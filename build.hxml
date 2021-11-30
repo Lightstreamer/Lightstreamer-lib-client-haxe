@@ -1,0 +1,12 @@
+--class-path src
+-D analyzer-optimize
+#--library <library_name>
+
+LightstreamerClient
+Subscription
+
+#-D js_classic
+-D shallow-expose
+--js bin/web/lightstreamer_orig.js
+
+--cmd haxe -p tools -m JsUtils --interp
