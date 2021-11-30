@@ -24,7 +24,7 @@ import VisualUpdate from "./VisualUpdate";
 import IllegalArgumentException from "../src-tool/IllegalArgumentException";
 import IllegalStateException from "../src-tool/IllegalStateException";
 import LoggerManager from "../src-log/LoggerManager";
-import ASSERT from "../src-test/ASSERT";
+import ASSERT from "./ASSERT";
 import Environment from "../src-tool/Environment";
 
 export default /*@__PURE__*/(function() {

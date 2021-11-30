@@ -14,7 +14,6 @@
   limitations under the License.
 */
 import Cell from "./Cell";
-import ASSERT from "../src-test/ASSERT";
 
 export default /*@__PURE__*/(function() {
   /**

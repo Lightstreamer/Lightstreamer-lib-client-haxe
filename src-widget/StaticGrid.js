@@ -22,7 +22,7 @@ import CellMatrix from "./CellMatrix";
 import IllegalArgumentException from "../src-tool/IllegalArgumentException";
 import IllegalStateException from "../src-tool/IllegalStateException";
 import Helpers from "../src-tool/Helpers";
-import ASSERT from "../src-test/ASSERT";
+import ASSERT from "./ASSERT";
 import LoggerManager from "../src-log/LoggerManager";
 import DoubleKeyMap from "../src-tool/DoubleKeyMap";
 import Environment from "../src-tool/Environment";
