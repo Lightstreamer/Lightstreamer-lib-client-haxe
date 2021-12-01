@@ -1,4 +1,5 @@
 import JsUtils from './tools/JsUtils'
+import { terser } from 'rollup-plugin-terser'
 import pkg from './bin/web/package.json'
 
 const [versionNum, buildNum] = JsUtils.parseSemVer(pkg.version)
@@ -14,6 +15,16 @@ export default [
         format: 'iife',
         banner: JsUtils.generateCopyright("Web", versionNum, buildNum, "UMD", classes) + "\n" + JsUtils.generateUmdHeader(classes),
         footer: JsUtils.generateUmdFooter('lightstreamerExports')
+      },
+      {
+        name: 'lightstreamerExports',
+        file: 'bin/web/lightstreamer-core.min.js',
+        format: 'iife',
+        banner: JsUtils.generateCopyright("Web", versionNum, buildNum, "UMD", classes) + "\n" + JsUtils.generateUmdHeader(classes),
+        footer: JsUtils.generateUmdFooter('lightstreamerExports'),
+        plugins: [
+          terser()
+        ]
       },
       {
         file: 'bin/web/lightstreamer-core.esm.js',
