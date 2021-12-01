@@ -25,6 +25,7 @@ export default [
         format: 'iife',
         banner: JsUtils.generateCopyright("Web", versionNum, buildNum, "UMD", classes) + "\n" + JsUtils.generateUmdHeader(classes),
         footer: JsUtils.generateUmdFooter('lightstreamerExports'),
+        sourcemap: true,
         plugins: [
           terser()
         ]
