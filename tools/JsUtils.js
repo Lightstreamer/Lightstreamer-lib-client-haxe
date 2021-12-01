@@ -48,7 +48,30 @@ function generateUmdFooter(globalObject) {
 ` 
 }
 
+function generateCopyright(platform, versionNum, buildNum, format, classes) {
+  return `
+/**
+ * @preserve
+ * LIGHTSTREAMER - www.lightstreamer.com
+ * Lightstreamer ${platform} Client
+ * Version ${versionNum} build ${buildNum}
+ * Copyright (c) Lightstreamer Srl. All Rights Reserved.
+ * Contains: ${classes.reduce((acc, x, i) => i % 4 == 3 ? (acc + ',\n * ' + x) : (acc + ', ' + x))}
+ * ${format}
+ */
+`
+}
+
+function parseSemVer(semver) {
+  // https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
+  const regex = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/
+  const [/*whole match*/, major, minor, patch, /*prerelease*/, build] = semver.match(regex)
+  return [`${major}.${minor}.${patch}`, build]
+}
+
 export default {
   generateUmdHeader,
-  generateUmdFooter
+  generateUmdFooter,
+  generateCopyright,
+  parseSemVer
 }
