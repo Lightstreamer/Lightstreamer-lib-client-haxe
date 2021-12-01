@@ -1,5 +1,5 @@
 import virtual from '@rollup/plugin-virtual'
-import UmdUtils from './tools/UmdUtils'
+import JsUtils from './tools/JsUtils'
 
 const coreClasses = ["LightstreamerClient", "Subscription"]
 const widgetClasses = ["Chart", "DynaGrid", "SimpleChartListener", "StaticGrid", "StatusWidget"]
@@ -13,8 +13,8 @@ export default [
         name: 'lightstreamerExports',
         file: 'bin/web/lightstreamer.js',
         format: 'iife',
-        banner: UmdUtils.generateUmdHeader(classes),
-        footer: UmdUtils.generateUmdFooter('lightstreamerExports')
+        banner: JsUtils.generateUmdHeader(classes),
+        footer: JsUtils.generateUmdFooter('lightstreamerExports')
       },
       { 
         file: 'bin/web/lightstreamer.esm.js', 

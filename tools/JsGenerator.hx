@@ -1,7 +1,7 @@
 import sys.io.File;
 using StringTools;
 
-class JsUtils {
+class JsGenerator {
 
   static final classes = ["LightstreamerClient", "Subscription"];
 

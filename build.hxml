@@ -9,4 +9,4 @@ Subscription
 -D shallow-expose
 --js bin/web/lightstreamer_orig.js
 
---cmd haxe -p tools -m JsUtils --interp
+--cmd haxe -p tools -m JsGenerator --interp

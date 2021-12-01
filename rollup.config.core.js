@@ -1,4 +1,4 @@
-import UmdUtils from './tools/UmdUtils'
+import JsUtils from './tools/JsUtils'
 
 const classes = ["LightstreamerClient", "Subscription"]
 
@@ -10,8 +10,8 @@ export default [
         name: 'lightstreamerExports',
         file: 'bin/web/lightstreamer-core.js',
         format: 'iife',
-        banner: UmdUtils.generateUmdHeader(classes),
-        footer: UmdUtils.generateUmdFooter('lightstreamerExports')
+        banner: JsUtils.generateUmdHeader(classes),
+        footer: JsUtils.generateUmdFooter('lightstreamerExports')
       },
       {
         file: 'bin/web/lightstreamer-core.esm.js',
