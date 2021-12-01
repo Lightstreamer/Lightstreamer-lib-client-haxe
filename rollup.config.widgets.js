@@ -1,18 +1,27 @@
 import virtual from '@rollup/plugin-virtual'
+import JsUtils from './tools/JsUtils'
 
 const classes = ["Chart", "DynaGrid", "SimpleChartListener", "StaticGrid", "StatusWidget"]
-const virtualEntryPoint = generateVirtualEntryPoint()
 
 export default [
   {
     input: 'virtual-entrypoint',
-    output: {
-      file: 'bin/web/lightstreamer-widgets.esm.js',
-      format: 'es'
-    },
+    output: [
+      {
+        name: 'lightstreamerExports',
+        file: 'bin/web/lightstreamer-widgets.js',
+        format: 'iife',
+        banner: JsUtils.generateUmdHeader(classes),
+        footer: JsUtils.generateUmdFooter('lightstreamerExports')
+      },
+      {
+        file: 'bin/web/lightstreamer-widgets.esm.js',
+        format: 'es'
+      }
+    ],
     plugins: [
       virtual({ 
-        'virtual-entrypoint': virtualEntryPoint
+        'virtual-entrypoint': generateVirtualEntryPoint()
       })
     ]
   }
