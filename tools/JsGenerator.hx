@@ -1,4 +1,5 @@
 import sys.io.File;
+import sys.FileSystem;
 using StringTools;
 
 class JsGenerator {
@@ -10,6 +11,7 @@ class JsGenerator {
     generateCoreLibs();
     generateWidgetLib();
     generateFullLibs();
+    renameTypescriptDeclarationFile();
   }
 
   static function fixLib() {
@@ -33,6 +35,10 @@ export { ${classes.join(",")} };
 
   static function generateFullLibs() {
     run("npx rollup --config rollup.config.full.js");
+  }
+
+  static function renameTypescriptDeclarationFile() {
+    FileSystem.rename("bin/web/lightstreamer_orig.d.ts", "bin/web/types.d.ts");
   }
 
   static function run(cmd: String) {

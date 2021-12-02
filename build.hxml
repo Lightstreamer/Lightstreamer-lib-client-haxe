@@ -1,6 +1,8 @@
 --class-path src
 -D analyzer-optimize
-#--library <library_name>
+
+#-D hxtsdgen_types_ts=types
+--library hxtsdgen
 
 LightstreamerClient
 Subscription
