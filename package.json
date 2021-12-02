@@ -7,11 +7,13 @@
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-node-resolve": "^13.0.6",
     "@rollup/plugin-virtual": "^2.0.3",
+    "@types/estree": "0.0.50",
     "browserify": "^17.0.0",
     "lightstreamer-client-web": "file:bin/web",
     "requirejs": "^2.3.6",
     "rollup": "^2.60.1",
     "rollup-plugin-terser": "^7.0.2",
+    "typescript": "^4.5.2",
     "webpack": "^5.64.4",
     "webpack-cli": "^4.9.1"
   },
