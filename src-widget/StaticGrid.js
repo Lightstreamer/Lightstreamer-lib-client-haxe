@@ -482,7 +482,7 @@ export default /*@__PURE__*/(function() {
           
           //updateIsKey can't pass from here: out-of-sight rows are completely deleted
           //gridKey > this.maxRow  === out of sight
-          //!this.grid.getRow(toPos) no cells defined for the row
+          // !this.grid.getRow(toPos) no cells defined for the row
           
           var toCopyRow = this.grid.getRow(gridKey-1);
           var fakeRow = CellMatrix.scrollRow(toCopyRow,null,this.useInner);
