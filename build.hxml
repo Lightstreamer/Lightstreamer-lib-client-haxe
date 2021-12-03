@@ -1,17 +1,5 @@
---class-path src
--D analyzer-optimize
-
-LightstreamerClient
-Subscription
+build.common.hxml
 --each
-
---library hxtsdgen
--D shallow-expose
---js bin/web/lightstreamer_orig.js
---cmd haxe -p tools -m WebGenerator --interp
-
+build.web.hxml
 --next
---library hxtsdgen
--D shallow-expose
---js bin/node/lightstreamer-node_orig.js
---cmd haxe -p tools -m NodeGenerator --interp
+build.node.hxml

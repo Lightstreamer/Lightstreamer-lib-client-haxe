@@ -1,0 +1,5 @@
+--class-path src
+-D analyzer-optimize
+
+LightstreamerClient
+Subscription
