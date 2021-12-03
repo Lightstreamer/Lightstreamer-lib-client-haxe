@@ -9,6 +9,7 @@
     "@rollup/plugin-virtual": "^2.0.3",
     "@types/estree": "0.0.50",
     "browserify": "^17.0.0",
+    "lightstreamer-client-node": "file:bin/node",
     "lightstreamer-client-web": "file:bin/web",
     "requirejs": "^2.3.6",
     "rollup": "^2.60.1",
