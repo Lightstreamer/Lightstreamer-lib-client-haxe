@@ -1,14 +1,17 @@
 --class-path src
 -D analyzer-optimize
 
-#-D hxtsdgen_types_ts=types
---library hxtsdgen
-
 LightstreamerClient
 Subscription
+--each
 
-#-D js_classic
+--library hxtsdgen
 -D shallow-expose
 --js bin/web/lightstreamer_orig.js
+--cmd haxe -p tools -m WebGenerator --interp
 
---cmd haxe -p tools -m JsGenerator --interp
+--next
+--library hxtsdgen
+-D shallow-expose
+--js bin/node/lightstreamer-node_orig.js
+--cmd haxe -p tools -m NodeGenerator --interp
