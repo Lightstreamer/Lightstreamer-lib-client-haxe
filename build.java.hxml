@@ -1,0 +1,5 @@
+build.common.hxml
+
+-D jvm.dynamic-level=0
+--jvm bin/java/ls-javase-client.jar
+#--java bin/java
