@@ -1,5 +1,5 @@
 --class-path src
 -D analyzer-optimize
 
-LightstreamerClient
-Subscription
+com.lightstreamer.client.LightstreamerClient
+com.lightstreamer.client.Subscription
