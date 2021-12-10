@@ -3,3 +3,5 @@ build.web.hxml
 build.node.hxml
 --next
 build.java.hxml
+--next
+build.android.hxml

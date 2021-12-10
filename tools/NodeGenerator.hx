@@ -1,13 +1,19 @@
-import HxUtils.*;
+import HxUtils;
+import sys.io.File;
 
 class NodeGenerator {
   static function main() {
-    fixLib("bin/node/lightstreamer-node_orig.js");
+    copyPackageJson();
+    HxUtils.fixLib("bin/node/lightstreamer-node_orig.js");
     generateLibs();
-    renameTypescriptDeclarationFile("bin/node/lightstreamer-node_orig.d.ts");
+    HxUtils.renameTypescriptDeclarationFile("bin/node/lightstreamer-node_orig.d.ts");
+  }
+
+  static function copyPackageJson() {
+    File.copy("tools/node/package.json", "bin/node/package.json");
   }
 
   static function generateLibs() {
-    run("npx rollup --config rollup.config.node.js");
+    HxUtils.run("npx rollup --config rollup.config.node.js");
   }
 }
