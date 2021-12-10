@@ -3,4 +3,4 @@ build.common.hxml
 --library hxtsdgen
 -D shallow-expose
 --js bin/node/lightstreamer-node_orig.js
---cmd haxe -p tools -m NodeGenerator --interp
+--cmd haxe -p tools --run NodeGenerator
