@@ -1,3 +1,6 @@
 node_modules/
 bin/
 .vscode/
+
+test-system/
+Makefile
