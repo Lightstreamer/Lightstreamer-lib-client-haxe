@@ -42,16 +42,18 @@ class Subscription {
   public function getMode(): String {
     return null;
   }
-  // TODO getItems/setItems
-  // public function getItems(): java.NativeArray<String> {}
-  // public function setItems(items: java.NativeArray<String>) {}
+  public function getItems(): Array<String> {
+    return null;
+  }
+  public function setItems(items: Array<String>): Void {}
   public function getItemGroup(): String {
     return null;
   }
   public function setItemGroup(groupName: String): Void {}
-  // TODO getFields/setFields
-  // public function getFields(): java.NativeArray<String> {}
-  // public function setFields(fields: java.NativeArray<String>) {}
+  public function getFields(): Array<String> {
+    return null;
+  }
+  public function setFields(fields: Array<String>): Void {}
   public function getFieldSchema(): String {
     return null;
   }
