@@ -1,0 +1,5 @@
+test.common.hxml
+
+-D jvm.dynamic-level=0
+--jvm bin/java/ls-javase-client-test.jar
+--cmd java -jar bin/java/ls-javase-client-test.jar
