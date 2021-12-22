@@ -1,14 +1,23 @@
 package com.lightstreamer.client;
 
 class ConnectionDetails {
+  var adapterSet: String;
+  var serverAddress: String;
+
+  public function new() {}
+
   public function getAdapterSet(): String {
-    return null;
+    return adapterSet;
   }
-  public function setAdapterSet(adapterSet: String): Void {}
+  public function setAdapterSet(adapterSet: String): Void {
+    this.adapterSet = adapterSet;
+  }
   public function getServerAddress(): String {
-    return null;
+    return serverAddress;
   }
-  public function setServerAddress(serverAddress: String): Void {}
+  public function setServerAddress(serverAddress: String): Void {
+    this.serverAddress = serverAddress;
+  }
   public function getUser(): String {
     return null;
   }

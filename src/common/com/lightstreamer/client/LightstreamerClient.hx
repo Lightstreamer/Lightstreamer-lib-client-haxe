@@ -5,6 +5,7 @@ package com.lightstreamer.client;
  **/
 @:expose("LightstreamerClient")
 class LightstreamerClient {
+  public final details = new ConnectionDetails();
 
   public static final LIB_NAME: String = "TODO";
   public static final LIB_VERSIONE: String = "TODO";
@@ -18,7 +19,12 @@ class LightstreamerClient {
    * @param adapterSet 
    */
   public function new(serverAddress: String, adapterSet: String) {
-    trace("LS.new");
+    if (serverAddress != null) {
+      details.setServerAddress(serverAddress);
+    }
+    if (adapterSet != null) {
+      details.setAdapterSet(adapterSet);
+    }
   }
   public function addListener(): Void {
     trace("LS:addListener");
