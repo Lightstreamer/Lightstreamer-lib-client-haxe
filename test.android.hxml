@@ -5,4 +5,4 @@ test.common.hxml
 -D jvm.dynamic-level=0
 -D android
 --java-lib %ANDROID_SDK%/platforms/android-30/android.jar
---jvm bin/android/ls-android-client-test.jar
+--jvm bin-test/android/ls-android-client.jar

@@ -1,5 +1,6 @@
 node_modules/
 bin/
+bin-test/
 .vscode/
 
 test-system/

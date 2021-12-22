@@ -1,4 +1,4 @@
 test.common.hxml
 
---js bin/web/lightstreamer-test.js
+--js bin-test/web/lightstreamer.js
 --cmd open index.html
