@@ -1,0 +1,4 @@
+test.common.hxml
+
+--python bin-test/python/lightstreamer.py
+--cmd python3 bin-test/python/lightstreamer.py

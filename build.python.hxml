@@ -1,0 +1,3 @@
+build.common.hxml
+
+--python bin/python/lightstreamer.py
