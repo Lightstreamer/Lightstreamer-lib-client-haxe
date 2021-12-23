@@ -1,5 +1,4 @@
 test.common.hxml
 
---library hxtsdgen
 --js bin-test/node/lightstreamer-node.js
 --cmd node bin-test/node/lightstreamer-node.js
