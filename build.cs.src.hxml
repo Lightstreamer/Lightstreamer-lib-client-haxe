@@ -1,0 +1,5 @@
+build.common.hxml
+
+-D no-compilation
+-D no-root
+--cs bin/cs
