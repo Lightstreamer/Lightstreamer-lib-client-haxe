@@ -4,6 +4,7 @@ package com.lightstreamer.client;
  * Subscription class
  **/
 @:expose("Subscription")
+@:nativeGen
 class Subscription {
   
   #if java
@@ -20,6 +21,10 @@ class Subscription {
   }
   #elseif js
   public function new(subscriptionMode: String, items: Dynamic, fields: Array<String>) {
+    trace("Sub.new");
+  }
+  #elseif cs
+  public function new(subscriptionMode: String, items: cs.NativeArray<String>, fields: cs.NativeArray<String>) {
     trace("Sub.new");
   }
   #end

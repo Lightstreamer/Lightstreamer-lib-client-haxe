@@ -2,6 +2,7 @@ package com.lightstreamer.client;
 
 import com.lightstreamer.client.Types;
 
+@:nativeGen
 class ConnectionOptions {
   public function getConnectTimeout(): String {
     return null;

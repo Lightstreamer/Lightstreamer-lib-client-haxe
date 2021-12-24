@@ -1,4 +1,5 @@
 test.common.hxml
 
+-D no-root
 --cs bin-test/cs
 --cmd mono bin-test/cs/bin/TestAll.exe

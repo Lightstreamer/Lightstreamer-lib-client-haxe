@@ -1,3 +1,4 @@
 build.common.hxml
 
+-D no-root
 --cs bin/cs

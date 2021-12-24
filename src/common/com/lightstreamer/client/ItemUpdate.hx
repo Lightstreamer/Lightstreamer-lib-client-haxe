@@ -1,5 +1,6 @@
 package com.lightstreamer.client;
 
+@:nativeGen
 interface ItemUpdate {
   public function getItemName(): String;
   public function getItemPos(): Int;

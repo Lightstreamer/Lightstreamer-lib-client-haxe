@@ -1,5 +1,6 @@
 package com.lightstreamer.client;
 
+@:nativeGen
 interface SubscriptionListener {
   function onClearSnapshot(itemName: String, itemPos: Int): Void;
   function onCommandSecondLevelItemLostUpdates(lostUpdates: Int, key: String): Void;

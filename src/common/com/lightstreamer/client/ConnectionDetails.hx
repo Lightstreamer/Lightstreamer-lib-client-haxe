@@ -1,5 +1,6 @@
 package com.lightstreamer.client;
 
+@:nativeGen
 class ConnectionDetails {
   var adapterSet: String;
   var serverAddress: String;

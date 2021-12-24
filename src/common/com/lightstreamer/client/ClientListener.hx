@@ -1,5 +1,6 @@
 package com.lightstreamer.client;
 
+@:nativeGen
 interface ClientListener {
   public function onListenEnd(client: LightstreamerClient): Void;
   public function onListenStart(client: LightstreamerClient): Void;

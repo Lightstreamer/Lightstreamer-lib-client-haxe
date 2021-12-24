@@ -4,6 +4,7 @@ package com.lightstreamer.client;
  * LightstreamerClient class
  **/
 @:expose("LightstreamerClient")
+@:nativeGen
 class LightstreamerClient {
   public final details = new ConnectionDetails();
 
