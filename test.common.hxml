@@ -2,4 +2,5 @@
 --class-path src/common
 --class-path test
 --library utest
+--library haxe-concurrent
 --main TestAll

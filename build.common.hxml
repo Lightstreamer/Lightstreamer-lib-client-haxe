@@ -1,5 +1,6 @@
 -D analyzer-optimize
 --class-path src/common
+--library haxe-concurrent
 
 com.lightstreamer.client.LightstreamerClient
 com.lightstreamer.client.Subscription
