@@ -1,5 +1,7 @@
 package com.lightstreamer.client;
 
+import com.lightstreamer.log.LogManager;
+
 /**
  * LightstreamerClient class
  **/
@@ -10,6 +12,7 @@ class LightstreamerClient {
 
   public static final LIB_NAME: String = "TODO";
   public static final LIB_VERSIONE: String = "TODO";
+  static final logger = LogManager.getLogger("activity");
 
   // TODO setLoggerProvider
   // public static function setLoggerProvider(provider: LoggerProvider): Void {}

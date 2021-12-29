@@ -25,25 +25,11 @@ class TestCase extends utest.Test {
     log.error("log at error");
     log.fatal("log at fatal");
 
-    #if js
     try {
-      throw new js.lib.Error("Exception");
-    } catch(e: js.lib.Error) {
-      log.error("exception", e);
+      throw "Terrible Exception";
+    } catch(e) {
+      log.error("exception", e.native);
     }
-    #elseif java
-    try {
-      throw new java.lang.RuntimeException("Exception");
-    } catch(e: java.lang.Exception) {
-      log.error("exception", e);
-    }
-    #elseif cs
-    try {
-      throw new cs.system.Exception("Exception");
-    } catch(e: cs.system.Exception) {
-      log.error("exception", e);
-    }
-    #end
     Assert.pass();
   }
 }

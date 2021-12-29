@@ -37,24 +37,11 @@ class EmptyLogger implements Logger {
 
   public function new() {}
   
-  #if js
   public function fatal(line: String, ?exception: Exception) {}
 	public function error(line: String, ?exception: Exception) {}
 	public function warn(line: String, ?exception: Exception) {}
 	public function info(line: String, ?exception: Exception) {}
 	public function debug(line: String, ?exception: Exception) {}
-  #elseif (java || cs)
-  public overload function fatal(line: String) {}
-  public overload function fatal(line: String, exception: Exception) {}
-  public overload function error(line: String) {}
-  public overload function error(line: String, exception: Exception) {}
-  public overload function warn(line: String) {}
-  public overload function warn(line: String, exception: Exception) {}
-  public overload function info(line: String) {}
-  public overload function info(line: String, exception: Exception) {}
-  public overload function debug(line: String) {}
-  public overload function debug(line: String, exception: Exception) {}
-  #end
 
   public function isFatalEnabled(): Bool {
     return false;

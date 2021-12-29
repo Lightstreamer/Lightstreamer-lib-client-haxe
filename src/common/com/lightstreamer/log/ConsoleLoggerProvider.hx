@@ -51,30 +51,22 @@ class ConsoleLogger implements Logger {
     this.fatalEnabled = level <= ConsoleLogLevel.FATAL;
   }
 
+  @:access(haxe.Exception.caught)
   @:internal function log(level: String, line: String, ?exception: Exception) {
     var now = DateTools.format(Date.now(), "%Y.%m.%d %H:%M:%S");
-    #if js
-    var msg = '$now|$level|$category|$line';
-    js.Browser.console.log(msg);
-    if (exception != null) {
-      js.Browser.console.log(exception);
-    }
-    #elseif java
+    #if java
     var msg = '$now|$level|$category|${java.lang.Thread.currentThread().getName()}|$line';
-    Sys.println(msg);
-    if (exception != null) {
-      exception.printStackTrace();
-    }
     #elseif cs
     var msg = '$now|$level|$category|${cs.system.threading.Thread.CurrentThread.ManagedThreadId}|$line';
-    Sys.println(msg);
-    if (exception != null) {
-      Sys.println(exception.ToString());
-    }
+    #else
+    var msg = '$now|$level|$category|$line';
     #end
+    trace(msg);
+    if (exception != null) {
+      trace(haxe.Exception.caught(exception).details());
+    }
   }
 
-  #if js
   public function fatal(line: String, ?exception: Exception): Void {
     if (this.fatalEnabled) {
       log("FATAL", line, exception);
@@ -104,67 +96,6 @@ class ConsoleLogger implements Logger {
       log("DEBUG", line, exception);
     }
   }
-  #elseif (java || cs)
-  public overload function fatal(line: String) {
-    if (this.fatalEnabled) {
-      log("FATAL", line);
-    }
-  }
-
-  public overload function fatal(line: String, exception: Exception) {
-    if (this.fatalEnabled) {
-      log("FATAL", line, exception);
-    }
-  }
-
-  public overload function error(line: String) {
-    if (this.errorEnabled) {
-      log("ERROR", line);
-    }
-  }
-
-  public overload function error(line: String, exception: Exception) {
-    if (this.errorEnabled) {
-      log("ERROR", line, exception);
-    }
-  }
-
-  public overload function warn(line: String) {
-    if (this.warnEnabled) {
-      log("WARN ", line);
-    }
-  }
-
-  public overload function warn(line: String, exception: Exception) {
-    if (this.warnEnabled) {
-      log("WARN ", line, exception);
-    }
-  }
-
-  public overload function info(line: String) {
-    if (this.infoEnabled) {
-      log("INFO ", line);
-    }
-  }
-
-  public overload function info(line: String, exception: Exception) {
-    if (this.infoEnabled) {
-      log("INFO ", line, exception);
-    }
-  }
-
-  public overload function debug(line: String) {
-    if (this.debugEnabled) {
-      log("DEBUG", line);
-    }
-  }
-
-  public overload function debug(line: String, exception: Exception) {
-    if (this.debugEnabled) {
-      log("DEBUG", line, exception);
-    }
-  }
-  #end
 
   public function isFatalEnabled():Bool {
     return fatalEnabled;
