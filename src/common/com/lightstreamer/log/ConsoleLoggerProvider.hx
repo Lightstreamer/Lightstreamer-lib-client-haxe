@@ -61,15 +61,15 @@ class ConsoleLogger implements Logger {
     }
     #elseif java
     var msg = '$now|$level|$category|${java.lang.Thread.currentThread().getName()}|$line';
-    java.lang.System.out.println(msg);
+    Sys.println(msg);
     if (exception != null) {
       exception.printStackTrace();
     }
     #elseif cs
     var msg = '$now|$level|$category|${cs.system.threading.Thread.CurrentThread.ManagedThreadId}|$line';
-    cs.system.Console.WriteLine(msg);
+    Sys.println(msg);
     if (exception != null) {
-      cs.system.Console.WriteLine(exception.ToString());
+      Sys.println(exception.ToString());
     }
     #end
   }
