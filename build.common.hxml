@@ -3,3 +3,4 @@
 
 com.lightstreamer.client.LightstreamerClient
 com.lightstreamer.client.Subscription
+com.lightstreamer.log.ConsoleLoggerProvider

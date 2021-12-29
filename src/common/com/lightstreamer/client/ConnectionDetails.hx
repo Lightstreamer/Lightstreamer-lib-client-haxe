@@ -2,7 +2,9 @@ package com.lightstreamer.client;
 
 @:nativeGen
 class ConnectionDetails {
+  @:internal
   var adapterSet: String;
+  @:internal
   var serverAddress: String;
 
   public function new() {}
