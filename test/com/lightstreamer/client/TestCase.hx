@@ -26,7 +26,7 @@ class TestCase extends utest.Test {
     log.fatal("log at fatal");
 
     try {
-      throw "Terrible Exception";
+      null.foo();
     } catch(e) {
       log.error("exception", e.native);
     }

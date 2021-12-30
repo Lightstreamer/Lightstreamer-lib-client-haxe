@@ -51,6 +51,14 @@ class ConsoleLogger implements Logger {
     this.fatalEnabled = level <= ConsoleLogLevel.FATAL;
   }
 
+  @:internal inline function printLog(msg: String) {
+    #if js
+    js.Browser.console.log(msg);
+    #elseif sys
+    Sys.println(msg);
+    #end
+  }
+
   @:access(haxe.Exception.caught)
   @:internal function log(level: String, line: String, ?exception: Exception) {
     var now = DateTools.format(Date.now(), "%Y.%m.%d %H:%M:%S");
@@ -61,9 +69,9 @@ class ConsoleLogger implements Logger {
     #else
     var msg = '$now|$level|$category|$line';
     #end
-    trace(msg);
+    printLog(msg);
     if (exception != null) {
-      trace(haxe.Exception.caught(exception).details());
+      printLog(exception.details());
     }
   }
 
