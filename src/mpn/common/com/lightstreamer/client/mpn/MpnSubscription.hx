@@ -2,7 +2,7 @@ package com.lightstreamer.client.mpn;
 
 import com.lightstreamer.client.Types.Millis;
 
-@:expose("MpnSubscription")
+#if (js || python) @:expose @:native("MpnSubscription") #end
 class MpnSubscription {
 
   #if android

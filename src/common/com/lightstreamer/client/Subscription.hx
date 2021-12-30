@@ -3,7 +3,7 @@ package com.lightstreamer.client;
 /**
  * Subscription class
  **/
-@:expose("Subscription")
+#if (js || python) @:expose @:native("Subscription") #end
 @:nativeGen
 class Subscription {
   
@@ -19,7 +19,7 @@ class Subscription {
   public overload function new(subscriptionMode: String) {
     trace("Sub.new");
   }
-  #elseif js
+  #elseif (js || python)
   public function new(subscriptionMode: String, items: Dynamic, fields: Array<String>) {
     trace("Sub.new");
   }

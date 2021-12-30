@@ -5,7 +5,7 @@ import com.lightstreamer.log.LogManager;
 /**
  * LightstreamerClient class
  **/
-@:expose("LightstreamerClient")
+#if (js || python) @:expose @:native("LightstreamerClient") #end
 @:nativeGen
 class LightstreamerClient {
   public final details = new ConnectionDetails();
