@@ -5,3 +5,7 @@ build.node.hxml
 build.java.hxml
 --next
 build.android.hxml
+--next
+build.cs.hxml
+--next
+build.python.hxml

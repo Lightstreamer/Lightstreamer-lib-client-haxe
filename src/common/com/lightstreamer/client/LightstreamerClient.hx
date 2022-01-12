@@ -8,7 +8,7 @@ import com.lightstreamer.log.LogManager;
 #if (js || python) @:expose @:native("LightstreamerClient") #end
 @:nativeGen
 class LightstreamerClient {
-  public final details = new ConnectionDetails();
+  public final connectionDetails = new ConnectionDetails();
 
   public static final LIB_NAME: String = "TODO";
   public static final LIB_VERSIONE: String = "TODO";
@@ -24,10 +24,10 @@ class LightstreamerClient {
    */
   public function new(serverAddress: String, adapterSet: String) {
     if (serverAddress != null) {
-      details.setServerAddress(serverAddress);
+      connectionDetails.setServerAddress(serverAddress);
     }
     if (adapterSet != null) {
-      details.setAdapterSet(adapterSet);
+      connectionDetails.setAdapterSet(adapterSet);
     }
   }
   public function addListener(): Void {

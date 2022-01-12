@@ -1,29 +1,32 @@
 package com.lightstreamer.client;
 
-import com.lightstreamer.log.LoggerTools.actionLogger;
+import com.lightstreamer.client.Types;
+import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
 
+#if (js || python) @:expose @:native("ConnectionDetails") #end
 #if (java || cs || python) @:nativeGen #end
 class ConnectionDetails {
   // TODO synchronize methods
   // TODO fire property listeners
-  var serverAddress: String;
-  var adapterSet: String;
-  var user: String;
-  var password: String;
-  var sessionId: String;
-  var serverInstanceAddress: String;
-  var serverSocketName: String;
-  var clientIp: String;
+  @:internal var serverAddress: ServerAddress;
+  @:internal var adapterSet: String;
+  @:internal var user: String;
+  @:internal var password: String;
+  @:internal var sessionId: String;
+  @:internal var serverInstanceAddress: String;
+  @:internal var serverSocketName: String;
+  @:internal var clientIp: String;
 
-  public function new() {}
+  @:internal public function new() {}
 
   public function getServerAddress(): String {
     return serverAddress;
   }
   public function setServerAddress(serverAddress: String): Void {
+    var url = new ServerAddress(serverAddress);
     actionLogger.logInfo('serverAddress changed: $serverAddress');
-    this.serverAddress = serverAddress;
+    this.serverAddress = url;
     // TODO forward event to client
   }
   public function getAdapterSet(): String {
