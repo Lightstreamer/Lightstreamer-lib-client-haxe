@@ -1,0 +1,12 @@
+browserify-core/dist/
+browserify-full/dist/
+cs/cs.dll
+cs/Program.exe
+java/myapp/*.class
+python/__pycache__
+python/lightstreamer.py
+rollup-core/dist/
+rollup-full/dist/
+typescript/main.ts
+webpack-core/dist/
+webpack-full/dist/
