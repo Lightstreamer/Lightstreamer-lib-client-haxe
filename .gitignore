@@ -3,5 +3,4 @@ bin/
 bin-test/
 .vscode/
 
-test-system/
-Makefile
+/Makefile
