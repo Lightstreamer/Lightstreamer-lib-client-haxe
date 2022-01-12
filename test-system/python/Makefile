@@ -12,4 +12,3 @@ run: build
 
 clean:
 	rm -f lightstreamer.py
-	rm -f $(BIN)/*

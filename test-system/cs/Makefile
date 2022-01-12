@@ -13,4 +13,3 @@ run: build
 
 clean:
 	rm -f *.exe *.dll
-	rm -rf $(BIN)/*

@@ -12,4 +12,3 @@ run: build
 
 clean:
 	rm -f myapp/*.class
-	rm -rf $(BIN)/*

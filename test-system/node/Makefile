@@ -11,4 +11,3 @@ run: build
 	node test-min.js
 
 clean:
-	rm -f $(BIN)/*
