@@ -5,14 +5,17 @@ import utest.ui.Report;
 import com.lightstreamer.client.*;
 
 class TestAll {
+
+  static function buildSuite(runner: Runner) {
+    runner.addCase(new TestCase());
+    runner.addCase(new ConnectionDetailsTest());
+  }
+
   public static function main() {
     var runner = new Runner();
-    runner.addCase(new TestCase());
+    buildSuite(runner);
     Report.create(runner);
     runner.run();
-
-    //the short way in case you don't need to handle any specifics
-    //utest.UTest.run([new TestCase1(), new TestCase2()]);
   }
 
   #if java
@@ -20,7 +23,7 @@ class TestAll {
   // class Report interferes with logcat
   public static function androidMain() {
     var runner = new Runner();
-    runner.addCase(new TestCase());
+    buildSuite(runner);
     var aggregator = new ResultAggregator(runner, true);
     aggregator.onComplete.add(complete);
     runner.run();

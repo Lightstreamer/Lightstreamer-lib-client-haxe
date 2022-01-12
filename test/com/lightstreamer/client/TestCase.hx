@@ -6,16 +6,7 @@ import com.lightstreamer.log.ConsoleLoggerProvider;
 
 class TestCase extends utest.Test {
   
-  function testServerAddress() {
-    var client = new LightstreamerClient("http://localhost", "TEST");
-    Assert.equals("http://localhost", client.details.getServerAddress());
-  }
-
-  function testAdapterSet() {
-    var client = new LightstreamerClient("http://localhost", "TEST");
-    Assert.equals("TEST", client.details.getAdapterSet());
-  }
-
+  @Ignored
   function testLog() {
     var provider = new ConsoleLoggerProvider(ConsoleLogLevel.WARN);
     var log = provider.getLogger("foo");
