@@ -24,9 +24,8 @@ class ConnectionDetails {
     return serverAddress;
   }
   public function setServerAddress(serverAddress: String): Void {
-    var url = new ServerAddress(serverAddress);
     actionLogger.logInfo('serverAddress changed: $serverAddress');
-    this.serverAddress = url;
+    this.serverAddress = new ServerAddress(serverAddress);
     // TODO forward event to client
   }
   public function getAdapterSet(): String {
