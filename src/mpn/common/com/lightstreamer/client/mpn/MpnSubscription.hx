@@ -1,7 +1,5 @@
 package com.lightstreamer.client.mpn;
 
-import com.lightstreamer.client.Types.Millis;
-
 #if (js || python) @:expose @:native("MpnSubscription") #end
 class MpnSubscription {
 
@@ -37,7 +35,7 @@ class MpnSubscription {
   public function getStatus(): String {
     return null;
   }
-  public function getStatusTimestamp(): Millis {
+  public function getStatusTimestamp(): haxe.Int64 {
     return 0;
   }
   public function getItems(): Array<String> {

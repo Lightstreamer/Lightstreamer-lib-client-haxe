@@ -1,7 +1,5 @@
 package com.lightstreamer.client.mpn;
 
-import com.lightstreamer.client.Types.Millis;
-
 interface MpnSubscriptionListener {
   public function onListenStart(subscription: MpnSubscription): Void;
   public function onListenEnd(subscription: MpnSubscription): Void;
@@ -10,6 +8,6 @@ interface MpnSubscriptionListener {
   public function onSubscriptionError(code: Int, message: String): Void;
   public function onUnsubscriptionError(code: Int, message: String): Void;
   public function onTriggered(): Void;
-  public function onStatusChanged(status: String, timestamp: Millis): Void;
+  public function onStatusChanged(status: String, timestamp: haxe.Int64): Void;
   public function onPropertyChanged(propertyName: String): Void;
 }

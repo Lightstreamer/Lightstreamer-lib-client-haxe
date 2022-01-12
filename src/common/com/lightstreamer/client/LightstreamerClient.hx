@@ -9,6 +9,7 @@ import com.lightstreamer.log.LogManager;
 @:nativeGen
 class LightstreamerClient {
   public final connectionDetails = new ConnectionDetails();
+  public final connectionOptions = new ConnectionOptions();
 
   public static final LIB_NAME: String = "TODO";
   public static final LIB_VERSIONE: String = "TODO";
@@ -67,7 +68,7 @@ class LightstreamerClient {
   public function sendMessage(message: String): Void {}
 
   // TODO overload
-  // public function sendMessage(message: String, sequence: String, delayTimeout: Types.Millis, listener: ClientMessageListener, enqueueWhileDisconnected: Bool) {}
+  // public function sendMessage(message: String, sequence: String, delayTimeout: haxe.Int64, listener: ClientMessageListener, enqueueWhileDisconnected: Bool) {}
 
 
 

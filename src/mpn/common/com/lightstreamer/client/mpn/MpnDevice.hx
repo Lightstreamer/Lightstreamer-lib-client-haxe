@@ -1,7 +1,5 @@
 package com.lightstreamer.client.mpn;
 
-import com.lightstreamer.client.Types.Millis;
-
 class MpnDevice {
   public function addListener(listener: MpnDeviceListener): Void {}
   public function removeListener(listener: MpnDeviceListener): Void {}
@@ -17,7 +15,7 @@ class MpnDevice {
   public function getStatus(): String {
     return null;
   }
-  public function getStatusTimestamp(): Millis {
+  public function getStatusTimestamp(): haxe.Int64 {
     return 0;
   }
   public function getApplicationId(): String {
