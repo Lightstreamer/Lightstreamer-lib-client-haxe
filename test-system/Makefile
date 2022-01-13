@@ -1,6 +1,8 @@
-.PHONY: all web ts node java cs py
+.PHONY: all web ts node java cs py sys
 
 all: web ts node java cs py
+
+sys: ts node java cs py
 
 web:
 	cd browserify-full && make
