@@ -36,7 +36,7 @@ class LightstreamerClient {
   }
   public function removeListener(listener: ClientListener): Void {}
   public function getListeners(): Array<ClientListener> {
-    return null;
+    return [];
   }
   /**
    * connect
@@ -50,7 +50,7 @@ class LightstreamerClient {
   }
 
   public function getStatus(): String {
-    return null;
+    return "";
   }
 
   public function subscribe(subscription: Subscription): Void {
@@ -62,7 +62,7 @@ class LightstreamerClient {
   }
 
   public function getSubscriptions(): Array<Subscription> {
-    return null;
+    return [];
   }
 
   public function sendMessage(message: String): Void {}

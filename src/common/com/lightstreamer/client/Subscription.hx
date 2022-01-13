@@ -32,7 +32,7 @@ class Subscription {
   public function addListener(listener: SubscriptionListener): Void {}
   public function removeListener(listener: SubscriptionListener): Void {}
   public function getListeners(): Array<SubscriptionListener> {
-    return null;
+    return [];
   }
   public function isActive(): Bool {
     return false;
@@ -41,42 +41,42 @@ class Subscription {
     return false;
   }
   public function getDataAdapter(): String {
-    return null;
+    return "";
   }
   public function setDataAdapter(dataAdapter: String): Void {}
   public function getMode(): String {
-    return null;
+    return "";
   }
   public function getItems(): Array<String> {
-    return null;
+    return [];
   }
   public function setItems(items: Array<String>): Void {}
   public function getItemGroup(): String {
-    return null;
+    return "";
   }
   public function setItemGroup(groupName: String): Void {}
   public function getFields(): Array<String> {
-    return null;
+    return [];
   }
   public function setFields(fields: Array<String>): Void {}
   public function getFieldSchema(): String {
-    return null;
+    return "";
   }
   public function setFieldSchema(schemaName: String): Void {}
   public function getRequestedBufferSize(): String {
-    return null;
+    return "";
   }
   public function setRequestedBufferSize(size: String): Void {}
   public function getRequestedSnapshot(): String {
-    return null;
+    return "";
   }
   public function setRequestedSnapshot(required: String): Void {}
   public function getRequestedMaxFrequency(): String {
-    return null;
+    return "";
   }
   public function setRequestedMaxFrequency(freq: String): Void {}
   public function getSelector(): String {
-    return null;
+    return "";
   }
   public function setSelector(selector: String): Void {}
   public function getCommandPosition(): Int {
@@ -86,25 +86,25 @@ class Subscription {
     return 0;
   }
   public function getCommandSecondLevelDataAdapter(): String {
-    return null;
+    return "";
   }
   public function setCommandSecondLevelDataAdapter(dataAdapter: String): Void {}
   // TODO getCommandSecondLevelFields/setCommandSecondLevelFields
   // public function getCommandSecondLevelFields(): java.NativeArray<String> {}
   // public function setCommandSecondLevelFields(fields: java.NativeArray<String>) {}
   public function getCommandSecondLevelFieldSchema(): String {
-    return null;
+    return "";
   }
   public function setCommandSecondLevelFieldSchema(schemaName: String): Void {}
   public function getValue(itemName: String, fieldName: String): String {
-    return null;
+    return "";
   }
   // TODO overload
   // public function getValue(itemPos: Int, fieldPos: Int): String {}
   // public function getValue(itemName: String, fieldPos: Int): String {}
   // public function getValue(itemPos: Int, fieldName: String): String {}
   public function getCommandValue(itemName: String, keyValue: String, fieldName: String): String {
-    return null;
+    return "";
   }
   // TODO overload
   // public function getCommandValue(itemPos: Int, keyValue: String, fieldPos: Int): String {}
