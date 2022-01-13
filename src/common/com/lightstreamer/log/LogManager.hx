@@ -7,7 +7,7 @@ class LogManager {
   static final lock = new RLock();
   static final logInstances: Map<String, LoggerProxy> = [];
   static final emptyLogger = new EmptyLogger();
-  static var currentLoggerProvider: LoggerProvider;
+  static var currentLoggerProvider: Null<LoggerProvider>;
 
   public static function getLogger(category: String): Logger {
     return lock.execute(() -> {
@@ -15,7 +15,7 @@ class LogManager {
       if (log == null) {
         log = logInstances[category] = new LoggerProxy(newLogger(category));
       }
-      return log;
+      return (log : LoggerProxy);
     });
   }
 
