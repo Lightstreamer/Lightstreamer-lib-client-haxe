@@ -12,13 +12,13 @@ class ConsoleLogLevel {
   public static final ERROR = 40;
   public static final FATAL = 50;
 
-  @:internal function new() {}
+  function new() {}
 }
 
 #if (js || python) @:expose @:native("ConsoleLoggerProvider") #end
 @:nativeGen
 class ConsoleLoggerProvider implements LoggerProvider {
-  @:internal final level: Int;
+  final level: Int;
 
   public function new(level: Int) {
     this.level = level;
@@ -31,14 +31,14 @@ class ConsoleLoggerProvider implements LoggerProvider {
 
 @:nativeGen
 private class ConsoleLogger implements Logger {
-  @:internal final level: Int;
-  @:internal final category: String;
-  @:internal final traceEnabled: Bool;
-  @:internal final debugEnabled: Bool;
-  @:internal final infoEnabled: Bool;
-  @:internal final warnEnabled: Bool;
-  @:internal final errorEnabled: Bool;
-  @:internal final fatalEnabled: Bool;
+  final level: Int;
+  final category: String;
+  final traceEnabled: Bool;
+  final debugEnabled: Bool;
+  final infoEnabled: Bool;
+  final warnEnabled: Bool;
+  final errorEnabled: Bool;
+  final fatalEnabled: Bool;
 
   public function new(level: Int, category: String) {
     this.level = level;
@@ -51,7 +51,7 @@ private class ConsoleLogger implements Logger {
     this.fatalEnabled = level <= ConsoleLogLevel.FATAL;
   }
 
-  @:internal inline function printLog(msg: String) {
+  inline function printLog(msg: String) {
     #if js
     js.Browser.console.log(msg);
     #elseif sys
@@ -60,7 +60,7 @@ private class ConsoleLogger implements Logger {
   }
 
   @:access(haxe.Exception.caught)
-  @:internal function log(level: String, line: String, ?exception: Exception) {
+  function log(level: String, line: String, ?exception: Exception) {
     var now = DateTools.format(Date.now(), "%Y.%m.%d %H:%M:%S");
     #if java
     var msg = '$now|$level|$category|${java.lang.Thread.currentThread().getName()}|$line';

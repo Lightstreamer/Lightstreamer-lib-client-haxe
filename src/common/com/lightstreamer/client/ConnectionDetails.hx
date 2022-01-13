@@ -9,16 +9,16 @@ using com.lightstreamer.log.LoggerTools;
 class ConnectionDetails {
   // TODO synchronize methods
   // TODO fire property listeners
-  @:internal var serverAddress: Null<ServerAddress>;
-  @:internal var adapterSet: Null<String>;
-  @:internal var user: Null<String>;
-  @:internal var password: Null<String>;
-  @:internal var sessionId: Null<String>;
-  @:internal var serverInstanceAddress: Null<String>;
-  @:internal var serverSocketName: Null<String>;
-  @:internal var clientIp: Null<String>;
+  var serverAddress: Null<ServerAddress>;
+  var adapterSet: Null<String>;
+  var user: Null<String>;
+  var password: Null<String>;
+  var sessionId: Null<String>;
+  var serverInstanceAddress: Null<String>;
+  var serverSocketName: Null<String>;
+  var clientIp: Null<String>;
 
-  @:internal public function new() {}
+  public function new() {}
 
   public function getServerAddress(): Null<String> {
     return serverAddress;
