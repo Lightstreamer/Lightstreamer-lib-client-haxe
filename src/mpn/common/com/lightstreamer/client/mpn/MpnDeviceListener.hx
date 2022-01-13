@@ -6,7 +6,7 @@ interface MpnDeviceListener {
   public function onRegistered(): Void;
   public function onSuspended(): Void;
   public function onResumed(): Void;
-  public function onStatusChanged(status: String, timestamp: haxe.Int64): Void;
+  public function onStatusChanged(status: String, timestamp: Long): Void;
   public function onRegistrationFailed(code: Int, message: String): Void;
   public function onSubscriptionsUpdated(): Void;
 }

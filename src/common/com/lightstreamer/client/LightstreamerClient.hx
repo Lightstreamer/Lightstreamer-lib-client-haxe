@@ -68,7 +68,7 @@ class LightstreamerClient {
   public function sendMessage(message: String): Void {}
 
   // TODO overload
-  // public function sendMessage(message: String, sequence: String, delayTimeout: haxe.Int64, listener: ClientMessageListener, enqueueWhileDisconnected: Bool) {}
+  // public function sendMessage(message: String, sequence: String, delayTimeout: Long, listener: ClientMessageListener, enqueueWhileDisconnected: Bool) {}
 
 
 

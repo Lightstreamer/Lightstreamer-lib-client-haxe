@@ -2,19 +2,21 @@ package com.lightstreamer.client;
 
 using StringTools;
 
-abstract Millis(haxe.Int64) to haxe.Int64 {
+typedef Long = #if (java || cs) haxe.Int64 #else Int #end
+
+abstract Millis(Long) to Long {
   public inline function new(millis) {
     this = millis;
   }
 
-  public static function fromIntGt0(millis: haxe.Int64) {
+  public static function fromIntGt0(millis: Long) {
     if (millis <= 0) {
       throw new IllegalArgumentException("value must be greater than zero");
     }
     return new Millis(millis);
   }
 
-  public static function fromIntGtEq0(millis: haxe.Int64) {
+  public static function fromIntGtEq0(millis: Long) {
     if (millis < 0) {
       throw new IllegalArgumentException("value must be greater than or equal to zero");
     }
@@ -22,12 +24,12 @@ abstract Millis(haxe.Int64) to haxe.Int64 {
   }
 }
 
-abstract ContentLength(haxe.Int64) to haxe.Int64 {
+abstract ContentLength(Long) to Long {
   public inline function new(length) {
     this = length;
   }
 
-  public static function fromIntGt0(millis: haxe.Int64) {
+  public static function fromIntGt0(millis: Long) {
     if (millis <= 0) {
       throw new IllegalArgumentException("value must be greater than zero");
     }

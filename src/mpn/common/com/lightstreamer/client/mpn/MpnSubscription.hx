@@ -35,7 +35,7 @@ class MpnSubscription {
   public function getStatus(): String {
     return null;
   }
-  public function getStatusTimestamp(): haxe.Int64 {
+  public function getStatusTimestamp(): Long {
     return 0;
   }
   public function getItems(): Array<String> {

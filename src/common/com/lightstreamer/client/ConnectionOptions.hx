@@ -28,19 +28,19 @@ class ConnectionOptions {
   
   public function new() {}
   
-  public function getContentLength(): haxe.Int64 {
+  public function getContentLength(): Long {
     return contentLength;
   }
-  public function setContentLength(contentLength: haxe.Int64): Void {
+  public function setContentLength(contentLength: Long): Void {
     var newValue = ContentLength.fromIntGt0(contentLength);
     actionLogger.info('contentLength changed: $newValue');
     this.contentLength = newValue;
   }
 
-  public function getFirstRetryMaxDelay(): haxe.Int64 {
+  public function getFirstRetryMaxDelay(): Long {
     return firstRetryMaxDelay;
   }
-  public function setFirstRetryMaxDelay(firstRetryMaxDelay: haxe.Int64): Void {
+  public function setFirstRetryMaxDelay(firstRetryMaxDelay: Long): Void {
     var newValue = Millis.fromIntGt0(firstRetryMaxDelay);
     actionLogger.info('firstRetryMaxDelay changed: $newValue');
     this.firstRetryMaxDelay = newValue;
@@ -64,19 +64,19 @@ class ConnectionOptions {
     this.httpExtraHeaders = httpExtraHeaders;
   }
 
-  public function getIdleTimeout(): haxe.Int64 {
+  public function getIdleTimeout(): Long {
     return idleTimeout;
   }
-  public function setIdleTimeout(idleTimeout: haxe.Int64): Void {
+  public function setIdleTimeout(idleTimeout: Long): Void {
     var newValue = Millis.fromIntGtEq0(idleTimeout);
     actionLogger.info('idleTimeout changed: $newValue');
     this.idleTimeout = newValue;
   }
 
-  public function getKeepaliveInterval(): haxe.Int64 {
+  public function getKeepaliveInterval(): Long {
     return keepaliveInterval;
   }
-  public function setKeepaliveInterval(keepaliveInterval: haxe.Int64): Void {
+  public function setKeepaliveInterval(keepaliveInterval: Long): Void {
     var newValue = Millis.fromIntGtEq0(keepaliveInterval);
     actionLogger.info('keepaliveInterval changed: $newValue');
     this.keepaliveInterval = newValue;
@@ -96,56 +96,56 @@ class ConnectionOptions {
     return realMaxBandwidth == null ? null : realMaxBandwidth.toString();
   }
 
-  public function getPollingInterval(): haxe.Int64 {
+  public function getPollingInterval(): Long {
     return pollingInterval;
   }
-  public function setPollingInterval(pollingInterval: haxe.Int64): Void {
+  public function setPollingInterval(pollingInterval: Long): Void {
     var newValue = Millis.fromIntGtEq0(pollingInterval);
     actionLogger.info('pollingInterval changed: $newValue');
     this.pollingInterval = newValue;
   }
 
-  public function getReconnectTimeout(): haxe.Int64 {
+  public function getReconnectTimeout(): Long {
     return reconnectTimeout;
   }
-  public function setReconnectTimeout(reconnectTimeout: haxe.Int64): Void {
+  public function setReconnectTimeout(reconnectTimeout: Long): Void {
     var newValue = Millis.fromIntGt0(reconnectTimeout);
     actionLogger.info('reconnectTimeout changed: $newValue');
     this.reconnectTimeout = newValue;
   }
 
-  public function getRetryDelay(): haxe.Int64 {
+  public function getRetryDelay(): Long {
     return retryDelay;
   }
-  public function setRetryDelay(retryDelay: haxe.Int64): Void {
+  public function setRetryDelay(retryDelay: Long): Void {
     var newValue = Millis.fromIntGt0(retryDelay);
     actionLogger.info('retryDelay changed: $newValue');
     this.retryDelay = newValue;
   }
 
-  public function getReverseHeartbeatInterval(): haxe.Int64 {
+  public function getReverseHeartbeatInterval(): Long {
     return reverseHeartbeatInterval;
   }
-  public function setReverseHeartbeatInterval(reverseHeartbeatInterval: haxe.Int64): Void {
+  public function setReverseHeartbeatInterval(reverseHeartbeatInterval: Long): Void {
     var newValue = Millis.fromIntGtEq0(reverseHeartbeatInterval);
     actionLogger.info('reverseHeartbeatInterval changed: $newValue');
     this.reverseHeartbeatInterval = newValue;
     // TODO forward to client
   }
 
-  public function getSessionRecoveryTimeout(): haxe.Int64 {
+  public function getSessionRecoveryTimeout(): Long {
     return sessionRecoveryTimeout;
   }
-  public function setSessionRecoveryTimeout(sessionRecoveryTimeout: haxe.Int64): Void {
+  public function setSessionRecoveryTimeout(sessionRecoveryTimeout: Long): Void {
     var newValue = Millis.fromIntGtEq0(sessionRecoveryTimeout);
     actionLogger.info('sessionRecoveryTimeout changed: $newValue');
     this.sessionRecoveryTimeout = newValue;
   }
 
-  public function getStalledTimeout(): haxe.Int64 {
+  public function getStalledTimeout(): Long {
     return stalledTimeout;
   }
-  public function setStalledTimeout(stalledTimeout: haxe.Int64): Void {
+  public function setStalledTimeout(stalledTimeout: Long): Void {
     var newValue = Millis.fromIntGt0(stalledTimeout);
     actionLogger.info('stalledTimeout changed: $newValue');
     this.stalledTimeout = newValue;

@@ -8,6 +8,6 @@ interface MpnSubscriptionListener {
   public function onSubscriptionError(code: Int, message: String): Void;
   public function onUnsubscriptionError(code: Int, message: String): Void;
   public function onTriggered(): Void;
-  public function onStatusChanged(status: String, timestamp: haxe.Int64): Void;
+  public function onStatusChanged(status: String, timestamp: Long): Void;
   public function onPropertyChanged(propertyName: String): Void;
 }
