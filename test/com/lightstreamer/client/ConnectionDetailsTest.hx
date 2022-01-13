@@ -4,29 +4,29 @@ import com.lightstreamer.client.Types.IllegalArgumentException;
 import utest.Assert;
 
 class ConnectionDetailsTest extends utest.Test {
-  var client = new LightstreamerClient("http://example.com", "TEST");
+  var details = new LightstreamerClient("http://example.com", "TEST").connectionDetails;
 
   function testServerAddress() {
-    Assert.equals("http://example.com", client.connectionDetails.getServerAddress());
+    Assert.equals("http://example.com", details.getServerAddress());
 
-    client.connectionDetails.setServerAddress("https://example.com:8080/ls");
-    Assert.equals("https://example.com:8080/ls", client.connectionDetails.getServerAddress());
+    details.setServerAddress("https://example.com:8080/ls");
+    Assert.equals("https://example.com:8080/ls", details.getServerAddress());
 
-    Assert.raises(() -> client.connectionDetails.setServerAddress("example.com"), IllegalArgumentException);
-    Assert.raises(() -> client.connectionDetails.setServerAddress("tcp://example.com"), IllegalArgumentException);
+    Assert.raises(() -> details.setServerAddress("example.com"), IllegalArgumentException);
+    Assert.raises(() -> details.setServerAddress("tcp://example.com"), IllegalArgumentException);
   }
 
   function testAdapterSet() {
-    Assert.equals("TEST", client.connectionDetails.getAdapterSet());
+    Assert.equals("TEST", details.getAdapterSet());
 
-    client.connectionDetails.setAdapterSet("DEMO");
-    Assert.equals("DEMO", client.connectionDetails.getAdapterSet());
+    details.setAdapterSet("DEMO");
+    Assert.equals("DEMO", details.getAdapterSet());
   }
 
   function testUser() {
-    Assert.equals(null, client.connectionDetails.getUser());
+    Assert.equals(null, details.getUser());
 
-    client.connectionDetails.setUser("user");
-    Assert.equals("user", client.connectionDetails.getUser());
+    details.setUser("user");
+    Assert.equals("user", details.getUser());
   }
 }
