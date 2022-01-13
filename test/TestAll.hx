@@ -9,6 +9,7 @@ class TestAll {
   static function buildSuite(runner: Runner) {
     runner.addCase(new TestCase());
     runner.addCase(new ConnectionDetailsTest());
+    runner.addCase(new ConnectionOptionsTest());
   }
 
   public static function main() {
