@@ -9,33 +9,34 @@ using com.lightstreamer.log.LoggerTools;
 class ConnectionDetails {
   // TODO synchronize methods
   // TODO fire property listeners
-  @:internal var serverAddress: ServerAddress;
-  @:internal var adapterSet: String;
-  @:internal var user: String;
-  @:internal var password: String;
-  @:internal var sessionId: String;
-  @:internal var serverInstanceAddress: String;
-  @:internal var serverSocketName: String;
-  @:internal var clientIp: String;
+  @:internal var serverAddress: Null<ServerAddress>;
+  @:internal var adapterSet: Null<String>;
+  @:internal var user: Null<String>;
+  @:internal var password: Null<String>;
+  @:internal var sessionId: Null<String>;
+  @:internal var serverInstanceAddress: Null<String>;
+  @:internal var serverSocketName: Null<String>;
+  @:internal var clientIp: Null<String>;
 
   @:internal public function new() {}
 
-  public function getServerAddress(): String {
+  public function getServerAddress(): Null<String> {
     return serverAddress;
   }
   public function setServerAddress(serverAddress: String): Void {
-    actionLogger.logInfo('serverAddress changed: $serverAddress');
-    this.serverAddress = new ServerAddress(serverAddress);
+    var newValue = ServerAddress.fromString(serverAddress);
+    actionLogger.logInfo('serverAddress changed: $newValue');
+    this.serverAddress = newValue;
     // TODO forward event to client
   }
-  public function getAdapterSet(): String {
+  public function getAdapterSet(): Null<String> {
     return adapterSet;
   }
   public function setAdapterSet(adapterSet: String): Void {
     actionLogger.logInfo('adapterSet changed: $adapterSet');
     this.adapterSet = adapterSet;
   }
-  public function getUser(): String {
+  public function getUser(): Null<String> {
     return user;
   }
   public function setUser(user: String): Void {
@@ -46,16 +47,16 @@ class ConnectionDetails {
     actionLogger.logInfo("password changed");
     this.password = password;
   }
-  public function getSessionId(): String {
+  public function getSessionId(): Null<String> {
     return sessionId;
   }
-  public function getServerInstanceAddress(): String {
+  public function getServerInstanceAddress(): Null<String> {
     return serverInstanceAddress;
   }
-  public function getServerSocketName(): String {
+  public function getServerSocketName(): Null<String> {
     return serverSocketName;
   }
-  public function getClientIp(): String {
+  public function getClientIp(): Null<String> {
     return clientIp;
   }
 }
