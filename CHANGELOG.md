@@ -1,0 +1,8 @@
+
+removed methods
+- ConnectionOptions.getConnectTimeout
+- ConnectionOptions.setConnectTimeout
+- ConnectionOptions.getCurrentConnectTimeout
+- ConnectionOptions.setCurrentConnectTimeout
+- ConnectionOptions.isEarlyWSOpenEnabled
+- ConnectionOptions.setEarlyWSOpenEnabled
