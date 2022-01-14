@@ -1,8 +1,8 @@
-.PHONY: all web ts node java cs py sys
+.PHONY: all web ts node java cs py sys php
 
-all: web ts node java cs py
+all: web ts node java cs py php
 
-sys: ts node java cs py
+sys: ts node java cs py php
 
 web:
 	cd browserify-full && make
@@ -27,3 +27,6 @@ cs:
 
 py:
 	cd python && make
+
+php:
+	cd php && make
