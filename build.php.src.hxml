@@ -1,4 +1,0 @@
-build.common.hxml
-
--D no-compilation
---php bin/php

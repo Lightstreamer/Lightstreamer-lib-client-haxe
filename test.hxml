@@ -7,3 +7,5 @@ test.java.hxml
 test.cs.hxml
 --next
 test.python.hxml
+--next
+test.php.hxml
