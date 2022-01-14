@@ -4,7 +4,7 @@ import com.lightstreamer.client.Types;
 import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
 
-@:nativeGen
+#if (java || cs || python) @:nativeGen #end
 class ConnectionOptions {
   // TODO synchronize methods
   // TODO fire property listeners

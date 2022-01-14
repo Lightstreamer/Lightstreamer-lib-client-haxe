@@ -4,7 +4,7 @@ package com.lightstreamer.client;
  * Subscription class
  **/
 #if (js || python) @:expose @:native("Subscription") #end
-@:nativeGen
+#if (java || cs || python) @:nativeGen #end
 class Subscription {
   
   #if java
