@@ -13,10 +13,10 @@ class LightstreamerClient {
 
   public static final LIB_NAME: String = "TODO";
   public static final LIB_VERSIONE: String = "TODO";
-  static final logger = LogManager.getLogger("activity");
 
-  // TODO setLoggerProvider
-  // public static function setLoggerProvider(provider: LoggerProvider): Void {}
+  public static function setLoggerProvider(provider: com.lightstreamer.log.LoggerProvider): Void {
+    com.lightstreamer.log.LogManager.setLoggerProvider(provider);
+  }
 
   /**
    * LightstreamerClient ctor

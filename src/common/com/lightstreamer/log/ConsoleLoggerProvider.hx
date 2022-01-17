@@ -61,7 +61,7 @@ private class ConsoleLogger implements Logger {
 
   @:access(haxe.Exception.caught)
   function log(level: String, line: String, ?exception: Exception) {
-    var now = DateTools.format(Date.now(), "%Y.%m.%d %H:%M:%S");
+    var now = Date.now().toString();
     #if java
     var msg = '$now|$level|$category|${java.lang.Thread.currentThread().getName()}|$line';
     #elseif cs

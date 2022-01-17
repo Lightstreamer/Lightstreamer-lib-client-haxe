@@ -115,6 +115,18 @@ abstract NativeStringMap(cs.system.collections.generic.IDictionary_2<String, Str
     }
     return out;
   }
+
+  public function toString() {
+    var out = new StringBuf();
+    var it = this.GetEnumerator();
+    out.add("{\n");
+    while (it.MoveNext()) {
+      var entry = it.Current;
+      out.add(entry.Key + "=" + entry.Value + "\n");
+    }
+    out.add("}");
+    return out.toString();
+  }
 }
 #elseif python
 abstract NativeStringMap(python.Dict<String, String>) {
