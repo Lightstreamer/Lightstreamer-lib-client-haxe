@@ -1,5 +1,6 @@
 package com.lightstreamer.client;
 
+// TODO use NativeMap
 @:nativeGen
 interface ItemUpdate {
   public function getItemName(): String;
