@@ -10,8 +10,8 @@ class HxUtils {
   public static function fixLib(path: String) {
     // fix https://github.com/HaxeFoundation/haxe/issues/7366
     var lib = File.getContent(path);
-    var needle = "typeof exports != \"undefined\" ? exports : typeof window != \"undefined\" ? window : typeof self != \"undefined\" ? self : this";
-    lib = lib.replace(needle, "{}");
+    var needle = "var $hx_exports = typeof exports != \"undefined\" ? exports : typeof window != \"undefined\" ? window : typeof self != \"undefined\" ? self : this;";
+    lib = lib.replace(needle, "var $hx_exports = {};");
     lib = '$lib
 export { ${classes.join(",")} };
 ';
