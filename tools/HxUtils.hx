@@ -5,7 +5,7 @@ using StringTools;
 
 class HxUtils {
 
-  static final classes = ["LightstreamerClient", "Subscription"];
+  static final classes: Array<String> = haxe.Json.parse(File.getContent("tools/coreClasses.json"));
 
   public static function fixLib(path: String) {
     // fix https://github.com/HaxeFoundation/haxe/issues/7366

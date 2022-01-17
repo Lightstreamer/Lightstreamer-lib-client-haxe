@@ -2,9 +2,9 @@ import virtual from '@rollup/plugin-virtual'
 import { terser } from 'rollup-plugin-terser'
 import JsUtils from './tools/JsUtils'
 import pkg from './bin/web/package.json'
+import coreClasses from './tools/coreClasses.json';
 
 const [versionNum, buildNum] = JsUtils.parseSemVer(pkg.version)
-const coreClasses = ["LightstreamerClient", "Subscription"]
 const widgetClasses = ["Chart", "DynaGrid", "SimpleChartListener", "StaticGrid", "StatusWidget"]
 const classes = coreClasses.concat(widgetClasses)
 
