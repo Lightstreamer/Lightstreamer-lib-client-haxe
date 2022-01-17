@@ -1,6 +1,6 @@
 package com.lightstreamer.log;
 
-import com.lightstreamer.client.Types;
+import com.lightstreamer.client.NativeTypes;
 
 #if (js || python) @:expose @:native("ConsoleLogLevel") #end
 #if (java || cs || python) @:nativeGen #end

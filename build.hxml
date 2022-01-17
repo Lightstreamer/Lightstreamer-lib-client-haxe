@@ -9,3 +9,5 @@ build.android.hxml
 build.cs.hxml
 --next
 build.python.hxml
+--next
+build.php.hxml

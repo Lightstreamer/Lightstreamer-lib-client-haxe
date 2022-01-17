@@ -1,6 +1,6 @@
 package com.lightstreamer.log;
 
-import com.lightstreamer.client.Types.Exception;
+import com.lightstreamer.client.NativeTypes;
 import hx.concurrent.lock.RLock;
 
 class LogManager {

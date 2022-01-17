@@ -1,6 +1,6 @@
 package com.lightstreamer.log;
 
-import com.lightstreamer.client.Types;
+import com.lightstreamer.client.NativeTypes;
 
 @:nativeGen
 interface Logger {

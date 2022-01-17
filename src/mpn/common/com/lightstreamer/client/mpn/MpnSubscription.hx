@@ -1,5 +1,7 @@
 package com.lightstreamer.client.mpn;
 
+import com.lightstreamer.client.NativeTypes;
+
 #if (js || python) @:expose @:native("MpnSubscription") #end
 class MpnSubscription {
 
@@ -13,14 +15,14 @@ class MpnSubscription {
   public function addListener(listener: MpnSubscriptionListener): Void {}
   public function removeListener(listener: MpnSubscriptionListener): Void {}
   public function getListeners(): Array<MpnSubscriptionListener> {
-    return null;
+    return [];
   }
   public function getNotificationFormat(): String {
-    return null;
+    return "";
   }
   public function setNotificationFormat(format: String): Void {}
   public function getTriggerExpression(): String {
-    return null;
+    return "";
   }
   public function setTriggerExpression(expr: String): Void {}
   public function isActive(): Bool {
@@ -33,43 +35,43 @@ class MpnSubscription {
     return false;
   }
   public function getStatus(): String {
-    return null;
+    return "";
   }
   public function getStatusTimestamp(): Long {
     return 0;
   }
   public function getItems(): Array<String> {
-    return null;
+    return [];
   }
   public function setItems(items: Array<String>): Void {}
   public function setItemGroup(groupName: String): Void {}
   public function getItemGroup(): String {
-    return null;
+    return "";
   }
   public function getFields(): Array<String> {
-    return null;
+    return [];
   }
   public function setFields(fields: Array<String>): Void {}
   public function setFieldSchema(schemaName: String): Void {}
   public function getFieldSchema(): String {
-    return null;
+    return "";
   }
   public function setDataAdapter(dataAdapter: String): Void {}
   public function getDataAdapter(): String {
-    return null;
+    return "";
   }
   public function setRequestedBufferSize(size: String): Void {}
   public function getRequestedBufferSize(): String {
-    return null;
+    return "";
   }
   public function setRequestedMaxFrequency(freq: String): Void {}
   public function getRequestedMaxFrequency(): String {
-    return null;
+    return "";
   }
   public function getMode(): String {
-    return null;
+    return "";
   }
   public function getSubscriptionId(): String {
-    return null;
+    return "";
   }
 }

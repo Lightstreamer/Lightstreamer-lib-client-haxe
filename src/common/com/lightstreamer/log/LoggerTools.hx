@@ -1,6 +1,6 @@
 package com.lightstreamer.log;
 
-import com.lightstreamer.client.Types.Exception;
+import com.lightstreamer.client.NativeTypes;
 
 final streamLogger = LogManager.getLogger("lightstreamer.stream");
 final protocolLogger = LogManager.getLogger("lightstreamer.protocol");

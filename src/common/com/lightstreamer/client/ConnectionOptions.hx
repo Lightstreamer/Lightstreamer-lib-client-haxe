@@ -1,5 +1,6 @@
 package com.lightstreamer.client;
 
+import com.lightstreamer.client.NativeTypes;
 import com.lightstreamer.client.Types;
 import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;

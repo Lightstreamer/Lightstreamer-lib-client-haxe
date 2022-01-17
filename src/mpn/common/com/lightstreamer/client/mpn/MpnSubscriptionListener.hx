@@ -1,5 +1,7 @@
 package com.lightstreamer.client.mpn;
 
+import com.lightstreamer.client.NativeTypes;
+
 interface MpnSubscriptionListener {
   public function onListenStart(subscription: MpnSubscription): Void;
   public function onListenEnd(subscription: MpnSubscription): Void;
