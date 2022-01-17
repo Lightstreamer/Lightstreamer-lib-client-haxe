@@ -1,7 +1,8 @@
 package com.lightstreamer.client;
 
-import com.lightstreamer.client.Types.IllegalArgumentException;
+import com.lightstreamer.client.NativeTypes.IllegalArgumentException;
 import utest.Assert;
+using TestTools;
 
 class ConnectionOptionsTest extends utest.Test {
   var options = new LightstreamerClient("http://example.com", "TEST").connectionOptions;
@@ -49,9 +50,9 @@ class ConnectionOptionsTest extends utest.Test {
     Assert.equals(null, options.getHttpExtraHeaders());
 
     options.setHttpExtraHeaders(["Foo"=>"bar"]);
-    Assert.same(["Foo"=>"bar"], options.getHttpExtraHeaders());
-    options.setHttpExtraHeaders([]);
-    Assert.same(([]:Map<String,String>), options.getHttpExtraHeaders());
+    Assert.strictSame(["Foo"=>"bar"], options.getHttpExtraHeaders());
+    options.setHttpExtraHeaders(([]:Map<String,String>));
+    Assert.strictSame(([]:Map<String,String>), options.getHttpExtraHeaders());
     options.setHttpExtraHeaders(null);
     Assert.equals(null, options.getHttpExtraHeaders());
   }

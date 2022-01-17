@@ -1,6 +1,6 @@
 package com.lightstreamer.client;
 
-import com.lightstreamer.client.Types.IllegalArgumentException;
+import com.lightstreamer.client.NativeTypes.IllegalArgumentException;
 import utest.Assert;
 
 class ConnectionDetailsTest extends utest.Test {

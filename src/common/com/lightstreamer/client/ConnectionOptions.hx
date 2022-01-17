@@ -57,12 +57,12 @@ class ConnectionOptions {
     // TODO forward to client
   }
 
-  public function getHttpExtraHeaders(): Null<Map<String, String>> {
-    return httpExtraHeaders;
+  public function getHttpExtraHeaders(): Null<NativeStringMap> {
+    return httpExtraHeaders == null ? null : new NativeStringMap(httpExtraHeaders);
   }
-  public function setHttpExtraHeaders(httpExtraHeaders: Null<Map<String, String>>): Void {
-    actionLogger.info('httpExtraHeaders changed: $httpExtraHeaders');
-    this.httpExtraHeaders = httpExtraHeaders;
+  public function setHttpExtraHeaders(httpExtraHeaders: Null<NativeStringMap>): Void {
+    @:nullSafety(Off) actionLogger.info('httpExtraHeaders changed: $httpExtraHeaders');
+    this.httpExtraHeaders = httpExtraHeaders == null ? null : httpExtraHeaders.toHaxe();
   }
 
   public function getIdleTimeout(): Long {
