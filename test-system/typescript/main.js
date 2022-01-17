@@ -1,6 +1,7 @@
 "use strict";
 exports.__esModule = true;
 var lightstreamer_client_node_1 = require("lightstreamer-client-node");
+lightstreamer_client_node_1.LightstreamerClient.setLoggerProvider(new lightstreamer_client_node_1.ConsoleLoggerProvider(lightstreamer_client_node_1.ConsoleLogLevel.DEBUG));
 var QuoteListener = /** @class */ (function () {
     function QuoteListener() {
     }
@@ -28,6 +29,8 @@ var client = new lightstreamer_client_node_1.LightstreamerClient("http://push.li
 //var client = new LightstreamerClient("http://localhost:8080","DEMO");
 client.connect();
 client.subscribe(sub);
+var headers = { "Foo": "bar" };
+client.connectionOptions.setHttpExtraHeaders(headers);
 // setTimeout(function() {
 //     client.disconnect();
 // }, 5*1000);

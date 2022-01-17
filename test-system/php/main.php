@@ -14,6 +14,10 @@ include_once 'QuoteListener.php';
 
 use com\lightstreamer\client\LightstreamerClient;
 use com\lightstreamer\client\Subscription;
+use com\lightstreamer\log\ConsoleLoggerProvider;
+use com\lightstreamer\log\ConsoleLogLevel;
+
+LightstreamerClient::setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel::$DEBUG));
 
 $sub = new Subscription('MERGE', ['item1', 'item2', 'item3'], ['stock_name', 'last_price']);
 $sub->setDataAdapter('QUOTE_ADAPTER');
@@ -27,3 +31,6 @@ $client->connectionOptions->setRetryDelay(2000);
 
 assert($client->connectionDetails->getUser() == 'foo');
 assert($client->connectionOptions->getRetryDelay() == 2000);
+
+$headers = ['Foo' => 'bar'];
+$client->connectionOptions->setHttpExtraHeaders($headers);

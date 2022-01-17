@@ -1,4 +1,6 @@
-import {Subscription, LightstreamerClient, StatusWidget} from 'lightstreamer-client-web';
+import {Subscription, LightstreamerClient, StatusWidget, ConsoleLoggerProvider, ConsoleLogLevel} from 'lightstreamer-client-web';
+
+LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.DEBUG));
 
 var sub = new Subscription("MERGE",["item1","item2","item3"],["stock_name","last_price"]);
 sub.setDataAdapter("QUOTE_ADAPTER");
@@ -13,6 +15,9 @@ var client = new LightstreamerClient("http://push.lightstreamer.com","DEMO");
 client.addListener(new StatusWidget("left", "0px", true));
 client.connect();
 client.subscribe(sub);
+
+var headers = {"Foo": "bar"};
+client.connectionOptions.setHttpExtraHeaders(headers);
 
 setTimeout(function() {
     client.disconnect();

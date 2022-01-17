@@ -2,6 +2,8 @@
 <head>
     <script src="../../node_modules/lightstreamer-client-web/lightstreamer.js"></script>
     <script>
+    LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.DEBUG));
+
     var sub = new Subscription("MERGE",["item1","item2","item3"],["stock_name","last_price"]);
     sub.setDataAdapter("QUOTE_ADAPTER");
     sub.setRequestedSnapshot("yes");
@@ -15,6 +17,9 @@
     client.addListener(new StatusWidget("left", "0px", true));
     client.connect();
     client.subscribe(sub);
+
+    var headers = {"Foo": "bar"};
+    client.connectionOptions.setHttpExtraHeaders(headers);
     
     setTimeout(() => {
         client.disconnect();
