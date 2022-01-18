@@ -185,3 +185,72 @@ abstract NativeStringMap(php.NativeAssocArray<String>) {
   }
 }
 #end
+
+#if js
+abstract NativeList<T>(Array<T>) {
+  public inline function new(lst: Array<T>) {
+    this = lst.copy();
+  }
+
+  public inline function toHaxe() {
+    return this.copy();
+  }
+}
+#elseif java
+abstract NativeList<T>(java.util.List<T>) {
+  public function new(lst: Array<T>) {
+    var out = new java.util.ArrayList<T>();
+    for (e in lst) {
+      out.add(e);
+    }
+    this = out;
+  }
+
+  public function toHaxe() {
+    return [for (e in this) e];
+  }
+}
+#elseif cs
+abstract NativeList<T>(cs.system.collections.generic.IList_1<T>) {
+  public function new(lst: Array<T>) {
+    var out = new cs.system.collections.generic.List_1<T>();
+    for (e in lst) {
+      out.Add(e);
+    }
+    this = out;
+  }
+
+  public function toHaxe(): Array<T> {
+    var out = [];
+    var it = this.GetEnumerator();
+    while (it.MoveNext()) {
+      out.push(it.Current);
+    }
+    return out;
+  }
+}
+#elseif python
+abstract NativeList<T>(Array<T>) {
+  public inline function new(lst: Array<T>) {
+    this = lst.copy();
+  }
+
+  public inline function toHaxe(): Array<T> {
+    return this.copy();
+  } 
+}
+#elseif php
+abstract NativeList<T>(php.NativeIndexedArray<T>) {
+  public function new(lst: Array<T>) {
+    var out = new php.NativeIndexedArray<T>();
+    for (e in lst) {
+      out.push(e);
+    }
+    this = out;
+  }
+
+  public function toHaxe(): Array<T> {
+    return [for (e in this) e];
+  }
+}
+#end

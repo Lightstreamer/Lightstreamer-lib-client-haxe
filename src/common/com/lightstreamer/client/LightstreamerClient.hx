@@ -1,5 +1,6 @@
 package com.lightstreamer.client;
 
+import com.lightstreamer.client.NativeTypes.NativeList;
 import com.lightstreamer.log.LogManager;
 
 /**
@@ -35,8 +36,8 @@ class LightstreamerClient {
     trace("LS:addListener");
   }
   public function removeListener(listener: ClientListener): Void {}
-  public function getListeners(): Array<ClientListener> {
-    return [];
+  public function getListeners(): NativeList<ClientListener> {
+    return new NativeList([]);
   }
   /**
    * connect
@@ -61,8 +62,8 @@ class LightstreamerClient {
     
   }
 
-  public function getSubscriptions(): Array<Subscription> {
-    return [];
+  public function getSubscriptions(): NativeList<Subscription> {
+    return new NativeList([]);
   }
 
   public function sendMessage(message: String): Void {}
