@@ -1,8 +1,6 @@
 package com.lightstreamer.client;
 
 import com.lightstreamer.client.NativeTypes.IllegalArgumentException;
-import utest.Assert;
-using TestTools;
 
 class TestConnectionOptions extends utest.Test {
   var options = new LightstreamerClient("http://example.com", "TEST").connectionOptions;

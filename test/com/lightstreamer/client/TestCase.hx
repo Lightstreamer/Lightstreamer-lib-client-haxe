@@ -1,7 +1,5 @@
 package com.lightstreamer.client;
 
-import utest.Assert;
-import utest.Async;
 import com.lightstreamer.log.ConsoleLoggerProvider;
 
 class TestCase extends utest.Test {
