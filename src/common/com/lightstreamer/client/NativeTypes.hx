@@ -12,6 +12,8 @@ typedef ExceptionImpl = cs.system.Exception
 typedef ExceptionImpl = python.Exceptions.BaseException
 #elseif php
 typedef ExceptionImpl = php.Throwable
+#elseif cpp
+typedef ExceptionImpl = Any
 #end
 
 abstract Exception(ExceptionImpl) {
@@ -24,10 +26,13 @@ abstract Exception(ExceptionImpl) {
 
 #if java
 typedef IllegalArgumentException = java.lang.IllegalArgumentException
+typedef IllegalStateException = java.lang.IllegalStateException
 #elseif cs
 typedef IllegalArgumentException = cs.system.ArgumentException
+typedef IllegalStateException = cs.system.InvalidOperationException
 #else
 class IllegalArgumentException extends haxe.Exception {}
+class IllegalStateException extends haxe.Exception {}
 #end
 
 #if js
@@ -212,7 +217,8 @@ abstract NativeList<T>(java.util.List<T>) {
 }
 #elseif cs
 abstract NativeList<T>(cs.system.collections.generic.IList_1<T>) {
-  public function new(lst: Array<T>) {
+  // TODO remove inline (see issue https://github.com/HaxeFoundation/haxe/issues/10556)
+  public inline function new(lst: Array<T>) {
     var out = new cs.system.collections.generic.List_1<T>();
     for (e in lst) {
       out.Add(e);
@@ -251,6 +257,58 @@ abstract NativeList<T>(php.NativeIndexedArray<T>) {
 
   public function toHaxe(): Array<T> {
     return [for (e in this) e];
+  }
+}
+#end
+
+#if js
+abstract NativeArray<T>(Array<T>) {
+  public inline function new(a: Array<T>) {
+    this = a.copy();
+  }
+
+  public inline function toHaxe(): Array<T> {
+    return this.copy();
+  }
+}
+#elseif java
+abstract NativeArray<T>(java.NativeArray<T>) {
+  public inline function new(a: Array<T>) {
+    this = java.Lib.nativeArray(a, true);
+  }
+
+  public inline function toHaxe(): Array<T> {
+    return java.Lib.array(this);
+  }
+}
+#elseif cs
+abstract NativeArray<T>(cs.NativeArray<T>) {
+  public inline function new(a: Array<T>) {
+    this = cs.Lib.nativeArray(a, true);
+  }
+
+  public inline function toHaxe(): Array<T> {
+    return cs.Lib.array(this);
+  }
+}
+#elseif python
+abstract NativeArray<T>(Array<T>) {
+  public inline function new(a: Array<T>) {
+    this = a.copy();
+  }
+
+  public inline function toHaxe(): Array<T> {
+    return this.copy();
+  }
+}
+#elseif php
+abstract NativeArray<T>(php.NativeArray) {
+  public inline function new(a: Array<T>) {
+    this = php.Lib.toPhpArray(a);
+  }
+
+  public inline function toHaxe(): Array<T> {
+    return php.Lib.toHaxeArray(this);
   }
 }
 #end

@@ -2,6 +2,7 @@ package com.lightstreamer.client;
 
 import com.lightstreamer.client.NativeTypes;
 using StringTools;
+using Lambda;
 
 abstract Millis(Long) to Long {
   public inline function new(millis) {
@@ -95,6 +96,87 @@ class RequestedMaxBandwidthTools {
   }
 }
 
+@:using(com.lightstreamer.client.Types.RequestedBufferSizeTools)
+enum RequestedBufferSize {
+  BSLimited(size: Int);
+  BSUnlimited;
+}
+
+class RequestedBufferSizeTools {
+  public static function fromString(size: Null<String>): Null<RequestedBufferSize> {
+    return if (size == null) null 
+    else switch size {
+      case _.toLowerCase() => "unlimited": BSUnlimited;
+      case Std.parseInt(_) => num if (num != null && num > 0): BSLimited(num);
+      case _: throw new IllegalArgumentException("The given value is not valid for this setting; use null, 'unlimited' or a positive integer instead");
+    }
+  }
+
+  public static function toString(size: Null<RequestedBufferSize>) {
+    return switch size {
+      case null: null;
+      case BSUnlimited: "unlimited";
+      case BSLimited(sz): Std.string(sz);
+    }
+  }
+}
+
+@:using(com.lightstreamer.client.Types.RequestedSnapshotTools)
+enum RequestedSnapshot {
+  SnpYes;
+  SnpNo;
+  SnpLength(len: Int);
+}
+
+class RequestedSnapshotTools {
+  public static function fromString(snapshot: Null<String>): Null<RequestedSnapshot> {
+    return if (snapshot == null) null
+    else switch snapshot {
+      case _.toLowerCase() => "yes": SnpYes;
+      case _.toLowerCase() => "no": SnpNo;
+      case Std.parseInt(_) => len if (len != null && len > 0): SnpLength(len);
+      case _: throw new IllegalArgumentException("The given value is not valid for this setting; use null, 'yes', 'no' or a positive number instead");
+    }
+  }
+
+  public static function toString(snapshot: Null<RequestedSnapshot>) {
+    return switch snapshot {
+      case null: null;
+      case SnpYes: "yes";
+      case SnpNo: "no";
+      case SnpLength(len): Std.string(len);
+    }
+  }
+}
+
+@:using(com.lightstreamer.client.Types.RequestedMaxFrequencyTools)
+enum RequestedMaxFrequency {
+  FreqLimited(max: Float);
+  FreqUnlimited;
+  FreqUnfiltered;
+}
+
+class RequestedMaxFrequencyTools {
+  public static function fromString(freq: Null<String>): Null<RequestedMaxFrequency> {
+    return if (freq == null) null
+    else switch freq {
+      case _.toLowerCase() => "unlimited": FreqUnlimited;
+      case _.toLowerCase() => "unfiltered": FreqUnfiltered;
+      case Std.parseFloat(_) => max if (!Math.isNaN(max) && max > 0): FreqLimited(max);
+      case _: throw new IllegalArgumentException("The given value is not valid for this setting; use null, 'unlimited', 'unfiltered' or a positive number instead");
+    }
+  }
+
+  public static function toString(freq: Null<RequestedMaxFrequency>) {
+    return switch freq {
+      case null: null;
+      case FreqUnlimited: "unlimited";
+      case FreqUnfiltered: "unfiltered";
+      case FreqLimited(max): Std.string(max);
+    }
+  }
+}
+
 @:using(com.lightstreamer.client.Types.RealMaxBandwidthTools)
 enum RealMaxBandwidth {
   BWLimited(bw: Float);
@@ -103,11 +185,94 @@ enum RealMaxBandwidth {
 }
 
 class RealMaxBandwidthTools {
-  public static function toString(bandwidth: RealMaxBandwidth) {
+  public static function toString(bandwidth: Null<RealMaxBandwidth>) {
     return switch bandwidth {
+      case null: null;
       case BWUnlimited: "unlimited";
       case BWLimited(bw): Std.string(bw);
       case BWUnmanaged: "unmanaged";
+    }
+  }
+}
+
+enum abstract SubscriptionMode(String) to String {
+  var Merge = "MERGE";
+  var Distinct = "DISTINCT";
+  var Command = "COMMAND";
+  var Raw = "RAW";
+
+  public static function fromString(mode: String): SubscriptionMode {
+    return switch (mode) {
+      case "MERGE": Merge;
+      case "DISTINCT": Distinct;
+      case "COMMAND": Command;
+      case "RAW": Raw;
+      case _: throw new IllegalArgumentException("The given value is not a valid subscription mode. Admitted values are MERGE, DISTINCT, RAW, COMMAND");
+    };
+  }
+}
+
+abstract Items(Array<String>) to Array<String> {
+  public inline function new(a: Array<String>) {
+    this = a;
+  }
+
+  public static function fromArray(array: Null<Array<String>>): Null<Items> {
+    switch array {
+      case null: 
+        return null;
+      case []:
+        throw new IllegalArgumentException("Item List is empty");
+      case a if (@:nullSafety(Off) a.exists(item -> ~/^$|\s|^\d/.match(item))):
+        // an item name is invalid when it is empty, contains spaces or starts with a digit
+        throw new IllegalArgumentException("Item List is invalid");
+      case a:
+        return new Items(a);
+    }  
+  }
+}
+
+abstract Fields(Array<String>) to Array<String> {
+  public inline function new(a: Array<String>) {
+    this = a;
+  }
+
+  public inline function hasKeyField() {
+    return this.contains("key");
+  }
+
+  public inline function hasCommandField() {
+    return this.contains("command");
+  }
+
+  public static function fromArray(array: Null<Array<String>>): Null<Fields> {
+    switch array {
+      case null:
+        return null;
+      case []:
+        throw new IllegalArgumentException("Field List is empty");
+      case a if (@:nullSafety(Off) a.exists(field -> ~/^$|\s/.match(field))):
+        // a field name is invalid when it is empty or contains spaces
+        throw new IllegalArgumentException("Field List is invalid");
+      case a:
+        return new Fields(a);
+    }
+  }
+}
+
+abstract FieldPosition(Int) to Int {}
+
+abstract Name(String) to String {
+  public inline function new(name: String) this = name;
+
+  public static function fromString(name: Null<String>): Null<Name> {
+    switch name {
+      case null:
+        return null;
+      case "":
+        throw new IllegalArgumentException("The value is empty");
+      case n:
+        return new Name(n);
     }
   }
 }
