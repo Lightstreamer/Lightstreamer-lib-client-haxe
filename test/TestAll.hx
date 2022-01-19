@@ -10,6 +10,7 @@ class TestAll {
     runner.addCase(new TestCase());
     runner.addCase(new TestConnectionDetails());
     runner.addCase(new TestConnectionOptions());
+    runner.addCase(new TestSubscription());
   }
 
   public static function main() {

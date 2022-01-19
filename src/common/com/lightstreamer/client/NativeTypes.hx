@@ -263,6 +263,16 @@ abstract NativeList<T>(php.NativeIndexedArray<T>) {
 
 #if js
 abstract NativeArray<T>(Array<T>) {
+  @:from
+  public static inline function fromHaxeArray<T>(a: Array<T>) {
+    return new NativeArray(a);
+  }
+
+  @:to
+  public inline function toHaxeArray() {
+    return toHaxe();
+  }
+
   public inline function new(a: Array<T>) {
     this = a.copy();
   }
@@ -273,6 +283,16 @@ abstract NativeArray<T>(Array<T>) {
 }
 #elseif java
 abstract NativeArray<T>(java.NativeArray<T>) {
+  @:from
+  public static inline function fromHaxeArray<T>(a: Array<T>) {
+    return new NativeArray(a);
+  }
+
+  @:to
+  public inline function toHaxeArray() {
+    return toHaxe();
+  }
+
   public inline function new(a: Array<T>) {
     this = java.Lib.nativeArray(a, true);
   }
@@ -283,6 +303,16 @@ abstract NativeArray<T>(java.NativeArray<T>) {
 }
 #elseif cs
 abstract NativeArray<T>(cs.NativeArray<T>) {
+  @:from
+  public static inline function fromHaxeArray<T>(a: Array<T>) {
+    return new NativeArray(a);
+  }
+
+  @:to
+  public inline function toHaxeArray() {
+    return toHaxe();
+  }
+
   public inline function new(a: Array<T>) {
     this = cs.Lib.nativeArray(a, true);
   }
@@ -293,6 +323,16 @@ abstract NativeArray<T>(cs.NativeArray<T>) {
 }
 #elseif python
 abstract NativeArray<T>(Array<T>) {
+  @:from
+  public static inline function fromHaxeArray<T>(a: Array<T>) {
+    return new NativeArray(a);
+  }
+
+  @:to
+  public inline function toHaxeArray() {
+    return toHaxe();
+  }
+
   public inline function new(a: Array<T>) {
     this = a.copy();
   }
@@ -303,6 +343,16 @@ abstract NativeArray<T>(Array<T>) {
 }
 #elseif php
 abstract NativeArray<T>(php.NativeArray) {
+  @:from
+  public static inline function fromHaxeArray<T>(a: Array<T>) {
+    return new NativeArray(a);
+  }
+
+  @:to
+  public inline function toHaxeArray() {
+    return toHaxe();
+  }
+  
   public inline function new(a: Array<T>) {
     this = php.Lib.toPhpArray(a);
   }
