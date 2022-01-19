@@ -94,7 +94,7 @@ class ConnectionOptions {
   }
 
   public function getRealMaxBandwidth(): Null<String> {
-    return realMaxBandwidth == null ? null : realMaxBandwidth.toString();
+    return realMaxBandwidth.toString();
   }
 
   public function getPollingInterval(): Long {

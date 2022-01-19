@@ -9,11 +9,11 @@ import com.lightstreamer.log.LogManager;
 #if (js || python) @:expose @:native("LightstreamerClient") #end
 #if (java || cs || python) @:nativeGen #end
 class LightstreamerClient {
-  public final connectionDetails = new ConnectionDetails();
-  public final connectionOptions = new ConnectionOptions();
-
   public static final LIB_NAME: String = "TODO";
   public static final LIB_VERSIONE: String = "TODO";
+
+  public final connectionDetails = new ConnectionDetails();
+  public final connectionOptions = new ConnectionOptions();
 
   public static function setLoggerProvider(provider: com.lightstreamer.log.LoggerProvider): Void {
     com.lightstreamer.log.LogManager.setLoggerProvider(provider);
