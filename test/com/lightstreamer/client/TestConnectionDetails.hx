@@ -3,7 +3,7 @@ package com.lightstreamer.client;
 import com.lightstreamer.client.NativeTypes.IllegalArgumentException;
 import utest.Assert;
 
-class ConnectionDetailsTest extends utest.Test {
+class TestConnectionDetails extends utest.Test {
   var details = new LightstreamerClient("http://example.com", "TEST").connectionDetails;
 
   function testServerAddress() {

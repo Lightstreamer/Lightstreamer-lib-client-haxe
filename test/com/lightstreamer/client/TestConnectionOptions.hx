@@ -4,7 +4,7 @@ import com.lightstreamer.client.NativeTypes.IllegalArgumentException;
 import utest.Assert;
 using TestTools;
 
-class ConnectionOptionsTest extends utest.Test {
+class TestConnectionOptions extends utest.Test {
   var options = new LightstreamerClient("http://example.com", "TEST").connectionOptions;
 
   function testContentLength() {
