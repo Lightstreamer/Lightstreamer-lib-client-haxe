@@ -4,8 +4,7 @@ import com.lightstreamer.log.ConsoleLoggerProvider;
 
 class TestCase extends utest.Test {
   
-  @Ignored
-  function testLog() {
+  function _testLog() {
     var provider = new ConsoleLoggerProvider(ConsoleLogLevel.WARN);
     var log = provider.getLogger("foo");
     log.debug("log at debug");
