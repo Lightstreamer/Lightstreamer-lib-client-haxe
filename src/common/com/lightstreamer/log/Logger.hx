@@ -2,7 +2,7 @@ package com.lightstreamer.log;
 
 import com.lightstreamer.client.NativeTypes;
 
-@:nativeGen
+#if (java || cs || python) @:nativeGen #end
 interface Logger {
   function fatal(line: String, ?exception: Exception): Void;
   function error(line: String, ?exception: Exception): Void;

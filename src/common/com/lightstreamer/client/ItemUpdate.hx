@@ -1,7 +1,7 @@
 package com.lightstreamer.client;
 
 // TODO use NativeMap
-@:nativeGen
+#if (java || cs || python) @:nativeGen #end
 interface ItemUpdate {
   public function getItemName(): String;
   public function getItemPos(): Int;

@@ -1,6 +1,6 @@
 package com.lightstreamer.log;
 
-@:nativeGen
+#if (java || cs || python) @:nativeGen #end
 interface LoggerProvider {
   function getLogger(category: String): Logger;
 }
