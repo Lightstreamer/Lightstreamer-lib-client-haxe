@@ -11,3 +11,5 @@ build.cs.hxml
 build.python.hxml
 --next
 build.php.hxml
+--next
+build.cpp.hxml

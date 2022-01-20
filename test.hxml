@@ -4,8 +4,12 @@ test.node.hxml
 --next
 test.java.hxml
 --next
+test.android.hxml
+--next
 test.cs.hxml
 --next
 test.python.hxml
 --next
 test.php.hxml
+--next
+test.cpp.hxml
