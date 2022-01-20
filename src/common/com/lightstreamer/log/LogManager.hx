@@ -3,6 +3,7 @@ package com.lightstreamer.log;
 import com.lightstreamer.client.NativeTypes;
 import hx.concurrent.lock.RLock;
 
+@:unreflective
 class LogManager {
   static final lock = new RLock();
   static final logInstances: Map<String, LoggerProxy> = [];

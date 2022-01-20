@@ -2,16 +2,16 @@ package com.lightstreamer.log;
 
 import com.lightstreamer.client.NativeTypes;
 
-final streamLogger = LogManager.getLogger("lightstreamer.stream");
-final protocolLogger = LogManager.getLogger("lightstreamer.protocol");
-final internalLogger = LogManager.getLogger("lightstreamer.internal");
-final sessionLogger = LogManager.getLogger("lightstreamer.session");
-final actionLogger = LogManager.getLogger("lightstreamer.actions");
-final reachabilityLogger = LogManager.getLogger("lightstreamer.reachability");
-final subscriptionLogger = LogManager.getLogger("lightstreamer.subscriptions");
-final messageLogger = LogManager.getLogger("lightstreamer.messages");
-final mpnDeviceLogger = LogManager.getLogger("lightstreamer.mpn.device");
-final mpnSubscriptionLogger = LogManager.getLogger("lightstreamer.mpn.subscriptions");
+@:unreflective final streamLogger = LogManager.getLogger("lightstreamer.stream");
+@:unreflective final protocolLogger = LogManager.getLogger("lightstreamer.protocol");
+@:unreflective final internalLogger = LogManager.getLogger("lightstreamer.internal");
+@:unreflective final sessionLogger = LogManager.getLogger("lightstreamer.session");
+@:unreflective final actionLogger = LogManager.getLogger("lightstreamer.actions");
+@:unreflective final reachabilityLogger = LogManager.getLogger("lightstreamer.reachability");
+@:unreflective final subscriptionLogger = LogManager.getLogger("lightstreamer.subscriptions");
+@:unreflective final messageLogger = LogManager.getLogger("lightstreamer.messages");
+@:unreflective final mpnDeviceLogger = LogManager.getLogger("lightstreamer.mpn.device");
+@:unreflective final mpnSubscriptionLogger = LogManager.getLogger("lightstreamer.mpn.subscriptions");
 
 inline function logFatal(logger: Logger, line: String, ?exception: Exception) {
   if (logger.isFatalEnabled()) {

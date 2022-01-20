@@ -189,6 +189,16 @@ abstract NativeStringMap(php.NativeAssocArray<String>) {
     return out;
   }
 }
+#elseif cpp
+abstract NativeStringMap(Map<String, String>) from Map<String, String> to Map<String, String> {
+  public inline function new(a: Map<String, String>) {
+    this = a;
+  }
+
+  public inline function toHaxe(): Map<String, String> {
+    return this;
+  }
+}
 #end
 
 #if js
@@ -257,6 +267,16 @@ abstract NativeList<T>(php.NativeIndexedArray<T>) {
 
   public function toHaxe(): Array<T> {
     return [for (e in this) e];
+  }
+}
+#elseif cpp
+abstract NativeList<T>(Array<T>) {
+  public inline function new(a: Array<T>) {
+    this = a;
+  }
+
+  public inline function toHaxe(): Array<T> {
+    return this;
   }
 }
 #end
@@ -359,6 +379,16 @@ abstract NativeArray<T>(php.NativeArray) {
 
   public inline function toHaxe(): Array<T> {
     return php.Lib.toHaxeArray(this);
+  }
+}
+#elseif cpp
+abstract NativeArray<T>(Array<T>) from Array<T> to Array<T> {
+  public inline function new(a: Array<T>) {
+    this = a;
+  }
+
+  public inline function toHaxe(): Array<T> {
+    return this;
   }
 }
 #end
