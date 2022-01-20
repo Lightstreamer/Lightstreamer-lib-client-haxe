@@ -6,26 +6,26 @@ class TestConnectionDetails extends utest.Test {
   var details = new LightstreamerClient("http://example.com", "TEST").connectionDetails;
 
   function testServerAddress() {
-    Assert.equals("http://example.com", details.getServerAddress());
+    equals("http://example.com", details.getServerAddress());
 
     details.setServerAddress("https://example.com:8080/ls");
-    Assert.equals("https://example.com:8080/ls", details.getServerAddress());
+    equals("https://example.com:8080/ls", details.getServerAddress());
 
-    Assert.raises(() -> details.setServerAddress("example.com"), IllegalArgumentException);
-    Assert.raises(() -> details.setServerAddress("tcp://example.com"), IllegalArgumentException);
+    raises(() -> details.setServerAddress("example.com"), IllegalArgumentException);
+    raises(() -> details.setServerAddress("tcp://example.com"), IllegalArgumentException);
   }
 
   function testAdapterSet() {
-    Assert.equals("TEST", details.getAdapterSet());
+    equals("TEST", details.getAdapterSet());
 
     details.setAdapterSet("DEMO");
-    Assert.equals("DEMO", details.getAdapterSet());
+    equals("DEMO", details.getAdapterSet());
   }
 
   function testUser() {
-    Assert.equals(null, details.getUser());
+    equals(null, details.getUser());
 
     details.setUser("user");
-    Assert.equals("user", details.getUser());
+    equals("user", details.getUser());
   }
 }

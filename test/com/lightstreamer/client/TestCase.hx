@@ -18,6 +18,6 @@ class TestCase extends utest.Test {
     } catch(e) {
       log.error("exception", e.native);
     }
-    Assert.pass();
+    pass();
   }
 }
