@@ -17,53 +17,53 @@ function buildEventDispatcher(): Array<Field> {
       throw false;
   }
   var localSuperClassType: ClassType = localClass.superClass.t.get();
-  var eventType: Type = localClass.superClass.params[0];
-  var eventClassType: ClassType;
-  switch eventType {
+  var typeParamType: Type = localClass.superClass.params[0];
+  var typeParamClassType: ClassType;
+  switch typeParamType {
     case TInst(_.get() => t, _):
-      eventClassType = t;
+      typeParamClassType = t;
     case _:
       throw false;
   }
-  var eventFields: Array<ClassField> = eventClassType.fields.get();
-  for (eventClassField in eventFields) {
+  var typeParamFields: Array<ClassField> = typeParamClassType.fields.get();
+  for (typeParamField in typeParamFields) {
     // event: ClassField
-    var eventFieldType: Type = eventClassField.type;
-    var eventArgs:Array<{name:String, opt:Bool, t:Type}>;
-    switch eventFieldType {
+    var typeParamFieldType: Type = typeParamField.type;
+    var typeParamFieldArgs:Array<{name:String, opt:Bool, t:Type}>;
+    switch typeParamFieldType {
       case TFun(args, _):
-        eventArgs = args;
+        typeParamFieldArgs = args;
       case _:
         throw false;
     }
-    var eventDispatcherArgs: Array<FunctionArg> = [ for (a in eventArgs) {name: a.name, type: a.t.toComplexType()} ];
-    var eventActualArgs: Array<Expr> = [ for (a in eventArgs) macro $i{a.name} ];
-    var eventFieldName: String = eventClassField.name;
+    var eventName: String = typeParamField.name;
+    var eventDispatcherArgs: Array<FunctionArg> = [ for (a in typeParamFieldArgs) {name: a.name, type: a.t.toComplexType()} ];
+    var eventArgs: Array<Expr> = [ for (a in typeParamFieldArgs) macro $i{a.name} ];
     var eventField: Field;
-    if (eventFieldName == "onListenStart") {
-      eventDispatcherArgs = [{name: "listener", type: eventType.toComplexType()}].concat(eventDispatcherArgs);
+    if (eventName == "onListenStart") {
+      eventDispatcherArgs = [{name: "listener", type: typeParamType.toComplexType()}].concat(eventDispatcherArgs);
       eventField = {
         name: "addListenerAndFireOnListenStart",
         access:  [Access.APublic],
         kind: FieldType.FFun({
           expr: macro {
             if (addListener(listener))
-              dispatchToOne(listener, l -> l.onListenStart( $a{eventActualArgs} ));
+              dispatchToOne(listener, l -> l.onListenStart( $a{eventArgs} ));
           },
           ret: (macro:Void),
           args: eventDispatcherArgs
         }),
         pos: Context.currentPos()
       };
-    } else if (eventFieldName == "onListenEnd") {
-      eventDispatcherArgs = [{name: "listener", type: eventType.toComplexType()}].concat(eventDispatcherArgs);
+    } else if (eventName == "onListenEnd") {
+      eventDispatcherArgs = [{name: "listener", type: typeParamType.toComplexType()}].concat(eventDispatcherArgs);
       eventField = {
         name: "removeListenerAndFireOnListenEnd",
         access:  [Access.APublic],
         kind: FieldType.FFun({
           expr: macro {
             if (removeListener(listener))
-              dispatchToOne(listener, l -> l.onListenEnd( $a{eventActualArgs} ));
+              dispatchToOne(listener, l -> l.onListenEnd( $a{eventArgs} ));
           },
           ret: (macro:Void),
           args: eventDispatcherArgs
@@ -72,11 +72,11 @@ function buildEventDispatcher(): Array<Field> {
       };
     } else {
       eventField = {
-        name:  eventFieldName,
+        name:  eventName,
         access:  [Access.APublic],
         kind: FieldType.FFun({
           expr: macro {
-            dispatchToAll(listener -> listener.$eventFieldName( $a{eventActualArgs} ));
+            dispatchToAll(listener -> listener.$eventName( $a{eventArgs} ));
           },
           ret: (macro:Void),
           args: eventDispatcherArgs
