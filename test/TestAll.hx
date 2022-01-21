@@ -11,6 +11,7 @@ class TestAll {
     runner.addCase(new TestConnectionDetails());
     runner.addCase(new TestConnectionOptions());
     runner.addCase(new TestSubscription());
+    runner.addCase(new TestEventDispatcher());
   }
 
   public static function main() {
