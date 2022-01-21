@@ -1,6 +1,8 @@
 package com.lightstreamer.client;
 
 private interface IEvtListener {
+  function onListenStart(s: String): Void;
+  function onListenEnd(s: String): Void;
   function evt1(s: String): Void;
   function evt2(i: Int): Void;
 }
@@ -8,6 +10,8 @@ private interface IEvtListener {
 private class EvtListener implements IEvtListener {
   public var output = new Array<Any>();
   public function new() {}
+  public function onListenStart(s: String) output.push(s);
+  public function onListenEnd(s: String) output.push(s);
   public function evt1(s: String) output.push(s);
   public function evt2(i: Int) output.push(i);
 }
@@ -15,8 +19,13 @@ private class EvtListener implements IEvtListener {
 private class EvtDispatcher extends EventDispatcher<IEvtListener> {}
 
 class TestEventDispatcher extends utest.Test {
-  var dispatcher = new EvtDispatcher();
-  var listener = new EvtListener();
+  var dispatcher: EvtDispatcher;
+  var listener: EvtListener;
+
+  public function setup() {
+    dispatcher = new EvtDispatcher();
+    listener = new EvtListener();
+  }
 
   function testAddListener(async: utest.Async) {
     equals(true, dispatcher.addListener(listener));
@@ -48,5 +57,26 @@ class TestEventDispatcher extends utest.Test {
     equals(listener, dispatcher.getListeners()[0]);
     dispatcher.removeListener(listener);
     equals(0, dispatcher.getListeners().length);
+  }
+
+  function testAddListenerAndFireOnListenStart(async: utest.Async) {
+    dispatcher.addListenerAndFireOnListenStart(listener, "onListenStart");
+    dispatcher.addListenerAndFireOnListenStart(listener, "onListenStart");
+
+    delay(() -> {
+      same(["onListenStart"], listener.output);
+      async.done();
+    }, 50);
+  }
+
+  function testRemoveListenerAndFireOnListenEnd(async: utest.Async) {
+    dispatcher.addListenerAndFireOnListenStart(listener, "onListenStart");
+    dispatcher.removeListenerAndFireOnListenEnd(listener, "onListenEnd");
+    dispatcher.removeListenerAndFireOnListenEnd(listener, "onListenEnd");
+
+    delay(() -> {
+      same(["onListenStart", "onListenEnd"], listener.output);
+      async.done();
+    }, 50);
   }
 }

@@ -22,7 +22,14 @@ class EventDispatcher<T> {
     return listeners;
   }
 
-  function dispatch() {
-    // TODO dispatch event
+  function dispatchToAll(func: T->Void) {
+    for (l in listeners) {
+      dispatchToOne(l, func);
+    }
+  }
+
+  function dispatchToOne(listener: T, func: T->Void) {
+    // TODO dispatch event to event loop
+    func(listener);
   }
 }

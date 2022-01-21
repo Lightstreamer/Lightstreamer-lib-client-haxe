@@ -39,19 +39,51 @@ function buildEventDispatcher(): Array<Field> {
     var eventDispatcherArgs: Array<FunctionArg> = [ for (a in eventArgs) {name: a.name, type: a.t.toComplexType()} ];
     var eventActualArgs: Array<Expr> = [ for (a in eventArgs) macro $i{a.name} ];
     var eventFieldName: String = eventClassField.name;
-    var eventField: Field = {
-      name:  eventFieldName,
-      access:  [Access.APublic],
-      kind: FieldType.FFun({
-        expr: macro {
-          for (listener in listeners)
-            listener.$eventFieldName( $a{eventActualArgs} );
-        },
-        ret: (macro:Void),
-        args: eventDispatcherArgs
-      }),
-      pos: Context.currentPos()
-    };
+    var eventField: Field;
+    if (eventFieldName == "onListenStart") {
+      eventDispatcherArgs = [{name: "listener", type: eventType.toComplexType()}].concat(eventDispatcherArgs);
+      eventField = {
+        name: "addListenerAndFireOnListenStart",
+        access:  [Access.APublic],
+        kind: FieldType.FFun({
+          expr: macro {
+            if (addListener(listener))
+              dispatchToOne(listener, l -> l.onListenStart( $a{eventActualArgs} ));
+          },
+          ret: (macro:Void),
+          args: eventDispatcherArgs
+        }),
+        pos: Context.currentPos()
+      };
+    } else if (eventFieldName == "onListenEnd") {
+      eventDispatcherArgs = [{name: "listener", type: eventType.toComplexType()}].concat(eventDispatcherArgs);
+      eventField = {
+        name: "removeListenerAndFireOnListenEnd",
+        access:  [Access.APublic],
+        kind: FieldType.FFun({
+          expr: macro {
+            if (removeListener(listener))
+              dispatchToOne(listener, l -> l.onListenEnd( $a{eventActualArgs} ));
+          },
+          ret: (macro:Void),
+          args: eventDispatcherArgs
+        }),
+        pos: Context.currentPos()
+      };
+    } else {
+      eventField = {
+        name:  eventFieldName,
+        access:  [Access.APublic],
+        kind: FieldType.FFun({
+          expr: macro {
+            dispatchToAll(listener -> listener.$eventFieldName( $a{eventActualArgs} ));
+          },
+          ret: (macro:Void),
+          args: eventDispatcherArgs
+        }),
+        pos: Context.currentPos()
+      };
+    }
     fields.push(eventField);
   }
   return fields;
