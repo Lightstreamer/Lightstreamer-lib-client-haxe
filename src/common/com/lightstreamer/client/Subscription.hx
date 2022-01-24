@@ -3,9 +3,11 @@ package com.lightstreamer.client;
 import com.lightstreamer.client.NativeTypes;
 import com.lightstreamer.client.Types;
 
-enum SubscriptionState {
+private enum SubscriptionState {
   Inactive; Active; Subscribed;
 }
+
+private class SubscriptionEventDispatcher extends EventDispatcher<SubscriptionListener> {}
 
 /**
  * Subscription class
@@ -14,14 +16,12 @@ enum SubscriptionState {
 #if (java || cs || python) @:nativeGen #end
 class Subscription {
   // TODO synchronize methods
-  // TODO implement listeners
+  final eventDispatcher = new SubscriptionEventDispatcher();
   final mode: SubscriptionMode;
   var items: Null<Items>;
   var fields: Null<Fields>;
   var group: Null<Name>;
   var schema: Null<Name>;
-  // let multicastDelegate = MulticastDelegate<SubscriptionDelegate>()
-  // let callbackQueue = defaultQueue
   var dataAdapter: Null<Name>;
   var bufferSize: Null<RequestedBufferSize>;
   var snapshot: Null<RequestedSnapshot>;
@@ -54,10 +54,14 @@ class Subscription {
     }
   }
 
-  public function addListener(listener: SubscriptionListener): Void {}
-  public function removeListener(listener: SubscriptionListener): Void {}
+  public function addListener(listener: SubscriptionListener): Void {
+    eventDispatcher.addListenerAndFireOnListenStart(listener, this);
+  }
+  public function removeListener(listener: SubscriptionListener): Void {
+    eventDispatcher.removeListenerAndFireOnListenEnd(listener, this);
+  }
   public function getListeners(): NativeList<SubscriptionListener> {
-    return new NativeList([]);
+    return new NativeList(eventDispatcher.getListeners());
   }
 
   public function isActive(): Bool {

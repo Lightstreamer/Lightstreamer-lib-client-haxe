@@ -1,7 +1,8 @@
 package com.lightstreamer.client;
 
 import com.lightstreamer.client.NativeTypes.NativeList;
-import com.lightstreamer.log.LogManager;
+
+private class ClientEventDispatcher extends EventDispatcher<ClientListener> {}
 
 /**
  * LightstreamerClient class
@@ -14,6 +15,7 @@ class LightstreamerClient {
 
   public final connectionDetails = new ConnectionDetails();
   public final connectionOptions = new ConnectionOptions();
+  final eventDispatcher = new ClientEventDispatcher();
 
   public static function setLoggerProvider(provider: com.lightstreamer.log.LoggerProvider): Void {
     com.lightstreamer.log.LogManager.setLoggerProvider(provider);
@@ -32,12 +34,14 @@ class LightstreamerClient {
       connectionDetails.setAdapterSet(adapterSet);
     }
   }
-  public function addListener(): Void {
-    trace("LS:addListener");
+  public function addListener(listener: ClientListener): Void {
+    eventDispatcher.addListenerAndFireOnListenStart(listener, this);
   }
-  public function removeListener(listener: ClientListener): Void {}
+  public function removeListener(listener: ClientListener): Void {
+    eventDispatcher.removeListenerAndFireOnListenEnd(listener, this);
+  }
   public function getListeners(): NativeList<ClientListener> {
-    return new NativeList([]);
+    return new NativeList(eventDispatcher.getListeners());
   }
   /**
    * connect
