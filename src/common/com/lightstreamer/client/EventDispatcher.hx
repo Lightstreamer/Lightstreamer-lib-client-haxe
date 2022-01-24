@@ -2,6 +2,7 @@ package com.lightstreamer.client;
 
 @:autoBuild(com.lightstreamer.client.Macros.buildEventDispatcher())
 class EventDispatcher<T> {
+  static final executor = hx.concurrent.executor.Executor.create(1);
   var listeners = new Array<T>();
 
   public function new() {}
@@ -29,7 +30,6 @@ class EventDispatcher<T> {
   }
 
   function dispatchToOne(listener: T, func: T->Void) {
-    // TODO dispatch event to event loop
-    func(listener);
+    executor.submit(() -> func(listener));
   }
 }
