@@ -1,4 +1,6 @@
 build.common.hxml
 
+-D net-ver=50
+-D unsafe
 -D no-root
 --cs bin/cs
