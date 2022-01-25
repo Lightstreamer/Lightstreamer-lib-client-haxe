@@ -1,4 +1,4 @@
-import {Subscription, LightstreamerClient, StatusWidget, ConsoleLoggerProvider, ConsoleLogLevel} from 'lightstreamer-client-web';
+import {Subscription, LightstreamerClient, StatusWidget, ConsoleLoggerProvider, ConsoleLogLevel, MpnSubscription} from 'lightstreamer-client-web';
 
 LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.DEBUG));
 
@@ -18,6 +18,9 @@ client.subscribe(sub);
 
 var headers = {"Foo": "bar"};
 client.connectionOptions.setHttpExtraHeaders(headers);
+
+var mpnSub = new MpnSubscription("MERGE",["item1","item2","item3"],["stock_name","last_price"]);
+console.assert("MERGE", mpnSub.getMode());
 
 setTimeout(function() {
     client.disconnect();
