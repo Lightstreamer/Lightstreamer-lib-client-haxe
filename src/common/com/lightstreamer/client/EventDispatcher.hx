@@ -2,7 +2,20 @@ package com.lightstreamer.client;
 
 @:autoBuild(com.lightstreamer.client.Macros.buildEventDispatcher())
 class EventDispatcher<T> {
+  #if python
+  // TODO remove python workaround
+  // workaround for https://github.com/HaxeFoundation/haxe/issues/10562
+  static function createExecutor() {
+    haxe.Log.trace = (v, ?infos) -> {
+      @:nullSafety(Off) var out = haxe.Log.formatOutput(v, infos);
+      Sys.println(out);
+    };
+    return hx.concurrent.executor.Executor.create(1);
+  }
+  static final executor = createExecutor();
+  #else
   static final executor = hx.concurrent.executor.Executor.create(1);
+  #end
   var listeners = new Array<T>();
 
   public function new() {}
