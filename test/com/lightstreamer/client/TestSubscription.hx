@@ -4,10 +4,13 @@ import com.lightstreamer.client.NativeTypes.IllegalStateException;
 import com.lightstreamer.client.NativeTypes.IllegalArgumentException;
 
 class TestSubscription extends utest.Test {
-  var sub = new Subscription("MERGE", ["i1"], ["f1"]);
+  var sub: Subscription;
+
+  function setup() {
+    sub = new Subscription("MERGE", ["i1"], ["f1"]);
+  }
 
   function testCtor() {
-    var sub = new Subscription("MERGE", ["i1"], ["f1"]);
     equals("MERGE", sub.getMode());
     strictSame(["i1"], sub.getItems());
     strictSame(["f1"], sub.getFields());
