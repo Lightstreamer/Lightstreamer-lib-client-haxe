@@ -6,3 +6,7 @@ removed methods
 - ConnectionOptions.setCurrentConnectTimeout
 - ConnectionOptions.isEarlyWSOpenEnabled
 - ConnectionOptions.setEarlyWSOpenEnabled
+
+added methods
+- MpnSubscription.getActualTriggerExpression
+- MpnSubscription.getActualNotificationFormat
