@@ -11,6 +11,9 @@ class TestAll {
     runner.addCase(new TestConnectionDetails());
     runner.addCase(new TestConnectionOptions());
     runner.addCase(new TestSubscription());
+    #if LS_MPN
+    runner.addCase(new com.lightstreamer.client.mpn.TestMpnSubscription());
+    #end
     runner.addCase(new TestEventDispatcher());
   }
 
