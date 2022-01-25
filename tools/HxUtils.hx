@@ -5,18 +5,16 @@ using StringTools;
 
 class HxUtils {
 
-  static final classes: Array<String> = haxe.Json.parse(File.getContent("tools/coreClasses.json"));
-
-  public static function fixLib(path: String) {
-    // fix https://github.com/HaxeFoundation/haxe/issues/7366
-    var lib = File.getContent(path);
-    var needle = "var $hx_exports = typeof exports != \"undefined\" ? exports : typeof window != \"undefined\" ? window : typeof self != \"undefined\" ? self : this;";
-    lib = lib.replace(needle, "var $hx_exports = {};");
-    lib = '$lib
+public static function fixLib(path: String, classes: Array<String>) {
+  // fix https://github.com/HaxeFoundation/haxe/issues/7366
+  var lib = File.getContent(path);
+  var needle = "var $hx_exports = typeof exports != \"undefined\" ? exports : typeof window != \"undefined\" ? window : typeof self != \"undefined\" ? self : this;";
+  lib = lib.replace(needle, "var $hx_exports = {};");
+  lib = '$lib
 export { ${classes.join(",")} };
 ';
-    File.saveContent(path, lib);
-  }
+  File.saveContent(path, lib);
+}
 
   public static function renameTypescriptDeclarationFile(inPath: String) {
     var baseDir = Path.directory(inPath);

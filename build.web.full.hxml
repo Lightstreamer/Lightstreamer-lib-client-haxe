@@ -1,0 +1,10 @@
+build.common.hxml
+
+--class-path src/mpn/common
+
+com.lightstreamer.client.mpn.MpnSubscription
+
+--library hxtsdgen
+-D shallow-expose
+--js bin/web/lightstreamer_orig.full.js
+--cmd haxe -p tools --run WebFullGenerator

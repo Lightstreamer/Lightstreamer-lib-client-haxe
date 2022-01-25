@@ -1,6 +1,3 @@
-build.common.hxml
-
---library hxtsdgen
--D shallow-expose
---js bin/web/lightstreamer_orig.js
---cmd haxe -p tools --run WebGenerator
+build.web.core.hxml
+--next
+build.web.full.hxml

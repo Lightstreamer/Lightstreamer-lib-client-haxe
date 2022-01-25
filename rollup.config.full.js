@@ -2,11 +2,12 @@ import virtual from '@rollup/plugin-virtual'
 import { terser } from 'rollup-plugin-terser'
 import JsUtils from './tools/JsUtils'
 import pkg from './bin/web/package.json'
-import coreClasses from './tools/coreClasses.json';
+import coreClasses from './tools/classes.core.json'
+import mpnClasses from './tools/classes.mpn.json'
 
 const [versionNum, buildNum] = JsUtils.parseSemVer(pkg.version)
 const widgetClasses = ["Chart", "DynaGrid", "SimpleChartListener", "StaticGrid", "StatusWidget"]
-const classes = coreClasses.concat(widgetClasses)
+const classes = coreClasses.concat(mpnClasses).concat(widgetClasses)
 
 export default [
   {
@@ -51,7 +52,7 @@ export default [
 
 function generateVirtualEntryPoint() {
   return `
-export { ${ coreClasses.join(",") } } from "./bin/web/lightstreamer-core.esm.js";
+export { ${ coreClasses.concat(mpnClasses).join(",") } } from "./bin/web/lightstreamer_orig.full.js";
 export { ${ widgetClasses.join(",") } } from "./bin/web/lightstreamer-widgets.esm.js";
 `
 }

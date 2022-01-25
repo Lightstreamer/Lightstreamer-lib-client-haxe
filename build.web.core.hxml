@@ -1,0 +1,5 @@
+build.common.hxml
+
+-D shallow-expose
+--js bin/web/lightstreamer_orig.core.js
+--cmd haxe -p tools --run WebCoreGenerator

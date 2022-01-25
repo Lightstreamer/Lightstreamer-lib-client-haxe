@@ -1,13 +1,13 @@
 import JsUtils from './tools/JsUtils'
 import { terser } from 'rollup-plugin-terser'
 import pkg from './bin/web/package.json'
-import classes from './tools/coreClasses.json';
+import classes from './tools/classes.core.json';
 
 const [versionNum, buildNum] = JsUtils.parseSemVer(pkg.version)
 
 export default [
   {
-    input: 'bin/web/lightstreamer_orig.js',
+    input: 'bin/web/lightstreamer_orig.core.js',
     output: [ 
       {
         name: 'lightstreamerExports',
