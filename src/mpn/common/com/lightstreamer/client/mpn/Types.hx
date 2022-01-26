@@ -41,7 +41,22 @@ class MpnRequestedMaxFrequencyTools {
 }
 
 abstract MpnSubscriptionId(String) to String {
-  public inline function new(id: String) {
-    this = id;
-  }
+  public inline function new(id: String) this = id;
+}
+
+abstract ApplicationId(String) to String {
+  public inline function new(id: String) this = id;
+}
+
+abstract DeviceToken(String) to String {
+  public inline function new(token: String) this = token;
+}
+
+abstract DeviceId(String) to String {
+  public inline function new(id: String) this = id;
+}
+
+enum abstract Platform(String) to String {
+  var Google;
+  var Apple;
 }

@@ -2,10 +2,10 @@ build.common.hxml
 
 --class-path src/mpn/common
 --class-path src/mpn/android
+--class-path src/extern/android
 
+com.lightstreamer.client.mpn.MpnDevice
 com.lightstreamer.client.mpn.MpnSubscription
 
 -D jvm.dynamic-level=0
--D android
---java-lib %ANDROID_SDK%/platforms/android-30/android.jar
 --jvm bin/android/ls-android-client.jar
