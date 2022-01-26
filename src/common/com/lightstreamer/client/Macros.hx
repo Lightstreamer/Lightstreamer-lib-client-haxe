@@ -48,7 +48,7 @@ function buildEventDispatcher(): Array<Field> {
         kind: FieldType.FFun({
           expr: macro {
             if (addListener(listener))
-              dispatchToOne(listener, l -> l.onListenStart( $a{eventArgs} ));
+              dispatchToOne(listener, l -> if (l.onListenStart != null) l.onListenStart( $a{eventArgs} ));
           },
           ret: (macro:Void),
           args: eventDispatcherArgs
@@ -63,7 +63,7 @@ function buildEventDispatcher(): Array<Field> {
         kind: FieldType.FFun({
           expr: macro {
             if (removeListener(listener))
-              dispatchToOne(listener, l -> l.onListenEnd( $a{eventArgs} ));
+              dispatchToOne(listener, l -> if (l.onListenEnd != null) l.onListenEnd( $a{eventArgs} ));
           },
           ret: (macro:Void),
           args: eventDispatcherArgs
@@ -76,7 +76,7 @@ function buildEventDispatcher(): Array<Field> {
         access:  [Access.APublic],
         kind: FieldType.FFun({
           expr: macro {
-            dispatchToAll(listener -> listener.$eventName( $a{eventArgs} ));
+            dispatchToAll(listener -> if (listener.$eventName != null) listener.$eventName( $a{eventArgs} ));
           },
           ret: (macro:Void),
           args: eventDispatcherArgs
