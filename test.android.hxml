@@ -1,8 +1,9 @@
 test.common.hxml
 
--D LS_MPN
 --class-path src/mpn/common
 --class-path src/mpn/android
+--class-path src/extern/android
+
+-D LS_MPN
 -D jvm.dynamic-level=0
---java-lib %ANDROID_SDK%/platforms/android-30/android.jar
 --jvm bin-test/android/ls-android-client.jar
