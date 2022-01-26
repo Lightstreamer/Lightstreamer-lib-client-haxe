@@ -2,6 +2,7 @@ package com.lightstreamer.client.mpn;
 
 import com.lightstreamer.client.NativeTypes;
 import com.lightstreamer.client.Types;
+import com.lightstreamer.client.mpn.Types;
 
 private enum MpnSubscriptionState {
   Unknown; Active; Subscribed; Triggered;
