@@ -6,6 +6,7 @@ build.common.hxml
 com.lightstreamer.client.mpn.MpnDevice
 com.lightstreamer.client.mpn.MpnSubscription
 com.lightstreamer.client.mpn.FirebaseMpnBuilder
+com.lightstreamer.client.mpn.SafariMpnBuilder
 
 --library hxtsdgen
 -D shallow-expose
