@@ -36,9 +36,9 @@ class IllegalStateException extends haxe.Exception {}
 #end
 
 #if js
-abstract NativeStringMap(js.lib.Object) {
+abstract NativeStringMap(haxe.DynamicAccess<String>) {
   @:from
-  public static inline function fromHaxeMap(map) {
+  public static inline function fromHaxeMap(map: Map<String, String>) {
     return new NativeStringMap(map);
   }
 
@@ -47,20 +47,33 @@ abstract NativeStringMap(js.lib.Object) {
     return toHaxe();
   }
 
-  public function new(map: Map<String, String>) {
+  public overload inline extern function new(map: Map<String, String>) {
+    this = fromMapToDynamicAccess(map);
+  }
+  
+  public overload inline extern function new(map: haxe.DynamicAccess<String>) {
+    this = map.copy();
+  }
+
+  static function fromMapToDynamicAccess(map: Map<String, String>) {
     var out: haxe.DynamicAccess<String> = {};
     for (k => v in map) {
       out[k] = v;
     }
-    this = cast out;
+    return out;
   }
 
   public function toHaxe(): Map<String, String> {
     var out = new Map<String, String>();
-    for (entry in js.lib.Object.entries(this)) {
-      out[entry.key] = entry.value;
+    @:nullSafety(Off) 
+    for (k => v in this) {
+      out[k] = v;
     }
     return out;
+  }
+
+  public function toDynamicAccess(): haxe.DynamicAccess<String> {
+    @:nullSafety(Off) return this.copy();
   }
 }
 #elseif java

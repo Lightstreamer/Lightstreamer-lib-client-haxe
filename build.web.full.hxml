@@ -1,9 +1,11 @@
 build.common.hxml
 
 --class-path src/mpn/common
+--class-path src/mpn/web
 
 com.lightstreamer.client.mpn.MpnDevice
 com.lightstreamer.client.mpn.MpnSubscription
+com.lightstreamer.client.mpn.FirebaseMpnBuilder
 
 --library hxtsdgen
 -D shallow-expose
