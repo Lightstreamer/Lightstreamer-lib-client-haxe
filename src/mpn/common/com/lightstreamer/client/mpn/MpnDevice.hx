@@ -17,6 +17,8 @@ private enum abstract MpnDeviceStatus(String) to String {
   var SUSPENDED;
 }
 
+#if (js || python) @:expose @:native("MpnDevice") #end
+#if (java || cs || python) @:nativeGen #end
 class MpnDevice {
   // TOOD synchronize methods
   final eventDispatcher = new MpnDeviceEventDispatcher();
