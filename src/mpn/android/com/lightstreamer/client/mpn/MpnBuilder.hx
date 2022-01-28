@@ -185,15 +185,7 @@ class MpnBuilder {
   }
 
   public overload function data(newValue: Null<NativeStringMap>): MpnBuilder {
-    if (newValue == null) {
-      obj.android.data = null;
-      return this;
-    }
-    var data = new DynamicAccess<String>();
-    for (k => v in newValue.toHaxe()) {
-      data[k] = v;
-    }
-    obj.android.data = data;
+    obj.android.data = newValue == null ? null : newValue.toDynamicAccess();
     return this;
   }
   public overload function data(): Null<NativeStringMap> {

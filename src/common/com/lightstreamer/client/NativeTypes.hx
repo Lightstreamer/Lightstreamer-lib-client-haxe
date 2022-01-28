@@ -98,6 +98,14 @@ abstract NativeStringMap(java.util.Map<String, String>) {
     }
     return out;
   }
+
+  public function toDynamicAccess(): haxe.DynamicAccess<String> {
+    var out = new haxe.DynamicAccess<String>();
+    for (entry in this.entrySet()) {
+      out[entry.getKey()] = entry.getValue();
+    }
+    return out;
+  }
 }
 #elseif cs
 abstract NativeStringMap(cs.system.collections.generic.IDictionary_2<String, String>) {
