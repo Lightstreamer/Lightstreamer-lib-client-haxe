@@ -75,7 +75,15 @@ abstract NativeStringMap(java.util.Map<String, String>) {
     return toHaxe();
   }
 
-  public function new(map: Map<String, String>) {
+  public overload function new(map: Map<String, String>) {
+    var out = new java.util.HashMap<String, String>();
+    for (k => v in map) {
+      out.put(k, v);
+    }
+    this = out;
+  }
+
+  public overload function new(map: haxe.DynamicAccess<String>) {
     var out = new java.util.HashMap<String, String>();
     for (k => v in map) {
       out.put(k, v);

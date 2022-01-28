@@ -10,3 +10,9 @@ removed methods
 added methods
 - MpnSubscription.getActualTriggerExpression
 - MpnSubscription.getActualNotificationFormat
+
+removed methods on android
+- MpnBuilder.contentAvailable(String contentAvailable)
+- MpnBuilder.contentAvailableAsString()
+- MpnBuilder.contentAvailable(boolean contentAvailable)
+- MpnBuilder.contentAvailableAsBool()
