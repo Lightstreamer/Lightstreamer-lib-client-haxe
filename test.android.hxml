@@ -7,3 +7,4 @@ test.common.hxml
 -D LS_MPN
 -D jvm.dynamic-level=0
 --jvm bin-test/android/ls-android-client.jar
+--cmd java -jar bin-test/android/ls-android-client.jar

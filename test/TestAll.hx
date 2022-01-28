@@ -16,6 +16,9 @@ class TestAll {
     runner.addCase(new com.lightstreamer.client.mpn.TestMpnDevice());
     #end
     runner.addCase(new com.lightstreamer.client.mpn.TestMpnSubscription());
+    #if java
+    runner.addCase(new com.lightstreamer.client.mpn.TestMpnBuilder());
+    #end
     #end
     runner.addCase(new TestEventDispatcher());
   }
