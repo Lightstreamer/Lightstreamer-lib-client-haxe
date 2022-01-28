@@ -16,3 +16,7 @@ removed methods on android
 - MpnBuilder.contentAvailableAsString()
 - MpnBuilder.contentAvailable(boolean contentAvailable)
 - MpnBuilder.contentAvailableAsBool()
+
+moved classes
+- to com.lightstreamer.client.mpn.MpnDevice from com.lightstreamer.client.mpn.android.MpnDevice
+- to com.lightstreamer.client.mpn.MpnBuilder from com.lightstreamer.client.mpn.util.MpnBuilder
