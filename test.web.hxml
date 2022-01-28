@@ -1,6 +1,7 @@
 test.common.hxml
 
 --class-path src/mpn/common
+--class-path src/mpn/web
 
 -D LS_MPN
 --js bin-test/web/lightstreamer.js

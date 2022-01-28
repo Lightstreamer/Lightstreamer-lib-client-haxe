@@ -14,6 +14,7 @@ class TestAll {
     #if LS_MPN
     #if js
     runner.addCase(new com.lightstreamer.client.mpn.TestMpnDevice());
+    runner.addCase(new com.lightstreamer.client.mpn.TestFirebaseMpnBuilder());
     #end
     runner.addCase(new com.lightstreamer.client.mpn.TestMpnSubscription());
     #if java
