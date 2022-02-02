@@ -1,4 +1,9 @@
 
+js only
+- removed ConnectionSharing
+
+revised logging mechanism (same API on all platforms)
+
 removed methods
 - ConnectionOptions.getConnectTimeout
 - ConnectionOptions.setConnectTimeout
