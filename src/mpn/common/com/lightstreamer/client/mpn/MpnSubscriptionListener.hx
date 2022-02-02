@@ -2,6 +2,7 @@ package com.lightstreamer.client.mpn;
 
 import com.lightstreamer.client.NativeTypes;
 
+#if (java || cs || python) @:nativeGen #end
 interface MpnSubscriptionListener {
   public function onListenStart(subscription: MpnSubscription): Void;
   public function onListenEnd(subscription: MpnSubscription): Void;

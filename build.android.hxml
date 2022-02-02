@@ -11,3 +11,4 @@ com.lightstreamer.client.mpn.MpnBuilder
 -D jvm.dynamic-level=0
 --java-lib tools/jar
 --java bin/android
+--cmd mv bin/android/android.jar bin/android/ls-android-client.jar

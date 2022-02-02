@@ -27,6 +27,7 @@ private typedef JsonFormat = {
   };
 }
 
+#if (java || cs || python) @:nativeGen #end
 class MpnBuilder {
   final obj: JsonFormat;
 
