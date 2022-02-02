@@ -11,3 +11,7 @@ function raisesEx(method:() -> Void, type: Class<Dynamic>, exMsg: String) {
     utest.Assert.equals(exMsg, e.message);
   }
 }
+
+function jsonEquals(expected: String, actual: String) {
+  utest.Assert.same(haxe.Json.parse(expected), haxe.Json.parse(actual));
+}
