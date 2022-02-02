@@ -15,7 +15,7 @@ function getPackageVersion(appContext: Context): haxe.Int64 {
 function readTokenFromSharedPreferences(appContext: Context) {
   var packageName = appContext.getPackageName();
   var prefs = appContext.getSharedPreferences(packageName, Context.MODE_PRIVATE);
-  return prefs.getString(PREFS_REG_ID, null);
+  @:nullSafety(Off) return prefs.getString(PREFS_REG_ID, null);
 }
 
 function writeTokenToSharedPreferences(appContext: Context, value: String) {

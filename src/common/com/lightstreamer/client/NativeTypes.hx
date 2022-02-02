@@ -346,8 +346,12 @@ abstract NativeArray<T>(java.NativeArray<T>) {
     this = java.Lib.nativeArray(a, true);
   }
 
-  public inline function toHaxe(): Array<T> {
-    return java.Lib.array(this);
+  public function toHaxe(): Array<T> {
+    var a = [];
+    for (i in 0...this.length) {
+      a[i] = this[i];
+    }
+    return a;
   }
 }
 #elseif cs
