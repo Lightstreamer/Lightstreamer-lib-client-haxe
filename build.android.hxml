@@ -7,6 +7,7 @@ com.lightstreamer.client.mpn.MpnDevice
 com.lightstreamer.client.mpn.MpnSubscription
 com.lightstreamer.client.mpn.MpnBuilder
 
+-D android
 -D jvm.dynamic-level=0
 --java-lib tools/jar
 --java bin/android

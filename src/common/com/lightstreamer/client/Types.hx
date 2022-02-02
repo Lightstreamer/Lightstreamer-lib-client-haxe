@@ -4,15 +4,6 @@ import com.lightstreamer.client.NativeTypes;
 using StringTools;
 using Lambda;
 
-inline function regexMatches(regex: String, input: String): Bool {
-#if java
-// patch for android (see issue https://github.com/HaxeFoundation/haxe/issues/10579)
-return java.util.regex.Pattern.matches(regex, input);
-#else
-return new EReg(regex, "").match(input);
-#end
-}
-
 abstract Millis(Long) to Long {
   public inline function new(millis) {
     this = millis;
@@ -238,7 +229,7 @@ abstract Items(Array<String>) to Array<String> {
         return null;
       case []:
         throw new IllegalArgumentException("Item List is empty");
-      case a if (@:nullSafety(Off) a.exists(item -> regexMatches("^$|\\s|^\\d", item))):
+      case a if (@:nullSafety(Off) a.exists(item -> ~/^$|\s|^\d/.match(item))):
         // an item name is invalid when it is empty, contains spaces or starts with a digit
         throw new IllegalArgumentException("Item List is invalid");
       case a:
@@ -266,7 +257,7 @@ abstract Fields(Array<String>) to Array<String> {
         return null;
       case []:
         throw new IllegalArgumentException("Field List is empty");
-      case a if (@:nullSafety(Off) a.exists(field -> regexMatches("^$|\\s", field))):
+      case a if (@:nullSafety(Off) a.exists(field -> ~/^$|\s/.match(field))):
         // a field name is invalid when it is empty or contains spaces
         throw new IllegalArgumentException("Field List is invalid");
       case a:

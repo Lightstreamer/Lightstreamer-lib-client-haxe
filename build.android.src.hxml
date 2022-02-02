@@ -2,12 +2,13 @@ build.common.hxml
 
 --class-path src/mpn/common
 --class-path src/mpn/android
---class-path src/extern/android
 
 com.lightstreamer.client.mpn.MpnDevice
 com.lightstreamer.client.mpn.MpnSubscription
 com.lightstreamer.client.mpn.MpnBuilder
 
 -D no-compilation
+-D android
 -D jvm.dynamic-level=0
+--java-lib tools/jar
 --java bin/android

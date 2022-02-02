@@ -4,6 +4,7 @@ test.common.hxml
 --class-path src/mpn/android
 
 -D LS_MPN
+-D android
 -D jvm.dynamic-level=0
 --java-lib tools/jar
 --java bin-test/android
