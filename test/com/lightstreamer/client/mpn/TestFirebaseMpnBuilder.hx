@@ -9,34 +9,34 @@ class TestFirebaseMpnBuilder extends utest.Test {
 
   function testCtor() {
     b = new FirebaseMpnBuilder();
-    equals("{\"webpush\":{\"notification\":{}}}", b.build());
+    jsonEquals("{\"webpush\":{\"notification\":{}}}", b.build());
 
     b = new FirebaseMpnBuilder(null);
-    equals("{\"webpush\":{\"notification\":{}}}", b.build());
+    jsonEquals("{\"webpush\":{\"notification\":{}}}", b.build());
 
     b = new FirebaseMpnBuilder("null");
-    equals("{\"webpush\":{\"notification\":{}}}", b.build());
+    jsonEquals("{\"webpush\":{\"notification\":{}}}", b.build());
 
     b = new FirebaseMpnBuilder("{}");
-    equals("{\"webpush\":{\"notification\":{}}}", b.build());
+    jsonEquals("{\"webpush\":{\"notification\":{}}}", b.build());
 
     b = new FirebaseMpnBuilder("{\"foo\":123}");
-    equals("{\"foo\":123,\"webpush\":{\"notification\":{}}}", b.build());
+    jsonEquals("{\"foo\":123,\"webpush\":{\"notification\":{}}}", b.build());
 
     b = new FirebaseMpnBuilder("{\"webpush\":{\"notification\":{\"title\":\"TITLE\",\"body\":\"BODY\"},\"data\":{\"KEY\":\"VAL\"}}}");
     equals("BODY", b.getBody());
     equals("TITLE", b.getTitle());
     strictSame(["KEY" => "VAL"], b.getData());
-    equals("{\"webpush\":{\"notification\":{\"title\":\"TITLE\",\"body\":\"BODY\"},\"data\":{\"KEY\":\"VAL\"}}}", b.build());
+    jsonEquals("{\"webpush\":{\"notification\":{\"title\":\"TITLE\",\"body\":\"BODY\"},\"data\":{\"KEY\":\"VAL\"}}}", b.build());
   }
 
   function testBuild() {
     b.setTitle("TITLE");
     b.setBody("BODY");
-    equals("{\"webpush\":{\"notification\":{\"title\":\"TITLE\",\"body\":\"BODY\"}}}", b.build());
+    jsonEquals("{\"webpush\":{\"notification\":{\"title\":\"TITLE\",\"body\":\"BODY\"}}}", b.build());
 
     b.setTitle(null);
-    equals("{\"webpush\":{\"notification\":{\"body\":\"BODY\"}}}", b.build());
+    jsonEquals("{\"webpush\":{\"notification\":{\"body\":\"BODY\"}}}", b.build());
   }
 
   function testHeaders() {
@@ -44,11 +44,11 @@ class TestFirebaseMpnBuilder extends utest.Test {
 
     b.setHeaders(["KEY" => "VAL"]);
     strictSame(["KEY" => "VAL"], b.getHeaders());
-    equals("{\"webpush\":{\"notification\":{},\"headers\":{\"KEY\":\"VAL\"}}}", b.build());
+    jsonEquals("{\"webpush\":{\"notification\":{},\"headers\":{\"KEY\":\"VAL\"}}}", b.build());
 
     b.setHeaders(null);
     equals(null, b.getHeaders());
-    equals("{\"webpush\":{\"notification\":{}}}", b.build());
+    jsonEquals("{\"webpush\":{\"notification\":{}}}", b.build());
   }
 
   function testTitle() {
@@ -56,11 +56,11 @@ class TestFirebaseMpnBuilder extends utest.Test {
 
     b.setTitle("VAL");
     equals("VAL", b.getTitle());
-    equals("{\"webpush\":{\"notification\":{\"title\":\"VAL\"}}}", b.build());
+    jsonEquals("{\"webpush\":{\"notification\":{\"title\":\"VAL\"}}}", b.build());
 
     b.setTitle(null);
     equals(null, b.getTitle());
-    equals("{\"webpush\":{\"notification\":{}}}", b.build());
+    jsonEquals("{\"webpush\":{\"notification\":{}}}", b.build());
   }
 
   function testBody() {
@@ -68,11 +68,11 @@ class TestFirebaseMpnBuilder extends utest.Test {
 
     b.setBody("VAL");
     equals("VAL", b.getBody());
-    equals("{\"webpush\":{\"notification\":{\"body\":\"VAL\"}}}", b.build());
+    jsonEquals("{\"webpush\":{\"notification\":{\"body\":\"VAL\"}}}", b.build());
 
     b.setBody(null);
     equals(null, b.getBody());
-    equals("{\"webpush\":{\"notification\":{}}}", b.build());
+    jsonEquals("{\"webpush\":{\"notification\":{}}}", b.build());
   }
 
   function testIcon() {
@@ -80,11 +80,11 @@ class TestFirebaseMpnBuilder extends utest.Test {
 
     b.setIcon("VAL");
     equals("VAL", b.getIcon());
-    equals("{\"webpush\":{\"notification\":{\"icon\":\"VAL\"}}}", b.build());
+    jsonEquals("{\"webpush\":{\"notification\":{\"icon\":\"VAL\"}}}", b.build());
 
     b.setIcon(null);
     equals(null, b.getIcon());
-    equals("{\"webpush\":{\"notification\":{}}}", b.build());
+    jsonEquals("{\"webpush\":{\"notification\":{}}}", b.build());
   }
 
   function testData() {
@@ -92,10 +92,10 @@ class TestFirebaseMpnBuilder extends utest.Test {
 
     b.setData(["KEY" => "VAL"]);
     strictSame(["KEY" => "VAL"], b.getData());
-    equals("{\"webpush\":{\"notification\":{},\"data\":{\"KEY\":\"VAL\"}}}", b.build());
+    jsonEquals("{\"webpush\":{\"notification\":{},\"data\":{\"KEY\":\"VAL\"}}}", b.build());
 
     b.setData(null);
     equals(null, b.getData());
-    equals("{\"webpush\":{\"notification\":{}}}", b.build());
+    jsonEquals("{\"webpush\":{\"notification\":{}}}", b.build());
   }
 }
