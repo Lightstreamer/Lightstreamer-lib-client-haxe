@@ -10,3 +10,4 @@ rollup-full/dist/
 typescript/dist/
 webpack-core/dist/
 webpack-full/dist/
+cpp/dist/
