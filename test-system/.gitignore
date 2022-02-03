@@ -7,6 +7,6 @@ python/__pycache__
 python/lightstreamer.py
 rollup-core/dist/
 rollup-full/dist/
-typescript/main.ts
+typescript/dist/
 webpack-core/dist/
 webpack-full/dist/

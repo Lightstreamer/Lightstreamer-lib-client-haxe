@@ -5,10 +5,11 @@ all: clean run
 
 build:
 #	haxe --cwd $(BASE) build.node.hxml
-	npx tsc main.ts
+	npx tsc
+	npx rollup -c
 
 run: build
-	node main.js
+	open test.html
 
 clean:
-	rm -f main.js
+	rm -f dist/*

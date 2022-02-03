@@ -1,8 +1,10 @@
-.PHONY: all web ts node java cs py sys php rollup-full rollup-core
+.PHONY: all web web_all ts node java cs py sys php rollup-full rollup-core
 
-all: web ts node java cs py php
+all: web_all ts node java cs py php
 
 sys: ts node java cs py php
+
+web: rollup-full
 
 rollup-full:
 	cd rollup-full && make
@@ -10,7 +12,7 @@ rollup-full:
 rollup-core:
 	cd rollup-core && make
 
-web:
+web_all:
 	cd browserify-full && make
 	cd esm-full && make
 	cd globals-full && make
