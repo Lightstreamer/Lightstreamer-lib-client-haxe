@@ -9,6 +9,7 @@ private class ClientEventDispatcher extends EventDispatcher<ClientListener> {}
  **/
 #if (js || python) @:expose @:native("LightstreamerClient") #end
 #if (java || cs || python) @:nativeGen #end
+@:build(com.lightstreamer.client.Macros.synchronizeClass())
 class LightstreamerClient {
   public static final LIB_NAME: String = "TODO";
   public static final LIB_VERSIONE: String = "TODO";

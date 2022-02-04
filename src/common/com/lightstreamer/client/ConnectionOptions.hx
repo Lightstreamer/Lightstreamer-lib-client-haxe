@@ -6,8 +6,8 @@ import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
 
 #if (java || cs || python) @:nativeGen #end
+@:build(com.lightstreamer.client.Macros.synchronizeClass())
 class ConnectionOptions {
-  // TODO synchronize methods
   // TODO fire property listeners
   var contentLength: ContentLength = new ContentLength(50000000);
   var firstRetryMaxDelay: Millis = new Millis(100);

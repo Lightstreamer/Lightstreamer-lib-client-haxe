@@ -6,8 +6,8 @@ using com.lightstreamer.log.LoggerTools;
 
 #if (js || python) @:expose @:native("ConnectionDetails") #end
 #if (java || cs || python) @:nativeGen #end
+@:build(com.lightstreamer.client.Macros.synchronizeClass())
 class ConnectionDetails {
-  // TODO synchronize methods
   // TODO fire property listeners
   var serverAddress: Null<ServerAddress>;
   var adapterSet: Null<String>;

@@ -28,6 +28,7 @@ private typedef JsonFormat = {
 }
 
 #if (java || cs || python) @:nativeGen #end
+@:build(com.lightstreamer.client.Macros.synchronizeClass())
 class MpnBuilder {
   final obj: JsonFormat;
 
@@ -85,9 +86,14 @@ class MpnBuilder {
   public overload function timeToLiveAsString(): Null<String> {
     return obj.android.ttl;
   }
+  // NB haxe fails to compile when the target is android and 
+  // the synchronization is injected by the macro!?
+  @:unsynchronized
   public overload function timeToLive(newValue: Null<java.lang.Integer>): MpnBuilder {
-    obj.android.ttl = newValue == null ? null : newValue.toString();
-    return this;
+    return lock.execute(() -> {
+      obj.android.ttl = newValue == null ? null : newValue.toString();
+      return this;
+    });
   }
   public overload function timeToLiveAsInteger(): Null<java.lang.Integer> {
     var f = obj.android.ttl;

@@ -12,8 +12,8 @@ private class MpnSubscriptionEventDispatcher extends EventDispatcher<MpnSubscrip
 
 #if (js || python) @:expose @:native("MpnSubscription") #end
 #if (java || cs || python) @:nativeGen #end
+@:build(com.lightstreamer.client.Macros.synchronizeClass())
 class MpnSubscription {
-  // TODO synchronize methods
   final eventDispatcher = new MpnSubscriptionEventDispatcher();
   final mode: MpnSubscriptionMode;
   var items: Null<Items>;
