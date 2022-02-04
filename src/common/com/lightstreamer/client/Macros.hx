@@ -6,6 +6,43 @@ import haxe.macro.Type;
 import haxe.macro.Expr;
 using haxe.macro.TypeTools;
 
+function synchronizeClass(): Array<Field> {
+  // don't synchronize single-threaded languages
+  if (Context.defined("js") || Context.defined("php"))
+    return null;
+  var fields = Context.getBuildFields();
+  fields.push({
+    name:  "lock",
+    access: [Access.AFinal],
+    kind: FieldType.FVar(macro: com.lightstreamer.internal.RLock, macro new com.lightstreamer.internal.RLock()), 
+    pos: Context.currentPos(),
+  });
+  // synchronize public, non-static methods by wrapping the bodies in lock.execute
+  for (field in fields) {
+    if (field.name == "new")
+      continue;
+    if (!(field.access != null && field.access.contains(APublic) && !field.access.contains(AStatic)))
+      continue;
+    if (field.meta != null && field.meta.map(m -> m.name).contains(":unsynchronized"))
+      continue;
+    var func: Function;
+    switch field.kind {
+    case FFun(f) if (f.expr != null):
+      func = f;
+    case _:
+      continue;
+    }
+    func.expr = if (func.ret == null || switch func.ret {
+      case TPath({name: "Void"}): true;
+      case _: false;
+    }) 
+      macro lock.execute(() -> ${func.expr})
+    else 
+      macro return lock.execute(() -> ${func.expr});
+  }
+  return fields;
+}
+
 function buildEventDispatcher(): Array<Field> {
   var fields: Array<Field> = Context.getBuildFields();
   var localType: Type = Context.getLocalType();
