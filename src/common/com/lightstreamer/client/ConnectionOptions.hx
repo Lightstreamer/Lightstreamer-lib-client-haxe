@@ -7,6 +7,7 @@ using com.lightstreamer.log.LoggerTools;
 
 #if (java || cs || python) @:nativeGen #end
 @:build(com.lightstreamer.client.Macros.synchronizeClass())
+@:access(com.lightstreamer.client.LightstreamerClient)
 class ConnectionOptions {
   // TODO fire property listeners
   var contentLength: ContentLength = new ContentLength(50000000);
@@ -26,8 +27,13 @@ class ConnectionOptions {
   var httpExtraHeadersOnSessionCreationOnly: Bool = false;
   var serverInstanceAddressIgnored: Bool = false;
   var slowingEnabled: Bool = false;
+  final client: LightstreamerClient;
+  final lock: com.lightstreamer.internal.RLock;
   
-  public function new() {}
+  public function new(client: LightstreamerClient) {
+    this.client = client;
+    this.lock = client.lock;
+  }
   
   public function getContentLength(): Long {
     return contentLength;
@@ -36,6 +42,7 @@ class ConnectionOptions {
     var newValue = ContentLength.fromIntGt0(contentLength);
     actionLogger.info('contentLength changed: $newValue');
     this.contentLength = newValue;
+    client.eventDispatcher.onPropertyChange("contentLength");
   }
 
   public function getFirstRetryMaxDelay(): Long {
@@ -45,6 +52,7 @@ class ConnectionOptions {
     var newValue = Millis.fromIntGt0(firstRetryMaxDelay);
     actionLogger.info('firstRetryMaxDelay changed: $newValue');
     this.firstRetryMaxDelay = newValue;
+    client.eventDispatcher.onPropertyChange("firstRetryMaxDelay");
   }
 
   public function getForcedTransport(): Null<String> {
@@ -54,6 +62,7 @@ class ConnectionOptions {
     var newValue = TransportSelection.fromString(forcedTransport);
     actionLogger.info('forcedTransport changed: $newValue');
     this.forcedTransport = newValue;
+    client.eventDispatcher.onPropertyChange("forcedTransport");
     // TODO forward to client
   }
 
@@ -61,8 +70,10 @@ class ConnectionOptions {
     return httpExtraHeaders == null ? null : new NativeStringMap(httpExtraHeaders);
   }
   public function setHttpExtraHeaders(httpExtraHeaders: Null<NativeStringMap>): Void {
-    @:nullSafety(Off) actionLogger.info('httpExtraHeaders changed: $httpExtraHeaders');
+    @:nullSafety(Off)
+    actionLogger.info('httpExtraHeaders changed: $httpExtraHeaders');
     this.httpExtraHeaders = httpExtraHeaders == null ? null : httpExtraHeaders.toHaxe();
+    client.eventDispatcher.onPropertyChange("httpExtraHeaders");
   }
 
   public function getIdleTimeout(): Long {
@@ -72,6 +83,7 @@ class ConnectionOptions {
     var newValue = Millis.fromIntGtEq0(idleTimeout);
     actionLogger.info('idleTimeout changed: $newValue');
     this.idleTimeout = newValue;
+    client.eventDispatcher.onPropertyChange("idleTimeout");
   }
 
   public function getKeepaliveInterval(): Long {
@@ -81,6 +93,7 @@ class ConnectionOptions {
     var newValue = Millis.fromIntGtEq0(keepaliveInterval);
     actionLogger.info('keepaliveInterval changed: $newValue');
     this.keepaliveInterval = newValue;
+    client.eventDispatcher.onPropertyChange("keepaliveInterval");
   }
 
   public function getRequestedMaxBandwidth(): String {
@@ -90,6 +103,7 @@ class ConnectionOptions {
     var newValue = RequestedMaxBandwidthTools.fromString(maxBandwidth);
     actionLogger.info('keepaliveInterval changed: ${newValue.toString()}');
     this.requestedMaxBandwidth = newValue;
+    client.eventDispatcher.onPropertyChange("requestedMaxBandwidth");
     // TODO forward to client
   }
 
@@ -104,6 +118,7 @@ class ConnectionOptions {
     var newValue = Millis.fromIntGtEq0(pollingInterval);
     actionLogger.info('pollingInterval changed: $newValue');
     this.pollingInterval = newValue;
+    client.eventDispatcher.onPropertyChange("pollingInterval");
   }
 
   public function getReconnectTimeout(): Long {
@@ -113,6 +128,7 @@ class ConnectionOptions {
     var newValue = Millis.fromIntGt0(reconnectTimeout);
     actionLogger.info('reconnectTimeout changed: $newValue');
     this.reconnectTimeout = newValue;
+    client.eventDispatcher.onPropertyChange("reconnectTimeout");
   }
 
   public function getRetryDelay(): Long {
@@ -122,6 +138,7 @@ class ConnectionOptions {
     var newValue = Millis.fromIntGt0(retryDelay);
     actionLogger.info('retryDelay changed: $newValue');
     this.retryDelay = newValue;
+    client.eventDispatcher.onPropertyChange("retryDelay");
   }
 
   public function getReverseHeartbeatInterval(): Long {
@@ -131,6 +148,7 @@ class ConnectionOptions {
     var newValue = Millis.fromIntGtEq0(reverseHeartbeatInterval);
     actionLogger.info('reverseHeartbeatInterval changed: $newValue');
     this.reverseHeartbeatInterval = newValue;
+    client.eventDispatcher.onPropertyChange("reverseHeartbeatInterval");
     // TODO forward to client
   }
 
@@ -141,6 +159,7 @@ class ConnectionOptions {
     var newValue = Millis.fromIntGtEq0(sessionRecoveryTimeout);
     actionLogger.info('sessionRecoveryTimeout changed: $newValue');
     this.sessionRecoveryTimeout = newValue;
+    client.eventDispatcher.onPropertyChange("sessionRecoveryTimeout");
   }
 
   public function getStalledTimeout(): Long {
@@ -150,6 +169,7 @@ class ConnectionOptions {
     var newValue = Millis.fromIntGt0(stalledTimeout);
     actionLogger.info('stalledTimeout changed: $newValue');
     this.stalledTimeout = newValue;
+    client.eventDispatcher.onPropertyChange("stalledTimeout");
   }
 
   public function isHttpExtraHeadersOnSessionCreationOnly(): Bool {
@@ -158,6 +178,7 @@ class ConnectionOptions {
   public function setHttpExtraHeadersOnSessionCreationOnly(httpExtraHeadersOnSessionCreationOnly: Bool): Void {
     actionLogger.info('httpExtraHeadersOnSessionCreationOnly changed: $httpExtraHeadersOnSessionCreationOnly');
     this.httpExtraHeadersOnSessionCreationOnly = httpExtraHeadersOnSessionCreationOnly;
+    client.eventDispatcher.onPropertyChange("httpExtraHeadersOnSessionCreationOnly");
   }
 
   public function isServerInstanceAddressIgnored(): Bool {
@@ -166,6 +187,7 @@ class ConnectionOptions {
   public function setServerInstanceAddressIgnored(serverInstanceAddressIgnored: Bool): Void {
     actionLogger.info('serverInstanceAddressIgnored changed: $serverInstanceAddressIgnored');
     this.serverInstanceAddressIgnored = serverInstanceAddressIgnored;
+    client.eventDispatcher.onPropertyChange("serverInstanceAddressIgnored");
   }
 
   public function isSlowingEnabled(): Bool {
@@ -174,6 +196,7 @@ class ConnectionOptions {
   public function setSlowingEnabled(slowingEnabled: Bool): Void {
     actionLogger.info('slowingEnabled changed: $slowingEnabled');
     this.slowingEnabled = slowingEnabled;
+    client.eventDispatcher.onPropertyChange("slowingEnabled");
   }
 
   // TODO javase Proxy

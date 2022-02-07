@@ -14,9 +14,10 @@ class LightstreamerClient {
   public static final LIB_NAME: String = "TODO";
   public static final LIB_VERSIONE: String = "TODO";
 
-  public final connectionDetails = new ConnectionDetails();
-  public final connectionOptions = new ConnectionOptions();
+  public final connectionDetails: ConnectionDetails;
+  public final connectionOptions: ConnectionOptions;
   final eventDispatcher = new ClientEventDispatcher();
+  final lock = new com.lightstreamer.internal.RLock();
 
   public static function setLoggerProvider(provider: com.lightstreamer.log.LoggerProvider): Void {
     com.lightstreamer.log.LogManager.setLoggerProvider(provider);
@@ -27,7 +28,12 @@ class LightstreamerClient {
    * @param serverAddress 
    * @param adapterSet 
    */
+  @:nullSafety(Off)
   public function new(serverAddress: String, adapterSet: String) {
+    // workaround for https://github.com/HaxeFoundation/haxe/issues/10584
+    connectionDetails = null; connectionOptions = null;
+    connectionDetails = new ConnectionDetails(this);
+    connectionOptions = new ConnectionOptions(this);
     if (serverAddress != null) {
       connectionDetails.setServerAddress(serverAddress);
     }
