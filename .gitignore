@@ -5,4 +5,4 @@ bin-test/
 .unittest/
 
 /Makefile
-scratch.txt
+scratch.md
