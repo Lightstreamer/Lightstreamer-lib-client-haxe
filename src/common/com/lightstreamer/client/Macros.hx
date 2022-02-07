@@ -11,12 +11,14 @@ function synchronizeClass(): Array<Field> {
   if (Context.defined("js") || Context.defined("php"))
     return null;
   var fields = Context.getBuildFields();
-  fields.push({
-    name:  "lock",
-    access: [Access.AFinal],
-    kind: FieldType.FVar(macro: com.lightstreamer.internal.RLock, macro new com.lightstreamer.internal.RLock()), 
-    pos: Context.currentPos(),
-  });
+  if (!fields.map(f -> f.name).contains("lock")) {
+    fields.push({
+      name:  "lock",
+      access: [Access.AFinal],
+      kind: FieldType.FVar(macro: com.lightstreamer.internal.RLock, macro new com.lightstreamer.internal.RLock()), 
+      pos: Context.currentPos(),
+    });
+  }
   // synchronize public, non-static methods by wrapping the bodies in lock.execute
   for (field in fields) {
     if (field.name == "new")
@@ -36,9 +38,9 @@ function synchronizeClass(): Array<Field> {
       case TPath({name: "Void"}): true;
       case _: false;
     }) 
-      macro lock.execute(() -> ${func.expr})
+      macro this.lock.execute(() -> ${func.expr})
     else 
-      macro return lock.execute(() -> ${func.expr});
+      macro return this.lock.execute(() -> ${func.expr});
   }
   return fields;
 }
