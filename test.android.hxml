@@ -2,10 +2,11 @@ test.common.hxml
 
 --class-path src/mpn/common
 --class-path src/mpn/android
+--class-path src/platform/java
 
 -D LS_MPN
 -D android
 -D jvm.dynamic-level=0
 --java-lib tools/jar
---java bin-test/android
+--jvm bin-test/android/TestAll.jar
 --cmd java -jar bin-test/android/TestAll.jar

@@ -1,5 +1,3 @@
-import utest.ui.common.ResultAggregator;
-import utest.ui.common.PackageResult;
 import utest.Runner;
 import utest.ui.Report;
 import com.lightstreamer.client.*;
@@ -7,7 +5,7 @@ import com.lightstreamer.client.*;
 class TestAll {
 
   static function buildSuite(runner: Runner) {
-    runner.addCase(new TestCase());
+    // runner.addCase(new TestCase());
     runner.addCase(new TestConnectionDetails());
     runner.addCase(new TestConnectionOptions());
     runner.addCase(new TestSubscription());
@@ -23,6 +21,9 @@ class TestAll {
     #end
     #end
     runner.addCase(new TestEventDispatcher());
+    #if java
+    runner.addCase(new com.lightstreamer.client.internal.TestCookieHelper());
+    #end
   }
 
   public static function main() {
