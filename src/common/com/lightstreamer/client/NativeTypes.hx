@@ -241,7 +241,8 @@ abstract NativeList<T>(Array<T>) {
   }
 }
 #elseif java
-abstract NativeList<T>(java.util.List<T>) {
+@:forward(iterator)
+abstract NativeList<T>(java.util.List<T>) from java.util.List<T> to java.util.List<T> {
   public function new(lst: Array<T>) {
     var out = new java.util.ArrayList<T>();
     for (e in lst) {
@@ -250,6 +251,7 @@ abstract NativeList<T>(java.util.List<T>) {
     this = out;
   }
 
+  @:to
   public function toHaxe() {
     return [for (e in this) e];
   }

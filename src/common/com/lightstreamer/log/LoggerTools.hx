@@ -12,6 +12,7 @@ import com.lightstreamer.client.NativeTypes;
 @:unreflective final messageLogger = LogManager.getLogger("lightstreamer.messages");
 @:unreflective final mpnDeviceLogger = LogManager.getLogger("lightstreamer.mpn.device");
 @:unreflective final mpnSubscriptionLogger = LogManager.getLogger("lightstreamer.mpn.subscriptions");
+@:unreflective final cookieLogger = LogManager.getLogger("lightstreamer.cookies");
 
 inline function logFatal(logger: Logger, line: String, ?exception: Exception) {
   if (logger.isFatalEnabled()) {
