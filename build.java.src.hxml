@@ -1,5 +1,0 @@
-build.common.hxml
-
--D no-compilation
--D jvm.dynamic-level=0
---java bin/java
