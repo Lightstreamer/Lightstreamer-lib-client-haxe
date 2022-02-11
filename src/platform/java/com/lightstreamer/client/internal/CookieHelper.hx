@@ -36,7 +36,7 @@ class CookieHelper {
     }
   }
 
-  public function getCookies(uri: URI): NativeList<HttpCookie> {
+  public function getCookies(uri: Null<URI>): NativeList<HttpCookie> {
     var store = getCookieStore();
     if (store != null) {
       if (uri == null) {
@@ -82,7 +82,7 @@ class CookieHelper {
    * the library uses the new manager. If the user removes the default manager,
    * the library doesn't manage cookies.
    */
-  function getCookieHandler(): CookieHandler {
+  public function getCookieHandler(): CookieHandler {
     if (firstTime) {
       firstTime = false;
       if (CookieHandler.getDefault() == null) {

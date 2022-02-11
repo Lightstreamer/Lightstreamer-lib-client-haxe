@@ -23,6 +23,16 @@ class LightstreamerClient {
     com.lightstreamer.log.LogManager.setLoggerProvider(provider);
   }
 
+  #if java
+  public static function addCookies(uri: java.net.URI, cookies: NativeList<java.net.HttpCookie>): Void {
+    com.lightstreamer.client.internal.CookieHelper.instance.addCookies(uri, cookies);
+  }
+
+  public static function getCookies(uri: Null<java.net.URI>): NativeList<java.net.HttpCookie> {
+    return com.lightstreamer.client.internal.CookieHelper.instance.getCookies(uri);
+  }
+  #end
+
   /**
    * LightstreamerClient ctor
    * @param serverAddress 
