@@ -199,6 +199,14 @@ class ConnectionOptions {
     client.eventDispatcher.onPropertyChange("slowingEnabled");
   }
 
-  // TODO javase Proxy
-  // public function setProxy(proxy: Proxy): Void {}
+  #if (java || cs)
+  var proxy: Null<Proxy>;
+
+  public function setProxy(proxy: Null<Proxy>): Void {
+    @:nullSafety(Off)
+    actionLogger.info('proxy changed: $proxy');
+    this.proxy = proxy;
+    client.eventDispatcher.onPropertyChange("proxy");
+  }
+  #end
 }
