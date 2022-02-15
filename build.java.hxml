@@ -1,5 +1,6 @@
 build.common.hxml
 --class-path src/platform/java
+--java-lib-extern lib
 
 -D jvm.dynamic-level=0
 --jvm bin/java/ls-javase-client.jar
