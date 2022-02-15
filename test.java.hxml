@@ -1,5 +1,6 @@
 test.common.hxml
 --class-path src/platform/java
+--java-lib lib
 
 -D jvm.dynamic-level=0
 --jvm bin-test/java/ls-javase-client.jar
