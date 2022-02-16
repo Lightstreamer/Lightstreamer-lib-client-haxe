@@ -1,6 +1,7 @@
 package com.lightstreamer.client.internal;
 
 import okhttp3.*;
+import com.lightstreamer.client.NativeTypes.IllegalStateException;
 import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
 
@@ -20,6 +21,7 @@ class HttpClient implements Callback {
   public function new(url: String, body: String, 
     headers: Null<Map<String, String>>, 
     proxy: Null<Proxy>,
+    trustManagerFactory: Null<java.javax.net.ssl.TrustManagerFactory>,
     onText: (HttpClient, String)->Void, 
     onError: (HttpClient, String)->Void, 
     onDone: HttpClient->Void) {
@@ -56,6 +58,19 @@ class HttpClient implements Callback {
         case SOCKS4 | SOCKS5: java.net.Proxy.Proxy_Type.SOCKS;
       }, inet);
       clientBuilder.proxy(javaProxy);
+    }
+    // set trust manager
+    if (trustManagerFactory != null) {
+      // see https://square.github.io/okhttp/4.x/okhttp/okhttp3/-ok-http-client/-builder/ssl-socket-factory/
+      var trustManagers = trustManagerFactory.getTrustManagers();
+      var x509TrustManager;
+      if (trustManagers.length != 1 || (x509TrustManager = Std.downcast(trustManagers[0], java.javax.net.ssl.X509TrustManager)) == null) {
+        throw new IllegalStateException("Unexpected default trust managers:" + java.util.Arrays.toString(trustManagers));
+      }
+      var sslContext = java.javax.net.ssl.SSLContext.getInstance("TLS");
+      sslContext.init(null, java.NativeArray.make((x509TrustManager:java.javax.net.ssl.TrustManager)), null);
+      var sslSocketFactory = sslContext.getSocketFactory();
+      clientBuilder.sslSocketFactory(sslSocketFactory, x509TrustManager);
     }
     this.call = clientBuilder.build().newCall(request);
     call.enqueue(this);

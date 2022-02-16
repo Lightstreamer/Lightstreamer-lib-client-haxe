@@ -3,8 +3,8 @@ build.common.hxml
 --class-path src/mpn/common
 --class-path src/mpn/android
 --class-path src/platform/java
---java-lib-extern tools/jar
---java-lib-extern lib
+--java-lib-extern lib/android
+--java-lib-extern lib/java
 
 com.lightstreamer.client.mpn.MpnDevice
 com.lightstreamer.client.mpn.MpnSubscription

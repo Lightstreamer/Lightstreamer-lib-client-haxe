@@ -31,6 +31,10 @@ class LightstreamerClient {
   public static function getCookies(uri: Null<java.net.URI>): NativeList<java.net.HttpCookie> {
     return com.lightstreamer.client.internal.CookieHelper.instance.getCookies(uri);
   }
+
+  public static function setTrustManagerFactory(factory: java.javax.net.ssl.TrustManagerFactory) {
+    com.lightstreamer.client.internal.Globals.instance.setTrustManagerFactory(factory);
+  }
   #end
 
   /**
