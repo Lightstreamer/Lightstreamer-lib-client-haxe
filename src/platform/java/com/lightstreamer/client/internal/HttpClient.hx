@@ -5,7 +5,7 @@ import com.lightstreamer.client.NativeTypes.IllegalStateException;
 import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
 
-class HttpClient implements Callback {
+class HttpClient implements Callback implements Authenticator {
   static final TXT = MediaType.get("text/plain; charset=utf-8");
   // OkHttp performs best when you create a single OkHttpClient instance and reuse it for all of your HTTP calls 
   // (see https://square.github.io/okhttp/4.x/okhttp/okhttp3/-ok-http-client/#okhttpclients-should-be-shared)
@@ -14,6 +14,7 @@ class HttpClient implements Callback {
   // (see https://square.github.io/okhttp/4.x/okhttp/okhttp3/-ok-http-client/#shutdown-isnt-necessary)
   public static final client = new OkHttpClient();
   final call: Call;
+  final proxy: Null<Proxy>;
   final onText: (HttpClient, String)->Void;
   final onError: (HttpClient, String)->Void;
   final onDone: HttpClient->Void;
@@ -25,7 +26,8 @@ class HttpClient implements Callback {
     onText: (HttpClient, String)->Void, 
     onError: (HttpClient, String)->Void, 
     onDone: HttpClient->Void) {
-    streamLogger.logDebug('HTTP sending: $url $body headers($headers) proxy($proxy)');
+    streamLogger.logDebug('HTTP sending: $url $body headers($headers) proxy($proxy) trustManager($trustManagerFactory)');
+    this.proxy = proxy;
     this.onText = onText;
     this.onError = onError;
     this.onDone = onDone;
@@ -35,12 +37,6 @@ class HttpClient implements Callback {
       for (k => v in headers) {
         reqBuilder.header(k, v);
       }
-    }
-    // set proxy credentials
-    if (proxy != null && proxy.user != null) {
-      var user = proxy.user;
-      var password = proxy.password != null ? proxy.password : "";
-      reqBuilder.header("Proxy-Authorization", Credentials.basic(user, password));
     }
     // set url and url body
     var request = reqBuilder.url(url).post(RequestBody.create(body, TXT)).build();
@@ -57,7 +53,7 @@ class HttpClient implements Callback {
         case HTTP: java.net.Proxy.Proxy_Type.HTTP;
         case SOCKS4 | SOCKS5: java.net.Proxy.Proxy_Type.SOCKS;
       }, inet);
-      clientBuilder.proxy(javaProxy);
+      clientBuilder.proxy(javaProxy).proxyAuthenticator(this);
     }
     // set trust manager
     if (trustManagerFactory != null) {
@@ -116,5 +112,17 @@ class HttpClient implements Callback {
       call.cancel();
     }
     response.close();
+  }
+
+  // Authenticator.authenticate
+  public function authenticate(route: Null<Route>, response: Response): Null<Request> {
+    // see https://square.github.io/okhttp/4.x/okhttp/okhttp3/-authenticator/
+    var user = proxy.user == null ? "" : proxy.user;
+    var password = proxy.password == null ? "" : proxy.password;
+    if (response.request().header("Proxy-Authorization") != null) {
+      return null; // Give up, we’ve already failed to authenticate
+    }
+    var credential = Credentials.basic(user, password);
+    return response.request().newBuilder().header("Proxy-Authorization", credential).build();
   }
 }
