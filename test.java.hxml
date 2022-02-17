@@ -6,4 +6,4 @@ test.common.hxml
 --jvm bin-test/java/ls-javase-client.jar
 --cmd java -jar bin-test/java/ls-javase-client.jar
 
---resource test/local.pfx@user_certificate
+--resource test/server-local.pfx@server_certificate

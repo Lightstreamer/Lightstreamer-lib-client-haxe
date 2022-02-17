@@ -12,8 +12,6 @@ class TestHttpClient extends utest.Test {
   var secHost = "https://localhost:8443";
   #end
   var output: Array<String>;
- 
-  // TODO test trust manager
 
   function setup() {
     output = [];
@@ -21,6 +19,7 @@ class TestHttpClient extends utest.Test {
 
   function teardown() {
     CookieHelper.instance.clearCookies();
+    Globals.instance.clearTrustManager();
   }
 
   function testPolling(async: utest.Async) {
@@ -139,9 +138,33 @@ class TestHttpClient extends utest.Test {
       });
   }
 
+  @:timeout(3000)
+  function testProxyHttps(async: utest.Async) {
+    new HttpClient(
+      "https://push.lightstreamer.com/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", 
+      null,
+      #if android
+      new Proxy("HTTP", "10.0.2.2", 8079, "myuser", "mypassword"),
+      #else
+      new Proxy("HTTP", "localhost", 8079, "myuser", "mypassword"),
+      #end
+      null,
+      function onText(c, line) output.push(line), 
+      function onError(c, error) { 
+        fail(error); 
+        async.completed(); 
+      }, 
+      function onDone(c) { 
+        isTrue(output.length > 0);
+        match(~/CONOK/, output[0]);
+        async.completed(); 
+      });
+  }
+
   #if !android
   function testTrustManager(async: utest.Async) {
-    var bytes = haxe.Resource.getBytes("user_certificate").getData();
+    var bytes = haxe.Resource.getBytes("server_certificate").getData();
     var ksIn = new java.io.ByteArrayInputStream(bytes);
     var keyStore = java.security.KeyStore.getInstance(java.security.KeyStore.getDefaultType());
     keyStore.load(ksIn, (cast "secret":java.NativeString).toCharArray());
