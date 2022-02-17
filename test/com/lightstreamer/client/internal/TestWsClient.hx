@@ -182,11 +182,14 @@ class TestWsClient extends utest.Test {
       });
   }
 
-  #if !android
   function testTrustManager(async: utest.Async) {
+    #if android
+    var ksIn = TestAll.openRawResource("server_certificate");
+    #else
     var bytes = haxe.Resource.getBytes("server_certificate").getData();
     var ksIn = new java.io.ByteArrayInputStream(bytes);
-    var keyStore = java.security.KeyStore.getInstance(java.security.KeyStore.getDefaultType());
+    #end
+    var keyStore = java.security.KeyStore.getInstance("PKCS12");
     keyStore.load(ksIn, (cast "secret":java.NativeString).toCharArray());
     var tmf = java.javax.net.ssl.TrustManagerFactory.getInstance(java.javax.net.ssl.TrustManagerFactory.getDefaultAlgorithm());
     tmf.init(keyStore);
@@ -210,5 +213,4 @@ class TestWsClient extends utest.Test {
         async.completed(); 
       });
   }
-  #end
 }
