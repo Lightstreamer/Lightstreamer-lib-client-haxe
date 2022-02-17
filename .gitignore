@@ -3,6 +3,7 @@ bin/
 bin-test/
 .vscode/
 .unittest/
+lib/
 
 /Makefile
 scratch.md
