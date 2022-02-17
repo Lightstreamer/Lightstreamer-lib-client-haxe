@@ -24,6 +24,7 @@ class TestAll {
     #if java
     runner.addCase(new com.lightstreamer.client.internal.TestCookieHelper());
     runner.addCase(new com.lightstreamer.client.internal.TestHttpClient());
+    runner.addCase(new com.lightstreamer.client.internal.TestWsClient());
     #end
   }
 
