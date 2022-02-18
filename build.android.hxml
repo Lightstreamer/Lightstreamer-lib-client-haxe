@@ -3,6 +3,7 @@ build.common.hxml
 --class-path src/mpn/common
 --class-path src/mpn/android
 --class-path src/platform/java
+--class-path src/extern/android
 --java-lib-extern %ANDROID_SDK%/platforms/android-30/android.jar
 --java-lib-extern lib/android
 --java-lib-extern lib/java
