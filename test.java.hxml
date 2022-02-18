@@ -1,5 +1,6 @@
 test.common.hxml
 --class-path src/platform/java
+--class-path src/extern/java
 --java-lib lib/java
 
 -D jvm.dynamic-level=0
