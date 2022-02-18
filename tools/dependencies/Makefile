@@ -1,6 +1,5 @@
 
 copy:
-	cd android && make
 	cd java && make
 
 clean:
