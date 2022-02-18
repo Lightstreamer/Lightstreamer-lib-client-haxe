@@ -1,6 +1,8 @@
-package com.lightstreamer.client.internal;
+package com.lightstreamer.internal;
 
-import com.lightstreamer.client.NativeTypes.NativeList;
+import com.lightstreamer.client.LightstreamerClient;
+import com.lightstreamer.client.Proxy;
+import com.lightstreamer.internal.NativeTypes.NativeList;
 
 @:timeout(1500)
 class TestHttpClient extends utest.Test {
@@ -178,7 +180,7 @@ class TestHttpClient extends utest.Test {
     new HttpClient(
       secHost + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null, null, 
-      com.lightstreamer.client.internal.Globals.instance.getTrustManagerFactory(),
+      Globals.instance.getTrustManagerFactory(),
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
         fail(error); 

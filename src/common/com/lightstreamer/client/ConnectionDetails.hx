@@ -1,12 +1,13 @@
 package com.lightstreamer.client;
 
-import com.lightstreamer.client.Types;
+import com.lightstreamer.internal.NativeTypes;
+import com.lightstreamer.internal.Types;
 import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
 
 #if (js || python) @:expose @:native("ConnectionDetails") #end
 #if (java || cs || python) @:nativeGen #end
-@:build(com.lightstreamer.client.Macros.synchronizeClass())
+@:build(com.lightstreamer.internal.Macros.synchronizeClass())
 @:access(com.lightstreamer.client.LightstreamerClient)
 class ConnectionDetails {
   // TODO fire property listeners

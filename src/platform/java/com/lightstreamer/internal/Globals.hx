@@ -1,8 +1,8 @@
-package com.lightstreamer.client.internal;
+package com.lightstreamer.internal;
 
-import com.lightstreamer.client.NativeTypes.IllegalStateException;
+import com.lightstreamer.internal.NativeTypes.IllegalStateException;
 
-@:build(com.lightstreamer.client.Macros.synchronizeClass())
+@:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class Globals {
   static public final instance = new Globals();
   static inline public final Sec_WebSocket_Protocol = "TLCP-2.3.0.lightstreamer.com";

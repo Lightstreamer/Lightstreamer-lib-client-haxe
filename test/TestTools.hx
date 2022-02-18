@@ -18,6 +18,10 @@ function jsonEquals(expected: String, actual: String) {
 
 class AsyncTools {
   inline public static function completed(async: utest.Async) {
+    #if target.threaded
     sys.thread.Thread.runWithEventLoop(() -> async.done());
+    #else
+    async.done();
+    #end
   }
 }

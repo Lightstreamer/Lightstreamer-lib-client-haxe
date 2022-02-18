@@ -1,6 +1,7 @@
 package com.lightstreamer.client;
 
-import com.lightstreamer.client.NativeTypes.NativeList;
+import com.lightstreamer.internal.NativeTypes.NativeList;
+import com.lightstreamer.internal.EventDispatcher;
 
 private class ClientEventDispatcher extends EventDispatcher<ClientListener> {}
 
@@ -9,7 +10,7 @@ private class ClientEventDispatcher extends EventDispatcher<ClientListener> {}
  **/
 #if (js || python) @:expose @:native("LightstreamerClient") #end
 #if (java || cs || python) @:nativeGen #end
-@:build(com.lightstreamer.client.Macros.synchronizeClass())
+@:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class LightstreamerClient {
   public static final LIB_NAME: String = "TODO";
   public static final LIB_VERSIONE: String = "TODO";
@@ -25,15 +26,15 @@ class LightstreamerClient {
 
   #if java
   public static function addCookies(uri: java.net.URI, cookies: NativeList<java.net.HttpCookie>): Void {
-    com.lightstreamer.client.internal.CookieHelper.instance.addCookies(uri, cookies);
+    com.lightstreamer.internal.CookieHelper.instance.addCookies(uri, cookies);
   }
 
   public static function getCookies(uri: Null<java.net.URI>): NativeList<java.net.HttpCookie> {
-    return com.lightstreamer.client.internal.CookieHelper.instance.getCookies(uri);
+    return com.lightstreamer.internal.CookieHelper.instance.getCookies(uri);
   }
 
   public static function setTrustManagerFactory(factory: java.javax.net.ssl.TrustManagerFactory) {
-    com.lightstreamer.client.internal.Globals.instance.setTrustManagerFactory(factory);
+    com.lightstreamer.internal.Globals.instance.setTrustManagerFactory(factory);
   }
   #end
 

@@ -1,6 +1,8 @@
-package com.lightstreamer.client.internal;
+package com.lightstreamer.internal;
 
-import com.lightstreamer.client.NativeTypes.NativeList;
+import com.lightstreamer.client.LightstreamerClient;
+import com.lightstreamer.client.Proxy;
+import com.lightstreamer.internal.NativeTypes.NativeList;
 
 @:timeout(1500)
 class TestWsClient extends utest.Test {
@@ -197,7 +199,7 @@ class TestWsClient extends utest.Test {
     LightstreamerClient.setTrustManagerFactory(tmf);
     new WsClient(
       secHost + "/lightstreamer", null, null, 
-      com.lightstreamer.client.internal.Globals.instance.getTrustManagerFactory(),
+      Globals.instance.getTrustManagerFactory(),
       function onOpen(c) {
         c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i");
       },

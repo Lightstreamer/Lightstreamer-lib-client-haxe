@@ -1,7 +1,8 @@
 package com.lightstreamer.client.mpn;
 
-import com.lightstreamer.client.NativeTypes;
-import com.lightstreamer.client.Types;
+import com.lightstreamer.internal.NativeTypes;
+import com.lightstreamer.internal.Types;
+import com.lightstreamer.internal.EventDispatcher;
 import com.lightstreamer.client.mpn.Types;
 
 private enum MpnSubscriptionState {
@@ -12,7 +13,7 @@ private class MpnSubscriptionEventDispatcher extends EventDispatcher<MpnSubscrip
 
 #if (js || python) @:expose @:native("MpnSubscription") #end
 #if (java || cs || python) @:nativeGen #end
-@:build(com.lightstreamer.client.Macros.synchronizeClass())
+@:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class MpnSubscription {
   final eventDispatcher = new MpnSubscriptionEventDispatcher();
   final mode: MpnSubscriptionMode;

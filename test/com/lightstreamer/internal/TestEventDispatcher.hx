@@ -1,4 +1,4 @@
-package com.lightstreamer.client;
+package com.lightstreamer.internal;
 
 private interface IEvtListener {
   function onListenStart(s: String): Void;

@@ -1,6 +1,6 @@
 package com.lightstreamer.client.mpn;
 
-import com.lightstreamer.client.NativeTypes.IllegalArgumentException;
+import com.lightstreamer.internal.NativeTypes.IllegalArgumentException;
 
 class TestMpnDevice extends utest.Test {
   var dev: MpnDevice;

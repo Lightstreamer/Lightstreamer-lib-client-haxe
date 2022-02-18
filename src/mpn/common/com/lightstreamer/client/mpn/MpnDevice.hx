@@ -1,7 +1,8 @@
 package com.lightstreamer.client.mpn;
 
-import com.lightstreamer.client.Types.Timestamp;
-import com.lightstreamer.client.NativeTypes;
+import com.lightstreamer.internal.Types.Timestamp;
+import com.lightstreamer.internal.NativeTypes;
+import com.lightstreamer.internal.EventDispatcher;
 import com.lightstreamer.client.mpn.Types;
 import com.lightstreamer.log.LoggerTools.mpnDeviceLogger;
 using com.lightstreamer.log.LoggerTools;
@@ -19,7 +20,7 @@ private enum abstract MpnDeviceStatus(String) to String {
 
 #if (js || python) @:expose @:native("MpnDevice") #end
 #if (java || cs || python) @:nativeGen #end
-@:build(com.lightstreamer.client.Macros.synchronizeClass())
+@:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class MpnDevice {
   final eventDispatcher = new MpnDeviceEventDispatcher();
   final platform: Platform;

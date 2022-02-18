@@ -1,6 +1,6 @@
 package com.lightstreamer.log;
 
-import com.lightstreamer.client.NativeTypes;
+import com.lightstreamer.internal.NativeTypes;
 import hx.concurrent.lock.RLock;
 
 @:unreflective

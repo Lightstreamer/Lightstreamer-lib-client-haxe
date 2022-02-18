@@ -1,6 +1,6 @@
-package com.lightstreamer.client.internal;
+package com.lightstreamer.internal;
 
-import com.lightstreamer.client.NativeTypes.NativeList;
+import com.lightstreamer.internal.NativeTypes.NativeList;
 import java.net.CookieStore;
 import java.net.HttpCookie;
 import java.net.URI;
@@ -10,7 +10,7 @@ import java.net.CookieHandler;
 import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
 
-@:build(com.lightstreamer.client.Macros.synchronizeClass())
+@:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class CookieHelper {
   public static final instance = new CookieHelper();
   var firstTime = true;

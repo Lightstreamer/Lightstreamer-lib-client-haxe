@@ -2,8 +2,8 @@ package com.lightstreamer.client.mpn;
 
 import haxe.DynamicAccess;
 import haxe.Json;
-import com.lightstreamer.client.NativeTypes.NativeStringMap;
-import com.lightstreamer.client.NativeTypes.NativeList;
+import com.lightstreamer.internal.NativeTypes.NativeStringMap;
+import com.lightstreamer.internal.NativeTypes.NativeList;
 
 private typedef JsonFormat = {
   var android: {
@@ -28,7 +28,7 @@ private typedef JsonFormat = {
 }
 
 #if (java || cs || python) @:nativeGen #end
-@:build(com.lightstreamer.client.Macros.synchronizeClass())
+@:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class MpnBuilder {
   final obj: JsonFormat;
 

@@ -1,7 +1,8 @@
 package com.lightstreamer.client;
 
-import com.lightstreamer.client.NativeTypes;
-import com.lightstreamer.client.Types;
+import com.lightstreamer.internal.NativeTypes;
+import com.lightstreamer.internal.EventDispatcher;
+import com.lightstreamer.internal.Types;
 
 private enum SubscriptionState {
   Inactive; Active; Subscribed;
@@ -14,7 +15,7 @@ private class SubscriptionEventDispatcher extends EventDispatcher<SubscriptionLi
  **/
 #if (js || python) @:expose @:native("Subscription") #end
 #if (java || cs || python) @:nativeGen #end
-@:build(com.lightstreamer.client.Macros.synchronizeClass())
+@:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class Subscription {
   final eventDispatcher = new SubscriptionEventDispatcher();
   final mode: SubscriptionMode;

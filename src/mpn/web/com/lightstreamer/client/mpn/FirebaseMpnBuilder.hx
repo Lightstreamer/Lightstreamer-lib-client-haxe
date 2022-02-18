@@ -1,7 +1,7 @@
 package com.lightstreamer.client.mpn;
 
 import haxe.Json;
-import com.lightstreamer.client.NativeTypes.NativeStringMap;
+import com.lightstreamer.internal.NativeTypes.NativeStringMap;
 import haxe.DynamicAccess;
 
 private typedef JsonFormat = {

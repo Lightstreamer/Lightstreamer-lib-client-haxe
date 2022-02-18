@@ -1,7 +1,7 @@
 package com.lightstreamer.client.mpn;
 
-import com.lightstreamer.client.NativeTypes.IllegalStateException;
-import com.lightstreamer.client.NativeTypes.IllegalArgumentException;
+import com.lightstreamer.internal.NativeTypes.IllegalStateException;
+import com.lightstreamer.internal.NativeTypes.IllegalArgumentException;
 
 class TestMpnSubscription extends utest.Test {
   var sub: MpnSubscription;

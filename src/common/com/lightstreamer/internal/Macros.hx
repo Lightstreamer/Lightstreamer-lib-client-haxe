@@ -1,4 +1,4 @@
-package com.lightstreamer.client;
+package com.lightstreamer.internal;
 
 #if macro
 import haxe.macro.Context;

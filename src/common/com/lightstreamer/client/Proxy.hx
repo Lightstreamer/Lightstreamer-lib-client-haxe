@@ -1,6 +1,6 @@
 package com.lightstreamer.client;
 
-import com.lightstreamer.client.NativeTypes.IllegalArgumentException;
+import com.lightstreamer.internal.NativeTypes.IllegalArgumentException;
 
 enum abstract ProxyType(String) to String {
   var HTTP;

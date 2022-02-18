@@ -20,11 +20,11 @@ class TestAll {
     runner.addCase(new com.lightstreamer.client.mpn.TestAndroidMpnBuilder());
     #end
     #end
-    runner.addCase(new TestEventDispatcher());
+    runner.addCase(new com.lightstreamer.internal.TestEventDispatcher());
     #if java
-    runner.addCase(new com.lightstreamer.client.internal.TestCookieHelper());
-    runner.addCase(new com.lightstreamer.client.internal.TestHttpClient());
-    runner.addCase(new com.lightstreamer.client.internal.TestWsClient());
+    runner.addCase(new com.lightstreamer.internal.TestCookieHelper());
+    runner.addCase(new com.lightstreamer.internal.TestHttpClient());
+    runner.addCase(new com.lightstreamer.internal.TestWsClient());
     #end
   }
 

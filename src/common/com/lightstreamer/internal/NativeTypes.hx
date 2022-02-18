@@ -1,4 +1,4 @@
-package com.lightstreamer.client;
+package com.lightstreamer.internal;
 
 typedef Long = #if (java || cs) haxe.Int64 #else Int #end
 

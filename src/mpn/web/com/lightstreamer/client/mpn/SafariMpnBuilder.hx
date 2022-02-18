@@ -1,7 +1,7 @@
 package com.lightstreamer.client.mpn;
 
 import haxe.Json;
-import com.lightstreamer.client.NativeTypes.NativeList;
+import com.lightstreamer.internal.NativeTypes.NativeList;
 
 private typedef JsonFormat = {
   var aps: {

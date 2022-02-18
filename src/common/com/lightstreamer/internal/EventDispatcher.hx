@@ -1,6 +1,6 @@
-package com.lightstreamer.client;
+package com.lightstreamer.internal;
 
-@:autoBuild(com.lightstreamer.client.Macros.buildEventDispatcher())
+@:autoBuild(com.lightstreamer.internal.Macros.buildEventDispatcher())
 class EventDispatcher<T> {
   #if python
   // TODO remove python workaround

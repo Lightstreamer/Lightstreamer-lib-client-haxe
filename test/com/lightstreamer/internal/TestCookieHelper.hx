@@ -1,7 +1,7 @@
-package com.lightstreamer.client.internal;
+package com.lightstreamer.internal;
 
 import java.net.HttpCookie;
-import com.lightstreamer.client.NativeTypes.NativeList;
+import com.lightstreamer.internal.NativeTypes.NativeList;
 
 class TestCookieHelper extends utest.Test {
   function testCookies() {

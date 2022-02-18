@@ -1,6 +1,6 @@
 package com.lightstreamer.client.mpn;
 
-import com.lightstreamer.client.NativeTypes.Long;
+import com.lightstreamer.internal.NativeTypes.Long;
 
 #if (java || cs || python) @:nativeGen #end
 interface MpnDeviceListener {

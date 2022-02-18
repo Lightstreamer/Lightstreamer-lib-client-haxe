@@ -1,6 +1,6 @@
 package com.lightstreamer.client.mpn;
 
-import com.lightstreamer.client.NativeTypes.IllegalArgumentException;
+import com.lightstreamer.internal.NativeTypes.IllegalArgumentException;
 
 enum abstract MpnSubscriptionMode(String) to String {
   var Merge = "MERGE";

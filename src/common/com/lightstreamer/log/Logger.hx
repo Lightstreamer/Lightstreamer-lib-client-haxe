@@ -1,6 +1,6 @@
 package com.lightstreamer.log;
 
-import com.lightstreamer.client.NativeTypes;
+import com.lightstreamer.internal.NativeTypes;
 
 #if (java || cs || python) @:nativeGen #end
 interface Logger {

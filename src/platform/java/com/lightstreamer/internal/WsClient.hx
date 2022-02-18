@@ -1,7 +1,8 @@
-package com.lightstreamer.client.internal;
+package com.lightstreamer.internal;
 
 import okhttp3.*;
-import com.lightstreamer.client.NativeTypes.IllegalStateException;
+import com.lightstreamer.client.Proxy;
+import com.lightstreamer.internal.NativeTypes.IllegalStateException;
 import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
 

@@ -1,6 +1,6 @@
-package com.lightstreamer.client;
+package com.lightstreamer.internal;
 
-import com.lightstreamer.client.NativeTypes;
+import com.lightstreamer.internal.NativeTypes;
 using StringTools;
 using Lambda;
 
@@ -79,7 +79,7 @@ abstract ServerAddress(String) to String {
   }
 }
 
-@:using(com.lightstreamer.client.Types.RequestedMaxBandwidthTools)
+@:using(com.lightstreamer.internal.Types.RequestedMaxBandwidthTools)
 enum RequestedMaxBandwidth {
   BWLimited(bw: Float);
   BWUnlimited;
@@ -102,7 +102,7 @@ class RequestedMaxBandwidthTools {
   }
 }
 
-@:using(com.lightstreamer.client.Types.RequestedBufferSizeTools)
+@:using(com.lightstreamer.internal.Types.RequestedBufferSizeTools)
 enum RequestedBufferSize {
   BSLimited(size: Int);
   BSUnlimited;
@@ -127,7 +127,7 @@ class RequestedBufferSizeTools {
   }
 }
 
-@:using(com.lightstreamer.client.Types.RequestedSnapshotTools)
+@:using(com.lightstreamer.internal.Types.RequestedSnapshotTools)
 enum RequestedSnapshot {
   SnpYes;
   SnpNo;
@@ -155,7 +155,7 @@ class RequestedSnapshotTools {
   }
 }
 
-@:using(com.lightstreamer.client.Types.RequestedMaxFrequencyTools)
+@:using(com.lightstreamer.internal.Types.RequestedMaxFrequencyTools)
 enum RequestedMaxFrequency {
   FreqLimited(max: Float);
   FreqUnlimited;
@@ -183,7 +183,7 @@ class RequestedMaxFrequencyTools {
   }
 }
 
-@:using(com.lightstreamer.client.Types.RealMaxBandwidthTools)
+@:using(com.lightstreamer.internal.Types.RealMaxBandwidthTools)
 enum RealMaxBandwidth {
   BWLimited(bw: Float);
   BWUnlimited;
