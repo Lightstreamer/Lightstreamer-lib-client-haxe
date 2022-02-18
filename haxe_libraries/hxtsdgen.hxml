@@ -1,0 +1,5 @@
+# @install: lix --silent download "haxelib:/hxtsdgen#0.3.0" into hxtsdgen/0.3.0/haxelib
+-cp ${HAXE_LIBCACHE}/hxtsdgen/0.3.0/haxelib/src
+-D hxtsdgen=0.3.0
+--macro hxtsdgen.Generator.use()
+-D use-rtti-doc
