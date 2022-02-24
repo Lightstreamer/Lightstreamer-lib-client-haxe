@@ -23,8 +23,8 @@ class TestAll {
     runner.addCase(new com.lightstreamer.internal.TestEventDispatcher());
     #if java
     runner.addCase(new com.lightstreamer.internal.TestCookieHelper());
-    runner.addCase(new com.lightstreamer.internal.TestHttpClient());
-    runner.addCase(new com.lightstreamer.internal.TestWsClient());
+    runner.addCase(new com.lightstreamer.internal.TestJavaHttpClient());
+    runner.addCase(new com.lightstreamer.internal.TestJavaWsClient());
     #end
   }
 

@@ -5,7 +5,7 @@ import com.lightstreamer.client.Proxy;
 import com.lightstreamer.internal.NativeTypes.NativeList;
 
 @:timeout(1500)
-class TestHttpClient extends utest.Test {
+class TestJavaHttpClient extends utest.Test {
   #if android
   var host = "http://10.0.2.2:8080";
   var secHost = "https://10.0.2.2:8443";
