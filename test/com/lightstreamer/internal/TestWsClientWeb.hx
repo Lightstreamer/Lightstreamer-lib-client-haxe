@@ -1,6 +1,6 @@
 package com.lightstreamer.internal;
 
-class TestJsWsClient extends utest.Test {
+class TestWsClientWeb extends utest.Test {
   var host = "ws://localhost:8080";
   var secHost = "wss://localhost:8443";
   var output: Array<String>;

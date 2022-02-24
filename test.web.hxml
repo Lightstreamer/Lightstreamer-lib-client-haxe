@@ -3,6 +3,7 @@ test.common.hxml
 --class-path src/mpn/common
 --class-path src/mpn/web
 
+-D LS_WEB
 -D LS_MPN
 --js bin-test/web/lightstreamer.js
 --cmd open index.html

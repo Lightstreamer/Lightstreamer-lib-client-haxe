@@ -1,7 +1,7 @@
 package com.lightstreamer.internal;
 
 @:timeout(1500)
-class TestJsHttpClient extends utest.Test {
+class TestHttpClientWeb extends utest.Test {
   var host = "http://localhost:8080";
   var secHost = "https://localhost:8443";
   var output: Array<String>;

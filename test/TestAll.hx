@@ -12,15 +12,15 @@ class TestAll {
     runner.addCase(new TestConnectionOptions());
     runner.addCase(new TestSubscription());
     runner.addCase(new com.lightstreamer.internal.TestEventDispatcher());
-    #if js
+    #if LS_WEB
     runner.addCase(new com.lightstreamer.internal.TestStreamReader());
-    runner.addCase(new com.lightstreamer.internal.TestJsHttpClient());
-    runner.addCase(new com.lightstreamer.internal.TestJsWsClient());
+    runner.addCase(new com.lightstreamer.internal.TestHttpClientWeb());
+    runner.addCase(new com.lightstreamer.internal.TestWsClientWeb());
     #end
     #if java
     runner.addCase(new com.lightstreamer.internal.TestCookieHelper());
-    runner.addCase(new com.lightstreamer.internal.TestJavaHttpClient());
-    runner.addCase(new com.lightstreamer.internal.TestJavaWsClient());
+    runner.addCase(new com.lightstreamer.internal.TestHttpClientJava());
+    runner.addCase(new com.lightstreamer.internal.TestWsClientJava());
     #end
     #if LS_MPN
     runner.addCase(new com.lightstreamer.client.mpn.TestMpnSubscription());
