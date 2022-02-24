@@ -5,7 +5,6 @@ import com.lightstreamer.internal.NativeTypes.IllegalStateException;
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class Globals {
   static public final instance = new Globals();
-  static inline public final Sec_WebSocket_Protocol = "TLCP-2.3.0.lightstreamer.com";
   var trustManagerFactory: Null<java.javax.net.ssl.TrustManagerFactory>;
 
   function new() {}
