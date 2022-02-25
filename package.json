@@ -9,6 +9,7 @@
     "@rollup/plugin-virtual": "^2.0.3",
     "@types/estree": "0.0.50",
     "browserify": "^17.0.0",
+    "cookiejar": "^2.1.3",
     "lightstreamer-client-node": "file:bin/node",
     "lightstreamer-client-web": "file:bin/web",
     "requirejs": "^2.3.6",
@@ -16,7 +17,8 @@
     "rollup-plugin-terser": "^7.0.2",
     "typescript": "^4.5.2",
     "webpack": "^5.64.4",
-    "webpack-cli": "^4.9.1"
+    "webpack-cli": "^4.9.1",
+    "xmlhttprequest": "git+https://github.com/driverdan/node-XMLHttpRequest.git"
   },
   "devDependencies": {
     "lix": "^15.11.6"
