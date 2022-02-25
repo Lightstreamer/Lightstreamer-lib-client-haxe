@@ -1,7 +1,5 @@
 package com.lightstreamer.internal;
 
-import com.lightstreamer.internal.HttpClient.StreamReader;
-
 class TestStreamReader extends utest.Test {
 
   function testStreamProgress() {
