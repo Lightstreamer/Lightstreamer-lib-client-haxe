@@ -1,4 +1,8 @@
 test.common.hxml
+--class-path src/platform/js
+--class-path src/platform/node
+--library hxnodejs
 
+-D LS_NODE
 --js bin-test/node/lightstreamer-node.js
 --cmd node bin-test/node/lightstreamer-node.js
