@@ -20,10 +20,12 @@ class TestAll {
     runner.addCase(new com.lightstreamer.internal.TestWsClientWeb());
     #end
     #if LS_NODE
+    runner.addCase(new com.lightstreamer.internal.TestCookieHelperNode());
     runner.addCase(new com.lightstreamer.internal.TestHttpClientNode());
+    runner.addCase(new com.lightstreamer.internal.TestWsClientNode());
     #end
     #if java
-    runner.addCase(new com.lightstreamer.internal.TestCookieHelper());
+    runner.addCase(new com.lightstreamer.internal.TestCookieHelperJava());
     runner.addCase(new com.lightstreamer.internal.TestHttpClientJava());
     runner.addCase(new com.lightstreamer.internal.TestWsClientJava());
     #end

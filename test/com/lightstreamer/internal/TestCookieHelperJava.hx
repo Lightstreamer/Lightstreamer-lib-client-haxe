@@ -3,7 +3,7 @@ package com.lightstreamer.internal;
 import java.net.HttpCookie;
 import com.lightstreamer.internal.NativeTypes.NativeList;
 
-class TestCookieHelper extends utest.Test {
+class TestCookieHelperJava extends utest.Test {
   function testCookies() {
     var uri = new java.net.URI("www.example.com");
     strictSame([], CookieHelper.instance.getCookies(uri));

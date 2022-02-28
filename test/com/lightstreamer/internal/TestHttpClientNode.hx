@@ -1,5 +1,7 @@
 package com.lightstreamer.internal;
 
+import com.lightstreamer.client.LightstreamerClient;
+
 @:timeout(1500)
 class TestHttpClientNode extends utest.Test {
   var host = "http://localhost:8080";
@@ -8,6 +10,10 @@ class TestHttpClientNode extends utest.Test {
 
   function setup() {
     output = [];
+  }
+
+  function teardown() {
+    CookieHelper.instance.clearCookies();
   }
 
   function testPolling(async: utest.Async) {
@@ -57,6 +63,30 @@ class TestHttpClientNode extends utest.Test {
       function onDone(c) {
         isTrue(output.length > 0);
         match(~/CONOK/, output[0]);
+        async.completed();
+      });
+  }
+
+  function testCookies(async: utest.Async) {
+    var uri = host;
+    equals(0, LightstreamerClient.getCookies(uri).length);
+    
+    var cookie = "X-Client=client";
+    LightstreamerClient.addCookies(uri, [cookie]);
+
+    new HttpClient(
+      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null,
+      function onText(c, line) null, 
+      function onError(c, error) { 
+        fail(error); 
+        async.completed(); 
+      }, 
+      function onDone(c) {
+        var cookies = LightstreamerClient.getCookies(uri);
+        equals(2, cookies.length);
+        contains("X-Client=client; domain=localhost; path=/", cookies);
+        contains("X-Server=server; domain=localhost; path=/", cookies);
         async.completed();
       });
   }
