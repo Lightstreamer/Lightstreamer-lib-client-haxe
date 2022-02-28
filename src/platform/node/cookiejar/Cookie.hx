@@ -21,7 +21,7 @@ extern class Cookie {
   /** should it only be transmitted over secure means */
   var secure(default, null): Bool;
   /** number of millis since 1970 at which this should be removed */
-  var expiration_date(default, null): Int;
+  var expiration_date(default, default): Int;
   /**
   It turns input into a Cookie (singleton if given a Cookie), the request_domain argument is used to default the domain if it is not explicit in the cookie string, the request_path argument is used to set the path if it is not explicit in a cookie String.
 

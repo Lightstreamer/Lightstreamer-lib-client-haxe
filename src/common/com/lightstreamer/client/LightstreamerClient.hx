@@ -36,6 +36,14 @@ class LightstreamerClient {
   public static function setTrustManagerFactory(factory: java.javax.net.ssl.TrustManagerFactory) {
     com.lightstreamer.internal.Globals.instance.setTrustManagerFactory(factory);
   }
+  #elseif LS_NODE
+  public static function addCookies(uri: String, cookies: Array<String>): Void {
+    com.lightstreamer.internal.CookieHelper.instance.addCookies(uri, cookies);
+  }
+
+  public static function getCookies(uri: Null<String>): Array<String> {
+    return com.lightstreamer.internal.CookieHelper.instance.getCookies(uri);
+  }
   #end
 
   /**

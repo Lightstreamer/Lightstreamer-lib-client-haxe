@@ -1,5 +1,6 @@
 build.common.hxml
 --library hxnodejs
+--library hxnodejs-ws
 --library hxtsdgen
 
 -D shallow-expose

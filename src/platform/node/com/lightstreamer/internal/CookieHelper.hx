@@ -13,12 +13,23 @@ class CookieHelper {
 
   function new() {}
 
-  // TODO logging
-  // TODO addCookies/getCookies
+  public function addCookies(uri: String, cookies: Array<String>): Void {
+    if (cookies.length == 0) {
+      return;
+    }
+    if (cookieLogger.isDebugEnabled()) {
+      logCookies("Before adding cookies for " + uri, store.getCookies(CookieAccessInfo.All));
+      logCookies2("Cookies to be added for " + uri, cookies);
+    }
+    store.setCookies(cookies, new URL(uri).hostname);
+    if (cookieLogger.isDebugEnabled()) {
+      logCookies("After adding cookies for " + uri, store.getCookies(CookieAccessInfo.All));
+    }
+  }
 
-  public function setCookies(url: String, cookies: EitherType<String, Array<String>>) {
-    var _url = new URL(url);
-    store.setCookies(cookies, _url.hostname);
+  public function getCookies(uri: Null<String>): Array<String> {
+    var info = uri == null ? CookieAccessInfo.All : new CookieAccessInfo(new URL(uri).hostname);
+    return store.getCookies(info).map(c -> c.toString());
   }
 
   public function getCookieHeader(url: String): Option<String> {
@@ -32,12 +43,30 @@ class CookieHelper {
             cookie += "; ";
         cookie += ck.toValueString();
     }
+    if (cookie != "") {
+      cookieLogger.logDebug("Cookie: " + cookie);
+    }
     return cookie != "" ? Some(cookie) : None;
+  }
+
+  public function clearCookies() {
+    var cookies = store.getCookies(CookieAccessInfo.All);
+    for (c in cookies) {
+      c.expiration_date = 0;
+    }
+    store.setCookies(cookies);
   }
 
   function logCookies(message: String, cookies: Array<Cookie>) {
     for (cookie in cookies) {
       message += ("\r\n    " + cookie.toString());
+    }
+    cookieLogger.logDebug(message);
+  }
+
+  function logCookies2(message: String, cookies: Array<String>) {
+    for (cookie in cookies) {
+      message += ("\r\n    " + cookie);
     }
     cookieLogger.logDebug(message);
   }

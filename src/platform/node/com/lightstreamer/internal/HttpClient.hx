@@ -8,8 +8,6 @@ class HttpClient {
   final xhr: XMLHttpRequest;
   final reader = new StreamReader();
   var isCanceled: Bool = false;
-
-  // TODO user-supplied cookies
   
   public function new(url: String, body: String, 
     headers: Null<Map<String, String>>, 
@@ -26,7 +24,8 @@ class HttpClient {
       }
     }
     // set cookies
-    switch CookieHelper.instance.getCookieHeader(url) {
+    var cookies = CookieHelper.instance.getCookieHeader(url);
+    switch cookies {
       case Some(header):
         xhr.setDisableHeaderCheck(true);
         xhr.setRequestHeader("Cookie", header);
@@ -42,7 +41,7 @@ class HttpClient {
         // store cookies
         var cookies = xhr.getResponseHeader("Set-Cookie");
         if (cookies != null) {
-          CookieHelper.instance.setCookies(url, cookies);
+          CookieHelper.instance.addCookies(url, cookies);
         }
         var status = xhr.status;
         // in local files, status is 0 upon success in Mozilla Firefox
