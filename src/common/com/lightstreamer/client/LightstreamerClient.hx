@@ -46,11 +46,11 @@ class LightstreamerClient {
   }
   #elseif cs
   public static function addCookies(uri: cs.system.Uri, cookies: cs.system.net.CookieCollection): Void {
-    com.lightstreamer.cs.CookieHelper.instance.addCookies(uri, cookies);
+    com.lightstreamer.cs.CookieHelper.instance.AddCookies(uri, cookies);
   }
 
   public static function getCookies(uri: cs.system.Uri): cs.system.net.CookieCollection {
-    return com.lightstreamer.cs.CookieHelper.instance.getCookies(uri);
+    return com.lightstreamer.cs.CookieHelper.instance.GetCookies(uri);
   }
 
   public static function setTrustManagerFactory(factory: cs.system.net.security.RemoteCertificateValidationCallback) {
