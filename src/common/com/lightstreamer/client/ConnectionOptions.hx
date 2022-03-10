@@ -203,8 +203,10 @@ class ConnectionOptions {
   var proxy: Null<Proxy>;
 
   public function setProxy(proxy: Null<Proxy>): Void {
-    @:nullSafety(Off)
     actionLogger.info('proxy changed: $proxy');
+    #if cs
+    com.lightstreamer.internal.Globals.instance.setProxy(proxy);
+    #end
     this.proxy = proxy;
     client.eventDispatcher.onPropertyChange("proxy");
   }

@@ -50,6 +50,10 @@ class Proxy {
     this.password = password;
   }
 
+  public function equals(proxy2: Proxy) {
+    return type == proxy2.type && host == proxy2.host && port == proxy2.port && user == proxy2.user && password == proxy2.password;
+  }
+
   public function toString() {
     return '$type ${user != null ? user + "@" : ""}$host:$port';
   }

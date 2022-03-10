@@ -121,7 +121,8 @@ abstract NativeStringMap(java.util.Map<String, String>) {
   }
 }
 #elseif cs
-abstract NativeStringMap(cs.system.collections.generic.IDictionary_2<String, String>) {
+abstract NativeStringMap(cs.system.collections.generic.IDictionary_2<String, String>) 
+to cs.system.collections.generic.IDictionary_2<String, String> {
   @:from
   public static inline function fromHaxeMap(map) {
     return new NativeStringMap(map);

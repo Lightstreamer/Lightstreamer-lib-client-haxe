@@ -44,6 +44,18 @@ class LightstreamerClient {
   public static function getCookies(uri: Null<String>): Array<String> {
     return com.lightstreamer.internal.CookieHelper.instance.getCookies(uri);
   }
+  #elseif cs
+  public static function addCookies(uri: cs.system.Uri, cookies: cs.system.net.CookieCollection): Void {
+    com.lightstreamer.cs.CookieHelper.instance.addCookies(uri, cookies);
+  }
+
+  public static function getCookies(uri: cs.system.Uri): cs.system.net.CookieCollection {
+    return com.lightstreamer.cs.CookieHelper.instance.getCookies(uri);
+  }
+
+  public static function setTrustManagerFactory(factory: cs.system.net.security.RemoteCertificateValidationCallback) {
+    com.lightstreamer.internal.Globals.instance.setRemoteCertificateValidationCallback(factory);
+  }
   #end
 
   /**

@@ -1,6 +1,8 @@
 build.common.hxml
+--class-path src/platform/cs
+--net-lib lib/cs/cs-client.dll
+--net-lib lib/cs/net-48/netstandard.dll
 
--D net-ver=50
--D unsafe
+-D net-ver=45
 -D no-root
 --cs bin/cs
