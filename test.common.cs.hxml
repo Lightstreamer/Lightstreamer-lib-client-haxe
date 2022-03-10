@@ -5,7 +5,7 @@
 --library haxe-concurrent
 
 --class-path src/platform/cs
---net-lib lib/cs/cs-client.dll
+--net-lib lib/cs/Lightstreamer.Net.dll
 --net-lib lib/cs/net-48/netstandard.dll
 
 -D net-ver=45
