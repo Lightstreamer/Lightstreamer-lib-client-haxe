@@ -1,0 +1,13 @@
+-D analyzer-optimize
+--class-path src/common
+--class-path test
+--library utest
+--library haxe-concurrent
+
+--class-path src/platform/cs
+--net-lib lib/cs/cs-client.dll
+--net-lib lib/cs/net-48/netstandard.dll
+
+-D net-ver=45
+-D no-root
+--cs bin-test/cs

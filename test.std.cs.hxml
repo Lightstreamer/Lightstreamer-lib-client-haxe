@@ -1,0 +1,4 @@
+test.common.cs.hxml
+
+--main TestAll
+--cmd mono bin-test/cs/bin/TestAll.exe
