@@ -67,7 +67,7 @@ class WsClient extends WebSocketListener implements Authenticator {
       var sslSocketFactory = sslContext.getSocketFactory();
       clientBuilder.sslSocketFactory(sslSocketFactory, x509TrustManager);
     }
-    this.ws =clientBuilder.build().newWebSocket(request, this);
+    this.ws = clientBuilder.build().newWebSocket(request, this);
   }
 
   public function send(txt: String) {
