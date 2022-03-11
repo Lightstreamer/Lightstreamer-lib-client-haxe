@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Net.Security;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
@@ -18,11 +20,43 @@ namespace com.lightstreamer.cs
         }
 
         public async Task ConnectAsync(
-            string url, string body, string protocol)
+            string url, string protocol,
+            IDictionary<string, string> headers,
+            Proxy proxy,
+            RemoteCertificateValidationCallback certificateValidator)
         {
             try
             {
+                // set sub-protocol
                 ws.Options.AddSubProtocol(protocol);
+                // set headers
+                if (headers != null)
+                {
+                    foreach (var h in headers)
+                    {
+                        ws.Options.SetRequestHeader(h.Key, h.Value);
+                    }
+                }
+                // set cookies
+                ws.Options.Cookies = CookieHelper.instance.GetCookieContainer();
+                // set proxy
+                if (proxy != null)
+                {
+                    var uriBuilder = new UriBuilder(proxy.Host);
+                    uriBuilder.Port = proxy.Port;
+                    var webProxy = new System.Net.WebProxy(uriBuilder.Uri);
+                    if (proxy.User != null)
+                    {
+                        webProxy.Credentials = new System.Net.NetworkCredential(proxy.User, proxy.Password);
+                    }
+                    ws.Options.Proxy = webProxy;
+                }
+                // set certificate validator
+                if (certificateValidator != null)
+                {
+                    ws.Options.RemoteCertificateValidationCallback = certificateValidator;
+                }
+                // connect
                 var uri = new Uri(url);
                 await ws.ConnectAsync(uri, CancellationToken.None);
                 OnOpen(this);

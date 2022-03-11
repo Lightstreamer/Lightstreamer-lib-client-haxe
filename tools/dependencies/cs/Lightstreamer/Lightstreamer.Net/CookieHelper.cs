@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Net;
+using System.Reflection;
 
 namespace com.lightstreamer.cs
 {
@@ -18,7 +20,30 @@ namespace com.lightstreamer.cs
 
         public CookieCollection GetCookies(Uri uri)
         {
-            return cookieContainer.GetCookies(uri);
+            return uri == null ? GetAllCookies() : cookieContainer.GetCookies(uri);
+        }
+
+        public CookieCollection GetAllCookies()
+        {
+            // see https://stackoverflow.com/a/31900670
+            var res = new CookieCollection();
+            Hashtable k = (Hashtable) cookieContainer
+                .GetType()
+                .GetField("m_domainTable", BindingFlags.Instance | BindingFlags.NonPublic)
+                .GetValue(cookieContainer);
+            foreach (DictionaryEntry element in k)
+            {
+                SortedList l = (SortedList)element.Value.GetType().GetField("m_list", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(element.Value);
+                foreach (var e in l)
+                {
+                    var cl = (CookieCollection)((DictionaryEntry)e).Value;
+                    foreach (Cookie fc in cl)
+                    {
+                        res.Add(fc);
+                    }
+                }
+            }
+            return res;
         }
 
         public CookieContainer GetCookieContainer()
