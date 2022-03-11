@@ -26,7 +26,7 @@ class TestCertValidatorCs extends  utest.Test {
     output = [];
   }
 
-  function testRemoteCertificateValidation(async: utest.Async) {
+  function testRemoteCertificateValidationHttp(async: utest.Async) {
     new HttpClient(
       "https://localhost:8443/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null,
@@ -39,6 +39,26 @@ class TestCertValidatorCs extends  utest.Test {
         isTrue(output.length > 0);
         match(~/CONOK/, output[0]);
         async.completed();
+      });
+  }
+
+  function testRemoteCertificateValidationWs(async: utest.Async) {
+    new WsClient(
+      "wss://localhost:8443/lightstreamer", null, null, 
+      (sender, cert, chain, sslPolicyErrors) -> true,
+      function onOpen(c) {
+        c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i");
+      },
+      function onText(c, line) {
+        if (c.isDisposed()) return;
+        match(~/CONOK/, line);
+        c.dispose();
+        async.completed();
+      }, 
+      function onError(c, error) {
+        if (c.isDisposed()) return;
+        fail(error); 
+        async.completed(); 
       });
   }
 

@@ -31,6 +31,7 @@ class TestAll {
     #end
     #if cs
     runner.addCase(new com.lightstreamer.internal.TestHttpClientCs());
+    runner.addCase(new com.lightstreamer.internal.TestWsClientCs());
     #end
     #if LS_MPN
     runner.addCase(new com.lightstreamer.client.mpn.TestMpnSubscription());

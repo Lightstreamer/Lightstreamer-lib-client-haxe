@@ -1,9 +1,4 @@
 test.common.cs.hxml
 
---each
---main TestProxyCs
---cmd mono bin-test/cs/bin/TestProxyCs.exe
-
---next
 --main TestCertValidatorCs
 --cmd mono bin-test/cs/bin/TestCertValidatorCs.exe

@@ -6,7 +6,7 @@ test.java.hxml
 --next
 test.android.hxml
 --next
-test.std.cs.hxml
+test.cs.hxml
 --next
 test.python.hxml
 --next
