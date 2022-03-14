@@ -83,6 +83,28 @@ class TestWsClientJava extends utest.Test {
       });
   }
 
+  function testConnectionError(async: utest.Async) {
+    new WsClient(
+      "wss://localhost:8443/lightstreamer", 
+      null, null, null,
+      function onOpen(c) {
+        fail("Unexpected call"); 
+        async.completed(); 
+      }, 
+      function onText(c, l) { 
+        fail("Unexpected call"); 
+        async.completed(); 
+      },
+      function onError(c, error) { 
+        #if android
+        equals("Failed to connect to localhost/127.0.0.1:8443", error);
+        #else
+        equals("PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target", error);
+        #end
+        async.completed(); 
+      });
+  }
+
   function testCookies(async: utest.Async) {
     var uri = new java.net.URI(host);
     equals(0, LightstreamerClient.getCookies(uri).toHaxe().length);

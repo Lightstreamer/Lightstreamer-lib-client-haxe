@@ -75,6 +75,23 @@ class TestWsClientNode extends utest.Test {
       });
   }
 
+  function testConnectionError(async: utest.Async) {
+    new WsClient(
+      "wss://localhost:8443/lightstreamer", null,
+      function onOpen(c) {
+        fail("Unexpected call"); 
+        async.completed(); 
+      }, 
+      function onText(c, l) { 
+        fail("Unexpected call"); 
+        async.completed(); 
+      },
+      function onError(c, error) { 
+        equals("Network error: Error - self signed certificate", error);
+        async.completed(); 
+      });
+  }
+
   function testCookies(async: utest.Async) {
     var uri = host;
     equals(0, LightstreamerClient.getCookies(uri).length);

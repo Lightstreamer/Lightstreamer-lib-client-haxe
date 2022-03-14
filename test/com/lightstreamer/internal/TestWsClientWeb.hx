@@ -68,4 +68,21 @@ class TestWsClientWeb extends utest.Test {
         async.completed(); 
       });
   }
+
+  function testConnectionError(async: utest.Async) {
+    new WsClient(
+      "wss://localhost:8443/lightstreamer", 
+      function onOpen(c) {
+        fail("Unexpected call"); 
+        async.completed(); 
+      }, 
+      function onText(c, l) { 
+        fail("Unexpected call"); 
+        async.completed(); 
+      },
+      function onError(c, error) { 
+        equals("Network error", error);
+        async.completed(); 
+      });
+  }
 }
