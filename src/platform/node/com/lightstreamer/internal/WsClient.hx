@@ -49,7 +49,7 @@ class WsClient {
     });
     ws.on(Error, error -> {
       var msg = 'Network error: ${error.name} - ${error.message}';
-      streamLogger.logDebug('WS event: error($msg)');
+      streamLogger.logDebug('WS event: error($msg)', error);
       onError(this, msg);
       ws.terminate();
     });

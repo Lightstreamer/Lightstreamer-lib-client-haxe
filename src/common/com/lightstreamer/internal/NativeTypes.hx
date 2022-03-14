@@ -16,7 +16,7 @@ typedef ExceptionImpl = php.Throwable
 typedef ExceptionImpl = Any
 #end
 
-abstract Exception(ExceptionImpl) {
+abstract Exception(ExceptionImpl) from ExceptionImpl {
 
   @:access(haxe.Exception.caught)
   inline public function details() {

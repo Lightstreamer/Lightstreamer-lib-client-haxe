@@ -40,7 +40,7 @@ class HttpClient extends HttpClientCs {
   }
 
   overload override public function OnError(client: HttpClientCs, error: cs.system.Exception): Void {
-    streamLogger.logDebug('HTTP event: error(${error.Message})');
+    streamLogger.logDebug('HTTP event: error(${error.Message})', error);
     this.onError(this, error.Message);
   }
 

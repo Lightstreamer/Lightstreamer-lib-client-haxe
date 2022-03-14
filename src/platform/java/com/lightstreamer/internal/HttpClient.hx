@@ -84,7 +84,7 @@ class HttpClient implements Callback implements Authenticator {
 
   // Callback.onFailure
   public function onFailure(call: Call, ex: java.io.IOException) {
-    streamLogger.logDebug('HTTP event: error(${ex.getMessage()})');
+    streamLogger.logDebug('HTTP event: error(${ex.getMessage()})', ex);
     onError(this, ex.getMessage());
     call.cancel();
   }
@@ -108,7 +108,7 @@ class HttpClient implements Callback implements Authenticator {
       streamLogger.logDebug("HTTP event: complete");
       onDone(this);
     } catch(e) {
-      streamLogger.logDebug('HTTP event: error(${e.message})');
+      streamLogger.logDebugEx('HTTP event: error(${e.message})', e);
       onError(this, e.message);
       call.cancel();
     }

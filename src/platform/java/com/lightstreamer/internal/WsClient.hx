@@ -108,7 +108,7 @@ class WsClient extends WebSocketListener implements Authenticator {
   // WebSocketListener.onFailure
   override public overload function onFailure(webSocket: WebSocket, ex: java.lang.Throwable, response: Response) {
     var msg = ex.getMessage();
-    streamLogger.logDebug('WS event: error($msg)');
+    streamLogger.logDebug('WS event: error($msg)', ex);
     onErrorCb(this, msg);
     webSocket.cancel();
   }

@@ -53,7 +53,7 @@ class WsClient extends WsClientCs {
   }
 
   overload override public function OnError(client: WsClientCs, error: cs.system.Exception) {
-    streamLogger.logDebug('WS event: error(${error.Message})');
+    streamLogger.logDebug('WS event: error(${error.Message})', error);
     this.onError(this, error.Message);
   }
 }
