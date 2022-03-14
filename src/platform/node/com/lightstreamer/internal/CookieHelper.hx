@@ -21,20 +21,27 @@ class CookieHelper {
       logCookies("Before adding cookies for " + uri, store.getCookies(CookieAccessInfo.All));
       logCookies2("Cookies to be added for " + uri, cookies);
     }
-    store.setCookies(cookies, new URL(uri).hostname);
+    var _uri = new URL(uri);
+    store.setCookies(cookies, _uri.hostname, _uri.pathname);
     if (cookieLogger.isDebugEnabled()) {
       logCookies("After adding cookies for " + uri, store.getCookies(CookieAccessInfo.All));
     }
   }
 
   public function getCookies(uri: Null<String>): Array<String> {
-    var info = uri == null ? CookieAccessInfo.All : new CookieAccessInfo(new URL(uri).hostname);
+    var info;
+    if (uri == null) {
+      info = CookieAccessInfo.All;
+    } else {
+      var _uri = new URL(uri);
+      info = new CookieAccessInfo(_uri.hostname, _uri.pathname);
+    }
     return store.getCookies(info).map(c -> c.toString());
   }
 
   public function getCookieHeader(url: String): Option<String> {
     var _url = new URL(url);
-    var cookies = store.getCookies(new CookieAccessInfo(_url.hostname));
+    var cookies = store.getCookies(new CookieAccessInfo(_url.hostname, _url.pathname));
     var cookie = "";
     for (ck in cookies) {
         if (ck.secure && _url.protocol != "https:")
