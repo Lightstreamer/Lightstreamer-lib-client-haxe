@@ -41,7 +41,7 @@ class TestAll {
     runner.addCase(new com.lightstreamer.client.mpn.TestMpnBuilderSafari());
     #end
     #if java
-    runner.addCase(new com.lightstreamer.client.mpn.TestdMpnBuilderAndroid());
+    runner.addCase(new com.lightstreamer.client.mpn.TestMpnBuilderAndroid());
     #end
     #end
   }
