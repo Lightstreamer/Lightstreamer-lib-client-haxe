@@ -2,6 +2,8 @@ package com.lightstreamer.internal;
 
 import com.lightstreamer.internal.NativeTypes.NativeStringMap;
 import com.lightstreamer.cs.HttpClientCs;
+import com.lightstreamer.log.LoggerTools;
+using com.lightstreamer.log.LoggerTools;
 
 class HttpClient extends HttpClientCs {
   final onText: (HttpClient, String)->Void;
@@ -14,6 +16,7 @@ class HttpClient extends HttpClientCs {
     onError: (HttpClient, String)->Void, 
     onDone: HttpClient->Void) {
       super();
+      streamLogger.logDebug('HTTP sending: $url $body headers($headers)');
       this.onText = onText;
       this.onError = onError;
       this.onDone = onDone;
@@ -23,6 +26,7 @@ class HttpClient extends HttpClientCs {
   }
 
   public function dispose(): Void {
+    streamLogger.logDebug("HTTP disposing");
     Dispose();
   }
 
@@ -31,14 +35,17 @@ class HttpClient extends HttpClientCs {
   }
 
   overload override public function OnText(client: HttpClientCs, line: String): Void {
+    streamLogger.logDebug('HTTP event: text($line)');
     this.onText(this, line);
   }
 
   overload override public function OnError(client: HttpClientCs, error: cs.system.Exception): Void {
+    streamLogger.logDebug('HTTP event: error(${error.Message})');
     this.onError(this, error.Message);
   }
 
   overload override public function OnDone(client: HttpClientCs): Void {
+    streamLogger.logDebug("HTTP event: complete");
     this.onDone(this);
   }
 
