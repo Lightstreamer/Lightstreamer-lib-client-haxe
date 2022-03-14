@@ -44,7 +44,7 @@ inline function logDebug(logger: Logger, line: String, ?exception: Exception) {
   }
 }
 
-inline function logDebugEx(logger: Logger, line: String, ?exception: haxe.Exception) {
+inline function logDebugEx(logger: Logger, line: String, exception: haxe.Exception) {
   if (logger.isDebugEnabled()) {
     logger.debug(line + "\n" + exception.details());
   }
