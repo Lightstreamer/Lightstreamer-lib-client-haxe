@@ -1,4 +1,5 @@
 test.common.hxml
+--class-path src/extern/node
 --class-path src/platform/js
 --class-path src/platform/node
 --library hxnodejs
