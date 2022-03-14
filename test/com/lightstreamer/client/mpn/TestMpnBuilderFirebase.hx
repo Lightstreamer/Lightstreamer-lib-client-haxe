@@ -1,6 +1,6 @@
 package com.lightstreamer.client.mpn;
 
-class TestFirebaseMpnBuilder extends utest.Test {
+class TestMpnBuilderFirebase extends utest.Test {
   var b: FirebaseMpnBuilder;
 
   function setup() {

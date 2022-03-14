@@ -36,12 +36,12 @@ class TestAll {
     #if LS_MPN
     runner.addCase(new com.lightstreamer.client.mpn.TestMpnSubscription());
     #if js
-    runner.addCase(new com.lightstreamer.client.mpn.TestMpnDevice());
-    runner.addCase(new com.lightstreamer.client.mpn.TestFirebaseMpnBuilder());
-    runner.addCase(new com.lightstreamer.client.mpn.TestSafariMpnBuilder());
+    runner.addCase(new com.lightstreamer.client.mpn.TestMpnDeviceWeb());
+    runner.addCase(new com.lightstreamer.client.mpn.TestMpnBuilderFirebase());
+    runner.addCase(new com.lightstreamer.client.mpn.TestMpnBuilderSafari());
     #end
     #if java
-    runner.addCase(new com.lightstreamer.client.mpn.TestAndroidMpnBuilder());
+    runner.addCase(new com.lightstreamer.client.mpn.TestdMpnBuilderAndroid());
     #end
     #end
   }

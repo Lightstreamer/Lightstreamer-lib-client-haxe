@@ -2,7 +2,7 @@ package com.lightstreamer.client.mpn;
 
 import com.lightstreamer.internal.NativeTypes.NativeList;
 
-class TestSafariMpnBuilder extends utest.Test {
+class TestMpnBuilderSafari extends utest.Test {
   var b: SafariMpnBuilder;
 
   function setup() {
