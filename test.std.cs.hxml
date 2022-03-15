@@ -1,4 +1,4 @@
 test.common.cs.hxml
 
 --main TestAll
---cmd mono bin-test/cs/bin/TestAll.exe
+--cmd dotnet run --project bin-test/cs/TestAll.csproj

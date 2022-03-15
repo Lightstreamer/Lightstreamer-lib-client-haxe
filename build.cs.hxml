@@ -1,8 +1,10 @@
 build.common.hxml
 --class-path src/platform/cs
 --net-lib lib/cs/Lightstreamer.Net.dll
---net-lib lib/cs/net-48/netstandard.dll
 
 -D net-ver=45
 -D no-root
+-D no-compilation
+-D real-position
 --cs bin/cs
+--cmd dotnet build bin/cs/Lightstreamer.Client.csproj
