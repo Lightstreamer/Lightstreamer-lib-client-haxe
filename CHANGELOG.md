@@ -45,3 +45,5 @@ On the other hand, if a default CookieHandler is available upon the first usage 
 - LightstreamerClient.getCookies: remove ", or null." and "If a null URI was supplied, all available non-expired cookies will be returned."
 
 - ConnectionOptions.setProxy: remove "Lifecycle: This value can be set and changed at any time. The supplied value will be used for the next connection attempt." and change to "Lifecycle: the proxy is shared by all the client instances; hence once set, it cannot be changed with another value."
+
+- compatible with .net standard 2.1
