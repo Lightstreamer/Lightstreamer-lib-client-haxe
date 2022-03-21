@@ -105,6 +105,12 @@ private class ConsoleLogger implements Logger {
     }
   }
 
+  public function trace(line: String, ?exception: Exception): Void {
+    if (this.traceEnabled) {
+      log("TRACE", line, exception);
+    }
+  }
+
   public function isFatalEnabled():Bool {
     return fatalEnabled;
   }
@@ -123,5 +129,9 @@ private class ConsoleLogger implements Logger {
 
   public function isDebugEnabled():Bool {
     return debugEnabled;
+  }
+
+  public function isTraceEnabled():Bool {
+    return traceEnabled;
   }
 }

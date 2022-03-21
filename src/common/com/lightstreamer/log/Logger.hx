@@ -9,9 +9,11 @@ interface Logger {
   function warn(line: String, ?exception: Exception): Void;
   function info(line: String, ?exception: Exception): Void;
   function debug(line: String, ?exception: Exception): Void;
+  function trace(line: String, ?exception: Exception): Void;
   function isFatalEnabled(): Bool;
   function isErrorEnabled(): Bool;
   function isWarnEnabled(): Bool;
   function isInfoEnabled(): Bool;
   function isDebugEnabled(): Bool;
+  function isTraceEnabled(): Bool;
 }

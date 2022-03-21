@@ -41,11 +41,13 @@ private class EmptyLogger implements Logger {
 	inline public function warn(line: String, ?exception: Exception) {}
 	inline public function info(line: String, ?exception: Exception) {}
 	inline public function debug(line: String, ?exception: Exception) {}
+	inline public function trace(line: String, ?exception: Exception) {}
   inline public function isFatalEnabled(): Bool return false;
   inline public function isErrorEnabled(): Bool return false;
   inline public function isWarnEnabled(): Bool return false;
   inline public function isInfoEnabled(): Bool return false;
   inline public function isDebugEnabled(): Bool return false;
+  inline public function isTraceEnabled(): Bool return false;
 }
 
 private class LoggerProxy implements Logger {
@@ -69,6 +71,9 @@ private class LoggerProxy implements Logger {
 	inline public function debug(line: String, ?exception: Exception) {
     this.wrappedLogger.debug(line, exception);
   }
+  inline public function trace(line: String, ?exception: Exception) {
+    this.wrappedLogger.trace(line, exception);
+  }
   inline public function isFatalEnabled(): Bool {
     return this.wrappedLogger.isFatalEnabled();
   }
@@ -83,5 +88,8 @@ private class LoggerProxy implements Logger {
   }
   inline public function isDebugEnabled(): Bool {
     return this.wrappedLogger.isDebugEnabled();
+  }
+  inline public function isTraceEnabled(): Bool {
+    return this.wrappedLogger.isTraceEnabled();
   }
 }
