@@ -1,6 +1,18 @@
 package com.lightstreamer.internal;
 
-typedef Long = #if (java || cs) haxe.Int64 #else Int #end
+#if (java || cs)
+typedef Long = haxe.Int64;
+
+inline function fromLong(x: Long): Int {
+  return haxe.Int64.toInt(x);
+}
+#else
+typedef Long = Int;
+
+inline function fromLong(x: Long): Int {
+  return x;
+}
+#end
 
 #if js
 typedef ExceptionImpl = js.lib.Error

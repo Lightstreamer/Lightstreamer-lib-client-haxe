@@ -22,6 +22,10 @@ abstract Millis(Long) to Long {
     }
     return new Millis(millis);
   }
+
+  public inline function toInt(): Int {
+    return fromLong(this);
+  }
 }
 
 abstract Timestamp(Long) to Long {
