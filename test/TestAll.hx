@@ -2,6 +2,7 @@ import com.lightstreamer.log.ConsoleLoggerProvider;
 import utest.Runner;
 import utest.ui.Report;
 import com.lightstreamer.client.*;
+import com.lightstreamer.internal.*;
 
 class TestAll {
 
@@ -11,27 +12,27 @@ class TestAll {
     runner.addCase(new TestConnectionDetails());
     runner.addCase(new TestConnectionOptions());
     runner.addCase(new TestSubscription());
-    runner.addCase(new com.lightstreamer.internal.TestEventDispatcher());
+    runner.addCase(new TestEventDispatcher());
     #if js
-    runner.addCase(new com.lightstreamer.internal.TestStreamReader());
+    runner.addCase(new TestStreamReader());
     #end
     #if LS_WEB
-    runner.addCase(new com.lightstreamer.internal.TestHttpClientWeb());
-    runner.addCase(new com.lightstreamer.internal.TestWsClientWeb());
+    runner.addCase(new TestHttpClientWeb());
+    runner.addCase(new TestWsClientWeb());
     #end
     #if LS_NODE
-    runner.addCase(new com.lightstreamer.internal.TestCookieHelperNode());
-    runner.addCase(new com.lightstreamer.internal.TestHttpClientNode());
-    runner.addCase(new com.lightstreamer.internal.TestWsClientNode());
+    runner.addCase(new TestCookieHelperNode());
+    runner.addCase(new TestHttpClientNode());
+    runner.addCase(new TestWsClientNode());
     #end
     #if java
-    runner.addCase(new com.lightstreamer.internal.TestCookieHelperJava());
-    runner.addCase(new com.lightstreamer.internal.TestHttpClientJava());
-    runner.addCase(new com.lightstreamer.internal.TestWsClientJava());
+    runner.addCase(new TestCookieHelperJava());
+    runner.addCase(new TestHttpClientJava());
+    runner.addCase(new TestWsClientJava());
     #end
     #if cs
-    runner.addCase(new com.lightstreamer.internal.TestHttpClientCs());
-    runner.addCase(new com.lightstreamer.internal.TestWsClientCs());
+    runner.addCase(new TestHttpClientCs());
+    runner.addCase(new TestWsClientCs());
     #end
     #if LS_MPN
     runner.addCase(new com.lightstreamer.client.mpn.TestMpnSubscription());
