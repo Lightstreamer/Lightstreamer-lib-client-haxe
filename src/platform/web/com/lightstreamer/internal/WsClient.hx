@@ -13,7 +13,7 @@ class WsClient {
     onText: (WsClient, String)->Void, 
     onError: (WsClient, String)->Void) {
     streamLogger.logDebug('WS connecting: $url');
-    this.ws = new WebSocket(url, Constants.Sec_WebSocket_Protocol);
+    this.ws = new WebSocket(url, Constants.FULL_TLCP_VERSION);
     ws.onopen = () -> {
       streamLogger.logDebug('WS event: open');
       onOpen(this);

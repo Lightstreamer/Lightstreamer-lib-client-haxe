@@ -34,7 +34,7 @@ class WsClient {
       case _:
     }
     // set url and options
-    this.ws = new WebSocket(url, Constants.Sec_WebSocket_Protocol, options);
+    this.ws = new WebSocket(url, Constants.FULL_TLCP_VERSION, options);
     ws.on(Open, () -> {
       streamLogger.logDebug('WS event: open');
       onOpen(this);

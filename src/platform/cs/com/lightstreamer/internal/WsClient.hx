@@ -25,7 +25,7 @@ class WsClient extends WsClientCs {
     this.onError = onError;
     var nHeaders = headers == null ? null : new NativeStringMap(headers);
     var nProxy = proxy == null ? null : new com.lightstreamer.cs.Proxy(proxy.host, proxy.port, proxy.user, proxy.password);
-    this.ConnectAsync(url, Constants.Sec_WebSocket_Protocol, nHeaders, nProxy, certificateValidator);
+    this.ConnectAsync(url, Constants.FULL_TLCP_VERSION, nHeaders, nProxy, certificateValidator);
   }
 
   public function send(txt: String) {

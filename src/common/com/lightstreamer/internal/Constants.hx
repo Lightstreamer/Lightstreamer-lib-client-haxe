@@ -1,3 +1,4 @@
 package com.lightstreamer.internal;
 
-final Sec_WebSocket_Protocol = "TLCP-2.3.0.lightstreamer.com";
+final TLCP_VERSION = "TLCP-2.3.0";
+final FULL_TLCP_VERSION = TLCP_VERSION + ".lightstreamer.com";

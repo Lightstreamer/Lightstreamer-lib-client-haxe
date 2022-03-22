@@ -35,7 +35,7 @@ class WsClient extends WebSocketListener implements Authenticator {
       }
     }
     // set protocol
-    reqBuilder.header("Sec-WebSocket-Protocol", Constants.Sec_WebSocket_Protocol);
+    reqBuilder.header("Sec-WebSocket-Protocol", Constants.FULL_TLCP_VERSION);
     // set url
     reqBuilder.url(url);
     var request = reqBuilder.build();
