@@ -49,3 +49,9 @@ inline function logDebugEx(logger: Logger, line: String, exception: haxe.Excepti
     logger.debug(line + "\n" + exception.details());
   }
 }
+
+inline function logTrace(logger: Logger, line: String, ?exception: Exception) {
+  if (logger.isTraceEnabled()) {
+    logger.trace(line, exception);
+  }
+}
