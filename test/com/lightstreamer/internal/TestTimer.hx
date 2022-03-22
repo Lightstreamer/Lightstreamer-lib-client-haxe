@@ -1,0 +1,28 @@
+package com.lightstreamer.internal;
+
+class TestTimer extends utest.Test {
+
+  @:timeout(700)
+  function testTimer(async: utest.Async) {
+    var ts = Timer.stamp();
+    var timer = new Timer("id", new Types.Millis(500), tr -> {
+      var now = Timer.stamp();
+      equals(false, tr.isCanceled());
+      floatEquals(0.5, now - ts, 0.1);
+      async.completed();
+    });
+  }
+
+  @:timeout(700)
+  function testCancel(async: utest.Async) {
+    var timer = new Timer("id", new Types.Millis(100), tr -> {
+      fail("Not expected");
+      async.completed();
+    });
+    timer.cancel();
+    haxe.Timer.delay(() -> {
+      equals(true, timer.isCanceled());
+      async.completed();
+    }, 200);
+  }
+}

@@ -13,6 +13,7 @@ class TestAll {
     runner.addCase(new TestConnectionOptions());
     runner.addCase(new TestSubscription());
     runner.addCase(new TestEventDispatcher());
+    runner.addCase(new TestTimer());
     #if js
     runner.addCase(new TestStreamReader());
     #end
