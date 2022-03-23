@@ -4,6 +4,44 @@ import com.lightstreamer.internal.NativeTypes;
 using StringTools;
 using Lambda;
 
+abstract Url(String) to String {
+  public function new(base: String, ?path: String) {
+    if (path != null) {
+      var baseEndsWithSlash = base.endsWith("/");
+      var pathStartsWithSlash = path.startsWith("/");
+      if (!baseEndsWithSlash) {
+        if (!pathStartsWithSlash) {
+          base += "/" + path;
+        } else {
+          base += path;
+        }
+      } else {
+        if (!pathStartsWithSlash) {
+          base += path;
+        } else {
+          base += path.substring(1);
+        }
+      }
+    }
+    this = base;
+  }
+}
+
+enum abstract ClientStatus(String) {
+  var CONNECTING = "CONNECTING";
+  var CONNECTED_STREAM_SENSING = "CONNECTED:STREAM-SENSING";
+  var CONNECTED_WS_STREAMING = "CONNECTED:WS-STREAMING";
+  var CONNECTED_HTTP_STREAMING = "CONNECTED:HTTP-STREAMING";
+  var CONNECTED_WS_POLLING = "CONNECTED:WS-POLLING";
+  var CONNECTED_HTTP_POLLING = "CONNECTED:HTTP-POLLING";
+  var STALLED = "STALLED";
+  var DISCONNECTED_WILL_RETRY = "DISCONNECTED:WILL-RETRY";
+  var DISCONNECTED_TRYING_RECOVERY = "DISCONNECTED:TRYING-RECOVERY";
+  var DISCONNECTED = "DISCONNECTED";
+}
+
+abstract RequestLimit(Int) from Int to Int {}
+
 abstract Millis(Long) to Long {
   public inline function new(millis) {
     this = millis;
