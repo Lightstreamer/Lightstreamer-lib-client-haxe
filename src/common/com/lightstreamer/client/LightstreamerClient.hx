@@ -3,7 +3,7 @@ package com.lightstreamer.client;
 import com.lightstreamer.internal.NativeTypes.NativeList;
 import com.lightstreamer.internal.EventDispatcher;
 
-private class ClientEventDispatcher extends EventDispatcher<ClientListener> {}
+class ClientEventDispatcher extends EventDispatcher<ClientListener> {}
 
 /**
  * LightstreamerClient class
