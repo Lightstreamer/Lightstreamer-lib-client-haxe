@@ -1,5 +1,7 @@
 package com.lightstreamer.internal;
 
+import com.lightstreamer.internal.NativeTypes.NativeStringMap;
+
 interface IHttpClient {
   function dispose(): Void;
   function isDisposed(): Bool;
@@ -18,7 +20,7 @@ interface IWsClient {
 }
 
 // TODO add proxy and trust manager
-typedef IWsClientFactory = (url: String, headers: Null<Map<String, String>>, 
+typedef IWsClientFactory = (url: String, headers: Null<NativeStringMap>, 
   onOpen: IWsClient->Void,
   onText: (IWsClient, String)->Void, 
   onError: (IWsClient, String)->Void) -> IWsClient;
@@ -29,3 +31,15 @@ interface ITimer {
 }
 
 typedef ITimerFactory = (id: String, delay: Types.Millis, callback: ITimer->Void) -> ITimer;
+
+enum ReachabilityStatus {
+  RSReachable;
+  RSNotReachable;
+}
+
+interface IReachability {
+  function startListening(onUpdate: ReachabilityStatus -> Void): Void;
+  function stopListening(): Void;
+}
+
+typedef IReachabilityFactory = (host: String) -> IReachability;
