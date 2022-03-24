@@ -3,8 +3,26 @@ package com.lightstreamer.internal;
 import com.lightstreamer.internal.NativeTypes.Long;
 using StringTools;
 
+private class KeyVal {
+  public var key: String;
+  public var val: String;
+
+  public function new(key: String, val: String) {
+    this.key = key;
+    this.val = val;
+  }
+
+  public function toEncodedPair() {
+    return key.urlEncode() + "=" + val.urlEncode();
+  }
+
+  public function toString() {
+    return key + "=" + val;
+  }
+}
+
 class RequestBuilder {
-  final params: Array<String> = [];
+  final params: Array<KeyVal> = [];
 
   public inline function new() {}
 
@@ -120,12 +138,12 @@ class RequestBuilder {
     addParam("LS_cause", val);
   }
 
-  public function LS_keepalive_millis(val: Int) {
-    addParam("LS_keepalive_millis", val);
+  public function LS_keepalive_millis(val: Long) {
+    addParamAny("LS_keepalive_millis", val);
   }
 
-  public function LS_inactivity_millis(val: Int) {
-    addParam("LS_inactivity_millis", val);
+  public function LS_inactivity_millis(val: Long) {
+    addParamAny("LS_inactivity_millis", val);
   }
 
   public function LS_requested_max_bandwidth(val: String) {
@@ -168,12 +186,12 @@ class RequestBuilder {
     addParam("LS_polling", val);
   }
 
-  public function LS_polling_millis(val: Int) {
-    addParam("LS_polling_millis", val);
+  public function LS_polling_millis(val: Long) {
+    addParamAny("LS_polling_millis", val);
   }
 
-  public function LS_idle_millis(val: Int) {
-    addParam("LS_idle_millis", val);
+  public function LS_idle_millis(val: Long) {
+    addParamAny("LS_idle_millis", val);
   }
 
   public function LS_content_length(val: Long) {
@@ -221,7 +239,7 @@ class RequestBuilder {
   }
 
   function addParamString(key: String, val: String) {
-    params.push(key.urlEncode() + "=" + val.urlEncode());
+    params.push(new KeyVal(key, val));
   }
 
   function addParamAny(key: String, val: Any) {
@@ -233,6 +251,10 @@ class RequestBuilder {
   }
 
   public function getEncodedString() {
-    return params.join("&");
+    return params.map(p -> p.toEncodedPair()).join("&");
+  }
+
+  public function toString() {
+    return params.join(" ");
   }
 }

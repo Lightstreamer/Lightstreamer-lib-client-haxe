@@ -4,30 +4,7 @@ import com.lightstreamer.internal.NativeTypes;
 using StringTools;
 using Lambda;
 
-abstract Url(String) to String {
-  public function new(base: String, ?path: String) {
-    if (path != null) {
-      var baseEndsWithSlash = base.endsWith("/");
-      var pathStartsWithSlash = path.startsWith("/");
-      if (!baseEndsWithSlash) {
-        if (!pathStartsWithSlash) {
-          base += "/" + path;
-        } else {
-          base += path;
-        }
-      } else {
-        if (!pathStartsWithSlash) {
-          base += path;
-        } else {
-          base += path.substring(1);
-        }
-      }
-    }
-    this = base;
-  }
-}
-
-enum abstract ClientStatus(String) {
+enum abstract ClientStatus(String) to String {
   var CONNECTING = "CONNECTING";
   var CONNECTED_STREAM_SENSING = "CONNECTED:STREAM-SENSING";
   var CONNECTED_WS_STREAMING = "CONNECTED:WS-STREAMING";
@@ -59,6 +36,11 @@ abstract Millis(Long) to Long {
       throw new IllegalArgumentException("value must be greater than or equal to zero");
     }
     return new Millis(millis);
+  }
+
+  @:op(A > B)
+  public inline function gt(rhs: Int) {
+    return this > rhs;
   }
 
   public inline function toInt(): Int {
