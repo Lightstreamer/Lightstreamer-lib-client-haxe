@@ -66,15 +66,35 @@ class ConnectionDetails {
     return sessionId;
   }
 
+  function setSessionId(sessionId: String) {
+    this.sessionId = sessionId;
+    client.eventDispatcher.onPropertyChange("sessionId");
+  }
+
   public function getServerInstanceAddress(): Null<String> {
     return serverInstanceAddress;
+  }
+
+  function setServerInstanceAddress(serverInstanceAddress: String) {
+    this.serverInstanceAddress = serverInstanceAddress;
+    client.eventDispatcher.onPropertyChange("serverInstanceAddress");
   }
 
   public function getServerSocketName(): Null<String> {
     return serverSocketName;
   }
+
+  function setServerSocketName(serverSocketName: String) {
+    this.serverSocketName = serverSocketName;
+    client.eventDispatcher.onPropertyChange("serverSocketName");
+  }
   
   public function getClientIp(): Null<String> {
     return clientIp;
+  }
+
+  function setClientIp(clientIp: String) {
+    this.clientIp = clientIp;
+    client.eventDispatcher.onPropertyChange("clientIp");
   }
 }

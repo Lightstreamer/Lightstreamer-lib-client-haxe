@@ -70,7 +70,6 @@ class ConnectionOptions {
     return httpExtraHeaders == null ? null : new NativeStringMap(httpExtraHeaders);
   }
   public function setHttpExtraHeaders(httpExtraHeaders: Null<NativeStringMap>): Void {
-    @:nullSafety(Off)
     actionLogger.info('httpExtraHeaders changed: $httpExtraHeaders');
     this.httpExtraHeaders = httpExtraHeaders == null ? null : httpExtraHeaders.toHaxe();
     client.eventDispatcher.onPropertyChange("httpExtraHeaders");
@@ -109,6 +108,11 @@ class ConnectionOptions {
 
   public function getRealMaxBandwidth(): Null<String> {
     return realMaxBandwidth.toString();
+  }
+
+  function setRealMaxBandwidth(newValue: Null<RealMaxBandwidth>) {
+    realMaxBandwidth = newValue;
+    client.eventDispatcher.onPropertyChange("realMaxBandwidth");
   }
 
   public function getPollingInterval(): Long {
