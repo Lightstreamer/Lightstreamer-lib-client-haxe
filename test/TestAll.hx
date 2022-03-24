@@ -14,6 +14,7 @@ class TestAll {
     runner.addCase(new TestSubscription());
     runner.addCase(new TestEventDispatcher());
     runner.addCase(new TestTimer());
+    runner.addCase(new TestUrl());
     runner.addCase(new TestRequestBuilder());
     #if js
     runner.addCase(new TestStreamReader());
