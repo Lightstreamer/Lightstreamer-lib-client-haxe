@@ -38,7 +38,7 @@ abstract TimerMillis(Float) {
     return this < rhs.toFloat();
   }
 
-  inline function toFloat(): Float {
+  public inline function toFloat(): Float {
     return this;
   }
 }
