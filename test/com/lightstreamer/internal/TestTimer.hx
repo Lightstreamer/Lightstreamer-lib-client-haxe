@@ -1,5 +1,7 @@
 package com.lightstreamer.internal;
 
+import com.lightstreamer.internal.Timer;
+
 class TestTimer extends utest.Test {
 
   @:timeout(700)
@@ -24,5 +26,10 @@ class TestTimer extends utest.Test {
       equals(true, timer.isCanceled());
       async.completed();
     }, 200);
+  }
+
+  function testDiff() {
+    var diff: TimerMillis = new TimerStamp(2) - new TimerStamp(1);
+    equals(1000, diff);
   }
 }
