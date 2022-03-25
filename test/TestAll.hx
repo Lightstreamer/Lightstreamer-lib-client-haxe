@@ -16,6 +16,7 @@ class TestAll {
     runner.addCase(new TestTimer());
     runner.addCase(new TestUrl());
     runner.addCase(new TestRequestBuilder());
+    runner.addCase(new TestAssocArray());
     #if js
     runner.addCase(new TestStreamReader());
     #end
