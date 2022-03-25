@@ -3,18 +3,63 @@ package com.lightstreamer.internal;
 import hx.concurrent.executor.Executor;
 import com.lightstreamer.internal.PlatformApi;
 
-abstract TimestampSec(Float) {
+abstract TimerMillis(Float) {
+  public inline function new(millis: Float) {
+    this = millis;
+  }
 
-  inline function new(secs: Float) {
-    this = secs;
+  @:op(-A)
+  public inline function uminus() {
+    return new TimerMillis(-this);
+  }
+
+  @:op(A - B)
+  public inline function minus(rhs: TimerMillis) {
+    return new TimerMillis(this - rhs.toFloat());
+  }
+
+  @:op(A + B)
+  public inline function plus(rhs: TimerMillis) {
+    return new TimerMillis(this + rhs.toFloat());
+  }
+
+  @:op(A * B)
+  public inline function mult(rhs: Float) {
+    return new TimerMillis(this * rhs);
+  }
+
+  @:op(A > B)
+  public inline function gt(rhs: TimerMillis) {
+    return this > rhs.toFloat();
+  }
+
+  @:op(A < B)
+  public inline function lt(rhs: TimerMillis) {
+    return this < rhs.toFloat();
+  }
+
+  inline function toFloat(): Float {
+    return this;
+  }
+}
+
+abstract TimerStamp(Float) {
+
+  public inline function new(seconds: Float) {
+    this = seconds;
   }
 
   public static inline function now() {
-    return new TimestampSec(Timer.stamp());
+    return new TimerStamp(Timer.stamp());
   }
 
-  public static inline function fromSecs(secs: Float) {
-    return new TimestampSec(secs);
+  @:op(A - B)
+  public function minus(rhs: TimerStamp): TimerMillis {
+    return new TimerMillis((this - rhs.toFloat()) * 1000);
+  }
+
+  inline function toFloat(): Float {
+    return this;
   }
 }
 
