@@ -847,6 +847,31 @@ mpnBadgeResetRequest = MpnBadgeResetRequest(self)
     }
   }
 
+  function doSYNC_NG(syncMs: TimerMillis): SyncCheckResult {
+    var diffTime = diffTimeSync(syncMs);
+    if (diffTime > slw_hugeDelayMs && diffTime > slw_avgDelayMs * 2) {
+        slw_avgDelayMs = slowAvg(diffTime);
+        if (slw_avgDelayMs > slw_maxAvgDelayMs && options.slowingEnabled) {
+          return SCR_bad;
+        } else {
+          if (slw_avgDelayMs < new TimerMillis(60)) {
+            slw_avgDelayMs = new TimerMillis(0);
+          }
+          return SCR_good;
+        }
+    } else {
+      slw_avgDelayMs = slowAvg(diffTime);
+      if (slw_avgDelayMs > slw_maxAvgDelayMs && options.slowingEnabled) {
+        return SCR_bad;
+      } else {
+        if (slw_avgDelayMs < new TimerMillis(60)) {
+          slw_avgDelayMs = new TimerMillis(0);
+        }
+        return SCR_not_good;
+      }
+    }
+  }
+
   function diffTimeSync(syncMs: TimerMillis) {
     var diffMs = TimerStamp.now() - slw_refTime;
     var diffTime = diffMs - syncMs;
