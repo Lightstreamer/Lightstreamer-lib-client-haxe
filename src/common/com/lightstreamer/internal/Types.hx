@@ -4,6 +4,13 @@ import com.lightstreamer.internal.NativeTypes;
 using StringTools;
 using Lambda;
 
+typedef Pos = Int;
+
+enum FieldValue {
+  unchanged;
+  changed(val: Null<String>);
+}
+
 enum abstract ClientStatus(String) to String {
   var CONNECTING = "CONNECTING";
   var CONNECTED_STREAM_SENSING = "CONNECTED:STREAM-SENSING";
@@ -205,6 +212,11 @@ class RequestedMaxFrequencyTools {
       case FreqLimited(max): Std.string(max);
     }
   }
+}
+
+enum RealMaxFrequency {
+  RFreqLimited(freq: Float);
+  RFreqUnlimited;
 }
 
 @:using(com.lightstreamer.internal.Types.RealMaxBandwidthTools)
