@@ -15,9 +15,11 @@ using com.lightstreamer.log.LoggerTools;
 @:nullSafety(Off)
 @:access(com.lightstreamer.client.ConnectionDetails)
 @:access(com.lightstreamer.client.ConnectionOptions)
+@:access(com.lightstreamer.client.LightstreamerClient)
 class ClientMachine {
   final details: ConnectionDetails;
   final options: ConnectionOptions;
+  final lock: com.lightstreamer.internal.RLock;
   final clientEventDispatcher: ClientEventDispatcher;
   final state: ClientStates.State = new ClientStates.State();
   // resource factories
@@ -94,26 +96,25 @@ class ClientMachine {
   var ctrlTimer: Null<ITimer>;
 
   public function new(
+    client: LightstreamerClient,
     serverAddress: Null<String>,
     adapterSet: Null<String>,
-    details: ConnectionDetails,
-    options: ConnectionOptions,
     wsFactory: IWsClientFactory,
     httpFactory: IHttpClientFactory,
     ctrlFactory: IHttpClientFactory,
     timerFactory: ITimerFactory,
     randomGenerator: Int->Int,
-    reachabilityFactory: IReachabilityFactory,
-    clientEventDispatcher: ClientEventDispatcher) {
-    this.details = details;
-    this.options = options;
+    reachabilityFactory: IReachabilityFactory) {
+    this.lock = client.lock;
+    this.details = client.connectionDetails;
+    this.options = client.connectionOptions;
     this.wsFactory = wsFactory;
     this.httpFactory = httpFactory;
     this.ctrlFactory = ctrlFactory;
     this.timerFactory = timerFactory;
     this.randomGenerator = randomGenerator;
     this.reachabilityFactory = reachabilityFactory;
-    this.clientEventDispatcher = clientEventDispatcher;
+    this.clientEventDispatcher = client.eventDispatcher;
     delayCounter.reset(options.retryDelay);
     if (serverAddress != null) {
       details.setServerAddress(serverAddress);
@@ -155,13 +156,55 @@ mpnBadgeResetRequest = MpnBadgeResetRequest(self)
   }
 
   function evtWSOpen() {
-    // TODO called by openWS: synchronize
+    // TODO synchronize (called by openWS)
   }
   function evtMessage(line: String) {
-    // TODO called by openWS: synchronize
+    // TODO synchronize (called by openWS)
   }
   function evtTransportError() {
-    // TODO called by openWS: synchronize
+    // TODO synchronize (called by openWS)
+  }
+  function evtTransportTimeout() {
+    // TODO synchronize (called by timer)
+  }
+  function evtRetryTimeout() {
+    // TODO synchronize (called by timer)
+  }
+  function evtRecoveryTimeout() {
+    // TODO synchronize (called by timer)
+  }
+  function evtIdleTimeout() {
+    // TODO synchronize (called by timer)
+  }
+  function evtPollingTimeout() {
+    // TODO synchronize (called by timer)
+  }
+  function evtCtrlTimeout() {
+    // TODO synchronize (called by timer)
+  }
+  function evtKeepaliveTimeout() {
+    // TODO synchronize (called by timer)
+  }
+  function evtStalledTimeout() {
+    // TODO synchronize (called by timer)
+  }
+  function evtReconnectTimeout() {
+    // TODO synchronize (called by timer)
+  }
+  function evtRhbTimeout() {
+    // TODO synchronize (called by timer)
+  }
+  function evtEndSession() {
+    // TODO
+  }
+  function evtRetry(retryCause: RetryCause, timeout: Null<Millis> = null) {
+    // TODO
+  }
+  function evtDisposeCtrl() {
+    // TODO
+  }
+  function evtStartRecovery() {
+    // TODO
   }
 
   // ---------- event actions ----------
@@ -882,6 +925,267 @@ mpnBadgeResetRequest = MpnBadgeResetRequest(self)
     return slw_avgDelayMs * slw_m + diffTime * (1.0 - slw_m);
   }
 
+  function schedule_evtTransportTimeout(timeout: Millis) {
+    transportTimer = createTimer("transport.timeout", timeout, evtTransportTimeout);
+  }
+
+  function schedule_evtRetryTimeout(timeout: Millis) {
+    retryTimer = createTimer("retry.timeout", timeout, evtRetryTimeout);
+  }
+
+  function schedule_evtRecoveryTimeout(timeout: Millis) {
+    recoveryTimer = createTimer("recovery.timeout", timeout, evtRecoveryTimeout);
+  }
+
+  function schedule_evtIdleTimeout(timeout: Millis) {
+    idleTimer = createTimer("idle.timeout", timeout, evtIdleTimeout);
+  }
+
+  function schedule_evtPollingTimeout(timeout: Millis) {
+    pollingTimer = createTimer("polling.timeout", timeout, evtPollingTimeout);
+  }
+
+  function schedule_evtCtrlTimeout(timeout: Millis) {
+    ctrlTimer = createTimer("ctrl.timeout", timeout, evtCtrlTimeout);
+  }
+
+  function schedule_evtKeepaliveTimeout(timeout: Millis) {
+    keepaliveTimer = createTimer("keepalive.timeout", timeout, evtKeepaliveTimeout);
+  }
+
+  function schedule_evtStalledTimeout(timeout: Millis) {
+    stalledTimer = createTimer("stalled.timeout", timeout, evtStalledTimeout);
+  }
+
+  function schedule_evtReconnectTimeout(timeout: Millis) {
+    reconnectTimer = createTimer("reconnect.timeout", timeout, evtReconnectTimeout);
+  }
+
+  function schedule_evtRhbTimeout(timeout: Millis) {
+    rhbTimer = createTimer("rhb.timeout", timeout, evtRhbTimeout);
+  }
+
+  function createTimer(id: String, timeout: Millis, callback: ()->Void) {
+    return timerFactory(id, timeout, timer -> lock.execute(() -> {
+      if (timer.isCanceled())
+        return;
+      callback();
+    }));
+  }
+
+  function cancel_evtTransportTimeout() {
+    if (transportTimer != null) {
+      transportTimer.cancel();
+      transportTimer = null;
+    }
+  }
+
+  function cancel_evtRetryTimeout() {
+    if (retryTimer != null) {
+      retryTimer.cancel();
+      retryTimer = null;
+    }
+  }
+
+  function cancel_evtKeepaliveTimeout() {
+    if (keepaliveTimer != null) {
+      keepaliveTimer.cancel();
+      keepaliveTimer = null;
+    }
+  }
+
+  function cancel_evtStalledTimeout() {
+    if (stalledTimer != null) {
+      stalledTimer.cancel();
+      stalledTimer = null;
+    }
+  }
+
+  function cancel_evtReconnectTimeout() {
+    if (reconnectTimer != null) {
+      reconnectTimer.cancel();
+      reconnectTimer = null;
+    }
+  }
+
+  function cancel_evtRhbTimeout() {
+    if (rhbTimer != null) {
+      rhbTimer.cancel();
+      rhbTimer = null;
+    }
+  }
+
+  function cancel_evtIdleTimeout() {
+    if (idleTimer != null) {
+      idleTimer.cancel();
+      idleTimer = null;
+    }
+  }
+
+  function cancel_evtPollingTimeout() {
+    if (pollingTimer != null) {
+      pollingTimer.cancel();
+      pollingTimer = null;
+    }
+  }
+
+  function cancel_evtCtrlTimeout() {
+    if (ctrlTimer != null) {
+      ctrlTimer.cancel();
+      ctrlTimer = null;
+    }
+  }
+
+  function cancel_evtRecoveryTimeout() {
+    if (recoveryTimer != null) {
+      recoveryTimer.cancel();
+      recoveryTimer = null;
+    }
+  }
+
+  function waitingInterval(expectedMs: Millis, startTime: TimerStamp): Millis {
+    var diffMs = TimerStamp.now() - startTime;
+    var expected = new TimerMillis(expectedMs.toInt());
+    return diffMs < expected ? new Millis((expected - diffMs).toFloat()) : new Millis(0);
+  }
+
+  function exit_tr() {
+    evtEndSession();
+  }
+
+  function entry_m111(retryCause: RetryCause, timeout: Millis) {
+    evtRetry(retryCause, timeout);
+    schedule_evtRetryTimeout(timeout);
+  }
+
+  function entry_m112(retryCause: RetryCause) {
+    var pauseMs = waitingInterval(delayCounter.getCurrentRetryDelay(), connectTs);
+    evtRetry(retryCause, pauseMs);
+    schedule_evtRetryTimeout(pauseMs);
+  }
+
+  function entry_m113(retryCause: RetryCause) {
+    var pauseMs = randomPause(options.firstRetryMaxDelay);
+    evtRetry(retryCause, pauseMs);
+    schedule_evtRetryTimeout(pauseMs);
+  }
+
+  function entry_m115(retryCause: RetryCause) {
+    evtRetry(retryCause);
+    evtRetryTimeout();
+  }
+
+  function entry_rec(pause: Millis, retryCause: RetryCause) {
+    sessionLogger.logError('Recovering connection in $pause ms. Cause: ${asErrorMsg(retryCause)})');
+    evtStartRecovery();
+    schedule_evtRecoveryTimeout(pause);
+  }
+
+  function exit_w() {
+    cancel_evtKeepaliveTimeout();
+    cancel_evtStalledTimeout();
+    cancel_evtReconnectTimeout();
+    cancel_evtRhbTimeout();
+  }
+
+  function exit_ws() {
+    cancel_evtTransportTimeout();
+    cancel_evtKeepaliveTimeout();
+    cancel_evtStalledTimeout();
+    cancel_evtReconnectTimeout();
+    cancel_evtRhbTimeout();
+  }
+
+  function exit_wp() {
+    cancel_evtTransportTimeout();
+    cancel_evtIdleTimeout();
+    cancel_evtPollingTimeout();
+  }
+
+  function exit_hs() {
+    cancel_evtTransportTimeout();
+    cancel_evtKeepaliveTimeout();
+    cancel_evtStalledTimeout();
+    cancel_evtReconnectTimeout();
+    cancel_evtRhbTimeout();
+  }
+
+  function exit_hp() {
+    cancel_evtIdleTimeout();
+    cancel_evtPollingTimeout();
+    cancel_evtRhbTimeout();
+  }
+
+  function exit_ctrl() {
+    cancel_evtCtrlTimeout();
+    evtDisposeCtrl();
+  }
+
+  function exit_rec() {
+    cancel_evtRecoveryTimeout();
+    cancel_evtTransportTimeout();
+    cancel_evtRetryTimeout();
+  }
+
+  function exit_keepalive_unit() {
+    cancel_evtKeepaliveTimeout();
+    cancel_evtStalledTimeout();
+    cancel_evtReconnectTimeout();
+  }
+
+  function exit_w_to_m() {
+    exit_w();
+    exit_tr();
+  }
+
+  function exit_ws_to_m() {
+    exit_ws();
+    exit_tr();
+  }
+
+  function exit_wp_to_m() {
+    exit_wp();
+    exit_tr();
+  }
+
+  function exit_hs_to_m() {
+    exit_ctrl();
+    exit_hs();
+    exit_tr();
+  }
+
+  function exit_hs_to_rec() {
+    exit_ctrl();
+    exit_hs();
+  }
+
+  function exit_hp_to_m() {
+    exit_ctrl();
+    exit_hp();
+    exit_tr();
+  }
+
+  function exit_hp_to_rec() {
+    exit_ctrl();
+    exit_hp();
+  }
+
+  function exit_ctrl_to_m() {
+    exit_ctrl();
+    exit_hs();
+    exit_hp();
+    exit_tr();
+  }
+
+  function exit_rec_to_m() {
+    exit_rec();
+    exit_tr();
+  }
+
+  function randomPause(maxPause: Millis): Millis {
+    return new Millis(randomGenerator(maxPause.toInt()));
+  }
+
   function generateFreshReqId() {
     // TODO synchronize
     m_nextReqId += 1;
@@ -908,4 +1212,42 @@ private enum BestForBindingEnum {
 
 private enum SyncCheckResult {
   SCR_good; SCR_not_good; SCR_bad;
+}
+
+private enum RetryCause {
+  standardError(code: Int, msg: String);
+  ws_unavailable;
+  ws_error;
+  http_error;
+  idle_timeout;
+  stalled_timeout;
+  ws_timeout;
+  http_timeout;
+  recovery_timeout;
+  prog_mismatch(expected: Int, actual: Int);
+}
+
+private function asErrorMsg(cause: RetryCause) {
+  return switch cause {
+    case standardError(code, msg):
+      '$code - $msg';
+    case ws_unavailable:
+      "Websocket transport not available";
+    case ws_error:
+      "Websocket error";
+    case http_error:
+      "HTTP error";
+    case idle_timeout:
+      "idleTimeout expired";
+    case stalled_timeout:
+      "stalledTimeout expired";
+    case ws_timeout:
+      "Websocket connect timeout expired";
+    case http_timeout:
+      "HTTP connect timeout expired";
+    case recovery_timeout:
+      "sessionRecoveryTimeout expired";
+    case prog_mismatch(expected, actual):
+      'Recovery counter mismatch: expected $expected but found $actual';
+  };
 }
