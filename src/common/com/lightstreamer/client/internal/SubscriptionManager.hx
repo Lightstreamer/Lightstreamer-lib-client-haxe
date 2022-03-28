@@ -14,4 +14,5 @@ class SubscriptionManager {
   public function evtCONF(freq: RealMaxFrequency) {}
   public function evtREQOK(reqId: Int) {}
   public function evtREQERR(reqId: Int, errorCode: Int, errorMsg: String) {}
+  public function evtExtAbort() {}
 }

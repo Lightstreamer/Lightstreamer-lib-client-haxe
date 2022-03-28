@@ -1192,6 +1192,70 @@ mpnBadgeResetRequest = MpnBadgeResetRequest(self)
     return m_nextReqId;
   }
 
+  function generateFreshSubId() {
+    // TODO synchronize
+    m_nextSubId += 1;
+    return m_nextSubId;
+  }
+
+  function genAbortSubscriptions() {
+    for (_ => sub in subscriptionManagers) {
+      sub.evtExtAbort();
+    }
+    // TODO MPN
+    // for (sub in mpnSubscriptionManagers) {
+    //   sub.evtAbort();
+    // }
+  }
+
+  function genAckMessagesWS() {
+    var messages = messageManagers.filter(msg -> msg.isPending());
+    for (msg in messages) {
+      msg.evtWSSent();
+    }
+  }
+
+  function genAbortMessages() {
+    for (msg in messageManagers) {
+      msg.evtAbort();
+    }
+  }
+
+  function resetSequenceMap() {
+    sequenceMap.clear();
+  }
+
+  function encodeSwitch(isWS: Bool) {
+    var req = new RequestBuilder();
+    swt_lastReqId = generateFreshReqId();
+    req.LS_reqId(swt_lastReqId);
+    req.LS_op("force_rebind");
+    if (isWS) {
+      req.LS_close_socket(true);
+    }
+    if (cause != null) {
+      req.LS_cause(cause);
+      cause = null;
+    }
+    protocolLogger.logInfo("Sending transport switch: " + req);
+    return req.getEncodedString();
+  }
+
+  function encodeConstrain() {
+    var req = new RequestBuilder();
+    bw_lastReqId = generateFreshReqId();
+    req.LS_reqId(bw_lastReqId);
+    req.LS_op("constrain");
+    switch bw_requestedMaxBandwidth {
+    case BWLimited(bw):
+      req.LS_requested_max_bandwidth_Float(bw);
+    case BWUnlimited:
+      req.LS_requested_max_bandwidth("unlimited");
+    }
+    protocolLogger.logInfo("Sending bandwidth constrain: " + req);
+    return req.getEncodedString();
+  }
+
   function getHeadersForRequestOtherThanCreate() {
     return options.httpExtraHeadersOnSessionCreationOnly ? null : options.httpExtraHeaders;
   }

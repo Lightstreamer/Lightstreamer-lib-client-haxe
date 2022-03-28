@@ -200,24 +200,24 @@ class StateVar_hp {
 
 class State {
   // TODO update toString
-  var m: State_m = M_100;
-  var du: State_du = DU_20;
-  var tr: Null<State_tr>;
-  var w: Null<StateVar_w>;
-  var ws: Null<StateVar_ws>;
-  var wp: Null<StateVar_wp>;
-  var hs: Null<StateVar_hs>;
-  var hp: Null<StateVar_hp>;
-  var rec: Null<State_rec>;
-  var h: Null<State_h>;
-  var ctrl: Null<State_ctrl>;
-  var swt: Null<State_swt>;
-  var bw: Null<State_bw>;
-  var rhb: Null<State_rhb>;
-  var slw: Null<State_slw>;
+  var s_m: State_m = M_100;
+  var s_du: State_du = DU_20;
+  var s_tr: Null<State_tr>;
+  var s_w: Null<StateVar_w>;
+  var s_ws: Null<StateVar_ws>;
+  var s_wp: Null<StateVar_wp>;
+  var s_hs: Null<StateVar_hs>;
+  var s_hp: Null<StateVar_hp>;
+  var s_rec: Null<State_rec>;
+  var s_h: Null<State_h>;
+  var s_ctrl: Null<State_ctrl>;
+  var s_swt: Null<State_swt>;
+  var s_bw: Null<State_bw>;
+  var s_rhb: Null<State_rhb>;
+  var s_slw: Null<State_slw>;
   // TODO MPN
-  // var mpn: StateVar_mpn = StateVar_mpn()
-  var nr: State_nr = NR_1400;
+  // var s_mpn: StateVar_mpn = StateVar_mpn()
+  var s_nr: State_nr = NR_1400;
 
   inline public function new() {}
 
@@ -226,31 +226,145 @@ class State {
   }
 
   inline public function is(value: State_m)
-    return m == value;
+    return s_m == value;
 
   public function goTo(newValue: State_m) {
-    m = newValue;
+    s_m = newValue;
     internalLogger.logTrace("goto: " + toString());
   }
 
+  public function goto_m_from_w(m: State_m) {
+    clear_w();
+    goto_m_from_session(m);
+  }
+
+  public function goto_m_from_ws(m: State_m) {
+    clear_ws();
+    goto_m_from_session(m);
+  }
+
+  public function goto_rec_from_w() {
+    clear_w();
+    goto_rec();
+  }
+
+  public function goto_rec_from_ws() {
+    clear_ws();
+    goto_rec();
+  }
+
+  public function goto_m_from_wp(m: State_m) {
+    clear_wp();
+    goto_m_from_session(m);
+  }
+
+  function goto_rec_from_wp() {
+    clear_wp();
+    goto_rec();
+  }
+
+  function goto_m_from_hs(m: State_m) {
+    clear_hs();
+    s_ctrl = null;
+    s_h = null;
+    goto_m_from_session(m);
+  }
+
+  function goto_m_from_rec(m: State_m) {
+    s_tr = null;
+    goto_m_from_session(m);
+  }
+
+  function goto_rec_from_hs() {
+    clear_hs();
+    s_ctrl = null;
+    s_h = null;
+    goto_rec();
+  }
+
+  function goto_m_from_hp(m: State_m) {
+    clear_hp();
+    s_ctrl = null;
+    s_h = null;
+    goto_m_from_session(m);
+  }
+
+  function goto_rec_from_hp() {
+    clear_hp();
+    s_ctrl = null;
+    s_h = null;
+    goto_rec();
+  }
+
+  function goto_rec() {
+    s_tr = TR_260;
+    s_rec = REC_1000;
+  }
+
+  function goto_m_from_session(m: State_m) {
+    s_tr = null;
+    s_swt = null;
+    s_bw = null;
+    s_m = m;
+  }
+
+  function goto_m_from_ctrl(m: State_m) {
+    clear_hs();
+    clear_hp();
+    s_ctrl = null;
+    s_h = null;
+    goto_m_from_session(m);
+  }
+
+  function clear_w() {
+    s_w = null;
+    s_rhb = null;
+    s_slw = null;
+  }
+
+  function clear_ws() {
+    s_ws = null;
+    s_rhb = null;
+    s_slw = null;
+  }
+
+  function clear_wp() {
+    s_wp = null;
+  }
+
+  function clear_hs() {
+    s_hs = null;
+    s_rhb = null;
+    s_slw = null;
+  }
+
+  function clear_hp() {
+    s_hp = null;
+    s_rhb = null;
+  }
+
+  function isSwitching() {
+    return s_m == M_150 && (s_swt == SWT_1302 || s_swt == SWT_1303);
+  }
+
   public function toString() {
-    var str = "<m=" + m;
-    str += " du=" + du;
-    if (tr != null) str += " tr=" + tr;
-    if (w != null) str += " " + w;
-    if (ws != null) str += " " + ws;
-    if (wp != null) str += " " + wp;
-    if (hs != null) str += " " + hs;
-    if (hp != null) str += " " + hp;
-    if (rec != null) str += " rec=" + rec;
-    if (h != null) str += " h=" + h;
-    if (ctrl != null) str += " ctrl=" + ctrl;
-    if (swt != null) str += " swt=" + swt;
-    if (bw != null) str += " bw=" + bw;
-    if (rhb != null) str += " rhb=" + rhb;
-    if (slw != null) str += " slw=" + slw;
+    var str = "<m=" + s_m;
+    str += " du=" + s_du;
+    if (s_tr != null) str += " tr=" + s_tr;
+    if (s_w != null) str += " " + s_w;
+    if (s_ws != null) str += " " + s_ws;
+    if (s_wp != null) str += " " + s_wp;
+    if (s_hs != null) str += " " + s_hs;
+    if (s_hp != null) str += " " + s_hp;
+    if (s_rec != null) str += " rec=" + s_rec;
+    if (s_h != null) str += " h=" + s_h;
+    if (s_ctrl != null) str += " ctrl=" + s_ctrl;
+    if (s_swt != null) str += " swt=" + s_swt;
+    if (s_bw != null) str += " bw=" + s_bw;
+    if (s_rhb != null) str += " rhb=" + s_rhb;
+    if (s_slw != null) str += " slw=" + s_slw;
     // TODO log MPN
-    str += " nr=" + nr;
+    str += " nr=" + s_nr;
     str += ">";
     return str;
   }
