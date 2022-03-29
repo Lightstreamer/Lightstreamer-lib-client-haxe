@@ -225,8 +225,14 @@ class State {
     internalLogger.logTrace("event: " + event + " from: " +  toString());
   }
 
-  inline public function is(value: State_m)
+  overload extern inline public function is(value: State_m)
     return s_m == value;
+
+  overload extern inline public function is(value: State_swt)
+    return s_swt == value;
+
+  overload extern inline public function is(value: State_bw)
+    return s_bw == value;
 
   public function goTo(newValue: State_m) {
     s_m = newValue;

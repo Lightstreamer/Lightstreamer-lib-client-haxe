@@ -1,11 +1,17 @@
 package com.lightstreamer.client.internal;
 
+import com.lightstreamer.client.internal.ClientRequests;
+
 // TODO MessageManager
-class MessageManager {
+@:access(com.lightstreamer.client.internal.ClientMachine)
+class MessageManager implements Encodable {
   public var sequence: String;
   public var prog: Int;
+  final client: ClientMachine;
 
-  public function new() {
+  public function new(client: ClientMachine) {
+    this.client = client;
+    // TODO complete
     sequence = "";
     prog = 0;
   }
@@ -17,8 +23,21 @@ class MessageManager {
   public function evtWSSent() {}
   public function evtAbort() {}
 
-  public function isPending() {
+  public function isPending(): Bool {
     // TODO
     return false;
+  }
+
+  public function encode(isWS: Bool): String {
+    return encodeMsg(isWS);
+  }
+
+  public function encodeWS(): String {
+    return "msg\r\n" + encode(true);
+  }
+
+  function encodeMsg(isWS: Bool): String {
+    // TODO
+    return "";
   }
 }

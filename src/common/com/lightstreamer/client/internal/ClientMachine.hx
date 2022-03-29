@@ -8,6 +8,8 @@ import com.lightstreamer.internal.PlatformApi;
 import com.lightstreamer.internal.Timer;
 import com.lightstreamer.internal.Constants;
 import com.lightstreamer.client.LightstreamerClient.ClientEventDispatcher;
+import com.lightstreamer.client.internal.ClientStates;
+import com.lightstreamer.client.internal.ClientRequests;
 import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
 
@@ -51,8 +53,8 @@ class ClientMachine {
   // subscriptions
   final subscriptionManagers: AssocArray<SubscriptionManager> = new AssocArray();
   // request types
-  var switchRequest: Null<Requests.SwitchRequest>;
-  var constrainRequest: Null<Requests.ConstrainRequest>;
+  var switchRequest: Null<SwitchRequest>;
+  var constrainRequest: Null<ConstrainRequest>;
   // TODO MPN
   //var mpnRegisterRequest: Null<Requests.MpnRegisterRequest>;
   //var mpnFilterUnsubscriptionRequest: Null<Requests.MpnFilterUnsubscriptionRequest>;
@@ -164,6 +166,15 @@ mpnBadgeResetRequest = MpnBadgeResetRequest(self)
   function evtTransportError() {
     // TODO synchronize (called by openWS)
   }
+  function evtCtrlMessage(line: String) {
+    // TODO synchronize (called by sendBatchHTTP)
+  }
+  function evtCtrlError() {
+    // TODO synchronize (called by sendBatchHTTP)
+  }
+  function evtCtrlDone() {
+   // TODO synchronize (called by sendBatchHTTP) 
+  }
   function evtTransportTimeout() {
     // TODO synchronize (called by timer)
   }
@@ -227,19 +238,25 @@ mpnBadgeResetRequest = MpnBadgeResetRequest(self)
   function openWS(url: String, headers: Null<NativeStringMap>): IWsClient {
     return wsFactory(url, headers, 
       function onOpen(client) {
-        if (client.isDisposed())
-          return;
-        evtWSOpen();
+        lock.execute(() -> {
+          if (client.isDisposed())
+            return;
+          evtWSOpen();
+        });
       },
       function onText(client, line) {
-        if (client.isDisposed())
-          return;
-        evtMessage(line);
+        lock.execute(() -> {
+          if (client.isDisposed())
+            return;
+          evtMessage(line);
+        });
       },
       function onError(client, error) {
-        if (client.isDisposed())
-          return;
-        evtTransportError();
+        lock.execute(() -> {
+          if (client.isDisposed())
+            return;
+          evtTransportError();
+        });
       });
   }
 
@@ -366,14 +383,18 @@ mpnBadgeResetRequest = MpnBadgeResetRequest(self)
   function sendHttpRequest(url: String, req: RequestBuilder, headers: Null<NativeStringMap>): IHttpClient {
     return httpFactory(url, req.getEncodedString(), headers,
       function onText(client, line) {
-        if (client.isDisposed())
-          return;
-        evtMessage(line);
+        lock.execute(() -> {   
+          if (client.isDisposed())
+            return;
+          evtMessage(line);
+        });
       },
       function onError(client, error) {
-        if (client.isDisposed())
-          return;
-        evtTransportError();
+        lock.execute(() -> {   
+          if (client.isDisposed())
+            return;
+          evtTransportError();
+        });
       },
       function onDone(client) {
         // ignore
@@ -1256,6 +1277,162 @@ mpnBadgeResetRequest = MpnBadgeResetRequest(self)
     return req.getEncodedString();
   }
 
+  function getPendingControls() {
+    var res = new Array<Encodable>();
+    if (switchRequest.isPending()) {
+      res.push(switchRequest);
+    }
+    if (constrainRequest.isPending()) {
+      res.push(constrainRequest);
+    }
+    for (_ => sub in subscriptionManagers) {
+      if (sub.isPending()) {
+        res.push(sub);
+      }
+    }
+    // TODO MPN
+    // if mpnRegisterRequest.isPending() {
+    //     res.append(mpnRegisterRequest)
+    // }
+    // for sub in mpnSubscriptionManagers.filter({ $0.isPending() }) {
+    //     res.append(sub)
+    // }
+    // if mpnFilterUnsubscriptionRequest.isPending() {
+    //     res.append(mpnFilterUnsubscriptionRequest)
+    // }
+    // if mpnBadgeResetRequest.isPending() {
+    //     res.append(mpnBadgeResetRequest)
+    // }
+    return res;
+  }
+
+  function sendControlWS(request: Encodable) {
+    ws.send(request.encodeWS());
+  }
+
+  function sendMsgWS(msg: MessageManager) {
+    ws.send(msg.encodeWS());
+  }
+
+  function sendPengingControlsWS(pendings: Array<Encodable>) {
+      var batches = prepareBatchWS("control", pendings, requestLimit);
+      sendBatchWS(batches);
+  }
+
+  function sendPendingMessagesWS() {
+    var messages = [for (msg in messageManagers) if (msg.isPending()) (msg : Encodable)];
+    // ASSERT (for each i, j in DOMAIN messages :
+    // i < j AND messages[i].sequence = messages[j].sequence => messages[i].prog < messages[j].prog)
+    var batches = prepareBatchWS("msg", messages, requestLimit);
+    sendBatchWS(batches);
+  }
+
+  function sendBatchWS(batches: Array<String>) {
+    for (batch in batches) {
+      ws.send(batch);
+    }
+  }
+
+  function sendHeartbeatWS() {
+    protocolLogger.logInfo("Heartbeat request");
+    ws.send("heartbeat\r\n\r\n"); // since the request has no parameter, it must include EOL
+  }
+
+  function sendPendingControlsHTTP(pendings: Array<Encodable>) {
+    var body = prepareBatchHTTP(pendings, requestLimit);
+    sendBatchHTTP(body, "control");
+  }
+
+  function sendPendingMessagesHTTP() {
+    var messages = [for (msg in messageManagers) if (msg.isPending()) (msg : Encodable)];
+    // ASSERT (for each i, j in DOMAIN messages :
+    // i < j AND messages[i].sequence = messages[j].sequence => messages[i].prog < messages[j].prog)
+    var body = prepareBatchHTTP(messages, requestLimit);
+    sendBatchHTTP(body, "msg");
+  }
+
+  function sendHeartbeatHTTP() {
+    protocolLogger.logInfo("Heartbeat request");
+    sendBatchHTTP("\r\n", "heartbeat"); // since the request has no parameter, it must include EOL
+  }
+
+  function sendBatchHTTP(body: String, reqType: String) {
+    ctrl_connectTs = TimerStamp.now();
+    var url = Url.build(serverInstanceAddress, '/lightstreamer/$reqType.txt?LS_protocol=$TLCP_VERSION&LS_session=$sessionId');
+    var headers = getHeadersForRequestOtherThanCreate();
+    ctrl_http = ctrlFactory(url, body, headers,
+      function onText(client, line) {
+        lock.execute(() -> {
+          if (client.isDisposed())
+            return;
+          evtCtrlMessage(line);
+        });
+      },
+      function onError(client, error) {
+        lock.execute(() -> {
+          if (client.isDisposed())
+            return;
+          evtCtrlError();
+        });
+      },
+      function onDone(client) {
+        lock.execute(() -> {
+          if (client.isDisposed())
+            return;
+          evtCtrlDone();
+        });
+      });
+  }
+
+  function prepareBatchWS(reqType: String, pendings: Array<Encodable>, requestLimit: Int): Array<String> {
+    assert(pendings.length > 0);
+    // NB $requestLimit must always be respected unless
+    // one single request surpasses the limit: in that case the requests is sent on its own even if
+    // we already know that the server will refuse it
+    var out = [];
+    var i = 0;
+    var subReq = pendings[i].encode(true);
+    while (i < pendings.length) {
+      // prepare next batch
+      var mainReq = new Request();
+      mainReq.addSubRequest(reqType);
+      mainReq.addSubRequest(subReq);
+      i += 1;
+      while (i < pendings.length) {
+        subReq = pendings[i].encode(true);
+        if (mainReq.addSubRequestOnlyIfBodyIsLessThan(subReq, requestLimit)) {
+          i += 1;
+        } else {
+          // batch is full: keep subReq for the next batch
+          break;
+        }
+      }
+      out.push(mainReq.getBody());
+    }
+    return out;
+  }
+
+  function prepareBatchHTTP(pendings: Array<Encodable>, requestLimit: Int) {
+    assert(pendings.length > 0);
+    // NB $requestLimit must always be respected unless
+    // one single request surpasses the limit: in that case the requests is sent on its own even if
+    // we already know that the server will refuse it
+    var mainReq = new Request();
+    var i = 0;
+    var subReq = pendings[i].encode(false);
+    mainReq.addSubRequest(subReq);
+    i += 1;
+    while (i < pendings.length) {
+      subReq = pendings[i].encode(false);
+      if (mainReq.addSubRequestOnlyIfBodyIsLessThan(subReq, requestLimit)) {
+        i += 1;
+      } else {
+        break;
+      }
+    }
+    return mainReq.getBody();
+  }
+
   function getHeadersForRequestOtherThanCreate() {
     return options.httpExtraHeadersOnSessionCreationOnly ? null : options.httpExtraHeaders;
   }
@@ -1263,6 +1440,30 @@ mpnBadgeResetRequest = MpnBadgeResetRequest(self)
   function getServerAddress() {
     var addr = details.serverAddress;
     return addr != null ? addr : defaultServerAddress;
+  }
+
+  function relateSubManager(subManager: SubscriptionManager) {
+    assert(subscriptionManagers[subManager.subId] == null);
+    subscriptionManagers[subManager.subId] = subManager;
+  }
+
+  function unrelateSubManager(subManager: SubscriptionManager) {
+    subscriptionManagers.remove(subManager.subId);
+  }
+
+  function relateMsgManager(msgManager: MessageManager) {
+    messageManagers.push(msgManager);
+  }
+
+  function unrelateMsgManager(msgManager: MessageManager) {
+    messageManagers.remove(msgManager);
+  }
+
+  function getAndSetNextMsgProg(sequence: String) {
+    var prog = sequenceMap[sequence];
+    prog = prog == null ? 1 : prog;
+    sequenceMap[sequence] = prog + 1;
+    return prog;
   }
 }
 
