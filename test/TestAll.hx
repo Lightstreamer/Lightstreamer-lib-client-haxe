@@ -3,6 +3,7 @@ import utest.Runner;
 import utest.ui.Report;
 import com.lightstreamer.client.*;
 import com.lightstreamer.internal.*;
+import com.lightstreamer.client.internal.*;
 
 class TestAll {
 
@@ -17,6 +18,7 @@ class TestAll {
     runner.addCase(new TestUrl());
     runner.addCase(new TestRequestBuilder());
     runner.addCase(new TestAssocArray());
+    runner.addCase(new TestRequest());
     #if js
     runner.addCase(new TestStreamReader());
     #end
