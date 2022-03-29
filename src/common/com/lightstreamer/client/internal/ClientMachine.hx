@@ -97,6 +97,38 @@ class ClientMachine {
   var pollingTimer: Null<ITimer>;
   var ctrlTimer: Null<ITimer>;
 
+  function disposeSession() {
+    disposeWS();
+    disposeHTTP();
+    disposeCtrl();
+    
+    details.serverInstanceAddress = null;
+    details.serverSocketName = null;
+    details.clientIp = null;
+    details.sessionId = null;
+    options.realMaxBandwidth = null;
+    
+    lastKnownClientIp = null;
+    
+    resetSequenceMap();
+    
+    rec_serverProg = 0;
+    rec_clientProg = 0;
+    
+    bw_lastReqId = null;
+    bw_requestedMaxBandwidth = null;
+    
+    swt_lastReqId = null;
+  }
+
+  function disposeClient() {
+    sessionId = null;
+    enableAllTransports();
+    resetCurrentRetryDelay();
+    resetSequenceMap();
+    cause = null;
+  }
+
   public function new(
     client: LightstreamerClient,
     serverAddress: Null<String>,
@@ -117,6 +149,12 @@ class ClientMachine {
     this.randomGenerator = randomGenerator;
     this.reachabilityFactory = reachabilityFactory;
     this.clientEventDispatcher = client.eventDispatcher;
+    this.switchRequest = new SwitchRequest(this);
+    this.constrainRequest = new ConstrainRequest(this);
+    // TODO MPN
+    // mpnRegisterRequest = MpnRegisterRequest(self)
+    // mpnFilterUnsubscriptionRequest = MpnFilterUnsubscriptionRequest(self)
+    // mpnBadgeResetRequest = MpnBadgeResetRequest(self)
     delayCounter.reset(options.retryDelay);
     if (serverAddress != null) {
       details.setServerAddress(serverAddress);
@@ -124,14 +162,6 @@ class ClientMachine {
     if (adapterSet != null) {
       details.setAdapterSet(adapterSet);
     }
-    // TODO complete
-    /*
-switchRequest = SwitchRequest(self)
-constrainRequest = ConstrainRequest(self)
-mpnRegisterRequest = MpnRegisterRequest(self)
-mpnFilterUnsubscriptionRequest = MpnFilterUnsubscriptionRequest(self)
-mpnBadgeResetRequest = MpnBadgeResetRequest(self)
-*/
   }
 
   // ---------- event handlers ----------
