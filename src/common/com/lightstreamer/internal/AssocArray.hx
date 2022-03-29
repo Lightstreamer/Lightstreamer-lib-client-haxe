@@ -33,6 +33,13 @@ abstract AssocArray<T>(Array<AssocPair<T>>) {
     return value;
   }
 
+  public function remove(key: Int) {
+    var i = this.findIndex(p -> p.key == key);
+    if (i != -1) {
+      this.splice(i, 1);
+    }
+  }
+
   public function keyValueIterator() {
     // since AssocPair has fields key and value,
     // it is compatible with KeyValueIterator interface
