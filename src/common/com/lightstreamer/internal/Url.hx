@@ -77,7 +77,7 @@ class Url {
   function get_protocol() return _protocol;
 
   function set_protocol(newValue: String) {
-    if (!newValue.endsWith(":")) {
+    if (newValue != "" && !newValue.endsWith(":")) {
       newValue += ":";
     }
     _protocol = newValue;
