@@ -5,24 +5,25 @@ import com.lightstreamer.internal.NativeTypes.Long;
 
 class RetryDelayCounter {
   var attempt: Int;
-  var currentRetryDelay: Long;
+  var _currentRetryDelay: Long;
+  public var currentRetryDelay(get, never): Millis;
 
   public function new() {
     attempt = 1;
-    currentRetryDelay = 0;
+    _currentRetryDelay = 0;
   }
 
-  public function getCurrentRetryDelay() {
-    return new Millis(currentRetryDelay);
+  function get_currentRetryDelay() {
+    return new Millis(_currentRetryDelay);
   }
 
   public function increase() {
     if (attempt > 10) {
-      if (currentRetryDelay < 60_000) {
-        if (currentRetryDelay * 2 < 60_000) {
-          currentRetryDelay *= 2;
+      if (_currentRetryDelay < 60_000) {
+        if (_currentRetryDelay * 2 < 60_000) {
+          _currentRetryDelay *= 2;
         } else {
-          currentRetryDelay = 60_000;
+          _currentRetryDelay = 60_000;
         }
       }
     } else {
@@ -32,6 +33,6 @@ class RetryDelayCounter {
 
   public function reset(retryDelay: Long) {
     attempt = 1;
-    currentRetryDelay = retryDelay;
+    _currentRetryDelay = retryDelay;
   }
 }

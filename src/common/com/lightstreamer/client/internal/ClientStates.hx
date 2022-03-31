@@ -113,14 +113,22 @@ enum abstract State_nr(Int) {
 }
 
 class StateVar_w {
-  public var p: State_w_p;
-  public var k: State_w_k;
-  public var s: State_w_s;
+  public var p(default, set): State_w_p;
+  var k: State_w_k;
+  var s: State_w_s;
+  final parent: State;
   
-  public function new(p: State_w_p, k: State_w_k, s: State_w_s) {
-    this.p = p;
-    this.k = k;
-    this.s = s;
+  public function new(parent: State, p: State_w_p, k: State_w_k, s: State_w_s) {
+    this.parent = parent;
+    @:bypassAccessor this.p = p;
+    @:bypassAccessor this.k = k;
+    @:bypassAccessor this.s = s;
+  }
+
+  function set_p(newValue) {
+    p = newValue;
+    parent.traceState();
+    return newValue;
   }
 
   public function toString() {
@@ -129,13 +137,27 @@ class StateVar_w {
 }
 
 class StateVar_ws {
-  public var m: State_ws_m;
-  public var p: Null<State_ws_p>;
-  public var k: Null<State_ws_k>;
-  public var s: Null<State_ws_s>;
+  public var m(default, set): State_ws_m;
+  public var p(default, set): Null<State_ws_p>;
+  var k: Null<State_ws_k>;
+  var s: Null<State_ws_s>;
+  final parent: State;
   
-  public function new(m: State_ws_m) {
-    this.m = m;
+  public function new(parent: State, m: State_ws_m) {
+    this.parent = parent;
+    @:bypassAccessor this.m = m;
+  }
+
+  function set_m(newValue) {
+    m = newValue;
+    parent.traceState();
+    return newValue;
+  }
+
+  function set_p(newValue) {
+    p = newValue;
+    parent.traceState();
+    return newValue;
   }
 
   public function toString() {
@@ -149,13 +171,33 @@ class StateVar_ws {
 }
 
 class StateVar_wp {
-  public var m: State_wp_m;
-  public var p: Null<State_wp_p>;
-  public var c: Null<State_wp_c>;
-  public var s: Null<State_wp_s>;
+  public var m(default, set): State_wp_m;
+  public var p(default, set): Null<State_wp_p>;
+  public var c(default, set): Null<State_wp_c>;
+  var s: Null<State_wp_s>;
+  final parent: State;
   
-  public function new(m: State_wp_m) {
-    this.m = m;
+  public function new(parent: State, m: State_wp_m) {
+    this.parent = parent;
+    @:bypassAccessor this.m = m;
+  }
+
+  function set_m(newValue) {
+    m = newValue;
+    parent.traceState();
+    return newValue;
+  }
+
+  function set_p(newValue) {
+    p = newValue;
+    parent.traceState();
+    return newValue;
+  }
+
+  function set_c(newValue) {
+    c = newValue;
+    parent.traceState();
+    return newValue;
   }
 
   public function toString() {
@@ -200,43 +242,95 @@ class StateVar_hp {
 
 class State {
   // TODO update toString
-  var s_m: State_m = M_100;
-  var s_du: State_du = DU_20;
-  var s_tr: Null<State_tr>;
-  var s_w: Null<StateVar_w>;
-  var s_ws: Null<StateVar_ws>;
-  var s_wp: Null<StateVar_wp>;
-  var s_hs: Null<StateVar_hs>;
-  var s_hp: Null<StateVar_hp>;
-  var s_rec: Null<State_rec>;
-  var s_h: Null<State_h>;
-  var s_ctrl: Null<State_ctrl>;
-  var s_swt: Null<State_swt>;
-  var s_bw: Null<State_bw>;
-  var s_rhb: Null<State_rhb>;
-  var s_slw: Null<State_slw>;
+  public var s_m(default, set): State_m;
+  public var s_du(default, set): State_du;
+  public var s_tr(default, set): Null<State_tr>;
+  public var s_w: Null<StateVar_w>;
+  public var s_ws: Null<StateVar_ws>;
+  public var s_wp: Null<StateVar_wp>;
+  public var s_hs: Null<StateVar_hs>;
+  public var s_hp: Null<StateVar_hp>;
+  public var s_rec(default, set): Null<State_rec>;
+  public var s_h(default, set): Null<State_h>;
+  public var s_ctrl(default, set): Null<State_ctrl>;
+  public var s_swt(default, set): Null<State_swt>;
+  public var s_bw(default, set): Null<State_bw>;
+  public var s_rhb(default, set): Null<State_rhb>;
+  public var s_slw(default, set): Null<State_slw>;
   // TODO MPN
   // var s_mpn: StateVar_mpn = StateVar_mpn()
-  var s_nr: State_nr = NR_1400;
+  public var s_nr(default, set): State_nr;
 
-  inline public function new() {}
-
-  public function event(event: String) {
-    internalLogger.logTrace("event: " + event + " from: " +  toString());
+  public function new() {
+    @:bypassAccessor s_m = M_100;
+    @:bypassAccessor s_du = DU_20;
+    @:bypassAccessor s_nr = NR_1400;
   }
 
-  overload extern inline public function is(value: State_m)
-    return s_m == value;
-
-  overload extern inline public function is(value: State_swt)
-    return s_swt == value;
-
-  overload extern inline public function is(value: State_bw)
-    return s_bw == value;
-
-  public function goTo(newValue: State_m) {
+  function set_s_m(newValue) {
     s_m = newValue;
-    internalLogger.logTrace("goto: " + toString());
+    traceState();
+    return newValue;
+  }
+
+  function set_s_du(newValue) {
+    s_du = newValue;
+    traceState();
+    return newValue;
+  }
+
+  function set_s_tr(newValue) {
+    s_tr = newValue;
+    traceState();
+    return newValue;
+  }
+
+  function set_s_rec(newValue) {
+    s_rec = newValue;
+    traceState();
+    return newValue;
+  }
+
+  function set_s_h(newValue) {
+    s_h = newValue;
+    traceState();
+    return newValue;
+  }
+
+  function set_s_ctrl(newValue) {
+    s_ctrl = newValue;
+    traceState();
+    return newValue;
+  }
+
+  function set_s_swt(newValue) {
+    s_swt = newValue;
+    traceState();
+    return newValue;
+  }
+
+  function set_s_bw(newValue) {
+    s_bw = newValue;
+    traceState();
+    return newValue;
+  }
+
+  function set_s_rhb(newValue) {
+    s_rhb = newValue;
+    traceState();
+    return newValue;
+  }
+
+  function set_s_slw(newValue) {
+    s_slw = newValue;
+    traceState();
+    return newValue;
+  }
+
+  function set_s_nr(newValue) {
+    s_nr = newValue;
+    traceState();
+    return newValue;
   }
 
   public function goto_m_from_w(m: State_m) {
@@ -269,84 +363,86 @@ class State {
     goto_rec();
   }
 
-  function goto_m_from_hs(m: State_m) {
+  public function goto_m_from_hs(m: State_m) {
     clear_hs();
-    s_ctrl = null;
-    s_h = null;
+    @:bypassAccessor s_ctrl = null;
+    @:bypassAccessor s_h = null;
     goto_m_from_session(m);
   }
 
-  function goto_m_from_rec(m: State_m) {
-    s_tr = null;
+  public function goto_m_from_rec(m: State_m) {
+    @:bypassAccessor s_tr = null;
     goto_m_from_session(m);
   }
 
   function goto_rec_from_hs() {
     clear_hs();
-    s_ctrl = null;
-    s_h = null;
+    @:bypassAccessor s_ctrl = null;
+    @:bypassAccessor s_h = null;
     goto_rec();
   }
 
-  function goto_m_from_hp(m: State_m) {
+  public function goto_m_from_hp(m: State_m) {
     clear_hp();
-    s_ctrl = null;
-    s_h = null;
+    @:bypassAccessor s_ctrl = null;
+    @:bypassAccessor s_h = null;
     goto_m_from_session(m);
   }
 
   function goto_rec_from_hp() {
     clear_hp();
-    s_ctrl = null;
-    s_h = null;
+    @:bypassAccessor s_ctrl = null;
+    @:bypassAccessor s_h = null;
     goto_rec();
   }
 
   function goto_rec() {
-    s_tr = TR_260;
-    s_rec = REC_1000;
+    @:bypassAccessor s_tr = TR_260;
+    @:bypassAccessor s_rec = REC_1000;
+    traceState();
   }
 
-  function goto_m_from_session(m: State_m) {
-    s_tr = null;
-    s_swt = null;
-    s_bw = null;
-    s_m = m;
+  public function goto_m_from_session(m: State_m) {
+    @:bypassAccessor s_tr = null;
+    @:bypassAccessor s_swt = null;
+    @:bypassAccessor s_bw = null;
+    @:bypassAccessor s_m = m;
+    traceState();
   }
 
   function goto_m_from_ctrl(m: State_m) {
     clear_hs();
     clear_hp();
-    s_ctrl = null;
-    s_h = null;
+    @:bypassAccessor s_ctrl = null;
+    @:bypassAccessor s_h = null;
     goto_m_from_session(m);
   }
 
-  function clear_w() {
-    s_w = null;
-    s_rhb = null;
-    s_slw = null;
+  public function clear_w() {
+    @:bypassAccessor s_w = null;
+    @:bypassAccessor s_rhb = null;
+    @:bypassAccessor s_slw = null;
   }
 
   function clear_ws() {
-    s_ws = null;
-    s_rhb = null;
-    s_slw = null;
+    @:bypassAccessor s_ws = null;
+    @:bypassAccessor s_rhb = null;
+    @:bypassAccessor s_slw = null;
   }
 
   function clear_wp() {
-    s_wp = null;
+    @:bypassAccessor s_wp = null;
   }
 
   function clear_hs() {
-    s_hs = null;
-    s_rhb = null;
-    s_slw = null;
+    @:bypassAccessor s_hs = null;
+    @:bypassAccessor s_rhb = null;
+    @:bypassAccessor s_slw = null;
   }
 
   function clear_hp() {
-    s_hp = null;
-    s_rhb = null;
+    @:bypassAccessor s_hp = null;
+    @:bypassAccessor s_rhb = null;
   }
 
   function isSwitching() {
@@ -373,5 +469,9 @@ class State {
     str += " nr=" + s_nr;
     str += ">";
     return str;
+  }
+
+  public function traceState() {
+    internalLogger.logTrace("goto: " + this.toString());
   }
 }

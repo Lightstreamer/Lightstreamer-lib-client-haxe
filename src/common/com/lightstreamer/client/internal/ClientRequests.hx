@@ -17,7 +17,7 @@ class SwitchRequest implements  Encodable {
   }
 
 	public function isPending(): Bool {
-		return client.state.is(M_150) && client.state.is(SWT_1302);
+		return client.state.s_m == M_150 && client.state.s_swt == SWT_1302;
 	}
 
 	public function encode(isWS: Bool): String {
@@ -38,7 +38,7 @@ class ConstrainRequest implements Encodable {
   }
 
 	public function isPending(): Bool {
-		return client.state.is(BW_1202);
+		return client.state.s_bw == BW_1202;
 	}
 
 	public function encode(isWS: Bool): String {

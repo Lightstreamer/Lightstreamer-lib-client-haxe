@@ -12,6 +12,7 @@ import com.lightstreamer.client.internal.ClientStates;
 import com.lightstreamer.client.internal.ClientRequests;
 import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
+using StringTools;
 
 // TODO synchronize
 @:nullSafety(Off)
@@ -167,12 +168,12 @@ class ClientMachine {
   // ---------- event handlers ----------
 
   public function evtExtConnect() {
-    state.event("connect");
+    traceEvent("connect");
     var forward = true;
-    if (state.is(M_100)) {
+    if (state.s_m == M_100) {
       cause = "api";
       resetCurrentRetryDelay();
-      state.goTo(M_101);
+      state.s_m = M_101;
       // TODO MPN
       //forward = evtExtConnect_MpnRegion();
       evtSelectCreate();
@@ -183,21 +184,548 @@ class ClientMachine {
     }
   }
 
+  function evtExtConnect_NetworkReachabilityRegion() {
+    // TODO connect with evtExtConnect 
+    traceEvent("nr:connect");
+    if (state.s_nr == NR_1400) {
+      var hostAddress = new Url(getServerAddress()).hostname;
+      nr_reachabilityManager = reachabilityFactory(hostAddress);
+      state.s_nr = NR_1410;
+      nr_reachabilityManager.startListening(status -> 
+        switch status {
+          case RSNotReachable:
+            evtNetworkNotReachable(hostAddress);
+          case RSReachable:
+            evtNetworkReachable(hostAddress);
+        });
+    }
+    return false;
+  }
+
+  function evtNetworkNotReachable(host: String) {
+    reachabilityLogger.logInfo(host + " is NOT reachable");
+    traceEvent("nr:network.not.reachable");
+    if (state.s_nr == NR_1410) {
+      state.s_nr = NR_1411;
+    } else if (state.s_nr == NR_1412) {
+      state.s_nr = NR_1411;
+    }
+  }
+
+  function evtNetworkReachable(host: String) {
+    reachabilityLogger.logInfo(host + " is reachable");
+    traceEvent("nr:network.reachable");
+    if (state.s_nr == NR_1410) {
+      state.s_nr = NR_1412;
+    } else if (state.s_nr == NR_1411) {
+      state.s_nr = NR_1412;
+      evtOnlineAgain();
+    }
+  }
+
+  function evtOnlineAgain() {
+    traceEvent("online.again");
+    if (state.s_m == M_112) {
+      state.s_m = M_116;
+      cancel_evtRetryTimeout();
+      evtSelectCreate();
+    } else if (state.s_rec == REC_1003) {
+      sendRecovery();
+      state.s_rec = REC_1001;
+      cancel_evtRetryTimeout();
+      schedule_evtTransportTimeout(options.retryDelay);
+    }
+  }
+
+  function evtServerAddressChanged() {
+    traceEvent( "nr:serverAddress.changed");
+    switch state.s_nr {
+    case NR_1410, NR_1411, NR_1412:
+      var oldManager = nr_reachabilityManager;
+      var hostAddress = new Url(getServerAddress()).hostname;
+      nr_reachabilityManager = reachabilityFactory(hostAddress);
+      state.s_nr = NR_1410;
+      oldManager.stopListening();
+      nr_reachabilityManager.startListening(status -> 
+        switch status {
+          case RSNotReachable:
+            evtNetworkNotReachable(hostAddress);
+          case RSReachable:
+            evtNetworkReachable(hostAddress);
+        });
+    default:
+    }
+  }
+
+  function evtExtDisconnect() {
+    traceEvent("disconnect");
+    var terminationCause = TerminationCause.TC_api;
+    switch state.s_m {
+    case M_120, M_121, M_122:
+      disposeWS();
+      notifyStatus(DISCONNECTED);
+      state.s_m = M_100;
+      cancel_evtTransportTimeout();
+      evtTerminate(terminationCause);
+    case M_130:
+      disposeHTTP();
+      notifyStatus(DISCONNECTED);
+      state.s_m = M_100;
+      cancel_evtTransportTimeout();
+      evtTerminate(terminationCause);
+    case M_140:
+      disposeHTTP();
+      notifyStatus(DISCONNECTED);
+      state.s_m = M_100;
+      cancel_evtTransportTimeout();
+      evtTerminate(terminationCause);
+    case M_150:
+      switch state.s_tr {
+      case TR_210:
+        sendDestroyWS();
+        closeWS();
+        notifyStatus(DISCONNECTED);
+        state.clear_w();
+        state.goto_m_from_session(M_100);
+        exit_w();
+        evtEndSession();
+        evtTerminate(terminationCause);
+      case TR_220:
+        disposeHTTP();
+        notifyStatus(DISCONNECTED);
+        state.goto_m_from_session(M_100);
+        cancel_evtTransportTimeout();
+        evtEndSession();
+        evtTerminate(terminationCause);
+      case TR_230:
+        disposeHTTP();
+        notifyStatus(DISCONNECTED);
+        state.goto_m_from_session(M_100);
+        cancel_evtTransportTimeout();
+        evtEndSession();
+        evtTerminate(terminationCause);
+      case TR_240:
+        if (state.s_ws.m == WS_M_500) {
+          disposeWS();
+          notifyStatus(DISCONNECTED);
+          state.goto_m_from_ws(M_100);
+          exit_ws_to_m();
+          evtTerminate(terminationCause);
+        } else if (state.s_ws.m == WS_M_501 || state.s_ws.m == WS_M_502 || state.s_ws.m == WS_M_503) {
+          sendDestroyWS();
+          closeWS();
+          notifyStatus(DISCONNECTED);
+          state.goto_m_from_ws(M_100);
+          exit_ws_to_m();
+          evtTerminate(terminationCause);
+        } 
+      case TR_250:
+        if (state.s_wp.m == WP_M_600 || state.s_wp.m == WP_M_601) {
+          disposeWS();
+          notifyStatus(DISCONNECTED);
+          state.goto_m_from_wp(M_100);
+          exit_ws_to_m();
+          evtTerminate(terminationCause);
+        } else if (state.s_wp.m == WP_M_602) {
+          sendDestroyWS();
+          closeWS();
+          notifyStatus(DISCONNECTED);
+          state.goto_m_from_wp(M_100);
+          exit_wp_to_m();
+          evtTerminate(terminationCause);
+        }
+      case TR_260:
+        disposeHTTP();
+        notifyStatus(DISCONNECTED);
+        state.goto_m_from_rec(M_100);
+        exit_rec_to_m();
+        evtTerminate(terminationCause);
+      case TR_270:
+        if (state.s_h == H_710) {
+          disposeHTTP();
+          notifyStatus(DISCONNECTED);
+          state.goto_m_from_hs(M_100);
+          exit_hs_to_m();
+          evtTerminate(terminationCause);
+        } else if (state.s_h == H_720) {
+          disposeHTTP();
+          notifyStatus(DISCONNECTED);
+          state.goto_m_from_hp(M_100);
+          exit_hp_to_m();
+          evtTerminate(terminationCause);
+        }
+      default:
+      }
+    case M_110, M_111, M_112, M_113, M_114, M_115, M_116:
+        notifyStatus(DISCONNECTED);
+        state.s_m = M_100;
+        cancel_evtRetryTimeout();
+        evtTerminate(terminationCause);
+    default:
+    }
+  }
+
   function evtSelectCreate() {
-    // TODO
+    traceEvent("select.create");
+    if (state.s_m == M_101 || state.s_m == M_116) {
+      switch getBestForCreating() {
+        case bfc_ws:
+          notifyStatus(CONNECTING);
+          openWS_Create();
+          state.s_m = M_120;
+          evtCreate();
+          schedule_evtTransportTimeout(delayCounter.currentRetryDelay);
+        case bfc_http:
+          notifyStatus(CONNECTING);
+          sendCreateHTTP();
+          state.s_m = M_130;
+          evtCreate();
+          schedule_evtTransportTimeout(delayCounter.currentRetryDelay);
+      }
+    }
   }
 
   function evtWSOpen() {
     // TODO synchronize (called by openWS)
+    traceEvent("ws.open");
+    if (state.s_m == M_120) {
+      sendCreateWS();
+      state.s_m = M_121;
+    } else if (state.s_ws.m == WS_M_500) {
+      sendBindWS_Streaming();
+      state.s_ws.m = WS_M_501;
+    } else if (state.s_wp.m == WP_M_600) {
+      ws.send("wsok");
+      state.s_wp.m = WP_M_601;
+    }
   }
+
   function evtMessage(line: String) {
     // TODO synchronize (called by openWS)
+    /*
+    if (line.startsWith("U,")) {
+      // U,<subscription id>,<itemd index>,<field values>
+      var update = parseUpdate(line);
+      evtU(update.subId, update.itemIdx, update.values, line);
+    } else if (line.startsWith("REQOK")) {
+      // REQOK,<request id>
+      if (line == "REQOK") {
+        evtREQOK();
+      } else {
+        var args = line.split(",");
+        var reqId = Std.parseInt(args[1]);
+        evtREQOK(reqId);
+      }
+    } else if (line.startsWith("PROBE")) {
+      evtPROBE();
+    } else if (line.startsWith("LOOP")) {
+      // LOOP,<delay [ms]>
+      var args = line.split(",");
+      var pollingMs = Std.parseInt(args[1]);
+      evtLOOP(pollingMs);
+    } else if (line.startsWith("CONOK")) {
+      // CONOK,<session id>,<request limit>,<keepalive/idle timeout [ms]>,(*|<control link>);
+      var args = line.split(",");
+      var sessionId = args[1];
+      var reqLimit = Std.parseInt(args[2]);
+      var keepalive = Std.parseInt(args[3]);
+      var clink = args[4];
+      evtCONOK(sessionId, reqLimit, keepalive, clink);
+    } else if (line.startsWith("WSOK")) {
+      evtWSOK();
+    } else if (line.startsWith("SERVNAME")) {
+      let args = line.split(",");
+      let serverName = String(args[1]);
+      evtSERVNAME(serverName);
+    } else if (line.startsWith("CLIENTIP")) {
+      let args = line.split(",");
+      let ip = String(args[1]);
+      evtCLIENTIP(ip);
+    } else if (line.startsWith("CONS")) {
+      // CONS,(unmanaged|unlimited|<bandwidth>);
+      let args = line.split(",");
+      let bw = String(args[1]);
+      switch bw {
+      case "unlimited":
+        evtCONS(.unlimited);
+      case "unmanaged":
+        evtCONS(.unmanaged);
+      default:
+        let n = Double(bw)!
+        evtCONS(.limited(n));
+      }
+    } else if (line.startsWith("MSGDONE")) {
+      // MSGDONE,(*|<sequence>),<prog>
+      let args = line.split(",");
+      var seq = String(args[1]);
+      if seq == "*" {
+        seq = "UNORDERED_MESSAGES"
+      }
+      let prog = Int(args[2])!
+      evtMSGDONE(seq, prog);
+    } else if (line.startsWith("MSGFAIL")) {
+      // MSGFAIL,(*|<sequence>),<prog>,<code>,<message>
+      let args = line.split(",");
+      var seq = String(args[1]);
+      if seq == "*" {
+        seq = "UNORDERED_MESSAGES"
+      }
+      let prog = Int(args[2])!
+      let errorCode = Int(args[3])!
+      let errorMsg = args[4].removingPercentEncoding!
+      evtMSGFAIL(seq, prog, errorCode: errorCode, errorMsg: errorMsg);
+    } else if (line.startsWith("REQERR")) {
+      // REQERR,<request id>,<code>,<message>
+      let args = line.split(",");
+      let reqId = Int(args[1])!
+      let code = Int(args[2])!
+      let msg = args[3].removingPercentEncoding!
+      evtREQERR(reqId, code, msg);
+    } else if (line.startsWith("PROG")) {
+      // PROG,<prog>
+      let args = line.split(",");
+      let prog = Int(args[1])!
+      evtPROG(prog);
+    } else if (line.startsWith("SUBOK")) {
+      // SUBOK,<subscription id>,<total items>,<total fields>
+      let args = line.split(",");
+      let subId = Int(args[1])!
+      let nItems = Int(args[2])!
+      let nFields = Int(args[3])!
+      evtSUBOK(subId, nItems, nFields);
+    } else if (line.startsWith("SUBCMD")) {
+      // SUBCMD,<subscription id>,<total items>,<total fields>,<key index>,<command index>
+      let args = line.split(",");
+      let subId = Int(args[1])!
+      let nItems = Int(args[2])!
+      let nFields = Int(args[3])!
+      let keyIdx = Pos(args[4])!
+      let cmdIdx = Pos(args[5])!
+      evtSUBCMD(subId, nItems, nFields, keyIdx, cmdIdx);
+    } else if (line.startsWith("UNSUB")) {
+      // UNSUB,<subscription id>
+      let args = line.split(",");
+      let subId = Int(args[1])!
+      evtUNSUB(subId);
+    } else if (line.startsWith("CONF")) {
+      // CONF,<subscription id>,(unlimited|<frequency>),(filtered|unfiltered);
+      let args = line.split(",");
+      let subId = Int(args[1])!
+      if args[2] == "unlimited" {
+        evtCONF(subId, .unlimited);
+      } else {
+        let freq = Double(args[2])!
+        evtCONF(subId, .limited(freq));
+      }
+    } else if (line.startsWith("EOS")) {
+      // EOS,<subscription id>,<item index>
+      let args = line.split(",");
+      let subId = Int(args[1])!
+      let itemIdx = Int(args[2])!
+      evtEOS(subId, itemIdx);
+    } else if (line.startsWith("CS")) {
+      // CS,<subscription id>,<item index>
+      let args = line.split(",");
+      let subId = Int(args[1])!
+      let itemIdx = Int(args[2])!
+      evtCS(subId, itemIdx);
+    } else if (line.startsWith("OV")) {
+      // OV,<subscription id>,<item index>,<lost updates>
+      let args = line.split(",");
+      let subId = Int(args[1])!
+      let itemIdx = Int(args[2])!
+      let lostUpdates = Int(args[3])!
+      evtOV(subId, itemIdx, lostUpdates);
+    } else if (line.startsWith("NOOP")) {
+      evtNOOP();
+    } else if (line.startsWith("CONERR")) {
+      // CONERR,<code>,<message>
+      let args = line.split(",");
+      let code = Int(args[1])!
+      let msg = args[2].removingPercentEncoding!
+      evtCONERR(code, msg);
+    } else if (line.startsWith("END")) {
+      // END,<code>,<message>
+      let args = line.split(",");
+      let code = Int(args[1])!
+      let msg = args[2].removingPercentEncoding!
+      evtEND(code, msg);
+    } else if (line.startsWith("ERROR")) {
+      // ERROR,<code>,<message>
+      let args = line.split(",");
+      let code = Int(args[1])!
+      let msg = args[2].removingPercentEncoding!
+      evtERROR(code, msg);
+    } else if (line.startsWith("SYNC")) {
+      // SYNC,<elapsed time [sec]>
+      let args = line.split(",");
+      let seconds = UInt64(args[1])!
+      evtSYNC(seconds);
+    } else if (line.startsWith("MPNREG")) {
+      // MPNREG,<device id>,<adapter name>
+      let args = line.split(",");
+      let deviceId = String(args[1]);
+      let adapterName = String(args[2]);
+      evtMPNREG(deviceId, adapterName);
+    } else if (line.startsWith("MPNZERO")) {
+      // MPNZERO,<device id>
+      let args = line.split(",");
+      let deviceId = String(args[1]);
+      evtMPNZERO(deviceId);
+    } else if (line.startsWith("MPNOK")) {
+      // MPNOK,<subscription id>, <mpn subscription id>
+      let args = line.split(",");
+      let subId = Int(args[1])!
+      let mpnSubId = String(args[2]);
+      evtMPNOK(subId, mpnSubId);
+    } else if (line.startsWith("MPNDEL")) {
+      // MPNDEL,<mpn subscription id>
+      let args = line.split(",");
+      let mpnSubId = String(args[1]);
+      evtMPNDEL(mpnSubId);
+    } else if (line.startsWith("MPNCONF")) {
+      // MPNCONF,<mpn subscription id>
+      let args = line.split(",");
+      let mpnSubId = String(args[1]);
+      evtMPNCONF(mpnSubId);
+    }
+    */
   }
-  function evtTransportError() {
-    // TODO synchronize (called by openWS)
-  }
+
   function evtCtrlMessage(line: String) {
     // TODO synchronize (called by sendBatchHTTP)
+    if (line.startsWith("REQOK")) {
+      // REQOK,<request id>
+      if (line == "REQOK") {
+        evtREQOK();
+      } else {
+        var args = line.split(",");
+        var reqId = Std.parseInt(args[1]);
+        evtREQOK_reqId(reqId);
+      }
+    } else if (line.startsWith("REQERR")) {
+      // REQERR,<request id>,<code>,<message>
+      var args = line.split(",");
+      var reqId = Std.parseInt(args[1]);
+      var code = Std.parseInt(args[2]);
+      var msg = args[3].urlDecode();
+      evtREQERR(reqId, code, msg);
+    } else if (line.startsWith("ERROR")) {
+      // ERROR,<code>,<message>
+      var args = line.split(",");
+      var code = Std.parseInt(args[1]);
+      var msg = args[2].urlDecode();
+      evtERROR(code, msg);
+    }
+  }
+
+  function evtREQOK() {
+    traceEvent("REQOK");
+    protocolLogger.logDebug("REQOK");
+    if (state.s_ctrl == CTRL_1102) {
+      // heartbeat response (only in HTTP)
+      state.s_ctrl = CTRL_1102;
+    }
+  }
+
+  function evtREQOK_reqId(reqId: Int) {
+    traceEvent("REQOK");
+    protocolLogger.logDebug("REQOK " + reqId);
+    var forward = true;
+    if (state.s_swt == SWT_1302 && reqId == swt_lastReqId) {
+      state.s_swt = SWT_1303;
+      forward = evtREQOK_TransportRegion(reqId);
+    } else if (state.s_bw == BW_1202 && reqId == bw_lastReqId) {
+      state.s_bw = BW_1200;
+      forward = evtREQOK_TransportRegion(reqId);
+      evtCheckBW();
+    }
+    // TODO MPN 
+    /*else if s_mpn.m == .s403 && reqId == mpn_lastRegisterReqId {
+      s_mpn.m = .s404
+      forward = evtREQOK_TransportRegion(reqId)
+    } else if s_mpn.m == .s406 && reqId == mpn_lastRegisterReqId {
+      s_mpn.m = .s407
+      forward = evtREQOK_TransportRegion(reqId)
+    } else if s_mpn.tk == .s453 && reqId == mpn_lastRegisterReqId {
+      s_mpn.tk = .s454
+      forward = evtREQOK_TransportRegion(reqId)
+    } else if s_mpn.ft == .s432 && reqId == mpn_filter_lastDeactivateReqId {
+      doREQMpnUnsubscribeFilter()
+      s_mpn.ft = .s430
+      forward = evtREQOK_TransportRegion(reqId)
+      evtMpnCheckFilter()
+    } else if s_mpn.bg == .s442 && reqId == mpn_badge_lastResetReqId {
+      doREQOKMpnResetBadge()
+      forward = evtREQOK_TransportRegion(reqId)
+      s_mpn.bg = .s440
+      evtMpnCheckReset()
+    }*/
+    if (forward) {
+      forward = evtREQOK_TransportRegion(reqId);
+    }
+  }
+
+  function evtREQOK_TransportRegion(reqId: Int) {
+    traceEvent("REQOK");
+    if (state.s_w?.p == W_P_300) {
+      state.s_w.p = W_P_300;
+      doREQOK(reqId);
+      evtRestartKeepalive();
+    } else if (state.s_ws?.p == WS_P_510) {
+      state.s_ws.p = WS_P_510;
+      doREQOK(reqId);
+      evtRestartKeepalive();
+    } else if (state.s_wp?.c == WP_C_620) {
+      state.s_wp.c = WP_C_620;
+      doREQOK(reqId);
+    } else if (state.s_ctrl == CTRL_1102) {
+      state.s_ctrl = CTRL_1102;
+      doREQOK(reqId);
+    }
+    return false;
+  }
+
+  function evtCreate() {
+    traceEvent("du:create");
+    if (state.s_du == DU_20) {
+      state.s_du = DU_21;
+    } else if (state.s_du == DU_23) {
+      state.s_du = DU_21;
+    }
+  }
+
+  function evtCheckBW() {
+    traceEvent("check.bw");
+    if (state.s_bw == BW_1200) {
+      if (bw_requestedMaxBandwidth != options.requestedMaxBandwidth
+        && options.realMaxBandwidth != BWUnmanaged) {
+        bw_requestedMaxBandwidth = options.requestedMaxBandwidth;
+        state.s_bw = BW_1202;
+        evtSendControl(constrainRequest);
+      } else {
+        state.s_bw = BW_1201;
+      }
+    }
+  }
+  function evtRestartKeepalive() {
+    // TODO
+  }
+  function evtREQERR(reqId: Int, code: Int, msg: String) {
+    // TODO
+  }
+  function evtERROR(code: Int, msg: String) {
+    // TODO
+  }
+  function evtSendControl(req: ConstrainRequest) {
+    // TODO
+  }
+  function evtTerminate(cause: TerminationCause) {
+    // TODO
+  }
+
+  function evtTransportError() {
+    // TODO synchronize (called by openWS)
   }
   function evtCtrlError() {
     // TODO synchronize (called by sendBatchHTTP)
@@ -1110,7 +1638,7 @@ class ClientMachine {
   }
 
   function entry_m112(retryCause: RetryCause) {
-    var pauseMs = waitingInterval(delayCounter.getCurrentRetryDelay(), connectTs);
+    var pauseMs = waitingInterval(delayCounter.currentRetryDelay, connectTs);
     evtRetry(retryCause, pauseMs);
     schedule_evtRetryTimeout(pauseMs);
   }
@@ -1495,6 +2023,10 @@ class ClientMachine {
     sequenceMap[sequence] = prog + 1;
     return prog;
   }
+
+  function traceEvent(event: String) {
+    internalLogger.logTrace("event: " + event + " " +  state.toString());
+  }
 }
 
 private enum BestForCreatingEnum {
@@ -1545,4 +2077,10 @@ private function asErrorMsg(cause: RetryCause) {
     case prog_mismatch(expected, actual):
       'Recovery counter mismatch: expected $expected but found $actual';
   };
+}
+
+private enum TerminationCause {
+  TC_standardError(code: Int, msg: String);
+  TC_otherError(error: String);
+  TC_api;
 }
