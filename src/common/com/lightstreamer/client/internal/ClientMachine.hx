@@ -170,10 +170,10 @@ class ClientMachine {
   public function evtExtConnect() {
     traceEvent("connect");
     var forward = true;
-    if (state.s_m == M_100) {
+    if (state.s_m == s100) {
       cause = "api";
       resetCurrentRetryDelay();
-      state.s_m = M_101;
+      state.s_m = s101;
       // TODO MPN
       //forward = evtExtConnect_MpnRegion();
       evtSelectCreate();
@@ -187,10 +187,10 @@ class ClientMachine {
   function evtExtConnect_NetworkReachabilityRegion() {
     // TODO connect with evtExtConnect 
     traceEvent("nr:connect");
-    if (state.s_nr == NR_1400) {
+    if (state.s_nr == s1400) {
       var hostAddress = new Url(getServerAddress()).hostname;
       nr_reachabilityManager = reachabilityFactory(hostAddress);
-      state.s_nr = NR_1410;
+      state.s_nr = s1410;
       nr_reachabilityManager.startListening(status -> 
         switch status {
           case RSNotReachable:
@@ -205,33 +205,33 @@ class ClientMachine {
   function evtNetworkNotReachable(host: String) {
     reachabilityLogger.logInfo(host + " is NOT reachable");
     traceEvent("nr:network.not.reachable");
-    if (state.s_nr == NR_1410) {
-      state.s_nr = NR_1411;
-    } else if (state.s_nr == NR_1412) {
-      state.s_nr = NR_1411;
+    if (state.s_nr == s1410) {
+      state.s_nr = s1411;
+    } else if (state.s_nr == s1412) {
+      state.s_nr = s1411;
     }
   }
 
   function evtNetworkReachable(host: String) {
     reachabilityLogger.logInfo(host + " is reachable");
     traceEvent("nr:network.reachable");
-    if (state.s_nr == NR_1410) {
-      state.s_nr = NR_1412;
-    } else if (state.s_nr == NR_1411) {
-      state.s_nr = NR_1412;
+    if (state.s_nr == s1410) {
+      state.s_nr = s1412;
+    } else if (state.s_nr == s1411) {
+      state.s_nr = s1412;
       evtOnlineAgain();
     }
   }
 
   function evtOnlineAgain() {
     traceEvent("online.again");
-    if (state.s_m == M_112) {
-      state.s_m = M_116;
+    if (state.s_m == s112) {
+      state.s_m = s116;
       cancel_evtRetryTimeout();
       evtSelectCreate();
-    } else if (state.s_rec == REC_1003) {
+    } else if (state.s_rec == s1003) {
       sendRecovery();
-      state.s_rec = REC_1001;
+      state.s_rec = s1001;
       cancel_evtRetryTimeout();
       schedule_evtTransportTimeout(options.retryDelay);
     }
@@ -240,11 +240,11 @@ class ClientMachine {
   function evtServerAddressChanged() {
     traceEvent( "nr:serverAddress.changed");
     switch state.s_nr {
-    case NR_1410, NR_1411, NR_1412:
+    case s1410, s1411, s1412:
       var oldManager = nr_reachabilityManager;
       var hostAddress = new Url(getServerAddress()).hostname;
       nr_reachabilityManager = reachabilityFactory(hostAddress);
-      state.s_nr = NR_1410;
+      state.s_nr = s1410;
       oldManager.stopListening();
       nr_reachabilityManager.startListening(status -> 
         switch status {
@@ -261,104 +261,104 @@ class ClientMachine {
     traceEvent("disconnect");
     var terminationCause = TerminationCause.TC_api;
     switch state.s_m {
-    case M_120, M_121, M_122:
+    case s120, s121, s122:
       disposeWS();
       notifyStatus(DISCONNECTED);
-      state.s_m = M_100;
+      state.s_m = s100;
       cancel_evtTransportTimeout();
       evtTerminate(terminationCause);
-    case M_130:
+    case s130:
       disposeHTTP();
       notifyStatus(DISCONNECTED);
-      state.s_m = M_100;
+      state.s_m = s100;
       cancel_evtTransportTimeout();
       evtTerminate(terminationCause);
-    case M_140:
+    case s140:
       disposeHTTP();
       notifyStatus(DISCONNECTED);
-      state.s_m = M_100;
+      state.s_m = s100;
       cancel_evtTransportTimeout();
       evtTerminate(terminationCause);
-    case M_150:
+    case s150:
       switch state.s_tr {
-      case TR_210:
+      case s210:
         sendDestroyWS();
         closeWS();
         notifyStatus(DISCONNECTED);
         state.clear_w();
-        state.goto_m_from_session(M_100);
+        state.goto_m_from_session(s100);
         exit_w();
         evtEndSession();
         evtTerminate(terminationCause);
-      case TR_220:
+      case s220:
         disposeHTTP();
         notifyStatus(DISCONNECTED);
-        state.goto_m_from_session(M_100);
+        state.goto_m_from_session(s100);
         cancel_evtTransportTimeout();
         evtEndSession();
         evtTerminate(terminationCause);
-      case TR_230:
+      case s230:
         disposeHTTP();
         notifyStatus(DISCONNECTED);
-        state.goto_m_from_session(M_100);
+        state.goto_m_from_session(s100);
         cancel_evtTransportTimeout();
         evtEndSession();
         evtTerminate(terminationCause);
-      case TR_240:
-        if (state.s_ws.m == WS_M_500) {
+      case s240:
+        if (state.s_ws.m == s500) {
           disposeWS();
           notifyStatus(DISCONNECTED);
-          state.goto_m_from_ws(M_100);
+          state.goto_m_from_ws(s100);
           exit_ws_to_m();
           evtTerminate(terminationCause);
-        } else if (state.s_ws.m == WS_M_501 || state.s_ws.m == WS_M_502 || state.s_ws.m == WS_M_503) {
+        } else if (state.s_ws.m == s501 || state.s_ws.m == s502 || state.s_ws.m == s503) {
           sendDestroyWS();
           closeWS();
           notifyStatus(DISCONNECTED);
-          state.goto_m_from_ws(M_100);
+          state.goto_m_from_ws(s100);
           exit_ws_to_m();
           evtTerminate(terminationCause);
         } 
-      case TR_250:
-        if (state.s_wp.m == WP_M_600 || state.s_wp.m == WP_M_601) {
+      case s250:
+        if (state.s_wp.m == s600 || state.s_wp.m == s601) {
           disposeWS();
           notifyStatus(DISCONNECTED);
-          state.goto_m_from_wp(M_100);
+          state.goto_m_from_wp(s100);
           exit_ws_to_m();
           evtTerminate(terminationCause);
-        } else if (state.s_wp.m == WP_M_602) {
+        } else if (state.s_wp.m == s602) {
           sendDestroyWS();
           closeWS();
           notifyStatus(DISCONNECTED);
-          state.goto_m_from_wp(M_100);
+          state.goto_m_from_wp(s100);
           exit_wp_to_m();
           evtTerminate(terminationCause);
         }
-      case TR_260:
+      case s260:
         disposeHTTP();
         notifyStatus(DISCONNECTED);
-        state.goto_m_from_rec(M_100);
+        state.goto_m_from_rec(s100);
         exit_rec_to_m();
         evtTerminate(terminationCause);
-      case TR_270:
-        if (state.s_h == H_710) {
+      case s270:
+        if (state.s_h == s710) {
           disposeHTTP();
           notifyStatus(DISCONNECTED);
-          state.goto_m_from_hs(M_100);
+          state.goto_m_from_hs(s100);
           exit_hs_to_m();
           evtTerminate(terminationCause);
-        } else if (state.s_h == H_720) {
+        } else if (state.s_h == s720) {
           disposeHTTP();
           notifyStatus(DISCONNECTED);
-          state.goto_m_from_hp(M_100);
+          state.goto_m_from_hp(s100);
           exit_hp_to_m();
           evtTerminate(terminationCause);
         }
       default:
       }
-    case M_110, M_111, M_112, M_113, M_114, M_115, M_116:
+    case s110, s111, s112, s113, s114, s115, s116:
         notifyStatus(DISCONNECTED);
-        state.s_m = M_100;
+        state.s_m = s100;
         cancel_evtRetryTimeout();
         evtTerminate(terminationCause);
     default:
@@ -367,18 +367,18 @@ class ClientMachine {
 
   function evtSelectCreate() {
     traceEvent("select.create");
-    if (state.s_m == M_101 || state.s_m == M_116) {
+    if (state.s_m == s101 || state.s_m == s116) {
       switch getBestForCreating() {
         case bfc_ws:
           notifyStatus(CONNECTING);
           openWS_Create();
-          state.s_m = M_120;
+          state.s_m = s120;
           evtCreate();
           schedule_evtTransportTimeout(delayCounter.currentRetryDelay);
         case bfc_http:
           notifyStatus(CONNECTING);
           sendCreateHTTP();
-          state.s_m = M_130;
+          state.s_m = s130;
           evtCreate();
           schedule_evtTransportTimeout(delayCounter.currentRetryDelay);
       }
@@ -388,15 +388,15 @@ class ClientMachine {
   function evtWSOpen() {
     // TODO synchronize (called by openWS)
     traceEvent("ws.open");
-    if (state.s_m == M_120) {
+    if (state.s_m == s120) {
       sendCreateWS();
-      state.s_m = M_121;
-    } else if (state.s_ws.m == WS_M_500) {
+      state.s_m = s121;
+    } else if (state.s_ws.m == s500) {
       sendBindWS_Streaming();
-      state.s_ws.m = WS_M_501;
-    } else if (state.s_wp.m == WP_M_600) {
+      state.s_ws.m = s501;
+    } else if (state.s_wp.m == s600) {
       ws.send("wsok");
-      state.s_wp.m = WP_M_601;
+      state.s_wp.m = s601;
     }
   }
 
@@ -622,9 +622,9 @@ class ClientMachine {
   function evtREQOK() {
     traceEvent("REQOK");
     protocolLogger.logDebug("REQOK");
-    if (state.s_ctrl == CTRL_1102) {
+    if (state.s_ctrl == s1102) {
       // heartbeat response (only in HTTP)
-      state.s_ctrl = CTRL_1102;
+      state.s_ctrl = s1102;
     }
   }
 
@@ -632,11 +632,11 @@ class ClientMachine {
     traceEvent("REQOK");
     protocolLogger.logDebug("REQOK " + reqId);
     var forward = true;
-    if (state.s_swt == SWT_1302 && reqId == swt_lastReqId) {
-      state.s_swt = SWT_1303;
+    if (state.s_swt == s1302 && reqId == swt_lastReqId) {
+      state.s_swt = s1303;
       forward = evtREQOK_TransportRegion(reqId);
-    } else if (state.s_bw == BW_1202 && reqId == bw_lastReqId) {
-      state.s_bw = BW_1200;
+    } else if (state.s_bw == s1202 && reqId == bw_lastReqId) {
+      state.s_bw = s1200;
       forward = evtREQOK_TransportRegion(reqId);
       evtCheckBW();
     }
@@ -668,19 +668,19 @@ class ClientMachine {
 
   function evtREQOK_TransportRegion(reqId: Int) {
     traceEvent("REQOK");
-    if (state.s_w?.p == W_P_300) {
-      state.s_w.p = W_P_300;
+    if (state.s_w?.p == s300) {
+      state.s_w.p = s300;
       doREQOK(reqId);
       evtRestartKeepalive();
-    } else if (state.s_ws?.p == WS_P_510) {
-      state.s_ws.p = WS_P_510;
+    } else if (state.s_ws?.p == s510) {
+      state.s_ws.p = s510;
       doREQOK(reqId);
       evtRestartKeepalive();
-    } else if (state.s_wp?.c == WP_C_620) {
-      state.s_wp.c = WP_C_620;
+    } else if (state.s_wp?.c == s620) {
+      state.s_wp.c = s620;
       doREQOK(reqId);
-    } else if (state.s_ctrl == CTRL_1102) {
-      state.s_ctrl = CTRL_1102;
+    } else if (state.s_ctrl == s1102) {
+      state.s_ctrl = s1102;
       doREQOK(reqId);
     }
     return false;
@@ -688,23 +688,23 @@ class ClientMachine {
 
   function evtCreate() {
     traceEvent("du:create");
-    if (state.s_du == DU_20) {
-      state.s_du = DU_21;
-    } else if (state.s_du == DU_23) {
-      state.s_du = DU_21;
+    if (state.s_du == s20) {
+      state.s_du = s21;
+    } else if (state.s_du == s23) {
+      state.s_du = s21;
     }
   }
 
   function evtCheckBW() {
     traceEvent("check.bw");
-    if (state.s_bw == BW_1200) {
+    if (state.s_bw == s1200) {
       if (bw_requestedMaxBandwidth != options.requestedMaxBandwidth
         && options.realMaxBandwidth != BWUnmanaged) {
         bw_requestedMaxBandwidth = options.requestedMaxBandwidth;
-        state.s_bw = BW_1202;
+        state.s_bw = s1202;
         evtSendControl(constrainRequest);
       } else {
-        state.s_bw = BW_1201;
+        state.s_bw = s1201;
       }
     }
   }

@@ -4,112 +4,112 @@ import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
 
 enum abstract State_m(Int) {
-  var M_100 = 100; var M_101 = 101;
-  var M_110 = 110; var M_111 = 111; var M_112 = 112; var M_113 = 113; var M_114 = 114; var M_115 = 115; var M_116 = 116;
-  var M_120 = 120; var M_121 = 121; var M_122 = 122;
-  var M_130 = 130;
-  var M_140 = 140;
-  var M_150 = 150;
+  var s100 = 100; var s101 = 101;
+  var s110 = 110; var s111 = 111; var s112 = 112; var s113 = 113; var s114 = 114; var s115 = 115; var s116 = 116;
+  var s120 = 120; var s121 = 121; var s122 = 122;
+  var s130 = 130;
+  var s140 = 140;
+  var s150 = 150;
 }
 
 enum abstract State_du(Int) {
-  var DU_20 = 20; var DU_21 = 21; var DU_22 = 22; var DU_23 = 23;
+  var s20 = 20; var s21 = 21; var s22 = 22; var s23 = 23;
 }
 
 enum abstract State_tr(Int) {
-  var TR_200 = 200; var TR_210 = 210; var TR_220 = 220; var TR_230 = 230; var TR_240 = 240; var TR_250 = 250; var TR_260 = 260; var TR_270 = 270;
+  var s200 = 200; var s210 = 210; var s220 = 220; var s230 = 230; var s240 = 240; var s250 = 250; var s260 = 260; var s270 = 270;
 }
 
 enum abstract State_h(Int) {
-  var H_710 = 710; var H_720 = 720;
+  var s710 = 710; var s720 = 720;
 }
 
 enum abstract State_ctrl(Int) {
-  var CTRL_1100 = 1100; var CTRL_1101 = 1101; var CTRL_1102 = 1102; var CTRL_1103 = 1103;
+  var s1100 = 1100; var s1101 = 1101; var s1102 = 1102; var s1103 = 1103;
 }
 
 enum abstract State_swt(Int) {
-  var SWT_1300 = 1300; var SWT_1301 = 1301; var SWT_1302 = 1302; var SWT_1303 = 1303;
+  var s1300 = 1300; var s1301 = 1301; var s1302 = 1302; var s1303 = 1303;
 }
 
 enum abstract State_rhb(Int) {
-  var RHB_320 = 320; var RHB_321 = 321; var RHB_322 = 322; var RHB_323 = 323; var RHB_324 = 324;
+  var s320 = 320; var s321 = 321; var s322 = 322; var s323 = 323; var s324 = 324;
 }
 
 enum abstract State_slw(Int) {
-  var SLW_330 = 330; var SLW_331 = 331; var SLW_332 = 332; var SLW_333 = 333; var SLW_334 = 334;
+  var s330 = 330; var s331 = 331; var s332 = 332; var s333 = 333; var s334 = 334;
 }
 
 enum abstract State_w_p(Int) {
-  var W_P_300 = 300;
+  var s300 = 300;
 }
 
 enum abstract State_w_k(Int) {
-  var W_K_310 = 310; var W_K_311 = 311; var W_K_312 = 312;
+  var s310 = 310; var s311 = 311; var s312 = 312;
 }
 
 enum abstract State_w_s(Int) {
-  var W_S_340 = 340;
+  var s340 = 340;
 }
 
 enum abstract State_ws_m(Int) {
-  var WS_M_500 = 500; var WS_M_501 = 501; var WS_M_502 = 502; var WS_M_503 = 503;
+  var s500 = 500; var s501 = 501; var s502 = 502; var s503 = 503;
 }
 
 enum abstract State_ws_p(Int) {
-  var WS_P_510 = 510;
+  var s510 = 510;
 }
 
 enum abstract State_ws_k(Int) {
-  var WS_K_520 = 520; var WS_K_521 = 521; var WS_K_522 = 522;
+  var s520 = 520; var s521 = 521; var s522 = 522;
 }
 
 enum abstract State_ws_s(Int) {
-  var WS_S_550 = 550;
+  var s550 = 550;
 }
 
 enum abstract State_wp_m(Int) {
-  var WP_M_600 = 600; var WP_M_601 = 601; var WP_M_602 = 602;
+  var s600 = 600; var s601 = 601; var s602 = 602;
 }
 
 enum abstract State_wp_p(Int) {
-  var WP_P_610 = 610; var WP_P_611 = 611; var WP_P_612 = 612; var WP_P_613 = 613;
+  var s610 = 610; var s611 = 611; var s612 = 612; var s613 = 613;
 }
 
 enum abstract State_wp_c(Int) {
-  var WP_C_620 = 620;
+  var s620 = 620;
 }
 
 enum abstract State_wp_s(Int) {
-  var WP_S_630 = 630;
+  var s630 = 630;
 }
 
 enum abstract State_hs_m(Int) {
-  var HS_M_800 = 800; var HS_M_801 = 801; var HS_M_802 = 802;
+  var s800 = 800; var s801 = 801; var s802 = 802;
 }
 
 enum abstract State_hs_p(Int) {
-  var HS_P_810 = 810; var HS_P_811 = 811;
+  var s810 = 810; var s811 = 811;
 }
 
 enum abstract State_hs_k(Int) {
-  var HS_K_820 = 820; var HS_K_821 = 821; var HS_K_822 = 822;
+  var s820 = 820; var s821 = 821; var s822 = 822;
 }
 
 enum abstract State_hp_m(Int) {
-  var HP_M_900 = 900; var HP_M_901 = 901; var HP_M_902 = 902; var HP_M_903 = 903; var HP_M_904 = 904;
+  var s900 = 900; var s901 = 901; var s902 = 902; var s903 = 903; var s904 = 904;
 }
 
 enum abstract State_rec(Int) {
-  var REC_1000 = 1000; var REC_1001 = 1001; var REC_1002 = 1002; var REC_1003 = 1003;
+  var s1000 = 1000; var s1001 = 1001; var s1002 = 1002; var s1003 = 1003;
 }
 
 enum abstract State_bw(Int) {
-  var BW_1200 = 1200; var BW_1201 = 1201; var BW_1202 = 1202;
+  var s1200 = 1200; var s1201 = 1201; var s1202 = 1202;
 }
 
 enum abstract State_nr(Int) {
-  var NR_1400 = 1400; var NR_1410 = 1410; var NR_1411 = 1411; var NR_1412 = 1412;
+  var s1400 = 1400; var s1410 = 1410; var s1411 = 1411; var s1412 = 1412;
 }
 
 class StateVar_w {
@@ -262,9 +262,9 @@ class State {
   public var s_nr(default, set): State_nr;
 
   public function new() {
-    @:bypassAccessor s_m = M_100;
-    @:bypassAccessor s_du = DU_20;
-    @:bypassAccessor s_nr = NR_1400;
+    @:bypassAccessor s_m = s100;
+    @:bypassAccessor s_du = s20;
+    @:bypassAccessor s_nr = s1400;
   }
 
   function set_s_m(newValue) {
@@ -397,8 +397,8 @@ class State {
   }
 
   function goto_rec() {
-    @:bypassAccessor s_tr = TR_260;
-    @:bypassAccessor s_rec = REC_1000;
+    @:bypassAccessor s_tr = s260;
+    @:bypassAccessor s_rec = s1000;
     traceState();
   }
 
@@ -446,7 +446,7 @@ class State {
   }
 
   function isSwitching() {
-    return s_m == M_150 && (s_swt == SWT_1302 || s_swt == SWT_1303);
+    return s_m == s150 && (s_swt == s1302 || s_swt == s1303);
   }
 
   public function toString() {
