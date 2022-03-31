@@ -619,6 +619,60 @@ class ClientMachine {
     }
   }
 
+  function evtRestartKeepalive() {
+    traceEvent("restart.keepalive");
+    if (state.s_w?.k != null) {
+      state.s_w.k = s310;
+      exit_keepalive_unit();
+      schedule_evtKeepaliveTimeout(keepaliveInterval);
+    } else if (state.s_ws?.k != null) {
+      state.s_ws.k = s520;
+      exit_keepalive_unit();
+      schedule_evtKeepaliveTimeout(keepaliveInterval);
+    } else if (state.s_hs?.k != null) {
+      state.s_hs.k = s820;
+      exit_keepalive_unit();
+      schedule_evtKeepaliveTimeout(keepaliveInterval);
+    }
+  }
+
+  function evtERROR(code: Int, msg: String) {
+    traceEvent("ERROR");
+    protocolLogger.logDebug('ERROR $code $msg');
+    var terminationCause = TC_standardError(code, msg);
+    if (state.s_w?.p == s300) {
+      disposeWS();
+      notifyStatus(DISCONNECTED);
+      notifyServerError_ERROR(code, msg);
+      state.clear_w();
+      state.goto_m_from_session(s100);
+      exit_w();
+      evtEndSession();
+      evtTerminate(terminationCause);
+    } else if (state.s_ws?.p == s510) {
+      disposeWS();
+      notifyStatus(DISCONNECTED);
+      notifyServerError_ERROR(code, msg);
+      state.goto_m_from_ws(s100);
+      exit_ws_to_m();
+      evtTerminate(terminationCause);
+    } else if (state.s_wp?.c == s620) {
+      disposeWS();
+      notifyStatus(DISCONNECTED);
+      notifyServerError_ERROR(code, msg);
+      state.goto_m_from_wp(s100);
+      exit_wp_to_m();
+      evtTerminate(terminationCause);
+    } else if (state.s_ctrl == s1102) {
+      disposeHTTP();
+      notifyStatus(DISCONNECTED);
+      notifyServerError_ERROR(code, msg);
+      state.goto_m_from_ctrl(s100);
+      exit_ctrl_to_m();
+      evtTerminate(terminationCause);
+    }
+  }
+
   function evtREQOK() {
     traceEvent("REQOK");
     protocolLogger.logDebug("REQOK");
@@ -708,13 +762,8 @@ class ClientMachine {
       }
     }
   }
-  function evtRestartKeepalive() {
-    // TODO
-  }
+
   function evtREQERR(reqId: Int, code: Int, msg: String) {
-    // TODO
-  }
-  function evtERROR(code: Int, msg: String) {
     // TODO
   }
   function evtSendControl(req: ConstrainRequest) {

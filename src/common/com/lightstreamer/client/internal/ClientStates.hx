@@ -114,8 +114,8 @@ enum abstract State_nr(Int) {
 
 class StateVar_w {
   public var p(default, set): State_w_p;
-  var k: State_w_k;
-  var s: State_w_s;
+  public var k(default, set): State_w_k;
+  public var s(default, set): State_w_s;
   final parent: State;
   
   public function new(parent: State, p: State_w_p, k: State_w_k, s: State_w_s) {
@@ -131,6 +131,18 @@ class StateVar_w {
     return newValue;
   }
 
+  function set_k(newValue) {
+    k = newValue;
+    parent.traceState();
+    return newValue;
+  }
+
+  function set_s(newValue) {
+    s = newValue;
+    parent.traceState();
+    return newValue;
+  }
+
   public function toString() {
     return '<w_p=$p w_k=$k w_s=$s>';
   }
@@ -139,8 +151,8 @@ class StateVar_w {
 class StateVar_ws {
   public var m(default, set): State_ws_m;
   public var p(default, set): Null<State_ws_p>;
-  var k: Null<State_ws_k>;
-  var s: Null<State_ws_s>;
+  public var k(default, set): Null<State_ws_k>;
+  public var s(default, set): Null<State_ws_s>;
   final parent: State;
   
   public function new(parent: State, m: State_ws_m) {
@@ -156,6 +168,18 @@ class StateVar_ws {
 
   function set_p(newValue) {
     p = newValue;
+    parent.traceState();
+    return newValue;
+  }
+
+  function set_k(newValue) {
+    k = newValue;
+    parent.traceState();
+    return newValue;
+  }
+
+  function set_s(newValue) {
+    s = newValue;
     parent.traceState();
     return newValue;
   }
@@ -410,7 +434,7 @@ class State {
     traceState();
   }
 
-  function goto_m_from_ctrl(m: State_m) {
+  public function goto_m_from_ctrl(m: State_m) {
     clear_hs();
     clear_hp();
     @:bypassAccessor s_ctrl = null;
