@@ -1,5 +1,6 @@
 package com.lightstreamer.client.internal;
 
+import com.lightstreamer.internal.MacroTools;
 import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
 
@@ -120,9 +121,11 @@ class StateVar_w {
   
   public function new(parent: State, p: State_w_p, k: State_w_k, s: State_w_s) {
     this.parent = parent;
-    @:bypassAccessor this.p = p;
-    @:bypassAccessor this.k = k;
-    @:bypassAccessor this.s = s;
+    bypassAccessors({
+      this.p = p;
+      this.k = k;
+      this.s = s;
+    });
   }
 
   function set_p(newValue) {
@@ -157,7 +160,7 @@ class StateVar_ws {
   
   public function new(parent: State, m: State_ws_m) {
     this.parent = parent;
-    @:bypassAccessor this.m = m;
+    bypassAccessors(this.m = m);
   }
 
   function set_m(newValue) {
@@ -203,7 +206,7 @@ class StateVar_wp {
   
   public function new(parent: State, m: State_wp_m) {
     this.parent = parent;
-    @:bypassAccessor this.m = m;
+    bypassAccessors(this.m = m);
   }
 
   function set_m(newValue) {
@@ -286,9 +289,11 @@ class State {
   public var s_nr(default, set): State_nr;
 
   public function new() {
-    @:bypassAccessor s_m = s100;
-    @:bypassAccessor s_du = s20;
-    @:bypassAccessor s_nr = s1400;
+    bypassAccessors({
+      this.s_m = s100;
+      this.s_du = s20;
+      this.s_nr = s1400;
+    });
   }
 
   function set_s_m(newValue) {
@@ -389,84 +394,114 @@ class State {
 
   public function goto_m_from_hs(m: State_m) {
     clear_hs();
-    @:bypassAccessor s_ctrl = null;
-    @:bypassAccessor s_h = null;
+    bypassAccessors({
+      s_ctrl = null;
+      s_h = null;
+    });
     goto_m_from_session(m);
   }
 
   public function goto_m_from_rec(m: State_m) {
-    @:bypassAccessor s_tr = null;
+    bypassAccessors(s_tr = null);
     goto_m_from_session(m);
   }
 
   function goto_rec_from_hs() {
     clear_hs();
-    @:bypassAccessor s_ctrl = null;
-    @:bypassAccessor s_h = null;
+    bypassAccessors({
+      s_ctrl = null;
+      s_h = null;
+    });
     goto_rec();
   }
 
   public function goto_m_from_hp(m: State_m) {
     clear_hp();
-    @:bypassAccessor s_ctrl = null;
-    @:bypassAccessor s_h = null;
+    bypassAccessors({
+      s_ctrl = null;
+      s_h = null;
+    });
     goto_m_from_session(m);
   }
 
   function goto_rec_from_hp() {
     clear_hp();
-    @:bypassAccessor s_ctrl = null;
-    @:bypassAccessor s_h = null;
+    bypassAccessors({
+      s_ctrl = null;
+      s_h = null;
+    });
     goto_rec();
   }
 
   function goto_rec() {
-    @:bypassAccessor s_tr = s260;
-    @:bypassAccessor s_rec = s1000;
+    bypassAccessors({
+      s_tr = s260;
+      s_rec = s1000;
+    });
     traceState();
   }
 
   public function goto_m_from_session(m: State_m) {
-    @:bypassAccessor s_tr = null;
-    @:bypassAccessor s_swt = null;
-    @:bypassAccessor s_bw = null;
-    @:bypassAccessor s_m = m;
+    bypassAccessors({
+      s_tr = null;
+      s_swt = null;
+      s_bw = null;
+      s_m = m;
+    });
     traceState();
   }
 
   public function goto_m_from_ctrl(m: State_m) {
     clear_hs();
     clear_hp();
-    @:bypassAccessor s_ctrl = null;
-    @:bypassAccessor s_h = null;
+    bypassAccessors({
+      s_ctrl = null;
+      s_h = null;
+    });
     goto_m_from_session(m);
   }
 
+  public function goto_200_from_rec() {
+    bypassAccessors({
+      s_rec = null;
+      s_tr = s200;
+    });
+    traceState();
+  }
+
   public function clear_w() {
-    @:bypassAccessor s_w = null;
-    @:bypassAccessor s_rhb = null;
-    @:bypassAccessor s_slw = null;
+    bypassAccessors({
+      s_w = null;
+      s_rhb = null;
+      s_slw = null;
+    });
   }
 
-  function clear_ws() {
-    @:bypassAccessor s_ws = null;
-    @:bypassAccessor s_rhb = null;
-    @:bypassAccessor s_slw = null;
+  public function clear_ws() {
+    bypassAccessors({
+      s_ws = null;
+      s_rhb = null;
+      s_slw = null;
+    });
   }
 
-  function clear_wp() {
-    @:bypassAccessor s_wp = null;
+  public function clear_wp() {
+    bypassAccessors(s_wp = null);
   }
 
   function clear_hs() {
-    @:bypassAccessor s_hs = null;
-    @:bypassAccessor s_rhb = null;
-    @:bypassAccessor s_slw = null;
+    bypassAccessors({
+      s_hs = null;
+      s_rhb = null;
+      s_slw = null;
+    });
   }
 
   function clear_hp() {
-    @:bypassAccessor s_hp = null;
-    @:bypassAccessor s_rhb = null;
+    bypassAccessors({
+      s_hp = null;
+      s_rhb = null;
+    });
   }
 
   function isSwitching() {

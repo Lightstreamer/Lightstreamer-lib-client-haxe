@@ -14,7 +14,7 @@ macro function bypassAccessors(e)
 
 private function _bypassAccessors(e: Expr) {
   return switch e.expr {
-    case EBinop(OpAssign, {expr: EField(_, _)}, _):
+    case EBinop(OpAssign, _, _):
       {expr: EMeta({pos: e.pos, name: ":bypassAccessor"}, e), pos: e.pos};
     case _:
       e.map(_bypassAccessors);
