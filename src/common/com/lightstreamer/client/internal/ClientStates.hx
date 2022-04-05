@@ -1,6 +1,5 @@
 package com.lightstreamer.client.internal;
 
-import com.lightstreamer.internal.MacroTools;
 import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
 
@@ -114,36 +113,14 @@ enum abstract State_nr(Int) {
 }
 
 class StateVar_w {
-  public var p(default, set): State_w_p;
-  public var k(default, set): State_w_k;
-  public var s(default, set): State_w_s;
-  final parent: State;
+  public var p(default, null): State_w_p;
+  public var k(default, null): State_w_k;
+  public var s(default, null): State_w_s;
   
-  public function new(parent: State, p: State_w_p, k: State_w_k, s: State_w_s) {
-    this.parent = parent;
-    bypassAccessors({
-      this.p = p;
-      this.k = k;
-      this.s = s;
-    });
-  }
-
-  function set_p(newValue) {
-    p = newValue;
-    parent.traceState();
-    return newValue;
-  }
-
-  function set_k(newValue) {
-    k = newValue;
-    parent.traceState();
-    return newValue;
-  }
-
-  function set_s(newValue) {
-    s = newValue;
-    parent.traceState();
-    return newValue;
+  public function new(p: State_w_p, k: State_w_k, s: State_w_s) {
+    this.p = p;
+    this.k = k;
+    this.s = s;
   }
 
   public function toString() {
@@ -152,39 +129,13 @@ class StateVar_w {
 }
 
 class StateVar_ws {
-  public var m(default, set): State_ws_m;
-  public var p(default, set): Null<State_ws_p>;
-  public var k(default, set): Null<State_ws_k>;
-  public var s(default, set): Null<State_ws_s>;
-  final parent: State;
+  public var m(default, null): State_ws_m;
+  public var p(default, null): Null<State_ws_p>;
+  public var k(default, null): Null<State_ws_k>;
+  public var s(default, null): Null<State_ws_s>;
   
-  public function new(parent: State, m: State_ws_m) {
-    this.parent = parent;
-    bypassAccessors(this.m = m);
-  }
-
-  function set_m(newValue) {
-    m = newValue;
-    parent.traceState();
-    return newValue;
-  }
-
-  function set_p(newValue) {
-    p = newValue;
-    parent.traceState();
-    return newValue;
-  }
-
-  function set_k(newValue) {
-    k = newValue;
-    parent.traceState();
-    return newValue;
-  }
-
-  function set_s(newValue) {
-    s = newValue;
-    parent.traceState();
-    return newValue;
+  public function new(m: State_ws_m) {
+    this.m = m;
   }
 
   public function toString() {
@@ -198,33 +149,13 @@ class StateVar_ws {
 }
 
 class StateVar_wp {
-  public var m(default, set): State_wp_m;
-  public var p(default, set): Null<State_wp_p>;
-  public var c(default, set): Null<State_wp_c>;
-  var s: Null<State_wp_s>;
-  final parent: State;
+  public var m(default, null): State_wp_m;
+  public var p(default, null): Null<State_wp_p>;
+  public var c(default, null): Null<State_wp_c>;
+  public var s(default, null): Null<State_wp_s>;
   
-  public function new(parent: State, m: State_wp_m) {
-    this.parent = parent;
-    bypassAccessors(this.m = m);
-  }
-
-  function set_m(newValue) {
-    m = newValue;
-    parent.traceState();
-    return newValue;
-  }
-
-  function set_p(newValue) {
-    p = newValue;
-    parent.traceState();
-    return newValue;
-  }
-
-  function set_c(newValue) {
-    c = newValue;
-    parent.traceState();
-    return newValue;
+  public function new(m: State_wp_m) {
+    this.m = m;
   }
 
   public function toString() {
@@ -238,32 +169,12 @@ class StateVar_wp {
 }
 
 class StateVar_hs {
-  public var m(default, set): State_hs_m;
-  public var p(default, set): Null<State_hs_p>;
-  public var k(default, set): Null<State_hs_k>;
-  final parent: State;
+  public var m(default, null): State_hs_m;
+  public var p(default, null): Null<State_hs_p>;
+  public var k(default, null): Null<State_hs_k>;
   
-  public function new(parent: State, m: State_hs_m) {
-    this.parent = parent;
-    bypassAccessors(this.m = m);
-  }
-
-  function set_m(newValue) {
-    m = newValue;
-    parent.traceState();
-    return newValue;
-  }
-
-  function set_p(newValue) {
-    p = newValue;
-    parent.traceState();
-    return newValue;
-  }
-
-  function set_k(newValue) {
-    k = newValue;
-    parent.traceState();
-    return newValue;
+  public function new(m: State_hs_m) {
+    this.m = m;
   }
 
   public function toString() {
@@ -276,18 +187,10 @@ class StateVar_hs {
 }
 
 class StateVar_hp {
-  public var m(default, set): State_hp_m;
-  final parent: State;
+  public var m(default, null): State_hp_m;
   
-  public function new(parent: State, m: State_hp_m) {
-    this.parent = parent;
-    bypassAccessors(this.m = m);
-  }
-
-  function set_m(newValue) {
-    m = newValue;
-    parent.traceState();
-    return newValue;
+  public function new(m: State_hp_m) {
+    this.m = m;
   }
 
   public function toString() {
@@ -297,97 +200,29 @@ class StateVar_hp {
 
 class State {
   // TODO update toString
-  public var s_m(default, set): State_m;
-  public var s_du(default, set): State_du;
-  public var s_tr(default, set): Null<State_tr>;
-  public var s_w: Null<StateVar_w>;
-  public var s_ws: Null<StateVar_ws>;
-  public var s_wp: Null<StateVar_wp>;
-  public var s_hs: Null<StateVar_hs>;
-  public var s_hp: Null<StateVar_hp>;
-  public var s_rec(default, set): Null<State_rec>;
-  public var s_h(default, set): Null<State_h>;
-  public var s_ctrl(default, set): Null<State_ctrl>;
-  public var s_swt(default, set): Null<State_swt>;
-  public var s_bw(default, set): Null<State_bw>;
-  public var s_rhb(default, set): Null<State_rhb>;
-  public var s_slw(default, set): Null<State_slw>;
+  public var s_m(default, null): State_m;
+  public var s_du(default, null): State_du;
+  public var s_tr(default, null): Null<State_tr>;
+  public var s_w(default, null): Null<StateVar_w>;
+  public var s_ws(default, null): Null<StateVar_ws>;
+  public var s_wp(default, null): Null<StateVar_wp>;
+  public var s_hs(default, null): Null<StateVar_hs>;
+  public var s_hp(default, null): Null<StateVar_hp>;
+  public var s_rec(default, null): Null<State_rec>;
+  public var s_h(default, null): Null<State_h>;
+  public var s_ctrl(default, null): Null<State_ctrl>;
+  public var s_swt(default, null): Null<State_swt>;
+  public var s_bw(default, null): Null<State_bw>;
+  public var s_rhb(default, null): Null<State_rhb>;
+  public var s_slw(default, null): Null<State_slw>;
   // TODO MPN
   // var s_mpn: StateVar_mpn = StateVar_mpn()
-  public var s_nr(default, set): State_nr;
+  public var s_nr(default, null): State_nr;
 
   public function new() {
-    bypassAccessors({
-      this.s_m = s100;
-      this.s_du = s20;
-      this.s_nr = s1400;
-    });
-  }
-
-  function set_s_m(newValue) {
-    s_m = newValue;
-    traceState();
-    return newValue;
-  }
-
-  function set_s_du(newValue) {
-    s_du = newValue;
-    traceState();
-    return newValue;
-  }
-
-  function set_s_tr(newValue) {
-    s_tr = newValue;
-    traceState();
-    return newValue;
-  }
-
-  function set_s_rec(newValue) {
-    s_rec = newValue;
-    traceState();
-    return newValue;
-  }
-
-  function set_s_h(newValue) {
-    s_h = newValue;
-    traceState();
-    return newValue;
-  }
-
-  function set_s_ctrl(newValue) {
-    s_ctrl = newValue;
-    traceState();
-    return newValue;
-  }
-
-  function set_s_swt(newValue) {
-    s_swt = newValue;
-    traceState();
-    return newValue;
-  }
-
-  function set_s_bw(newValue) {
-    s_bw = newValue;
-    traceState();
-    return newValue;
-  }
-
-  function set_s_rhb(newValue) {
-    s_rhb = newValue;
-    traceState();
-    return newValue;
-  }
-
-  function set_s_slw(newValue) {
-    s_slw = newValue;
-    traceState();
-    return newValue;
-  }
-
-  function set_s_nr(newValue) {
-    s_nr = newValue;
-    traceState();
-    return newValue;
+    this.s_m = s100;
+    this.s_du = s20;
+    this.s_nr = s1400;
   }
 
   public function goto_m_from_w(m: State_m) {
@@ -415,121 +250,97 @@ class State {
     goto_m_from_session(m);
   }
 
-  function goto_rec_from_wp() {
+  public function goto_rec_from_wp() {
     clear_wp();
     goto_rec();
   }
 
   public function goto_m_from_hs(m: State_m) {
     clear_hs();
-    bypassAccessors({
-      s_ctrl = null;
-      s_h = null;
-    });
+    s_ctrl = null;
+    s_h = null;
     goto_m_from_session(m);
   }
 
   public function goto_m_from_rec(m: State_m) {
-    bypassAccessors(s_tr = null);
+    s_tr = null;
     goto_m_from_session(m);
   }
 
-  function goto_rec_from_hs() {
+  public function goto_rec_from_hs() {
     clear_hs();
-    bypassAccessors({
-      s_ctrl = null;
-      s_h = null;
-    });
+    s_ctrl = null;
+    s_h = null;
     goto_rec();
   }
 
   public function goto_m_from_hp(m: State_m) {
     clear_hp();
-    bypassAccessors({
-      s_ctrl = null;
-      s_h = null;
-    });
+    s_ctrl = null;
+    s_h = null;
     goto_m_from_session(m);
   }
 
-  function goto_rec_from_hp() {
+  public function goto_rec_from_hp() {
     clear_hp();
-    bypassAccessors({
-      s_ctrl = null;
-      s_h = null;
-    });
+    s_ctrl = null;
+    s_h = null;
     goto_rec();
   }
 
-  function goto_rec() {
-    bypassAccessors({
-      s_tr = s260;
-      s_rec = s1000;
-    });
+  public function goto_rec() {
+    s_tr = s260;
+    s_rec = s1000;
     traceState();
   }
 
   public function goto_m_from_session(m: State_m) {
-    bypassAccessors({
-      s_tr = null;
-      s_swt = null;
-      s_bw = null;
-      s_m = m;
-    });
+    s_tr = null;
+    s_swt = null;
+    s_bw = null;
+    s_m = m;
     traceState();
   }
 
   public function goto_m_from_ctrl(m: State_m) {
     clear_hs();
     clear_hp();
-    bypassAccessors({
-      s_ctrl = null;
-      s_h = null;
-    });
+    s_ctrl = null;
+    s_h = null;
     goto_m_from_session(m);
   }
 
   public function goto_200_from_rec() {
-    bypassAccessors({
-      s_rec = null;
-      s_tr = s200;
-    });
+    s_rec = null;
+    s_tr = s200;
     traceState();
   }
 
   public function clear_w() {
-    bypassAccessors({
-      s_w = null;
-      s_rhb = null;
-      s_slw = null;
-    });
+    s_w = null;
+    s_rhb = null;
+    s_slw = null;
   }
 
   public function clear_ws() {
-    bypassAccessors({
-      s_ws = null;
-      s_rhb = null;
-      s_slw = null;
-    });
+    s_ws = null;
+    s_rhb = null;
+    s_slw = null;
   }
 
   public function clear_wp() {
-    bypassAccessors(s_wp = null);
+    s_wp = null;
   }
 
   function clear_hs() {
-    bypassAccessors({
-      s_hs = null;
-      s_rhb = null;
-      s_slw = null;
-    });
+    s_hs = null;
+    s_rhb = null;
+    s_slw = null;
   }
 
   function clear_hp() {
-    bypassAccessors({
-      s_hp = null;
-      s_rhb = null;
-    });
+    s_hp = null;
+    s_rhb = null;
   }
 
   function isSwitching() {
@@ -558,7 +369,7 @@ class State {
     return str;
   }
 
-  public function traceState() {
+  function traceState() {
     internalLogger.logTrace("goto: " + this.toString());
   }
 }
