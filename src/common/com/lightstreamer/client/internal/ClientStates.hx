@@ -238,12 +238,32 @@ class StateVar_wp {
 }
 
 class StateVar_hs {
-  public var m: State_hs_m;
-  public var p: Null<State_hs_p>;
-  public var k: Null<State_hs_k>;
+  public var m(default, set): State_hs_m;
+  public var p(default, set): Null<State_hs_p>;
+  public var k(default, set): Null<State_hs_k>;
+  final parent: State;
   
-  public function new(m: State_hs_m) {
-    this.m = m;
+  public function new(parent: State, m: State_hs_m) {
+    this.parent = parent;
+    bypassAccessors(this.m = m);
+  }
+
+  function set_m(newValue) {
+    m = newValue;
+    parent.traceState();
+    return newValue;
+  }
+
+  function set_p(newValue) {
+    p = newValue;
+    parent.traceState();
+    return newValue;
+  }
+
+  function set_k(newValue) {
+    k = newValue;
+    parent.traceState();
+    return newValue;
   }
 
   public function toString() {
@@ -256,10 +276,18 @@ class StateVar_hs {
 }
 
 class StateVar_hp {
-  public var m: State_hp_m;
+  public var m(default, set): State_hp_m;
+  final parent: State;
   
-  public function new(m: State_hp_m) {
-    this.m = m;
+  public function new(parent: State, m: State_hp_m) {
+    this.parent = parent;
+    bypassAccessors(this.m = m);
+  }
+
+  function set_m(newValue) {
+    m = newValue;
+    parent.traceState();
+    return newValue;
   }
 
   public function toString() {
