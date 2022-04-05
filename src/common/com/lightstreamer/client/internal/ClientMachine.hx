@@ -1,7 +1,7 @@
 package com.lightstreamer.client.internal;
 
 import com.lightstreamer.internal.*;
-import com.lightstreamer.internal.Debug;
+import com.lightstreamer.internal.MacroTools;
 import com.lightstreamer.internal.Types;
 import com.lightstreamer.internal.NativeTypes;
 import com.lightstreamer.internal.PlatformApi;
@@ -30,7 +30,7 @@ class ClientMachine {
   final httpFactory: IHttpClientFactory;
   final ctrlFactory: IHttpClientFactory;
   final timerFactory: ITimerFactory;
-  final randomGenerator: Int->Int;
+  final randomGenerator: Millis->Millis;
   // attributes
   final delayCounter: RetryDelayCounter = new RetryDelayCounter();
   var m_status: ClientStatus = DISCONNECTED;
@@ -138,7 +138,7 @@ class ClientMachine {
     httpFactory: IHttpClientFactory,
     ctrlFactory: IHttpClientFactory,
     timerFactory: ITimerFactory,
-    randomGenerator: Int->Int,
+    randomGenerator: Millis->Millis,
     reachabilityFactory: IReachabilityFactory) {
     this.lock = client.lock;
     this.details = client.connectionDetails;
@@ -764,8 +764,346 @@ class ClientMachine {
   }
 
   function evtREQERR(reqId: Int, code: Int, msg: String) {
+    traceEvent("REQERR");
+    protocolLogger.logDebug('REQERR $reqId $code $msg');
+    var forward = true;
+    if (state.s_swt == s1302 && reqId == swt_lastReqId) {
+      state.s_swt = s1301;
+      forward = evtREQERR_TransportRegion(reqId, code, msg);
+    } else if (state.s_bw == s1202 && reqId == bw_lastReqId) {
+      state.s_bw = s1200;
+      forward = evtREQERR_TransportRegion(reqId, code, msg);
+      evtCheckBW();
+    }
+    // TODO MPN
+    /*else if s_mpn.m == .s403 && reqId == mpn_lastRegisterReqId {
+      trace(evt, State_mpn_m.s403, State_mpn_m.s402);
+      notifyDeviceError(code, msg);
+      s_mpn.m = .s402
+      forward = evtREQERR_TransportRegion(reqId, code, msg);
+      evtMpnCheckNext();
+    } else if s_mpn.m == .s406 && reqId == mpn_lastRegisterReqId {
+      trace(evt, State_mpn_m.s406, State_mpn_m.s408);
+      notifyDeviceError(code, msg);
+      s_mpn.m = .s408
+      forward = evtREQERR_TransportRegion(reqId, code, msg);
+      evtMpnCheckNext();
+    } else if s_mpn.tk == .s453 && reqId == mpn_lastRegisterReqId {
+      trace(evt, State_mpn_tk.s453, State_mpn_tk.s452);
+      notifyDeviceError(code, msg);
+      s_mpn.tk = .s452
+      forward = evtREQERR_TransportRegion(reqId, code, msg);
+      evtMpnCheckNext();
+    } else if s_mpn.ft == .s432 && reqId == mpn_filter_lastDeactivateReqId {
+      trace(evt, State_mpn_ft.s432, State_mpn_ft.s430);
+      doREQMpnUnsubscribeFilter();
+      s_mpn.ft = .s430
+      forward = evtREQERR_TransportRegion(reqId, code, msg);
+      evtMpnCheckFilter();
+    } else if s_mpn.bg == .s442 && reqId == mpn_badge_lastResetReqId {
+      trace(evt, State_mpn_bg.s442, State_mpn_bg.s440);
+      doREQERRMpnResetBadge();
+      notifyOnBadgeResetFailed(code, msg);
+      s_mpn.bg = .s440
+      forward = evtREQERR_TransportRegion(reqId, code, msg);
+      evtMpnCheckReset();
+    }*/
+    if (forward) {
+      forward = evtREQERR_TransportRegion(reqId, code, msg);
+    }
+  }
+
+  function evtREQERR_TransportRegion(reqId: Int, code: Int, msg: String) {
+    traceEvent("REQERR");
+    var retryCause = RetryCause.standardError(code, msg);
+    var terminationCause = TerminationCause.TC_standardError(code, msg);
+    if (state.s_w?.p == s300) {
+      switch code {
+      case 20:
+        disposeWS();
+        notifyStatus(DISCONNECTED_WILL_RETRY);
+        cause = 'ws.reqerr.$code';
+        var pauseMs = randomGenerator(options.firstRetryMaxDelay);
+        state.clear_w();
+        state.goto_m_from_session(s113);
+        exit_w();
+        evtEndSession();
+        evtRetry(standardError(code, msg), pauseMs);
+        schedule_evtRetryTimeout(pauseMs);
+      case 11, 65, 67:
+        disposeWS();
+        notifyStatus(DISCONNECTED);
+        notifyServerError_REQERR(code, msg);
+        state.clear_w();
+        state.goto_m_from_session(s100);
+        exit_w();
+        evtEndSession();
+        evtTerminate(terminationCause);
+      default:
+        state.s_w.p = s300;
+        doREQERR(reqId, code, msg);
+        evtRestartKeepalive();
+      }
+    } else if (state.s_ws?.p == s510) {
+      switch code {
+      case 20:
+        disposeWS();
+        notifyStatus(DISCONNECTED_WILL_RETRY);
+        cause = 'ws.reqerr.$code)';
+        state.goto_m_from_ws(s113);
+        exit_ws_to_m();
+        entry_m113(retryCause);
+      case 11, 65, 67:
+        disposeWS();
+        notifyStatus(DISCONNECTED);
+        notifyServerError_REQERR(code, msg);
+        state.goto_m_from_ws(s100);
+        exit_ws_to_m();
+        evtTerminate(terminationCause);
+      default:
+        state.s_ws.p = s510;
+        doREQERR(reqId, code, msg);
+        evtRestartKeepalive();
+      }
+    } else if (state.s_wp?.c == s620) {
+      switch code {
+      case 20:
+        disposeWS();
+        notifyStatus(DISCONNECTED_WILL_RETRY);
+        cause = 'ws.reqerr.$code';
+        state.goto_m_from_wp(s113);
+        exit_wp_to_m();
+        entry_m113(retryCause);
+      case 11, 65, 67:
+        disposeWS();
+        notifyStatus(DISCONNECTED);
+        notifyServerError_REQERR(code, msg);
+        state.goto_m_from_wp(s100);
+        exit_wp_to_m();
+        evtTerminate(terminationCause);
+      default:
+        state.s_wp.c = s620;
+        doREQERR(reqId, code, msg);
+      }
+    } else if (state.s_ctrl == s1102) {
+      switch code {
+      case 20:
+        disposeHTTP();
+        notifyStatus(DISCONNECTED_WILL_RETRY);
+        cause = 'http.reqerr.$code';
+        state.goto_m_from_ctrl(s113);
+        exit_ctrl_to_m();
+        entry_m113(retryCause);
+      case 11, 65, 67:
+        disposeHTTP();
+        notifyStatus(DISCONNECTED);
+        notifyServerError_REQERR(code, msg);
+        state.goto_m_from_ctrl(s100);
+        exit_ctrl_to_m();
+        evtTerminate(terminationCause);
+      default:
+        state.s_ctrl = s1102;
+        doREQERR(reqId, code, msg);
+      }
+    }
+    return false;
+  }
+
+  function evtPROG(prog: Int) {
+    traceEvent("PROG");
+    var retryCause = RetryCause.prog_mismatch(rec_serverProg, prog);
+    protocolLogger.logDebug('PROG $prog');
+    if (state.s_w?.p == s300) {
+      if (prog != rec_serverProg) {
+        disposeWS();
+        notifyStatus(DISCONNECTED_WILL_RETRY);
+        cause = 'prog.mismatch.$prog.$rec_serverProg';
+        state.clear_w();
+        state.goto_m_from_session(s113);
+        exit_w();
+        evtEndSession();
+        entry_m113(retryCause);
+      } else {
+        state.s_w.p = s300;
+        evtRestartKeepalive();
+      }
+    } else if (state.s_tr == s220) {
+      if (prog != rec_serverProg) {
+        disposeHTTP();
+        notifyStatus(DISCONNECTED_WILL_RETRY);
+        cause = 'prog.mismatch.$prog.$rec_serverProg';
+        state.goto_m_from_session(s113);
+        cancel_evtTransportTimeout();
+        evtEndSession();
+        entry_m113(retryCause);
+      } else {
+        state.s_tr = s220;
+      }
+    } else if (state.s_tr == s230) {
+      if (prog != rec_serverProg) {
+        disposeHTTP();
+        notifyStatus(DISCONNECTED_WILL_RETRY);
+        cause = 'prog.mismatch.$prog.$rec_serverProg';
+        state.goto_m_from_session(s113);
+        cancel_evtTransportTimeout();
+        evtEndSession();
+        entry_m113(retryCause);
+      } else {
+        state.s_tr = s230;
+      }
+    } else if (state.s_ws?.p == s510) {
+      if (prog != rec_serverProg) {
+        disposeWS();
+        notifyStatus(DISCONNECTED_WILL_RETRY);
+        cause = 'prog.mismatch.$prog.$rec_serverProg';
+        state.goto_m_from_ws(s113);
+        exit_ws_to_m();
+        entry_m113(retryCause);
+      } else {
+        state.s_ws.p = s510;
+        evtRestartKeepalive();
+      }
+    } else if (state.s_wp?.p == s611) {
+      if (prog != rec_serverProg) {
+        disposeWS();
+        notifyStatus(DISCONNECTED_WILL_RETRY);
+        cause = 'prog.mismatch.$prog.$rec_serverProg';
+        state.goto_m_from_wp(s113);
+        exit_wp_to_m();
+        entry_m113(retryCause);
+      } else {
+        state.s_wp.p = s611;
+      }
+    } else if (state.s_hs?.p == s810) {
+      if (prog != rec_serverProg) {
+        disposeHTTP();
+        notifyStatus(DISCONNECTED_WILL_RETRY);
+        cause = 'prog.mismatch.$prog.$rec_serverProg';
+        state.goto_m_from_hs(s113);
+        exit_hs_to_m();
+        entry_m113(retryCause);
+      } else {
+        state.s_hs.p = s810;
+        evtRestartKeepalive();
+      }
+    } else if (state.s_hp?.m == s901) {
+      if (prog != rec_serverProg) {
+        disposeHTTP();
+        notifyStatus(DISCONNECTED_WILL_RETRY);
+        cause = 'prog.mismatch.$prog.$rec_serverProg';
+        state.goto_m_from_hp(s113);
+        exit_hp_to_m();
+        entry_m113(retryCause);
+      } else {
+        state.s_hp.m = s901;
+      }
+    } else if (state.s_rec == s1001) {
+      if (prog > rec_clientProg) {
+        disposeHTTP();
+        notifyStatus(DISCONNECTED_WILL_RETRY);
+        cause = 'prog.mismatch.$prog.$rec_serverProg';
+        state.goto_m_from_rec(s113);
+        exit_rec_to_m();
+        entry_m113(retryCause);
+      } else {
+        state.s_rec = s1001;
+        doPROG(prog);
+      }
+    }
+  }
+
+  function evtLOOP(pollingMs: Millis) {
+    traceEvent("LOOP");
+    protocolLogger.logDebug('LOOP $pollingMs');
+    if (state.s_w?.p == s300) {
+      closeWS();
+      cause = "ws.loop";
+      state.clear_w();
+      state.s_tr = s200;
+      exit_w();
+      evtSwitchTransport();
+    } else if (state.s_tr == s220) {
+      closeHTTP();
+      cause = "http.loop";
+      state.s_tr = s200;
+      cancel_evtTransportTimeout();
+      evtSwitchTransport();
+    } else if (state.s_tr == s230) {
+      closeHTTP();
+      cause = "ttl.loop";
+      state.s_tr = s200;
+      cancel_evtTransportTimeout();
+      evtSwitchTransport();
+    } else if (state.s_ws?.p == s510) {
+      closeWS();
+      cause = "ws.loop";
+      state.clear_ws();
+      state.s_tr = s200;
+      exit_ws();
+      evtSwitchTransport();
+    } else if (state.s_wp?.p == s611) {
+      if (isSwitching()) {
+        closeWS();
+        cause = "ws.loop";
+        state.clear_wp();
+        state.s_tr = s200;
+        exit_wp();
+        evtSwitchTransport();
+      } else {
+        doLOOP(pollingMs);
+        state.s_wp.p = s612;
+        cancel_evtIdleTimeout();
+        schedule_evtPollingTimeout(options.pollingInterval);
+      }
+    } else if (state.s_hs?.p == s810) {
+      closeHTTP();
+      cause = "http.loop";
+      state.s_hs.p = s811;
+      evtSwitchTransport();
+    } else if (state.s_hp?.m == s901) {
+      if (isSwitching()) {
+        closeHTTP();
+        state.s_hp.m = s904;
+        cancel_evtIdleTimeout();
+        evtSwitchTransport();
+      } else {
+        doLOOP(pollingMs);
+        closeHTTP();
+        state.s_hp.m = s902;
+        cancel_evtIdleTimeout();
+        schedule_evtPollingTimeout(options.pollingInterval);
+      }
+    } else if (state.s_rec == s1001) {
+      closeHTTP();
+      cause = "recovery.loop";
+      state.goto_200_from_rec();
+      exit_rec();
+      evtSwitchTransport();
+    }
+  }
+
+  function evtSwitchTransport() {
+    traceEvent("switch.transport");
+    var forward = true;
+    if (state.s_swt == s1302 || state.s_swt == s1303) {
+      state.s_swt = s1300;
+      forward = evtSwitchTransport_forwardToTransportRegion();
+      evtCheckTransport();
+    }
+    if (forward) {
+      forward = evtSwitchTransport_forwardToTransportRegion();
+    }
+  }
+
+  function evtSwitchTransport_forwardToTransportRegion() {
+    // TODO
+    return false;
+  }
+
+  function evtCheckTransport() {
     // TODO
   }
+  
   function evtSendControl(req: ConstrainRequest) {
     // TODO
   }
@@ -1811,7 +2149,7 @@ class ClientMachine {
   }
 
   function randomPause(maxPause: Millis): Millis {
-    return new Millis(randomGenerator(maxPause.toInt()));
+    return randomGenerator(maxPause);
   }
 
   function generateFreshReqId() {
@@ -1851,6 +2189,10 @@ class ClientMachine {
 
   function resetSequenceMap() {
     sequenceMap.clear();
+  }
+
+  function isSwitching() {
+    return state.s_m == s150 && (state.s_swt == s1302 || state.s_swt == s1303);
   }
 
   function encodeSwitch(isWS: Bool) {
