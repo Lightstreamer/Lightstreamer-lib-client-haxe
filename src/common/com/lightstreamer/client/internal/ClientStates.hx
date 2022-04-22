@@ -332,13 +332,13 @@ class State {
     s_wp = null;
   }
 
-  function clear_hs() {
+  public function clear_hs() {
     s_hs = null;
     s_rhb = null;
     s_slw = null;
   }
 
-  function clear_hp() {
+  public function clear_hp() {
     s_hp = null;
     s_rhb = null;
   }

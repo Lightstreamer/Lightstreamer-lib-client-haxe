@@ -55,6 +55,9 @@ abstract Millis(Long) to Long {
     return new Millis(this + rhs);
   }
 
+  @:op(A == B)
+  public static function eq(a: Millis, b: Int): Bool;
+
   public inline function toInt(): Int {
     return cast this;
   }

@@ -369,13 +369,13 @@ class ClientMachine {
     traceEvent("select.create");
     if (state.s_m == s101 || state.s_m == s116) {
       switch getBestForCreating() {
-        case bfc_ws:
+        case BFC_ws:
           notifyStatus(CONNECTING);
           openWS_Create();
           goto(state.s_m = s120);
           evtCreate();
           schedule_evtTransportTimeout(delayCounter.currentRetryDelay);
-        case bfc_http:
+        case BFC_http:
           notifyStatus(CONNECTING);
           sendCreateHTTP();
           goto(state.s_m = s130);
@@ -619,6 +619,456 @@ class ClientMachine {
     }
   }
 
+  function evtTransportTimeout() {
+    // TODO synchronize (called by timer)
+    traceEvent("transport.timeout");
+    switch state.s_m {
+    case s120, s121:
+      suspendWS_Streaming();
+      disposeWS();
+      cause = "ws.unavailable";
+      goto(state.s_m = s115);
+      cancel_evtTransportTimeout();
+      entry_m115(ws_unavailable);
+    case s122:
+      disposeWS();
+      notifyStatus(DISCONNECTED_WILL_RETRY);
+      cause = "ws.timeout";
+      goto(state.s_m = s112);
+      cancel_evtTransportTimeout();
+      entry_m112(ws_timeout);
+    case s130:
+      disposeHTTP();
+      notifyStatus(DISCONNECTED_WILL_RETRY);
+      cause = "http.timeout";
+      goto(state.s_m = s112);
+      cancel_evtTransportTimeout();
+      entry_m112(http_timeout);
+    case s140:
+      disposeHTTP();
+      notifyStatus(DISCONNECTED_WILL_RETRY);
+      cause = "ttl.timeout";
+      var pauseMs = waitingInterval(delayCounter.currentRetryDelay, connectTs);
+      goto(state.s_m = s111);
+      cancel_evtTransportTimeout();
+      entry_m111(http_error, pauseMs);
+    case s150:
+      switch state.s_tr {
+      case s220:
+        if (options.sessionRecoveryTimeout == 0) {
+          disposeHTTP();
+          notifyStatus(DISCONNECTED_WILL_RETRY);
+          cause = "http.timeout";
+          state.goto_m_from_session(s112);
+          cancel_evtTransportTimeout();
+          evtEndSession();
+          entry_m112(http_timeout);
+        } else {
+          disposeHTTP();
+          notifyStatus(DISCONNECTED_TRYING_RECOVERY);
+          cause = "http.timeout";
+          var pauseMs = randomGenerator(options.firstRetryMaxDelay);
+          state.goto_rec();
+          cancel_evtTransportTimeout();
+          entry_rec(pauseMs, http_timeout);
+        }
+      case s230:
+        if (options.sessionRecoveryTimeout == 0) {
+          disposeHTTP();
+          notifyStatus(DISCONNECTED_WILL_RETRY);
+          cause = "ttl.timeout";
+          state.goto_m_from_session(s112);
+          cancel_evtTransportTimeout();
+          evtEndSession();
+          entry_m112(http_timeout);
+        } else {
+          disposeHTTP();
+          notifyStatus(DISCONNECTED_TRYING_RECOVERY);
+          cause = "ttl.timeout";
+          var pauseMs = randomGenerator(options.firstRetryMaxDelay);
+          state.goto_rec();
+          cancel_evtTransportTimeout();
+          entry_rec(pauseMs, http_error);
+        }
+      case s240:
+        switch state.s_ws.m {
+        case s500:
+          disableWS();
+          disposeWS();
+          cause = "ws.unavailable";
+          state.clear_ws();
+          goto(state.s_tr = s200);
+          cancel_evtTransportTimeout();
+          evtSwitchTransport();
+        case s501:
+          if (options.sessionRecoveryTimeout == 0) {
+            disableWS();
+            disposeWS();
+            notifyStatus(DISCONNECTED_WILL_RETRY);
+            cause = "ws.unavailable";
+            state.goto_m_from_ws(s112);
+            exit_ws_to_m();
+            entry_m112(ws_unavailable);
+          } else {
+            disableWS();
+            disposeWS();
+            notifyStatus(DISCONNECTED_TRYING_RECOVERY);
+            cause = "ws.unavailable";
+            var pauseMs = randomGenerator(options.firstRetryMaxDelay);
+            state.goto_rec_from_ws();
+            exit_ws();
+            entry_rec(pauseMs, ws_unavailable);
+          }
+        case s502:
+          if (options.sessionRecoveryTimeout == 0) {
+            disposeWS();
+            notifyStatus(DISCONNECTED_WILL_RETRY);
+            cause = "ws.timeout";
+            state.goto_m_from_ws(s112);
+            exit_ws_to_m();
+            entry_m112(ws_timeout);
+          } else {
+            disposeWS();
+            notifyStatus(DISCONNECTED_TRYING_RECOVERY);
+            cause = "ws.timeout";
+            var pauseMs = randomGenerator(options.firstRetryMaxDelay);
+            state.goto_rec_from_ws();
+            exit_ws();
+            entry_rec(pauseMs, ws_timeout);
+          }
+        default:
+        }
+      case s250:
+        switch state.s_wp.m {
+        case s600, s601:
+          disableWS();
+          disposeWS();
+          cause = "ws.unavailable";
+          state.clear_wp();
+          goto(state.s_tr = s200);
+          exit_wp();
+          evtSwitchTransport();
+        default:
+        }
+      case s260:
+        if (state.s_rec == s1001) {
+          disposeHTTP();
+          goto(state.s_rec = s1002);
+          cancel_evtTransportTimeout();
+          evtCheckRecoveryTimeout(RRC_transport_timeout);
+        }
+      case s270:
+        switch state.s_h {
+        case s710:
+          switch state.s_hs.m {
+          case s800:
+            disableHTTP_Streaming();
+            disposeHTTP();
+            cause = "http.streaming.unavailable";
+            goto(state.s_hs.m = s801);
+            cancel_evtTransportTimeout();
+            evtForcePolling();
+            schedule_evtTransportTimeout(options.retryDelay);
+          case s801:
+            if (options.sessionRecoveryTimeout == 0) {
+              disposeHTTP();
+              notifyStatus(DISCONNECTED_WILL_RETRY);
+              cause = "http.timeout";
+              state.goto_m_from_hs(s112);
+              exit_hs_to_m();
+              entry_m112(http_timeout);
+            } else {
+              disposeHTTP();
+              notifyStatus(DISCONNECTED_TRYING_RECOVERY);
+              cause = "http.timeout";
+              var pauseMs = randomGenerator(options.firstRetryMaxDelay);
+              state.goto_rec_from_hs();
+              exit_hs_to_rec();
+              entry_rec(pauseMs, http_timeout);
+            }
+          default:
+          }
+        default:
+        }
+      default:
+      }
+    default:
+    }
+  }
+
+  function evtTransportError() {
+    // TODO synchronize (called by openWS)
+    traceEvent("transport.error");
+    switch state.s_m {
+    case s120, s121:
+      suspendWS_Streaming();
+      disposeWS();
+      cause = "ws.unavailable";
+      goto(state.s_m = s115);
+      cancel_evtTransportTimeout();
+      evtRetry(ws_unavailable);
+      evtRetryTimeout();
+    case s122:
+      disposeWS();
+      notifyStatus(DISCONNECTED_WILL_RETRY);
+      cause = "ws.error";
+      var pauseMs = waitingInterval(delayCounter.currentRetryDelay, connectTs);
+      goto(state.s_m = s112);
+      cancel_evtTransportTimeout();
+      evtRetry(ws_error, pauseMs);
+      schedule_evtRetryTimeout(pauseMs);
+    case s130:
+      disposeHTTP();
+      notifyStatus(DISCONNECTED_WILL_RETRY);
+      cause = "http.error";
+      var pauseMs = waitingInterval(delayCounter.currentRetryDelay, connectTs);
+      goto(state.s_m = s112);
+      cancel_evtTransportTimeout();
+      evtRetry(http_error, pauseMs);
+      schedule_evtRetryTimeout(pauseMs);
+    case s140:
+      disposeHTTP();
+      notifyStatus(DISCONNECTED_WILL_RETRY);
+      cause = "ttl.error";
+      var pauseMs = waitingInterval(delayCounter.currentRetryDelay, connectTs);
+      goto(state.s_m = s111);
+      cancel_evtTransportTimeout();
+      evtRetry(http_error, pauseMs);
+      schedule_evtRetryTimeout(pauseMs);
+    case s150:
+      switch state.s_tr {
+      case s210:
+        if (options.sessionRecoveryTimeout == 0) {
+          disposeWS();
+          notifyStatus(DISCONNECTED_WILL_RETRY);
+          cause = "ws.error";
+          state.clear_w();
+          state.goto_m_from_session(s113);
+          exit_w();
+          evtEndSession();
+          entry_m113(ws_error);
+        } else {
+          disposeWS();
+          notifyStatus(DISCONNECTED_TRYING_RECOVERY);
+          cause = "ws.error";
+          var pauseMs = randomGenerator(options.firstRetryMaxDelay);
+          state.clear_w();
+          goto({
+            state.s_tr = s260;
+            state.s_rec = s1000;
+          });
+          exit_w();
+          entry_rec(pauseMs, ws_error);
+        }
+      case s220:
+        if (options.sessionRecoveryTimeout == 0) {
+          disposeHTTP();
+          notifyStatus(DISCONNECTED_WILL_RETRY);
+          cause = "http.error";
+          var pauseMs = waitingInterval(delayCounter.currentRetryDelay, connectTs);
+          state.goto_m_from_session(s112);
+          cancel_evtTransportTimeout();
+          evtEndSession();
+          evtRetry(http_error, pauseMs);
+          schedule_evtRetryTimeout(pauseMs);
+        } else {
+          disposeHTTP();
+          notifyStatus(DISCONNECTED_TRYING_RECOVERY);
+          cause = "http.error";
+          var pauseMs = randomGenerator(options.firstRetryMaxDelay);
+          state.goto_rec();
+          cancel_evtTransportTimeout();
+          entry_rec(pauseMs, http_error);
+        }
+      case s230:
+        if (options.sessionRecoveryTimeout == 0) {
+          disposeHTTP();
+          notifyStatus(DISCONNECTED_WILL_RETRY);
+          cause = "ttl.error";
+          var pauseMs = waitingInterval(delayCounter.currentRetryDelay, connectTs);
+          state.goto_m_from_session(s112);
+          cancel_evtTransportTimeout();
+          evtEndSession();
+          evtRetry(http_error, pauseMs);
+          schedule_evtRetryTimeout(pauseMs);
+        } else {
+          disposeHTTP();
+          notifyStatus(DISCONNECTED_TRYING_RECOVERY);
+          cause = "ttl.error";
+          var pauseMs = randomGenerator(options.firstRetryMaxDelay);
+          state.goto_rec();
+          cancel_evtTransportTimeout();
+          entry_rec(pauseMs, http_error);
+        }
+      case s240:
+        switch state.s_ws.m {
+        case s500:
+          disableWS();
+          disposeWS();
+          cause = "ws.unavailable";
+          state.clear_ws();
+          goto(state.s_tr = s200);
+          cancel_evtTransportTimeout();
+          evtSwitchTransport();
+        case s501:
+          if (options.sessionRecoveryTimeout == 0) {
+            disableWS();
+            disposeWS();
+            notifyStatus(DISCONNECTED_WILL_RETRY);
+            cause = "ws.unavailable";
+            state.goto_m_from_ws(s112);
+            exit_ws_to_m();
+            entry_m112(ws_unavailable);
+          } else {
+            disableWS();
+            disposeWS();
+            notifyStatus(DISCONNECTED_TRYING_RECOVERY);
+            cause = "ws.unavailable";
+            var pauseMs = randomGenerator(options.firstRetryMaxDelay);
+            state.goto_rec_from_ws();
+            exit_ws();
+            entry_rec(pauseMs, ws_unavailable);
+          }
+        case s502:
+          if (options.sessionRecoveryTimeout == 0) {
+            disposeWS();
+            notifyStatus(DISCONNECTED_WILL_RETRY);
+            cause = "ws.error";
+            state.goto_m_from_ws(s112);
+            exit_ws_to_m();
+            entry_m112(ws_error);
+          } else {
+            disposeWS();
+            notifyStatus(DISCONNECTED_TRYING_RECOVERY);
+            cause = "ws.error";
+            var pauseMs = randomGenerator(options.firstRetryMaxDelay);
+            state.goto_rec_from_ws();
+            cancel_evtTransportTimeout();
+            entry_rec(pauseMs, ws_error);
+          }
+        case s503:
+          if (options.sessionRecoveryTimeout == 0) {
+            disposeWS();
+            notifyStatus(DISCONNECTED_WILL_RETRY);
+            cause = "ws.error";
+            state.goto_m_from_ws(s113);
+            exit_ws_to_m();
+            entry_m113(ws_error);
+          } else {
+            disposeWS();
+            notifyStatus(DISCONNECTED_TRYING_RECOVERY);
+            cause = "ws.error";
+            var pauseMs = randomGenerator(options.firstRetryMaxDelay);
+            state.goto_rec_from_ws();
+            exit_ws();
+            entry_rec(pauseMs, ws_error);
+          }
+        }
+      case s250:
+        switch state.s_wp.m {
+        case s600, s601:
+          disableWS();
+          disposeWS();
+          cause = "ws.unavailable";
+          state.clear_wp();
+          goto(state.s_tr = s200);
+          cancel_evtTransportTimeout();
+          evtSwitchTransport();
+        case s602:
+          if (options.sessionRecoveryTimeout == 0) {
+            disposeWS();
+            notifyStatus(DISCONNECTED_WILL_RETRY);
+            cause = "ws.error";
+            state.goto_m_from_wp(s113);
+            exit_wp_to_m();
+            entry_m113(ws_error);
+          } else {
+            disposeWS();
+            notifyStatus(DISCONNECTED_TRYING_RECOVERY);
+            cause = "ws.error";
+            var pauseMs = randomGenerator(options.firstRetryMaxDelay);
+            state.goto_rec_from_wp();
+            exit_wp();
+            entry_rec(pauseMs, ws_error);
+          }
+        }
+      case s260:
+        if (state.s_rec == s1001) {
+          disposeHTTP();
+          goto(state.s_rec = s1002);
+          cancel_evtTransportTimeout();
+          evtCheckRecoveryTimeout(RRC_transport_error);
+        }
+      case s270:
+        switch state.s_h {
+        case s710:
+          switch state.s_hs.m {
+          case s800, s801:
+            if (options.sessionRecoveryTimeout == 0) {
+              disposeHTTP();
+              notifyStatus(DISCONNECTED_WILL_RETRY);
+              cause = "http.error";
+              state.goto_m_from_hs(s112);
+              exit_hs_to_m();
+              entry_m112(http_error);
+            } else {
+              disposeHTTP();
+              notifyStatus(DISCONNECTED_TRYING_RECOVERY);
+              cause = "http.error";
+              var pauseMs = randomGenerator(options.firstRetryMaxDelay);
+              state.goto_rec_from_hs();
+              exit_hs_to_rec();
+              entry_rec(pauseMs, http_error);
+            }
+          case s802:
+            if (options.sessionRecoveryTimeout == 0) {
+              disposeHTTP();
+              notifyStatus(DISCONNECTED_WILL_RETRY);
+              cause = "http.error";
+              state.goto_m_from_hs(s113);
+              exit_hs_to_m();
+              entry_m113(http_error);
+            } else {
+              disposeHTTP();
+              notifyStatus(DISCONNECTED_TRYING_RECOVERY);
+              cause = "http.error";
+              var pauseMs = randomGenerator(options.firstRetryMaxDelay);
+              state.goto_rec_from_hs();
+              exit_hs_to_rec();
+              entry_rec(pauseMs, http_error);
+            }
+          }
+        case s720:
+          switch state.s_hp.m {
+          case s900, s901, s902, s903, s904:
+            if (options.sessionRecoveryTimeout == 0) {
+              disposeHTTP();
+              notifyStatus(DISCONNECTED_WILL_RETRY);
+              cause = "http.error";
+              state.goto_m_from_hp(s112);
+              exit_hp_to_m();
+              entry_m112(http_error);
+            } else {
+              disposeHTTP();
+              notifyStatus(DISCONNECTED_TRYING_RECOVERY);
+              cause = "http.error";
+              var pauseMs = randomGenerator(options.firstRetryMaxDelay);
+              state.goto_rec_from_hp();
+              exit_hp_to_rec();
+              entry_rec(pauseMs, http_error);
+            }
+          }
+        }
+      default:
+      }
+    default:
+    }
+  }
+
+  function evtIdleTimeout() {
+    // TODO synchronize (called by timer)
+  }
+
   function evtRestartKeepalive() {
     traceEvent("restart.keepalive");
     if (state.s_w?.k != null) {
@@ -746,6 +1196,26 @@ class ClientMachine {
       goto(state.s_du = s21);
     } else if (state.s_du == s23) {
       goto(state.s_du = s21);
+    }
+  }
+
+  function evtCheckTransport() {
+    traceEvent("check.transport");
+    if (state.s_swt == s1300) {
+      if (state.s_tr == s220 || state.s_tr == s230 || state.s_tr == s260) {
+        goto(state.s_swt = s1301);
+      } else {
+        var best = getBestForBinding();
+        if ((best == BFB_ws_streaming && (state.s_tr == s210 || state.s_tr == s240)) ||
+          (best == BFB_http_streaming && state.s_tr == s270 && state.s_h == s710) ||
+          (best == BFB_ws_polling && state.s_tr == s250) ||
+          (best == BFB_http_polling && state.s_tr == s270 && state.s_h == s720)) {
+          goto(state.s_swt = s1301);
+        } else {
+          goto(state.s_swt = s1302);
+          evtSendControl(switchRequest);
+        }
+      }
     }
   }
 
@@ -1096,23 +1566,167 @@ class ClientMachine {
   }
 
   function evtSwitchTransport_forwardToTransportRegion() {
-    // TODO
+    traceEvent("switch.transport");
+    var terminationCause = TC_otherError('Selected transport ${options.forcedTransport} is not available');
+    if (state.s_tr == s200) {
+      switch getBestForBinding() {
+      case BFB_ws_streaming:
+        openWS_Bind();
+        goto({
+          state.s_tr = s240;
+          state.s_ws = new StateVar_ws(s500);
+        });
+        schedule_evtTransportTimeout(options.retryDelay);
+      case BFB_http_streaming:
+        sendBindHTTP_Streaming();
+        goto({
+          state.s_tr = s270;
+          state.s_h = s710;
+          state.s_hs = new StateVar_hs(s800);
+          state.s_ctrl = s1100;
+        });
+        evtCheckCtrlRequests();
+        schedule_evtTransportTimeout(options.retryDelay);
+      case BFB_ws_polling:
+        openWS_Bind();
+        goto({
+          state.s_tr = s250;
+          state.s_wp = new StateVar_wp(s600);
+        });
+        schedule_evtTransportTimeout(options.retryDelay);
+      case BFB_http_polling:
+        sendBindHTTP_Polling();
+        goto({
+          state.s_tr = s270;
+          state.s_h = s720;
+          state.s_hp = new StateVar_hp(s900);
+          state.s_rhb = s320;
+          state.s_ctrl = s1100;
+        });
+        evtCheckCtrlRequests();
+        schedule_evtIdleTimeout(idleTimeout + options.retryDelay);
+        evtSelectRhb();
+      case BFB_none:
+        notifyStatus(DISCONNECTED);
+        state.goto_m_from_session(s100);
+        evtEndSession();
+        evtTerminate(terminationCause);
+      }
+    } else if (state.s_hs?.p == s811) {
+      switch getBestForBinding() {
+      case BFB_ws_streaming:
+        openWS_Bind();
+        state.clear_hs();
+        goto({
+          state.s_h = null;
+          state.s_ctrl = null;
+          state.s_tr = s240;
+          state.s_ws = new StateVar_ws(s500);
+        });
+        exit_hs();
+        exit_ctrl();
+        schedule_evtTransportTimeout(options.retryDelay);
+      case BFB_http_streaming:
+        sendBindHTTP_Streaming();
+        goto(state.s_hs = new StateVar_hs(s800));
+        exit_hs();
+        schedule_evtTransportTimeout(options.retryDelay);
+      case BFB_ws_polling:
+        openWS_Bind();
+        state.clear_hs();
+        goto({
+          state.s_h = null;
+          state.s_ctrl = null;
+          state.s_tr = s250;
+          state.s_wp = new StateVar_wp(s600);
+        });
+        exit_hs();
+        exit_ctrl();
+        schedule_evtTransportTimeout(options.retryDelay);
+      case BFB_http_polling:
+        sendBindHTTP_Polling();
+        state.clear_hs();
+        goto({
+          state.s_h = s720;
+          state.s_hp = new StateVar_hp(s900);
+          state.s_rhb = s320;
+        });
+        exit_hs();
+        schedule_evtIdleTimeout(idleTimeout + options.retryDelay);
+        evtSelectRhb();
+      case BFB_none:
+        notifyStatus(DISCONNECTED);
+        state.goto_m_from_hs(s100);
+        exit_hs_to_m();
+        evtTerminate(terminationCause);
+      }
+    } else if (state.s_hp?.m == s904) {
+      switch getBestForBinding() {
+      case BFB_ws_streaming:
+        openWS_Bind();
+        state.clear_hp();
+        goto({
+          state.s_h = null;
+          state.s_ctrl = null;
+          state.s_tr = s240;
+          state.s_ws = new StateVar_ws(s500);
+        });
+        exit_hp();
+        exit_ctrl();
+        schedule_evtTransportTimeout(options.retryDelay);
+      case BFB_http_streaming:
+        sendBindHTTP_Streaming();
+        state.clear_hp();
+        goto({
+          state.s_h = s710;
+          state.s_hs = new StateVar_hs(s800);
+        });
+        exit_hp();
+        schedule_evtTransportTimeout(options.retryDelay);
+      case BFB_ws_polling:
+        openWS_Bind();
+        state.clear_hp();
+        goto({
+          state.s_h = null;
+          state.s_ctrl = null;
+          state.s_tr = s250;
+          state.s_wp = new StateVar_wp(s600);
+        });
+        exit_hp();
+        exit_ctrl();
+        schedule_evtTransportTimeout(options.retryDelay);
+      case BFB_http_polling:
+        sendBindHTTP_Polling();
+        goto({
+          state.s_hp = new StateVar_hp(s900);
+          state.s_rhb = s320;
+        });
+        exit_hp();
+        schedule_evtIdleTimeout(idleTimeout + options.retryDelay);
+        evtSelectRhb();
+      case BFB_none:
+        notifyStatus(DISCONNECTED);
+        state.goto_m_from_hp(s100);
+        exit_hp_to_m();
+        evtTerminate(terminationCause);
+      }
+    }
     return false;
   }
 
-  function evtCheckTransport() {
+  function evtCheckCtrlRequests() {
+    // TODO
+  }
+
+  function evtSelectRhb() {
     // TODO
   }
   
-  function evtSendControl(req: ConstrainRequest) {
+  function evtSendControl(req: Encodable) {
     // TODO
   }
   function evtTerminate(cause: TerminationCause) {
     // TODO
-  }
-
-  function evtTransportError() {
-    // TODO synchronize (called by openWS)
   }
   function evtCtrlError() {
     // TODO synchronize (called by sendBatchHTTP)
@@ -1120,16 +1734,10 @@ class ClientMachine {
   function evtCtrlDone() {
    // TODO synchronize (called by sendBatchHTTP) 
   }
-  function evtTransportTimeout() {
-    // TODO synchronize (called by timer)
-  }
   function evtRetryTimeout() {
     // TODO synchronize (called by timer)
   }
   function evtRecoveryTimeout() {
-    // TODO synchronize (called by timer)
-  }
-  function evtIdleTimeout() {
     // TODO synchronize (called by timer)
   }
   function evtPollingTimeout() {
@@ -1160,6 +1768,12 @@ class ClientMachine {
     // TODO
   }
   function evtStartRecovery() {
+    // TODO
+  }
+  function evtCheckRecoveryTimeout(retryCause: RecoveryRetryCause) {
+    // TODO
+  }
+  function evtForcePolling() {
     // TODO
   }
 
@@ -1569,24 +2183,24 @@ class ClientMachine {
   function getBestForCreating() {
     var ft = options.forcedTransport;
     if (!suspendedTransports.union(disabledTransports.toArray()).contains(WS_STREAMING) && (ft == null || ft == WS || ft == WS_STREAMING)) {
-      return bfc_ws;
+      return BFC_ws;
     } else {
-      return bfc_http;
+      return BFC_http;
     }
   }
 
   function getBestForBinding() {
     var ft = options.forcedTransport;
     if (!disabledTransports.contains(WS_STREAMING) && (ft == null || ft == WS || ft == WS_STREAMING)) {
-      return bfb_ws_streaming;
+      return BFB_ws_streaming;
     } else if (!disabledTransports.contains(HTTP_STREAMING) && (ft == null || ft == HTTP || ft == HTTP_STREAMING)) {
-        return bfb_http_streaming;
+        return BFB_http_streaming;
     } else if (!disabledTransports.contains(WS_POLLING) && (ft == null || ft == WS || ft == WS_POLLING)) {
-        return bfb_ws_polling;
+        return BFB_ws_polling;
     } else if (ft == null || ft == HTTP || ft == HTTP_POLLING) {
-        return bfb_http_polling;
+        return BFB_http_polling;
     } else {
-        return bfb_none;
+        return BFB_none;
     }
   }
 
@@ -2012,7 +2626,7 @@ class ClientMachine {
   function waitingInterval(expectedMs: Millis, startTime: TimerStamp): Millis {
     var diffMs = TimerStamp.now() - startTime;
     var expected = new TimerMillis(expectedMs.toInt());
-    return diffMs < expected ? new Millis((expected - diffMs).toFloat()) : new Millis(0);
+    return diffMs < expected ? new Millis((expected - diffMs).toLong()) : new Millis(0);
   }
 
   function exit_tr() {
@@ -2421,11 +3035,11 @@ class ClientMachine {
 }
 
 private enum BestForCreatingEnum {
-  bfc_ws; bfc_http;
+  BFC_ws; BFC_http;
 }
 
 private enum BestForBindingEnum {
-  bfb_none; bfb_ws_streaming; bfb_ws_polling; bfb_http_streaming; bfb_http_polling;
+  BFB_none; BFB_ws_streaming; BFB_ws_polling; BFB_http_streaming; BFB_http_polling;
 }
 
 private enum SyncCheckResult {
@@ -2474,4 +3088,8 @@ private enum TerminationCause {
   TC_standardError(code: Int, msg: String);
   TC_otherError(error: String);
   TC_api;
+}
+
+private enum RecoveryRetryCause {
+  RRC_transport_timeout; RRC_transport_error;
 }
