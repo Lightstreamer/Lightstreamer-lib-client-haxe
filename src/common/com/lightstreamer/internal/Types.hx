@@ -50,8 +50,13 @@ abstract Millis(Long) to Long {
     return this > rhs;
   }
 
+  @:op(A + B)
+  public function plus(rhs: Millis): Millis {
+    return new Millis(this + rhs);
+  }
+
   public inline function toInt(): Int {
-    return fromLong(this);
+    return cast this;
   }
 }
 

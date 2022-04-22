@@ -1,5 +1,6 @@
 package com.lightstreamer.internal;
 
+import com.lightstreamer.internal.NativeTypes.Long;
 import hx.concurrent.executor.Executor;
 import com.lightstreamer.internal.PlatformApi;
 
@@ -9,37 +10,25 @@ abstract TimerMillis(Float) {
   }
 
   @:op(-A)
-  public inline function uminus() {
-    return new TimerMillis(-this);
-  }
+  public static function uminus(a: TimerMillis): TimerMillis;
 
   @:op(A - B)
-  public inline function minus(rhs: TimerMillis) {
-    return new TimerMillis(this - rhs.toFloat());
-  }
+  public static function minus(a: TimerMillis, b: TimerMillis): TimerMillis;
 
   @:op(A + B)
-  public inline function plus(rhs: TimerMillis) {
-    return new TimerMillis(this + rhs.toFloat());
-  }
+  public static function plus(a: TimerMillis, b: TimerMillis): TimerMillis;
 
   @:op(A * B)
-  public inline function mult(rhs: Float) {
-    return new TimerMillis(this * rhs);
-  }
+  public static function mult(a: TimerMillis, b: Float): TimerMillis;
 
   @:op(A > B)
-  public inline function gt(rhs: TimerMillis) {
-    return this > rhs.toFloat();
-  }
+  public static function gt(a: TimerMillis, b: TimerMillis): Bool;
 
   @:op(A < B)
-  public inline function lt(rhs: TimerMillis) {
-    return this < rhs.toFloat();
-  }
+  public static function lt(a: TimerMillis, b: TimerMillis): Bool;
 
-  public inline function toFloat(): Float {
-    return this;
+  public inline function toLong(): Long {
+    return cast this;
   }
 }
 
