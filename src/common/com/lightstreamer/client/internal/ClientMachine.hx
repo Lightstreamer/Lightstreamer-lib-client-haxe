@@ -3,7 +3,6 @@ package com.lightstreamer.client.internal;
 import com.lightstreamer.internal.*;
 import com.lightstreamer.internal.MacroTools;
 import com.lightstreamer.internal.Types;
-import com.lightstreamer.internal.NativeTypes;
 import com.lightstreamer.internal.PlatformApi;
 import com.lightstreamer.internal.Timer;
 import com.lightstreamer.internal.Constants;
@@ -13,9 +12,9 @@ import com.lightstreamer.client.internal.ClientRequests;
 import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
 using StringTools;
+using com.lightstreamer.internal.NullTools;
 
 // TODO synchronize
-@:nullSafety(Off)
 @:access(com.lightstreamer.client.ConnectionDetails)
 @:access(com.lightstreamer.client.ConnectionOptions)
 @:access(com.lightstreamer.client.LightstreamerClient)
@@ -245,7 +244,9 @@ class ClientMachine {
       var hostAddress = new Url(getServerAddress()).hostname;
       nr_reachabilityManager = reachabilityFactory(hostAddress);
       goto(state.s_nr = s1410);
-      oldManager.stopListening();
+      if (oldManager != null) {
+        oldManager.stopListening();
+      }
       nr_reachabilityManager.startListening(status -> 
         switch status {
           case RSNotReachable:
@@ -305,13 +306,13 @@ class ClientMachine {
         evtEndSession();
         evtTerminate(terminationCause);
       case s240:
-        if (state.s_ws.m == s500) {
+        if (state.s_ws?.m == s500) {
           disposeWS();
           notifyStatus(DISCONNECTED);
           state.goto_m_from_ws(s100);
           exit_ws_to_m();
           evtTerminate(terminationCause);
-        } else if (state.s_ws.m == s501 || state.s_ws.m == s502 || state.s_ws.m == s503) {
+        } else if (state.s_ws?.m == s501 || state.s_ws?.m == s502 || state.s_ws?.m == s503) {
           sendDestroyWS();
           closeWS();
           notifyStatus(DISCONNECTED);
@@ -320,13 +321,13 @@ class ClientMachine {
           evtTerminate(terminationCause);
         } 
       case s250:
-        if (state.s_wp.m == s600 || state.s_wp.m == s601) {
+        if (state.s_wp?.m == s600 || state.s_wp?.m == s601) {
           disposeWS();
           notifyStatus(DISCONNECTED);
           state.goto_m_from_wp(s100);
           exit_ws_to_m();
           evtTerminate(terminationCause);
-        } else if (state.s_wp.m == s602) {
+        } else if (state.s_wp?.m == s602) {
           sendDestroyWS();
           closeWS();
           notifyStatus(DISCONNECTED);
@@ -391,11 +392,11 @@ class ClientMachine {
     if (state.s_m == s120) {
       sendCreateWS();
       goto(state.s_m = s121);
-    } else if (state.s_ws.m == s500) {
+    } else if (state.s_ws?.m == s500) {
       sendBindWS_Streaming();
       goto(state.s_ws.m = s501);
-    } else if (state.s_wp.m == s600) {
-      ws.send("wsok");
+    } else if (state.s_wp?.m == s600) {
+      ws.sure().send("wsok");
       goto(state.s_wp.m = s601);
     }
   }
@@ -600,20 +601,20 @@ class ClientMachine {
         evtREQOK();
       } else {
         var args = line.split(",");
-        var reqId = Std.parseInt(args[1]);
+        var reqId = parseInt(args[1]);
         evtREQOK_reqId(reqId);
       }
     } else if (line.startsWith("REQERR")) {
       // REQERR,<request id>,<code>,<message>
       var args = line.split(",");
-      var reqId = Std.parseInt(args[1]);
-      var code = Std.parseInt(args[2]);
+      var reqId = parseInt(args[1]);
+      var code = parseInt(args[2]);
       var msg = args[3].urlDecode();
       evtREQERR(reqId, code, msg);
     } else if (line.startsWith("ERROR")) {
       // ERROR,<code>,<message>
       var args = line.split(",");
-      var code = Std.parseInt(args[1]);
+      var code = parseInt(args[1]);
       var msg = args[2].urlDecode();
       evtERROR(code, msg);
     }
@@ -691,7 +692,7 @@ class ClientMachine {
           entry_rec(pauseMs, http_error);
         }
       case s240:
-        switch state.s_ws.m {
+        switch state.s_ws?.m {
         case s500:
           disableWS();
           disposeWS();
@@ -739,7 +740,7 @@ class ClientMachine {
         default:
         }
       case s250:
-        switch state.s_wp.m {
+        switch state.s_wp?.m {
         case s600, s601:
           disableWS();
           disposeWS();
@@ -760,7 +761,7 @@ class ClientMachine {
       case s270:
         switch state.s_h {
         case s710:
-          switch state.s_hs.m {
+          switch state.s_hs?.m {
           case s800:
             disableHTTP_Streaming();
             disposeHTTP();
@@ -901,7 +902,7 @@ class ClientMachine {
           entry_rec(pauseMs, http_error);
         }
       case s240:
-        switch state.s_ws.m {
+        switch state.s_ws.sure().m {
         case s500:
           disableWS();
           disposeWS();
@@ -965,7 +966,7 @@ class ClientMachine {
           }
         }
       case s250:
-        switch state.s_wp.m {
+        switch state.s_wp.sure().m {
         case s600, s601:
           disableWS();
           disposeWS();
@@ -1000,9 +1001,9 @@ class ClientMachine {
           evtCheckRecoveryTimeout(RRC_transport_error);
         }
       case s270:
-        switch state.s_h {
+        switch state.s_h.sure() {
         case s710:
-          switch state.s_hs.m {
+          switch state.s_hs.sure().m {
           case s800, s801:
             if (options.sessionRecoveryTimeout == 0) {
               disposeHTTP();
@@ -1039,7 +1040,7 @@ class ClientMachine {
             }
           }
         case s720:
-          switch state.s_hp.m {
+          switch state.s_hp.sure().m {
           case s900, s901, s902, s903, s904:
             if (options.sessionRecoveryTimeout == 0) {
               disposeHTTP();
@@ -1074,15 +1075,15 @@ class ClientMachine {
     if (state.s_w?.k != null) {
       goto(state.s_w.k = s310);
       exit_keepalive_unit();
-      schedule_evtKeepaliveTimeout(keepaliveInterval);
+      schedule_evtKeepaliveTimeout(keepaliveInterval.sure());
     } else if (state.s_ws?.k != null) {
       goto(state.s_ws.k = s520);
       exit_keepalive_unit();
-      schedule_evtKeepaliveTimeout(keepaliveInterval);
+      schedule_evtKeepaliveTimeout(keepaliveInterval.sure());
     } else if (state.s_hs?.k != null) {
       goto(state.s_hs.k = s820);
       exit_keepalive_unit();
-      schedule_evtKeepaliveTimeout(keepaliveInterval);
+      schedule_evtKeepaliveTimeout(keepaliveInterval.sure());
     }
   }
 
@@ -1213,7 +1214,7 @@ class ClientMachine {
           goto(state.s_swt = s1301);
         } else {
           goto(state.s_swt = s1302);
-          evtSendControl(switchRequest);
+          evtSendControl(switchRequest.sure());
         }
       }
     }
@@ -1226,7 +1227,7 @@ class ClientMachine {
         && options.realMaxBandwidth != BWUnmanaged) {
         bw_requestedMaxBandwidth = options.requestedMaxBandwidth;
         goto(state.s_bw = s1202);
-        evtSendControl(constrainRequest);
+        evtSendControl(constrainRequest.sure());
       } else {
         goto(state.s_bw = s1201);
       }
@@ -1604,7 +1605,7 @@ class ClientMachine {
           state.s_ctrl = s1100;
         });
         evtCheckCtrlRequests();
-        schedule_evtIdleTimeout(idleTimeout + options.retryDelay);
+        schedule_evtIdleTimeout(idleTimeout.sure() + options.retryDelay);
         evtSelectRhb();
       case BFB_none:
         notifyStatus(DISCONNECTED);
@@ -1652,7 +1653,7 @@ class ClientMachine {
           state.s_rhb = s320;
         });
         exit_hs();
-        schedule_evtIdleTimeout(idleTimeout + options.retryDelay);
+        schedule_evtIdleTimeout(idleTimeout.sure() + options.retryDelay);
         evtSelectRhb();
       case BFB_none:
         notifyStatus(DISCONNECTED);
@@ -1702,7 +1703,7 @@ class ClientMachine {
           state.s_rhb = s320;
         });
         exit_hp();
-        schedule_evtIdleTimeout(idleTimeout + options.retryDelay);
+        schedule_evtIdleTimeout(idleTimeout.sure() + options.retryDelay);
         evtSelectRhb();
       case BFB_none:
         notifyStatus(DISCONNECTED);
@@ -1794,7 +1795,7 @@ class ClientMachine {
     return rec_serverProg == rec_clientProg;
   }
   
-  function openWS(url: String, headers: Null<NativeStringMap>): IWsClient {
+  function openWS(url: String, headers: Null<Map<String, String>>): IWsClient {
     return wsFactory(url, headers, 
       function onOpen(client) {
         lock.execute(() -> {
@@ -1828,7 +1829,7 @@ class ClientMachine {
 
   function openWS_Bind() {
     connectTs = TimerStamp.now();
-    var url = Url.build(serverInstanceAddress, "lightstreamer");
+    var url = Url.build(serverInstanceAddress.sure(), "lightstreamer");
     var headers = getHeadersForRequestOtherThanCreate();
     ws = openWS(url, headers);
   }
@@ -1870,13 +1871,13 @@ class ClientMachine {
       req.LS_password(details.password);
     }
 
-    ws.send("wsok");
-    ws.send("create_session\r\n" + req.getEncodedString());
+    ws.sure().send("wsok");
+    ws.sure().send("create_session\r\n" + req.getEncodedString());
   }
 
   function sendBindWS_Streaming() {
     var req = new RequestBuilder();
-    req.LS_session(sessionId);
+    req.LS_session(sessionId.sure());
     if (options.keepaliveInterval > 0) {
       req.LS_keepalive_millis(options.keepaliveInterval);
     }
@@ -1893,13 +1894,13 @@ class ClientMachine {
     }
     protocolLogger.logInfo('Sending session bind: $req');
 
-    ws.send("wsok");
-    ws.send("bind_session\r\n" + req.getEncodedString());
+    ws.sure().send("wsok");
+    ws.sure().send("bind_session\r\n" + req.getEncodedString());
   }
 
   function sendBindWS_FirstPolling() {
     var req = new RequestBuilder();
-    req.LS_session(sessionId);
+    req.LS_session(sessionId.sure());
     req.LS_polling(true);
     req.LS_polling_millis(options.pollingInterval);
     idleTimeout = options.idleTimeout;
@@ -1910,7 +1911,7 @@ class ClientMachine {
     }
     protocolLogger.logInfo('Sending session bind: $req');
 
-    ws.send("bind_session\r\n" + req.getEncodedString());
+    ws.sure().send("bind_session\r\n" + req.getEncodedString());
   }
 
   function sendBindWS_Polling() {
@@ -1925,7 +1926,7 @@ class ClientMachine {
     }
     protocolLogger.logInfo('Sending session bind: $req');
 
-    ws.send("bind_session\r\n" + req.getEncodedString());
+    ws.sure().send("bind_session\r\n" + req.getEncodedString());
   }
 
   function sendDestroyWS() {
@@ -1936,10 +1937,10 @@ class ClientMachine {
     req.LS_cause("api");
     protocolLogger.logInfo('Sending session destroy: $req');
 
-    ws.send("control\r\n" + req.getEncodedString());
+    ws.sure().send("control\r\n" + req.getEncodedString());
   }
 
-  function sendHttpRequest(url: String, req: RequestBuilder, headers: Null<NativeStringMap>): IHttpClient {
+  function sendHttpRequest(url: String, req: RequestBuilder, headers: Null<Map<String, String>>): IHttpClient {
     return httpFactory(url, req.getEncodedString(), headers,
       function onText(client, line) {
         lock.execute(() -> {   
@@ -1998,7 +1999,7 @@ class ClientMachine {
 
   function sendBindHTTP_Streaming() {
     var req = new RequestBuilder();
-    req.LS_session(sessionId);
+    req.LS_session(sessionId.sure());
     req.LS_content_length(options.contentLength);
     if (options.keepaliveInterval > 0) {
       req.LS_keepalive_millis(options.keepaliveInterval);
@@ -2017,14 +2018,14 @@ class ClientMachine {
     protocolLogger.logInfo('Sending session bind: $req');
 
     connectTs = TimerStamp.now();
-    var url = Url.build(serverInstanceAddress, "/lightstreamer/bind_session.txt?LS_protocol=" + TLCP_VERSION);
+    var url = Url.build(serverInstanceAddress.sure(), "/lightstreamer/bind_session.txt?LS_protocol=" + TLCP_VERSION);
     var headers = getHeadersForRequestOtherThanCreate();
     http = sendHttpRequest(url, req, headers);
   }
 
   function sendBindHTTP_Polling() {
     var req = new RequestBuilder();
-    req.LS_session(sessionId);
+    req.LS_session(sessionId.sure());
     req.LS_polling(true);
     req.LS_polling_millis(options.pollingInterval);
     idleTimeout = options.idleTimeout;
@@ -2038,7 +2039,7 @@ class ClientMachine {
     protocolLogger.logInfo('Sending session bind: $req');
 
     connectTs = TimerStamp.now();
-    var url = Url.build(serverInstanceAddress, "/lightstreamer/bind_session.txt?LS_protocol=" + TLCP_VERSION);
+    var url = Url.build(serverInstanceAddress.sure(), "/lightstreamer/bind_session.txt?LS_protocol=" + TLCP_VERSION);
     var headers = getHeadersForRequestOtherThanCreate();
     http = sendHttpRequest(url, req, headers);
   }
@@ -2082,7 +2083,7 @@ class ClientMachine {
 
   function sendRecovery() {
     var req = new RequestBuilder();
-    req.LS_session(sessionId);
+    req.LS_session(sessionId.sure());
     req.LS_recovery_from(rec_clientProg);
     req.LS_polling(true);
     req.LS_polling_millis(0);
@@ -2094,7 +2095,7 @@ class ClientMachine {
     protocolLogger.logInfo('Sending session recovery: $req');
 
     connectTs = TimerStamp.now();
-    var url = Url.build(serverInstanceAddress, "/lightstreamer/bind_session.txt?LS_protocol=" + TLCP_VERSION);
+    var url = Url.build(serverInstanceAddress.sure(), "/lightstreamer/bind_session.txt?LS_protocol=" + TLCP_VERSION);
     var headers = getHeadersForRequestOtherThanCreate();
     http = sendHttpRequest(url, req, headers);
   }
@@ -2830,7 +2831,7 @@ class ClientMachine {
     bw_lastReqId = generateFreshReqId();
     req.LS_reqId(bw_lastReqId);
     req.LS_op("constrain");
-    switch bw_requestedMaxBandwidth {
+    switch bw_requestedMaxBandwidth.sure() {
     case BWLimited(bw):
       req.LS_requested_max_bandwidth_Float(bw);
     case BWUnlimited:
@@ -2842,11 +2843,11 @@ class ClientMachine {
 
   function getPendingControls() {
     var res = new Array<Encodable>();
-    if (switchRequest.isPending()) {
-      res.push(switchRequest);
+    if (switchRequest.sure().isPending()) {
+      res.push(switchRequest.sure());
     }
-    if (constrainRequest.isPending()) {
-      res.push(constrainRequest);
+    if (constrainRequest.sure().isPending()) {
+      res.push(constrainRequest.sure());
     }
     for (_ => sub in subscriptionManagers) {
       if (sub.isPending()) {
@@ -2870,15 +2871,15 @@ class ClientMachine {
   }
 
   function sendControlWS(request: Encodable) {
-    ws.send(request.encodeWS());
+    ws.sure().send(request.encodeWS());
   }
 
   function sendMsgWS(msg: MessageManager) {
-    ws.send(msg.encodeWS());
+    ws.sure().send(msg.encodeWS());
   }
 
   function sendPengingControlsWS(pendings: Array<Encodable>) {
-      var batches = prepareBatchWS("control", pendings, requestLimit);
+      var batches = prepareBatchWS("control", pendings, requestLimit.sure());
       sendBatchWS(batches);
   }
 
@@ -2886,23 +2887,23 @@ class ClientMachine {
     var messages = [for (msg in messageManagers) if (msg.isPending()) (msg : Encodable)];
     // ASSERT (for each i, j in DOMAIN messages :
     // i < j AND messages[i].sequence = messages[j].sequence => messages[i].prog < messages[j].prog)
-    var batches = prepareBatchWS("msg", messages, requestLimit);
+    var batches = prepareBatchWS("msg", messages, requestLimit.sure());
     sendBatchWS(batches);
   }
 
   function sendBatchWS(batches: Array<String>) {
     for (batch in batches) {
-      ws.send(batch);
+      ws.sure().send(batch);
     }
   }
 
   function sendHeartbeatWS() {
     protocolLogger.logInfo("Heartbeat request");
-    ws.send("heartbeat\r\n\r\n"); // since the request has no parameter, it must include EOL
+    ws.sure().send("heartbeat\r\n\r\n"); // since the request has no parameter, it must include EOL
   }
 
   function sendPendingControlsHTTP(pendings: Array<Encodable>) {
-    var body = prepareBatchHTTP(pendings, requestLimit);
+    var body = prepareBatchHTTP(pendings, requestLimit.sure());
     sendBatchHTTP(body, "control");
   }
 
@@ -2910,7 +2911,7 @@ class ClientMachine {
     var messages = [for (msg in messageManagers) if (msg.isPending()) (msg : Encodable)];
     // ASSERT (for each i, j in DOMAIN messages :
     // i < j AND messages[i].sequence = messages[j].sequence => messages[i].prog < messages[j].prog)
-    var body = prepareBatchHTTP(messages, requestLimit);
+    var body = prepareBatchHTTP(messages, requestLimit.sure());
     sendBatchHTTP(body, "msg");
   }
 
@@ -2921,7 +2922,7 @@ class ClientMachine {
 
   function sendBatchHTTP(body: String, reqType: String) {
     ctrl_connectTs = TimerStamp.now();
-    var url = Url.build(serverInstanceAddress, '/lightstreamer/$reqType.txt?LS_protocol=$TLCP_VERSION&LS_session=$sessionId');
+    var url = Url.build(serverInstanceAddress.sure(), '/lightstreamer/$reqType.txt?LS_protocol=$TLCP_VERSION&LS_session=$sessionId');
     var headers = getHeadersForRequestOtherThanCreate();
     ctrl_http = ctrlFactory(url, body, headers,
       function onText(client, line) {
@@ -3000,9 +3001,9 @@ class ClientMachine {
     return options.httpExtraHeadersOnSessionCreationOnly ? null : options.httpExtraHeaders;
   }
 
-  function getServerAddress() {
+  function getServerAddress(): ServerAddress {
     var addr = details.serverAddress;
-    return addr != null ? addr : defaultServerAddress;
+    return addr != null ? addr : defaultServerAddress.sure();
   }
 
   function relateSubManager(subManager: SubscriptionManager) {
@@ -3092,4 +3093,8 @@ private enum TerminationCause {
 
 private enum RecoveryRetryCause {
   RRC_transport_timeout; RRC_transport_error;
+}
+
+private function parseInt(s: String) {
+  return Std.parseInt(s).sure();
 }

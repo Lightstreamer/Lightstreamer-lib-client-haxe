@@ -11,5 +11,5 @@ macro function assert(e: Expr) {
 
 macro function goto(e) {
   var ee = [e, macro state.traceState()];
-  return macro @:privateAccess $b{ee}
+  return macro @:nullSafety(Off) @:privateAccess $b{ee}
 }
