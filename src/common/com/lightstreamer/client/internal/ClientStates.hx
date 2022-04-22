@@ -347,6 +347,18 @@ class State {
     return s_m == s150 && (s_swt == s1302 || s_swt == s1303);
   }
 
+  public function inPushing(): Bool {
+    return inStreaming() || inPolling();
+  }
+
+  public function inStreaming(): Bool {
+    return s_w?.p == s300 || s_ws?.p == s510 || s_hs?.p == s810;
+  }
+
+  public function inPolling(): Bool {
+    return s_tr == s220 || s_tr == s230 || s_wp?.p == s611 || s_hp?.m == s901 || s_rec == s1001;
+  }
+
   public function toString() {
     var str = "<m=" + s_m;
     str += " du=" + s_du;
