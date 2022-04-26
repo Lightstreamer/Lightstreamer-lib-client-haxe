@@ -187,7 +187,7 @@ class ClientMachine {
   }
 
   function evtExtConnect_NetworkReachabilityRegion() {
-    // TODO connect with evtExtConnect 
+    // TODO MPN connect with evtExtConnect 
     traceEvent("nr:connect");
     if (state.s_nr == s1400) {
       var hostAddress = new Url(getServerAddress()).hostname;
@@ -413,11 +413,11 @@ class ClientMachine {
     } else if (line.startsWith("REQOK")) {
       // REQOK,<request id>
       if (line == "REQOK") {
-        evtREQOK();
+        evtREQOK_withoutReqId();
       } else {
         var args = line.split(",");
         var reqId = parseInt(args[1]);
-        evtREQOK_reqId(reqId);
+        evtREQOK(reqId);
       }
     } else if (line.startsWith("PROBE")) {
       evtPROBE();
@@ -599,11 +599,11 @@ class ClientMachine {
     if (line.startsWith("REQOK")) {
       // REQOK,<request id>
       if (line == "REQOK") {
-        evtREQOK();
+        evtREQOK_withoutReqId();
       } else {
         var args = line.split(",");
         var reqId = parseInt(args[1]);
-        evtREQOK_reqId(reqId);
+        evtREQOK(reqId);
       }
     } else if (line.startsWith("REQERR")) {
       // REQERR,<request id>,<code>,<message>
@@ -1670,7 +1670,7 @@ class ClientMachine {
     }
   }
 
-  function evtREQOK() {
+  function evtREQOK_withoutReqId() {
     traceEvent("REQOK");
     protocolLogger.logDebug("REQOK");
     if (state.s_ctrl == s1102) {
@@ -1679,7 +1679,7 @@ class ClientMachine {
     }
   }
 
-  function evtREQOK_reqId(reqId: Int) {
+  function evtREQOK(reqId: Int) {
     traceEvent("REQOK");
     protocolLogger.logDebug("REQOK " + reqId);
     var forward = true;
@@ -2893,7 +2893,7 @@ class ClientMachine {
   }
 
   function evtTerminate_NetworkReachabilityRegion() {
-    // TODO must be called by evtTerminate
+    // TODO MPN connect with evtTerminate
     traceEvent("nr:terminate");
     switch state.s_nr {
     case s1410, s1411, s1412:

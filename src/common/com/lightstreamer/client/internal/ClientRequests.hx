@@ -49,8 +49,3 @@ class ConstrainRequest implements Encodable {
 		return "control\r\n" + encode(true);
 	}
 }
-
-// TODO MPN
-// class MpnRegisterRequest {}
-// class MpnFilterUnsubscriptionRequest {}
-// class MpnBadgeResetRequest {}
