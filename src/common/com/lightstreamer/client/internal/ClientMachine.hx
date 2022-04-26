@@ -11,10 +11,11 @@ import com.lightstreamer.client.LightstreamerClient.ClientEventDispatcher;
 import com.lightstreamer.client.internal.ClientStates;
 import com.lightstreamer.client.internal.ClientRequests;
 import com.lightstreamer.log.LoggerTools;
+import com.lightstreamer.client.internal.ParseTools;
 using com.lightstreamer.log.LoggerTools;
+using com.lightstreamer.internal.NullTools;
 using StringTools;
 using Lambda;
-using com.lightstreamer.internal.NullTools;
 
 // TODO synchronize
 @:access(com.lightstreamer.client.ConnectionDetails)
@@ -405,7 +406,6 @@ class ClientMachine {
 
   function evtMessage(line: String) {
     // TODO synchronize (called by openWS)
-    /*
     if (line.startsWith("U,")) {
       // U,<subscription id>,<itemd index>,<field values>
       var update = parseUpdate(line);
@@ -416,183 +416,182 @@ class ClientMachine {
         evtREQOK();
       } else {
         var args = line.split(",");
-        var reqId = Std.parseInt(args[1]);
-        evtREQOK(reqId);
+        var reqId = parseInt(args[1]);
+        evtREQOK_reqId(reqId);
       }
     } else if (line.startsWith("PROBE")) {
       evtPROBE();
     } else if (line.startsWith("LOOP")) {
       // LOOP,<delay [ms]>
       var args = line.split(",");
-      var pollingMs = Std.parseInt(args[1]);
+      var pollingMs = new Millis(parseInt(args[1]));
       evtLOOP(pollingMs);
     } else if (line.startsWith("CONOK")) {
-      // CONOK,<session id>,<request limit>,<keepalive/idle timeout [ms]>,(*|<control link>);
+      // CONOK,<session id>,<request limit>,<keepalive/idle timeout [ms]>,(*|<control link>)
       var args = line.split(",");
       var sessionId = args[1];
-      var reqLimit = Std.parseInt(args[2]);
-      var keepalive = Std.parseInt(args[3]);
+      var reqLimit = parseInt(args[2]);
+      var keepalive = new Millis(parseInt(args[3]));
       var clink = args[4];
       evtCONOK(sessionId, reqLimit, keepalive, clink);
     } else if (line.startsWith("WSOK")) {
       evtWSOK();
     } else if (line.startsWith("SERVNAME")) {
-      let args = line.split(",");
-      let serverName = String(args[1]);
+      var args = line.split(",");
+      var serverName = args[1];
       evtSERVNAME(serverName);
     } else if (line.startsWith("CLIENTIP")) {
-      let args = line.split(",");
-      let ip = String(args[1]);
+      var args = line.split(",");
+      var ip = args[1];
       evtCLIENTIP(ip);
     } else if (line.startsWith("CONS")) {
-      // CONS,(unmanaged|unlimited|<bandwidth>);
-      let args = line.split(",");
-      let bw = String(args[1]);
+      // CONS,(unmanaged|unlimited|<bandwidth>)
+      var args = line.split(",");
+      var bw = args[1];
       switch bw {
       case "unlimited":
-        evtCONS(.unlimited);
+        evtCONS(BWUnlimited);
       case "unmanaged":
-        evtCONS(.unmanaged);
+        evtCONS(BWUnmanaged);
       default:
-        let n = Double(bw)!
-        evtCONS(.limited(n));
+        var n = parseFloat(bw);
+        evtCONS(BWLimited(n));
       }
     } else if (line.startsWith("MSGDONE")) {
       // MSGDONE,(*|<sequence>),<prog>
-      let args = line.split(",");
-      var seq = String(args[1]);
-      if seq == "*" {
-        seq = "UNORDERED_MESSAGES"
+      var args = line.split(",");
+      var seq = args[1];
+      if (seq == "*") {
+        seq = "UNORDERED_MESSAGES";
       }
-      let prog = Int(args[2])!
+      var prog = parseInt(args[2]);
       evtMSGDONE(seq, prog);
     } else if (line.startsWith("MSGFAIL")) {
       // MSGFAIL,(*|<sequence>),<prog>,<code>,<message>
-      let args = line.split(",");
-      var seq = String(args[1]);
-      if seq == "*" {
-        seq = "UNORDERED_MESSAGES"
+      var args = line.split(",");
+      var seq = args[1];
+      if (seq == "*") {
+        seq = "UNORDERED_MESSAGES";
       }
-      let prog = Int(args[2])!
-      let errorCode = Int(args[3])!
-      let errorMsg = args[4].removingPercentEncoding!
-      evtMSGFAIL(seq, prog, errorCode: errorCode, errorMsg: errorMsg);
+      var prog = parseInt(args[2]);
+      var errorCode = parseInt(args[3]);
+      var errorMsg = args[4].urlDecode();
+      evtMSGFAIL(seq, prog, errorCode, errorMsg);
     } else if (line.startsWith("REQERR")) {
       // REQERR,<request id>,<code>,<message>
-      let args = line.split(",");
-      let reqId = Int(args[1])!
-      let code = Int(args[2])!
-      let msg = args[3].removingPercentEncoding!
+      var args = line.split(",");
+      var reqId = parseInt(args[1]);
+      var code = parseInt(args[2]);
+      var msg = args[3].urlDecode();
       evtREQERR(reqId, code, msg);
     } else if (line.startsWith("PROG")) {
       // PROG,<prog>
-      let args = line.split(",");
-      let prog = Int(args[1])!
+      var args = line.split(",");
+      var prog = parseInt(args[1]);
       evtPROG(prog);
     } else if (line.startsWith("SUBOK")) {
       // SUBOK,<subscription id>,<total items>,<total fields>
-      let args = line.split(",");
-      let subId = Int(args[1])!
-      let nItems = Int(args[2])!
-      let nFields = Int(args[3])!
+      var args = line.split(",");
+      var subId = parseInt(args[1]);
+      var nItems = parseInt(args[2]);
+      var nFields = parseInt(args[3]);
       evtSUBOK(subId, nItems, nFields);
     } else if (line.startsWith("SUBCMD")) {
       // SUBCMD,<subscription id>,<total items>,<total fields>,<key index>,<command index>
-      let args = line.split(",");
-      let subId = Int(args[1])!
-      let nItems = Int(args[2])!
-      let nFields = Int(args[3])!
-      let keyIdx = Pos(args[4])!
-      let cmdIdx = Pos(args[5])!
+      var args = line.split(",");
+      var subId = parseInt(args[1]);
+      var nItems = parseInt(args[2]);
+      var nFields = parseInt(args[3]);
+      var keyIdx = parseInt(args[4]);
+      var cmdIdx = parseInt(args[5]);
       evtSUBCMD(subId, nItems, nFields, keyIdx, cmdIdx);
     } else if (line.startsWith("UNSUB")) {
       // UNSUB,<subscription id>
-      let args = line.split(",");
-      let subId = Int(args[1])!
+      var args = line.split(",");
+      var subId = parseInt(args[1]);
       evtUNSUB(subId);
     } else if (line.startsWith("CONF")) {
-      // CONF,<subscription id>,(unlimited|<frequency>),(filtered|unfiltered);
-      let args = line.split(",");
-      let subId = Int(args[1])!
-      if args[2] == "unlimited" {
-        evtCONF(subId, .unlimited);
+      // CONF,<subscription id>,(unlimited|<frequency>),(filtered|unfiltered)
+      var args = line.split(",");
+      var subId = parseInt(args[1]);
+      if (args[2] == "unlimited") {
+        evtCONF(subId, RFreqUnlimited);
       } else {
-        let freq = Double(args[2])!
-        evtCONF(subId, .limited(freq));
+        var freq = parseFloat(args[2]);
+        evtCONF(subId, RFreqLimited(freq));
       }
     } else if (line.startsWith("EOS")) {
       // EOS,<subscription id>,<item index>
-      let args = line.split(",");
-      let subId = Int(args[1])!
-      let itemIdx = Int(args[2])!
+      var args = line.split(",");
+      var subId = parseInt(args[1]);
+      var itemIdx = parseInt(args[2]);
       evtEOS(subId, itemIdx);
     } else if (line.startsWith("CS")) {
       // CS,<subscription id>,<item index>
-      let args = line.split(",");
-      let subId = Int(args[1])!
-      let itemIdx = Int(args[2])!
+      var args = line.split(",");
+      var subId = parseInt(args[1]);
+      var itemIdx = parseInt(args[2]);
       evtCS(subId, itemIdx);
     } else if (line.startsWith("OV")) {
       // OV,<subscription id>,<item index>,<lost updates>
-      let args = line.split(",");
-      let subId = Int(args[1])!
-      let itemIdx = Int(args[2])!
-      let lostUpdates = Int(args[3])!
+      var args = line.split(",");
+      var subId = parseInt(args[1]);
+      var itemIdx = parseInt(args[2]);
+      var lostUpdates = parseInt(args[3]);
       evtOV(subId, itemIdx, lostUpdates);
     } else if (line.startsWith("NOOP")) {
       evtNOOP();
     } else if (line.startsWith("CONERR")) {
       // CONERR,<code>,<message>
-      let args = line.split(",");
-      let code = Int(args[1])!
-      let msg = args[2].removingPercentEncoding!
+      var args = line.split(",");
+      var code = parseInt(args[1]);
+      var msg = args[2].urlDecode();
       evtCONERR(code, msg);
     } else if (line.startsWith("END")) {
       // END,<code>,<message>
-      let args = line.split(",");
-      let code = Int(args[1])!
-      let msg = args[2].removingPercentEncoding!
+      var args = line.split(",");
+      var code = parseInt(args[1]);
+      var msg = args[2].urlDecode();
       evtEND(code, msg);
     } else if (line.startsWith("ERROR")) {
       // ERROR,<code>,<message>
-      let args = line.split(",");
-      let code = Int(args[1])!
-      let msg = args[2].removingPercentEncoding!
+      var args = line.split(",");
+      var code = parseInt(args[1]);
+      var msg = args[2].urlDecode();
       evtERROR(code, msg);
     } else if (line.startsWith("SYNC")) {
       // SYNC,<elapsed time [sec]>
-      let args = line.split(",");
-      let seconds = UInt64(args[1])!
+      var args = line.split(",");
+      var seconds = parseInt(args[1]);
       evtSYNC(seconds);
     } else if (line.startsWith("MPNREG")) {
       // MPNREG,<device id>,<adapter name>
-      let args = line.split(",");
-      let deviceId = String(args[1]);
-      let adapterName = String(args[2]);
-      evtMPNREG(deviceId, adapterName);
+      var args = line.split(",");
+      var deviceId = args[1];
+      var adapterName = args[2];
+      // TODO MPN evtMPNREG(deviceId, adapterName);
     } else if (line.startsWith("MPNZERO")) {
       // MPNZERO,<device id>
-      let args = line.split(",");
-      let deviceId = String(args[1]);
-      evtMPNZERO(deviceId);
+      var args = line.split(",");
+      var deviceId = args[1];
+      // TODO MPN evtMPNZERO(deviceId);
     } else if (line.startsWith("MPNOK")) {
       // MPNOK,<subscription id>, <mpn subscription id>
-      let args = line.split(",");
-      let subId = Int(args[1])!
-      let mpnSubId = String(args[2]);
-      evtMPNOK(subId, mpnSubId);
+      var args = line.split(",");
+      var subId = parseInt(args[1]);
+      var mpnSubId = args[2];
+      // TODO MPN evtMPNOK(subId, mpnSubId);
     } else if (line.startsWith("MPNDEL")) {
       // MPNDEL,<mpn subscription id>
-      let args = line.split(",");
-      let mpnSubId = String(args[1]);
-      evtMPNDEL(mpnSubId);
+      var args = line.split(",");
+      var mpnSubId = args[1];
+      // TODO MPN evtMPNDEL(mpnSubId);
     } else if (line.startsWith("MPNCONF")) {
       // MPNCONF,<mpn subscription id>
-      let args = line.split(",");
-      let mpnSubId = String(args[1]);
-      evtMPNCONF(mpnSubId);
+      var args = line.split(",");
+      var mpnSubId = args[1];
+      // TODO MPN evtMPNCONF(mpnSubId);
     }
-    */
   }
 
   function evtCtrlMessage(line: String) {
@@ -4481,8 +4480,4 @@ private enum TerminationCause {
 
 private enum RecoveryRetryCause {
   RRC_transport_timeout; RRC_transport_error;
-}
-
-private function parseInt(s: String) {
-  return Std.parseInt(s).sure();
 }
