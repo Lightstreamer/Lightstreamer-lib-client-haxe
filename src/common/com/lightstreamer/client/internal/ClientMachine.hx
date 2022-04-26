@@ -13,6 +13,7 @@ import com.lightstreamer.client.internal.ClientRequests;
 import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
 using StringTools;
+using Lambda;
 using com.lightstreamer.internal.NullTools;
 
 // TODO synchronize
@@ -2313,6 +2314,342 @@ class ClientMachine {
     }
   }
 
+  function evtSUBOK(subId: Int, nItems: Int, nFields: Int) {
+    traceEvent("SUBOK");
+    protocolLogger.logDebug('SUBOK $subId $nItems $nFields');
+    if (state.inPushing()) {
+      if (isFreshData()) {
+        doSUBOK(subId, nItems, nFields);
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      } else {
+        onStaleData();
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      }
+    }
+  }
+
+  function evtSUBCMD(subId: Int, nItems: Int, nFields: Int, keyIdx: Pos, cmdIdx: Pos) {
+    traceEvent("SUBCMD");
+    protocolLogger.logDebug('SUBCMD $subId $nItems $nFields $keyIdx $cmdIdx');
+    if (state.inPushing()) {
+      if (isFreshData()) {
+        doSUBCMD(subId, nItems, nFields, keyIdx, cmdIdx);
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      } else {
+        onStaleData();
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      }
+    }
+  }
+
+  function evtUNSUB(subId: Int) {
+    traceEvent("UNSUB");
+    protocolLogger.logDebug('UNSUB $subId');
+    if (state.inPushing()) {
+      if (isFreshData()) {
+        doUNSUB(subId);
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      } else {
+        onStaleData();
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      }
+    }
+  }
+
+  function evtEOS(subId: Int, itemIdx: Pos) {
+    traceEvent("EOS");
+    protocolLogger.logDebug('EOS $subId $itemIdx');
+    if (state.inPushing()) {
+      if (isFreshData()) {
+        doEOS(subId, itemIdx);
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      } else {
+        onStaleData();
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      }
+    }
+  }
+
+  function evtCS(subId: Int, itemIdx: Pos) {
+    traceEvent("CS");
+    protocolLogger.logDebug('CS $subId $itemIdx');
+    if (state.inPushing()) {
+      if (isFreshData()) {
+        doCS(subId, itemIdx);
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      } else {
+        onStaleData();
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      }
+    }
+  }
+
+  function evtOV(subId: Int, itemIdx: Pos, lostUpdates: Int) {
+    traceEvent("OV");
+    protocolLogger.logDebug('OV $subId $itemIdx $lostUpdates');
+    if (state.inPushing()) {
+      if (isFreshData()) {
+        doOV(subId, itemIdx, lostUpdates);
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      } else {
+        onStaleData();
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      }
+    }
+  }
+
+  function evtCONF(subId: Int, freq: RealMaxFrequency) {
+    traceEvent("CONF");
+    protocolLogger.logDebug('CONF $subId $freq');
+    if (state.inPushing()) {
+      if (isFreshData()) {
+        doCONF(subId, freq);
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      } else {
+        onStaleData();
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      }
+    }
+  }
+
+  function evtCheckAvg(result: SyncCheckResult) {
+    traceEvent("check.avg");
+    if (state.s_slw == s332) {
+      switch result {
+      case SCR_good:
+        goto(state.s_slw = s331);
+      case SCR_not_good:
+        goto(state.s_slw = s333);
+      case SCR_bad:
+        disableStreaming();
+        cause = "slow";
+        goto(state.s_slw = s334);
+        evtForcePolling();
+      }
+    }
+  }
+
+  function evtSendPendingControls() {
+    traceEvent("send.pending.controls");
+    var controls = getPendingControls();
+    if (state.s_w?.s == s340 && !controls.empty()) {
+      sendPengingControlsWS(controls);
+      goto(state.s_w.s = s340);
+      evtRestartHeartbeat();
+    } else if (state.s_ws?.s == s550 && !controls.empty()) {
+      sendPengingControlsWS(controls);
+      goto(state.s_ws.s = s550);
+      evtRestartHeartbeat();
+    } else if (state.s_wp?.s == s630 && !controls.empty()) {
+      sendPengingControlsWS(controls);
+      goto(state.s_wp.s = s630);
+    }
+  }
+
+  function evtSendPendingMessages() {
+    traceEvent("send.pending.messages");
+    if (state.s_w?.s == s340 && messageManagers.exists(msg -> msg.isPending())) {
+      sendPendingMessagesWS();
+      goto(state.s_w.s = s340);
+      genAckMessagesWS();
+      evtRestartHeartbeat();
+    } else if (state.s_ws?.s == s550 && messageManagers.exists(msg -> msg.isPending())) {
+      sendPendingMessagesWS();
+      goto(state.s_ws.s = s550);
+      genAckMessagesWS();
+      evtRestartHeartbeat();
+    } else if (state.s_wp?.s == s630 && messageManagers.exists(msg -> msg.isPending())) {
+      sendPendingMessagesWS();
+      goto(state.s_wp.s = s630);
+      genAckMessagesWS();
+    }
+  }
+
+  function evtSelectRhb() {
+    traceEvent("select.rhb");
+    if (state.s_rhb == s320) {
+      if (rhb_grantedInterval == 0) {
+        if (options.reverseHeartbeatInterval == 0) {
+          goto(state.s_rhb = s321);
+        } else {
+          rhb_currentInterval = options.reverseHeartbeatInterval;
+          goto(state.s_rhb = s322);
+          schedule_evtRhbTimeout(rhb_currentInterval);
+        }
+      } else {
+        if (options.reverseHeartbeatInterval > 0 && options.reverseHeartbeatInterval < rhb_grantedInterval.sure()) {
+          rhb_currentInterval = options.reverseHeartbeatInterval;
+          goto(state.s_rhb = s323);
+          schedule_evtRhbTimeout(rhb_currentInterval);
+        } else {
+          rhb_currentInterval = rhb_grantedInterval;
+          goto(state.s_rhb = s323);
+          schedule_evtRhbTimeout(rhb_currentInterval.sure());
+        }
+      }
+    }
+  }
+
+  function evtExtSetReverseHeartbeatInterval() {
+    traceEvent("setReverseHeartbeatInterval");
+    if (state.s_rhb != null) {
+      switch state.s_rhb {
+      case s321 if (options.reverseHeartbeatInterval != 0):
+        rhb_currentInterval = options.reverseHeartbeatInterval;
+        goto(state.s_rhb = s322);
+        schedule_evtRhbTimeout(rhb_currentInterval);
+      case s322:
+        if (options.reverseHeartbeatInterval == 0) {
+          goto(state.s_rhb = s321);
+          cancel_evtRhbTimeout();
+        } else {
+          rhb_currentInterval = options.reverseHeartbeatInterval;
+          goto(state.s_rhb = s322);
+        }
+      case s323:
+        if (options.reverseHeartbeatInterval > 0 && options.reverseHeartbeatInterval < rhb_grantedInterval.sure()) {
+          rhb_currentInterval = options.reverseHeartbeatInterval;
+          goto(state.s_rhb = s323);
+        } else {
+          rhb_currentInterval = rhb_grantedInterval;
+          goto(state.s_rhb = s323);
+        }
+      default:
+      }
+    }
+  }
+
+  function evtRestartHeartbeat() {
+    traceEvent("restart.heartbeat");
+    if (state.s_rhb != null) {
+      switch state.s_rhb {
+      case s322:
+        goto(state.s_rhb = s322);
+        cancel_evtRhbTimeout();
+        schedule_evtRhbTimeout(rhb_currentInterval.sure());
+      case s323:
+        goto(state.s_rhb = s323);
+        cancel_evtRhbTimeout();
+        schedule_evtRhbTimeout(rhb_currentInterval.sure());
+      case s324:
+        if (rhb_grantedInterval == 0) {
+          if (options.reverseHeartbeatInterval != 0) {
+            rhb_currentInterval = options.reverseHeartbeatInterval;
+            goto(state.s_rhb = s322);
+            schedule_evtRhbTimeout(rhb_currentInterval);
+          } else {
+            goto(state.s_rhb = s321);
+          }
+        } else {
+          if (options.reverseHeartbeatInterval > 0 && options.reverseHeartbeatInterval < rhb_grantedInterval.sure()) {
+            rhb_currentInterval = options.reverseHeartbeatInterval;
+            goto(state.s_rhb = s323);
+            schedule_evtRhbTimeout(rhb_currentInterval);
+          } else {
+            rhb_currentInterval = rhb_grantedInterval;
+            goto(state.s_rhb = s323);
+            schedule_evtRhbTimeout(rhb_currentInterval.sure());
+          }
+        }
+      default:
+      }
+    }
+  }
+
+  function evtRhbTimeout() {
+    // TODO synchronize (called by timer)
+    traceEvent("rhb.timeout");
+    if (state.s_rhb == s322) {
+      goto(state.s_rhb = s324);
+      cancel_evtRhbTimeout();
+      evtSendHeartbeat();
+    } else if (state.s_rhb == s323) {
+      goto(state.s_rhb = s324);
+      cancel_evtRhbTimeout();
+      evtSendHeartbeat();
+    }
+  }
+
+  function evtDisposeCtrl() {
+    traceEvent("du:dispose.ctrl");
+    disposeCtrl();
+  }
+
+  function evtStartRecovery() {
+    traceEvent("start.recovery");
+    if (state.s_rec == s1000) {
+      recoverTs = TimerStamp.now();
+      goto(state.s_rec = s1000);
+    }
+  }
+
+  function evtRecoveryTimeout() {
+    // TODO synchronize (called by timer)
+    traceEvent("recovery.timeout");
+    if (state.s_rec == s1000) {
+      sendRecovery();
+      goto(state.s_rec = s1001);
+      cancel_evtRecoveryTimeout();
+      schedule_evtTransportTimeout(options.retryDelay);
+    }
+  }
+
+  function evtCheckRecoveryTimeout(retryCause: RecoveryRetryCause) {
+    traceEvent("check.recovery.timeout");
+    if (state.s_rec == s1002) {
+      var retryDelayMs = options.retryDelay;
+      var sessionRecoveryMs = options.sessionRecoveryTimeout;
+      if (connectTs + retryDelayMs < recoverTs + sessionRecoveryMs) {
+        cause = "recovery.error";
+        var diffMs = TimerStamp.now() - connectTs;
+        var pauseMs = retryDelayMs > diffMs ? retryDelayMs - diffMs : Millis.ZERO;
+        goto(state.s_rec = s1003);
+        if (sessionLogger.isErrorEnabled()) {
+          if (pauseMs > 0) {
+            sessionLogger.error('Retrying recovery in ${pauseMs}ms. Cause: ${retryCause}');
+          } else {
+            sessionLogger.error('Retrying recovery. Cause: ${retryCause}');
+          }
+        }
+        schedule_evtRetryTimeout(pauseMs);
+      } else {
+        notifyStatus(DISCONNECTED_WILL_RETRY);
+        cause = "recovery.timeout";
+        state.goto_m_from_rec(s113);
+        exit_rec_to_m();
+        entry_m113(recovery_timeout);
+      }
+    }
+  }
+
   function evtCreate() {
     traceEvent("du:create");
     if (state.s_du == s20) {
@@ -2353,6 +2690,317 @@ class ClientMachine {
       } else {
         goto(state.s_bw = s1201);
       }
+    }
+  }
+
+  function evtCheckCtrlRequests() {
+    traceEvent("check.ctrl.requests");
+    if (state.s_ctrl == s1100) {
+      var controls = getPendingControls();
+      if (!controls.empty()) {
+        sendPendingControlsHTTP(controls);
+        goto(state.s_ctrl = s1102);
+        evtRestartHeartbeat();
+        schedule_evtCtrlTimeout(options.retryDelay);
+      } else if (messageManagers.exists(msg -> msg.isPending())) {
+        sendPendingMessagesHTTP();
+        goto(state.s_ctrl = s1102);
+        evtRestartHeartbeat();
+        schedule_evtCtrlTimeout(options.retryDelay);
+      } else if (state.s_rhb == s324) {
+        sendHeartbeatHTTP();
+        goto(state.s_ctrl = s1102);
+        evtRestartHeartbeat();
+        schedule_evtCtrlTimeout(options.retryDelay);
+      } else {
+        goto(state.s_ctrl = s1101);
+      }
+    }
+  }
+
+  function evtCtrlDone() {
+    // TODO synchronize (called by sendBatchHTTP)
+    traceEvent("ctrl.done");
+    if (state.s_ctrl == s1102) {
+      closeCtrl();
+      goto(state.s_ctrl = s1100);
+      cancel_evtCtrlTimeout();
+      evtCheckCtrlRequests();
+    }
+  }
+
+  function evtCtrlError() {
+    // TODO synchronize (called by sendBatchHTTP)
+    traceEvent("ctrl.error");
+    if (state.s_ctrl == s1102) {
+      disposeCtrl();
+      var pauseMs = waitingInterval(options.retryDelay, ctrl_connectTs);
+      goto(state.s_ctrl = s1103);
+      cancel_evtCtrlTimeout();
+      schedule_evtCtrlTimeout(pauseMs);
+    }
+  }
+
+  function evtCtrlTimeout() {
+    // TODO synchronize (called by timer)
+    traceEvent("ctrl.timeout");
+    if (state.s_ctrl != null) {
+      if (state.s_ctrl == s1102) {
+        disposeCtrl();
+        var pauseMs = waitingInterval(options.retryDelay, ctrl_connectTs);
+        goto(state.s_ctrl = s1103);
+        cancel_evtCtrlTimeout();
+        schedule_evtCtrlTimeout(pauseMs);
+      } else if (state.s_ctrl == s1103) {
+        goto(state.s_ctrl = s1100);
+        cancel_evtCtrlTimeout();
+        evtCheckCtrlRequests();
+      }
+    }
+  }
+
+  function evtSendControl(request: Encodable) {
+    traceEvent("send.control");
+    if (state.s_w?.s == s340) {
+      sendControlWS(request);
+      goto(state.s_w.s = s340);
+      evtRestartHeartbeat();
+    } else if (state.s_ws?.s == s550) {
+      sendControlWS(request);
+      goto(state.s_ws.s = s550);
+      evtRestartHeartbeat();
+    } else if (state.s_wp?.s == s630) {
+      sendControlWS(request);
+      goto(state.s_wp.s = s630);
+    } else if (state.s_ctrl == s1101) {
+      goto(state.s_ctrl = s1100);
+      evtCheckCtrlRequests();
+    }
+  }
+
+  function evtSendHeartbeat() {
+    traceEvent("send.heartbeat");
+    if (state.s_w?.s == s340) {
+      sendHeartbeatWS();
+      goto(state.s_w.s = s340);
+      evtRestartHeartbeat();
+    } else if (state.s_ws?.s == s550) {
+      sendHeartbeatWS();
+      goto(state.s_ws.s = s550);
+      evtRestartHeartbeat();
+    } else if (state.s_ctrl == s1101) {
+      goto(state.s_ctrl = s1100);
+      evtCheckCtrlRequests();
+    }
+  }
+
+  function evtStartSession() {
+    traceEvent("du:start.session");
+    sessionLogger.logInfo('Starting new session: $sessionId');
+    switch state.s_du {
+    case s21:
+      goto(state.s_du = s22);
+    default:
+    }
+  }
+
+  function evtEndSession() {
+    sessionLogger.logInfo('Destroying session: $sessionId');
+  }
+
+  function evtRetry(retryCause: RetryCause, timeout: Null<Millis> = null) {
+    traceEvent("du:retry");
+    if (sessionLogger.isErrorEnabled()) {
+      if (timeout != null && timeout > 0) {
+        sessionLogger.error('Retrying connection in ${timeout}ms. Cause: ${asErrorMsg(retryCause)}');
+      } else {
+        sessionLogger.error('Retrying connection. Cause: ${asErrorMsg(retryCause)}');
+      }
+    }
+    var forward = true;
+    switch state.s_du {
+    case s21:
+      resetSequenceMap();
+      goto(state.s_du = s23);
+      forward = evtRetry_MpnRegion();
+      genAbortMessages();
+    case s22:
+      disposeSession();
+      goto(state.s_du = s23);
+      forward = evtRetry_MpnRegion();
+      genAbortSubscriptions();
+      genAbortMessages();
+    default:
+    }
+    if (forward) {
+      forward = evtRetry_MpnRegion();
+    }
+  }
+
+  function evtRetry_MpnRegion() {
+    // TODO MPN
+    return false;
+  }
+
+  function evtTerminate(terminationCause: TerminationCause) {
+    traceEvent("du:terminate");
+    if (sessionLogger.isInfoEnabled()) {
+      switch terminationCause {
+      case TC_api:
+        sessionLogger.info("Disconnected. Cause: Requested by user");
+      default:
+        // see below
+      }
+    }
+    if (sessionLogger.isErrorEnabled()) {
+      switch terminationCause {
+      case TC_standardError(var code, var msg):
+        sessionLogger.error('Disconnected. Cause: $code - $msg');
+      case TC_otherError(var msg):
+        sessionLogger.error('Disconnected. Cause: $msg');
+      case TC_api:
+        // see above
+      }
+    }
+    var forward = true;
+    switch state.s_du {
+    case s22:
+      disposeSession();
+      disposeClient();
+      goto(state.s_du = s20);
+      forward = evtTerminate_MpnRegion();
+      genAbortSubscriptions();
+      genAbortMessages();
+    case s23:
+      disposeClient();
+      goto(state.s_du = s20);
+      forward = evtTerminate_MpnRegion();
+      genAbortMessages();
+    case s21:
+      disposeClient();
+      goto(state.s_du = s20);
+      forward = evtTerminate_MpnRegion();
+      genAbortMessages();
+    default:
+    }
+    if (forward) {
+      forward = evtTerminate_MpnRegion();
+    }
+  }
+
+  function evtTerminate_MpnRegion() {
+    // TODO MPN
+    return false;
+  }
+
+  function evtTerminate_NetworkReachabilityRegion() {
+    // TODO must be called by evtTerminate
+    traceEvent("nr:terminate");
+    switch state.s_nr {
+    case s1410, s1411, s1412:
+      var rm = nr_reachabilityManager;
+      nr_reachabilityManager = null;
+      goto(state.s_nr = s1400);
+      if (rm != null) {
+        rm.stopListening();
+      }
+    default:
+    }
+    return false;
+  }
+
+  function evtRetryTimeout() {
+    // TODO synchronize (called by timer)
+    traceEvent("retry.timeout");
+    switch state.s_m {
+    case s115:
+      goto(state.s_m = s116);
+      evtSelectCreate();
+    case s112:
+      delayCounter.increase();
+      goto(state.s_m = s116);
+      cancel_evtRetryTimeout();
+      evtSelectCreate();
+    case s110:
+      notifyStatus(CONNECTING);
+      sendCreateTTL();
+      goto(state.s_m = s140);
+      evtCreate();
+      schedule_evtTransportTimeout(new Millis(60_000));
+    case s111:
+      notifyStatus(CONNECTING);
+      delayCounter.increase();
+      sendCreateTTL();
+      goto(state.s_m = s140);
+      cancel_evtRetryTimeout();
+      evtCreate();
+      schedule_evtTransportTimeout(new Millis(60_000));
+    case s113:
+      goto(state.s_m = s116);
+      cancel_evtRetryTimeout();
+      evtSelectCreate();
+    case s150:
+      if (state.s_rec == s1003) {
+        sendRecovery();
+        goto(state.s_rec = s1001);
+        cancel_evtRetryTimeout();
+        schedule_evtTransportTimeout(options.retryDelay);
+      }
+    default:
+    }
+  }
+
+  function evtExtSetForcedTransport() {
+    traceEvent("setForcedTransport");
+    if (state.s_swt == s1301) {
+      goto(state.s_swt = s1300);
+      evtCheckTransport();
+    }
+  }
+
+  function evtExtSetRequestedMaxBandwidth() {
+    traceEvent("setRequestedMaxBandwidth");
+    if (state.s_bw == s1201) {
+      goto(state.s_bw = s1200);
+      evtCheckBW();
+    }
+  }
+
+  function evtForceSlowing() {
+    traceEvent("force.slowing");
+    if (state.s_swt == s1301) {
+      goto(state.s_swt = s1300);
+      evtCheckTransport();
+    }
+  }
+
+  function evtForcePolling() {
+    traceEvent("force.polling");
+    if (state.s_swt == s1301) {
+      goto(state.s_swt = s1300);
+      evtCheckTransport();
+    }
+  }
+
+  function evtSendMessage(msg: MessageManager) {
+    traceEvent("send.message");
+    if (state.s_w?.s == s340) {
+      sendMsgWS(msg);
+      goto(state.s_w.s = s340);
+      msg.evtWSSent();
+      evtRestartHeartbeat();
+    } else if (state.s_ws?.s == s550) {
+      sendMsgWS(msg);
+      goto(state.s_ws.s = s550);
+      msg.evtWSSent();
+      evtRestartHeartbeat();
+    } else if (state.s_wp?.s == s630) {
+      sendMsgWS(msg);
+      goto(state.s_wp.s = s630);
+      msg.evtWSSent();
+    } else if (state.s_ctrl == s1101) {
+      goto(state.s_ctrl = s1100);
+      evtCheckCtrlRequests();
     }
   }
 
@@ -2516,69 +3164,6 @@ class ClientMachine {
       }
     }
     return false;
-  }
-
-  function evtCheckCtrlRequests() {
-    // TODO
-  }
-
-  function evtSelectRhb() {
-    // TODO
-  }
-  
-  function evtSendControl(req: Encodable) {
-    // TODO
-  }
-  function evtTerminate(cause: TerminationCause) {
-    // TODO
-  }
-  function evtCtrlError() {
-    // TODO synchronize (called by sendBatchHTTP)
-  }
-  function evtCtrlDone() {
-   // TODO synchronize (called by sendBatchHTTP) 
-  }
-  function evtRetryTimeout() {
-    // TODO synchronize (called by timer)
-  }
-  function evtRecoveryTimeout() {
-    // TODO synchronize (called by timer)
-  }
-  function evtCtrlTimeout() {
-    // TODO synchronize (called by timer)
-  }
-  function evtRhbTimeout() {
-    // TODO synchronize (called by timer)
-  }
-  function evtEndSession() {
-    // TODO
-  }
-  function evtRetry(retryCause: RetryCause, timeout: Null<Millis> = null) {
-    // TODO
-  }
-  function evtDisposeCtrl() {
-    // TODO
-  }
-  function evtStartRecovery() {
-    // TODO
-  }
-  function evtCheckRecoveryTimeout(retryCause: RecoveryRetryCause) {
-    // TODO
-  }
-  function evtForcePolling() {
-    // TODO
-  }
-  function evtSendPendingControls() {
-    // TODO
-  }
-  function evtSendPendingMessages() {
-    // TODO
-  }
-  function evtStartSession() {
-    // TODO
-  }
-  function evtCheckAvg(result: SyncCheckResult) {
-    // TODO
   }
 
   // ---------- event actions ----------

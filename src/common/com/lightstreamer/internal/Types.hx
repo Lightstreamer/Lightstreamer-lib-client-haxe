@@ -27,6 +27,8 @@ enum abstract ClientStatus(String) to String {
 abstract RequestLimit(Int) from Int to Int {}
 
 abstract Millis(Long) to Long {
+  public static final ZERO = new Millis(0);
+
   public inline function new(millis) {
     this = millis;
   }
@@ -46,8 +48,18 @@ abstract Millis(Long) to Long {
   }
 
   @:op(A > B)
-  public inline function gt(rhs: Int) {
+  public inline function gti(rhs: Int) {
     return this > rhs;
+  }
+
+  @:op(A > B)
+  public inline function gt(rhs: Millis) {
+    return this > rhs;
+  }
+
+  @:op(A < B)
+  public inline function lt(rhs: Millis) {
+    return this < rhs;
   }
 
   @:op(A + B)
@@ -55,8 +67,16 @@ abstract Millis(Long) to Long {
     return new Millis(this + rhs);
   }
 
+  @:op(A - B)
+  public function minus(rhs: Millis): Millis {
+    return new Millis(this - rhs);
+  }
+
   @:op(A == B)
   public static function eq(a: Millis, b: Int): Bool;
+
+  @:op(A != B)
+  public static function neq(a: Millis, b: Int): Bool;
 
   public inline function toInt(): Int {
     return cast this;

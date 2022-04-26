@@ -1,6 +1,7 @@
 package com.lightstreamer.internal;
 
 import com.lightstreamer.internal.NativeTypes.Long;
+import com.lightstreamer.internal.Types;
 import hx.concurrent.executor.Executor;
 import com.lightstreamer.internal.PlatformApi;
 
@@ -27,6 +28,11 @@ abstract TimerMillis(Float) {
   @:op(A < B)
   public static function lt(a: TimerMillis, b: TimerMillis): Bool;
 
+  @:to
+  public function toMillis(): Millis {
+    return new Millis(this);
+  }
+
   public inline function toLong(): Long {
     return cast this;
   }
@@ -40,6 +46,11 @@ abstract TimerStamp(Float) {
 
   public static inline function now() {
     return new TimerStamp(Timer.stamp());
+  }
+
+  @:op(A + B)
+  public function plus(rhs: Millis): TimerMillis {
+    return new TimerMillis((this * 1000) + rhs.toInt());
   }
 
   @:op(A - B)
