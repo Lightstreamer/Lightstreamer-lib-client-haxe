@@ -1,7 +1,5 @@
 package com.lightstreamer.client.internal;
 
-import com.lightstreamer.client.internal.ClientStates;
-
 interface Encodable {
   function isPending(): Bool;
   function encode(isWS: Bool): String;

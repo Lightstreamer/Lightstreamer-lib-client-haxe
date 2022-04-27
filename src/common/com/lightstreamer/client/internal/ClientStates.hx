@@ -199,7 +199,6 @@ class StateVar_hp {
 }
 
 class State {
-  // TODO update toString
   public var s_m(default, null): State_m;
   public var s_du(default, null): State_du;
   public var s_tr(default, null): Null<State_tr>;
@@ -215,9 +214,10 @@ class State {
   public var s_bw(default, null): Null<State_bw>;
   public var s_rhb(default, null): Null<State_rhb>;
   public var s_slw(default, null): Null<State_slw>;
-  // TODO MPN
-  // var s_mpn: StateVar_mpn = StateVar_mpn()
   public var s_nr(default, null): State_nr;
+  #if LS_MPN
+  public var s_mpn(default, null) = new com.lightstreamer.client.internal.MpnStates.StateVar_mpn();
+  #end
 
   public function new() {
     this.s_m = s100;
@@ -375,8 +375,10 @@ class State {
     if (s_bw != null) str += " bw=" + s_bw;
     if (s_rhb != null) str += " rhb=" + s_rhb;
     if (s_slw != null) str += " slw=" + s_slw;
-    // TODO log MPN
     str += " nr=" + s_nr;
+    #if LS_MPN
+    if (s_mpn != null) str += " " + s_mpn;
+    #end
     str += ">";
     return str;
   }

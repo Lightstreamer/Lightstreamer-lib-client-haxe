@@ -19,6 +19,14 @@ class Set<T> {
     return values.contains(x);
   }
 
+  public function remove(x: T) {
+    values.remove(x);
+  }
+
+  public function removeAll() {
+    values.splice(0, values.length);
+  }
+
   public function union(other: Array<T>): Set<T> {
     var res = new Set();
     for (v in values) {

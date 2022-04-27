@@ -30,6 +30,7 @@ class MpnDevice {
   var status: MpnDeviceStatus = UNKNOWN;
   var statusTs: Timestamp = new Timestamp(0);
   var deviceId: Null<DeviceId>;
+  var adapterName: Null<String>;
 
   #if java
   public function new(appContext: android.content.Context, token: String) {
@@ -134,5 +135,103 @@ class MpnDevice {
   }
   public function getDeviceId(): Null<String> {
     return deviceId;
+  }
+
+  @:allow(com.lightstreamer.client.internal.MpnClientMachine)
+  function setDeviceId(deviceId: String, adapterName: String) {
+    lock.execute(() -> {
+      this.deviceId = new DeviceId(deviceId);
+      this.adapterName = adapterName;
+    });
+  }
+
+  @:allow(com.lightstreamer.client.internal.MpnClientMachine)
+  function onRegistered(timestamp: Long) {
+    lock.execute(() -> {
+      mpnDeviceLogger.logInfo('MPN device registered: $deviceId)');
+      status = REGISTERED;
+      statusTs = new Timestamp(timestamp);
+      
+      eventDispatcher.onStatusChanged(REGISTERED, timestamp);
+      eventDispatcher.onRegistered();
+    });
+  }
+
+  @:allow(com.lightstreamer.client.internal.MpnClientMachine)
+  function onSuspend(timestamp: Long) {
+    lock.execute(() -> {
+      mpnDeviceLogger.logInfo('MPN device suspended: $deviceId');
+      status = SUSPENDED;
+      statusTs = new Timestamp(timestamp);
+      
+      eventDispatcher.onStatusChanged(SUSPENDED, timestamp);
+      eventDispatcher.onSuspended();
+    });
+  }
+
+  @:allow(com.lightstreamer.client.internal.MpnClientMachine)
+  function onResume(timestamp: Long) {
+    lock.execute(() -> {
+      mpnDeviceLogger.logInfo('MPN device resumed: $deviceId');
+      status = REGISTERED;
+      statusTs = new Timestamp(timestamp);
+      
+      eventDispatcher.onStatusChanged(REGISTERED, timestamp);
+      eventDispatcher.onResumed();
+    });
+  }
+
+  @:allow(com.lightstreamer.client.internal.MpnClientMachine)
+  function onError(code: Int, msg: String) {
+    lock.execute(() -> {
+      mpnDeviceLogger.logWarn('MPN device error: $code - $msg $deviceId');
+      status = UNKNOWN;
+      statusTs = new Timestamp(0);
+      deviceId = null;
+      adapterName = null;
+      
+      eventDispatcher.onRegistrationFailed(code, msg);
+      eventDispatcher.onStatusChanged(UNKNOWN, 0);
+    });
+  }
+
+  @:allow(com.lightstreamer.client.internal.MpnClientMachine)
+  function onReset() {
+    lock.execute(() -> {
+      mpnDeviceLogger.logInfo("MPN device NOT registered");
+      var oldStatus = status;
+      status = UNKNOWN;
+      statusTs = new Timestamp(0);
+      deviceId = null;
+      adapterName = null;
+      
+      if (oldStatus != UNKNOWN) {
+        eventDispatcher.onStatusChanged(UNKNOWN, 0);
+      }
+    });
+  }
+
+  @:allow(com.lightstreamer.client.internal.MpnClientMachine)
+  function fireOnSubscriptionsUpdated() {
+    lock.execute(() -> {
+      mpnDeviceLogger.logInfo('MPN subscriptions have been updated: $deviceId');
+      eventDispatcher.onSubscriptionsUpdated();
+    });
+  }
+
+  @:allow(com.lightstreamer.client.internal.MpnClientMachine)
+  function fireOnBadgeResetFailed(code: Int, msg: String) {
+    // Swift only
+    lock.execute(() -> {
+      mpnDeviceLogger.logWarn('MPN badge reset failed: $code - $msg $deviceId');
+    });
+  }
+  
+  @:allow(com.lightstreamer.client.internal.MpnClientMachine)
+  function fireOnBadgeReset() {
+    // Swift only
+    lock.execute(() -> {
+      mpnDeviceLogger.logInfo('MPN badge successfully reset: $deviceId');
+    });
   }
 }

@@ -78,22 +78,6 @@ class RequestBuilder {
     addParam("LS_data_adapter", val);
   }
 
-  public function PN_deviceId(val: String) {
-    addParam("PN_deviceId", val);
-  }
-
-  public function PN_notificationFormat(val: String) {
-    addParam("PN_notificationFormat", val);
-  }
-
-  public function PN_trigger(val: String) {
-    addParam("PN_trigger", val);
-  }
-
-  public function PN_coalescing(val: Bool) {
-    addParam("PN_coalescing", val);
-  }
-
   public function LS_requested_max_frequency(val: String) {
     addParam("LS_requested_max_frequency", val);
   }
@@ -108,30 +92,6 @@ class RequestBuilder {
 
   public function LS_requested_buffer_size_Int(val: Int) {
     addParam("LS_requested_buffer_size", val);
-  }
-
-  public function PN_subscriptionId(val: String) {
-    addParam("PN_subscriptionId", val);
-  }
-
-  public function PN_type(val: String) {
-    addParam("PN_type", val);
-  }
-
-  public function PN_appId(val: String) {
-    addParam("PN_appId", val);
-  }
-
-  public function PN_deviceToken(val: String) {
-    addParam("PN_deviceToken", val);
-  }
-
-  public function PN_newDeviceToken(val: String) {
-    addParam("PN_newDeviceToken", val);
-  }
-
-  public function PN_subscriptionStatus(val: String) {
-    addParam("PN_subscriptionStatus", val);
   }
 
   public function LS_cause(val: String) {
@@ -257,4 +217,46 @@ class RequestBuilder {
   public function toString() {
     return params.join(" ");
   }
+
+  #if LS_MPN
+  public function PN_deviceId(val: String) {
+    addParam("PN_deviceId", val);
+  }
+
+  public function PN_notificationFormat(val: String) {
+    addParam("PN_notificationFormat", val);
+  }
+
+  public function PN_trigger(val: String) {
+    addParam("PN_trigger", val);
+  }
+
+  public function PN_coalescing(val: Bool) {
+    addParam("PN_coalescing", val);
+  }
+
+  public function PN_subscriptionId(val: String) {
+    addParam("PN_subscriptionId", val);
+  }
+
+  public function PN_type(val: String) {
+    addParam("PN_type", val);
+  }
+
+  public function PN_appId(val: String) {
+    addParam("PN_appId", val);
+  }
+
+  public function PN_deviceToken(val: String) {
+    addParam("PN_deviceToken", val);
+  }
+
+  public function PN_newDeviceToken(val: String) {
+    addParam("PN_newDeviceToken", val);
+  }
+
+  public function PN_subscriptionStatus(val: String) {
+    addParam("PN_subscriptionStatus", val);
+  }
+  #end
 }
