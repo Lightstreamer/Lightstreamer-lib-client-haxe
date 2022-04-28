@@ -158,6 +158,7 @@ class MpnClientMachine extends ClientMachine {
       });
       genUnsubscribeMpnSpecialItems();
     default:
+      // ignore
     }
     return false;
   }
@@ -191,6 +192,7 @@ class MpnClientMachine extends ClientMachine {
       genUnsubscribeMpnSpecialItems();
       evtResetMpnDevice();
     default:
+      // ignore
     }
     if (forward) {
       forward = evtTerminate_NetworkReachabilityRegion();

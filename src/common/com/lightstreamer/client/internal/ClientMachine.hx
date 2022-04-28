@@ -251,6 +251,7 @@ class ClientMachine {
             evtNetworkReachable(hostAddress);
         });
     default:
+      // ignore
     }
   }
 
@@ -352,6 +353,7 @@ class ClientMachine {
           evtTerminate(terminationCause);
         }
       default:
+        // ignore
       }
     case s110, s111, s112, s113, s114, s115, s116:
         notifyStatus(DISCONNECTED);
@@ -359,6 +361,7 @@ class ClientMachine {
         cancel_evtRetryTimeout();
         evtTerminate(terminationCause);
     default:
+      // ignore
     }
   }
 
@@ -709,6 +712,7 @@ class ClientMachine {
             entry_rec(pauseMs, ws_timeout);
           }
         default:
+          // ignore
         }
       case s250:
         switch state.s_wp?.m {
@@ -721,6 +725,7 @@ class ClientMachine {
           exit_wp();
           evtSwitchTransport();
         default:
+          // ignore
         }
       case s260:
         if (state.s_rec == s1001) {
@@ -759,12 +764,16 @@ class ClientMachine {
               entry_rec(pauseMs, http_timeout);
             }
           default:
+            // ignore
           }
         default:
+          // ignore
         }
       default:
+        // ignore
       }
     default:
+      // ignore
     }
   }
 
@@ -1032,8 +1041,10 @@ class ClientMachine {
           }
         }
       default:
+        // ignore
       }
     default:
+      // ignore
     }
   }
 
@@ -1222,6 +1233,7 @@ class ClientMachine {
           case s501:
             goto(state.s_ws.m = s502);
           default:
+            // ignore
           }
         case s250:
           switch state.s_wp?.m {
@@ -1238,10 +1250,13 @@ class ClientMachine {
             evtSendPendingMessages();
             schedule_evtIdleTimeout(idleTimeout.sure() + options.retryDelay);
           default:
+            // ignore
           }
         default:
+          // ignore
         }
       default:
+        // ignore
       }
   }
 
@@ -2179,6 +2194,7 @@ class ClientMachine {
         goto(state.s_slw = s332);
         evtCheckAvg(result);
       default:
+        // ignore
       }
     }
     return false;
@@ -2467,6 +2483,7 @@ class ClientMachine {
           goto(state.s_rhb = s323);
         }
       default:
+        // ignore
       }
     }
   }
@@ -2504,6 +2521,7 @@ class ClientMachine {
           }
         }
       default:
+        // ignore
       }
     }
   }
@@ -2725,6 +2743,7 @@ class ClientMachine {
     case s21:
       goto(state.s_du = s22);
     default:
+      // ignore
     }
   }
 
@@ -2755,6 +2774,7 @@ class ClientMachine {
       genAbortSubscriptions();
       genAbortMessages();
     default:
+      // ignore
     }
     if (forward) {
       forward = evtRetry_NextRegion();
@@ -2805,6 +2825,7 @@ class ClientMachine {
       forward = evtTerminate_NextRegion();
       genAbortMessages();
     default:
+      // ignore
     }
     if (forward) {
       forward = evtTerminate_NextRegion();
@@ -2825,6 +2846,7 @@ class ClientMachine {
         rm.stopListening();
       }
     default:
+      // ignore
     }
     return false;
   }
@@ -2867,6 +2889,7 @@ class ClientMachine {
         schedule_evtTransportTimeout(options.retryDelay);
       }
     default:
+      // ignore
     }
   }
 
