@@ -236,44 +236,384 @@ class MpnClientMachine extends ClientMachine {
     return true;
   }
 
-  function evtResetMpnDevice() {
-    // TODO
+  function evtExtMpnRegister() {
+    traceEvent("mpn.register");
+    if (state.s_mpn.m == s400) {
+      goto(state.s_mpn.m = s402);
+      evtMpnCheckNext();
+    } else if (state.s_mpn.m == s401) {
+      goto(state.s_mpn.m = s402);
+      evtMpnCheckNext();
+    } else if (state.s_mpn.tk == s451) {
+      goto(state.s_mpn.tk = s452);
+      evtMpnCheckNext();
+    }
   }
+
   function evtMpnCheckNext() {
-    // TODO
+    traceEvent("mpn.check.next");
+    if (state.s_mpn.m == s402) {
+      if (mpn_candidate_devices.empty()) {
+        goto(state.s_mpn.m = s401);
+        evtResetMpnDevice();
+      } else {
+        doRegisterMpnDevice();
+        goto(state.s_mpn.m = s403);
+        genSendMpnRegister();
+      }
+    } else if (state.s_mpn.m == s408) {
+      if (mpn_candidate_devices.empty()) {
+        goto(state.s_mpn.m = s401);
+        evtResetMpnDevice();
+      } else {
+        doRegisterMpnDevice();
+        goto(state.s_mpn.m = s406);
+        genSendMpnRegister();
+      }
+    } else if (state.s_mpn.tk == s452) {
+      if (mpn_candidate_devices.empty()) {
+        doRemoveMpnSpecialListeners();
+        goto({
+          state.s_mpn.m = s401;
+          state.s_mpn.st = null;
+          state.s_mpn.tk = null;
+          state.s_mpn.sbs = null;
+          state.s_mpn.ft = null;
+          state.s_mpn.bg = null;
+        });
+        genUnsubscribeMpnSpecialItems();
+        evtResetMpnDevice();
+      } else {
+        doRegisterMpnDevice();
+        goto(state.s_mpn.tk = s453);
+        genSendMpnRegister();
+      }
+    }
   }
-  function evtMpnCheckFilter() {
-    // TODO
+
+  function evtResetMpnDevice() {
+    traceEvent("reset.mpn.device");
+    if (state.s_mpn.m == s401) {
+      doResetMpnDevice();
+      notifyDeviceReset();
+      goto(state.s_mpn.m = s401);
+    }
   }
-  function evtMpnCheckReset() {
-    // TODO
-  }
-  function evtMPNREG(deviceId: String, adapterName: String) {
-    // TODO
-  }
-  function evtMPNZERO(deviceId: String) {
-    // TODO
-  }
-  function evtMPNOK(subId: Int, mpnSubId: String) {
-    // TODO
-  }
-  function evtMPNDEL(mpnSubId: String) {
-    // TODO
-  }
-  function evtMPNCONF(mpnSubId: String) {
-    // TODO
-  }
-  function evtDEV_Update(status: String, timestamp: Long) {
-    // TODO
-  }
+
   function evtMpnError(code: Int, msg: String) {
-    // TODO
+    traceEvent("mpn.error");
+    if (state.s_mpn.m == s405) {
+      doRemoveMpnSpecialListeners();
+      notifyDeviceError(code, msg);
+      goto({
+        state.s_mpn.m = s401;
+        state.s_mpn.st = null;
+        state.s_mpn.sbs = null;
+        state.s_mpn.ft = null;
+        state.s_mpn.bg = null;
+        state.s_mpn.tk = null;
+      });
+      genUnsubscribeMpnSpecialItems();
+      evtResetMpnDevice();
+    }
   }
+
+  function evtMPNREG(deviceId: String, adapterName: String) {
+    traceEvent("MPNREG");
+    protocolLogger.logDebug('MPNREG $deviceId $adapterName');
+    var forward = true;
+    if (state.inPushing()) {
+      if (isFreshData()) {
+        doMPNREG();
+        var inStreaming = state.inStreaming();
+        forward = evtMPNREG_MpnRegion(deviceId, adapterName);
+        if (inStreaming) {
+          evtRestartKeepalive();
+        }
+      } else {
+        onStaleData();
+        var inStreaming = state.inStreaming();
+        forward = evtMPNREG_MpnRegion(deviceId, adapterName);
+        if (inStreaming) {
+          evtRestartKeepalive();
+        }
+      }
+    }
+    if (forward) {
+      forward = evtMPNREG_MpnRegion(deviceId, adapterName);
+    }
+  }
+
+  function evtMPNREG_MpnRegion(deviceId: String, adapterName: String) {
+    traceEvent("MPNREG");
+    if (state.s_mpn.m == s403 || state.s_mpn.m == s404) {
+      doMPNREG_Register(deviceId, adapterName);
+      notifyDeviceRegistered(0);
+      goto({
+        state.s_mpn.m = s405;
+        state.s_mpn.st = s410;
+        state.s_mpn.sbs = s420;
+        state.s_mpn.ft = s430;
+        state.s_mpn.bg = s440;
+        state.s_mpn.tk = s450;
+      });
+      genDeviceActive();
+      genSubscribeSpecialItems();
+      evtMpnCheckPending();
+      evtSUBS_Init();
+      evtMpnCheckFilter();
+      evtMpnCheckReset();
+    } else if (state.s_mpn.m == s406 || state.s_mpn.m == s407) {
+      if (deviceId == mpn_deviceId && adapterName == mpn_adapterName) {
+        doMPNREG_Register(deviceId, adapterName);
+        notifyDeviceRegistered(0);
+        goto({
+          state.s_mpn.m = s405;
+          state.s_mpn.st = s410;
+          state.s_mpn.sbs = s420;
+          state.s_mpn.ft = s430;
+          state.s_mpn.bg = s440;
+          state.s_mpn.tk = s450;
+        });
+        genDeviceActive();
+        genSubscribeSpecialItems();
+        evtMpnCheckPending();
+        evtSUBS_Init();
+        evtMpnCheckFilter();
+        evtMpnCheckReset();
+      } else {
+        doMPNREG_Error();
+        notifyDeviceError_DifferentDevice();
+        goto(state.s_mpn.m = s408);
+        evtMpnCheckNext();
+      }
+    } else if (state.s_mpn.tk == s453 || state.s_mpn.tk == s454) {
+      if (deviceId == mpn_deviceId && adapterName == mpn_adapterName) {
+        doMPNREG_RefreshToken(deviceId, adapterName);
+        goto(state.s_mpn.tk = s450);
+        evtMpnCheckPending();
+      } else {
+        doMPNREG_Error();
+        notifyDeviceError_DifferentDevice();
+        goto(state.s_mpn.tk = s452);
+        evtMpnCheckNext();
+      }
+    }
+    return false;
+  }
+
+  function evtMPNZERO(deviceId: String) {
+    traceEvent("MPNZERO");
+    protocolLogger.logDebug('MPNZERO $deviceId');
+    if (state.inPushing()) {
+      if (isFreshData()) {
+        doMPNZERO(deviceId);
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      } else {
+        onStaleData();
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      }
+    }
+  }
+
+  function evtMPNOK(subId: Int, mpnSubId: String) {
+    traceEvent("MPNOK");
+    protocolLogger.logDebug('MPNOK $subId $mpnSubId');
+    if (state.inPushing()) {
+      if (isFreshData()) {
+        doMPNOK(subId, mpnSubId);
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      } else {
+        onStaleData();
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      }
+    }
+  }
+
+  function evtMPNDEL(mpnSubId: String) {
+    traceEvent("MPNDEL");
+    protocolLogger.logDebug('MPNDEL $mpnSubId');
+    if (state.inPushing()) {
+      if (isFreshData()) {
+        doMPNDEL(mpnSubId);
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      } else {
+        onStaleData();
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      }
+    }
+  }
+
+  function evtMPNCONF(mpnSubId: String) {
+    traceEvent("MPNCONF");
+    protocolLogger.logDebug('MPNCONF $mpnSubId');
+    if (state.inPushing()) {
+      if (isFreshData()) {
+        doMPNCONF(mpnSubId);
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      } else {
+        onStaleData();
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      }
+    }
+  }
+
+  function evtDEV_Update(status: String, timestamp: Long) {
+    traceEvent("DEV.update");
+    if (state.s_mpn.st == s410) {
+      if (status == "ACTIVE") {
+        if (!mpn_device.sure().isRegistered()) {
+          notifyDeviceRegistered(timestamp);
+        }
+        goto(state.s_mpn.st = s410);
+      } else if (status == "SUSPENDED") {
+        if (!mpn_device.sure().isSuspended()) {
+          notifyDeviceSuspended(timestamp);
+        }
+        goto(state.s_mpn.st = s411);
+      }
+    } else if (state.s_mpn.st == s411) {
+      if (status == "ACTIVE") {
+        notifyDeviceResume(timestamp);
+        goto(state.s_mpn.st = s410);
+      }
+    }
+  }
+
+  function evtMpnCheckPending() {
+    traceEvent("mpn.check.pending");
+    if (state.s_mpn.tk == s450) {
+      if (mpn_candidate_devices.empty()) {
+        goto(state.s_mpn.tk = s451);
+      } else {
+        goto(state.s_mpn.tk = s452);
+        evtMpnCheckNext();
+      }
+    }
+  }
+
+  function evtSUBS_Init() {
+    traceEvent("SUBS.init");
+    if (state.s_mpn.sbs == s420) {
+      doClearMpnSnapshot();
+      goto(state.s_mpn.sbs = s421);
+    }
+  }
+
   function evtSUBS_Update(mpnSubId: String, update: ItemUpdate) {
-    // TODO
+    traceEvent("SUBS.update");
+    var command = update.getValue("command");
+    var status = update.getValue("status");
+    if (state.s_mpn.sbs != null && exists(mpnSubId)) {
+      state.traceState();
+      genSUBS_update(mpnSubId, update);
+    } else if (state.s_mpn.sbs == s421 && command != "DELETE" && !exists(mpnSubId)) {
+      if (status == null) {
+        doAddToMpnSnapshot(mpnSubId);
+        goto(state.s_mpn.sbs = s423);
+      } else {
+        doRemoveFromMpnSnapshot(mpnSubId);
+        doAddMpnSubscription(mpnSubId);
+        goto(state.s_mpn.sbs = s423);
+        genSUBS_update(mpnSubId, update);
+      }
+    } else if (state.s_mpn.sbs == s423 && command != "DELETE" && !exists(mpnSubId)) {
+      if (status == null) {
+        doAddToMpnSnapshot(mpnSubId);
+        goto(state.s_mpn.sbs = s423);
+      } else {
+        doRemoveFromMpnSnapshot(mpnSubId);
+        doAddMpnSubscription(mpnSubId);
+        goto(state.s_mpn.sbs = s423);
+        genSUBS_update(mpnSubId, update);
+      }
+    } else if (state.s_mpn.sbs == s424 && command != "DELETE" && status != null && !exists(mpnSubId)) {
+      if (mpn_snapshotSet.count() == 0 || (mpn_snapshotSet.count() == 1 && mpn_snapshotSet.contains(mpnSubId))) {
+        doRemoveFromMpnSnapshot(mpnSubId);
+        doAddMpnSubscription(mpnSubId);
+        goto(state.s_mpn.sbs = s424);
+        genSUBS_update(mpnSubId, update);
+        notifyOnSubscriptionsUpdated();
+      } else if ((mpn_snapshotSet.count() == 1 && !mpn_snapshotSet.contains(mpnSubId)) || mpn_snapshotSet.count() > 1) {
+        doRemoveFromMpnSnapshot(mpnSubId);
+        doAddMpnSubscription(mpnSubId);
+        goto(state.s_mpn.sbs = s424);
+        genSUBS_update(mpnSubId, update);
+      }
+    }
   }
+
   function evtSUBS_EOS() {
-    // TODO
+    traceEvent("SUBS.EOS");
+    if (state.s_mpn.sbs == s421) {
+      goto(state.s_mpn.sbs = s424);
+      genSUBS_EOS();
+    } else if (state.s_mpn.sbs == s423) {
+      if (mpn_snapshotSet.count() > 0) {
+        goto(state.s_mpn.sbs = s424);
+        genSUBS_EOS();
+      } else {
+        goto(state.s_mpn.sbs = s424);
+        genSUBS_EOS();
+        notifyOnSubscriptionsUpdated();
+      }
+    }
+  }
+
+  function evtExtMpnUnsubscribeFilter() {
+    traceEvent("mpn.unsubscribe.filter");
+    if (state.s_mpn.ft == s431) {
+      goto(state.s_mpn.ft = s430);
+      evtMpnCheckFilter();
+    }
+  }
+
+  function evtMpnCheckFilter() {
+    traceEvent("mpn.check.filter");
+    if (state.s_mpn.ft == s430) {
+      if (mpn_filter_pendings.empty()) {
+        goto(state.s_mpn.ft = s431);
+      } else {
+        goto(state.s_mpn.ft = s432);
+        genSendMpnUnsubscribeFilter();
+      }
+    }
+  }
+
+  function evtExtMpnResetBadge() {
+    traceEvent("mpn.reset.badge");
+    if (state.s_mpn.bg == s441) {
+      goto(state.s_mpn.bg = s440);
+      evtMpnCheckReset();
+    }
+  }
+  
+  function evtMpnCheckReset() {
+    traceEvent("mpn.check.reset");
+    if (state.s_mpn.bg == s440) {
+      if (mpn_badge_reset_requested) {
+        goto(state.s_mpn.bg = s442);
+        genSendMpnResetBadge();
+      } else {
+        goto(state.s_mpn.bg = s441);
+      }
+    }
   }
 
   // ---------- event actions ----------
@@ -318,6 +658,7 @@ class MpnClientMachine extends ClientMachine {
 
   function subscribeExt(subscription: Subscription, isInternal: Bool = false) {
     // TODO
+    throw new haxe.exceptions.NotImplementedException();
   }
 
   function doRegisterMpnDevice() {

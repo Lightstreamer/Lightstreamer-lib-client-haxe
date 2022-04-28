@@ -383,7 +383,7 @@ class State {
     return str;
   }
 
-  function traceState() {
+  public function traceState() {
     internalLogger.logTrace("goto: " + this.toString());
   }
 }
