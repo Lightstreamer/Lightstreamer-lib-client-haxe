@@ -7,9 +7,6 @@ import haxe.macro.Expr;
 using haxe.macro.TypeTools;
 
 function synchronizeClass(): Array<Field> {
-  // don't synchronize single-threaded languages
-  if (Context.defined("js") || Context.defined("php"))
-    return null;
   var fields = Context.getBuildFields();
   if (!fields.map(f -> f.name).contains("lock")) {
     fields.push({
