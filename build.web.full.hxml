@@ -1,15 +1,18 @@
 build.common.hxml
+
 --class-path src/platform/js
 --class-path src/platform/web
 --class-path src/mpn/common
 --class-path src/mpn/web
+
+--library hxtsdgen
 
 com.lightstreamer.client.mpn.MpnDevice
 com.lightstreamer.client.mpn.MpnSubscription
 com.lightstreamer.client.mpn.FirebaseMpnBuilder
 com.lightstreamer.client.mpn.SafariMpnBuilder
 
---library hxtsdgen
+-D LS_MPN
 -D shallow-expose
 --js bin/web/lightstreamer_orig.full.js
 --cmd haxe -p tools --run WebFullGenerator
