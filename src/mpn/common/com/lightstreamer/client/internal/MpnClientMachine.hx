@@ -65,7 +65,6 @@ class MpnClientMachine extends ClientMachine {
   }
 
   function evtExtConnect_MpnRegion() {
-    traceEvent("mpn:connect");
     var forward = true;
     if (state.s_mpn.m == s401) {
       goto(state.s_mpn.m = s403);
@@ -142,7 +141,6 @@ class MpnClientMachine extends ClientMachine {
   }
 
   function evtRetry_MpnRegion() {
-    traceEvent("mpn:retry");
     switch state.s_mpn.m {
     case s403, s404:
       goto(state.s_mpn.m = s403);
@@ -169,7 +167,6 @@ class MpnClientMachine extends ClientMachine {
   }
 
   function evtTerminate_MpnRegion() {
-    traceEvent("mpn:terminate");
     var forward = true;
     switch state.s_mpn.m {
     case s403, s404:
@@ -345,7 +342,6 @@ class MpnClientMachine extends ClientMachine {
   }
 
   function evtMPNREG_MpnRegion(deviceId: String, adapterName: String) {
-    traceEvent("MPNREG");
     if (state.s_mpn.m == s403 || state.s_mpn.m == s404) {
       doMPNREG_Register(deviceId, adapterName);
       notifyDeviceRegistered(0);

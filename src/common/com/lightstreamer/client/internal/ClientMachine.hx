@@ -182,7 +182,6 @@ class ClientMachine {
   }
 
   function evtExtConnect_NetworkReachabilityRegion() {
-    traceEvent("nr:connect");
     if (state.s_nr == s1400) {
       var hostAddress = new Url(getServerAddress()).hostname;
       nr_reachabilityManager = reachabilityFactory(hostAddress);
@@ -1674,7 +1673,6 @@ class ClientMachine {
   }
 
   function evtREQOK_TransportRegion(reqId: Int) {
-    traceEvent("tr:REQOK");
     if (state.s_w?.p == s300) {
       goto(state.s_w.p = s300);
       doREQOK(reqId);
@@ -1717,7 +1715,6 @@ class ClientMachine {
   }
 
   function evtREQERR_TransportRegion(reqId: Int, code: Int, msg: String) {
-    traceEvent("tr:REQERR");
     var retryCause = RetryCause.standardError(code, msg);
     var terminationCause = TerminationCause.TC_standardError(code, msg);
     if (state.s_w?.p == s300) {
@@ -2167,7 +2164,6 @@ class ClientMachine {
   }
 
   function evtSYNC_PushingRegion(seconds: Long): Bool {
-    traceEvent("slw:SYNC");
     var syncMs = new TimerMillis(cast seconds * 1_000);
     if (state.s_slw != null) {
       switch state.s_slw {
@@ -2820,7 +2816,6 @@ class ClientMachine {
   }
 
   function evtTerminate_NetworkReachabilityRegion() {
-    traceEvent("nr:terminate");
     switch state.s_nr {
     case s1410, s1411, s1412:
       var rm = nr_reachabilityManager;
@@ -2943,7 +2938,6 @@ class ClientMachine {
   }
 
   function evtSwitchTransport_forwardToTransportRegion() {
-    traceEvent("tr:switch.transport");
     var terminationCause = TC_otherError('Selected transport ${options.forcedTransport} is not available');
     if (state.s_tr == s200) {
       switch getBestForBinding() {
