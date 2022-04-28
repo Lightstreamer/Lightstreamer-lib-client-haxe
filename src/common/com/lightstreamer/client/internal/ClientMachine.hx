@@ -22,6 +22,7 @@ using Lambda;
 @:access(com.lightstreamer.client.ConnectionOptions)
 @:access(com.lightstreamer.client.LightstreamerClient)
 class ClientMachine {
+  final client: LightstreamerClient;
   final details: ConnectionDetails;
   final options: ConnectionOptions;
   final lock: com.lightstreamer.internal.RLock;
@@ -48,6 +49,7 @@ class ClientMachine {
   var cause: Null<String>;
   var connectTs: TimerStamp = new TimerStamp(0);
   var recoverTs: TimerStamp = new TimerStamp(0);
+  var ctrl_connectTs: TimerStamp = new TimerStamp(0);
   var suspendedTransports: Set<TransportSelection> = new Set();
   var disabledTransports: Set<TransportSelection> = new Set();
   // messages
@@ -58,12 +60,6 @@ class ClientMachine {
   // request types
   var switchRequest: Null<SwitchRequest>;
   var constrainRequest: Null<ConstrainRequest>;
-  // TODO MPN
-  //var mpnRegisterRequest: Null<Requests.MpnRegisterRequest>;
-  //var mpnFilterUnsubscriptionRequest: Null<Requests.MpnFilterUnsubscriptionRequest>;
-  //var mpnBadgeResetRequest: Null<Requests.MpnBadgeResetRequest>;
-  //
-  var ctrl_connectTs: TimerStamp = new TimerStamp(0);
   // transport switch
   var swt_lastReqId: Null<Int>;
   // reverse heartbeat
@@ -142,6 +138,7 @@ class ClientMachine {
     timerFactory: ITimerFactory,
     randomGenerator: Millis->Millis,
     reachabilityFactory: IReachabilityFactory) {
+    this.client = client;
     this.lock = client.lock;
     this.details = client.connectionDetails;
     this.options = client.connectionOptions;
@@ -154,10 +151,6 @@ class ClientMachine {
     this.clientEventDispatcher = client.eventDispatcher;
     this.switchRequest = new SwitchRequest(this);
     this.constrainRequest = new ConstrainRequest(this);
-    // TODO MPN
-    // mpnRegisterRequest = MpnRegisterRequest(self)
-    // mpnFilterUnsubscriptionRequest = MpnFilterUnsubscriptionRequest(self)
-    // mpnBadgeResetRequest = MpnBadgeResetRequest(self)
     delayCounter.reset(options.retryDelay);
     if (serverAddress != null) {
       details.setServerAddress(serverAddress);
@@ -176,18 +169,19 @@ class ClientMachine {
       cause = "api";
       resetCurrentRetryDelay();
       goto(state.s_m = s101);
-      // TODO MPN
-      //forward = evtExtConnect_MpnRegion();
+      forward = evtExtConnect_NextRegion();
       evtSelectCreate();
     }
     if (forward) {
-      // TODO MPN
-      //forward = evtExtConnect_MpnRegion();
+      forward = evtExtConnect_NextRegion();
     }
   }
 
+  function evtExtConnect_NextRegion() {
+    return evtExtConnect_NetworkReachabilityRegion();
+  }
+
   function evtExtConnect_NetworkReachabilityRegion() {
-    // TODO MPN connect with evtExtConnect 
     traceEvent("nr:connect");
     if (state.s_nr == s1400) {
       var hostAddress = new Url(getServerAddress()).hostname;
@@ -406,6 +400,7 @@ class ClientMachine {
 
   function evtMessage(line: String) {
     // TODO synchronize (called by openWS)
+    var matched = true;
     if (line.startsWith("U,")) {
       // U,<subscription id>,<itemd index>,<field values>
       var update = parseUpdate(line);
@@ -564,34 +559,10 @@ class ClientMachine {
       var args = line.split(",");
       var seconds = parseInt(args[1]);
       evtSYNC(seconds);
-    } else if (line.startsWith("MPNREG")) {
-      // MPNREG,<device id>,<adapter name>
-      var args = line.split(",");
-      var deviceId = args[1];
-      var adapterName = args[2];
-      // TODO MPN evtMPNREG(deviceId, adapterName);
-    } else if (line.startsWith("MPNZERO")) {
-      // MPNZERO,<device id>
-      var args = line.split(",");
-      var deviceId = args[1];
-      // TODO MPN evtMPNZERO(deviceId);
-    } else if (line.startsWith("MPNOK")) {
-      // MPNOK,<subscription id>, <mpn subscription id>
-      var args = line.split(",");
-      var subId = parseInt(args[1]);
-      var mpnSubId = args[2];
-      // TODO MPN evtMPNOK(subId, mpnSubId);
-    } else if (line.startsWith("MPNDEL")) {
-      // MPNDEL,<mpn subscription id>
-      var args = line.split(",");
-      var mpnSubId = args[1];
-      // TODO MPN evtMPNDEL(mpnSubId);
-    } else if (line.startsWith("MPNCONF")) {
-      // MPNCONF,<mpn subscription id>
-      var args = line.split(",");
-      var mpnSubId = args[1];
-      // TODO MPN evtMPNCONF(mpnSubId);
+    } else {
+      matched = false;
     }
+    return matched;
   }
 
   function evtCtrlMessage(line: String) {
@@ -1690,35 +1661,20 @@ class ClientMachine {
       goto(state.s_bw = s1200);
       forward = evtREQOK_TransportRegion(reqId);
       evtCheckBW();
+    } else {
+      forward = evtREQOK_Forward(reqId);
     }
-    // TODO MPN 
-    /*else if s_mpn.m == .s403 && reqId == mpn_lastRegisterReqId {
-      s_mpn.m = .s404
-      forward = evtREQOK_TransportRegion(reqId)
-    } else if s_mpn.m == .s406 && reqId == mpn_lastRegisterReqId {
-      s_mpn.m = .s407
-      forward = evtREQOK_TransportRegion(reqId)
-    } else if s_mpn.tk == .s453 && reqId == mpn_lastRegisterReqId {
-      s_mpn.tk = .s454
-      forward = evtREQOK_TransportRegion(reqId)
-    } else if s_mpn.ft == .s432 && reqId == mpn_filter_lastDeactivateReqId {
-      doREQMpnUnsubscribeFilter()
-      s_mpn.ft = .s430
-      forward = evtREQOK_TransportRegion(reqId)
-      evtMpnCheckFilter()
-    } else if s_mpn.bg == .s442 && reqId == mpn_badge_lastResetReqId {
-      doREQOKMpnResetBadge()
-      forward = evtREQOK_TransportRegion(reqId)
-      s_mpn.bg = .s440
-      evtMpnCheckReset()
-    }*/
     if (forward) {
       forward = evtREQOK_TransportRegion(reqId);
     }
   }
 
+  function evtREQOK_Forward(reqId: Int) {
+    return true;
+  }
+
   function evtREQOK_TransportRegion(reqId: Int) {
-    traceEvent("REQOK");
+    traceEvent("tr:REQOK");
     if (state.s_w?.p == s300) {
       goto(state.s_w.p = s300);
       doREQOK(reqId);
@@ -1748,47 +1704,20 @@ class ClientMachine {
       goto(state.s_bw = s1200);
       forward = evtREQERR_TransportRegion(reqId, code, msg);
       evtCheckBW();
+    } else {
+      forward = evtREQERR_Forward(reqId, code, msg);
     }
-    // TODO MPN
-    /*else if s_mpn.m == .s403 && reqId == mpn_lastRegisterReqId {
-      trace(evt, State_mpn_m.s403, State_mpn_m.s402);
-      notifyDeviceError(code, msg);
-      s_mpn.m = .s402
-      forward = evtREQERR_TransportRegion(reqId, code, msg);
-      evtMpnCheckNext();
-    } else if s_mpn.m == .s406 && reqId == mpn_lastRegisterReqId {
-      trace(evt, State_mpn_m.s406, State_mpn_m.s408);
-      notifyDeviceError(code, msg);
-      s_mpn.m = .s408
-      forward = evtREQERR_TransportRegion(reqId, code, msg);
-      evtMpnCheckNext();
-    } else if s_mpn.tk == .s453 && reqId == mpn_lastRegisterReqId {
-      trace(evt, State_mpn_tk.s453, State_mpn_tk.s452);
-      notifyDeviceError(code, msg);
-      s_mpn.tk = .s452
-      forward = evtREQERR_TransportRegion(reqId, code, msg);
-      evtMpnCheckNext();
-    } else if s_mpn.ft == .s432 && reqId == mpn_filter_lastDeactivateReqId {
-      trace(evt, State_mpn_ft.s432, State_mpn_ft.s430);
-      doREQMpnUnsubscribeFilter();
-      s_mpn.ft = .s430
-      forward = evtREQERR_TransportRegion(reqId, code, msg);
-      evtMpnCheckFilter();
-    } else if s_mpn.bg == .s442 && reqId == mpn_badge_lastResetReqId {
-      trace(evt, State_mpn_bg.s442, State_mpn_bg.s440);
-      doREQERRMpnResetBadge();
-      notifyOnBadgeResetFailed(code, msg);
-      s_mpn.bg = .s440
-      forward = evtREQERR_TransportRegion(reqId, code, msg);
-      evtMpnCheckReset();
-    }*/
     if (forward) {
       forward = evtREQERR_TransportRegion(reqId, code, msg);
     }
   }
 
+  function evtREQERR_Forward(reqId: Int, code: Int, msg: String) {
+    return true;
+  }
+
   function evtREQERR_TransportRegion(reqId: Int, code: Int, msg: String) {
-    traceEvent("REQERR");
+    traceEvent("tr:REQERR");
     var retryCause = RetryCause.standardError(code, msg);
     var terminationCause = TerminationCause.TC_standardError(code, msg);
     if (state.s_w?.p == s300) {
@@ -2238,7 +2167,7 @@ class ClientMachine {
   }
 
   function evtSYNC_PushingRegion(seconds: Long): Bool {
-    traceEvent("SYNC");
+    traceEvent("slw:SYNC");
     var syncMs = new TimerMillis(cast seconds * 1_000);
     if (state.s_slw != null) {
       switch state.s_slw {
@@ -2821,23 +2750,22 @@ class ClientMachine {
     case s21:
       resetSequenceMap();
       goto(state.s_du = s23);
-      forward = evtRetry_MpnRegion();
+      forward = evtRetry_NextRegion();
       genAbortMessages();
     case s22:
       disposeSession();
       goto(state.s_du = s23);
-      forward = evtRetry_MpnRegion();
+      forward = evtRetry_NextRegion();
       genAbortSubscriptions();
       genAbortMessages();
     default:
     }
     if (forward) {
-      forward = evtRetry_MpnRegion();
+      forward = evtRetry_NextRegion();
     }
   }
 
-  function evtRetry_MpnRegion() {
-    // TODO MPN
+  function evtRetry_NextRegion() {
     return false;
   }
 
@@ -2867,33 +2795,31 @@ class ClientMachine {
       disposeSession();
       disposeClient();
       goto(state.s_du = s20);
-      forward = evtTerminate_MpnRegion();
+      forward = evtTerminate_NextRegion();
       genAbortSubscriptions();
       genAbortMessages();
     case s23:
       disposeClient();
       goto(state.s_du = s20);
-      forward = evtTerminate_MpnRegion();
+      forward = evtTerminate_NextRegion();
       genAbortMessages();
     case s21:
       disposeClient();
       goto(state.s_du = s20);
-      forward = evtTerminate_MpnRegion();
+      forward = evtTerminate_NextRegion();
       genAbortMessages();
     default:
     }
     if (forward) {
-      forward = evtTerminate_MpnRegion();
+      forward = evtTerminate_NextRegion();
     }
   }
 
-  function evtTerminate_MpnRegion() {
-    // TODO MPN
-    return false;
+  function evtTerminate_NextRegion() {
+    return evtTerminate_NetworkReachabilityRegion();
   }
 
   function evtTerminate_NetworkReachabilityRegion() {
-    // TODO MPN connect with evtTerminate
     traceEvent("nr:terminate");
     switch state.s_nr {
     case s1410, s1411, s1412:
@@ -3017,7 +2943,7 @@ class ClientMachine {
   }
 
   function evtSwitchTransport_forwardToTransportRegion() {
-    traceEvent("switch.transport");
+    traceEvent("tr:switch.transport");
     var terminationCause = TC_otherError('Selected transport ${options.forcedTransport} is not available');
     if (state.s_tr == s200) {
       switch getBestForBinding() {
@@ -3813,10 +3739,6 @@ class ClientMachine {
     for (msg in messageManagers) {
       msg.evtREQOK(reqId);
     }
-    // TODO MPN
-    // for (sub in mpnSubscriptionManagers) {
-    //   sub.evtREQOK(reqId);
-    // }
   }
 
   function doREQERR(reqId: Int, errorCode: Int, errorMsg: String) {
@@ -3826,10 +3748,6 @@ class ClientMachine {
     for (msg in messageManagers) {
       msg.evtREQERR(reqId, errorCode, errorMsg);
     }
-    // TODO MPN
-    // for (sub in mpnSubscriptionManagers) {
-    //   sub.evtREQERR(reqId, errorCode, errorMsg);
-    // }
   }
 
   function doSYNC(syncMs: TimerMillis) {
@@ -4170,10 +4088,6 @@ class ClientMachine {
     for (_ => sub in subscriptionManagers) {
       sub.evtExtAbort();
     }
-    // TODO MPN
-    // for (sub in mpnSubscriptionManagers) {
-    //   sub.evtAbort();
-    // }
   }
 
   function genAckMessagesWS() {
@@ -4241,19 +4155,6 @@ class ClientMachine {
         res.push(sub);
       }
     }
-    // TODO MPN
-    // if mpnRegisterRequest.isPending() {
-    //     res.append(mpnRegisterRequest)
-    // }
-    // for sub in mpnSubscriptionManagers.filter({ $0.isPending() }) {
-    //     res.append(sub)
-    // }
-    // if mpnFilterUnsubscriptionRequest.isPending() {
-    //     res.append(mpnFilterUnsubscriptionRequest)
-    // }
-    // if mpnBadgeResetRequest.isPending() {
-    //     res.append(mpnBadgeResetRequest)
-    // }
     return res;
   }
 

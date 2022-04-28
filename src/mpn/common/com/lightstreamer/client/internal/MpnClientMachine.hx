@@ -11,9 +11,11 @@ import com.lightstreamer.client.SubscriptionListener;
 import com.lightstreamer.client.internal.ParseTools;
 import com.lightstreamer.client.internal.ClientRequests;
 import com.lightstreamer.client.internal.MpnRequests;
+import com.lightstreamer.client.internal.ClientMachine;
 import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
 using Lambda;
+using StringTools;
 using com.lightstreamer.internal.NullTools;
 using com.lightstreamer.internal.ArrayTools;
 
@@ -36,9 +38,9 @@ class MpnClientMachine extends ClientMachine {
   var mpn_badge_reset_requested = false;
   var mpn_badge_lastResetReqId: Null<Int>;
   // requests
-  var mpnRegisterRequest: Null<MpnRequests.MpnRegisterRequest>;
-  var mpnFilterUnsubscriptionRequest: Null<MpnRequests.MpnFilterUnsubscriptionRequest>;
-  var mpnBadgeResetRequest: Null<MpnRequests.MpnBadgeResetRequest>;
+  final mpnRegisterRequest: MpnRequests.MpnRegisterRequest;
+  final mpnFilterUnsubscriptionRequest: MpnRequests.MpnFilterUnsubscriptionRequest;
+  final mpnBadgeResetRequest: MpnRequests.MpnBadgeResetRequest;
 
   public function new(
     client: LightstreamerClient,
@@ -51,14 +53,14 @@ class MpnClientMachine extends ClientMachine {
     randomGenerator: Millis->Millis,
     reachabilityFactory: IReachabilityFactory) {
     super(client, serverAddress, adapterSet, wsFactory, httpFactory, ctrlFactory, timerFactory, randomGenerator, reachabilityFactory);
-    mpnRegisterRequest = new MpnRegisterRequest(this);
-    mpnFilterUnsubscriptionRequest = new MpnFilterUnsubscriptionRequest(this);
+    mpnRegisterRequest = new MpnRegisterRequest(@:nullSafety(Off) this);
+    mpnFilterUnsubscriptionRequest = new MpnFilterUnsubscriptionRequest(@:nullSafety(Off) this);
     mpnBadgeResetRequest = new MpnBadgeResetRequest(this);
   }
 
   // ---------- event handlers ----------
 
-  override public function evtExtConnect() {
+  override public function evtExtConnect_NextRegion() {
     return evtExtConnect_MpnRegion();
   }
 
@@ -67,15 +69,200 @@ class MpnClientMachine extends ClientMachine {
     var forward = true;
     if (state.s_mpn.m == s401) {
       goto(state.s_mpn.m = s403);
-      forward = super.evtExtConnect();
+      forward = evtExtConnect_NetworkReachabilityRegion();
       genSendMpnRegister();
     }
     if (forward) {
-      forward = super.evtExtConnect();
+      forward = evtExtConnect_NetworkReachabilityRegion();
     }
     return false;
   }
 
+  override function evtREQOK_Forward(reqId: Int) {
+    traceEvent("mpn:REQOK");
+    var forward = true;
+    if (state.s_mpn.m == s403 && reqId == mpn_lastRegisterReqId) {
+      goto(state.s_mpn.m = s404);
+      forward = evtREQOK_TransportRegion(reqId);
+    } else if (state.s_mpn.m == s406 && reqId == mpn_lastRegisterReqId) {
+      goto(state.s_mpn.m = s407);
+      forward = evtREQOK_TransportRegion(reqId);
+    } else if (state.s_mpn.tk == s453 && reqId == mpn_lastRegisterReqId) {
+      goto(state.s_mpn.tk = s454);
+      forward = evtREQOK_TransportRegion(reqId);
+    } else if (state.s_mpn.ft == s432 && reqId == mpn_filter_lastDeactivateReqId) {
+      doREQMpnUnsubscribeFilter();
+      goto(state.s_mpn.ft = s430);
+      forward = evtREQOK_TransportRegion(reqId);
+      evtMpnCheckFilter();
+    } else if (state.s_mpn.bg == s442 && reqId == mpn_badge_lastResetReqId) {
+      doREQOKMpnResetBadge();
+      forward = evtREQOK_TransportRegion(reqId);
+      goto(state.s_mpn.bg = s440);
+      evtMpnCheckReset();
+    }
+    return forward;
+  }
+
+  override function evtREQERR_Forward(reqId: Int, code: Int, msg: String) {
+    traceEvent("mpn:REQERR");
+    var forward = true;
+    if (state.s_mpn.m == s403 && reqId == mpn_lastRegisterReqId) {
+      notifyDeviceError(code, msg);
+      goto(state.s_mpn.m = s402);
+      forward = evtREQERR_TransportRegion(reqId, code, msg);
+      evtMpnCheckNext();
+    } else if (state.s_mpn.m == s406 && reqId == mpn_lastRegisterReqId) {
+      notifyDeviceError(code, msg);
+      goto(state.s_mpn.m = s408);
+      forward = evtREQERR_TransportRegion(reqId, code, msg);
+      evtMpnCheckNext();
+    } else if (state.s_mpn.tk == s453 && reqId == mpn_lastRegisterReqId) {
+      notifyDeviceError(code, msg);
+      goto(state.s_mpn.tk = s452);
+      forward = evtREQERR_TransportRegion(reqId, code, msg);
+      evtMpnCheckNext();
+    } else if (state.s_mpn.ft == s432 && reqId == mpn_filter_lastDeactivateReqId) {
+      doREQMpnUnsubscribeFilter();
+      goto(state.s_mpn.ft = s430);
+      forward = evtREQERR_TransportRegion(reqId, code, msg);
+      evtMpnCheckFilter();
+    } else if (state.s_mpn.bg == s442 && reqId == mpn_badge_lastResetReqId) {
+      doREQERRMpnResetBadge();
+      notifyOnBadgeResetFailed(code, msg);
+      goto(state.s_mpn.bg = s440);
+      forward = evtREQERR_TransportRegion(reqId, code, msg);
+      evtMpnCheckReset();
+    }
+    return forward;
+  }
+
+  override function evtRetry_NextRegion() {
+    return evtRetry_MpnRegion();
+  }
+
+  function evtRetry_MpnRegion() {
+    traceEvent("mpn:retry");
+    switch state.s_mpn.m {
+    case s403, s404:
+      goto(state.s_mpn.m = s403);
+    case s406, s407:
+      goto(state.s_mpn.m = s406);
+    case s405:
+      doRemoveMpnSpecialListeners();
+      goto({
+        state.s_mpn.m = s406;
+        state.s_mpn.st = null;
+        state.s_mpn.tk = null;
+        state.s_mpn.sbs = null;
+        state.s_mpn.ft = null;
+        state.s_mpn.bg = null;
+      });
+      genUnsubscribeMpnSpecialItems();
+    default:
+    }
+    return false;
+  }
+
+  override function evtTerminate_NextRegion() {
+    return evtTerminate_MpnRegion();
+  }
+
+  function evtTerminate_MpnRegion() {
+    traceEvent("mpn:terminate");
+    var forward = true;
+    switch state.s_mpn.m {
+    case s403, s404:
+      goto(state.s_mpn.m = s401);
+      forward = evtTerminate_NetworkReachabilityRegion();
+      evtResetMpnDevice();
+    case s406, s407:
+      goto(state.s_mpn.m = s401);
+      forward = evtTerminate_NetworkReachabilityRegion();
+      evtResetMpnDevice();
+    case s405:
+      doRemoveMpnSpecialListeners();
+      goto({
+        state.s_mpn.m = s401;
+        state.s_mpn.st = null;
+        state.s_mpn.tk = null;
+        state.s_mpn.sbs = null;
+        state.s_mpn.ft = null;
+        state.s_mpn.bg = null;
+      });
+      forward = evtTerminate_NetworkReachabilityRegion();
+      genUnsubscribeMpnSpecialItems();
+      evtResetMpnDevice();
+    default:
+    }
+    if (forward) {
+      forward = evtTerminate_NetworkReachabilityRegion();
+    }
+    return false;
+  }
+
+  override function evtMessage(line: String) {
+    // TODO synchronize (called by openWS) (see super)
+    if (super.evtMessage(line)) {
+      // message already processed by super
+    } else if (line.startsWith("MPNREG")) {
+      // MPNREG,<device id>,<adapter name>
+      var args = line.split(",");
+      var deviceId = args[1];
+      var adapterName = args[2];
+      evtMPNREG(deviceId, adapterName);
+    } else if (line.startsWith("MPNZERO")) {
+      // MPNZERO,<device id>
+      var args = line.split(",");
+      var deviceId = args[1];
+      evtMPNZERO(deviceId);
+    } else if (line.startsWith("MPNOK")) {
+      // MPNOK,<subscription id>, <mpn subscription id>
+      var args = line.split(",");
+      var subId = parseInt(args[1]);
+      var mpnSubId = args[2];
+      evtMPNOK(subId, mpnSubId);
+    } else if (line.startsWith("MPNDEL")) {
+      // MPNDEL,<mpn subscription id>
+      var args = line.split(",");
+      var mpnSubId = args[1];
+      evtMPNDEL(mpnSubId);
+    } else if (line.startsWith("MPNCONF")) {
+      // MPNCONF,<mpn subscription id>
+      var args = line.split(",");
+      var mpnSubId = args[1];
+      evtMPNCONF(mpnSubId);
+    }
+    return true;
+  }
+
+  function evtResetMpnDevice() {
+    // TODO
+  }
+  function evtMpnCheckNext() {
+    // TODO
+  }
+  function evtMpnCheckFilter() {
+    // TODO
+  }
+  function evtMpnCheckReset() {
+    // TODO
+  }
+  function evtMPNREG(deviceId: String, adapterName: String) {
+    // TODO
+  }
+  function evtMPNZERO(deviceId: String) {
+    // TODO
+  }
+  function evtMPNOK(subId: Int, mpnSubId: String) {
+    // TODO
+  }
+  function evtMPNDEL(mpnSubId: String) {
+    // TODO
+  }
+  function evtMPNCONF(mpnSubId: String) {
+    // TODO
+  }
   function evtDEV_Update(status: String, timestamp: Long) {
     // TODO
   }
@@ -90,6 +277,44 @@ class MpnClientMachine extends ClientMachine {
   }
 
   // ---------- event actions ----------
+
+  override function doREQOK(reqId: Int) {
+    super.doREQOK(reqId);
+    for (sub in mpnSubscriptionManagers) {
+      sub.evtREQOK(reqId);
+    }
+  }
+
+  override function doREQERR(reqId: Int, errorCode: Int, errorMsg: String) {
+    super.doREQERR(reqId, errorCode, errorMsg);
+    for (sub in mpnSubscriptionManagers) {
+      sub.evtREQERR(reqId, errorCode, errorMsg);
+    }
+  }
+
+  override function genAbortSubscriptions() {
+    super.genAbortSubscriptions();
+    for (sub in mpnSubscriptionManagers) {
+      sub.evtAbort();
+    }
+  }
+
+  override function getPendingControls() {
+    var res = super.getPendingControls();
+    if (mpnRegisterRequest.isPending()) {
+      res.push(mpnRegisterRequest);
+    }
+    for (sub in mpnSubscriptionManagers.filter(sub -> sub.isPending())) {
+      res.push(sub);
+    }
+    if (mpnFilterUnsubscriptionRequest.isPending()) {
+      res.push(mpnFilterUnsubscriptionRequest);
+    }
+    if (mpnBadgeResetRequest.isPending()) {
+      res.push(mpnBadgeResetRequest);
+    }
+    return res;
+  }
 
   function subscribeExt(subscription: Subscription, isInternal: Bool = false) {
     // TODO
@@ -111,7 +336,7 @@ class MpnClientMachine extends ClientMachine {
   }
 
   function genSendMpnRegister() {
-    evtSendControl(mpnRegisterRequest.sure());
+    evtSendControl(mpnRegisterRequest);
   }
 
   function genUnsubscribeMpnSpecialItems() {
@@ -269,11 +494,11 @@ class MpnClientMachine extends ClientMachine {
   }
 
   function genSendMpnUnsubscribeFilter() {
-    evtSendControl(mpnFilterUnsubscriptionRequest.sure());
+    evtSendControl(mpnFilterUnsubscriptionRequest);
   }
 
   function genSendMpnResetBadge() {
-    evtSendControl(mpnBadgeResetRequest.sure());
+    evtSendControl(mpnBadgeResetRequest);
   }
 
   function doREQMpnUnsubscribeFilter() {
