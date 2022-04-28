@@ -54,12 +54,12 @@ abstract Millis(Long) to Long {
 
   @:op(A > B)
   public inline function gt(rhs: Millis) {
-    return this > rhs;
+    return this > (rhs : Long);
   }
 
   @:op(A < B)
   public inline function lt(rhs: Millis) {
-    return this < rhs;
+    return this < (rhs : Long);
   }
 
   @:op(A + B)

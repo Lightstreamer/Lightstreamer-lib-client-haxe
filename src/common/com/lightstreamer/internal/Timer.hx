@@ -30,7 +30,7 @@ abstract TimerMillis(Float) {
 
   @:to
   public function toMillis(): Millis {
-    return new Millis(this);
+    return new Millis(cast this);
   }
 
   public inline function toLong(): Long {
