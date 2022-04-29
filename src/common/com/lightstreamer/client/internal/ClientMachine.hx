@@ -4328,7 +4328,7 @@ class ClientMachine {
     messageManagers.remove(msgManager);
   }
 
-  function getAndSetNextMsgProg(sequence: String) {
+  function getAndSetNextMsgProg(sequence: String): Int {
     var prog = sequenceMap[sequence];
     prog = prog == null ? 1 : prog;
     sequenceMap[sequence] = prog + 1;
