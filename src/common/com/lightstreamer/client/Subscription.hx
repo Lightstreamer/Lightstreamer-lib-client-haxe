@@ -1,8 +1,11 @@
 package com.lightstreamer.client;
 
+import com.lightstreamer.client.internal.SubscriptionManager.SubscriptionManagerLiving;
 import com.lightstreamer.internal.NativeTypes;
 import com.lightstreamer.internal.EventDispatcher;
 import com.lightstreamer.internal.Types;
+import com.lightstreamer.log.LoggerTools;
+using com.lightstreamer.log.LoggerTools;
 
 private enum SubscriptionState {
   Inactive; Active; Subscribed;
@@ -32,14 +35,14 @@ class Subscription {
   var fields2: Null<Fields>;
   var schema2: Null<Name>;
   // /* other variables */
-  // let lock = NSRecursiveLock()
   var state: SubscriptionState = Inactive;
-  // var m_subId: Int?
-  var cmdIdx: Null<FieldPosition>;
-  var keyIdx: Null<FieldPosition>;
-  // var m_nItems: Int?
-  // var m_nFields: Int?
-  // var m_internal: Bool = false // special flag used to mark 2-level subscriptions
+  var subId: Null<Int>;
+  var cmdIdx: Null<Pos>;
+  var keyIdx: Null<Pos>;
+  var nItems: Null<Int>;
+  var nFields: Null<Int>;
+  var m_internal: Bool = false; // special flag used to mark 2-level subscriptions
+  var manager: Null<SubscriptionManagerLiving>;
 
   // TODO implement overloaded constructors
   public function new(mode: String, items: NativeArray<String>, fields: NativeArray<String>) {
@@ -237,9 +240,144 @@ class Subscription {
   // public function getCommandValue(itemPos: Int, keyValue: String, fieldName: String): String {}
   // public function getCommandValue(itemName: String, keyValue: String, fieldPos: Int): String {}
 
+  // --------------- private methods ---------------
+
   function checkActive() {
     if (isActive()) {
       throw new IllegalStateException("Cannot modify an active Subscription. Please unsubscribe before applying any change");
     }
+  }
+
+  @:synchronized
+  function setActive() {
+    state = Active;
+  }
+
+  @:synchronized
+  function setInactive() {
+    state = Inactive;
+    subId = null;
+    cmdIdx = null;
+    keyIdx = null;
+    nItems = null;
+    nFields = null;
+  }
+
+  @:synchronized
+  function setSubscribed(subId: Int, nItems: Int, nFields: Int) {
+    this.state = Subscribed;
+    this.subId = subId;
+    this.nItems = nItems;
+    this.nFields = nFields;
+  }
+  
+  @:synchronized
+  function setSubscribedCMD(subId: Int, nItems: Int, nFields: Int, cmdIdx: Pos, keyIdx: Pos) {
+    this.state = Subscribed;
+    this.subId = subId;
+    this.cmdIdx = cmdIdx;
+    this.keyIdx = keyIdx;
+    this.nItems = nItems;
+    this.nFields = nFields;
+  }
+
+  @:synchronized
+  function isInternal(): Bool {
+    return m_internal;
+  }
+
+  @:synchronized
+  function setInternal() {
+    m_internal = true;
+  }
+
+  @:synchronized
+  function getItemName(itemIdx: Pos): Null<String> {
+    if (items != null) {
+      return (items[itemIdx - 1] : Null<String>);
+    }
+    return (null : Null<String>);
+  }
+
+  @:synchronized
+  function relate(manager: SubscriptionManagerLiving) {
+    this.manager = manager;
+  }
+  
+  @:synchronized
+  function unrelate(manager: SubscriptionManagerLiving) {
+    if (this.manager != manager) {
+      return;
+    }
+    this.manager = null;
+  }
+
+  @:synchronized
+  function hasSnapshot(): Bool {
+    return !(snapshot == null || snapshot == SnpNo);
+  }
+
+  function getItemNameOrPos(itemIdx: Pos): String {
+    return items != null ? items[itemIdx - 1] : '$itemIdx';
+  }
+
+  @:synchronized
+  function fireOnSubscription(subId: Int) {
+    subscriptionLogger.logInfo('Subscription $subId added');
+    eventDispatcher.onSubscription();
+  }
+
+  @:synchronized
+  function fireOnUnsubscription(subId: Int) {
+    subscriptionLogger.logInfo('Subscription $subId deleted');
+    eventDispatcher.onUnsubscription();
+  }
+
+  @:synchronized
+  function fireOnSubscriptionError(subId: Int, code: Int, msg: String) {
+    subscriptionLogger.logWarn('Subscription $subId failed: $code - $msg');
+    eventDispatcher.onSubscriptionError(code, msg);
+  }
+
+  @:synchronized
+  function fireOnEndOfSnapshot(itemIdx: Pos, subId: Int) {
+    subscriptionLogger.logDebug('Subscription $subId:${getItemNameOrPos(itemIdx)}: snapshot ended');
+    eventDispatcher.onEndOfSnapshot(getItemName(itemIdx), itemIdx);
+  }
+
+  @:synchronized
+  function fireOnClearSnapshot(itemIdx: Pos, subId: Int) {
+    subscriptionLogger.logDebug('Subscription $subId:${getItemNameOrPos(itemIdx)}: snapshot cleared');
+    eventDispatcher.onClearSnapshot(getItemName(itemIdx), itemIdx);
+  }
+
+  @:synchronized
+  function fireOnLostUpdates(itemIdx: Pos, lostUpdates: Int, subId: Int) {
+    subscriptionLogger.logDebug('Subscription $subId:${getItemNameOrPos(itemIdx)}: lost $lostUpdates updates');
+    eventDispatcher.onItemLostUpdates(getItemName(itemIdx), itemIdx, lostUpdates);
+  }
+  
+  @:synchronized
+  function fireOnItemUpdate(update: ItemUpdate, subId: Int) {
+    subscriptionLogger.logDebug('Subscription $subId:${getItemNameOrPos(update.getItemPos())} update: $update');
+    eventDispatcher.onItemUpdate(update);
+  }
+
+  @:synchronized
+  function fireOnRealMaxFrequency(freq: Null<RealMaxFrequency>, subId: Int) {
+    subscriptionLogger.logDebug('Subscription $subId real max frequency changed: $freq');
+    eventDispatcher.onRealMaxFrequency(realFrequencyAsString(freq));
+  }
+
+  @:synchronized
+  function fireOnSubscriptionError2Level(keyName: String, code: Int, msg: String, subId: Int, itemIdx: Pos) {
+    subscriptionLogger.logWarn('Subscription $subId:${getItemNameOrPos(itemIdx)}:$keyName failed: $code - $msg');
+    eventDispatcher.onCommandSecondLevelSubscriptionError(code, msg, keyName);
+  }
+
+  @:synchronized
+  function fireOnLostUpdates2Level(keyName: String, lostUpdates: Int, subId: Int, itemIdx: Pos) {
+    subscriptionLogger.logDebug('Subscription $subId:${getItemNameOrPos(itemIdx)}:$keyName: lost $lostUpdates updates');
+    eventDispatcher.onCommandSecondLevelItemLostUpdates(lostUpdates, keyName);
   }
 }

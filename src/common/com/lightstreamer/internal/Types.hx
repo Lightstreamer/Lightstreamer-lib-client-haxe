@@ -247,6 +247,14 @@ enum RealMaxFrequency {
   RFreqUnlimited;
 }
 
+function realFrequencyAsString(freq: Null<RealMaxFrequency>) {
+  return switch freq {
+  case null: "null";
+  case RFreqLimited(f): '$f';
+  case RFreqUnlimited: "unlimited";
+  }
+}
+
 @:using(com.lightstreamer.internal.Types.RealMaxBandwidthTools)
 enum RealMaxBandwidth {
   BWLimited(bw: Float);
@@ -329,8 +337,6 @@ abstract Fields(Array<String>) to Array<String> {
     }
   }
 }
-
-abstract FieldPosition(Int) to Int {}
 
 abstract Name(String) to String {
   public inline function new(name: String) this = name;

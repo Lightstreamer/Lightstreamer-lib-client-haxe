@@ -16,11 +16,12 @@ function synchronizeClass(): Array<Field> {
       pos: Context.currentPos(),
     });
   }
-  // synchronize public, non-static methods by wrapping the bodies in lock.execute
+  // synchronize (1) public, non-static methods and (2) private, non-static, @:synchronized methods
+  // by wrapping the bodies in lock.execute
   for (field in fields) {
     if (field.name == "new")
       continue;
-    if (!(field.access != null && field.access.contains(APublic) && !field.access.contains(AStatic)))
+    if (!(field.access != null && !field.access.contains(AStatic) && (field.access.contains(APublic) || field.meta != null && field.meta.map(m -> m.name).contains(":synchronized"))))
       continue;
     if (field.meta != null && field.meta.map(m -> m.name).contains(":unsynchronized"))
       continue;
