@@ -55,7 +55,7 @@ class MpnClientMachine extends ClientMachine {
     super(client, serverAddress, adapterSet, wsFactory, httpFactory, ctrlFactory, timerFactory, randomGenerator, reachabilityFactory);
     mpnRegisterRequest = new MpnRegisterRequest(@:nullSafety(Off) this);
     mpnFilterUnsubscriptionRequest = new MpnFilterUnsubscriptionRequest(@:nullSafety(Off) this);
-    mpnBadgeResetRequest = new MpnBadgeResetRequest(this);
+    mpnBadgeResetRequest = new MpnBadgeResetRequest(@:nullSafety(Off) this);
   }
 
   // ---------- event handlers ----------

@@ -63,12 +63,9 @@ class LightstreamerClient {
    * @param serverAddress 
    * @param adapterSet 
    */
-  @:nullSafety(Off)
   public function new(serverAddress: String, adapterSet: String) {
-    // workaround for https://github.com/HaxeFoundation/haxe/issues/10584
-    connectionDetails = null; connectionOptions = null;
-    connectionDetails = new ConnectionDetails(this);
-    connectionOptions = new ConnectionOptions(this);
+    connectionDetails = new ConnectionDetails(@:nullSafety(Off) this);
+    connectionOptions = new ConnectionOptions(@:nullSafety(Off) this);
     if (serverAddress != null) {
       connectionDetails.setServerAddress(serverAddress);
     }
