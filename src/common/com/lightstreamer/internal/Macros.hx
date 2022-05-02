@@ -5,10 +5,26 @@ import haxe.macro.Context;
 import haxe.macro.Type;
 import haxe.macro.Expr;
 using haxe.macro.TypeTools;
+using Lambda;
 
 function synchronizeClass(): Array<Field> {
   var fields = Context.getBuildFields();
-  if (!fields.map(f -> f.name).contains("lock")) {
+  var hasLock = false;
+  if (fields.exists(f -> f.name == "lock" && f.kind.match(FVar(_,_)))) {
+    hasLock = true;
+  } else {
+    var clazz: ClassType = Context.getLocalClass().get();
+    while (clazz != null) {
+      var fields = clazz.fields.get();
+      if (fields.exists(f -> f.name == "lock" && f.kind.match(FVar(_,_)))) {
+        hasLock = true;
+        break;
+      }
+      var superDesc = clazz.superClass;
+      clazz = superDesc != null ? superDesc.t.get() : null;
+    }
+  }
+  if (!hasLock) {
     fields.push({
       name:  "lock",
       access: [Access.AFinal],

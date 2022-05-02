@@ -300,6 +300,7 @@ class Subscription {
   }
 
   @:synchronized
+  @:allow(com.lightstreamer.client.internal.SubscriptionManager)
   function relate(manager: SubscriptionManagerLiving) {
     this.manager = manager;
   }
@@ -313,6 +314,7 @@ class Subscription {
   }
 
   @:synchronized
+  @:allow(com.lightstreamer.client.internal.update.ItemBase)
   function hasSnapshot(): Bool {
     return !(snapshot == null || snapshot == SnpNo);
   }
@@ -358,12 +360,14 @@ class Subscription {
   }
   
   @:synchronized
+  @:allow(com.lightstreamer.client.internal.update.ItemBase)
   function fireOnItemUpdate(update: ItemUpdate, subId: Int) {
     subscriptionLogger.logDebug('Subscription $subId:${getItemNameOrPos(update.getItemPos())} update: $update');
     eventDispatcher.onItemUpdate(update);
   }
 
   @:synchronized
+  @:allow(com.lightstreamer.client.internal.ModeStrategy)
   function fireOnRealMaxFrequency(freq: Null<RealMaxFrequency>, subId: Int) {
     subscriptionLogger.logDebug('Subscription $subId real max frequency changed: $freq');
     eventDispatcher.onRealMaxFrequency(realFrequencyAsString(freq));

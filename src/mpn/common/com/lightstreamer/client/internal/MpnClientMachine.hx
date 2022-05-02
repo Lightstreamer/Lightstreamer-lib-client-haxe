@@ -9,7 +9,6 @@ import com.lightstreamer.internal.Set;
 import com.lightstreamer.client.mpn.MpnDevice;
 import com.lightstreamer.client.SubscriptionListener;
 import com.lightstreamer.client.internal.ParseTools;
-import com.lightstreamer.client.internal.ClientRequests;
 import com.lightstreamer.client.internal.MpnRequests;
 import com.lightstreamer.client.internal.ClientMachine;
 import com.lightstreamer.log.LoggerTools;
