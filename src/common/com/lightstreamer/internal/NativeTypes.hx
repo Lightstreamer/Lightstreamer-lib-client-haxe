@@ -319,7 +319,6 @@ abstract NativeList<T>(Array<T>) {
 }
 #end
 
-@:forward(length)
 #if js
 abstract NativeArray<T>(Array<T>) {
   @:from

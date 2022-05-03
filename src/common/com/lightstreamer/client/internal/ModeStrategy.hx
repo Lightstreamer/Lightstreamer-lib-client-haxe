@@ -140,8 +140,8 @@ class ModeStrategy {
   function doSUB(nItems: Int, nFields: Int) {
     var items = subscription.getItems();
     var fields = subscription.getFields();
-    assert(items != null ? nItems == items.length : true);
-    assert(fields != null ? nFields == fields.length : true);
+    assert(items != null ? nItems == items.toHaxe().length : true);
+    assert(fields != null ? nFields == fields.toHaxe().length : true);
   }
 
   function doUpdate(itemIdx: Pos, values: Map<Pos, FieldValue>) {

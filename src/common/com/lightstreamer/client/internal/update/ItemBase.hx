@@ -8,12 +8,12 @@ import com.lightstreamer.client.internal.update.UpdateUtils;
 @:access(com.lightstreamer.client.internal.ClientMachine)
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class ItemBase {
-  final m_subId: Int;
-  final itemIdx: Pos;
+  public final m_subId: Int;
+  public final itemIdx: Pos;
   var currValues: Null<Map<Pos, Null<String>>>;
-  final subscription: Subscription;
+  public final subscription: Subscription;
   final client: ClientMachine;
-  final lock: RLock;
+  public final lock: RLock;
 
   public function new(itemIdx: Pos, sub: Subscription, client: ClientMachine, subId: Int) {
     this.m_subId = subId;

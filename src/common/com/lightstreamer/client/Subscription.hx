@@ -282,11 +282,19 @@ class Subscription {
   }
 
   @:synchronized
+  @:allow(com.lightstreamer.client.internal.update.Key1Level)
+  @:allow(com.lightstreamer.client.internal.update.Key2Level)
+  function get_nFields(): Null<Int> {
+    return nFields;
+  }
+
+  @:synchronized
   function isInternal(): Bool {
     return m_internal;
   }
 
   @:synchronized
+  @:allow(com.lightstreamer.client.internal.update.Key2Level)
   function setInternal() {
     m_internal = true;
   }
@@ -361,6 +369,8 @@ class Subscription {
   
   @:synchronized
   @:allow(com.lightstreamer.client.internal.update.ItemBase)
+  @:allow(com.lightstreamer.client.internal.update.Key1Level)
+  @:allow(com.lightstreamer.client.internal.update.Key2Level)
   function fireOnItemUpdate(update: ItemUpdate, subId: Int) {
     subscriptionLogger.logDebug('Subscription $subId:${getItemNameOrPos(update.getItemPos())} update: $update');
     eventDispatcher.onItemUpdate(update);
@@ -374,12 +384,14 @@ class Subscription {
   }
 
   @:synchronized
+  @:allow(com.lightstreamer.client.internal.update.Key2Level)
   function fireOnSubscriptionError2Level(keyName: String, code: Int, msg: String, subId: Int, itemIdx: Pos) {
     subscriptionLogger.logWarn('Subscription $subId:${getItemNameOrPos(itemIdx)}:$keyName failed: $code - $msg');
     eventDispatcher.onCommandSecondLevelSubscriptionError(code, msg, keyName);
   }
 
   @:synchronized
+  @:allow(com.lightstreamer.client.internal.update.Key2Level)
   function fireOnLostUpdates2Level(keyName: String, lostUpdates: Int, subId: Int, itemIdx: Pos) {
     subscriptionLogger.logDebug('Subscription $subId:${getItemNameOrPos(itemIdx)}:$keyName: lost $lostUpdates updates');
     eventDispatcher.onCommandSecondLevelItemLostUpdates(lostUpdates, keyName);

@@ -3,7 +3,13 @@ package com.lightstreamer.internal;
 class Set<T> {
   final values: Array<T> = [];
 
-  public function new() {}
+  public function new(?it: Iterator<T>) {
+    if (it != null) {
+      for (x in it) {
+        insert(x);
+      }
+    }
+  }
 
   public function count() {
     return values.length;
@@ -34,6 +40,16 @@ class Set<T> {
     }
     for (v in other) {
       res.insert(v);
+    }
+    return res;
+  }
+
+  public function subtracting(other: Array<T>): Set<T> {
+    var res = new Set();
+    for (v in values) {
+      if (!other.contains(v)) {
+        res.insert(v);
+      }
     }
     return res;
   }
