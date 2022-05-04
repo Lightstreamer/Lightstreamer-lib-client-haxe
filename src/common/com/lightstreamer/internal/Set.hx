@@ -54,6 +54,10 @@ class Set<T> {
     return res;
   }
 
+  public function iterator() {
+    return values.iterator();
+  }
+
   public function toArray() {
     return values;
   }

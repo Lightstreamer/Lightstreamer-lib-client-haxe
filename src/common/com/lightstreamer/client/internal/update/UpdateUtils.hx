@@ -3,6 +3,7 @@ package com.lightstreamer.client.internal.update;
 import com.lightstreamer.internal.NativeTypes.IllegalStateException;
 import com.lightstreamer.internal.Types;
 import com.lightstreamer.internal.Set;
+using Lambda;
 
 function mapUpdateValues(oldValues: Null<Map<Pos, Null<String>>>, values: Map<Pos, FieldValue>): Map<Pos, Null<String>> {
   if (oldValues != null) {
@@ -46,4 +47,24 @@ function findChangedFields(prev: Null<Map<Pos, Null<String>>>, curr: Map<Pos, Nu
     }
     return changedFields;
   }
+}
+
+function toMap(array: Null<Array<String>>): Null<Map<Pos, String>> {
+  if (array != null) {
+    var map = new Map<Pos, String>();
+    for (i => v in array) {
+      map[i + 1] = v;
+    }
+    return map;
+  }
+  return null;
+}
+
+function findFirstIndex(map: Map<Pos, String>, value: String): Null<Pos> {
+  for (i in 1...map.count()+1) {
+    if (map[i] == value) {
+      return i;
+    }
+  }
+  return null;
 }

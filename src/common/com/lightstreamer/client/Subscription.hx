@@ -284,6 +284,8 @@ class Subscription {
   @:synchronized
   @:allow(com.lightstreamer.client.internal.update.Key1Level)
   @:allow(com.lightstreamer.client.internal.update.Key2Level)
+  @:allow(com.lightstreamer.client.internal.update.ItemUpdateBase)
+  @:allow(com.lightstreamer.client.internal.update.ItemUpdate2Level)
   function get_nFields(): Null<Int> {
     return nFields;
   }
