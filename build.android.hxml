@@ -8,10 +8,6 @@ build.common.hxml
 --java-lib-extern %ANDROID_SDK%/platforms/android-30/android.jar
 --java-lib-extern lib/java
 
-com.lightstreamer.client.mpn.MpnDevice
-com.lightstreamer.client.mpn.MpnSubscription
-com.lightstreamer.client.mpn.MpnBuilder
-
 -D LS_MPN
 -D android
 -D jvm.dynamic-level=0

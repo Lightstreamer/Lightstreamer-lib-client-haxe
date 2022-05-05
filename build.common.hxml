@@ -3,5 +3,4 @@
 --class-path src/common
 --library haxe-concurrent
 
-com.lightstreamer.client.LightstreamerClient
-com.lightstreamer.log.ConsoleLoggerProvider
+--macro include("com.lightstreamer")
