@@ -139,7 +139,7 @@ class MpnDevice {
 
   @:allow(com.lightstreamer.client.internal.MpnClientMachine)
   function setDeviceId(deviceId: String, adapterName: String) {
-    lock.execute(() -> {
+    lock.synchronized(() -> {
       this.deviceId = new DeviceId(deviceId);
       this.adapterName = adapterName;
     });
@@ -147,7 +147,7 @@ class MpnDevice {
 
   @:allow(com.lightstreamer.client.internal.MpnClientMachine)
   function onRegistered(timestamp: Long) {
-    lock.execute(() -> {
+    lock.synchronized(() -> {
       mpnDeviceLogger.logInfo('MPN device registered: $deviceId)');
       status = REGISTERED;
       statusTs = new Timestamp(timestamp);
@@ -159,7 +159,7 @@ class MpnDevice {
 
   @:allow(com.lightstreamer.client.internal.MpnClientMachine)
   function onSuspend(timestamp: Long) {
-    lock.execute(() -> {
+    lock.synchronized(() -> {
       mpnDeviceLogger.logInfo('MPN device suspended: $deviceId');
       status = SUSPENDED;
       statusTs = new Timestamp(timestamp);
@@ -171,7 +171,7 @@ class MpnDevice {
 
   @:allow(com.lightstreamer.client.internal.MpnClientMachine)
   function onResume(timestamp: Long) {
-    lock.execute(() -> {
+    lock.synchronized(() -> {
       mpnDeviceLogger.logInfo('MPN device resumed: $deviceId');
       status = REGISTERED;
       statusTs = new Timestamp(timestamp);
@@ -183,7 +183,7 @@ class MpnDevice {
 
   @:allow(com.lightstreamer.client.internal.MpnClientMachine)
   function onError(code: Int, msg: String) {
-    lock.execute(() -> {
+    lock.synchronized(() -> {
       mpnDeviceLogger.logWarn('MPN device error: $code - $msg $deviceId');
       status = UNKNOWN;
       statusTs = new Timestamp(0);
@@ -197,7 +197,7 @@ class MpnDevice {
 
   @:allow(com.lightstreamer.client.internal.MpnClientMachine)
   function onReset() {
-    lock.execute(() -> {
+    lock.synchronized(() -> {
       mpnDeviceLogger.logInfo("MPN device NOT registered");
       var oldStatus = status;
       status = UNKNOWN;
@@ -213,7 +213,7 @@ class MpnDevice {
 
   @:allow(com.lightstreamer.client.internal.MpnClientMachine)
   function fireOnSubscriptionsUpdated() {
-    lock.execute(() -> {
+    lock.synchronized(() -> {
       mpnDeviceLogger.logInfo('MPN subscriptions have been updated: $deviceId');
       eventDispatcher.onSubscriptionsUpdated();
     });
@@ -222,7 +222,7 @@ class MpnDevice {
   @:allow(com.lightstreamer.client.internal.MpnClientMachine)
   function fireOnBadgeResetFailed(code: Int, msg: String) {
     // Swift only
-    lock.execute(() -> {
+    lock.synchronized(() -> {
       mpnDeviceLogger.logWarn('MPN badge reset failed: $code - $msg $deviceId');
     });
   }
@@ -230,7 +230,7 @@ class MpnDevice {
   @:allow(com.lightstreamer.client.internal.MpnClientMachine)
   function fireOnBadgeReset() {
     // Swift only
-    lock.execute(() -> {
+    lock.synchronized(() -> {
       mpnDeviceLogger.logInfo('MPN badge successfully reset: $deviceId');
     });
   }

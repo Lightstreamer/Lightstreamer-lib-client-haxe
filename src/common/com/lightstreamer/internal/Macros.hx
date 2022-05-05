@@ -33,7 +33,7 @@ function synchronizeClass(): Array<Field> {
     });
   }
   // synchronize (1) public, non-static methods and (2) private, non-static, @:synchronized methods
-  // by wrapping the bodies in lock.execute
+  // by wrapping the bodies in lock.synchronized
   for (field in fields) {
     if (field.name == "new")
       continue;
@@ -52,9 +52,9 @@ function synchronizeClass(): Array<Field> {
       case TPath({name: "Void"}): true;
       case _: false;
     }) 
-      macro this.lock.execute(() -> ${func.expr})
+      macro this.lock.synchronized(() -> ${func.expr})
     else 
-      macro return this.lock.execute(() -> ${func.expr});
+      macro return this.lock.synchronized(() -> ${func.expr});
   }
   return fields;
 }

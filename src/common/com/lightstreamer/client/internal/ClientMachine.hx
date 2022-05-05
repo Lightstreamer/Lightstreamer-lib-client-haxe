@@ -3128,21 +3128,21 @@ class ClientMachine {
   function openWS(url: String, headers: Null<Map<String, String>>): IWsClient {
     return wsFactory(url, headers, 
       function onOpen(client) {
-        lock.execute(() -> {
+        lock.synchronized(() -> {
           if (client.isDisposed())
             return;
           evtWSOpen();
         });
       },
       function onText(client, line) {
-        lock.execute(() -> {
+        lock.synchronized(() -> {
           if (client.isDisposed())
             return;
           evtMessage(line);
         });
       },
       function onError(client, error) {
-        lock.execute(() -> {
+        lock.synchronized(() -> {
           if (client.isDisposed())
             return;
           evtTransportError();
@@ -3273,14 +3273,14 @@ class ClientMachine {
   function sendHttpRequest(url: String, req: RequestBuilder, headers: Null<Map<String, String>>): IHttpClient {
     return httpFactory(url, req.getEncodedString(), headers,
       function onText(client, line) {
-        lock.execute(() -> {   
+        lock.synchronized(() -> {   
           if (client.isDisposed())
             return;
           evtMessage(line);
         });
       },
       function onError(client, error) {
-        lock.execute(() -> {   
+        lock.synchronized(() -> {   
           if (client.isDisposed())
             return;
           evtTransportError();
@@ -3869,7 +3869,7 @@ class ClientMachine {
   }
 
   function createTimer(id: String, timeout: Millis, callback: ()->Void) {
-    return timerFactory(id, timeout, timer -> lock.execute(() -> {
+    return timerFactory(id, timeout, timer -> lock.synchronized(() -> {
       if (timer.isCanceled())
         return;
       callback();
@@ -4231,21 +4231,21 @@ class ClientMachine {
     var headers = getHeadersForRequestOtherThanCreate();
     ctrl_http = ctrlFactory(url, body, headers,
       function onText(client, line) {
-        lock.execute(() -> {
+        lock.synchronized(() -> {
           if (client.isDisposed())
             return;
           evtCtrlMessage(line);
         });
       },
       function onError(client, error) {
-        lock.execute(() -> {
+        lock.synchronized(() -> {
           if (client.isDisposed())
             return;
           evtCtrlError();
         });
       },
       function onDone(client) {
-        lock.execute(() -> {
+        lock.synchronized(() -> {
           if (client.isDisposed())
             return;
           evtCtrlDone();

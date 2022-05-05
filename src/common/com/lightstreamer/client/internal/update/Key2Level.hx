@@ -456,13 +456,13 @@ private class Sub2LevelDelegate implements SubscriptionListener {
   }
 
   public function disable() {
-    key.lock.execute(() -> {
+    key.lock.synchronized(() -> {
       m_disabled = true;
     });
   }
 
   function synchronized(block: () -> Void) {
-    key.lock.execute(() -> {
+    key.lock.synchronized(() -> {
       if (!m_disabled) {
         block();
       }

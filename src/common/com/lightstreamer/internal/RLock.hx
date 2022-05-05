@@ -5,7 +5,7 @@ abstract RLock(hx.concurrent.lock.RLock) {
     this = new hx.concurrent.lock.RLock();
   }
 
-  public function execute<T>(func: ()->T): T {
+  public function synchronized<T>(func: ()->T): T {
     var ex: Null<haxe.Exception> = null;
     var result: Null<T> = null;
 

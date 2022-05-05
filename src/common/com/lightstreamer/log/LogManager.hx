@@ -1,7 +1,7 @@
 package com.lightstreamer.log;
 
 import com.lightstreamer.internal.NativeTypes;
-import hx.concurrent.lock.RLock;
+import com.lightstreamer.internal.RLock;
 
 @:unreflective
 class LogManager {
@@ -11,7 +11,7 @@ class LogManager {
   static var currentLoggerProvider: Null<LoggerProvider>;
 
   public static function getLogger(category: String): Logger {
-    return lock.execute(() -> {
+    return lock.synchronized(() -> {
       var log = logInstances[category];
       if (log == null) {
         log = logInstances[category] = new LoggerProxy(newLogger(category));
@@ -21,7 +21,7 @@ class LogManager {
   }
 
   public static function setLoggerProvider(provider: LoggerProvider): Void {
-    lock.execute(() -> {
+    lock.synchronized(() -> {
       currentLoggerProvider = provider;
       for (category => proxy in logInstances) {
         proxy.wrappedLogger = newLogger(category);
