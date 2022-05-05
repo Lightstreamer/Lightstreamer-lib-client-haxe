@@ -1,5 +1,6 @@
 package com.lightstreamer.client.internal;
 
+import com.lightstreamer.internal.NativeTypes.IllegalStateException;
 import com.lightstreamer.client.internal.ClientRequests.Encodable;
 
 @:access(com.lightstreamer.client.internal.MpnClientMachine)
@@ -22,7 +23,7 @@ class MpnRegisterRequest implements Encodable {
     } else if (client.state.s_mpn.tk == s453) {
       return client.encodeMpnRefreshToken();
     } else {
-      throw new haxe.Exception("Can't encode register request");
+      throw new IllegalStateException("Can't encode register request");
     }
   }
   
@@ -47,7 +48,7 @@ class MpnFilterUnsubscriptionRequest implements  Encodable {
     if (isPending()) {
       return client.encodeDeactivateFilter();
     } else {
-      throw new haxe.Exception("Can't encode unsubscription request");
+      throw new IllegalStateException("Can't encode unsubscription request");
     }
   }
   
@@ -72,7 +73,7 @@ class MpnBadgeResetRequest implements  Encodable {
     if (isPending()) {
       return client.encodeBadgeReset();
     } else {
-      throw new haxe.Exception("Can't encode badge reset request");
+      throw new IllegalStateException("Can't encode badge reset request");
     }
   }
   

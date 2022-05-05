@@ -6,7 +6,7 @@ using haxe.macro.Tools;
 macro function assert(e: Expr) {
   var expr = e.toString();
   var pos = e.pos;
-  return macro if (!$e) @:pos(pos) throw new haxe.Exception("Assertion failure: " + $v{expr});
+  return macro if (!$e) @:pos(pos) throw new com.lightstreamer.internal.NativeTypes.IllegalStateException("Assertion failure: " + $v{expr});
 }
 
 macro function goto(e) {

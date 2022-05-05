@@ -1,5 +1,6 @@
 package com.lightstreamer.client.internal;
 
+import com.lightstreamer.internal.NativeTypes.IllegalStateException;
 import com.lightstreamer.internal.Types;
 using com.lightstreamer.internal.NullTools;
 using StringTools;
@@ -89,7 +90,7 @@ function parseUpdate(message: String): UpdateInfo {
 private function checkedIndexOf(s: String, needle: String, ?startIndex:Int): Int {
   var i = s.indexOf(needle, startIndex);
   if (i == -1) {
-    throw new haxe.Exception("string not found");
+    throw new IllegalStateException("string not found");
   }
   return i;
 }
