@@ -68,3 +68,25 @@ function findFirstIndex(map: Map<Pos, String>, value: String): Null<Pos> {
   }
   return null;
 }
+
+#if js
+function getFieldsByPosition(update: ItemUpdate): Map<Int, Null<String>> {
+  var res: Map<Int, Null<String>> = [];
+  update.forEachField((name, pos, val) -> res[pos] = val);
+  return res;
+}
+
+function getChangedFieldsByPosition(update: ItemUpdate): Map<Int, Null<String>> {
+  var res: Map<Int, Null<String>> = [];
+  update.forEachChangedField((name, pos, val) -> res[pos] = val);
+  return res;
+}
+#else
+inline function getFieldsByPosition(update: ItemUpdate): Map<Int, Null<String>> {
+  return update.getFieldsByPosition().toHaxe([]);
+}
+
+inline function getChangedFieldsByPosition(update: ItemUpdate): Map<Int, Null<String>> {
+  return update.getChangedFieldsByPosition().toHaxe([]);
+}
+#end

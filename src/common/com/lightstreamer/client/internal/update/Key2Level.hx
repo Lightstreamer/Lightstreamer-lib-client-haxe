@@ -1,7 +1,7 @@
 package com.lightstreamer.client.internal.update;
 
 import com.lightstreamer.internal.Set;
-import com.lightstreamer.client.internal.update.UpdateUtils.findChangedFields;
+import com.lightstreamer.client.internal.update.UpdateUtils;
 import com.lightstreamer.internal.Types;
 import com.lightstreamer.internal.RLock;
 import com.lightstreamer.internal.MacroTools;
@@ -222,7 +222,7 @@ class Key2Level implements ItemKey {
     var prevKeyValues = currKeyValues.sure();
     @:nullSafety(Off)
     currKeyValues[cmdIdx] = "UPDATE";
-    currKey2Values = update.getFieldsByPosition();
+    currKey2Values = getFieldsByPosition(update);
     var extKeyValues = currKeyValues.sure();
     for (f => v in currKey2Values) {
       extKeyValues[f + nFields] = v;
@@ -232,7 +232,7 @@ class Key2Level implements ItemKey {
     if (prevKeyValues[cmdIdx] != currKeyValues[cmdIdx]) {
       changedFields.insert(cmdIdx);
     }
-    for (f => _ in update.getChangedFieldsByPosition()) {
+    for (f => _ in getChangedFieldsByPosition(update)) {
       changedFields.insert(f + nFields);
     }
     var snapshot = update.isSnapshot();

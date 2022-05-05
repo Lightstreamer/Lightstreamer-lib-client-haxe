@@ -91,6 +91,13 @@ abstract NativeMap<K, V>(java.util.Map<K, V>) {
     }
     this = out;
   }
+
+  public function toHaxe(out: Map<K, V>): Map<K, V> {
+    for (entry in this.entrySet()) {
+      out[entry.getKey()] = entry.getValue();
+    }
+    return out;
+  }
 }
 
 abstract NativeStringMap(java.util.Map<String, String>) {
@@ -145,6 +152,15 @@ abstract NativeMap<K, V>(cs.system.collections.generic.IDictionary_2<K, V>) {
     }
     this = out;
   }
+
+  public function toHaxe(out: Map<K, V>): Map<K, V> {
+    var it = this.GetEnumerator();
+    while (it.MoveNext()) {
+      var entry = it.Current;
+      out[entry.Key] = entry.Value;
+    }
+    return out;
+  }
 }
 
 abstract NativeStringMap(cs.system.collections.generic.IDictionary_2<String, String>) 
@@ -198,6 +214,13 @@ abstract NativeMap<K, V>(python.Dict<K, V>) {
     }
     this = out;
   }
+
+  public function toHaxe(out: Map<K, V>): Map<K, V> {
+    for (entry in this.items()) {
+      out[entry._1] = entry._2;
+    }
+    return out;
+  }
 }
 
 abstract NativeStringMap(python.Dict<String, String>) {
@@ -247,6 +270,13 @@ abstract NativeMap<K, V>(haxe.Constraints.IMap<K, V>) {
     }
     return res;
   }
+
+  public function toHaxe(out: Map<K, V>): Map<K, V> {
+    for (k => v in this) {
+      out[k] = v;
+    }
+    return out;
+  }
 }
 
 abstract NativeStringMap(php.NativeAssocArray<String>) {
@@ -280,6 +310,10 @@ abstract NativeStringMap(php.NativeAssocArray<String>) {
 abstract NativeMap<K, V>(Map<K, V>) {
   public inline function new(a: Map<K, V>) {
     this = a;
+  }
+
+  public function toHaxe(out: Map<K, V>): Map<K, V> {
+    return this;
   }
 }
 
