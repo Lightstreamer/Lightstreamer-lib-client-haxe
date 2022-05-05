@@ -62,14 +62,15 @@ class WsClient {
     });
     ws.on(Upgrade, response -> {
       // store cookies
-      var cookies: Array<String> = getCookies(response.headers);
+      var cookies = getCookies(response.headers);
       if (cookies != null) {
         CookieHelper.instance.addCookies(url, cookies);
       }
     });
   }
 
-  function getCookies(headers: DynamicAccess<Array<String>>) {
+  function getCookies(headers: DynamicAccess<Array<String>>): Null<Array<String>> {
+    @:nullSafety(Off)
     for (k => v in headers) {
       if (k.toLowerCase() == "set-cookie") {
         return v;
@@ -80,6 +81,7 @@ class WsClient {
 
   public function send(txt: String) {
     streamLogger.logDebug('WS sending: $txt');
+    @:nullSafety(Off)
     ws.send(txt, null, null);
   }
 

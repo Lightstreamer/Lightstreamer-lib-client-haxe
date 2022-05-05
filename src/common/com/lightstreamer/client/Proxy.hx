@@ -1,5 +1,6 @@
 package com.lightstreamer.client;
 
+#if (java || cs)
 import com.lightstreamer.internal.NativeTypes.IllegalArgumentException;
 
 enum abstract ProxyType(String) to String {
@@ -18,7 +19,7 @@ enum abstract ProxyType(String) to String {
   }
 }
 
-#if (java || cs || python) @:nativeGen #end
+@:nativeGen
 class Proxy {
   public final type: ProxyType;
   public final host: String;
@@ -58,3 +59,4 @@ class Proxy {
     return '$type ${user != null ? user + "@" : ""}$host:$port';
   }
 }
+#end

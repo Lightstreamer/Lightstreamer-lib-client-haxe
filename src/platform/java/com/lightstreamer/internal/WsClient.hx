@@ -3,6 +3,7 @@ package com.lightstreamer.internal;
 import okhttp3.*;
 import com.lightstreamer.client.Proxy;
 import com.lightstreamer.internal.NativeTypes.IllegalStateException;
+import com.lightstreamer.internal.MacroTools.assert;
 import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
 
@@ -52,17 +53,19 @@ class WsClient extends WebSocketListener implements Authenticator {
         case HTTP: java.net.Proxy.Proxy_Type.HTTP;
         case SOCKS4 | SOCKS5: java.net.Proxy.Proxy_Type.SOCKS;
       }, inet);
-      clientBuilder.proxy(javaProxy).proxyAuthenticator(this);
+      clientBuilder.proxy(javaProxy).proxyAuthenticator(@:nullSafety(Off) this);
     }
     // set trust manager
     if (trustManagerFactory != null) {
       // see https://square.github.io/okhttp/4.x/okhttp/okhttp3/-ok-http-client/-builder/ssl-socket-factory/
       var trustManagers = trustManagerFactory.getTrustManagers();
       var x509TrustManager;
+      @:nullSafety(Off)
       if (trustManagers.length != 1 || (x509TrustManager = Std.downcast(trustManagers[0], java.javax.net.ssl.X509TrustManager)) == null) {
         throw new IllegalStateException("Unexpected default trust managers:" + java.util.Arrays.toString(trustManagers));
       }
       var sslContext = java.javax.net.ssl.SSLContext.getInstance("TLS");
+      @:nullSafety(Off)
       sslContext.init(null, java.NativeArray.make((x509TrustManager:java.javax.net.ssl.TrustManager)), null);
       var sslSocketFactory = sslContext.getSocketFactory();
       clientBuilder.sslSocketFactory(sslSocketFactory, x509TrustManager);
@@ -123,6 +126,7 @@ class WsClient extends WebSocketListener implements Authenticator {
 
   // Authenticator.authenticate
   public function authenticate(route: Null<Route>, response: Response): Null<Request> {
+    assert(proxy != null);
     // see https://square.github.io/okhttp/4.x/okhttp/okhttp3/-authenticator/
     var user = proxy.user == null ? "" : proxy.user;
     var password = proxy.password == null ? "" : proxy.password;
