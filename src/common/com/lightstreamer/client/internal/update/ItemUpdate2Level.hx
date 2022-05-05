@@ -46,6 +46,23 @@ class ItemUpdate2Level implements ItemUpdate {
   }
 
   #if static
+  #if cpp
+  public function getValueWithFieldPos(fieldPos: Int): Null<String> {
+    return getValuePos(fieldPos);
+  }
+
+  public function getValue(fieldName: String): Null<String> {
+    return getValueName(fieldName);
+  }
+
+  public function isValueChangedWithFieldPos(fieldPos: Int): Bool {
+    return isValueChangedPos(fieldPos);
+  }
+
+  public function isValueChanged(fieldName: String): Bool {
+    return isValueChangedName(fieldName);
+  }
+  #else
   overload public function getValue(fieldPos: Int): Null<String> {
     return getValuePos(fieldPos);
   }
@@ -61,6 +78,7 @@ class ItemUpdate2Level implements ItemUpdate {
   overload public function isValueChanged(fieldName: String): Bool {
     return isValueChangedName(fieldName);
   }
+  #end
   #else
   public function getValue(fieldNameOrPos: haxe.extern.EitherType<String, Int>): Null<String> {
     if (fieldNameOrPos is Int) {
@@ -106,7 +124,7 @@ class ItemUpdate2Level implements ItemUpdate {
     }
   }
   #else
-  public function getChangedFields(): Map<String, Null<String>> {
+  public function getChangedFields(): NativeMap<String, Null<String>> {
     if (m_fields == null || m_fields2 == null) {
       throw new IllegalStateException(ItemUpdateBase.NO_FIELDS);
     }
@@ -114,18 +132,18 @@ class ItemUpdate2Level implements ItemUpdate {
     for (fieldPos in m_changedFields) {
       res[getFieldNameFromIdx(fieldPos)] = m_newValues[fieldPos];
     }
-    return res;
+    return new NativeMap(res);
   }
 
-  public function getChangedFieldsByPosition(): Map<Int, Null<String>> {
+  public function getChangedFieldsByPosition(): NativeMap<Int, Null<String>> {
     var res = new Map<Int, Null<String>>();
     for (fieldPos in m_changedFields) {
       res[fieldPos] = m_newValues[fieldPos];
     }
-    return res;
+    return new NativeMap(res);
   }
 
-  public function getFields(): Map<String, Null<String>> {
+  public function getFields(): NativeMap<String, Null<String>> {
     if (m_fields == null || m_fields2 == null) {
       throw new IllegalStateException(ItemUpdateBase.NO_FIELDS);
     }
@@ -133,11 +151,11 @@ class ItemUpdate2Level implements ItemUpdate {
     for (f => v in m_newValues) {
       res[getFieldNameFromIdx(f)] = v;
     }
-    return res;
+    return new NativeMap(res);
   }
 
-  public function getFieldsByPosition(): Map<Int, Null<String>> {
-    return m_newValues;
+  public function getFieldsByPosition(): NativeMap<Int, Null<String>> {
+    return new NativeMap(m_newValues);
   }
   #end
 

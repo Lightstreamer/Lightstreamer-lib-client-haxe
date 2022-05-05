@@ -83,6 +83,16 @@ abstract NativeStringMap(haxe.DynamicAccess<String>) {
   }
 }
 #elseif java
+abstract NativeMap<K, V>(java.util.Map<K, V>) {
+  public function new(map: Map<K, V>) {
+    var out = new java.util.HashMap<K, V>();
+    for (k => v in map) {
+      out.put(k, v);
+    }
+    this = out;
+  }
+}
+
 abstract NativeStringMap(java.util.Map<String, String>) {
   @:from
   public static inline function fromHaxeMap(map) {
@@ -127,6 +137,16 @@ abstract NativeStringMap(java.util.Map<String, String>) {
   }
 }
 #elseif cs
+abstract NativeMap<K, V>(cs.system.collections.generic.IDictionary_2<K, V>) {
+  public function new(map: Map<K, V>) {
+    var out = new cs.system.collections.generic.Dictionary_2<K, V>();
+    for (k => v in map) {
+      out.Add(k, v);
+    }
+    this = out;
+  }
+}
+
 abstract NativeStringMap(cs.system.collections.generic.IDictionary_2<String, String>) 
 to cs.system.collections.generic.IDictionary_2<String, String> {
   @:from
@@ -170,6 +190,16 @@ to cs.system.collections.generic.IDictionary_2<String, String> {
   }
 }
 #elseif python
+abstract NativeMap<K, V>(python.Dict<K, V>) {
+  public function new(map: Map<K, V>) {
+    var out = new python.Dict<K, V>();
+    for (k => v in map) {
+      out.set(k, v);
+    }
+    this = out;
+  }
+}
+
 abstract NativeStringMap(python.Dict<String, String>) {
   @:from
   public static inline function fromHaxeMap(map) {
@@ -198,6 +228,27 @@ abstract NativeStringMap(python.Dict<String, String>) {
   }
 }
 #elseif php
+@:multiType(@:followWithAbstracts K)
+abstract NativeMap<K, V>(haxe.Constraints.IMap<K, V>) {
+  public function new(a: Map<K, V>);
+
+  @:to static function toStringMap<K:String, V>(t: haxe.Constraints.IMap<K, V>, a: Map<K, V>): php.NativeAssocArray<V> {
+    var res = new php.NativeAssocArray<V>();
+    for (k => v in a) {
+      res[k] = v;
+    }
+    return res;
+  }
+
+  @:to static function toIntMap<K:Int, V>(t: haxe.Constraints.IMap<K, V>, a: Map<K, V>): php.NativeIndexedArray<V> {
+    var res = new php.NativeIndexedArray<V>();
+    for (k => v in a) {
+      res[k] = v;
+    }
+    return res;
+  }
+}
+
 abstract NativeStringMap(php.NativeAssocArray<String>) {
   @:from
   public static inline function fromHaxeMap(map) {
@@ -226,6 +277,12 @@ abstract NativeStringMap(php.NativeAssocArray<String>) {
   }
 }
 #elseif cpp
+abstract NativeMap<K, V>(Map<K, V>) {
+  public inline function new(a: Map<K, V>) {
+    this = a;
+  }
+}
+
 abstract NativeStringMap(Map<String, String>) from Map<String, String> to Map<String, String> {
   public inline function new(a: Map<String, String>) {
     this = a;
