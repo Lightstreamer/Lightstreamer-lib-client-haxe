@@ -249,11 +249,43 @@ class Subscription {
   }
 
   @:synchronized
+  @:allow(com.lightstreamer.client.internal.SubscriptionManager)
+  function fetchMode(): SubscriptionMode {
+    return mode;
+  }
+
+  @:synchronized
+  @:allow(com.lightstreamer.client.internal.SubscriptionManager)
+  function fetchRequestedBufferSize(): Null<RequestedBufferSize> {
+    return bufferSize;
+  }
+
+  @:synchronized
+  @:allow(com.lightstreamer.client.internal.SubscriptionManager)
+  function fetchRequestedSnapshot(): Null<RequestedSnapshot> {
+    return snapshot;
+  }
+
+  @:synchronized
+  @:allow(com.lightstreamer.client.internal.SubscriptionManager)
+  function fetchRequestedMaxFrequency(): Null<RequestedMaxFrequency> {
+    return requestedMaxFrequency;
+  }
+
+  @:synchronized
+  @:allow(com.lightstreamer.client.internal.SubscriptionManager)
+  function fetch_nItems(): Null<Int> {
+    return nItems;
+  }
+
+  @:synchronized
+  @:allow(com.lightstreamer.client.internal.SubscriptionManager)
   function setActive() {
     state = Active;
   }
 
   @:synchronized
+  @:allow(com.lightstreamer.client.internal.SubscriptionManager)
   function setInactive() {
     state = Inactive;
     subId = null;
@@ -264,6 +296,7 @@ class Subscription {
   }
 
   @:synchronized
+  @:allow(com.lightstreamer.client.internal.SubscriptionManager)
   function setSubscribed(subId: Int, nItems: Int, nFields: Int) {
     this.state = Subscribed;
     this.subId = subId;
@@ -272,6 +305,7 @@ class Subscription {
   }
   
   @:synchronized
+  @:allow(com.lightstreamer.client.internal.SubscriptionManager)
   function setSubscribedCMD(subId: Int, nItems: Int, nFields: Int, cmdIdx: Pos, keyIdx: Pos) {
     this.state = Subscribed;
     this.subId = subId;
@@ -316,6 +350,7 @@ class Subscription {
   }
   
   @:synchronized
+  @:allow(com.lightstreamer.client.internal.SubscriptionManager)
   function unrelate(manager: SubscriptionManagerLiving) {
     if (this.manager != manager) {
       return;
@@ -334,36 +369,42 @@ class Subscription {
   }
 
   @:synchronized
+  @:allow(com.lightstreamer.client.internal.SubscriptionManager)
   function fireOnSubscription(subId: Int) {
     subscriptionLogger.logInfo('Subscription $subId added');
     eventDispatcher.onSubscription();
   }
 
   @:synchronized
+  @:allow(com.lightstreamer.client.internal.SubscriptionManager)
   function fireOnUnsubscription(subId: Int) {
     subscriptionLogger.logInfo('Subscription $subId deleted');
     eventDispatcher.onUnsubscription();
   }
 
   @:synchronized
+  @:allow(com.lightstreamer.client.internal.SubscriptionManager)
   function fireOnSubscriptionError(subId: Int, code: Int, msg: String) {
     subscriptionLogger.logWarn('Subscription $subId failed: $code - $msg');
     eventDispatcher.onSubscriptionError(code, msg);
   }
 
   @:synchronized
+  @:allow(com.lightstreamer.client.internal.SubscriptionManager)
   function fireOnEndOfSnapshot(itemIdx: Pos, subId: Int) {
     subscriptionLogger.logDebug('Subscription $subId:${getItemNameOrPos(itemIdx)}: snapshot ended');
     eventDispatcher.onEndOfSnapshot(getItemName(itemIdx), itemIdx);
   }
 
   @:synchronized
+  @:allow(com.lightstreamer.client.internal.SubscriptionManager)
   function fireOnClearSnapshot(itemIdx: Pos, subId: Int) {
     subscriptionLogger.logDebug('Subscription $subId:${getItemNameOrPos(itemIdx)}: snapshot cleared');
     eventDispatcher.onClearSnapshot(getItemName(itemIdx), itemIdx);
   }
 
   @:synchronized
+  @:allow(com.lightstreamer.client.internal.SubscriptionManager)
   function fireOnLostUpdates(itemIdx: Pos, lostUpdates: Int, subId: Int) {
     subscriptionLogger.logDebug('Subscription $subId:${getItemNameOrPos(itemIdx)}: lost $lostUpdates updates');
     eventDispatcher.onItemLostUpdates(getItemName(itemIdx), itemIdx, lostUpdates);

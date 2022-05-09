@@ -240,6 +240,14 @@ class RequestedMaxFrequencyTools {
       case FreqLimited(max): Std.string(max);
     }
   }
+
+  public static function equals(a: Null<RequestedMaxFrequency>, b: Null<RequestedMaxFrequency>) {
+    return switch [a, b] {
+      case [null, null]: true;
+      case [_, null] | [null, _]: false;
+      case _: a.equals(b);
+    }
+  }
 }
 
 enum RealMaxFrequency {
