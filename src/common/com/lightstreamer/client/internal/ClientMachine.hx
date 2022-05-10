@@ -386,7 +386,6 @@ class ClientMachine {
   }
 
   function evtWSOpen() {
-    // TODO synchronize (called by openWS)
     traceEvent("ws.open");
     if (state.s_m == s120) {
       sendCreateWS();
@@ -401,7 +400,6 @@ class ClientMachine {
   }
 
   function evtMessage(line: String) {
-    // TODO synchronize (called by openWS)
     var matched = true;
     if (line.startsWith("U,")) {
       // U,<subscription id>,<itemd index>,<field values>
@@ -568,7 +566,6 @@ class ClientMachine {
   }
 
   function evtCtrlMessage(line: String) {
-    // TODO synchronize (called by sendBatchHTTP)
     if (line.startsWith("REQOK")) {
       // REQOK,<request id>
       if (line == "REQOK") {
@@ -595,7 +592,6 @@ class ClientMachine {
   }
 
   function evtTransportTimeout() {
-    // TODO synchronize (called by timer)
     traceEvent("transport.timeout");
     switch state.s_m {
     case s120, s121:
@@ -778,7 +774,6 @@ class ClientMachine {
   }
 
   function evtTransportError() {
-    // TODO synchronize (called by openWS)
     traceEvent("transport.error");
     switch state.s_m {
     case s120, s121:
@@ -1049,7 +1044,6 @@ class ClientMachine {
   }
 
   function evtIdleTimeout() {
-    // TODO synchronize (called by timer)
     traceEvent("idle.timeout");
     if (switch state.s_wp?.p {
       case s610, s611, s613: true;
@@ -1095,7 +1089,6 @@ class ClientMachine {
   }
 
   function evtPollingTimeout() {
-    // TODO synchronize (called by timer)
     traceEvent("polling.timeout");
     if (state.s_wp?.p == s612) {
       sendBindWS_Polling();
@@ -1111,7 +1104,6 @@ class ClientMachine {
   }
 
   function evtKeepaliveTimeout() {
-    // TODO synchronize (called by timer)
     traceEvent("keepalive.timeout");
     if (state.s_w?.k == s310) {
       goto(state.s_w.k = s311);
@@ -1129,7 +1121,6 @@ class ClientMachine {
   }
 
   function evtStalledTimeout() {
-    // TODO synchronize (called by timer)
     traceEvent("stalled.timeout");
     if (state.s_w?.k == s311) {
       goto(state.s_w.k = s312);
@@ -1147,7 +1138,6 @@ class ClientMachine {
   }
 
   function evtReconnectTimeout() {
-    // TODO synchronize (called by timer)
     traceEvent("reconnect.timeout");
     if (state.s_w?.k == s312) {
       if (options.sessionRecoveryTimeout == 0) {
@@ -2527,7 +2517,6 @@ class ClientMachine {
   }
 
   function evtRhbTimeout() {
-    // TODO synchronize (called by timer)
     traceEvent("rhb.timeout");
     if (state.s_rhb == s322) {
       goto(state.s_rhb = s324);
@@ -2554,7 +2543,6 @@ class ClientMachine {
   }
 
   function evtRecoveryTimeout() {
-    // TODO synchronize (called by timer)
     traceEvent("recovery.timeout");
     if (state.s_rec == s1000) {
       sendRecovery();
@@ -2661,7 +2649,6 @@ class ClientMachine {
   }
 
   function evtCtrlDone() {
-    // TODO synchronize (called by sendBatchHTTP)
     traceEvent("ctrl.done");
     if (state.s_ctrl == s1102) {
       closeCtrl();
@@ -2672,7 +2659,6 @@ class ClientMachine {
   }
 
   function evtCtrlError() {
-    // TODO synchronize (called by sendBatchHTTP)
     traceEvent("ctrl.error");
     if (state.s_ctrl == s1102) {
       disposeCtrl();
@@ -2684,7 +2670,6 @@ class ClientMachine {
   }
 
   function evtCtrlTimeout() {
-    // TODO synchronize (called by timer)
     traceEvent("ctrl.timeout");
     if (state.s_ctrl != null) {
       if (state.s_ctrl == s1102) {
@@ -2852,7 +2837,6 @@ class ClientMachine {
   }
 
   function evtRetryTimeout() {
-    // TODO synchronize (called by timer)
     traceEvent("retry.timeout");
     switch state.s_m {
     case s115:
@@ -3869,11 +3853,12 @@ class ClientMachine {
   }
 
   function createTimer(id: String, timeout: Millis, callback: ()->Void) {
-    return timerFactory(id, timeout, timer -> lock.synchronized(() -> {
-      if (timer.isCanceled())
-        return;
-      callback();
-    }));
+    return timerFactory(id, timeout, timer -> 
+      lock.synchronized(() -> {
+        if (timer.isCanceled())
+          return;
+        callback();
+      }));
   }
 
   function cancel_evtTransportTimeout() {
@@ -4090,13 +4075,11 @@ class ClientMachine {
   }
 
   public function generateFreshReqId() {
-    // TODO synchronize
     m_nextReqId += 1;
     return m_nextReqId;
   }
 
   public function generateFreshSubId() {
-    // TODO synchronize
     m_nextSubId += 1;
     return m_nextSubId;
   }
