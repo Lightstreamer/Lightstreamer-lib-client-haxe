@@ -25,7 +25,7 @@ class ClientMachine {
   final client: LightstreamerClient;
   final details: ConnectionDetails;
   final options: ConnectionOptions;
-  final lock: com.lightstreamer.internal.RLock;
+  public final lock: com.lightstreamer.internal.RLock;
   final clientEventDispatcher: ClientEventDispatcher;
   final state: ClientStates.State = new ClientStates.State();
   // resource factories
@@ -2701,7 +2701,7 @@ class ClientMachine {
     }
   }
 
-  function evtSendControl(request: Encodable) {
+  public function evtSendControl(request: Encodable) {
     traceEvent("send.control");
     if (state.s_w?.s == s340) {
       sendControlWS(request);
@@ -4089,13 +4089,13 @@ class ClientMachine {
     return randomGenerator(maxPause);
   }
 
-  function generateFreshReqId() {
+  public function generateFreshReqId() {
     // TODO synchronize
     m_nextReqId += 1;
     return m_nextReqId;
   }
 
-  function generateFreshSubId() {
+  public function generateFreshSubId() {
     // TODO synchronize
     m_nextSubId += 1;
     return m_nextSubId;

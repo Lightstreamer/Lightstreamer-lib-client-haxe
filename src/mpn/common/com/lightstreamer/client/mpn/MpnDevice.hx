@@ -212,6 +212,7 @@ class MpnDevice {
   }
 
   @:allow(com.lightstreamer.client.internal.MpnClientMachine)
+  @:allow(com.lightstreamer.client.internal.MpnSubscriptionManager)
   function fireOnSubscriptionsUpdated() {
     lock.synchronized(() -> {
       mpnDeviceLogger.logInfo('MPN subscriptions have been updated: $deviceId');

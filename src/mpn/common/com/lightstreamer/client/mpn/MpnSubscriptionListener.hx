@@ -13,4 +13,5 @@ interface MpnSubscriptionListener {
   public function onTriggered(): Void;
   public function onStatusChanged(status: String, timestamp: Long): Void;
   public function onPropertyChanged(propertyName: String): Void;
+  public function onModificationError(code: Int, message: String, propertyName: String): Void;
 }

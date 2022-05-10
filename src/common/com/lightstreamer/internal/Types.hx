@@ -184,6 +184,14 @@ class RequestedBufferSizeTools {
       case BSLimited(sz): Std.string(sz);
     }
   }
+
+  public static function equals(a: Null<RequestedBufferSize>, b: Null<RequestedBufferSize>) {
+    return switch [a, b] {
+      case [null, null]: true;
+      case [_, null] | [null, _]: false;
+      case _: a.equals(b);
+    }
+  }
 }
 
 @:using(com.lightstreamer.internal.Types.RequestedSnapshotTools)

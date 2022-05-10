@@ -797,12 +797,12 @@ class MpnClientMachine extends ClientMachine {
   }
 
   function exists(mpnSubId: String): Bool {
-    return mpnSubscriptionManagers.exists(sub -> sub.mpnSubId == mpnSubId);
+    return mpnSubscriptionManagers.exists(sub -> sub.get_mpnSubId() == mpnSubId);
   }
 
   function genSUBS_update(mpnSubId: String, update: ItemUpdate) {
     for (sm in mpnSubscriptionManagers) {
-      if (mpnSubId == sm.mpnSubId) {
+      if (mpnSubId == sm.get_mpnSubId()) {
         sm.evtMpnUpdate(update);
       }
     }
@@ -817,7 +817,7 @@ class MpnClientMachine extends ClientMachine {
   }
 
   function doAddMpnSubscription(mpnSubId: String) {
-    var sm = new MpnSubscriptionManager(mpnSubId, this);
+    var sm = new MpnSubscriptionManager(Ctor2(mpnSubId, this));
     sm.start();
   }
 
@@ -867,7 +867,7 @@ class MpnClientMachine extends ClientMachine {
   function doMPNDEL(mpnSubId: String) {
     onFreshData();
     for (sm in mpnSubscriptionManagers) {
-      if (sm.mpnSubId == mpnSubId) {
+      if (sm.get_mpnSubId() == mpnSubId) {
         sm.evtMPNDEL();
       }
     }
@@ -953,6 +953,23 @@ class MpnClientMachine extends ClientMachine {
     req.PN_deviceId(mpn_deviceId.sure());
     protocolLogger.logInfo('Sending MPNDevice badge reset: $req');
     return req.getEncodedString();
+  }
+
+  public function relate(subManager: MpnSubscriptionManager) {
+    assert(!mpnSubscriptionManagers.contains(subManager));
+    mpnSubscriptionManagers.push(subManager);
+  }
+
+  public function unrelate(subManager: MpnSubscriptionManager) {
+    mpnSubscriptionManagers.remove(subManager);
+  }
+
+  public function get_mpn_deviceId(): Null<String> {
+    return mpn_deviceId;
+  }
+
+  public function get_mpn_device(): Null<MpnDevice> {
+    return mpn_device;
   }
 }
 
