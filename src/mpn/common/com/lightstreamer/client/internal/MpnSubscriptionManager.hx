@@ -472,7 +472,6 @@ class MpnSubscriptionManager implements Encodable {
     }
   }
 
-  @:access(com.lightstreamer.client.internal.ClientMachine)
   public function evtExtMpnSubscribe() {
     traceEvent("subscribe");
     if (state.s_m == s40) {

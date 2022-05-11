@@ -15,8 +15,6 @@ private enum abstract State_m(Int) {
   var s30 = 30; var s31 = 31; var s32 = 32; var  s33 = 33; var s34 = 34; var s35 = 35;
 }
 
-// TODO synchronize method of ClientMachine accessed by MessageManager
-@:access(com.lightstreamer.client.internal.ClientMachine)
 class MessageManager implements Encodable {
   final eventDispatcher = new MessageEventDispatcher();
   final txt: String;

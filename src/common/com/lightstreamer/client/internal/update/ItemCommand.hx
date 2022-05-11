@@ -13,8 +13,7 @@ private enum abstract State_m(Int) {
 
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class ItemCommand extends ItemBase {
-  @:allow(com.lightstreamer.client.internal.ModeStrategyCommand2Level)
-  final keys = new Map<String, ItemKey>();
+  public final keys = new Map<String, ItemKey>();
   var s_m: State_m;
 
   override public function new(itemIdx: Pos, sub: Subscription, client: ClientMachine, subId: Int) {

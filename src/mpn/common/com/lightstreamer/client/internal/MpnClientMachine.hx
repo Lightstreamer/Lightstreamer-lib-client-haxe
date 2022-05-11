@@ -18,7 +18,7 @@ using StringTools;
 using com.lightstreamer.internal.NullTools;
 using com.lightstreamer.internal.ArrayTools;
 
-// TODO synchronize
+@:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class MpnClientMachine extends ClientMachine {
   final mpnSubscriptionManagers = new Array<MpnSubscriptionManager>();
   var mpn_device: Null<MpnDevice>;
@@ -59,7 +59,7 @@ class MpnClientMachine extends ClientMachine {
 
   // ---------- event handlers ----------
 
-  override public function evtExtConnect_NextRegion() {
+  override public function evtExtConnect_NextRegion(): Bool {
     return evtExtConnect_MpnRegion();
   }
 
@@ -298,7 +298,7 @@ class MpnClientMachine extends ClientMachine {
     }
   }
 
-  function evtMpnError(code: Int, msg: String) {
+  public function evtMpnError(code: Int, msg: String) {
     traceEvent("mpn.error");
     if (state.s_mpn.m == s405) {
       doRemoveMpnSpecialListeners();
@@ -471,7 +471,7 @@ class MpnClientMachine extends ClientMachine {
     }
   }
 
-  function evtDEV_Update(status: String, timestamp: Long) {
+  public function evtDEV_Update(status: String, timestamp: Long) {
     traceEvent("DEV.update");
     if (state.s_mpn.st == s410) {
       if (status == "ACTIVE") {
@@ -513,7 +513,7 @@ class MpnClientMachine extends ClientMachine {
     }
   }
 
-  function evtSUBS_Update(mpnSubId: String, update: ItemUpdate) {
+  public function evtSUBS_Update(mpnSubId: String, update: ItemUpdate) {
     traceEvent("SUBS.update");
     var command = update.getValue("command");
     var status = update.getValue("status");
@@ -556,7 +556,7 @@ class MpnClientMachine extends ClientMachine {
     }
   }
 
-  function evtSUBS_EOS() {
+  public function evtSUBS_EOS() {
     traceEvent("SUBS.EOS");
     if (state.s_mpn.sbs == s421) {
       goto(state.s_mpn.sbs = s424);
@@ -877,7 +877,7 @@ class MpnClientMachine extends ClientMachine {
     onFreshData();
   }
 
-  function encodeMpnRegister() {
+  public function encodeMpnRegister(): String {
     assert(mpn_device != null);
     var req = new RequestBuilder();
     var deviceToken = mpn_device.getDeviceToken();
@@ -897,7 +897,7 @@ class MpnClientMachine extends ClientMachine {
     return req.getEncodedString();
   }
 
-  function encodeMpnRefreshToken() {
+  public function encodeMpnRefreshToken(): String {
     assert(mpn_device != null);
     var req = new RequestBuilder();
     mpn_lastRegisterReqId = generateFreshReqId();
@@ -912,7 +912,7 @@ class MpnClientMachine extends ClientMachine {
     return req.getEncodedString();
   }
 
-  function encodeMpnRestore() {
+  public function encodeMpnRestore(): String {
     assert(mpn_device != null);
     var req = new RequestBuilder();
     mpn_lastRegisterReqId = generateFreshReqId();
@@ -927,7 +927,7 @@ class MpnClientMachine extends ClientMachine {
     return req.getEncodedString();
   }
 
-  function encodeDeactivateFilter() {
+  public function encodeDeactivateFilter(): String {
     var req = new RequestBuilder();
     mpn_filter_lastDeactivateReqId = generateFreshReqId();
     req.LS_reqId(mpn_filter_lastDeactivateReqId);
@@ -945,7 +945,7 @@ class MpnClientMachine extends ClientMachine {
     return req.getEncodedString();
   }
 
-  function encodeBadgeReset() {
+  public function encodeBadgeReset(): String {
     var req = new RequestBuilder();
     mpn_badge_lastResetReqId = generateFreshReqId();
     req.LS_reqId(mpn_badge_lastResetReqId);
@@ -977,7 +977,6 @@ private enum MPNSubscriptionStatus {
   ALL; SUBSCRIBED; TRIGGERED;
 }
 
-// TODO synchronize
 private class SubscriptionDelegateBase implements SubscriptionListener {
   final client: MpnClientMachine;
   var m_disabled = false;
@@ -987,15 +986,17 @@ private class SubscriptionDelegateBase implements SubscriptionListener {
   }
 
   public function disable() {
-    // TODO synchronize
-    m_disabled = true;
+    client.lock.synchronized(() -> {
+      m_disabled = true;
+    });
   }
 
   function synchronized(block: () -> Void) {
-    // TODO synchronize
-    if (!m_disabled) {
-      block();
-    }
+    client.lock.synchronized(() -> {
+      if (!m_disabled) {
+        block();
+      }
+    });
   }
 
   public function onClearSnapshot(itemName: String, itemPos: Int): Void {}
@@ -1012,7 +1013,6 @@ private class SubscriptionDelegateBase implements SubscriptionListener {
   public function onRealMaxFrequency(frequency: String): Void {}
 }
 
-@:access(com.lightstreamer.client.internal.MpnClientMachine)
 private class MpnDeviceDelegate extends SubscriptionDelegateBase {
 
   override public function onItemUpdate(itemUpdate: ItemUpdate): Void {
@@ -1038,7 +1038,6 @@ private class MpnDeviceDelegate extends SubscriptionDelegateBase {
   }
 }
 
-@:access(com.lightstreamer.client.internal.MpnClientMachine)
 private class MpnItemDelegate extends SubscriptionDelegateBase {
 
   override public function onItemUpdate(itemUpdate: ItemUpdate): Void {

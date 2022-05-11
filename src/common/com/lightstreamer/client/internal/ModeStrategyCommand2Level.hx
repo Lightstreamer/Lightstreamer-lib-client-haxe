@@ -6,8 +6,7 @@ import com.lightstreamer.internal.MacroTools;
 
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class ModeStrategyCommand2Level extends ModeStrategyCommand {
-  @:allow(com.lightstreamer.client.internal.update.Key2Level)
-  var requestedMaxFrequency: Null<RequestedMaxFrequency>;
+  public var requestedMaxFrequency: Null<RequestedMaxFrequency>;
   var aggregateRealMaxFrequency: Null<RealMaxFrequency>;
 
   override public function evtOnSUB(nItems: Int, nFields: Int, cmdIdx: Null<Pos>, keyIdx: Null<Pos>, currentFreq: Null<RequestedMaxFrequency>) {

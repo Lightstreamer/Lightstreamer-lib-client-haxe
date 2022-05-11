@@ -6,7 +6,6 @@ interface Encodable {
   function encodeWS(): String;
 }
 
-@:access(com.lightstreamer.client.internal.ClientMachine)
 class SwitchRequest implements  Encodable {
   final client: ClientMachine;
 
@@ -27,7 +26,6 @@ class SwitchRequest implements  Encodable {
 	}
 }
 
-@:access(com.lightstreamer.client.internal.ClientMachine)
 class ConstrainRequest implements Encodable {
   final client: ClientMachine;
 

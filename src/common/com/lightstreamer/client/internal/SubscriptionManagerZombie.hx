@@ -11,8 +11,6 @@ private enum abstract State_m(Int) {
   var s1 = 1; var s2 = 2; var s3 = 3;
 }
 
-// TODO synchronize method of ClientMachine accessed by SubscriptionManagerZombie
-@:access(com.lightstreamer.client.internal.ClientMachine)
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class SubscriptionManagerZombie implements SubscriptionManager {
   public final subId: Int;

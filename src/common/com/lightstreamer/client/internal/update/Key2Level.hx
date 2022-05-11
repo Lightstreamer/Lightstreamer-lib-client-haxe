@@ -25,8 +25,7 @@ class Key2Level implements ItemKey {
   var subscription2Level: Null<Subscription>;
   var s_m: State_m = s1;
   public final lock: RLock;
-  @:allow(com.lightstreamer.client.internal.ModeStrategyCommand2Level)
-  var realMaxFrequency: Null<RealMaxFrequency>;
+  public var realMaxFrequency: Null<RealMaxFrequency>;
 
   public function new(keyName: String, item: ItemCommand2Level) {
     this.keyName = keyName;

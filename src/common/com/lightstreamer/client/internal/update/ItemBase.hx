@@ -5,7 +5,6 @@ import com.lightstreamer.internal.RLock;
 import com.lightstreamer.internal.Types;
 import com.lightstreamer.client.internal.update.UpdateUtils;
 
-@:access(com.lightstreamer.client.internal.ClientMachine)
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class ItemBase {
   public final m_subId: Int;

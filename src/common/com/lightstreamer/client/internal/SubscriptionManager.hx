@@ -67,8 +67,6 @@ private class State {
   }
 }
 
-// TODO synchronize method of ClientMachine accessed by SubscriptionManagerLiving
-@:access(com.lightstreamer.client.internal.ClientMachine)
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class SubscriptionManagerLiving implements SubscriptionManager {
   public final subId: Int;

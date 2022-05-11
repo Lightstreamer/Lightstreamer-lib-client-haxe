@@ -27,7 +27,7 @@ class ClientMachine {
   final options: ConnectionOptions;
   public final lock: com.lightstreamer.internal.RLock;
   final clientEventDispatcher: ClientEventDispatcher;
-  final state: ClientStates.State = new ClientStates.State();
+  public final state: ClientStates.State = new ClientStates.State();
   // resource factories
   final wsFactory: IWsClientFactory;
   final httpFactory: IHttpClientFactory;
@@ -177,7 +177,7 @@ class ClientMachine {
     }
   }
 
-  function evtExtConnect_NextRegion() {
+  function evtExtConnect_NextRegion(): Bool {
     return evtExtConnect_NetworkReachabilityRegion();
   }
 
@@ -2909,7 +2909,7 @@ class ClientMachine {
     }
   }
 
-  function evtSendMessage(msg: MessageManager) {
+  public function evtSendMessage(msg: MessageManager) {
     traceEvent("send.message");
     if (state.s_w?.s == s340) {
       sendMsgWS(msg);
@@ -4111,7 +4111,7 @@ class ClientMachine {
     return state.s_m == s150 && (state.s_swt == s1302 || state.s_swt == s1303);
   }
 
-  function encodeSwitch(isWS: Bool) {
+  public function encodeSwitch(isWS: Bool) {
     var req = new RequestBuilder();
     swt_lastReqId = generateFreshReqId();
     req.LS_reqId(swt_lastReqId);
@@ -4127,7 +4127,7 @@ class ClientMachine {
     return req.getEncodedString();
   }
 
-  function encodeConstrain() {
+  public function encodeConstrain() {
     var req = new RequestBuilder();
     bw_lastReqId = generateFreshReqId();
     req.LS_reqId(bw_lastReqId);
@@ -4294,28 +4294,32 @@ class ClientMachine {
     return addr != null ? addr : defaultServerAddress.sure();
   }
 
-  function relateSubManager(subManager: SubscriptionManager) {
+  public function relateSubManager(subManager: SubscriptionManager) {
     assert(subscriptionManagers[subManager.subId] == null);
     subscriptionManagers[subManager.subId] = subManager;
   }
 
-  function unrelateSubManager(subManager: SubscriptionManager) {
+  public function unrelateSubManager(subManager: SubscriptionManager) {
     subscriptionManagers.remove(subManager.subId);
   }
 
-  function relateMsgManager(msgManager: MessageManager) {
+  public function relateMsgManager(msgManager: MessageManager) {
     messageManagers.push(msgManager);
   }
 
-  function unrelateMsgManager(msgManager: MessageManager) {
+  public function unrelateMsgManager(msgManager: MessageManager) {
     messageManagers.remove(msgManager);
   }
 
-  function getAndSetNextMsgProg(sequence: String): Int {
+  public function getAndSetNextMsgProg(sequence: String): Int {
     var prog = sequenceMap[sequence];
     prog = prog == null ? 1 : prog;
     sequenceMap[sequence] = prog + 1;
     return prog;
+  }
+
+  public function onPropertyChange(property: String) {
+    clientEventDispatcher.onPropertyChange(property);
   }
 
   function traceEvent(event: String) {

@@ -3,7 +3,6 @@ package com.lightstreamer.client.internal;
 import com.lightstreamer.internal.NativeTypes.IllegalStateException;
 import com.lightstreamer.client.internal.ClientRequests.Encodable;
 
-@:access(com.lightstreamer.client.internal.MpnClientMachine)
 class MpnRegisterRequest implements Encodable {
   final client: MpnClientMachine;
   
@@ -32,7 +31,6 @@ class MpnRegisterRequest implements Encodable {
   }
 }
 
-@:access(com.lightstreamer.client.internal.MpnClientMachine)
 class MpnFilterUnsubscriptionRequest implements  Encodable {
   final client: MpnClientMachine;
   
@@ -57,7 +55,6 @@ class MpnFilterUnsubscriptionRequest implements  Encodable {
   }
 }
 
-@:access(com.lightstreamer.client.internal.MpnClientMachine)
 class MpnBadgeResetRequest implements  Encodable {
   final client: MpnClientMachine;
   
