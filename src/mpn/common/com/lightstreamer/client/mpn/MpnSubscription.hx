@@ -399,43 +399,43 @@ class MpnSubscription {
 
   @:synchronized
   @:allow(com.lightstreamer.client.internal.MpnSubscriptionManager)
-  function get_subManager(): Null<MpnSubscriptionManager> {
+  function fetch_subManager(): Null<MpnSubscriptionManager> {
     return m_manager;
   }
 
   @:synchronized
   @:allow(com.lightstreamer.client.internal.MpnSubscriptionManager)
-  function get_mpnSubId(): Null<String> {
+  function fetch_mpnSubId(): Null<String> {
     return m_mpnSubId;
   }
 
   @:synchronized
   @:allow(com.lightstreamer.client.internal.MpnSubscriptionManager)
-  function fetchRequestedBufferSize(): Null<RequestedBufferSize> {
+  function fetch_requestedBufferSize(): Null<RequestedBufferSize> {
     return bufferSize;
   }
 
   @:synchronized
   @:allow(com.lightstreamer.client.internal.MpnSubscriptionManager)
-  function fetchMode(): Null<MpnSubscriptionMode> {
+  function fetch_mode(): Null<MpnSubscriptionMode> {
     return mode;
   }
 
   @:synchronized
   @:allow(com.lightstreamer.client.internal.MpnSubscriptionManager)
-  function fetchRequestedMaxFrequency(): Null<MpnRequestedMaxFrequency> {
+  function fetch_requestedMaxFrequency(): Null<MpnRequestedMaxFrequency> {
     return requestedMaxFrequency;
   }
 
   @:synchronized
   @:allow(com.lightstreamer.client.internal.MpnSubscriptionManager)
-  function fetchRequestedFormat(): Null<String> {
+  function fetch_requestedFormat(): Null<String> {
     return requestedFormat;
   }
 
   @:synchronized
   @:allow(com.lightstreamer.client.internal.MpnSubscriptionManager)
-  function fetchRequestedTrigger(): Null<String> {
+  function fetch_requestedTrigger(): Null<String> {
     return requestedTrigger;
   }
 

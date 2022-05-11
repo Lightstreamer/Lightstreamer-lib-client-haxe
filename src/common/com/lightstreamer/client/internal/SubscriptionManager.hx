@@ -84,7 +84,7 @@ class SubscriptionManagerLiving implements SubscriptionManager {
   public function new(sub: Subscription, client: ClientMachine) {
     lock = client.lock;
     subId = client.generateFreshSubId();
-    m_strategy = switch sub.fetchMode() {
+    m_strategy = switch sub.fetch_mode() {
     case Merge:
       new ModeStrategyMerge(sub, client, subId);
     case Command:
@@ -179,7 +179,7 @@ class SubscriptionManagerLiving implements SubscriptionManager {
       finalize();
       goto(state.s_m = s32);
     } else if (state.s_c == s22 && reqId == m_lastReconfReqId) {
-      if (RequestedMaxFrequencyTools.equals(m_reqMaxFrequency, m_subscription.fetchRequestedMaxFrequency())) {
+      if (RequestedMaxFrequencyTools.equals(m_reqMaxFrequency, m_subscription.fetch_requestedMaxFrequency())) {
         goto(state.s_c = s21);
       } else {
         goto(state.s_c = s20);
@@ -309,7 +309,7 @@ class SubscriptionManagerLiving implements SubscriptionManager {
   public function evtCheckFrequency() {
     traceEvent("check.frequency");
     if (state.s_c == s20) {
-      if (!RequestedMaxFrequencyTools.equals(m_subscription.fetchRequestedMaxFrequency(), m_currentMaxFrequency)) {
+      if (!RequestedMaxFrequencyTools.equals(m_subscription.fetch_requestedMaxFrequency(), m_currentMaxFrequency)) {
         doConfigure();
         goto(state.s_c = s22);
         genSendControl();
@@ -361,7 +361,7 @@ class SubscriptionManagerLiving implements SubscriptionManager {
     req.LS_reqId(m_lastAddReqId);
     req.LS_op("add");
     req.LS_subId(subId);
-    req.LS_mode(m_subscription.fetchMode());
+    req.LS_mode(m_subscription.fetch_mode());
     var group = m_subscription.getItemGroup();
     var items = m_subscription.getItems();
     if (group != null) {
@@ -384,7 +384,7 @@ class SubscriptionManagerLiving implements SubscriptionManager {
     if (selector != null) {
       req.LS_selector(selector);
     }
-    var snapshot = m_subscription.fetchRequestedSnapshot();
+    var snapshot = m_subscription.fetch_requestedSnapshot();
     if (snapshot != null) {
       switch snapshot {
       case SnpYes:
@@ -406,7 +406,7 @@ class SubscriptionManagerLiving implements SubscriptionManager {
         req.LS_requested_max_frequency("unfiltered");
       }
     }
-    var buff = m_subscription.fetchRequestedBufferSize();
+    var buff = m_subscription.fetch_requestedBufferSize();
     if (buff != null) {
       switch buff {
       case BSLimited(var limit):
@@ -465,7 +465,7 @@ class SubscriptionManagerLiving implements SubscriptionManager {
   }
 
   function doSubscribe() {
-    m_currentMaxFrequency = m_subscription.fetchRequestedMaxFrequency();
+    m_currentMaxFrequency = m_subscription.fetch_requestedMaxFrequency();
   }
 
   function doUnsubscribe() {
@@ -478,7 +478,7 @@ class SubscriptionManagerLiving implements SubscriptionManager {
     m_lastDeleteReqId = null;
     m_lastReconfReqId = null;
     m_reqMaxFrequency = null;
-    m_currentMaxFrequency = m_subscription.fetchRequestedMaxFrequency();
+    m_currentMaxFrequency = m_subscription.fetch_requestedMaxFrequency();
     m_strategy.evtAbort();
   }
 
@@ -499,7 +499,7 @@ class SubscriptionManagerLiving implements SubscriptionManager {
   }
 
   function doConfigure() {
-    m_reqMaxFrequency = m_subscription.fetchRequestedMaxFrequency();
+    m_reqMaxFrequency = m_subscription.fetch_requestedMaxFrequency();
     m_strategy.evtSetRequestedMaxFrequency(m_reqMaxFrequency);
   }
 
@@ -549,6 +549,6 @@ class SubscriptionManagerLiving implements SubscriptionManager {
   }
 
   static function is2LevelCommand(sub: Subscription): Bool {
-    return sub.fetchMode() == Command && (sub.getCommandSecondLevelFields() != null || sub.getCommandSecondLevelFieldSchema() != null);
+    return sub.fetch_mode() == Command && (sub.getCommandSecondLevelFields() != null || sub.getCommandSecondLevelFieldSchema() != null);
   }
 }

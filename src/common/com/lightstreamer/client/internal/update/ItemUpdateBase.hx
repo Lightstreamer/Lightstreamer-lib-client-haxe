@@ -26,7 +26,7 @@ class ItemUpdateBase implements ItemUpdate {
     var fields = sub.getFields();
     this.m_itemIdx = itemIdx;
     this.m_items = toMap(items != null ? items.toHaxe() : null);
-    this.m_nFields = sub.get_nFields().sure();
+    this.m_nFields = sub.fetch_nFields().sure();
     this.m_fields = toMap(fields != null ? fields.toHaxe() : null);
     this.m_newValues = newValues;
     this.m_changedFields = changedFields;

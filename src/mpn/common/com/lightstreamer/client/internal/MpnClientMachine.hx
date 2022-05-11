@@ -797,12 +797,12 @@ class MpnClientMachine extends ClientMachine {
   }
 
   function exists(mpnSubId: String): Bool {
-    return mpnSubscriptionManagers.exists(sub -> sub.get_mpnSubId() == mpnSubId);
+    return mpnSubscriptionManagers.exists(sub -> sub.fetch_mpnSubId() == mpnSubId);
   }
 
   function genSUBS_update(mpnSubId: String, update: ItemUpdate) {
     for (sm in mpnSubscriptionManagers) {
-      if (mpnSubId == sm.get_mpnSubId()) {
+      if (mpnSubId == sm.fetch_mpnSubId()) {
         sm.evtMpnUpdate(update);
       }
     }
@@ -867,7 +867,7 @@ class MpnClientMachine extends ClientMachine {
   function doMPNDEL(mpnSubId: String) {
     onFreshData();
     for (sm in mpnSubscriptionManagers) {
-      if (sm.get_mpnSubId() == mpnSubId) {
+      if (sm.fetch_mpnSubId() == mpnSubId) {
         sm.evtMPNDEL();
       }
     }
@@ -964,11 +964,11 @@ class MpnClientMachine extends ClientMachine {
     mpnSubscriptionManagers.remove(subManager);
   }
 
-  public function get_mpn_deviceId(): Null<String> {
+  public function fetch_mpn_deviceId(): Null<String> {
     return mpn_deviceId;
   }
 
-  public function get_mpn_device(): Null<MpnDevice> {
+  public function fetch_mpn_device(): Null<MpnDevice> {
     return mpn_device;
   }
 }

@@ -68,7 +68,7 @@ private class State {
   }
 
   public function traceState() {
-    internalLogger.logTrace('mpn#sub#goto(${manager.m_subId}:${manager.get_mpnSubId()}) ' + this.toString());
+    internalLogger.logTrace('mpn#sub#goto(${manager.m_subId}:${manager.fetch_mpnSubId()}) ' + this.toString());
   }
 }
 
@@ -139,8 +139,8 @@ class MpnSubscriptionManager implements Encodable {
     m_subscription.unrelate(this);
   }
 
-  public function get_mpnSubId(): Null<String> {
-    return m_subscription.get_mpnSubId();
+  public function fetch_mpnSubId(): Null<String> {
+    return m_subscription.fetch_mpnSubId();
   }
 
   public function start() {
@@ -671,7 +671,7 @@ class MpnSubscriptionManager implements Encodable {
     req.LS_reqId(m_lastActivateReqId);
     req.LS_op("activate");
     req.LS_subId(m_subId.sure());
-    req.LS_mode(m_subscription.fetchMode().sure());
+    req.LS_mode(m_subscription.fetch_mode().sure());
     var group = m_subscription.getItemGroup();
     var items = m_subscription.getItems();
     if (group != null) {
@@ -690,7 +690,7 @@ class MpnSubscriptionManager implements Encodable {
     if (adapter != null) {
       req.LS_data_adapter(adapter);
     }
-    var freq = m_subscription.fetchRequestedMaxFrequency();
+    var freq = m_subscription.fetch_requestedMaxFrequency();
     if (freq != null) {
       switch freq {
       case FreqLimited(var limit):
@@ -699,7 +699,7 @@ class MpnSubscriptionManager implements Encodable {
         req.LS_requested_max_frequency("unlimited");
       }
     }
-    var buff = m_subscription.fetchRequestedBufferSize();
+    var buff = m_subscription.fetch_requestedBufferSize();
     if (buff != null) {
       switch buff {
       case BSLimited(var limit):
@@ -708,7 +708,7 @@ class MpnSubscriptionManager implements Encodable {
         req.LS_requested_buffer_size("unlimited");
       }
     }
-    req.PN_deviceId(m_client.get_mpn_deviceId().sure());
+    req.PN_deviceId(m_client.fetch_mpn_deviceId().sure());
     req.PN_notificationFormat(m_initFormat.sure());
     var trigger = m_initTrigger;
     if (trigger != null) {
@@ -726,7 +726,7 @@ class MpnSubscriptionManager implements Encodable {
     m_lastDeactivateReqId = m_client.generateFreshReqId();
     req.LS_reqId(m_lastDeactivateReqId);
     req.LS_op("deactivate");
-    req.PN_deviceId(m_client.get_mpn_deviceId().sure());
+    req.PN_deviceId(m_client.fetch_mpn_deviceId().sure());
     req.PN_subscriptionId(m_subscription.getSubscriptionId().sure());
     protocolLogger.info('Sending MPNSubscription deactivate: $req');
     return req.getEncodedString();
@@ -737,7 +737,7 @@ class MpnSubscriptionManager implements Encodable {
     m_lastConfigureReqId = m_client.generateFreshReqId();
     req.LS_reqId(m_lastConfigureReqId);
     req.LS_op("pn_reconf");
-    req.LS_mode(m_subscription.fetchMode().sure());
+    req.LS_mode(m_subscription.fetch_mode().sure());
     var group = m_subscription.getItemGroup();
     var items = m_subscription.getItems();
     if (group != null) {
@@ -756,7 +756,7 @@ class MpnSubscriptionManager implements Encodable {
     if (adapter != null) {
       req.LS_data_adapter(adapter);
     }
-    req.PN_deviceId(m_client.get_mpn_deviceId().sure());
+    req.PN_deviceId(m_client.fetch_mpn_deviceId().sure());
     req.PN_subscriptionId(m_subscription.getSubscriptionId().sure());
     if (state.s_ct == s74) {
       req.PN_notificationFormat(m_currentFormat.sure());
@@ -821,7 +821,7 @@ class MpnSubscriptionManager implements Encodable {
   }
   
   function notifyOnSubscriptionsUpdated() {
-    m_client.get_mpn_device().sure().fireOnSubscriptionsUpdated();
+    m_client.fetch_mpn_device().sure().fireOnSubscriptionsUpdated();
   }
 
   function notifyUpdate(update: ItemUpdate) {
@@ -837,11 +837,11 @@ class MpnSubscriptionManager implements Encodable {
   }
 
   function doSetCurrentFormat() {
-    m_currentFormat = m_subscription.fetchRequestedFormat();
+    m_currentFormat = m_subscription.fetch_requestedFormat();
   }
   
   function doSetCurrentTrigger() {
-    m_currentTrigger = m_subscription.fetchRequestedTrigger();
+    m_currentTrigger = m_subscription.fetch_requestedTrigger();
   }
   
   function notifyOnModificationError_Format(code: Int, msg: String) {
@@ -861,6 +861,6 @@ class MpnSubscriptionManager implements Encodable {
   }
 
   function traceEvent(evt: String) {
-    internalLogger.logTrace('mpn#sub#$evt($m_subId:${get_mpnSubId()}) in $state');
+    internalLogger.logTrace('mpn#sub#$evt($m_subId:${fetch_mpnSubId()}) in $state');
   }
 }

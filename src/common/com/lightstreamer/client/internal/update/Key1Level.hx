@@ -77,7 +77,7 @@ class Key1Level implements ItemKey {
   }
 
   function doFirstUpdate(keyValues: Map<Pos, Null<String>>, snapshot: Bool) {
-    var nFields = item.subscription.get_nFields().sure();
+    var nFields = item.subscription.fetch_nFields().sure();
     var cmdIdx = item.subscription.getCommandPosition().sure();
     currKeyValues = keyValues;
     currKeyValues[cmdIdx] = "ADD";

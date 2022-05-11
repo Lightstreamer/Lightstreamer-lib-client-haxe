@@ -250,25 +250,25 @@ class Subscription {
 
   @:synchronized
   @:allow(com.lightstreamer.client.internal.SubscriptionManager)
-  function fetchMode(): SubscriptionMode {
+  function fetch_mode(): SubscriptionMode {
     return mode;
   }
 
   @:synchronized
   @:allow(com.lightstreamer.client.internal.SubscriptionManager)
-  function fetchRequestedBufferSize(): Null<RequestedBufferSize> {
+  function fetch_requestedBufferSize(): Null<RequestedBufferSize> {
     return bufferSize;
   }
 
   @:synchronized
   @:allow(com.lightstreamer.client.internal.SubscriptionManager)
-  function fetchRequestedSnapshot(): Null<RequestedSnapshot> {
+  function fetch_requestedSnapshot(): Null<RequestedSnapshot> {
     return snapshot;
   }
 
   @:synchronized
   @:allow(com.lightstreamer.client.internal.SubscriptionManager)
-  function fetchRequestedMaxFrequency(): Null<RequestedMaxFrequency> {
+  function fetch_requestedMaxFrequency(): Null<RequestedMaxFrequency> {
     return requestedMaxFrequency;
   }
 
@@ -320,7 +320,7 @@ class Subscription {
   @:allow(com.lightstreamer.client.internal.update.Key2Level)
   @:allow(com.lightstreamer.client.internal.update.ItemUpdateBase)
   @:allow(com.lightstreamer.client.internal.update.ItemUpdate2Level)
-  function get_nFields(): Null<Int> {
+  function fetch_nFields(): Null<Int> {
     return nFields;
   }
 

@@ -185,7 +185,7 @@ class Key2Level implements ItemKey {
       return values[fieldIdx];
     } else {
       var values = currKey2Values;
-      var nFields = item.subscription.get_nFields();
+      var nFields = item.subscription.fetch_nFields();
       if (values != null && nFields != null) {
         return values[fieldIdx - nFields];
       } else {
@@ -217,7 +217,7 @@ class Key2Level implements ItemKey {
 
   function doUpdate2Level(update: ItemUpdate) {
     var cmdIdx = item.subscription.getCommandPosition().sure();
-    var nFields = item.subscription.get_nFields().sure();
+    var nFields = item.subscription.fetch_nFields().sure();
     var prevKeyValues = currKeyValues.sure();
     @:nullSafety(Off)
     currKeyValues[cmdIdx] = "UPDATE";
@@ -242,7 +242,7 @@ class Key2Level implements ItemKey {
 
   function doUpdate1Level(keyValues: Map<Pos, Null<String>>, snapshot: Bool) {
     var cmdIdx = item.subscription.getCommandPosition().sure();
-    var nFields = item.subscription.get_nFields().sure();
+    var nFields = item.subscription.fetch_nFields().sure();
     var prevKeyValues = currKeyValues.sure();
     currKeyValues =  keyValues;
     currKeyValues[cmdIdx] = "UPDATE";
@@ -262,7 +262,7 @@ class Key2Level implements ItemKey {
   }
 
   function doDelete(keyValues: Map<Pos, Null<String>>, snapshot: Bool) {
-    var n = item.subscription.get_nFields().sure();
+    var n = item.subscription.fetch_nFields().sure();
     var keyIdx = item.subscription.getKeyPosition().sure();
     var cmdIdx = item.subscription.getCommandPosition().sure();
     currKeyValues = null;
@@ -288,7 +288,7 @@ class Key2Level implements ItemKey {
   }
 
   function doDeleteExt(keyValues: Map<Pos, Null<String>>, snapshot: Bool) {
-    var nFields = item.subscription.get_nFields().sure();
+    var nFields = item.subscription.fetch_nFields().sure();
     var keyIdx = item.subscription.getKeyPosition().sure();
     var cmdIdx = item.subscription.getCommandPosition().sure();
     var n = nFields + currKey2Values.sure().count();
@@ -316,7 +316,7 @@ class Key2Level implements ItemKey {
   }
 
   function doLightDelete(keyValues: Map<Pos, Null<String>>, snapshot: Bool) {
-    var nFields = item.subscription.get_nFields().sure();
+    var nFields = item.subscription.fetch_nFields().sure();
     var keyIdx = item.subscription.getKeyPosition().sure();
     var cmdIdx = item.subscription.getCommandPosition().sure();
     currKeyValues = null;
@@ -333,7 +333,7 @@ class Key2Level implements ItemKey {
   }
 
   function doDelete1LevelOnly(keyValues: Map<Pos, Null<String>>, snapshot: Bool) {
-    var nFields = item.subscription.get_nFields().sure();
+    var nFields = item.subscription.fetch_nFields().sure();
     var keyIdx = item.subscription.getKeyPosition().sure();
     var cmdIdx = item.subscription.getCommandPosition().sure();
     currKeyValues = null;
