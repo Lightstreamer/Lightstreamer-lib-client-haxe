@@ -159,18 +159,26 @@ class Subscription {
   public function getRequestedMaxFrequency(): Null<String> {
     return requestedMaxFrequency.toString();
   }
+  @:unsynchronized
   public function setRequestedMaxFrequency(freq: Null<String>): Void {
-    var newValue = RequestedMaxFrequencyTools.fromString(freq);
-    switch (mode) {
-      case Merge|Distinct|Command:
-      case _:
-        throw new IllegalArgumentException("The operation in only available on MERGE, DISTINCT and COMMAND Subscripitons");
+    var _manager;
+    lock.synchronized(() -> {
+      var newValue = RequestedMaxFrequencyTools.fromString(freq);
+      switch (mode) {
+        case Merge|Distinct|Command:
+        case _:
+          throw new IllegalArgumentException("The operation in only available on MERGE, DISTINCT and COMMAND Subscripitons");
+      }
+      if (isActive() && (newValue == null || newValue == FreqUnfiltered || this.requestedMaxFrequency == FreqUnfiltered)) {
+        throw new IllegalArgumentException("Cannot change the frequency from/to 'unfiltered' or to null while the Subscription is active");
+      }
+      subscriptionLogger.logInfo('Subscription $subId requested max frequency changed: $freq');
+      this.requestedMaxFrequency = newValue;
+      _manager = manager;
+    });
+    if (_manager != null) {
+      _manager.evtExtConfigure();
     }
-    if (isActive() && (newValue == null || newValue == FreqUnfiltered || this.requestedMaxFrequency == FreqUnfiltered)) {
-      throw new IllegalArgumentException("Cannot change the frequency from/to 'unfiltered' or to null while the Subscription is active");
-    }
-    this.requestedMaxFrequency = newValue;
-    // TODO forward to manager
   }
 
   public function getSelector(): Null<String> {

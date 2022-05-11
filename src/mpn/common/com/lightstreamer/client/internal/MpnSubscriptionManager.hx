@@ -366,7 +366,7 @@ class MpnSubscriptionManager implements Encodable {
     }
   }
 
-  function evtExtMpnSetFormat() {
+  public function evtExtMpnSetFormat() {
     traceEvent("setFormat");
     var forward = true;
     if (state.s_fu == s20) {

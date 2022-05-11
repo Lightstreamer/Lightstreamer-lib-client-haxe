@@ -81,9 +81,16 @@ class MpnSubscription {
   public function getTriggerExpression(): Null<String> {
     return requestedTrigger;
   }
+  @:unsynchronized
   public function setTriggerExpression(expr: Null<String>): Void {
-    // TODO forward to manager
-    this.requestedTrigger = TriggerExpression.fromString(expr);
+    var _manager;
+    lock.synchronized(() -> {
+      this.requestedTrigger = TriggerExpression.fromString(expr);
+      _manager = m_manager;
+    });
+    if (_manager != null) {
+      _manager.evtExtMpnSetTrigger();
+    }
   }
   public function getActualTriggerExpression(): Null<String> {
     return realTrigger;
@@ -92,9 +99,16 @@ class MpnSubscription {
   public function getNotificationFormat(): Null<String> {
     return requestedFormat;
   }
+  @:unsynchronized
   public function setNotificationFormat(format: Null<String>): Void {
-    // TODO forward to manager
-    this.requestedFormat = NotificationFormat.fromString(format);
+    var _manager;
+    lock.synchronized(() -> {
+      this.requestedFormat = NotificationFormat.fromString(format);
+      _manager = m_manager;
+    });
+    if (_manager != null) {
+      _manager.evtExtMpnSetFormat();
+    }
   }
   public function getActualNotificationFormat(): Null<String> {
     return realFormat;
