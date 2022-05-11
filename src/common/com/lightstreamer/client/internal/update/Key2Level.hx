@@ -3,6 +3,7 @@ package com.lightstreamer.client.internal.update;
 import com.lightstreamer.internal.Set;
 import com.lightstreamer.client.internal.update.UpdateUtils;
 import com.lightstreamer.internal.Types;
+import com.lightstreamer.internal.NativeTypes.NativeArray;
 import com.lightstreamer.internal.RLock;
 import com.lightstreamer.internal.MacroTools;
 using com.lightstreamer.internal.NullTools;
@@ -407,7 +408,7 @@ class Key2Level implements ItemKey {
     listener2Level = new Sub2LevelDelegate(this);
     var sub = item.subscription;
     @:nullSafety(Off)
-    var sub2 = new Subscription(Merge, null, null);
+    var sub2 = new Subscription(Merge, (null: NativeArray<String>), (null: NativeArray<String>));
     var items = [keyName];
     // TODO
     // guard allValidItems(items) else {

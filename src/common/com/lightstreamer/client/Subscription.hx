@@ -44,17 +44,56 @@ class Subscription {
   var m_internal: Bool = false; // special flag used to mark 2-level subscriptions
   var manager: Null<SubscriptionManagerLiving>;
 
-  // TODO implement overloaded constructors
+  #if js
   public function new(mode: String, items: NativeArray<String>, fields: NativeArray<String>) {
     this.mode = SubscriptionMode.fromString(mode);
+    initSnapshot();
+    initItemsAndFields(items is String ? [cast items] : items, fields);
+  }
+  #elseif (java || cs)
+  overload public function new(mode: String, items: NativeArray<String>, fields: NativeArray<String>) {
+    this.mode = SubscriptionMode.fromString(mode);
+    initSnapshot();
+    initItemsAndFields(items, fields);
+  }
+
+  overload public function new(mode: String) {
+    this.mode = SubscriptionMode.fromString(mode);
+    initSnapshot();
+  }
+
+  overload public function new(mode: String, item: String, fields: NativeArray<String>) {
+    this.mode = SubscriptionMode.fromString(mode);
+    initSnapshot();
+    initItemsAndFields([item], fields);
+  }
+  #else
+  public function new(mode: String, items: NativeArray<String>, fields: NativeArray<String>) {
+    this.mode = SubscriptionMode.fromString(mode);
+    initSnapshot();
+    initItemsAndFields(items, fields);
+  }
+  #end
+
+  function initSnapshot() {
     this.snapshot = this.mode == Raw ? null : SnpYes;
-    this.items = Items.fromArray(items.toHaxe());
-    this.fields = Fields.fromArray(fields.toHaxe());
-    if (this.mode == Command && @:nullSafety(Off) !this.fields.hasKeyField()) {
-      throw new IllegalArgumentException("Field 'key' is missing");
-    }
-    if (this.mode == Command && @:nullSafety(Off) !this.fields.hasCommandField()) {
-      throw new IllegalArgumentException("Field 'command' is missing");
+  }
+
+  function initItemsAndFields(items: NativeArray<String>, fields: NativeArray<String>) {
+    if (items != null) {
+      if (fields == null) {
+        throw new IllegalArgumentException("Please specify a valid field list");
+      }
+      this.items = Items.fromArray(items.toHaxe());
+      this.fields = Fields.fromArray(fields.toHaxe());
+      if (this.mode == Command && @:nullSafety(Off) !this.fields.hasKeyField()) {
+        throw new IllegalArgumentException("Field 'key' is missing");
+      }
+      if (this.mode == Command && @:nullSafety(Off) !this.fields.hasCommandField()) {
+        throw new IllegalArgumentException("Field 'command' is missing");
+      }
+    } else if (fields != null) {
+      throw new IllegalArgumentException("Please specify a valid item or item list");
     }
   }
 
