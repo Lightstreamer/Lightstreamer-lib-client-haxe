@@ -52,9 +52,9 @@ function synchronizeClass(): Array<Field> {
       case TPath({name: "Void"}): true;
       case _: false;
     }) 
-      macro this.lock.synchronized(() -> ${func.expr})
+      macro @:pos(field.pos) this.lock.synchronized(() -> ${func.expr})
     else 
-      macro return this.lock.synchronized(() -> ${func.expr});
+      macro @:pos(field.pos) return this.lock.synchronized(() -> ${func.expr});
   }
   return fields;
 }
