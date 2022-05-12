@@ -4,6 +4,7 @@ import com.lightstreamer.client.internal.SubscriptionManager.SubscriptionManager
 import com.lightstreamer.internal.NativeTypes;
 import com.lightstreamer.internal.EventDispatcher;
 import com.lightstreamer.internal.Types;
+import haxe.extern.EitherType;
 import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
 
@@ -271,23 +272,185 @@ class Subscription {
     this.fields2 = null;
   }
 
-  public function getValue(itemName: String, fieldName: String): String {
-    return "";
+  #if (java || cs)
+  @:unsynchronized
+  overload public function getValue(itemPos: Int, fieldPos: Int): Null<String> {
+    if (itemPos < 1 || fieldPos < 1) {
+      throw new IllegalArgumentException("The specified position is out of bounds");
+    }
+    var _manager;
+    lock.synchronized(() -> {
+      _manager = manager;
+    });
+    return _manager != null ? _manager.getValue(itemPos, fieldPos) : null;
   }
-  // TODO overload
-  // public function getValue(itemPos: Int, fieldPos: Int): String {}
-  // public function getValue(itemName: String, fieldPos: Int): String {}
-  // public function getValue(itemPos: Int, fieldName: String): String {}
 
-  public function getCommandValue(itemName: String, keyValue: String, fieldName: String): String {
-    return "";
+  @:unsynchronized
+  overload public function getValue(itemPos: Int, fieldName: String): String {
+    var fieldPos = lock.synchronized(() -> getFieldPos(fieldName));
+    return getValue(itemPos, fieldPos);
   }
-  // TODO overload
-  // public function getCommandValue(itemPos: Int, keyValue: String, fieldPos: Int): String {}
-  // public function getCommandValue(itemPos: Int, keyValue: String, fieldName: String): String {}
-  // public function getCommandValue(itemName: String, keyValue: String, fieldPos: Int): String {}
+
+  @:unsynchronized
+  overload public function getValue(itemName: String, fieldPos: Int): String {
+    var itemPos = lock.synchronized(() -> getItemPos(itemName));
+    return getValue(itemPos, fieldPos);
+  }
+
+  @:unsynchronized
+  overload public function getValue(itemName: String, fieldName: String): String {
+    var itemPos = lock.synchronized(() -> getItemPos(itemName));
+    var fieldPos = lock.synchronized(() -> getFieldPos(fieldName));
+    return getValue(itemPos, fieldPos);
+  }
+
+  @:unsynchronized
+  overload public function getCommandValue(itemPos: Int, keyValue: String, fieldPos: Int): Null<String> {
+    if (mode != Command) {
+      throw new IllegalStateException("This method can only be used on COMMAND subscriptions");
+    }
+    if (itemPos < 1 || fieldPos < 1) {
+      throw new IllegalArgumentException("The specified position is out of bounds");
+    }
+    var _manager;
+    lock.synchronized(() -> {
+      _manager = manager;
+    });
+    return _manager != null ? _manager.getCommandValue(itemPos, keyValue, fieldPos) : null;
+  }
+
+  @:unsynchronized
+  overload public function getCommandValue(itemPos: Int, keyValue: String, fieldName: String): Null<String> {
+    var fieldPos = lock.synchronized(() -> getFieldPos(fieldName));
+    return getCommandValue(itemPos, keyValue, fieldPos);
+  }
+
+  @:unsynchronized
+  overload public function getCommandValue(itemName: String, keyValue: String, fieldPos: Int): Null<String> {
+    var itemPos = lock.synchronized(() -> getItemPos(itemName));
+    return getCommandValue(itemPos, keyValue, fieldPos);
+  }
+
+  @:unsynchronized
+  overload public function getCommandValue(itemName: String, keyValue: String, fieldName: String): Null<String> {
+    var itemPos = lock.synchronized(() -> getItemPos(itemName));
+    var fieldPos = lock.synchronized(() -> getFieldPos(fieldName));
+    return getCommandValue(itemPos, keyValue, fieldPos);
+  }
+  #else
+  @:unsynchronized
+  public function getValue(itemNameOrPos: EitherType<Int, String>, fieldNameOrPos: EitherType<Int, String>): Null<String> {
+    var isItemPos = itemNameOrPos is Int;
+    var isItemName = itemNameOrPos is String;
+    var isFieldPos = fieldNameOrPos is Int;
+    var isFieldName = fieldNameOrPos is String;
+    if (isItemPos && isFieldPos) {
+      return getValuePosPos(itemNameOrPos, fieldNameOrPos);
+    } else if (isItemPos && isFieldName) {
+      return getValuePosName(itemNameOrPos, fieldNameOrPos);
+    } else if (isItemName && isFieldPos) {
+      return getValueNamePos(itemNameOrPos, fieldNameOrPos);
+    } else if (isItemName && isFieldName) {
+      return getValueNameName(itemNameOrPos, fieldNameOrPos);
+    } else {
+      throw new IllegalArgumentException("Invalid argument type");
+    }
+  }
+
+  @:unsynchronized
+  public function getCommandValue(itemNameOrPos: EitherType<Int, String>, keyValue: String, fieldNameOrPos: EitherType<Int, String>): Null<String> {
+    var isItemPos = itemNameOrPos is Int;
+    var isItemName = itemNameOrPos is String;
+    var isFieldPos = fieldNameOrPos is Int;
+    var isFieldName = fieldNameOrPos is String;
+    if (isItemPos && isFieldPos) {
+      return getCommandValuePosPos(itemNameOrPos, keyValue, fieldNameOrPos);
+    } else if (isItemPos && isFieldName) {
+      return getCommandValuePosName(itemNameOrPos, keyValue, fieldNameOrPos);
+    } else if (isItemName && isFieldPos) {
+      return getCommandValueNamePos(itemNameOrPos, keyValue, fieldNameOrPos);
+    } else if (isItemName && isFieldName) {
+      return getCommandValueNameName(itemNameOrPos, keyValue, fieldNameOrPos);
+    } else {
+      throw new IllegalArgumentException("Invalid argument type");
+    }
+  }
+
+  function getValuePosPos(itemPos: Int, fieldPos: Int): Null<String> {
+    if (itemPos < 1 || fieldPos < 1) {
+      throw new IllegalArgumentException("The specified position is out of bounds");
+    }
+    var _manager;
+    lock.synchronized(() -> {
+      _manager = manager;
+    });
+    return _manager != null ? _manager.getValue(itemPos, fieldPos) : null;
+  }
+
+  function getValuePosName(itemPos: Int, fieldName: String): Null<String> {
+    var fieldPos = lock.synchronized(() -> getFieldPos(fieldName));
+    return getValuePosPos(itemPos, fieldPos);
+  }
+
+  function getValueNamePos(itemName: String, fieldPos: Int): Null<String> {
+    var itemPos = lock.synchronized(() -> getItemPos(itemName));
+    return getValuePosPos(itemPos, fieldPos);
+  }
+
+  function getValueNameName(itemName: String, fieldName: String): Null<String> {
+    var itemPos = lock.synchronized(() -> getItemPos(itemName));
+    var fieldPos = lock.synchronized(() -> getFieldPos(fieldName));
+    return getValuePosPos(itemPos, fieldPos);
+  }
+
+  function getCommandValuePosPos(itemPos: Int, keyValue: String, fieldPos: Int): Null<String> {
+    if (mode != Command) {
+      throw new IllegalStateException("This method can only be used on COMMAND subscriptions");
+    }
+    if (itemPos < 1 || fieldPos < 1) {
+      throw new IllegalArgumentException("The specified position is out of bounds");
+    }
+    var _manager;
+    lock.synchronized(() -> {
+      _manager = manager;
+    });
+    return _manager != null ? _manager.getCommandValue(itemPos, keyValue, fieldPos) : null;
+  }
+
+  function getCommandValuePosName(itemPos: Int, keyValue: String, fieldName: String): Null<String> {
+    var fieldPos = lock.synchronized(() -> getFieldPos(fieldName));
+    return getCommandValuePosPos(itemPos, keyValue, fieldPos);
+  }
+
+  function getCommandValueNamePos(itemName: String, keyValue: String, fieldPos: Int): Null<String> {
+    var itemPos = lock.synchronized(() -> getItemPos(itemName));
+    return getCommandValuePosPos(itemPos, keyValue, fieldPos);
+  }
+
+  function getCommandValueNameName(itemName: String, keyValue: String, fieldName: String): Null<String> {
+    var itemPos = lock.synchronized(() -> getItemPos(itemName));
+    var fieldPos = lock.synchronized(() -> getFieldPos(fieldName));
+    return getCommandValuePosPos(itemPos, keyValue, fieldPos);
+  }
+  #end
 
   // --------------- private methods ---------------
+
+  function getItemPos(itemName: String) {
+    var itemPos: Int;
+    if (items == null || (itemPos = items.getPos(itemName)) == -1) {
+      throw new IllegalArgumentException("Unknown item name");
+    }
+    return itemPos;
+  }
+
+  function getFieldPos(fieldName: String) {
+    var fieldPos: Int;
+    if (fields == null || (fieldPos = fields.getPos(fieldName)) == -1) {
+      throw new IllegalArgumentException("Unknown field name");
+    }
+    return fieldPos;
+  }
 
   function checkActive() {
     if (isActive()) {

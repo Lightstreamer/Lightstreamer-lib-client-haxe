@@ -311,6 +311,11 @@ abstract Items(Array<String>) to Array<String> {
     this = a;
   }
 
+  public function getPos(name: String): Pos {
+    var pos = this.indexOf(name);
+    return pos != -1 ? pos + 1 : -1;
+  }
+
   public static function fromArray(array: Null<Array<String>>): Null<Items> {
     switch array {
       case null: 
@@ -329,6 +334,11 @@ abstract Items(Array<String>) to Array<String> {
 abstract Fields(Array<String>) to Array<String> {
   public inline function new(a: Array<String>) {
     this = a;
+  }
+
+  public function getPos(name: String): Pos {
+    var pos = this.indexOf(name);
+    return pos != -1 ? pos + 1 : -1;
   }
 
   public inline function hasKeyField() {
