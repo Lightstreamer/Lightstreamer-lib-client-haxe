@@ -1,7 +1,7 @@
 package com.lightstreamer.client.internal;
 
 import com.lightstreamer.internal.RequestBuilder;
-import com.lightstreamer.internal.NativeTypes.IllegalStateException;
+import com.lightstreamer.internal.NativeTypes;
 import com.lightstreamer.client.mpn.Types.MpnSubscriptionMode;
 import com.lightstreamer.internal.RLock;
 import com.lightstreamer.client.internal.ClientRequests.Encodable;
@@ -124,7 +124,7 @@ class MpnSubscriptionManager implements Encodable {
       m_coalescing = false;
       m_initFormat = null;
       m_initTrigger = null;
-      m_subscription = new MpnSubscription(Merge, null, null);
+      m_subscription = @:nullSafety(Off) new MpnSubscription(Merge, (null : NativeArray<String>), (null: NativeArray<String>));
       m_subscription.reInit(mpnSubId);
       m_client = client;
       state = new State(s45, @:nullSafety(Off) this);

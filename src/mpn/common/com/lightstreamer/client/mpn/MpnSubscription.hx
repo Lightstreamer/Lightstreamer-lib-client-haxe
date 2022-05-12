@@ -6,6 +6,7 @@ import com.lightstreamer.internal.Types;
 import com.lightstreamer.internal.EventDispatcher;
 import com.lightstreamer.client.mpn.Types;
 import com.lightstreamer.client.internal.ParseTools;
+import haxe.extern.EitherType;
 import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
 
@@ -39,29 +40,101 @@ class MpnSubscription {
   var m_status: MpnSubscriptionStatus = Unknown;
   var m_manager: Null<MpnSubscriptionManager>;
 
-  // #if android
-  // public function new(appContext: android.content.Context) {
-  //   var pkg = com.lightstreamer.client.mpn.AndroidUtils.getPackageName(appContext);
-  //   trace("MPNSub.new", pkg);
-  // }
-  // #end
+  #if js
+  public function new(mode: EitherType<String, EitherType<Subscription, MpnSubscription>>, items: NativeArray<String>, fields: NativeArray<String>) {
+    if (mode is String) {
+      this.mode = MpnSubscriptionMode.fromString(mode);
+      this.madeByServer = false;
+      initItemsAndFields(items, fields);
+    } else if (mode is Subscription) {
+      var subscription: Subscription = cast mode;
+      this.mode = MpnSubscriptionMode.fromString(subscription.getMode());
+      this.madeByServer = false;
+      initFromSubscription(subscription);
+    } else if (mode is MpnSubscription) {
+      var mpnSubscription: MpnSubscription = cast mode;
+      this.mode = mpnSubscription.mode;
+      this.madeByServer = false;
+      initFromMpnSubscription(mpnSubscription);
+    } else {
+      // pseudo-initialization to please the compiler
+      this.mode = Merge;
+      this.madeByServer = false;
+      throw new IllegalArgumentException("Wrong arguments for MpnSubscription constructor");
+    }
+  }
+  #elseif java
+  overload public function new(mode: String, items: NativeArray<String>, fields: NativeArray<String>) {
+    this.mode = MpnSubscriptionMode.fromString(mode);
+    this.madeByServer = false;
+    initItemsAndFields(items, fields);
+  }
 
-  // TODO implement overloaded constructors
-  public function new(mode: String, items: Null<NativeArray<String>>, fields: Null<NativeArray<String>>) {
-    if (items != null) {
-      this.items = Items.fromArray(items.toHaxe());
-    }
-    if (fields != null) {
-      this.fields = Fields.fromArray(fields.toHaxe());
-    }
+  overload public function new(mode: String) {
     this.mode = MpnSubscriptionMode.fromString(mode);
     this.madeByServer = false;
   }
 
+  overload public function new(mode: String, item: String, fields: NativeArray<String>) {
+    this.mode = MpnSubscriptionMode.fromString(mode);
+    this.madeByServer = false;
+    initItemsAndFields([item], fields);
+  }
+
+  overload public function new(subscription: Subscription) {
+    this.mode = MpnSubscriptionMode.fromString(subscription.getMode());
+    this.madeByServer = false;
+    initFromSubscription(subscription);
+  }
+
+  overload public function new(mpnSubscription: MpnSubscription) {
+    this.mode = mpnSubscription.mode;
+    this.madeByServer = false;
+    initFromMpnSubscription(mpnSubscription);
+  }
+  #end
+
+  // NB emulate constructor overloading: call it immediately after the constructor
   @:allow(com.lightstreamer.client.internal.MpnSubscriptionManager)
   function reInit(mpnSubId: String) {
     m_mpnSubId = mpnSubId;
     madeByServer = true;
+  }
+
+  function initFromSubscription(subscription: Subscription) {
+    var _items = subscription.getItems();
+    var _fields = subscription.getFields();
+    this.items = _items != null ? Items.fromArray(_items) : null;
+    this.group = Name.fromString(subscription.getItemGroup());
+    this.fields = _fields != null ? Fields.fromArray(_fields) : null;
+    this.schema = Name.fromString(subscription.getFieldSchema());
+    this.dataAdapter = Name.fromString(subscription.getDataAdapter());
+    this.bufferSize = RequestedBufferSizeTools.fromString(subscription.getRequestedBufferSize());
+    this.requestedMaxFrequency = MpnRequestedMaxFrequencyTools.fromString(subscription.getRequestedMaxFrequency());
+  }
+
+  function initFromMpnSubscription(mpnSubscription: MpnSubscription) {
+    this.items = mpnSubscription.items;
+    this.group = mpnSubscription.group;
+    this.fields = mpnSubscription.fields;
+    this.schema = mpnSubscription.schema;
+    this.dataAdapter = mpnSubscription.dataAdapter;
+    this.bufferSize = mpnSubscription.bufferSize;
+    this.requestedMaxFrequency = mpnSubscription.requestedMaxFrequency;
+    this.requestedFormat = mpnSubscription.requestedFormat;
+    this.requestedTrigger = mpnSubscription.requestedTrigger;
+  }
+
+  function initItemsAndFields(items: NativeArray<String>, fields: NativeArray<String>) {
+    if (items != null) {
+      if (fields == null) {
+        throw new IllegalArgumentException("Please specify a valid field list");
+      }
+      this.items = Items.fromArray(items.toHaxe());
+      this.fields = Fields.fromArray(fields.toHaxe());
+    } else if (fields != null) {
+      throw new IllegalArgumentException("Please specify a valid item or item list");
+    }
   }
 
   public function addListener(listener: MpnSubscriptionListener): Void {
