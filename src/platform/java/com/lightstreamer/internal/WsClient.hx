@@ -1,5 +1,6 @@
 package com.lightstreamer.internal;
 
+import com.lightstreamer.internal.PlatformApi.IWsClient;
 import okhttp3.*;
 import com.lightstreamer.client.Proxy;
 import com.lightstreamer.internal.NativeTypes.IllegalStateException;
@@ -7,7 +8,7 @@ import com.lightstreamer.internal.MacroTools.assert;
 import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
 
-class WsClient extends WebSocketListener implements Authenticator {
+class WsClient extends WebSocketListener implements Authenticator implements IWsClient {
   final ws: WebSocket;
   final proxy: Null<Proxy>;
   final onOpenCb: WsClient->Void;
@@ -110,6 +111,9 @@ class WsClient extends WebSocketListener implements Authenticator {
 
   // WebSocketListener.onFailure
   override public overload function onFailure(webSocket: WebSocket, ex: java.lang.Throwable, response: Response) {
+    if (isDisposed()) {
+      return;
+    }
     var msg = ex.getMessage();
     streamLogger.logDebug('WS event: error($msg)', ex);
     onErrorCb(this, msg);
