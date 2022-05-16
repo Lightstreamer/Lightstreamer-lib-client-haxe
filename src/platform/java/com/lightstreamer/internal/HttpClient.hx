@@ -1,5 +1,6 @@
 package com.lightstreamer.internal;
 
+import com.lightstreamer.internal.PlatformApi.IHttpClient;
 import okhttp3.*;
 import com.lightstreamer.client.Proxy;
 import com.lightstreamer.internal.NativeTypes.IllegalStateException;
@@ -7,7 +8,7 @@ import com.lightstreamer.internal.MacroTools.assert;
 import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
 
-class HttpClient implements Callback implements Authenticator {
+class HttpClient implements Callback implements Authenticator implements IHttpClient {
   static final TXT = MediaType.get("application/x-www-form-urlencoded; charset=utf-8");
   // OkHttp performs best when you create a single OkHttpClient instance and reuse it for all of your HTTP calls 
   // (see https://square.github.io/okhttp/4.x/okhttp/okhttp3/-ok-http-client/#okhttpclients-should-be-shared)
@@ -87,6 +88,9 @@ class HttpClient implements Callback implements Authenticator {
 
   // Callback.onFailure
   public function onFailure(call: Call, ex: java.io.IOException) {
+    if (isDisposed()) {
+      return;
+    }
     streamLogger.logDebug('HTTP event: error(${ex.getMessage()})', ex);
     onError(this, ex.getMessage());
     call.cancel();
@@ -111,9 +115,11 @@ class HttpClient implements Callback implements Authenticator {
       streamLogger.logDebug("HTTP event: complete");
       onDone(this);
     } catch(e) {
-      streamLogger.logDebugEx('HTTP event: error(${e.message})', e);
-      onError(this, e.message);
-      call.cancel();
+      if (!isDisposed()) {
+        streamLogger.logDebugEx('HTTP event: error(${e.message})', e);
+        onError(this, e.message);
+        call.cancel();
+      }
     }
     response.close();
   }
