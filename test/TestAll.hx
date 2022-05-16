@@ -8,7 +8,7 @@ import com.lightstreamer.client.internal.*;
 class TestAll {
 
   static function buildSuite(runner: Runner) {
-    //LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.DEBUG));
+    //LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.TRACE));
     //runner.addCase(new TestCase());
     runner.addCase(new TestConnectionDetails());
     runner.addCase(new TestConnectionOptions());
@@ -19,6 +19,7 @@ class TestAll {
     runner.addCase(new TestRequestBuilder());
     runner.addCase(new TestAssocArray());
     runner.addCase(new TestRequest());
+    runner.addCase(new TestClient());
     #if js
     runner.addCase(new TestStreamReader());
     #end
