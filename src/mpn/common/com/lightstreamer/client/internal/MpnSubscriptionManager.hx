@@ -90,7 +90,7 @@ class MpnSubscriptionManager implements Encodable {
   final m_initTrigger: Null<String>;
   var m_currentFormat: Null<String>;
   var m_currentTrigger: Null<String>;
-  final m_subscription: MpnSubscription;
+  public final m_subscription: MpnSubscription;
   final m_client: MpnClientMachine;
 
   public function new(args: CtorArgs) {

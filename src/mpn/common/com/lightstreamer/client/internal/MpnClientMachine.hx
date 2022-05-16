@@ -1,5 +1,6 @@
 package com.lightstreamer.client.internal;
 
+import com.lightstreamer.client.mpn.MpnSubscription;
 import com.lightstreamer.internal.*;
 import com.lightstreamer.internal.Types;
 import com.lightstreamer.internal.NativeTypes;
@@ -653,11 +654,6 @@ class MpnClientMachine extends ClientMachine {
     return res;
   }
 
-  function subscribeExt(subscription: Subscription, isInternal: Bool = false) {
-    // TODO
-    throw new haxe.exceptions.NotImplementedException();
-  }
-
   function doRegisterMpnDevice() {
     assert(!mpn_candidate_devices.empty());
     mpn_device = mpn_candidate_devices.shift();
@@ -971,10 +967,138 @@ class MpnClientMachine extends ClientMachine {
   public function fetch_mpn_device(): Null<MpnDevice> {
     return mpn_device;
   }
+
+  public function registerForMpn(mpnDevice: MpnDevice) {
+    if (mpnDevice == null) {
+      throw new IllegalArgumentException("Device cannot be null");
+    }
+    mpn_candidate_devices.push(mpnDevice);
+    actionLogger.logInfo('MPN registration requested: $mpnDevice');
+    evtExtMpnRegister();
+  }
+
+  public function subscribeMpn(mpnSubscription: MpnSubscription, coalescing: Bool) {
+    if (mpn_device == null) {
+      throw new IllegalStateException(NO_DEVICE);
+    }
+    if (mpnSubscription.isActive()) {
+      throw new IllegalArgumentException(IS_ACTIVE_MPN);
+    }
+    if (mpnSubscription.getNotificationFormat() == null) {
+      throw new IllegalArgumentException(NO_FORMAT);
+    }
+    if (mpnSubscription.getItems() == null && mpnSubscription.getItemGroup() == null) {
+      throw new IllegalArgumentException("Specify property 'items' or 'itemGroup'");
+    }
+    if (mpnSubscription.getFields() == null && mpnSubscription.getFieldSchema() == null) {
+      throw new IllegalArgumentException("Specify property 'fields' or 'fieldSchema'");
+    }
+    var sm = new MpnSubscriptionManager(Ctor1(mpnSubscription, coalescing, this));
+    actionLogger.info('MPN Subscription requested: subId: ${sm.m_subId} $mpnSubscription coalescing: $coalescing');
+    sm.evtExtMpnSubscribe();
+  }
+
+  public function unsubscribeMpn(mpnSubscription: MpnSubscription) {
+    if (mpn_device == null) {
+      throw new IllegalStateException(NO_DEVICE);
+    }
+    var sm = mpnSubscription.fetch_subManager();
+    if (sm != null) {
+      if (!mpnSubscriptionManagers.contains(sm)) {
+        throw new IllegalStateException("The MPNSubscription is not subscribed to this Client");
+      }
+      actionLogger.logInfo('MPN Unsubscription requested: pnSubId: ${mpnSubscription.getSubscriptionId()} $mpnSubscription');
+      sm.evtExtMpnUnsubscribe();
+    }
+  }
+
+  public function unsubscribeMpnSubscriptions(filter: Null<String>) {
+    if (mpn_device == null) {
+      throw new IllegalStateException(NO_DEVICE);
+    }
+    var filter = parseStatusFilter(filter);
+    mpn_filter_pendings.push(filter);
+    actionLogger.logInfo('Multiple MPN Unsubscriptions requested: $filter');
+    evtExtMpnUnsubscribeFilter();
+  }
+
+  public function getMpnSubscriptions(filter: Null<String>): Array<MpnSubscription> {
+    if (mpn_device == null) {
+      throw new IllegalStateException(NO_DEVICE);
+    }
+    var filter = parseStatusFilter(filter); 
+    var filteredSubs = switch filter {
+      case ALL: 
+        mpnSubscriptionManagers.map(sub -> sub.m_subscription).filter(sub -> sub.fetch_status() == Subscribed || sub.fetch_status() == Triggered);
+      case SUBSCRIBED:
+        mpnSubscriptionManagers.map(sub -> sub.m_subscription).filter(sub -> sub.fetch_status() == Subscribed);
+      case TRIGGERED:
+        mpnSubscriptionManagers.map(sub -> sub.m_subscription).filter(sub -> sub.fetch_status() == Triggered);
+    };
+    var mapBySubId = new Map<String, Array<MpnSubscription>>();
+    for (sub in filteredSubs) {
+      var subId = sub.getSubscriptionId();
+      if (subId != null) {
+        var ls = mapBySubId[subId];
+        if (ls == null) {
+          mapBySubId[subId] = [sub];
+        } else {
+          ls.push(sub);
+        }
+      }
+    }
+    var res = [];
+    for (_ => subs in mapBySubId) {
+      // for each subscriptionId add to the result an user subscription, if it exists;
+      // otherwise add the first one, that is a server subscription;
+      var assigned = false;
+      for (sub in subs) {
+        if (!sub.fetch_madeByServer()) {
+          res.push(sub);
+          assigned = true;
+          break;
+        }
+      }
+      if (!assigned && subs[0] != null) {
+        res.push(subs[0]);
+      }
+    }
+    return res;
+  }
+
+  public function findMpnSubscription(subscriptionId: String): Null<MpnSubscription> {
+    if (subscriptionId == null) {
+      throw new IllegalArgumentException("Subscription id must be not null");
+    }
+    if (mpn_device == null) {
+      throw new IllegalStateException(NO_DEVICE);
+    }
+    for (sm in mpnSubscriptionManagers) {
+      if (sm.m_subscription.getSubscriptionId() == subscriptionId) {
+        return (sm.m_subscription : Null<MpnSubscription>);
+      }
+    }
+    return null;
+  }
 }
+
+private final IS_ACTIVE_MPN = "Cannot subscribe to an active MPNSubscription";
+private final NO_DEVICE = "No MPNDevice Registered";
+private final NO_FORMAT = "Specify property 'notificationFormat'";
 
 private enum MPNSubscriptionStatus {
   ALL; SUBSCRIBED; TRIGGERED;
+}
+
+private function parseStatusFilter(filter: Null<String>) {
+  return switch filter {
+    case null: ALL;
+    case "ALL": ALL;
+    case "SUBSCRIBED": SUBSCRIBED;
+    case "TRIGGERED": TRIGGERED;
+    case _:
+      throw new IllegalArgumentException("The given value is not valid for this setting. Use null, ALL, TRIGGERED or SUBSCRIBED instead");
+  };
 }
 
 private class SubscriptionDelegateBase implements SubscriptionListener {

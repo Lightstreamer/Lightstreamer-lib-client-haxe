@@ -486,8 +486,21 @@ class MpnSubscription {
 
   @:synchronized
   @:allow(com.lightstreamer.client.internal.MpnSubscriptionManager)
+  @:allow(com.lightstreamer.client.internal.MpnClientMachine)
   function fetch_subManager(): Null<MpnSubscriptionManager> {
     return m_manager;
+  }
+
+  @:synchronized
+  @:allow(com.lightstreamer.client.internal.MpnClientMachine)
+  function fetch_status(): MpnSubscriptionStatus {
+    return m_status;
+  }
+
+  @:synchronized
+  @:allow(com.lightstreamer.client.internal.MpnClientMachine)
+  function fetch_madeByServer(): Bool {
+    return madeByServer;
   }
 
   @:synchronized
