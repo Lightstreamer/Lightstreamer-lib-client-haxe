@@ -45,4 +45,13 @@ abstract AssocArray<T>(Array<AssocPair<T>>) {
     // it is compatible with KeyValueIterator interface
     return this.iterator();
   }
+
+  public function containsValue(val: T) {
+    for (k => v in keyValueIterator()) {
+      if (v == val) {
+        return true;
+      }
+    }
+    return false;
+  }
 }

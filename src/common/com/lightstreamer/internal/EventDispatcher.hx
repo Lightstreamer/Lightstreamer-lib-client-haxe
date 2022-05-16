@@ -45,4 +45,8 @@ class EventDispatcher<T> {
   function dispatchToOne(listener: T, func: T->Void) {
     executor.submit(() -> func(listener));
   }
+
+  public static function submit(func: ()->Void) {
+    executor.submit(func);
+  }
 }

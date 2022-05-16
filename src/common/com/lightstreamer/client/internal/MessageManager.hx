@@ -56,7 +56,7 @@ class MessageManager implements Encodable {
     client.unrelateMsgManager(this);
   }
 
-  function evtExtSendMessage() {
+  public function evtExtSendMessage() {
     traceEvent("sendMessage");
     switch s_m {
     case s10:

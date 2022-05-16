@@ -1,7 +1,12 @@
 package com.lightstreamer.client;
 
+import com.lightstreamer.client.internal.ClientMachine;
 import com.lightstreamer.internal.NativeTypes.NativeList;
 import com.lightstreamer.internal.EventDispatcher;
+import com.lightstreamer.internal.Factories;
+import com.lightstreamer.log.LoggerTools;
+
+using com.lightstreamer.log.LoggerTools;
 
 class ClientEventDispatcher extends EventDispatcher<ClientListener> {}
 
@@ -18,7 +23,7 @@ class LightstreamerClient {
   public final connectionDetails: ConnectionDetails;
   public final connectionOptions: ConnectionOptions;
   final eventDispatcher = new ClientEventDispatcher();
-  final lock = new com.lightstreamer.internal.RLock();
+  final machine: ClientMachine;
 
   public static function setLoggerProvider(provider: com.lightstreamer.log.LoggerProvider): Void {
     com.lightstreamer.log.LogManager.setLoggerProvider(provider);
@@ -66,67 +71,91 @@ class LightstreamerClient {
   public function new(serverAddress: String, adapterSet: String) {
     connectionDetails = new ConnectionDetails(@:nullSafety(Off) this);
     connectionOptions = new ConnectionOptions(@:nullSafety(Off) this);
-    if (serverAddress != null) {
-      connectionDetails.setServerAddress(serverAddress);
-    }
-    if (adapterSet != null) {
-      connectionDetails.setAdapterSet(adapterSet);
-    }
+    machine = new ClientMachine(this, serverAddress, adapterSet, createWsClient, createHttpClient, createHttpClient, createTimer, randomMillis, createReachabilityManager);
   }
+
   public function addListener(listener: ClientListener): Void {
     eventDispatcher.addListenerAndFireOnListenStart(listener, this);
   }
+
   public function removeListener(listener: ClientListener): Void {
     eventDispatcher.removeListenerAndFireOnListenEnd(listener, this);
   }
+
   public function getListeners(): NativeList<ClientListener> {
     return new NativeList(eventDispatcher.getListeners());
   }
+
   /**
    * connect
    */
   public function connect(): Void {
-    trace("LS.connect");
+    machine.connect();
   }
 
   public function disconnect(): Void {
-    trace("LS.disconnect");
+    machine.disconnect();
   }
 
   public function getStatus(): String {
-    return "";
+    return machine.getStatus();
   }
+
+  #if (java || cs)
+  overload public function sendMessage(message: String) {
+    machine.sendMessage(message, null, -1, null, false);
+  }
+
+  overload public function sendMessage(message: String, sequence: Null<String>, delayTimeout: Int, listener: Null<ClientMessageListener>, enqueueWhileDisconnected: Bool): Void {
+    machine.sendMessage(message, sequence, delayTimeout, listener, enqueueWhileDisconnected);
+  }
+  #else
+  public function sendMessage(message: String, sequence: Null<String>, delayTimeout: Null<Int>, listener: Null<ClientMessageListener>, enqueueWhileDisconnected: Null<Bool>): Void {
+    machine.sendMessage(message, sequence, delayTimeout != null ? delayTimeot : -1, listener, enqueueWhileDisconnected != null ? enqueueWhileDisconnected : false);
+  }
+  #end
 
   public function subscribe(subscription: Subscription): Void {
-    trace("LS.subscribe");
+    machine.subscribeExt(subscription);
   }
 
-  public function unsubscribe(subscription: Subscription): Void {
-    
+  public function unsubscribe(subscription: Subscription) {
+    machine.unsubscribe(subscription);
   }
 
   public function getSubscriptions(): NativeList<Subscription> {
-    return new NativeList([]);
+    return new NativeList(machine.getSubscriptions());
   }
 
-  public function sendMessage(message: String): Void {}
+  #if LS_MPN
+  public function registerForMpn(mpnDevice: com.lightstreamer.client.mpn.MpnDevice) {
+    var machine = cast(machine, com.lightstreamer.client.internal.MpnClientMachine);
+    machine.registerForMpn(mpnDevice);
+  }
 
-  // TODO overload
-  // public function sendMessage(message: String, sequence: String, delayTimeout: Long, listener: ClientMessageListener, enqueueWhileDisconnected: Bool) {}
+  public function subscribeMpn(mpnSubscription: com.lightstreamer.client.mpn.MpnSubscription, coalescing: Bool) {
+    var machine = cast(machine, com.lightstreamer.client.internal.MpnClientMachine);
+    machine.subscribeMpn(mpnSubscription, coalescing);
+  }
 
+  public function unsubscribeMpn(mpnSubscription: com.lightstreamer.client.mpn.MpnSubscription) {
+    var machine = cast(machine, com.lightstreamer.client.internal.MpnClientMachine);
+    machine.unsubscribeMpn(mpnSubscription);
+  }
 
+  public function unsubscribeMpnSubscriptions(filter: Null<String>) {
+    var machine = cast(machine, com.lightstreamer.client.internal.MpnClientMachine);
+    machine.unsubscribeMpnSubscriptions(filter);
+  }
 
-  // #if java
-  // public overload function subscribe(subscription: Subscription) {
-  //   trace("LS.subscribe");
-  // }
+  public function getMpnSubscriptions(filter: Null<String>): NativeList<com.lightstreamer.client.mpn.MpnSubscription> {
+    var machine = cast(machine, com.lightstreamer.client.internal.MpnClientMachine);
+    return new NativeList(machine.getMpnSubscriptions(filter));
+  }
 
-  // public overload function subscribe(subscription: MpnSubscription, coalescing: Bool) {
-  //   trace("LS.subscribeMpn");
-  // }
-  // #else
-  // public function subscribe(subscription: Subscription) {
-  //   trace("LS.subscribe");
-  // }
-  // #end
+  public function findMpnSubscription(subscriptionId: String): Null<com.lightstreamer.client.mpn.MpnSubscription> {
+    var machine = cast(machine, com.lightstreamer.client.internal.MpnClientMachine);
+    machine.findMpnSubscription(subscriptionId);
+  }
+  #end
 }

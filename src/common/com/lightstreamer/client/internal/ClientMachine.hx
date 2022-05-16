@@ -1,5 +1,6 @@
 package com.lightstreamer.client.internal;
 
+import com.lightstreamer.client.internal.SubscriptionManager;
 import com.lightstreamer.internal.*;
 import com.lightstreamer.internal.NativeTypes;
 import com.lightstreamer.internal.MacroTools;
@@ -12,15 +13,16 @@ import com.lightstreamer.client.internal.ClientStates;
 import com.lightstreamer.client.internal.ClientRequests;
 import com.lightstreamer.log.LoggerTools;
 import com.lightstreamer.client.internal.ParseTools;
+
 using com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.internal.NullTools;
 using StringTools;
 using Lambda;
 
-// TODO synchronize
 @:access(com.lightstreamer.client.ConnectionDetails)
 @:access(com.lightstreamer.client.ConnectionOptions)
 @:access(com.lightstreamer.client.LightstreamerClient)
+@:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class ClientMachine {
   final client: LightstreamerClient;
   final details: ConnectionDetails;
@@ -255,7 +257,7 @@ class ClientMachine {
     }
   }
 
-  function evtExtDisconnect() {
+  public function evtExtDisconnect() {
     traceEvent("disconnect");
     var terminationCause = TerminationCause.TC_api;
     switch state.s_m {
@@ -4074,12 +4076,12 @@ class ClientMachine {
     return randomGenerator(maxPause);
   }
 
-  public function generateFreshReqId() {
+  public function generateFreshReqId(): Int {
     m_nextReqId += 1;
     return m_nextReqId;
   }
 
-  public function generateFreshSubId() {
+  public function generateFreshSubId(): Int {
     m_nextSubId += 1;
     return m_nextSubId;
   }
@@ -4111,7 +4113,7 @@ class ClientMachine {
     return state.s_m == s150 && (state.s_swt == s1302 || state.s_swt == s1303);
   }
 
-  public function encodeSwitch(isWS: Bool) {
+  public function encodeSwitch(isWS: Bool): String {
     var req = new RequestBuilder();
     swt_lastReqId = generateFreshReqId();
     req.LS_reqId(swt_lastReqId);
@@ -4127,7 +4129,7 @@ class ClientMachine {
     return req.getEncodedString();
   }
 
-  public function encodeConstrain() {
+  public function encodeConstrain(): String {
     var req = new RequestBuilder();
     bw_lastReqId = generateFreshReqId();
     req.LS_reqId(bw_lastReqId);
@@ -4303,6 +4305,10 @@ class ClientMachine {
     subscriptionManagers.remove(subManager.subId);
   }
 
+  function isRelatedWithSubManager(subManager: SubscriptionManager): Bool {
+    return subscriptionManagers.containsValue(subManager);
+  }
+
   public function relateMsgManager(msgManager: MessageManager) {
     messageManagers.push(msgManager);
   }
@@ -4315,7 +4321,7 @@ class ClientMachine {
     var prog = sequenceMap[sequence];
     prog = prog == null ? 1 : prog;
     sequenceMap[sequence] = prog + 1;
-    return prog;
+    return (prog : Int);
   }
 
   public function onPropertyChange(property: String) {
@@ -4324,6 +4330,97 @@ class ClientMachine {
 
   function traceEvent(event: String) {
     internalLogger.logTrace("event: " + event + " " +  state.toString());
+  }
+
+  public function connect() {
+    var serverAddress = details.getServerAddress();
+    if (serverAddress == null) {
+      throw new IllegalStateException("Configure the server address before trying to connect");
+    }
+    actionLogger.logInfo('Connection requested: details: $details options: $options');
+    defaultServerAddress = new ServerAddress(serverAddress);
+    evtExtConnect();
+  }
+
+  public function disconnect() {
+    actionLogger.logInfo("Disconnection requested");
+    evtExtDisconnect();
+  }
+
+  public function getStatus(): String {
+    return m_status;
+  }
+
+  public function sendMessage(message: String, sequence: Null<String>, delayTimeout: Int, listener: Null<ClientMessageListener>, enqueueWhileDisconnected: Bool): Void {
+    if (!enqueueWhileDisconnected && (state.inDisconnected() || state.inRetryUnit())) {
+      if (actionLogger.isInfoEnabled()) {
+        var map = [
+          "text" => message, 
+          "sequence" => sequence != null ? sequence : "UNORDERED_MESSAGES",
+          "timeout" => Std.string(delayTimeout),
+          "enqueueWhileDisconnected" => Std.string(enqueueWhileDisconnected)
+        ];
+        actionLogger.info('Message sending requested: $map');
+      }
+      messageLogger.logWarn('Message ${sequence != null ? sequence : "UNORDERED_MESSAGES"} $message aborted');
+      if (listener != null) {
+        EventDispatcher.submit(() -> listener.onAbort(message, false));
+      }
+      return;
+    }
+    if (sequence != null) {
+      if (!~/^[a-zA-Z0-9_]*$/.match(sequence)) {
+        throw new IllegalArgumentException("The given sequence name is not valid. Use only alphanumeric characters plus underscore or null");
+      }
+      var msg = new MessageManager(message, sequence, delayTimeout, listener, enqueueWhileDisconnected, this);
+      actionLogger.logInfo('Message sending requested: $msg');
+      msg.evtExtSendMessage();
+    } else {
+      var sequence = "UNORDERED_MESSAGES";
+      var msg = new MessageManager(message, sequence, delayTimeout, listener, enqueueWhileDisconnected, this);
+      actionLogger.logInfo('Message sending requested: $msg');
+      msg.evtExtSendMessage();
+    }
+  }
+
+  public function subscribeExt(subscription: Subscription, isInternal: Bool = false) {
+    if (subscription.isActive()) {
+      throw new IllegalStateException("Cannot subscribe to an active Subscription");
+    }
+    if (subscription.getItems() == null && subscription.getItemGroup() == null) {
+      throw new IllegalArgumentException("Specify property 'items' or 'itemGroup'");
+    }
+    if (subscription.getFields() == null && subscription.getFieldSchema() == null) {
+      throw new IllegalArgumentException("Specify property 'fields' or 'fieldSchema'");
+    }
+    var sm = new SubscriptionManagerLiving(subscription, this);
+    actionLogger.logInfo('${isInternal ? "Internal subscription" : "Subscription"} requested: subId: ${sm.subId} $subscription');
+    sm.evtExtSubscribe();
+  }
+
+  public function unsubscribe(subscription: Subscription) {
+    var sm = subscription.fetch_subManager();
+    if (sm != null) {
+      if (!isRelatedWithSubManager(sm)) {
+        throw new IllegalArgumentException("The Subscription is not subscribed to this Client");
+      }
+      actionLogger.logInfo('Unsubscription requested: subId: ${sm.subId} $subscription');
+      sm.evtExtUnsubscribe();
+    }
+  }
+
+  public function getSubscriptions(): Array<Subscription> {
+    var ls = new Array<Subscription>();
+    for (_ => sm in subscriptionManagers) {
+      var sml = @:nullSafety(Off) Std.downcast(sm, SubscriptionManagerLiving);
+      if (sml != null) {
+        var sub = sml.m_subscription;
+        if (sub.isActive() && !sub.isInternal()) {
+          ls.push(sub);
+        }
+      }
+    }
+    return ls;
   }
 }
 

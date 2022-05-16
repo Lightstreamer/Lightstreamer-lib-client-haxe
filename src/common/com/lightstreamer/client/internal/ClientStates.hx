@@ -359,6 +359,19 @@ class State {
     return s_tr == s220 || s_tr == s230 || s_wp?.p == s611 || s_hp?.m == s901 || s_rec == s1001;
   }
 
+  public function inRetryUnit(): Bool {
+    switch s_m {
+    case s110, s111, s112, s113, s114, s115, s116:
+      return true;
+    default:
+      return false;
+    }
+  }
+
+  public function inDisconnected(): Bool {
+    return s_m == s100;
+  }
+
   public function toString() {
     var str = "<m=" + s_m;
     str += " du=" + s_du;

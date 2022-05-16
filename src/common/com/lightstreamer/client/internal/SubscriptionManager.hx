@@ -70,7 +70,7 @@ private class State {
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class SubscriptionManagerLiving implements SubscriptionManager {
   public final subId: Int;
-  final m_subscription: Subscription;
+  public final m_subscription: Subscription;
   final m_strategy: ModeStrategy;
   var m_lastAddReqId: Null<Int>;
   var m_lastDeleteReqId: Null<Int>;

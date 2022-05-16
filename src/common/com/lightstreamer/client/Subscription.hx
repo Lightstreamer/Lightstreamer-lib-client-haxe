@@ -1,5 +1,6 @@
 package com.lightstreamer.client;
 
+import com.lightstreamer.client.internal.SubscriptionManager;
 import com.lightstreamer.client.internal.SubscriptionManager.SubscriptionManagerLiving;
 import com.lightstreamer.internal.NativeTypes;
 import com.lightstreamer.internal.EventDispatcher;
@@ -489,6 +490,12 @@ class Subscription {
   }
 
   @:synchronized
+  @:allow(com.lightstreamer.client.internal.ClientMachine)
+  function fetch_subManager(): Null<SubscriptionManagerLiving> {
+    return manager;
+  }
+
+  @:synchronized
   @:allow(com.lightstreamer.client.internal.SubscriptionManager)
   function setActive() {
     state = Active;
@@ -535,6 +542,7 @@ class Subscription {
   }
 
   @:synchronized
+  @:allow(com.lightstreamer.client.internal.ClientMachine)
   function isInternal(): Bool {
     return m_internal;
   }
