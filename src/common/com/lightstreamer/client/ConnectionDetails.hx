@@ -97,4 +97,14 @@ class ConnectionDetails {
     this.clientIp = clientIp;
     client.eventDispatcher.onPropertyChange("clientIp");
   }
+
+  public function toString(): String {
+    return ["serverAddress" => serverAddress,
+    "adapterSet" => adapterSet,
+    "user" => user,
+    "sessionId" => sessionId,
+    "serverInstanceAddress" => serverInstanceAddress,
+    "serverSocketName" => serverSocketName,
+    "clientIp" => clientIp].toString();
+  }
 }

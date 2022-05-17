@@ -215,4 +215,24 @@ class ConnectionOptions {
     client.eventDispatcher.onPropertyChange("proxy");
   }
   #end
+
+  public function toString(): String {
+    return ["forcedTransport" => Std.string(forcedTransport),
+    "requestedMaxBandwidth" => Std.string(requestedMaxBandwidth),
+    "realMaxBandwidth" => Std.string(realMaxBandwidth),
+    "retryDelay" => Std.string(retryDelay),
+    "firstRetryMaxDelay" => Std.string(firstRetryMaxDelay),
+    "sessionRecoveryTimeout" => Std.string(sessionRecoveryTimeout ),
+    "reverseHeartbeatInterval" => Std.string(reverseHeartbeatInterval),
+    "stalledTimeout" => Std.string(stalledTimeout),
+    "reconnectTimeout" => Std.string(reconnectTimeout),
+    "keepaliveInterval" => Std.string(keepaliveInterval),
+    "pollingInterval" => Std.string(pollingInterval),
+    "idleTimeout" => Std.string(idleTimeout),
+    "contentLength" => Std.string(contentLength),
+    "slowingEnabled" => Std.string(slowingEnabled),
+    "serverInstanceAddressIgnored" => Std.string(serverInstanceAddressIgnored),
+    "HTTPExtraHeadersOnSessionCreationOnly" => Std.string(httpExtraHeadersOnSessionCreationOnly),
+    "HTTPExtraHeaders" => httpExtraHeaders != null ? Std.string(httpExtraHeaders) : "null"].toString();
+  }
 }
