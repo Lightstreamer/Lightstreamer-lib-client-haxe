@@ -111,7 +111,7 @@ class LightstreamerClient {
   }
   #else
   public function sendMessage(message: String, sequence: Null<String>, delayTimeout: Null<Int>, listener: Null<ClientMessageListener>, enqueueWhileDisconnected: Null<Bool>): Void {
-    machine.sendMessage(message, sequence, delayTimeout != null ? delayTimeot : -1, listener, enqueueWhileDisconnected != null ? enqueueWhileDisconnected : false);
+    machine.sendMessage(message, sequence, delayTimeout != null ? delayTimeout : -1, listener, enqueueWhileDisconnected != null ? enqueueWhileDisconnected : false);
   }
   #end
 
