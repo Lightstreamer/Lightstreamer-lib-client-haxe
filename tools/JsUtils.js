@@ -12,7 +12,13 @@ function generateUmdHeader(classes) {
     var namespace = createNs(extractNs(), root);
     ${ classes.map((c) => `namespace.${c} = hx_exports.${c};`).join("\n") }
   }
+  function lsIsBrowser() {
+    return typeof(window) !== 'undefined' && typeof(window.document) !== 'undefined';
+  }
   function extractNs() {
+    if (!lsIsBrowser()) {
+      return null;
+    }
     var scripts = window.document.getElementsByTagName("script");
     for (var i = 0, len = scripts.length; i < len; i++) {
       if ("data-lightstreamer-ns" in scripts[i].attributes) {        
