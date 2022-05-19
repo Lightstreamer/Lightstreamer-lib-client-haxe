@@ -1,10 +1,11 @@
 package com.lightstreamer.internal;
 
+import com.lightstreamer.internal.PlatformApi.IWsClient;
 import js.html.WebSocket;
 import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
 
-class WsClient {
+class WsClient implements IWsClient {
   final ws: WebSocket;
   var isCanceled = false;
 

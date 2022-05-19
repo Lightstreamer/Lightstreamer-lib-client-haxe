@@ -1,10 +1,11 @@
 package com.lightstreamer.internal;
 
+import com.lightstreamer.internal.PlatformApi.IHttpClient;
 import js.html.XMLHttpRequest;
 import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
 
-class HttpClient {
+class HttpClient implements IHttpClient {
   final xhr: XMLHttpRequest;
   final reader = new StreamReader();
   var isCanceled: Bool = false;
