@@ -223,7 +223,7 @@ abstract NativeMap<K, V>(python.Dict<K, V>) {
   }
 }
 
-abstract NativeStringMap(python.Dict<String, String>) {
+abstract NativeStringMap(python.Dict<String, String>) to python.Dict<String, String> {
   @:from
   public static inline function fromHaxeMap(map) {
     return new NativeStringMap(map);

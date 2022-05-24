@@ -66,6 +66,8 @@ private class ConsoleLogger implements Logger {
     var msg = '$now|$level|$category|${java.lang.Thread.currentThread().getName()}|$line';
     #elseif cs
     var msg = '$now|$level|$category|${cs.system.threading.Thread.CurrentThread.ManagedThreadId}|$line';
+    #elseif python
+    var msg = '$now|$level|$category|${python.lib.Threading.current_thread().name}|$line';
     #else
     var msg = '$now|$level|$category|$line';
     #end

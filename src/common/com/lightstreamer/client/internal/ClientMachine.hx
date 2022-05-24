@@ -4369,6 +4369,7 @@ class ClientMachine {
       return;
     }
     if (sequence != null) {
+      #if python @:nullSafety(Off) #end
       if (!~/^[a-zA-Z0-9_]*$/.match(sequence)) {
         throw new IllegalArgumentException("The given sequence name is not valid. Use only alphanumeric characters plus underscore or null");
       }
