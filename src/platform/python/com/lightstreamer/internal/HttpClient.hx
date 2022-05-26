@@ -37,8 +37,9 @@ class HttpClient extends HttpClientPy implements IHttpClient {
   }
 
   override public function on_error(client: HttpClientPy, error: python.Exceptions.BaseException): Void {
-    streamLogger.logDebug('HTTP event: error(${error})', error);
-    this.onError(this, Std.string(error));
+    var msg = python.Syntax.code("str({0})", error);
+    streamLogger.logDebug('HTTP event: error(${msg})', error);
+    this.onError(this, msg);
   }
 
   override public function on_done(client: HttpClientPy): Void {
