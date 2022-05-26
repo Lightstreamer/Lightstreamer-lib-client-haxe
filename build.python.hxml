@@ -1,3 +1,4 @@
 build.common.hxml
+--class-path src/platform/python
 
 --python bin/python/lightstreamer.py
