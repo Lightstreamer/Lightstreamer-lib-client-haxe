@@ -6,7 +6,7 @@ import deepequal.DeepEqual;
 
 using Lambda;
 
-final executor = Executor.create();
+private final executor = Executor.create();
 
 @:rtti
 class Test {
