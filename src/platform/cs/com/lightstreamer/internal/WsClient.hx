@@ -1,12 +1,15 @@
 package com.lightstreamer.internal;
 
+import com.lightstreamer.internal.PlatformApi.IWsClient;
 import com.lightstreamer.internal.NativeTypes.NativeStringMap;
 import com.lightstreamer.client.Proxy;
 import com.lightstreamer.cs.WsClientCs;
 import com.lightstreamer.log.LoggerTools;
+
+using StringTools;
 using com.lightstreamer.log.LoggerTools;
 
-class WsClient extends WsClientCs {
+class WsClient extends WsClientCs implements IWsClient {
   final onOpen: WsClient->Void;
   final onText: (WsClient, String)->Void;
   final onError: (WsClient, String)->Void;
@@ -19,6 +22,11 @@ class WsClient extends WsClientCs {
     onText: (WsClient, String)->Void, 
     onError: (WsClient, String)->Void) {
     super();
+    if (url.startsWith("https://")) {
+      url = url.replace("https://", "wss://");
+    } else if (url.startsWith("http://")) {
+      url = url.replace("http://", "ws://");
+    }
     streamLogger.logDebug('WS connecting: $url headers($headers) proxy($proxy) certificateValidator(${certificateValidator != null})');
     this.onOpen = onOpen;
     this.onText = onText;

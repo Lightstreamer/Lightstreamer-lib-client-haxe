@@ -1,11 +1,12 @@
 package com.lightstreamer.internal;
 
+import com.lightstreamer.internal.PlatformApi.IHttpClient;
 import com.lightstreamer.internal.NativeTypes.NativeStringMap;
 import com.lightstreamer.cs.HttpClientCs;
 import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
 
-class HttpClient extends HttpClientCs {
+class HttpClient extends HttpClientCs implements IHttpClient {
   final onText: (HttpClient, String)->Void;
   final onError: (HttpClient, String)->Void;
   final onDone: HttpClient->Void;

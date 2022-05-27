@@ -10,6 +10,8 @@ function createWsClient(url: String, headers: Null<Map<String, String>>,
   #if java
   // TODO pass all parameters
   return new WsClient(url, headers, null, null, onOpen, onText, onError);
+  #elseif cs
+  return new WsClient(url, headers, null, null, onOpen, onText, onError);
   #elseif (js && LS_WEB)
   return new WsClient(url, onOpen, onText, onError);
   #elseif js
@@ -26,6 +28,8 @@ function createHttpClient(url: String, body: String, headers: Null<Map<String, S
   #if java
   // TODO pass all parameters
   return new HttpClient(url, body, headers, null, null, onText, onError, onDone);
+  #elseif cs
+  return new HttpClient(url, body, headers, onText, onError, onDone);
   #elseif js
   return new HttpClient(url, body, headers, onText, onError, onDone);
   #elseif python
