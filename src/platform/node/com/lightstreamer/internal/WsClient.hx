@@ -4,6 +4,8 @@ import com.lightstreamer.internal.PlatformApi.IWsClient;
 import haxe.DynamicAccess;
 import js.npm.ws.WebSocket;
 import com.lightstreamer.log.LoggerTools;
+
+using StringTools;
 using com.lightstreamer.log.LoggerTools;
 
 class WsClient implements IWsClient {
@@ -15,6 +17,11 @@ class WsClient implements IWsClient {
     onOpen: WsClient->Void,
     onText: (WsClient, String)->Void, 
     onError: (WsClient, String)->Void) {
+    if (url.startsWith("https://")) {
+      url = url.replace("https://", "wss://");
+    } else if (url.startsWith("http://")) {
+      url = url.replace("http://", "ws://");
+    }
     streamLogger.logDebug('WS connecting: $url');
     var options: WebSocketOptions = cast {perMessageDeflate: false};
      // set headers
