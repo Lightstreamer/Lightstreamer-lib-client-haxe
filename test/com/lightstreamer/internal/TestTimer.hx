@@ -22,7 +22,7 @@ class TestTimer extends utest.Test {
       async.completed();
     });
     timer.cancel();
-    haxe.Timer.delay(() -> {
+    delay(() -> {
       equals(true, timer.isCanceled());
       async.completed();
     }, 200);
