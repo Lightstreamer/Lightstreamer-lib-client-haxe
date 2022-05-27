@@ -1,7 +1,8 @@
 -D analyzer-optimize
 --class-path src/common
 --class-path test
---library utest
+--class-path test-util
+--library deep_equal
 --library haxe-concurrent
 
 --class-path src/platform/cs

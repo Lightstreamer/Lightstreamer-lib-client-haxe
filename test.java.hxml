@@ -1,4 +1,4 @@
-test.common.hxml
+test.common2.hxml
 --class-path src/platform/java
 --class-path src/extern/java
 --java-lib lib/java

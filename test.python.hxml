@@ -1,4 +1,5 @@
-test.common.hxml
+test.common2.hxml
+--class-path src/platform/python
 
 --python bin-test/python/lightstreamer.py
 --cmd python3 bin-test/python/lightstreamer.py
