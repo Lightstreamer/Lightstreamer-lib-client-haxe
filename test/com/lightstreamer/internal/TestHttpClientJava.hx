@@ -185,7 +185,7 @@ class TestHttpClientJava extends utest.Test {
 
   function testTrustManager(async: utest.Async) {
     #if android
-    var ksIn = TestAll.openRawResource("server_certificate");
+    var ksIn = AndroidTools.openRawResource("server_certificate");
     #else
     var bytes = haxe.Resource.getBytes("server_certificate").getData();
     var ksIn = new java.io.ByteArrayInputStream(bytes);

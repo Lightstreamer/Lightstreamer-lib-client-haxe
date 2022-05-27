@@ -4,11 +4,16 @@ import com.lightstreamer.client.BaseListener.BaseClientListener;
 
 @:timeout(2000)
 class TestClient extends utest.Test {
+  #if android
+  var host = "http://10.0.2.2:8080";
+  #else
+  var host = "http://localhost:8080";
+  #end
   var client: LightstreamerClient;
   var listener: BaseClientListener;
 
   function setup() {
-    client = new LightstreamerClient("http://localhost:8080", "TEST");
+    client = new LightstreamerClient(host, "TEST");
     listener = new BaseClientListener();
     client.addListener(listener);
   }
