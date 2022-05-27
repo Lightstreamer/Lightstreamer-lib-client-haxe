@@ -18,6 +18,8 @@ function createWsClient(url: String, headers: Null<Map<String, String>>,
   return new WsClient(url, headers, onOpen, onText, onError);
   #elseif python
   return new WsClient(url, headers, onOpen, onText, onError);
+  #else
+  return null;
   #end
 }
 
@@ -34,6 +36,8 @@ function createHttpClient(url: String, body: String, headers: Null<Map<String, S
   return new HttpClient(url, body, headers, onText, onError, onDone);
   #elseif python
   return new HttpClient(url, body, headers, onText, onError, onDone);
+  #else
+  return null;
   #end
 }
 
