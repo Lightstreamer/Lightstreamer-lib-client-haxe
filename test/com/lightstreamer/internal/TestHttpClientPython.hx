@@ -13,6 +13,7 @@ class TestHttpClientPython extends utest.Test {
   }
 
   function teardown() {
+    CookieHelper.getInstance().clearCookies();
   }
 
   function testPolling(async: utest.Async) {
@@ -78,6 +79,33 @@ class TestHttpClientPython extends utest.Test {
       function onDone(c) { 
         fail("Unexpected call"); 
         async.completed(); 
+      });
+  }
+
+  function testCookies(async: utest.Async) {
+    var uri = host;
+    equals(0, LightstreamerClient.getCookies(uri).toHaxeArray().count());
+
+    var dict = new python.Dict<String, String>();
+    dict.set("X-Client", "client");
+    var cookies = new SimpleCookie(dict);
+    LightstreamerClient.addCookies(uri, cookies);
+
+    new HttpClient(
+      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null,
+      function onText(c, line) null, 
+      function onError(c, error) { 
+        fail(error); 
+        async.completed(); 
+      }, 
+      function onDone(c) {
+        var cookies = LightstreamerClient.getCookies(uri).toHaxeArray();
+        equals(2, cookies.count());
+        var nCookies = [for (c in cookies) c.output()];
+        contains("Set-Cookie: X-Client=client", nCookies);
+        contains("Set-Cookie: X-Server=server", nCookies);
+        async.completed();
       });
   }
 

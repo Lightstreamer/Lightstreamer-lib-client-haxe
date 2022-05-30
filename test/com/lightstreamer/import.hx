@@ -4,3 +4,6 @@ import haxe.Timer.delay;
 import TestTools;
 using TestTools.AsyncTools;
 #end
+
+using Lambda;
+using StringTools;
