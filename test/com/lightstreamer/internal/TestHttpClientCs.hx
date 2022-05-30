@@ -1,6 +1,5 @@
 package com.lightstreamer.internal;
 
-import com.lightstreamer.cs.CookieHelper;
 import com.lightstreamer.client.LightstreamerClient;
 import com.lightstreamer.client.Proxy;
 
@@ -14,7 +13,7 @@ class TestHttpClientCs extends utest.Test {
   }
 
   function teardown() {
-    CookieHelper.instance.ClearCookies("http://localhost");
+    CookieHelper.instance.clearCookies("http://localhost");
   }
 
   function testPolling(async: utest.Async) {
