@@ -2,7 +2,6 @@ package com.lightstreamer.internal;
 
 import com.lightstreamer.internal.NativeTypes.NativeStringMap;
 import com.lightstreamer.internal.PlatformApi.IWsClient;
-import com.lightstreamer.internal.Externs;
 import com.lightstreamer.log.LoggerTools;
 
 using com.lightstreamer.log.LoggerTools;
