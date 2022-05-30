@@ -61,6 +61,14 @@ class LightstreamerClient {
   public static function setTrustManagerFactory(factory: cs.system.net.security.RemoteCertificateValidationCallback) {
     com.lightstreamer.internal.Globals.instance.setRemoteCertificateValidationCallback(factory);
   }
+  #elseif python
+  public static function addCookies(uri: String, cookies: com.lightstreamer.internal.SimpleCookie): Void {
+    com.lightstreamer.internal.CookieHelper.getInstance().addCookies(uri, cookies);
+  }
+
+  public static function getCookies(uri: Null<String>): com.lightstreamer.internal.SimpleCookie {
+    return com.lightstreamer.internal.CookieHelper.getInstance().getCookies(uri);
+  }
   #end
 
   /**

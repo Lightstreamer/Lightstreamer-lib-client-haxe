@@ -1,6 +1,8 @@
 import aiohttp
 import asyncio
 from threading import Thread
+from yarl import URL
+from http.cookies import SimpleCookie
 
 class LS_IO_Thread(Thread):
   def __init__(self):
@@ -20,13 +22,40 @@ class LS_IO_Thread(Thread):
 ls_io_thread = LS_IO_Thread()
 ls_io_thread.start()
 
+class CookieHelper:
+  instance = None
+
+  @staticmethod
+  def getInstance():
+    if CookieHelper.instance is None:
+      CookieHelper.instance = CookieHelper()
+    return CookieHelper.instance
+
+  def __init__(self):
+    self.jar = aiohttp.CookieJar()
+
+  def addCookies(self, uri, cookies):
+    self.jar.update_cookies(cookies, URL(uri))
+
+  def getCookies(self, uri):
+    if uri is None:
+      cookies = SimpleCookie()
+      for cookie in self.jar:
+        cookies[cookie.key] = cookie
+      return cookies
+    else:
+      return self.jar.filter_cookies(URL(uri))
+  
+  def clearCookies(self):
+    self.jar.clear()
+
 class SessionPy:
   session = None
 
   @staticmethod
   def getInstance():
     if SessionPy.session is None:
-      SessionPy.session = aiohttp.ClientSession()
+      SessionPy.session = aiohttp.ClientSession(cookie_jar=CookieHelper.getInstance().jar)
     return SessionPy.session
 
   @staticmethod
@@ -38,13 +67,10 @@ class SessionPy:
 
 class HttpClientPy:
   def __init__(self):
-    #self.loop = ls_io_thread.loop
     self.isCanceled = False
-    #self.cancellationToken = self.loop.create_future()
     self.cancellationToken = ls_io_thread.create_future()
 
   def sendAsync(self, url, body, headers):
-    #self.loop.create_task(self._sendAsync(url, body, headers))
     ls_io_thread.submit_coro(self._sendAsync(url, body, headers))
 
   async def _sendAsync(self, url, body, headers):
@@ -90,13 +116,10 @@ class HttpClientPy:
 
 class WsClientPy:
   def __init__(self):
-    #self.loop = ls_io_thread.loop
     self.isCanceled = False
-    #self.cancellationToken = self.loop.create_future()
     self.cancellationToken = ls_io_thread.create_future()
 
   def connectAsync(self, url, protocol, headers):
-    #self.loop.create_task(self._connectAsync(url, protocol, headers))
     ls_io_thread.submit_coro(self._connectAsync(url, protocol, headers))
 
   async def _connectAsync(self, url, protocol, headers):
@@ -118,7 +141,6 @@ class WsClientPy:
         self.on_error(self, ex)
 
   def sendAsync(self, txt):
-    #self.loop.create_task(self.ws.send_str(txt))
     ls_io_thread.submit_coro(self.ws.send_str(txt))
 
   def dispose(self):
@@ -126,12 +148,10 @@ class WsClientPy:
       self.isCanceled = True
       if self.cancellationToken.done():
         resp = self.cancellationToken.result()
-        #self.loop.create_task(resp.close())
         ls_io_thread.submit_coro(resp.close())
       else:
         async def on_done_callback(future):
           resp = future.result()
-          #self.loop.create_task(resp.close())
           ls_io_thread.submit_coro(resp.close())
         self.cancellationToken.add_done_callback(on_done_callback)
 
