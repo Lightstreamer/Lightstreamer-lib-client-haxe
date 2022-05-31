@@ -145,6 +145,7 @@ class TestHttpClientPython extends utest.Test {
       });
   }
 
+  @Ignored
   @:timeout(3000)
   function testProxyHttps(async: utest.Async) {
     new HttpClient(
