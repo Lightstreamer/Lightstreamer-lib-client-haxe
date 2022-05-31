@@ -12,6 +12,7 @@ using StringTools;
 class Runner {
   final classes: Array<Class<Test>> = [];
   final tests: Array<Test> = [];
+  final ignoredTests: Array<String> = [];
   var globalPattern: EReg;
   public var numFailures(default, null) = 0;
 
@@ -83,6 +84,11 @@ class Runner {
       var rtti = Rtti.getRtti(clazz);
       var classTimeout = getTimeout(rtti);
       for (field in rtti.fields) {
+        // a test case has the following properties:
+        // 1) it's a function
+        // 2) its name starts with "test"
+        // 3) it has no argument or only one having type "utest.Async"
+        // 4) it's not annotated with "Ignored"
         var methodArgs;
         switch field.type {
         case CFunction(args, _):
@@ -105,6 +111,12 @@ class Runner {
             continue;
           }
         }
+        if (isIgnored(field)) {
+          var testName = getClassName(clazz) + "." + field.name;
+          ignoredTests.push(testName);
+          continue;
+        }
+        // process test
         if (isAsync) {
           var methodTimeout = getTimeout(field);
           var timeout = if (methodTimeout != null) methodTimeout
@@ -125,6 +137,10 @@ class Runner {
       return timeoutArg != null ? Std.parseInt(timeoutArg) : null;
     }
     return null;
+  }
+
+  function isIgnored(elem: {meta: MetaData}): Bool {
+    return elem.meta.find(m -> m.name == "Ignored" || m.name == ":Ignored") != null;
   }
 
   function printReport() {
@@ -158,6 +174,12 @@ class Runner {
       trace('FAILED [$failed/$total]');
     } else {
       trace('All tests passed [$total/$total]');
+    }
+    if (ignoredTests.length > 0) {
+      trace('WARN Ignored ${ignoredTests.length} tests:');
+      for (testName in ignoredTests) {
+        trace("  " + testName);
+      }
     }
     numFailures = failed;
   }
