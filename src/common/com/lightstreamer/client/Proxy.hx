@@ -1,6 +1,6 @@
 package com.lightstreamer.client;
 
-#if (java || cs)
+#if (java || cs || python)
 import com.lightstreamer.internal.NativeTypes.IllegalArgumentException;
 
 enum abstract ProxyType(String) to String {
@@ -27,6 +27,7 @@ class Proxy {
   public final user: Null<String>;
   public final password: Null<String>;
 
+  #if (java || cs)
   overload public function new(type: String, host: String, port: Int) {
     this.type = ProxyType.fromString(type);
     this.host = host;
@@ -50,6 +51,17 @@ class Proxy {
     this.user = user;
     this.password = password;
   }
+  #end
+
+  #if python
+  public function new(type: String, host: String, port: Int, user: Null<String>, password: Null<String>) {
+    this.type = ProxyType.fromString(type);
+    this.host = host;
+    this.port = port;
+    this.user = user;
+    this.password = password;
+  }
+  #end
 
   public function equals(proxy2: Proxy) {
     return type == proxy2.type && host == proxy2.host && port == proxy2.port && user == proxy2.user && password == proxy2.password;

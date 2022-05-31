@@ -65,21 +65,31 @@ class SessionPy:
       SessionPy.session = None
       await session.close()
 
+def build_proxy(proxy):
+  proxy_url = None
+  proxy_auth = None
+  if proxy is not None:
+    proxy_url = proxy.url
+    if proxy.user is not None:
+      proxy_auth = aiohttp.BasicAuth(proxy.user, password=proxy.password)
+  return proxy_url, proxy_auth
+
 class HttpClientPy:
   def __init__(self):
     self.isCanceled = False
     self.cancellationToken = ls_io_thread.create_future()
 
-  def sendAsync(self, url, body, headers):
-    ls_io_thread.submit_coro(self._sendAsync(url, body, headers))
+  def sendAsync(self, url, body, headers, proxy):
+    ls_io_thread.submit_coro(self._sendAsync(url, body, headers, proxy))
 
-  async def _sendAsync(self, url, body, headers):
+  async def _sendAsync(self, url, body, headers, proxy):
     if headers is None:
       headers = {}
     headers["Content-Type"] = "application/x-www-form-urlencoded; charset=utf-8"
+    proxy_url, proxy_auth = build_proxy(proxy)
     try:
       session = SessionPy.getInstance()
-      async with session.request("POST", url, data=body, headers=headers) as resp:
+      async with session.request("POST", url, data=body, headers=headers, proxy=proxy_url, proxy_auth=proxy_auth) as resp:
         self.cancellationToken.set_result(resp)
         if not resp.ok:
           raise Exception("Unexpected HTTP code: " + resp.status)
@@ -119,13 +129,14 @@ class WsClientPy:
     self.isCanceled = False
     self.cancellationToken = ls_io_thread.create_future()
 
-  def connectAsync(self, url, protocol, headers):
-    ls_io_thread.submit_coro(self._connectAsync(url, protocol, headers))
+  def connectAsync(self, url, protocol, headers, proxy):
+    ls_io_thread.submit_coro(self._connectAsync(url, protocol, headers, proxy))
 
-  async def _connectAsync(self, url, protocol, headers):
+  async def _connectAsync(self, url, protocol, headers, proxy):
+    proxy_url, proxy_auth = build_proxy(proxy)
     try:
       session = SessionPy.getInstance()
-      async with session.ws_connect(url, protocols=(protocol,), headers=headers) as ws:
+      async with session.ws_connect(url, protocols=(protocol,), headers=headers, proxy=proxy_url, proxy_auth=proxy_auth) as ws:
         self.cancellationToken.set_result(ws)
         self.ws = ws
         self.on_open(self)

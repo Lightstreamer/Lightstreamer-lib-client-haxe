@@ -1,5 +1,6 @@
 package com.lightstreamer.internal;
 
+import com.lightstreamer.client.Proxy;
 import com.lightstreamer.internal.NativeTypes.NativeStringMap;
 import com.lightstreamer.internal.PlatformApi.IWsClient;
 import com.lightstreamer.log.LoggerTools;
@@ -12,7 +13,8 @@ class WsClient extends WsClientPy implements IWsClient {
   final onError: (WsClient, String)->Void;
 
   public function new(url: String,
-    headers: Null<Map<String, String>>, 
+    headers: Null<Map<String, String>>,
+    proxy: Null<Proxy>, 
     onOpen: WsClient->Void,
     onText: (WsClient, String)->Void, 
     onError: (WsClient, String)->Void) {
@@ -22,7 +24,8 @@ class WsClient extends WsClientPy implements IWsClient {
     this.onText = onText;
     this.onError = onError;
     var nHeaders = headers == null ? null : new NativeStringMap(headers);
-    this.connectAsync(url, Constants.FULL_TLCP_VERSION, nHeaders);
+    var nProxy = proxy != null ? ClientCommon.buildProxy(proxy) : null;
+    this.connectAsync(url, Constants.FULL_TLCP_VERSION, nHeaders, nProxy);
   }
 
   public function send(txt: String) {

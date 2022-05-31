@@ -1,5 +1,6 @@
 package com.lightstreamer.internal;
 
+import com.lightstreamer.client.Proxy;
 import com.lightstreamer.internal.NativeTypes.NativeStringMap;
 import com.lightstreamer.internal.PlatformApi.IHttpClient;
 import com.lightstreamer.log.LoggerTools;
@@ -13,6 +14,7 @@ class HttpClient extends HttpClientPy implements IHttpClient {
 
   public function new(url: String, body: String, 
     headers: Null<Map<String, String>>,
+    proxy: Null<Proxy>,
     onText: (HttpClient, String)->Void, 
     onError: (HttpClient, String)->Void, 
     onDone: HttpClient->Void) {
@@ -22,7 +24,8 @@ class HttpClient extends HttpClientPy implements IHttpClient {
       this.onError = onError;
       this.onDone = onDone;
       var nHeaders = headers == null ? null : new NativeStringMap(headers);
-      this.sendAsync(url, body, nHeaders);
+      var nProxy = proxy != null ? ClientCommon.buildProxy(proxy) : null;
+      this.sendAsync(url, body, nHeaders, nProxy);
   }
 
   override public function dispose(): Void {
