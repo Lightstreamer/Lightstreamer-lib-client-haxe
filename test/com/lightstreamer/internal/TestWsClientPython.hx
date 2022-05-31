@@ -5,8 +5,8 @@ import com.lightstreamer.client.LightstreamerClient;
 
 @:timeout(1500)
 class TestWsClientPython extends utest.Test {
-  var host = "http://localhost:8080";
-  var secHost = "https://localhost:8443";
+  var host = "http://localtest.me:8080";
+  var secHost = "https://localtest.me:8443";
   var output: Array<String>;
 
   function setup() {
@@ -14,12 +14,13 @@ class TestWsClientPython extends utest.Test {
   }
 
   function teardown() {
-    CookieHelper.getInstance().clearCookies();
+    CookieHelper.instance.clearCookies();
+    Globals.instance.clearTrustManager();
   }
 
   function testPolling(async: utest.Async) {
     new WsClient(
-      host + "/lightstreamer", null, null,
+      host + "/lightstreamer", null, null, null,
       function onOpen(c) {
         c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i");
       },
@@ -39,7 +40,7 @@ class TestWsClientPython extends utest.Test {
 
   function testStreaming(async: utest.Async) {
     new WsClient(
-      host + "/lightstreamer", null, null,
+      host + "/lightstreamer", null, null, null,
       function onOpen(c) {
         c.send("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i");
       },
@@ -59,7 +60,7 @@ class TestWsClientPython extends utest.Test {
   @:timeout(3000)
   function testHttps(async: utest.Async) {
     new WsClient(
-      "https://push.lightstreamer.com/lightstreamer", null, null,
+      "https://push.lightstreamer.com/lightstreamer", null, null, null,
       function onOpen(c) {
         c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i");
       },
@@ -78,8 +79,8 @@ class TestWsClientPython extends utest.Test {
 
   function testConnectionError(async: utest.Async) {
     new WsClient(
-      "wss://localhost:8443/lightstreamer", 
-      null, null,
+      secHost + "/lightstreamer", 
+      null, null, null,
       function onOpen(c) {
         fail("Unexpected call"); 
         async.completed(); 
@@ -89,7 +90,7 @@ class TestWsClientPython extends utest.Test {
         async.completed(); 
       },
       function onError(c, error) { 
-        equals("Cannot connect to host localhost:8443 ssl:True [SSLCertVerificationError: (1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self signed certificate (_ssl.c:1129)')]", error);
+        equals("Cannot connect to host localtest.me:8443 ssl:True [SSLCertVerificationError: (1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self signed certificate (_ssl.c:1129)')]", error);
         async.completed(); 
       });
   }
@@ -104,7 +105,7 @@ class TestWsClientPython extends utest.Test {
     LightstreamerClient.addCookies(uri, cookies);
 
     new WsClient(
-      host + "/lightstreamer", null, null,
+      host + "/lightstreamer", null, null, null,
       function onOpen(c) {
         var cookies = LightstreamerClient.getCookies(uri).toHaxeArray();
         equals(2, cookies.count());
@@ -127,7 +128,7 @@ class TestWsClientPython extends utest.Test {
   function testHeaders(async: utest.Async) {
     new WsClient(
       host + "/lightstreamer", 
-      ["X-Header" => "header"], null,
+      ["X-Header" => "header"], null, null,
       function onOpen(c) {
         c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i");
       },
@@ -146,9 +147,9 @@ class TestWsClientPython extends utest.Test {
 
   function testProxy(async: utest.Async) {
     new WsClient(
-      "http://localhost:8080/lightstreamer", 
+      host + "/lightstreamer", 
       null,
-      new Proxy("HTTP", "localhost", 8079, "myuser", "mypassword"),
+      new Proxy("HTTP", "localhost", 8079, "myuser", "mypassword"), null,
       function onOpen(c) {
         c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i");
       },
@@ -171,9 +172,33 @@ class TestWsClientPython extends utest.Test {
     new WsClient(
       "https://push.lightstreamer.com/lightstreamer", 
       null,
-      new Proxy("HTTP", "localhost", 8079, "myuser", "mypassword"),
+      new Proxy("HTTP", "localhost", 8079, "myuser", "mypassword"), null,
       function onOpen(c) {
         c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i");
+      },
+      function onText(c, line) {
+        if (c.isDisposed()) return;
+        match(~/CONOK/, line);
+        c.dispose();
+        async.completed();
+      }, 
+      function onError(c, error) {
+        if (c.isDisposed()) return;
+        fail(error); 
+        async.completed(); 
+      });
+  }
+
+  function testTrustManager(async: utest.Async) {
+    var sslcontext = SSLContext.SSL.create_default_context({cafile: "test/localtest.me.crt"});
+    sslcontext.load_cert_chain({certfile: "test/localtest.me.crt", keyfile: "test/localtest.me.key"});
+
+    LightstreamerClient.setTrustManagerFactory(sslcontext);
+    new WsClient(
+      secHost + "/lightstreamer", null, null, 
+      Globals.instance.getTrustManagerFactory(),
+      function onOpen(c) {
+        c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i");
       },
       function onText(c, line) {
         if (c.isDisposed()) return;
