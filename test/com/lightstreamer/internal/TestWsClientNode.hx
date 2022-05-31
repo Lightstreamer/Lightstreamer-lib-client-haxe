@@ -94,7 +94,8 @@ class TestWsClientNode extends utest.Test {
 
   function testCookies(async: utest.Async) {
     var uri = host;
-    equals(0, LightstreamerClient.getCookies(uri).length);
+    var cookies: Array<String> = LightstreamerClient.getCookies(uri);
+    equals(0, cookies.length);
     
     var cookie = "X-Client=client";
     LightstreamerClient.addCookies(uri, [cookie]);
@@ -102,7 +103,7 @@ class TestWsClientNode extends utest.Test {
     new WsClient(
       host + "/lightstreamer", null,
       function onOpen(c) {
-        var cookies = LightstreamerClient.getCookies(uri);
+        var cookies: Array<String> = LightstreamerClient.getCookies(uri);
         equals(2, cookies.length);
         contains("X-Client=client; domain=localhost; path=/", cookies);
         contains("X-Server=server; domain=localhost; path=/", cookies);

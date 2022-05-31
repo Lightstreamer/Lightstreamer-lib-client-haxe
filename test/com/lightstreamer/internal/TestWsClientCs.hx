@@ -95,7 +95,8 @@ class TestWsClientCs extends utest.Test {
 
   function testCookies(async: utest.Async) {
     var uri = new cs.system.Uri(host);
-    equals(0, LightstreamerClient.getCookies(uri).Count);
+    var cookies: cs.system.net.CookieCollection = LightstreamerClient.getCookies(uri);
+    equals(0, cookies.Count);
     
     var cookie = new cs.system.net.Cookie("X-Client", "client");
     var cookies = new cs.system.net.CookieCollection();
@@ -105,7 +106,7 @@ class TestWsClientCs extends utest.Test {
     new WsClient(
       host + "/lightstreamer", null, null, null,
       function onOpen(c) {
-        var cookies = LightstreamerClient.getCookies(uri);
+        var cookies: cs.system.net.CookieCollection = LightstreamerClient.getCookies(uri);
         equals(2, cookies.Count);
         var nCookies = [cookies[0].ToString(), cookies[1].ToString()];
         contains("X-Client=client", nCookies);
