@@ -15,6 +15,7 @@ class HttpClient extends HttpClientPy implements IHttpClient {
   public function new(url: String, body: String, 
     headers: Null<Map<String, String>>,
     proxy: Null<Proxy>,
+    sslContext: Null<SSLContext>,
     onText: (HttpClient, String)->Void, 
     onError: (HttpClient, String)->Void, 
     onDone: HttpClient->Void) {
@@ -25,7 +26,7 @@ class HttpClient extends HttpClientPy implements IHttpClient {
       this.onDone = onDone;
       var nHeaders = headers == null ? null : new NativeStringMap(headers);
       var nProxy = proxy != null ? ClientCommon.buildProxy(proxy) : null;
-      this.sendAsync(url, body, nHeaders, nProxy);
+      this.sendAsync(url, body, nHeaders, nProxy, sslContext);
   }
 
   override public function dispose(): Void {

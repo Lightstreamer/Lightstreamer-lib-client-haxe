@@ -48,6 +48,10 @@ class LightstreamerClient {
   public static function setTrustManagerFactory(factory: cs.system.net.security.RemoteCertificateValidationCallback) {
     com.lightstreamer.internal.Globals.instance.setRemoteCertificateValidationCallback(factory);
   }
+  #elseif python
+  public static function setTrustManagerFactory(factory: com.lightstreamer.internal.SSLContext) {
+    com.lightstreamer.internal.Globals.instance.setTrustManagerFactory(factory);
+  }
   #end
 
   /**

@@ -15,6 +15,7 @@ class WsClient extends WsClientPy implements IWsClient {
   public function new(url: String,
     headers: Null<Map<String, String>>,
     proxy: Null<Proxy>, 
+    sslContext: Null<SSLContext>,
     onOpen: WsClient->Void,
     onText: (WsClient, String)->Void, 
     onError: (WsClient, String)->Void) {
@@ -25,7 +26,7 @@ class WsClient extends WsClientPy implements IWsClient {
     this.onError = onError;
     var nHeaders = headers == null ? null : new NativeStringMap(headers);
     var nProxy = proxy != null ? ClientCommon.buildProxy(proxy) : null;
-    this.connectAsync(url, Constants.FULL_TLCP_VERSION, nHeaders, nProxy);
+    this.connectAsync(url, Constants.FULL_TLCP_VERSION, nHeaders, nProxy, sslContext);
   }
 
   public function send(txt: String) {

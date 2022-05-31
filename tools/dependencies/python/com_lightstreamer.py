@@ -79,17 +79,17 @@ class HttpClientPy:
     self.isCanceled = False
     self.cancellationToken = ls_io_thread.create_future()
 
-  def sendAsync(self, url, body, headers, proxy):
-    ls_io_thread.submit_coro(self._sendAsync(url, body, headers, proxy))
+  def sendAsync(self, url, body, headers, proxy, sslContext):
+    ls_io_thread.submit_coro(self._sendAsync(url, body, headers, proxy, sslContext))
 
-  async def _sendAsync(self, url, body, headers, proxy):
+  async def _sendAsync(self, url, body, headers, proxy, sslContext):
     if headers is None:
       headers = {}
     headers["Content-Type"] = "application/x-www-form-urlencoded; charset=utf-8"
     proxy_url, proxy_auth = build_proxy(proxy)
     try:
       session = SessionPy.getInstance()
-      async with session.request("POST", url, data=body, headers=headers, proxy=proxy_url, proxy_auth=proxy_auth) as resp:
+      async with session.request("POST", url, data=body, headers=headers, proxy=proxy_url, proxy_auth=proxy_auth, ssl=sslContext) as resp:
         self.cancellationToken.set_result(resp)
         if not resp.ok:
           raise Exception("Unexpected HTTP code: " + resp.status)
@@ -129,14 +129,14 @@ class WsClientPy:
     self.isCanceled = False
     self.cancellationToken = ls_io_thread.create_future()
 
-  def connectAsync(self, url, protocol, headers, proxy):
-    ls_io_thread.submit_coro(self._connectAsync(url, protocol, headers, proxy))
+  def connectAsync(self, url, protocol, headers, proxy, sslContext):
+    ls_io_thread.submit_coro(self._connectAsync(url, protocol, headers, proxy, sslContext))
 
-  async def _connectAsync(self, url, protocol, headers, proxy):
+  async def _connectAsync(self, url, protocol, headers, proxy, sslContext):
     proxy_url, proxy_auth = build_proxy(proxy)
     try:
       session = SessionPy.getInstance()
-      async with session.ws_connect(url, protocols=(protocol,), headers=headers, proxy=proxy_url, proxy_auth=proxy_auth) as ws:
+      async with session.ws_connect(url, protocols=(protocol,), headers=headers, proxy=proxy_url, proxy_auth=proxy_auth, ssl=sslContext) as ws:
         self.cancellationToken.set_result(ws)
         self.ws = ws
         self.on_open(self)
