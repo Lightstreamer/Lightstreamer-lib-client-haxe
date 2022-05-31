@@ -35,9 +35,6 @@ class Runner {
   function runTests() {
     forEachTestCase((clazz, methodName, isAsync, timeout) -> {
       var testName = getClassName(clazz) + "." + methodName;
-      if (globalPattern != null && !globalPattern.match(testName)) {
-        return;
-      }
       // trace('********** $testName **********');
       var test: Test;
       try {
@@ -111,8 +108,11 @@ class Runner {
             continue;
           }
         }
+        var testName = getClassName(clazz) + "." + field.name;
+        if (globalPattern != null && !globalPattern.match(testName)) {
+          continue;
+        }
         if (isIgnored(field)) {
-          var testName = getClassName(clazz) + "." + field.name;
           ignoredTests.push(testName);
           continue;
         }
