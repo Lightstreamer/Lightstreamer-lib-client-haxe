@@ -6,6 +6,7 @@ build.common.hxml
 --library hxnodejs-ws
 --library hxtsdgen
 
+-D LS_NODE
 -D shallow-expose
 --js bin/node/lightstreamer-node_orig.js
 --cmd haxe -p tools --run NodeGenerator

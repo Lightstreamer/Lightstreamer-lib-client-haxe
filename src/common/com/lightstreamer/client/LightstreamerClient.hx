@@ -1,7 +1,7 @@
 package com.lightstreamer.client;
 
 import com.lightstreamer.client.internal.ClientMachine;
-import com.lightstreamer.internal.NativeTypes.NativeList;
+import com.lightstreamer.internal.NativeTypes;
 import com.lightstreamer.internal.EventDispatcher;
 import com.lightstreamer.internal.Factories;
 import com.lightstreamer.log.LoggerTools;
@@ -29,45 +29,24 @@ class LightstreamerClient {
     com.lightstreamer.log.LogManager.setLoggerProvider(provider);
   }
 
-  #if java
-  public static function addCookies(uri: java.net.URI, cookies: NativeList<java.net.HttpCookie>): Void {
+  #if (java || LS_NODE || cs || python)
+  public static function addCookies(uri: NativeURI, cookies: NativeCookieCollection): Void {
     com.lightstreamer.internal.CookieHelper.instance.addCookies(uri, cookies);
   }
 
-  public static function getCookies(uri: Null<java.net.URI>): NativeList<java.net.HttpCookie> {
+  public static function getCookies(uri: Null<NativeURI>): NativeCookieCollection {
+    #if cs @:nullSafety(Off) #end
     return com.lightstreamer.internal.CookieHelper.instance.getCookies(uri);
   }
+  #end
 
+  #if java
   public static function setTrustManagerFactory(factory: java.javax.net.ssl.TrustManagerFactory) {
     com.lightstreamer.internal.Globals.instance.setTrustManagerFactory(factory);
   }
-  #elseif LS_NODE
-  public static function addCookies(uri: String, cookies: Array<String>): Void {
-    com.lightstreamer.internal.CookieHelper.instance.addCookies(uri, cookies);
-  }
-
-  public static function getCookies(uri: Null<String>): Array<String> {
-    return com.lightstreamer.internal.CookieHelper.instance.getCookies(uri);
-  }
   #elseif cs
-  public static function addCookies(uri: cs.system.Uri, cookies: cs.system.net.CookieCollection): Void {
-    com.lightstreamer.internal.CookieHelper.instance.addCookies(uri, cookies);
-  }
-
-  public static function getCookies(uri: cs.system.Uri): cs.system.net.CookieCollection {
-    return com.lightstreamer.internal.CookieHelper.instance.getCookies(uri);
-  }
-
   public static function setTrustManagerFactory(factory: cs.system.net.security.RemoteCertificateValidationCallback) {
     com.lightstreamer.internal.Globals.instance.setRemoteCertificateValidationCallback(factory);
-  }
-  #elseif python
-  public static function addCookies(uri: String, cookies: com.lightstreamer.internal.SimpleCookie): Void {
-    com.lightstreamer.internal.CookieHelper.getInstance().addCookies(uri, cookies);
-  }
-
-  public static function getCookies(uri: Null<String>): com.lightstreamer.internal.SimpleCookie {
-    return com.lightstreamer.internal.CookieHelper.getInstance().getCookies(uri);
   }
   #end
 
