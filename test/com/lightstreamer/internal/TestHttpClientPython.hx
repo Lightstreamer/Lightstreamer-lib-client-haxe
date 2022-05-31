@@ -1,5 +1,6 @@
 package com.lightstreamer.internal;
 
+import com.lightstreamer.client.Proxy;
 import com.lightstreamer.client.LightstreamerClient;
 
 @:timeout(1500)
@@ -19,7 +20,7 @@ class TestHttpClientPython extends utest.Test {
   function testPolling(async: utest.Async) {
     new HttpClient(
       host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
-      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null,
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null, null,
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
         fail(error); 
@@ -35,7 +36,7 @@ class TestHttpClientPython extends utest.Test {
   function testStreaming(async: utest.Async) {
     new HttpClient(
       host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
-      "LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null,
+      "LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null, null,
       function onText(c, line) {
         if (c.isDisposed()) return;
         match(~/CONOK/, line);
@@ -54,7 +55,7 @@ class TestHttpClientPython extends utest.Test {
   function testHttps(async: utest.Async) {
     new HttpClient(
       "https://push.lightstreamer.com/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
-      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null, 
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null, null,
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
         fail(error); 
@@ -70,7 +71,7 @@ class TestHttpClientPython extends utest.Test {
   function testConnectionError(async: utest.Async) {
     new HttpClient(
       "https://localhost:8443/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
-      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null, 
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null, null,
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
         equals("Cannot connect to host localhost:8443 ssl:True [SSLCertVerificationError: (1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self signed certificate (_ssl.c:1129)')]", error);
@@ -93,7 +94,7 @@ class TestHttpClientPython extends utest.Test {
 
     new HttpClient(
       host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
-      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null,
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null, null,
       function onText(c, line) null, 
       function onError(c, error) { 
         fail(error); 
@@ -112,13 +113,50 @@ class TestHttpClientPython extends utest.Test {
   function testHeaders(async: utest.Async) {
     new HttpClient(
       host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
-      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", 
-      ["X-Header" => "header"],
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i",
+      ["X-Header" => "header"],  null,
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
         fail(error); 
         async.completed(); 
       }, 
+      function onDone(c) { 
+        isTrue(output.length > 0);
+        match(~/CONOK/, output[0]);
+        async.completed(); 
+      });
+  }
+
+  function testProxy(async: utest.Async) {
+    new HttpClient(
+      "http://localhost:8080/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", 
+      null,
+      new Proxy("HTTP", "localhost", 8079, "myuser", "mypassword"),
+      function onText(c, line) output.push(line), 
+      function onError(c, error) { 
+        fail(error); 
+        async.completed(); 
+      }, 
+      function onDone(c) { 
+        isTrue(output.length > 0);
+        match(~/CONOK/, output[0]);
+        async.completed(); 
+      });
+  }
+
+  @:timeout(3000)
+  function testProxyHttps(async: utest.Async) {
+    new HttpClient(
+      "https://push.lightstreamer.com/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", 
+      null,
+      new Proxy("HTTP", "localhost", 8079, "myuser", "mypassword"),
+      function onText(c, line) output.push(line), 
+      function onError(c, error) { 
+        fail(error); 
+        async.completed(); 
+      },
       function onDone(c) { 
         isTrue(output.length > 0);
         match(~/CONOK/, output[0]);
