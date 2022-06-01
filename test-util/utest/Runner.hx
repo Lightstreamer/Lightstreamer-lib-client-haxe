@@ -69,7 +69,7 @@ class Runner {
       }
       if (isAsync && !test.async.isCompleted) {
         test.addError("missed async call");
-      } else if (test.numAssertions == 0) {
+      } else if (test.passed() && test.numAssertions == 0) {
         test.addError("no assertion");
       }
       tests.push(test);
