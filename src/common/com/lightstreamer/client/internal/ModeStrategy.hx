@@ -168,7 +168,9 @@ class ModeStrategy {
   }
 
   function genDisposeItems() {
-    for (_ => item in items) {
+    // make a copy of `items` because evtDispose removes elements from it while iterating
+    var _items = items.copy();
+    for (_ => item in _items) {
       item.evtDispose(this);
     }
   }
