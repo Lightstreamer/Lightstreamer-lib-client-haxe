@@ -1,24 +1,21 @@
 import com.lightstreamer.client.LightstreamerClient;
 import utest.Runner;
-import utest.ui.Report;
 import com.lightstreamer.internal.*;
-import utest.Assert.*;
-import TestTools;
-using TestTools;
 
 @:timeout(1500)
 class TestCertValidatorCs extends  utest.Test {
-  var host = "http://localhost:8080";
+  var host = "http://localtest.me:8080";
+  var secHost = "https://localtest.me:8443";
   var output: Array<String>;
 
   public static function main() {
+    setupClass();
     var runner = new Runner();
-    runner.addCase(new TestCertValidatorCs());
-    Report.create(runner);
+    runner.addCase(TestCertValidatorCs);
     runner.run();
   }
 
-  function setupClass() {
+  static function setupClass() {
     LightstreamerClient.setTrustManagerFactory((sender, cert, chain, sslPolicyErrors) -> true);
   }
 
@@ -28,7 +25,7 @@ class TestCertValidatorCs extends  utest.Test {
 
   function testRemoteCertificateValidationHttp(async: utest.Async) {
     new HttpClient(
-      "https://localhost:8443/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
+      secHost + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null,
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
@@ -44,7 +41,7 @@ class TestCertValidatorCs extends  utest.Test {
 
   function testRemoteCertificateValidationWs(async: utest.Async) {
     new WsClient(
-      "wss://localhost:8443/lightstreamer", null, null, 
+      secHost + "/lightstreamer", null, null, 
       (sender, cert, chain, sslPolicyErrors) -> true,
       function onOpen(c) {
         c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i");

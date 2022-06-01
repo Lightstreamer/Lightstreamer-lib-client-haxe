@@ -10,8 +10,8 @@ class TestWsClientJava extends utest.Test {
   var host = "http://10.0.2.2:8080";
   var secHost = "https://10.0.2.2:8443";
   #else
-  var host = "http://localhost:8080";
-  var secHost = "https://localhost:8443";
+  var host = "http://localtest.me:8080";
+  var secHost = "https://localtest.me:8443";
   #end
   var output: Array<String>;
 
@@ -85,7 +85,7 @@ class TestWsClientJava extends utest.Test {
 
   function testConnectionError(async: utest.Async) {
     new WsClient(
-      "wss://localhost:8443/lightstreamer", 
+      secHost + "/lightstreamer", 
       null, null, null,
       function onOpen(c) {
         fail("Unexpected call"); 
@@ -155,12 +155,12 @@ class TestWsClientJava extends utest.Test {
 
   function testProxy(async: utest.Async) {
     new WsClient(
-      "http://localhost:8080/lightstreamer", 
+      host + "/lightstreamer", 
       null,
       #if android
       new Proxy("HTTP", "10.0.2.2", 8079, "myuser", "mypassword"),
       #else
-      new Proxy("HTTP", "localhost", 8079, "myuser", "mypassword"),
+      new Proxy("HTTP", "localtest.me", 8079, "myuser", "mypassword"),
       #end
       null,
       function onOpen(c) {
@@ -187,7 +187,7 @@ class TestWsClientJava extends utest.Test {
       #if android
       new Proxy("HTTP", "10.0.2.2", 8079, "myuser", "mypassword"),
       #else
-      new Proxy("HTTP", "localhost", 8079, "myuser", "mypassword"),
+      new Proxy("HTTP", "localtest.me", 8079, "myuser", "mypassword"),
       #end
       null,
       function onOpen(c) {

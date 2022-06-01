@@ -1,28 +1,25 @@
 import utest.Runner;
-import utest.ui.Report;
+import com.lightstreamer.log.ConsoleLoggerProvider;
 import com.lightstreamer.client.Proxy;
 import com.lightstreamer.client.LightstreamerClient;
 import com.lightstreamer.internal.*;
-import utest.Assert.*;
-import TestTools;
-using TestTools;
 
 @:timeout(1500)
 class TestProxyCs extends  utest.Test {
-  var proxy = new Proxy("HTTP", "localhost", 8079, "myuser", "mypassword");
+  static var proxy = new Proxy("HTTP", "localtest.me", 8079, "myuser", "mypassword");
   // use an alias of localhost to fool the network layer and force it to pass through the proxy
   // see https://stackoverflow.com/a/7103016
-  var host = "test.lightstreamer.com:8080";
+  var host = "localtest.me:8080";
   var output: Array<String>;
 
   public static function main() {
+    setupClass();
     var runner = new Runner();
-    runner.addCase(new TestProxyCs());
-    Report.create(runner);
+    runner.addCase(TestProxyCs);
     runner.run();
   }
 
-  function setupClass() {
+  static function setupClass() {
     // NB needs a validator even if the proxy is not secured
     LightstreamerClient.setTrustManagerFactory((sender, cert, chain, sslPolicyErrors) -> true);
     new LightstreamerClient(null, null).connectionOptions.setProxy(proxy);
@@ -112,13 +109,13 @@ class TestProxyCs extends  utest.Test {
   }
 
   function testInstallSameProxy() {
-    var proxy = new com.lightstreamer.client.Proxy("HTTP", "localhost", 8079, "myuser", "mypassword");
+    var proxy = new com.lightstreamer.client.Proxy("HTTP", "localtest.me", 8079, "myuser", "mypassword");
     new LightstreamerClient(null, null).connectionOptions.setProxy(proxy);
     pass();
   }
 
   function testInstallDifferentProxy() {
-    var proxy = new com.lightstreamer.client.Proxy("HTTP", "localhost", 8079);
+    var proxy = new com.lightstreamer.client.Proxy("HTTP", "localtest.me", 8079);
     raisesEx(
       () -> new LightstreamerClient(null, null).connectionOptions.setProxy(proxy),
       com.lightstreamer.internal.NativeTypes.IllegalStateException,

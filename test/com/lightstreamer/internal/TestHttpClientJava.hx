@@ -10,8 +10,8 @@ class TestHttpClientJava extends utest.Test {
   var host = "http://10.0.2.2:8080";
   var secHost = "https://10.0.2.2:8443";
   #else
-  var host = "http://localhost:8080";
-  var secHost = "https://localhost:8443";
+  var host = "http://localtest.me:8080";
+  var secHost = "https://localtest.me:8443";
   #end
   var output: Array<String>;
 
@@ -77,7 +77,7 @@ class TestHttpClientJava extends utest.Test {
 
   function testConnectionError(async: utest.Async) {
     new HttpClient(
-      "https://localhost:8443/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
+      secHost + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null, null, null,
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
@@ -138,13 +138,13 @@ class TestHttpClientJava extends utest.Test {
 
   function testProxy(async: utest.Async) {
     new HttpClient(
-      "http://localhost:8080/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
+      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", 
       null,
       #if android
       new Proxy("HTTP", "10.0.2.2", 8079, "myuser", "mypassword"),
       #else
-      new Proxy("HTTP", "localhost", 8079, "myuser", "mypassword"),
+      new Proxy("HTTP", "localtest.me", 8079, "myuser", "mypassword"),
       #end
       null,
       function onText(c, line) output.push(line), 
@@ -168,7 +168,7 @@ class TestHttpClientJava extends utest.Test {
       #if android
       new Proxy("HTTP", "10.0.2.2", 8079, "myuser", "mypassword"),
       #else
-      new Proxy("HTTP", "localhost", 8079, "myuser", "mypassword"),
+      new Proxy("HTTP", "localtest.me", 8079, "myuser", "mypassword"),
       #end
       null,
       function onText(c, line) output.push(line), 

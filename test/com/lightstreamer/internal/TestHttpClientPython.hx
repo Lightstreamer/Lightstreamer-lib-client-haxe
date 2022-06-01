@@ -133,7 +133,7 @@ class TestHttpClientPython extends utest.Test {
       host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", 
       null,
-      new Proxy("HTTP", "localhost", 8079, "myuser", "mypassword"), null,
+      new Proxy("HTTP", "localtest.me", 8079, "myuser", "mypassword"), null,
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
         fail(error); 
@@ -153,7 +153,7 @@ class TestHttpClientPython extends utest.Test {
       "https://push.lightstreamer.com/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", 
       null,
-      new Proxy("HTTP", "localhost", 8079, "myuser", "mypassword"), null,
+      new Proxy("HTTP", "localtest.me", 8079, "myuser", "mypassword"), null,
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
         fail(error); 

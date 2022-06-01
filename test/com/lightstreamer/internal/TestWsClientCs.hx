@@ -5,7 +5,8 @@ import com.lightstreamer.client.Proxy;
 
 @:timeout(1500)
 class TestWsClientCs extends utest.Test {
-  var host = "ws://localhost:8080";
+  var host = "http://localtest.me:8080";
+  var secHost = "https://localtest.me:8443";
   var output: Array<String>;
 
   function setup() {
@@ -13,7 +14,7 @@ class TestWsClientCs extends utest.Test {
   }
 
   function teardown() {
-    CookieHelper.instance.clearCookies("ws://localhost");
+    CookieHelper.instance.clearCookies("ws://localtest.me");
   }
 
   function testPolling(async: utest.Async) {
@@ -77,7 +78,7 @@ class TestWsClientCs extends utest.Test {
 
   function testConnectionError(async: utest.Async) {
     new WsClient(
-      "wss://localhost:8443/lightstreamer", 
+      secHost + "/lightstreamer", 
       null, null, null,
       function onOpen(c) {
         fail("Unexpected call"); 

@@ -5,7 +5,8 @@ import com.lightstreamer.client.Proxy;
 
 @:timeout(1500)
 class TestHttpClientCs extends utest.Test {
-  var host = "http://localhost:8080";
+  var host = "http://localtest.me:8080";
+  var secHost = "https://localtest.me:8443";
   var output: Array<String>;
 
   function setup() {
@@ -13,7 +14,7 @@ class TestHttpClientCs extends utest.Test {
   }
 
   function teardown() {
-    CookieHelper.instance.clearCookies("http://localhost");
+    CookieHelper.instance.clearCookies("http://localtest.me");
   }
 
   function testPolling(async: utest.Async) {
@@ -69,7 +70,7 @@ class TestHttpClientCs extends utest.Test {
 
   function testConnectionError(async: utest.Async) {
     new HttpClient(
-      "https://localhost:8443/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
+      secHost + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null,
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
