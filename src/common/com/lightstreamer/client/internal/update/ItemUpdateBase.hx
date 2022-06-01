@@ -194,4 +194,25 @@ class ItemUpdateBase implements ItemUpdate {
     }
     return m_changedFields.contains(fieldPos);
   }
+
+  function getFieldNameOrNullFromIdx(fieldIdx: Pos) {
+    return m_fields != null ? m_fields[fieldIdx] : null;
+  }
+
+  public function toString(): String {
+    var s = new StringBuf();
+    s.add("[");
+    for (i => val in m_newValues) {
+      var fieldName = getFieldNameOrNullFromIdx(i) ?? Std.string(i);
+      var fieldVal = Std.string(val);
+      if (i > 1) {
+        s.add(",");
+      }
+      s.add(fieldName);
+      s.add(":");
+      s.add(fieldVal);
+    }
+    s.add("]");
+    return s.toString();
+  }
 }
