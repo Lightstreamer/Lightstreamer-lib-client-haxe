@@ -166,13 +166,14 @@ class TestWsClientPython extends utest.Test {
       });
   }
 
-  @Ignored
   @:timeout(3000)
   function testProxyHttps(async: utest.Async) {
+    // see https://docs.aiohttp.org/en/stable/client_advanced.html#ssl-control-for-tcp-sockets
+    var sslcontext = SSLContext.SSL.create_default_context({cafile: "test/mitmproxy-ca-cert.pem"});
     new WsClient(
       "https://push.lightstreamer.com/lightstreamer", 
       null,
-      new Proxy("HTTP", "localtest.me", 8079, "myuser", "mypassword"), null,
+      new Proxy("HTTP", "localtest.me", 8079, "myuser", "mypassword"), sslcontext,
       function onOpen(c) {
         c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i");
       },
@@ -190,6 +191,7 @@ class TestWsClientPython extends utest.Test {
   }
 
   function testTrustManager(async: utest.Async) {
+    // see https://docs.aiohttp.org/en/stable/client_advanced.html#ssl-control-for-tcp-sockets
     var sslcontext = SSLContext.SSL.create_default_context({cafile: "test/localtest.me.crt"});
     sslcontext.load_cert_chain({certfile: "test/localtest.me.crt", keyfile: "test/localtest.me.key"});
 
