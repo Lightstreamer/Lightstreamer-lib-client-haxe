@@ -527,21 +527,15 @@ abstract NativeArray<T>(Array<T>) from Array<T> to Array<T> {
 #end
 
 #if java
-abstract NativeURI(java.net.URI) from java.net.URI to java.net.URI {}
-
-@:forward(toHaxe)
-abstract NativeCookieCollection(NativeList<java.net.HttpCookie>) from NativeList<java.net.HttpCookie> to NativeList<java.net.HttpCookie> {}
+typedef NativeURI = java.net.URI;
+typedef NativeCookieCollection = NativeList<java.net.HttpCookie>;
 #elseif LS_NODE
-abstract NativeURI(String) from String to String {}
-
-abstract NativeCookieCollection(Array<String>) from Array<String> to Array<String> {}
+typedef NativeURI = String;
+typedef NativeCookieCollection = Array<String>;
 #elseif cs
-abstract NativeURI(cs.system.Uri) from cs.system.Uri to cs.system.Uri {}
-
-abstract NativeCookieCollection(cs.system.net.CookieCollection) from cs.system.net.CookieCollection to cs.system.net.CookieCollection {}
+typedef NativeURI = cs.system.Uri;
+typedef NativeCookieCollection = cs.system.net.CookieCollection;
 #elseif python
-abstract NativeURI(String) from String to String {}
-
-@:forward(toHaxeArray)
-abstract NativeCookieCollection(com.lightstreamer.internal.SimpleCookie) from com.lightstreamer.internal.SimpleCookie to com.lightstreamer.internal.SimpleCookie {}
+typedef NativeURI = String;
+typedef NativeCookieCollection = com.lightstreamer.internal.SimpleCookie;
 #end
