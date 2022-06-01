@@ -40,16 +40,8 @@ class LightstreamerClient {
   }
   #end
 
-  #if java
-  public static function setTrustManagerFactory(factory: java.javax.net.ssl.TrustManagerFactory) {
-    com.lightstreamer.internal.Globals.instance.setTrustManagerFactory(factory);
-  }
-  #elseif cs
-  public static function setTrustManagerFactory(factory: cs.system.net.security.RemoteCertificateValidationCallback) {
-    com.lightstreamer.internal.Globals.instance.setRemoteCertificateValidationCallback(factory);
-  }
-  #elseif python
-  public static function setTrustManagerFactory(factory: com.lightstreamer.internal.SSLContext) {
+  #if (java || cs || python)
+  public static function setTrustManagerFactory(factory: NativeTrustManager) {
     com.lightstreamer.internal.Globals.instance.setTrustManagerFactory(factory);
   }
   #end

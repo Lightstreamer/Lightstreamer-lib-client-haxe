@@ -26,7 +26,7 @@ class Globals {
     }
   }
 
-  public function setRemoteCertificateValidationCallback(callback: RemoteCertificateValidationCallback) {
+  public function setTrustManagerFactory(callback: RemoteCertificateValidationCallback) {
     if (callback == null) {
       throw new IllegalArgumentException("Expected a non-null RemoteCertificateValidationCallback");
     }

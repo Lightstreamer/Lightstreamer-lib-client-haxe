@@ -539,3 +539,11 @@ typedef NativeCookieCollection = cs.system.net.CookieCollection;
 typedef NativeURI = String;
 typedef NativeCookieCollection = com.lightstreamer.internal.SimpleCookie;
 #end
+
+#if java
+typedef NativeTrustManager = java.javax.net.ssl.TrustManagerFactory;
+#elseif cs
+typedef NativeTrustManager = cs.system.net.security.RemoteCertificateValidationCallback;
+#elseif python
+typedef NativeTrustManager = com.lightstreamer.internal.SSLContext;
+#end
