@@ -1,6 +1,6 @@
 package com.lightstreamer.internal;
 
-@:pythonImport("com_lightstreamer", "CookieHelper")
+@:pythonImport("com_lightstreamer_net", "CookieHelper")
 extern class CookieHelper {
   static var instance(get, never): CookieHelper;
   inline static function get_instance() return getInstance();

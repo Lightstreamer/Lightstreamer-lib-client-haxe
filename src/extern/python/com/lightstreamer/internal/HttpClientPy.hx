@@ -1,6 +1,6 @@
 package com.lightstreamer.internal;
 
-@:pythonImport("com_lightstreamer", "HttpClientPy")
+@:pythonImport("com_lightstreamer_net", "HttpClientPy")
 extern class HttpClientPy {
   function new();
   function sendAsync(url: String, body: String, headers: Null<python.Dict<String, String>>, proxy: Null<TypesPy.Proxy>, sslContext: Null<SSLContext>): Void;
