@@ -1,6 +1,7 @@
 import aiohttp
 import asyncio
 from threading import Thread
+from threading import Lock
 from yarl import URL
 from http.cookies import SimpleCookie
 
@@ -24,30 +25,37 @@ ls_io_thread.start()
 
 class CookieHelper:
   instance = None
+  _lock = Lock()
 
   @staticmethod
   def getInstance():
     if CookieHelper.instance is None:
-      CookieHelper.instance = CookieHelper()
+      with CookieHelper._lock:
+        if CookieHelper.instance is None:
+          CookieHelper.instance = CookieHelper()
     return CookieHelper.instance
 
   def __init__(self):
     self.jar = aiohttp.CookieJar()
+    self._lock = Lock()
 
   def addCookies(self, uri, cookies):
-    self.jar.update_cookies(cookies, URL(uri))
+    with self._lock:
+      self.jar.update_cookies(cookies, URL(uri))
 
   def getCookies(self, uri):
-    if uri is None:
-      cookies = SimpleCookie()
-      for cookie in self.jar:
-        cookies[cookie.key] = cookie
-      return cookies
-    else:
-      return self.jar.filter_cookies(URL(uri))
+    with self._lock:
+      if uri is None:
+        cookies = SimpleCookie()
+        for cookie in self.jar:
+          cookies[cookie.key] = cookie
+        return cookies
+      else:
+        return self.jar.filter_cookies(URL(uri))
   
   def clearCookies(self):
-    self.jar.clear()
+    with self._lock:
+      self.jar.clear()
 
 class SessionPy:
   session = None
