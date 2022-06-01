@@ -1,5 +1,9 @@
 package com.lightstreamer.internal;
 
+import com.lightstreamer.log.LoggerTools;
+
+using com.lightstreamer.log.LoggerTools;
+
 @:autoBuild(com.lightstreamer.internal.Macros.buildEventDispatcher())
 class EventDispatcher<T> {
   #if python
@@ -43,10 +47,12 @@ class EventDispatcher<T> {
   }
 
   function dispatchToOne(listener: T, func: T->Void) {
-    executor.submit(() -> func(listener));
-  }
-
-  public static function submit(func: ()->Void) {
-    executor.submit(func);
+    executor.submit(() -> {
+      try {
+        func(listener);
+      } catch(e) {
+        actionLogger.logError("Uncaught exception", e);
+      }
+    });
   }
 }
