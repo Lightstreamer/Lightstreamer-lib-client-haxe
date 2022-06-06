@@ -3551,10 +3551,10 @@ class ClientMachine {
     this.requestLimit = reqLimit;
     if (keepalive != null) {
       this.keepaliveInterval = keepalive;
-      options.keepaliveInterval = keepalive;
+      options.setKeepaliveInterval(keepalive);
     } else if (idleTimeout != null) {
       this.idleTimeout = idleTimeout;
-      options.idleTimeout = idleTimeout;
+      options.setIdleTimeout(idleTimeout);
     }
     if (clink != "*" && !options.serverInstanceAddressIgnored) {
       clink = Url.completeControlLink(clink, getServerAddress());
