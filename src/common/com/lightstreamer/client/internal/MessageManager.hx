@@ -1,5 +1,6 @@
 package com.lightstreamer.client.internal;
 
+import com.lightstreamer.internal.NullStringMap;
 import com.lightstreamer.internal.EventDispatcher;
 import com.lightstreamer.client.internal.ClientRequests;
 import com.lightstreamer.internal.RequestBuilder;
@@ -295,5 +296,15 @@ class MessageManager implements Encodable {
   function goto(target: State_m) {
     s_m = target;
     internalLogger.logTrace('msg#goto($sequence:$prog) $s_m');
+  }
+
+  public function toString(): String {
+    var map = new NullStringMap();
+    map["text"] = txt;
+    map["sequence"] = sequence;
+    map["prog"]  = prog;
+    map["timeout"] = maxWait;
+    map["enqueueWhileDisconnected"] = enqueueWhileDisconnected;
+    return map.toString();
   }
 }
