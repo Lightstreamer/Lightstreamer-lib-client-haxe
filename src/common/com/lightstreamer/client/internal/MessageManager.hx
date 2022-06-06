@@ -41,6 +41,9 @@ class MessageManager implements Encodable {
     }
     this.maxWait = maxWait;
     this.delegate = delegate;
+    if (delegate != null) {
+      eventDispatcher.addListener(delegate);
+    }
     this.enqueueWhileDisconnected = enqueueWhileDisconnected;
     this.client = client;
     if (delegate != null) {
