@@ -100,7 +100,9 @@ class ItemCommand extends ItemBase {
   }
 
   function genDisposeKeys() {
-    for (_ => key in keys) {
+    // make a copy of `keys` because evtDispose removes elements from it while iterating
+    var _keys = keys.copy();
+    for (_ => key in _keys) {
       key.evtDispose();
     }
   }
