@@ -234,6 +234,7 @@ class ClientMachine {
     }
   }
 
+  @:allow(com.lightstreamer.client.ConnectionDetails)
   function evtServerAddressChanged() {
     traceEvent( "nr:serverAddress.changed");
     switch state.s_nr {
@@ -2450,6 +2451,7 @@ class ClientMachine {
     }
   }
 
+  @:allow(com.lightstreamer.client.ConnectionOptions)
   function evtExtSetReverseHeartbeatInterval() {
     traceEvent("setReverseHeartbeatInterval");
     if (state.s_rhb != null) {
@@ -2879,6 +2881,7 @@ class ClientMachine {
     }
   }
 
+  @:allow(com.lightstreamer.client.ConnectionOptions)
   function evtExtSetForcedTransport() {
     traceEvent("setForcedTransport");
     if (state.s_swt == s1301) {
@@ -2887,6 +2890,7 @@ class ClientMachine {
     }
   }
 
+  @:allow(com.lightstreamer.client.ConnectionOptions)
   function evtExtSetRequestedMaxBandwidth() {
     traceEvent("setRequestedMaxBandwidth");
     if (state.s_bw == s1201) {

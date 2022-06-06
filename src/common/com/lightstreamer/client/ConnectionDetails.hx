@@ -11,7 +11,6 @@ using com.lightstreamer.log.LoggerTools;
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 @:access(com.lightstreamer.client.LightstreamerClient)
 class ConnectionDetails {
-  // TODO fire property listeners
   var serverAddress: Null<ServerAddress>;
   var adapterSet: Null<String>;
   var user: Null<String>;
@@ -34,9 +33,12 @@ class ConnectionDetails {
   public function setServerAddress(serverAddress: Null<String>): Void {
     var newValue = ServerAddress.fromString(serverAddress);
     actionLogger.logInfo('serverAddress changed: $newValue');
+    var oldValue = this.serverAddress;
     this.serverAddress = newValue;
     client.eventDispatcher.onPropertyChange("serverAddress");
-    // TODO forward event to client
+    if (oldValue != newValue) {
+      client.machine.evtServerAddressChanged();
+    }
   }
 
   public function getAdapterSet(): Null<String> {

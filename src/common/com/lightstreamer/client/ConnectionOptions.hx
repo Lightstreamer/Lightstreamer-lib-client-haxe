@@ -10,7 +10,6 @@ using com.lightstreamer.log.LoggerTools;
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 @:access(com.lightstreamer.client.LightstreamerClient)
 class ConnectionOptions {
-  // TODO fire property listeners
   var contentLength: ContentLength = new ContentLength(50000000);
   var firstRetryMaxDelay: Millis = new Millis(100);
   var forcedTransport: Null<TransportSelection> = null;
@@ -64,7 +63,7 @@ class ConnectionOptions {
     actionLogger.info('forcedTransport changed: $newValue');
     this.forcedTransport = newValue;
     client.eventDispatcher.onPropertyChange("forcedTransport");
-    // TODO forward to client
+    client.machine.evtExtSetForcedTransport();
   }
 
   public function getHttpExtraHeaders(): Null<NativeStringMap> {
@@ -101,10 +100,10 @@ class ConnectionOptions {
   }
   public function setRequestedMaxBandwidth(maxBandwidth: String): Void {
     var newValue = RequestedMaxBandwidthTools.fromString(maxBandwidth);
-    actionLogger.info('keepaliveInterval changed: ${newValue.toString()}');
+    actionLogger.info('requestedMaxBandwidth changed: ${newValue.toString()}');
     this.requestedMaxBandwidth = newValue;
     client.eventDispatcher.onPropertyChange("requestedMaxBandwidth");
-    // TODO forward to client
+    client.machine.evtExtSetRequestedMaxBandwidth();
   }
 
   public function getRealMaxBandwidth(): Null<String> {
@@ -154,7 +153,7 @@ class ConnectionOptions {
     actionLogger.info('reverseHeartbeatInterval changed: $newValue');
     this.reverseHeartbeatInterval = newValue;
     client.eventDispatcher.onPropertyChange("reverseHeartbeatInterval");
-    // TODO forward to client
+    client.machine.evtExtSetReverseHeartbeatInterval();
   }
 
   public function getSessionRecoveryTimeout(): Long {
