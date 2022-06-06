@@ -67,7 +67,9 @@ private class ConsoleLogger implements Logger {
     #elseif cs
     var msg = '$now|$level|$category|${cs.system.threading.Thread.CurrentThread.ManagedThreadId}|$line';
     #elseif python
-    var msg = '$now|$level|$category|${python.lib.Threading.current_thread().name}|$line';
+    var pyTime = python.internal.UBuiltins.str(python.lib.datetime.Datetime.now());
+    var pyThread = python.lib.Threading.current_thread().name;
+    var msg = '$pyTime|$level|$category|$pyThread|$line';
     #else
     var msg = '$now|$level|$category|$line';
     #end
