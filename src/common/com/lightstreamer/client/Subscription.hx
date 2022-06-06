@@ -213,7 +213,9 @@ class Subscription {
       if (isActive() && (newValue == null || newValue == FreqUnfiltered || this.requestedMaxFrequency == FreqUnfiltered)) {
         throw new IllegalArgumentException("Cannot change the frequency from/to 'unfiltered' or to null while the Subscription is active");
       }
-      subscriptionLogger.logInfo('Subscription $subId requested max frequency changed: $freq');
+      if (subId != null) {
+        subscriptionLogger.logInfo('Subscription $subId requested max frequency changed: $freq');
+      }
       this.requestedMaxFrequency = newValue;
       _manager = manager;
     });
