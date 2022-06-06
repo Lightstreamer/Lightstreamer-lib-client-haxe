@@ -54,7 +54,13 @@ class LightstreamerClient {
   public function new(serverAddress: String, adapterSet: String) {
     connectionDetails = new ConnectionDetails(@:nullSafety(Off) this);
     connectionOptions = new ConnectionOptions(@:nullSafety(Off) this);
-    machine = new ClientMachine(this, serverAddress, adapterSet, createWsClient, createHttpClient, createHttpClient, createTimer, randomMillis, createReachabilityManager);
+    machine = new ClientMachine(this, createWsClient, createHttpClient, createHttpClient, createTimer, randomMillis, createReachabilityManager);
+    if (serverAddress != null) {
+      connectionDetails.setServerAddress(serverAddress);
+    }
+    if (adapterSet != null) {
+      connectionDetails.setAdapterSet(adapterSet);
+    }
   }
 
   public function addListener(listener: ClientListener): Void {

@@ -132,8 +132,6 @@ class ClientMachine {
 
   public function new(
     client: LightstreamerClient,
-    serverAddress: Null<String>,
-    adapterSet: Null<String>,
     wsFactory: IWsClientFactory,
     httpFactory: IHttpClientFactory,
     ctrlFactory: IHttpClientFactory,
@@ -154,12 +152,6 @@ class ClientMachine {
     this.switchRequest = new SwitchRequest(this);
     this.constrainRequest = new ConstrainRequest(this);
     delayCounter.reset(options.retryDelay);
-    if (serverAddress != null) {
-      details.setServerAddress(serverAddress);
-    }
-    if (adapterSet != null) {
-      details.setAdapterSet(adapterSet);
-    }
   }
 
   // ---------- event handlers ----------
