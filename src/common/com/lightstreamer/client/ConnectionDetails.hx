@@ -1,5 +1,6 @@
 package com.lightstreamer.client;
 
+import com.lightstreamer.internal.NullStringMap;
 import com.lightstreamer.internal.NativeTypes;
 import com.lightstreamer.internal.Types;
 import com.lightstreamer.log.LoggerTools;
@@ -99,12 +100,14 @@ class ConnectionDetails {
   }
 
   public function toString(): String {
-    return ["serverAddress" => serverAddress,
-    "adapterSet" => adapterSet,
-    "user" => user,
-    "sessionId" => sessionId,
-    "serverInstanceAddress" => serverInstanceAddress,
-    "serverSocketName" => serverSocketName,
-    "clientIp" => clientIp].toString();
+    var map = new NullStringMap();
+    map["serverAddress"] = serverAddress;
+    map["adapterSet"] = adapterSet;
+    map["user"] = user;
+    map["sessionId"] = sessionId;
+    map["serverInstanceAddress"] = serverInstanceAddress;
+    map["serverSocketName"] = serverSocketName;
+    map["clientIp"] = clientIp;
+    return map.toString();
   }
 }

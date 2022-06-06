@@ -1,5 +1,6 @@
 package com.lightstreamer.client;
 
+import com.lightstreamer.internal.NullStringMap;
 import com.lightstreamer.client.internal.SubscriptionManager;
 import com.lightstreamer.client.internal.SubscriptionManager.SubscriptionManagerLiving;
 import com.lightstreamer.internal.NativeTypes;
@@ -658,5 +659,20 @@ class Subscription {
   function fireOnLostUpdates2Level(keyName: String, lostUpdates: Int, subId: Int, itemIdx: Pos) {
     subscriptionLogger.logDebug('Subscription $subId:${getItemNameOrPos(itemIdx)}:$keyName: lost $lostUpdates updates');
     eventDispatcher.onCommandSecondLevelItemLostUpdates(lostUpdates, keyName);
+  }
+
+  public function toString(): String {
+    var map = new NullStringMap();
+    map["mode"] = mode;
+    map["items"] = (items : Any) ?? group;
+    map["fields"] = (fields : Any) ?? schema;
+    map["dataAdapter"] = dataAdapter;
+    map["requestedBufferSize"] = bufferSize;
+    map["requestedSnapshot"] = snapshot;
+    map["requestedMaxFrequency"] = requestedMaxFrequency;
+    map["selector"] = selector;
+    map["secondLevelFields"] = (fields2 : Any) ?? schema2;
+    map["secondLevelDataAdapter"] = dataAdapter2;
+    return map.toString();
   }
 }

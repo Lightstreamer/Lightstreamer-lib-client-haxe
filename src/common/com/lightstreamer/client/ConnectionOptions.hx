@@ -1,5 +1,6 @@
 package com.lightstreamer.client;
 
+import com.lightstreamer.internal.NullStringMap;
 import com.lightstreamer.internal.NativeTypes;
 import com.lightstreamer.internal.Types;
 import com.lightstreamer.log.LoggerTools;
@@ -217,22 +218,24 @@ class ConnectionOptions {
   #end
 
   public function toString(): String {
-    return ["forcedTransport" => Std.string(forcedTransport),
-    "requestedMaxBandwidth" => Std.string(requestedMaxBandwidth),
-    "realMaxBandwidth" => Std.string(realMaxBandwidth),
-    "retryDelay" => Std.string(retryDelay),
-    "firstRetryMaxDelay" => Std.string(firstRetryMaxDelay),
-    "sessionRecoveryTimeout" => Std.string(sessionRecoveryTimeout ),
-    "reverseHeartbeatInterval" => Std.string(reverseHeartbeatInterval),
-    "stalledTimeout" => Std.string(stalledTimeout),
-    "reconnectTimeout" => Std.string(reconnectTimeout),
-    "keepaliveInterval" => Std.string(keepaliveInterval),
-    "pollingInterval" => Std.string(pollingInterval),
-    "idleTimeout" => Std.string(idleTimeout),
-    "contentLength" => Std.string(contentLength),
-    "slowingEnabled" => Std.string(slowingEnabled),
-    "serverInstanceAddressIgnored" => Std.string(serverInstanceAddressIgnored),
-    "HTTPExtraHeadersOnSessionCreationOnly" => Std.string(httpExtraHeadersOnSessionCreationOnly),
-    "HTTPExtraHeaders" => httpExtraHeaders != null ? Std.string(httpExtraHeaders) : "null"].toString();
+    var map = new NullStringMap();
+    map["forcedTransport"] = forcedTransport;
+    map["requestedMaxBandwidth"] = requestedMaxBandwidth;
+    map["realMaxBandwidth"] = realMaxBandwidth;
+    map["retryDelay"] = retryDelay;
+    map["firstRetryMaxDelay"] = firstRetryMaxDelay;
+    map["sessionRecoveryTimeout"] = sessionRecoveryTimeout;
+    map["reverseHeartbeatInterval"] = reverseHeartbeatInterval;
+    map["stalledTimeout"] = stalledTimeout;
+    map["reconnectTimeout"] = reconnectTimeout;
+    map["keepaliveInterval"] = keepaliveInterval;
+    map["pollingInterval"] = pollingInterval;
+    map["idleTimeout"] = idleTimeout;
+    map["contentLength"] = contentLength;
+    map["slowingEnabled"] = slowingEnabled;
+    map["serverInstanceAddressIgnored"] = serverInstanceAddressIgnored;
+    map["HTTPExtraHeadersOnSessionCreationOnly"] = httpExtraHeadersOnSessionCreationOnly;
+    map["HTTPExtraHeaders"] = httpExtraHeaders;
+    return map.toString();
   }
 }
