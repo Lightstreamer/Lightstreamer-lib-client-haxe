@@ -28,6 +28,12 @@ inline function logError(logger: Logger, line: String, ?exception: NativeExcepti
   }
 }
 
+inline function logErrorEx(logger: Logger, line: String, exception: haxe.Exception) {
+  if (logger.isErrorEnabled()) {
+    logger.error(line + "\n" + exception.details());
+  }
+}
+
 inline function logWarn(logger: Logger, line: String, ?exception: NativeException) {
   if (logger.isWarnEnabled()) {
     logger.warn(line, exception);

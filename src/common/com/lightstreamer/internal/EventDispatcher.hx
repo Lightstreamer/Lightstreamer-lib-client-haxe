@@ -51,7 +51,7 @@ class EventDispatcher<T> {
       try {
         func(listener);
       } catch(e) {
-        actionLogger.logError("Uncaught exception", e);
+        actionLogger.logErrorEx("Uncaught exception", e);
       }
     });
   }
