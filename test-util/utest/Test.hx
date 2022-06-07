@@ -67,6 +67,18 @@ class Test {
   function isTrue(cond: Bool) {
     equals(true, cond);
   }
+
+  function isFalse(cond: Bool) {
+    equals(false, cond);
+  }
+
+  function isNull(value: Any) {
+    isTrue(value == null);
+  }
+
+  function notNull(value: Any) {
+    isTrue(value != null);
+  }
   
   function match(regex: EReg, actual: String) {
     numAssertions++;
