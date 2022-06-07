@@ -36,12 +36,12 @@ class LogManager {
 
 private class EmptyLogger implements Logger {
   inline public function new() {}
-  inline public function fatal(line: String, ?exception: Exception) {}
-	inline public function error(line: String, ?exception: Exception) {}
-	inline public function warn(line: String, ?exception: Exception) {}
-	inline public function info(line: String, ?exception: Exception) {}
-	inline public function debug(line: String, ?exception: Exception) {}
-	inline public function trace(line: String, ?exception: Exception) {}
+  inline public function fatal(line: String, ?exception: NativeException) {}
+	inline public function error(line: String, ?exception: NativeException) {}
+	inline public function warn(line: String, ?exception: NativeException) {}
+	inline public function info(line: String, ?exception: NativeException) {}
+	inline public function debug(line: String, ?exception: NativeException) {}
+	inline public function trace(line: String, ?exception: NativeException) {}
   inline public function isFatalEnabled(): Bool return false;
   inline public function isErrorEnabled(): Bool return false;
   inline public function isWarnEnabled(): Bool return false;
@@ -56,22 +56,22 @@ private class LoggerProxy implements Logger {
   inline public function new(logger: Logger) {
     this.wrappedLogger = logger;
   }
-  inline public function fatal(line: String, ?exception: Exception) {
+  inline public function fatal(line: String, ?exception: NativeException) {
     this.wrappedLogger.fatal(line, exception);
   }
-	inline public function error(line: String, ?exception: Exception) {
+	inline public function error(line: String, ?exception: NativeException) {
     this.wrappedLogger.error(line, exception);
   }
-	inline public function warn(line: String, ?exception: Exception) {
+	inline public function warn(line: String, ?exception: NativeException) {
     this.wrappedLogger.warn(line, exception);
   }
-	inline public function info(line: String, ?exception: Exception) {
+	inline public function info(line: String, ?exception: NativeException) {
     this.wrappedLogger.info(line, exception);
   }
-	inline public function debug(line: String, ?exception: Exception) {
+	inline public function debug(line: String, ?exception: NativeException) {
     this.wrappedLogger.debug(line, exception);
   }
-  inline public function trace(line: String, ?exception: Exception) {
+  inline public function trace(line: String, ?exception: NativeException) {
     this.wrappedLogger.trace(line, exception);
   }
   inline public function isFatalEnabled(): Bool {

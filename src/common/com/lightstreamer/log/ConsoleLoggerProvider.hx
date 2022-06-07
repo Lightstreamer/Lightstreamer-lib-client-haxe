@@ -60,7 +60,7 @@ private class ConsoleLogger implements Logger {
   }
 
   @:access(haxe.Exception.caught)
-  function log(level: String, line: String, ?exception: Exception) {
+  function log(level: String, line: String, ?exception: NativeException) {
     var now = Date.now().toString();
     #if java
     var msg = '$now|$level|$category|${java.lang.Thread.currentThread().getName()}|$line';
@@ -79,37 +79,37 @@ private class ConsoleLogger implements Logger {
     }
   }
 
-  public function fatal(line: String, ?exception: Exception): Void {
+  public function fatal(line: String, ?exception: NativeException): Void {
     if (this.fatalEnabled) {
       log("FATAL", line, exception);
     }
   }
 
-  public function error(line: String, ?exception: Exception): Void {
+  public function error(line: String, ?exception: NativeException): Void {
     if (this.errorEnabled) {
       log("ERROR", line, exception);
     }
   }
 
-  public function warn(line: String, ?exception: Exception): Void {
+  public function warn(line: String, ?exception: NativeException): Void {
     if (this.warnEnabled) {
       log("WARN ", line, exception);
     }
   }
 
-  public function info(line: String, ?exception: Exception): Void {
+  public function info(line: String, ?exception: NativeException): Void {
     if (this.infoEnabled) {
       log("INFO ", line, exception);
     }
   }
 
-  public function debug(line: String, ?exception: Exception): Void {
+  public function debug(line: String, ?exception: NativeException): Void {
     if (this.debugEnabled) {
       log("DEBUG", line, exception);
     }
   }
 
-  public function trace(line: String, ?exception: Exception): Void {
+  public function trace(line: String, ?exception: NativeException): Void {
     if (this.traceEnabled) {
       log("TRACE", line, exception);
     }

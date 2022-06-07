@@ -9,20 +9,20 @@ typedef Long = Int;
 #end
 
 #if js
-typedef ExceptionImpl = js.lib.Error
+typedef NativeExceptionImpl = js.lib.Error
 #elseif java
-typedef ExceptionImpl = java.lang.Throwable
+typedef NativeExceptionImpl = java.lang.Throwable
 #elseif cs
-typedef ExceptionImpl = cs.system.Exception
+typedef NativeExceptionImpl = cs.system.Exception
 #elseif python
-typedef ExceptionImpl = python.Exceptions.BaseException
+typedef NativeExceptionImpl = python.Exceptions.BaseException
 #elseif php
-typedef ExceptionImpl = php.Throwable
+typedef NativeExceptionImpl = php.Throwable
 #elseif cpp
-typedef ExceptionImpl = Any
+typedef NativeExceptionImpl = Any
 #end
 
-abstract Exception(ExceptionImpl) from ExceptionImpl {
+abstract NativeException(NativeExceptionImpl) from NativeExceptionImpl {
 
   @:access(haxe.Exception.caught)
   inline public function details() {

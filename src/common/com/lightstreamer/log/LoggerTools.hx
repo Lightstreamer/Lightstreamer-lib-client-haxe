@@ -16,31 +16,31 @@ import com.lightstreamer.internal.NativeTypes;
 @:unreflective final mpnSubscriptionLogger = LogManager.getLogger("lightstreamer.mpn.subscriptions");
 #end
 
-inline function logFatal(logger: Logger, line: String, ?exception: Exception) {
+inline function logFatal(logger: Logger, line: String, ?exception: NativeException) {
   if (logger.isFatalEnabled()) {
     logger.fatal(line, exception);
   }
 }
 
-inline function logError(logger: Logger, line: String, ?exception: Exception) {
+inline function logError(logger: Logger, line: String, ?exception: NativeException) {
   if (logger.isErrorEnabled()) {
     logger.error(line, exception);
   }
 }
 
-inline function logWarn(logger: Logger, line: String, ?exception: Exception) {
+inline function logWarn(logger: Logger, line: String, ?exception: NativeException) {
   if (logger.isWarnEnabled()) {
     logger.warn(line, exception);
   }
 }
 
-inline function logInfo(logger: Logger, line: String, ?exception: Exception) {
+inline function logInfo(logger: Logger, line: String, ?exception: NativeException) {
   if (logger.isInfoEnabled()) {
     logger.info(line, exception);
   }
 }
 
-inline function logDebug(logger: Logger, line: String, ?exception: Exception) {
+inline function logDebug(logger: Logger, line: String, ?exception: NativeException) {
   if (logger.isDebugEnabled()) {
     logger.debug(line, exception);
   }
@@ -52,7 +52,7 @@ inline function logDebugEx(logger: Logger, line: String, exception: haxe.Excepti
   }
 }
 
-inline function logTrace(logger: Logger, line: String, ?exception: Exception) {
+inline function logTrace(logger: Logger, line: String, ?exception: NativeException) {
   if (logger.isTraceEnabled()) {
     logger.trace(line, exception);
   }
