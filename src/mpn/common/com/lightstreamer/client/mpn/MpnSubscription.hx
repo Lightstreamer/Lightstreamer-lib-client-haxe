@@ -382,7 +382,7 @@ class MpnSubscription {
   @:allow(com.lightstreamer.client.internal.MpnSubscriptionManager)
   function changeBufferSize(rawBufferSize: Null<String>) {
     var _bufferSize = RequestedBufferSizeTools.fromString(rawBufferSize);
-    if (!RequestedBufferSizeTools.equals(bufferSize, _bufferSize)) {
+    if (!RequestedBufferSizeTools.extEquals(bufferSize, _bufferSize)) {
       bufferSize = _bufferSize;
       fireOnPropertyChange("requested_buffer_size");
     }
@@ -392,7 +392,7 @@ class MpnSubscription {
   @:allow(com.lightstreamer.client.internal.MpnSubscriptionManager)
   function changeMaxFrequency(rawFrequency: Null<String>) {
     var maxFreq = MpnRequestedMaxFrequencyTools.fromString(rawFrequency);
-    if (!MpnRequestedMaxFrequencyTools.equals(maxFreq, requestedMaxFrequency)) {
+    if (!MpnRequestedMaxFrequencyTools.extEquals(maxFreq, requestedMaxFrequency)) {
       requestedMaxFrequency = maxFreq;
       fireOnPropertyChange("requested_max_frequency");
     }

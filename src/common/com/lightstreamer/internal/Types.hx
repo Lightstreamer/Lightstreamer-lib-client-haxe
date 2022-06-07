@@ -185,7 +185,7 @@ class RequestedBufferSizeTools {
     }
   }
 
-  public static function equals(a: Null<RequestedBufferSize>, b: Null<RequestedBufferSize>) {
+  public static function extEquals(a: Null<RequestedBufferSize>, b: Null<RequestedBufferSize>) {
     return switch [a, b] {
       case [null, null]: true;
       case [_, null] | [null, _]: false;
@@ -249,7 +249,7 @@ class RequestedMaxFrequencyTools {
     }
   }
 
-  public static function equals(a: Null<RequestedMaxFrequency>, b: Null<RequestedMaxFrequency>) {
+  public static function extEquals(a: Null<RequestedMaxFrequency>, b: Null<RequestedMaxFrequency>) {
     return switch [a, b] {
       case [null, null]: true;
       case [_, null] | [null, _]: false;

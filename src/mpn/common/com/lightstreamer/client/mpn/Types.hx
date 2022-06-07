@@ -39,7 +39,7 @@ class MpnRequestedMaxFrequencyTools {
     }
   }
 
-  public static function equals(a: Null<MpnRequestedMaxFrequency>, b: Null<MpnRequestedMaxFrequency>) {
+  public static function extEquals(a: Null<MpnRequestedMaxFrequency>, b: Null<MpnRequestedMaxFrequency>) {
     return switch [a, b] {
       case [null, null]: true;
       case [_, null] | [null, _]: false;

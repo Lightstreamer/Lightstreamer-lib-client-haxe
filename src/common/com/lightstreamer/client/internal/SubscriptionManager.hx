@@ -179,7 +179,7 @@ class SubscriptionManagerLiving implements SubscriptionManager {
       finalize();
       goto(state.s_m = s32);
     } else if (state.s_c == s22 && reqId == m_lastReconfReqId) {
-      if (RequestedMaxFrequencyTools.equals(m_reqMaxFrequency, m_subscription.fetch_requestedMaxFrequency())) {
+      if (RequestedMaxFrequencyTools.extEquals(m_reqMaxFrequency, m_subscription.fetch_requestedMaxFrequency())) {
         goto(state.s_c = s21);
       } else {
         goto(state.s_c = s20);
@@ -309,7 +309,7 @@ class SubscriptionManagerLiving implements SubscriptionManager {
   public function evtCheckFrequency() {
     traceEvent("check.frequency");
     if (state.s_c == s20) {
-      if (!RequestedMaxFrequencyTools.equals(m_subscription.fetch_requestedMaxFrequency(), m_currentMaxFrequency)) {
+      if (!RequestedMaxFrequencyTools.extEquals(m_subscription.fetch_requestedMaxFrequency(), m_currentMaxFrequency)) {
         doConfigure();
         goto(state.s_c = s22);
         genSendControl();
