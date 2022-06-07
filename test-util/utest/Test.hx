@@ -14,8 +14,11 @@ class Test {
   final errors: Array<Exception> = [];
   var async: Async = null;
   var numAssertions = 0;
+  final exps: Expectations;
 
-  public function new() {}
+  public function new() {
+    this.exps = new Expectations(this);
+  }
 
   function fail(error: String) {
     numAssertions++;
