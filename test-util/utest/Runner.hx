@@ -35,7 +35,7 @@ class Runner {
   function runTests() {
     forEachTestCase((clazz, methodName, isAsync, timeout) -> {
       var testName = getClassName(clazz) + "." + methodName;
-      // trace('********** $testName **********');
+      trace('********** $testName **********');
       var test: Test;
       try {
         test = Type.createInstance(clazz, []);
@@ -47,12 +47,13 @@ class Runner {
         return;
       }
       test.name = testName;
+      var async = isAsync ? new Async() : null;
       try {
         var setup = Reflect.field(test, "setup");
         if (setup != null) Reflect.callMethod(test, setup, []);
         var body = Reflect.field(test, methodName);
         if (isAsync) {
-          var async = test.async = new Async();
+          test.async = async;
           Reflect.callMethod(test, body, [async]);
           async.tryAcquire(timeout ?? 250);
         } else {
@@ -67,7 +68,7 @@ class Runner {
       } catch(ex) {
         test.addException(ex);
       }
-      if (isAsync && !test.async.isCompleted) {
+      if (isAsync && !async.isCompleted) {
         test.addError("missed async call");
       } else if (test.passed() && test.numAssertions == 0) {
         test.addError("no assertion");
