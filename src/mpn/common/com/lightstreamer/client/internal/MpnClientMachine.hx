@@ -44,15 +44,13 @@ class MpnClientMachine extends ClientMachine {
 
   public function new(
     client: LightstreamerClient,
-    serverAddress: Null<String>,
-    adapterSet: Null<String>,
     wsFactory: IWsClientFactory,
     httpFactory: IHttpClientFactory,
     ctrlFactory: IHttpClientFactory,
     timerFactory: ITimerFactory,
     randomGenerator: Millis->Millis,
     reachabilityFactory: IReachabilityFactory) {
-    super(client, serverAddress, adapterSet, wsFactory, httpFactory, ctrlFactory, timerFactory, randomGenerator, reachabilityFactory);
+    super(client, wsFactory, httpFactory, ctrlFactory, timerFactory, randomGenerator, reachabilityFactory);
     mpnRegisterRequest = new MpnRegisterRequest(@:nullSafety(Off) this);
     mpnFilterUnsubscriptionRequest = new MpnFilterUnsubscriptionRequest(@:nullSafety(Off) this);
     mpnBadgeResetRequest = new MpnBadgeResetRequest(@:nullSafety(Off) this);
