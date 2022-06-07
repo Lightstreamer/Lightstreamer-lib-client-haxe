@@ -9,7 +9,7 @@ abstract NullStringMap(StringMap<String>) {
   }
 
   @:op([])
-  public function set(k: String, v: Any) {
+  public function set(k: String, v: Null<Any>) {
     if (v != null) {
       this.set(k, Std.string(v));
     }
