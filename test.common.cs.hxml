@@ -13,3 +13,5 @@
 -D no-compilation
 -D real-position
 --cs bin-test/cs
+
+-D LS_TEST
