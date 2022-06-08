@@ -3,6 +3,7 @@ package com.lightstreamer.client;
 import com.lightstreamer.client.BaseListener;
 
 @:timeout(2000)
+@:build(Macros.parameterize(["WS-STREAMING", "HTTP-STREAMING", "WS-POLLING", "HTTP-POLLING"]))
 class TestClient extends utest.Test {
   #if android
   var host = "http://10.0.2.2:8080";
@@ -13,7 +14,6 @@ class TestClient extends utest.Test {
   var listener: BaseClientListener;
   var subListener: BaseSubscriptionListener;
   var msgListener: BaseMessageListener;
-
 
   function setup() {
     client = new LightstreamerClient(host, "TEST");
@@ -27,9 +27,9 @@ class TestClient extends utest.Test {
     client.disconnect();
   }
 
-  function connectWithTransport(async: utest.Async, transport: String) {
-    client.connectionOptions.setForcedTransport(transport);
-    var expected = "CONNECTED:" + transport;
+  function _testConnect(async: utest.Async) {
+    setTransport();
+    var expected = "CONNECTED:" + _param;
     listener._onStatusChange = function(status) {
       if (status == expected) {
         equals(expected, client.getStatus());
@@ -39,29 +39,24 @@ class TestClient extends utest.Test {
     client.connect();
   }
 
-  function testConnectWsStreaming(async: utest.Async) {
-    connectWithTransport(async, "WS-STREAMING");
-  }
-
-  function testConnectHttpStreaming(async: utest.Async) {
-    connectWithTransport(async, "HTTP-STREAMING");
-  }
-
-  function testOnlineServer(async: utest.Async) {
+  function _testOnlineServer(async: utest.Async) {
+    var transport = _param;
     client = new LightstreamerClient("https://push.lightstreamer.com", "DEMO");
+    setTransport();
     listener = new BaseClientListener();
     client.addListener(listener);
     listener._onStatusChange = function(status) {
-      if (status == "CONNECTED:WS-STREAMING") {
-        equals("CONNECTED:WS-STREAMING", client.getStatus());
+      if (status == "CONNECTED:" + transport) {
+        equals("CONNECTED:" + transport, client.getStatus());
         async.completed();
       }
     };
     client.connect();
   }
 
-  function testError(async: utest.Async) {
+  function _testError(async: utest.Async) {
     client = new LightstreamerClient(host, "XXX");
+    setTransport();
     listener = new BaseClientListener();
     client.addListener(listener);
     listener._onServerError = (code, msg) -> {
@@ -71,12 +66,13 @@ class TestClient extends utest.Test {
     client.connect();
   }
 
-  function testDisconnect(async: utest.Async) {
+  function _testDisconnect(async: utest.Async) {
+    var transport = _param;
+    setTransport();
     listener._onStatusChange = (status) -> {
-      switch status {
-      case "CONNECTED:WS-STREAMING":
+      if (status == "CONNECTED:" + transport) {
         client.disconnect();
-      case "DISCONNECTED":
+      } else if (status == "DISCONNECTED") {
         equals("DISCONNECTED", client.getStatus());
         async.completed();
       }
@@ -84,7 +80,8 @@ class TestClient extends utest.Test {
     client.connect();
   }
 
-  function testSubscribe(async: utest.Async) {
+  function _testSubscribe(async: utest.Async) {
+    setTransport();
     var sub = new Subscription("MERGE", ["count"], ["count"]);
     sub.setDataAdapter("COUNT");
     sub.addListener(subListener);
@@ -96,7 +93,8 @@ class TestClient extends utest.Test {
     client.connect();
   }
 
-  function testSubscriptionError(async: utest.Async) {
+  function _testSubscriptionError(async: utest.Async) {
+    setTransport();
     var sub = new Subscription("RAW", ["count"], ["count"]);
     sub.setDataAdapter("COUNT");
     sub.addListener(subListener);
@@ -108,7 +106,8 @@ class TestClient extends utest.Test {
     client.connect();
   }
 
-  function testSubscribeCommand(async: utest.Async) {
+  function _testSubscribeCommand(async: utest.Async) {
+    setTransport();
     var sub = new Subscription("COMMAND", ["mult_table"], ["key", "value1", "value2", "command"]);
     sub.setDataAdapter("MULT_TABLE");
     sub.addListener(subListener);
@@ -122,7 +121,8 @@ class TestClient extends utest.Test {
     client.connect();
   }
 
-  function testSubscribeCommand2Level(async: utest.Async) {
+  function _testSubscribeCommand2Level(async: utest.Async) {
+    setTransport();
     var sub = new Subscription("COMMAND", ["two_level_command_count"], ["key", "command"]);
     sub.setDataAdapter("TWO_LEVEL_COMMAND");
     sub.setCommandSecondLevelDataAdapter("COUNT");
@@ -138,7 +138,8 @@ class TestClient extends utest.Test {
     client.connect();
   }
 
-  function testUnsubscribe(async: utest.Async) {
+  function _testUnsubscribe(async: utest.Async) {
+    setTransport();
     var sub = new Subscription("MERGE", ["count"], ["count"]);
     sub.setDataAdapter("COUNT");
     sub.addListener(subListener);
@@ -155,7 +156,8 @@ class TestClient extends utest.Test {
     client.connect();
   }
 
-  function testSubscribeNonAscii(async: utest.Async) {
+  function _testSubscribeNonAscii(async: utest.Async) {
+    setTransport();
     var sub = new Subscription("MERGE", ["strange:àìùòlè"], ["value🌐-", "value&+=\r\n%"]);
     sub.setDataAdapter("STRANGE_NAMES");
     sub.addListener(subListener);
@@ -167,7 +169,8 @@ class TestClient extends utest.Test {
     client.connect();
   }
 
-  function testBandwidth(async: utest.Async) {
+  function _testBandwidth(async: utest.Async) {
+    setTransport();
     listener._onPropertyChange = prop -> {
       switch prop {
       case "realMaxBandwidth":
@@ -191,7 +194,8 @@ class TestClient extends utest.Test {
     .verify();
   }
 
-  function testClearSnapshot(async: utest.Async) {
+  function _testClearSnapshot(async: utest.Async) {
+    setTransport();
     var sub = new Subscription("DISTINCT", ["clear_snapshot"], ["dummy"]);
     sub.setDataAdapter("CLEAR_SNAPSHOT");
     sub.addListener(subListener);
@@ -204,7 +208,8 @@ class TestClient extends utest.Test {
     client.connect();
   }
 
-  function testRoundTrip(async: utest.Async) {
+  function _testRoundTrip(async: utest.Async) {
+    setTransport();
     var sub = new Subscription("MERGE", ["count"], ["count"]);
     sub.setDataAdapter("COUNT");
     sub.addListener(subListener);
@@ -214,22 +219,17 @@ class TestClient extends utest.Test {
     listener._onPropertyChange = prop -> {
       switch prop {
       case "sessionId":
-        exps.signal("sessionId");
+        notNull(client.connectionDetails.getSessionId());
       case "keepaliveInterval":
-        exps.signal("keepaliveInterval=" + client.connectionOptions.getKeepaliveInterval());
+        equals(5000, client.connectionOptions.getKeepaliveInterval());
       case "serverSocketName":
-        exps.signal("serverSocketName=" + client.connectionDetails.getServerSocketName());
+        equals("Lightstreamer HTTP Server", client.connectionDetails.getServerSocketName());
       case "realMaxBandwidth":
-        exps.signal("realMaxBandwidth=" + client.connectionOptions.getRealMaxBandwidth());
+        equals("40", client.connectionOptions.getRealMaxBandwidth());
       }
     };
     exps
     .then(() -> client.connect())
-    .await("sessionId")
-    .then(() -> notNull(client.connectionDetails.getSessionId()))
-    .await("keepaliveInterval=5000")
-    .await("serverSocketName=Lightstreamer HTTP Server")
-    .await("realMaxBandwidth=40")
     .then(() -> client.subscribe(sub))
     .await("onSubscription")
     .await("onItemUpdate")
@@ -239,7 +239,8 @@ class TestClient extends utest.Test {
     .verify();
   }
 
-  function testMessage(async: utest.Async) {
+  function _testMessage(async: utest.Async) {
+    setTransport();
     exps
     .then(() -> client.connect())
     .then(() -> client.sendMessage("test message ()", null, 0, null, true))
@@ -264,7 +265,8 @@ class TestClient extends utest.Test {
     .verify();
   }
 
-  function testMessageWithSpecialChars(async: utest.Async) {
+  function _testMessageWithSpecialChars(async: utest.Async) {
+    setTransport();
     msgListener._onProcessed = msg -> {
       equals("hello +&=%\r\n", msg);
       async.completed();
@@ -273,7 +275,8 @@ class TestClient extends utest.Test {
     client.sendMessage("hello +&=%\r\n", null, -1, msgListener, false);
   }
 
-  function testUnorderedMessage(async: utest.Async) {
+  function _testUnorderedMessage(async: utest.Async) {
+    setTransport();
     msgListener._onProcessed = msg -> {
       equals("test message", msg);
       async.completed();
@@ -282,7 +285,8 @@ class TestClient extends utest.Test {
     client.sendMessage("test message", "UNORDERED_MESSAGES", -1, msgListener, false);
   }
 
-  function testMessageError(async: utest.Async) {
+  function _testMessageError(async: utest.Async) {
+    setTransport();
     msgListener._onDeny = (msg, code, error) -> {
       equals("throw me an error", msg);
       equals(-123, code);
@@ -293,7 +297,8 @@ class TestClient extends utest.Test {
     client.sendMessage("throw me an error", "test_seq", -1, msgListener, false);
   }
 
-  function testLongMessage(async: utest.Async) {
+  function _testLongMessage(async: utest.Async) {
+    setTransport();
     var msg = "{\"n\":\"MESSAGE_SEND\",\"c\":{\"u\":\"GEiIxthxD-1gf5Tk5O1NTw\",\"s\":\"S29120e92e162c244T2004863\",\"p\":\"localhost:3000/html/widget-responsive.html\",\"t\":\"2017-08-08T10:20:05.665Z\"},\"d\":\"{\\\"p\\\":\\\"🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐\\\"}\"}";
     msgListener._onProcessed = _ -> {
       pass();
@@ -303,7 +308,8 @@ class TestClient extends utest.Test {
     client.sendMessage(msg, "test_seq", -1, msgListener, false);
   }
 
-  function testEndOfSnapshot(async: utest.Async) {
+  function _testEndOfSnapshot(async: utest.Async) {
+    setTransport();
     var sub = new Subscription("DISTINCT", ["end_of_snapshot"], ["value"]);
     sub.setRequestedSnapshot("yes");
     sub.setDataAdapter("END_OF_SNAPSHOT");
@@ -317,7 +323,7 @@ class TestClient extends utest.Test {
     client.connect();
   }
 
-  /*
+   /**
    * Subscribes to an item and verifies the overflow event is notified to the client.
    * <br>To ease the overflow event, the test
    * <ul>
@@ -326,7 +332,8 @@ class TestClient extends utest.Test {
    * <li>requests "unfiltered" messages (see {@link Subscription#setRequestedMaxFrequency(String)}).</li>
    * </ul>
    */
-  function testOverflow(async: utest.Async) {
+  function _testOverflow(async: utest.Async) {
+    setTransport();
     var sub = new Subscription("MERGE", ["overflow"], ["value"]);
     sub.setRequestedSnapshot("no");
     sub.setDataAdapter("OVERFLOW");
@@ -342,7 +349,8 @@ class TestClient extends utest.Test {
     client.connect();
   }
 
-  function testFrequency(async: utest.Async) {
+  function _testFrequency(async: utest.Async) {
+    setTransport();
     var sub = new Subscription("MERGE", ["count"], ["count"]);
     sub.setDataAdapter("COUNT");
     sub.addListener(subListener);
@@ -354,7 +362,8 @@ class TestClient extends utest.Test {
     client.connect();
   }
 
-  function testChangeFrequency(async: utest.Async) {
+  function _testChangeFrequency(async: utest.Async) {
+    setTransport();
     var sub = new Subscription("MERGE", ["count"], ["count"]);
     sub.setDataAdapter("COUNT");
     sub.addListener(subListener);
@@ -374,5 +383,13 @@ class TestClient extends utest.Test {
       async.completed();
     })
     .verify();
+  }
+
+  function setTransport() {
+    client.connectionOptions.setForcedTransport(_param);
+    if (_param.endsWith("POLLING")) {
+      client.connectionOptions.setIdleTimeout(0);
+      client.connectionOptions.setPollingInterval(100);
+    }
   }
 }
