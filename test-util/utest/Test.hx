@@ -3,6 +3,7 @@ package utest;
 import hx.concurrent.executor.Executor;
 import haxe.Exception;
 import deepequal.DeepEqual;
+import utils.Expectations;
 
 using Lambda;
 
@@ -12,9 +13,9 @@ private final executor = Executor.create();
 class Test {
   var name: String = null;
   final errors: Array<Exception> = [];
-  var async: Async = null;
+  var _async: Async = null;
   var numAssertions = 0;
-  final exps: Expectations;
+  public final exps: Expectations;
 
   public function new() {
     this.exps = new Expectations(this);

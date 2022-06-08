@@ -1,3 +1,5 @@
+package utils;
+
 import haxe.Exception;
 
 private enum Slot {
@@ -42,7 +44,7 @@ class Expectations {
     case Await(expected):
       test.equals(expected, actual);
     case _:
-      throw new Exception("Expected a condition");
+      throw new Exception('Expected $actual but found a block');
     }
   }
 
@@ -51,7 +53,7 @@ class Expectations {
     while (expectations.length > 0) {
       switch slot {
       case Block(block):
-        block();
+        test.delay(block, 0);
       case Await(_):
         break;
       }

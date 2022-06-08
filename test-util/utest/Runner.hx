@@ -53,7 +53,7 @@ class Runner {
         if (setup != null) Reflect.callMethod(test, setup, []);
         var body = Reflect.field(test, methodName);
         if (isAsync) {
-          test.async = async;
+          test._async = async;
           Reflect.callMethod(test, body, [async]);
           async.tryAcquire(timeout ?? 250);
         } else {

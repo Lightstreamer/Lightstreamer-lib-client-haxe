@@ -5,5 +5,7 @@ import TestTools;
 using TestTools.AsyncTools;
 #end
 
+import utils.*;
+
 using Lambda;
 using StringTools;

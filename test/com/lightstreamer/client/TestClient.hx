@@ -3,7 +3,7 @@ package com.lightstreamer.client;
 import com.lightstreamer.client.BaseListener;
 
 @:timeout(2000)
-@:build(Macros.parameterize(["WS-STREAMING", "HTTP-STREAMING", "WS-POLLING", "HTTP-POLLING"]))
+@:build(utils.Macros.parameterize(["WS-STREAMING", "HTTP-STREAMING", "WS-POLLING", "HTTP-POLLING"]))
 class TestClient extends utest.Test {
   #if android
   var host = "http://10.0.2.2:8080";
