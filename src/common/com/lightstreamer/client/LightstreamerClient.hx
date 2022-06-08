@@ -4,6 +4,8 @@ import com.lightstreamer.client.internal.ClientMachine;
 import com.lightstreamer.internal.NativeTypes;
 import com.lightstreamer.internal.EventDispatcher;
 import com.lightstreamer.internal.Factories;
+import com.lightstreamer.internal.PlatformApi;
+import com.lightstreamer.internal.Types;
 import com.lightstreamer.log.LoggerTools;
 
 using com.lightstreamer.log.LoggerTools;
@@ -51,10 +53,16 @@ class LightstreamerClient {
    * @param serverAddress 
    * @param adapterSet 
    */
-  public function new(serverAddress: String, adapterSet: String) {
+  public function new(serverAddress: String, adapterSet: String 
+  #if LS_TEST , ?wsFactory: IWsClientFactory, ?httpFactory: IHttpClientFactory, ?timerFactory: ITimerFactory, ?randomGen: Millis->Millis, ?reachabilityFactory: IReachabilityFactory #end
+  ) {
     connectionDetails = new ConnectionDetails(@:nullSafety(Off) this);
     connectionOptions = new ConnectionOptions(@:nullSafety(Off) this);
+    #if LS_TEST
+    machine = new ClientMachine(this, wsFactory ?? createWsClient, httpFactory ?? createHttpClient, httpFactory ?? createHttpClient, timerFactory ?? createTimer, randomGen ?? randomMillis, reachabilityFactory ?? createReachabilityManager);
+    #else
     machine = new ClientMachine(this, createWsClient, createHttpClient, createHttpClient, createTimer, randomMillis, createReachabilityManager);
+    #end
     if (serverAddress != null) {
       connectionDetails.setServerAddress(serverAddress);
     }

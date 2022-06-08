@@ -5,3 +5,5 @@
 --library deep_equal
 --library haxe-concurrent
 --main TestAll2
+
+-D LS_TEST
