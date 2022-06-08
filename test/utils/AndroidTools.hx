@@ -1,3 +1,5 @@
+package utils;
+
 var appContext: android.content.Context;
 
 function openRawResource(res: String): java.io.InputStream {

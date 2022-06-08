@@ -72,7 +72,7 @@ class TestAll2 {
   // with an event loop (needed by haxe.Timer), the runner doesn’t wait for the completion
   // of asynchronous tests and the test execution doesn’t seem to produce any results
   public static function androidMain(ctx: android.content.Context) {
-    AndroidTools.appContext = ctx;
+    utils.AndroidTools.appContext = ctx;
     sys.thread.Thread.createWithEventLoop(() -> {
       var runner = new Runner();
       buildSuite(runner);
