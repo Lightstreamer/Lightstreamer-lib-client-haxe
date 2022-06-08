@@ -18,7 +18,6 @@ class TestAll2 {
     runner.addCase(TestRequestBuilder);
     runner.addCase(TestAssocArray);
     runner.addCase(TestRequest);
-    runner.addCase(TestClient);
     // #if js
     // runner.addCase(new TestStreamReader());
     // #end
@@ -56,6 +55,8 @@ class TestAll2 {
     runner.addCase(com.lightstreamer.client.mpn.TestMpnBuilderAndroid);
     #end
     #end
+    runner.addCase(TestClient);
+    runner.addCase(TestMachine_WS);
   }
 
   public static function main() {
