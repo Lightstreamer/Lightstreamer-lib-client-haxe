@@ -664,14 +664,14 @@ class Subscription {
   public function toString(): String {
     var map = new NullStringMap();
     map["mode"] = mode;
-    map["items"] = (items : Null<Any>) ?? group;
-    map["fields"] = (fields : Null<Any>) ?? schema;
+    map["items"] = items != null ? Std.string(items) : group;
+    map["fields"] = fields != null ? Std.string(fields) : schema;
     map["dataAdapter"] = dataAdapter;
     map["requestedBufferSize"] = bufferSize;
     map["requestedSnapshot"] = snapshot;
     map["requestedMaxFrequency"] = requestedMaxFrequency;
     map["selector"] = selector;
-    map["secondLevelFields"] = (fields2 : Null<Any>) ?? schema2;
+    map["secondLevelFields"] = fields2 != null ? Std.string(fields2) : schema2;
     map["secondLevelDataAdapter"] = dataAdapter2;
     return map.toString();
   }
