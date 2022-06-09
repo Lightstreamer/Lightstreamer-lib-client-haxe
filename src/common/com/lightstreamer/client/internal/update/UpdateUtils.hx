@@ -83,10 +83,10 @@ function getChangedFieldsByPosition(update: ItemUpdate): Map<Int, Null<String>> 
 }
 #else
 inline function getFieldsByPosition(update: ItemUpdate): Map<Int, Null<String>> {
-  return update.getFieldsByPosition().toHaxe([]);
+  return update.getFieldsByPosition();
 }
 
 inline function getChangedFieldsByPosition(update: ItemUpdate): Map<Int, Null<String>> {
-  return update.getChangedFieldsByPosition().toHaxe([]);
+  return update.getChangedFieldsByPosition();
 }
 #end

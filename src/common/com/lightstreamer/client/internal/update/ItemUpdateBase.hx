@@ -124,7 +124,7 @@ class ItemUpdateBase implements ItemUpdate {
     }
   }
   #else
-  public function getChangedFields(): NativeMap<String, Null<String>> {
+  public function getChangedFields(): NativeStringMap1<Null<String>> {
     if (m_fields == null) {
       throw new IllegalStateException(NO_FIELDS);
     }
@@ -132,18 +132,18 @@ class ItemUpdateBase implements ItemUpdate {
     for (fieldPos in m_changedFields) {
       res[m_fields[fieldPos].sure()] = m_newValues[fieldPos];
     }
-    return new NativeMap(res);
+    return new NativeStringMap1(res);
   }
 
-  public function getChangedFieldsByPosition(): NativeMap<Int, Null<String>> {
+  public function getChangedFieldsByPosition(): NativeIntMap1<Null<String>> {
     var res = new Map<Int, Null<String>>();
     for (fieldPos in m_changedFields) {
       res[fieldPos] = m_newValues[fieldPos];
     }
-    return new NativeMap(res);
+    return new NativeIntMap1(res);
   }
 
-  public function getFields(): NativeMap<String, Null<String>> {
+  public function getFields(): NativeStringMap1<Null<String>> {
     if (m_fields == null) {
       throw new IllegalStateException(NO_FIELDS);
     }
@@ -151,11 +151,11 @@ class ItemUpdateBase implements ItemUpdate {
     for (fieldPos => fieldName in m_fields) {
       res[fieldName] = m_newValues[fieldPos];
     }
-    return new NativeMap(res);
+    return new NativeStringMap1(res);
   }
 
-  public function getFieldsByPosition(): NativeMap<Int, Null<String>> {
-    return new NativeMap(m_newValues);
+  public function getFieldsByPosition(): NativeIntMap1<Null<String>> {
+    return new NativeIntMap1(m_newValues);
   }
   #end
 
