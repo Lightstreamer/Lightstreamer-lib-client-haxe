@@ -46,6 +46,10 @@ class Test {
     }
   }
 
+  function strictEquals<T>(expected: T, actual: T) {
+    equals(expected, actual);
+  }
+
   function floatEquals(expected: Float, actual: Float, approx: Float) {
     numAssertions++;
     if (Math.abs(expected - actual) > approx) {
