@@ -316,13 +316,17 @@ abstract Items(Array<String>) to Array<String> {
     return pos != -1 ? pos + 1 : -1;
   }
 
+  public static function allValidNames(names: Array<String>) {
+    return !names.exists(item -> ~/^$| |^\d/.match(item));
+  }
+
   public static function fromArray(array: Null<Array<String>>): Null<Items> {
     switch array {
       case null: 
         return null;
       case []:
         throw new IllegalArgumentException("Item List is empty");
-      case a if (@:nullSafety(Off) a.exists(item -> ~/^$| |^\d/.match(item))):
+      case a if (@:nullSafety(Off) !allValidNames(a)):
         // an item name is invalid when it is empty, contains spaces or starts with a digit
         throw new IllegalArgumentException("Item List is invalid");
       case a:

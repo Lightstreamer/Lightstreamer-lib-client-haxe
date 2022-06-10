@@ -19,7 +19,7 @@ class ModeStrategy {
   var s_m: State_m = s1;
   final items = new Map<Int, ItemBase>();
   final lock: RLock;
-  final client: ClientMachine;
+  public final client: ClientMachine;
   final m_subId: Int;
 
   public function new(sub: Subscription, client: ClientMachine, subId: Int) {

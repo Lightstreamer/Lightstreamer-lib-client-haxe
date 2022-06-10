@@ -50,7 +50,7 @@ class Key2Level implements ItemKey {
           doFirstUpdate(keyValues, snapshot);
           subscription2Level = sub;
           goto(s4);
-          // TODO item.strategy.client.subscribeExt(sub, true);
+          item.strategy.client.subscribeExt(sub, true);
         } else {
           doFirstUpdate(keyValues, snapshot);
           notify2LevelIllegalArgument();
@@ -284,7 +284,7 @@ class Key2Level implements ItemKey {
     subscription2Level = null;
     listener2Level = null;
     
-    // TODO item.strategy.client.unsubscribe(sub);
+    item.strategy.client.unsubscribe(sub);
     fireOnItemUpdate(update);
   }
 
@@ -312,7 +312,7 @@ class Key2Level implements ItemKey {
     subscription2Level = null;
     listener2Level = null;
     
-    // TODO item.strategy.client.unsubscribe(sub);
+    item.strategy.client.unsubscribe(sub);
     fireOnItemUpdate(update);
   }
 
@@ -379,7 +379,7 @@ class Key2Level implements ItemKey {
     subscription2Level = null;
     listener2Level = null;
     
-    // TODO item.strategy.client.unsubscribe(sub);
+    item.strategy.client.unsubscribe(sub);
   }
 
   function notify2LevelIllegalArgument() {
@@ -410,10 +410,9 @@ class Key2Level implements ItemKey {
     @:nullSafety(Off)
     var sub2 = new Subscription(Merge, (null: NativeArray<String>), (null: NativeArray<String>));
     var items = [keyName];
-    // TODO
-    // guard allValidItems(items) else {
-    //   return null;
-    // }
+    if (!Items.allValidNames(items)) {
+      return null;
+    }
     sub2.setItems(items);
     var fields2 = sub.getCommandSecondLevelFields();
     if (fields2 != null) {
