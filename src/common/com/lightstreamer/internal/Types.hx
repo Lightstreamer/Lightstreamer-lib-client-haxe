@@ -271,6 +271,14 @@ function realFrequencyAsString(freq: Null<RealMaxFrequency>) {
   }
 }
 
+function realFrequencyEquals(a: Null<RealMaxFrequency>, b: Null<RealMaxFrequency>) {
+  return switch [a, b] {
+    case [null, null]: true;
+    case [_, null] | [null, _]: false;
+    case _: a.equals(b);
+  }
+}
+
 @:using(com.lightstreamer.internal.Types.RealMaxBandwidthTools)
 enum RealMaxBandwidth {
   BWLimited(bw: Float);

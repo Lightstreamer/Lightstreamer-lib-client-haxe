@@ -122,7 +122,7 @@ class ModeStrategyCommand2Level extends ModeStrategyCommand {
     var prevMax = aggregateRealMaxFrequency;
     aggregateRealMaxFrequency = newMax;
     
-    if (prevMax != newMax) {
+    if (!realFrequencyEquals(prevMax, newMax)) {
       subscription.fireOnRealMaxFrequency(newMax, m_subId);
     }
   }
@@ -144,7 +144,7 @@ class ModeStrategyCommand2Level extends ModeStrategyCommand {
     var prevMax = aggregateRealMaxFrequency;
     aggregateRealMaxFrequency = newMax;
     
-    if (prevMax != newMax) {
+    if (!realFrequencyEquals(prevMax, newMax)) {
       subscription.fireOnRealMaxFrequency(newMax, m_subId);
     }
   }
