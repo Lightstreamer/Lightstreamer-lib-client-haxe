@@ -28,8 +28,8 @@ class ItemUpdate2Level implements ItemUpdate {
     this.m_nFields = sub.fetch_nFields().sure();
     this.m_fields = toMap(fields != null ? fields.toHaxe() : null);
     this.m_fields2 = toMap(fields2 != null ? fields2.toHaxe() : null);
-    this.m_newValues = newValues;
-    this.m_changedFields = changedFields;
+    this.m_newValues = newValues.copy();
+    this.m_changedFields = changedFields.copy();
     this.m_isSnapshot = isSnapshot;
   }
 

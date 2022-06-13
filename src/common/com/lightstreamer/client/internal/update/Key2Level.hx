@@ -219,11 +219,11 @@ class Key2Level implements ItemKey {
   function doUpdate2Level(update: ItemUpdate) {
     var cmdIdx = item.subscription.getCommandPosition().sure();
     var nFields = item.subscription.fetch_nFields().sure();
-    var prevKeyValues = currKeyValues.sure();
+    var prevKeyValues = currKeyValues.sure().copy();
     @:nullSafety(Off)
     currKeyValues[cmdIdx] = "UPDATE";
     currKey2Values = getFieldsByPosition(update);
-    var extKeyValues = currKeyValues.sure();
+    var extKeyValues = currKeyValues.sure().copy();
     for (f => v in currKey2Values) {
       extKeyValues[f + nFields] = v;
     }
@@ -247,7 +247,7 @@ class Key2Level implements ItemKey {
     var prevKeyValues = currKeyValues.sure();
     currKeyValues =  keyValues;
     currKeyValues[cmdIdx] = "UPDATE";
-    var extKeyValues = currKeyValues.sure();
+    var extKeyValues = currKeyValues.sure().copy();
     for (f => v in currKey2Values.sure()) {
       extKeyValues[f + nFields] = v;
     }

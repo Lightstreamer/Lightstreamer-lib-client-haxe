@@ -33,6 +33,10 @@ class Set<T> {
     values.splice(0, values.length);
   }
 
+  public function copy(): Set<T> {
+    return new Set(iterator());
+  }
+
   public function union(other: Array<T>): Set<T> {
     var res = new Set();
     for (v in values) {
