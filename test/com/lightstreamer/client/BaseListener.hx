@@ -31,9 +31,11 @@ class BaseSubscriptionListener implements SubscriptionListener {
   public function onItemLostUpdates(itemName:Null<String>, itemPos:Int, lostUpdates:Int) _onItemLostUpdates(itemName, itemPos, lostUpdates);
   dynamic public function _onRealMaxFrequency(frequency:Null<String>) {}
   public function onRealMaxFrequency(frequency:Null<String>) _onRealMaxFrequency(frequency);
+  dynamic public function _onCommandSecondLevelSubscriptionError(code:Int, message:String, key:String) {}
+  public function onCommandSecondLevelSubscriptionError(code:Int, message:String, key:String) _onCommandSecondLevelSubscriptionError(code, message, key);
+  dynamic public function _onCommandSecondLevelItemLostUpdates(lostUpdates:Int, key:String) {}
+  public function onCommandSecondLevelItemLostUpdates(lostUpdates:Int, key:String) _onCommandSecondLevelItemLostUpdates(lostUpdates, key);
 
-  public function onCommandSecondLevelItemLostUpdates(lostUpdates:Int, key:String) {}
-  public function onCommandSecondLevelSubscriptionError(code:Int, message:String, key:String) {}
   public function onListenEnd(subscription:Subscription) {}
   public function onListenStart(subscription:Subscription) {}
 }
