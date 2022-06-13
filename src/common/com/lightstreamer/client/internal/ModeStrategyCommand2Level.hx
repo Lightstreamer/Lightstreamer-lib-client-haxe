@@ -48,7 +48,7 @@ class ModeStrategyCommand2Level extends ModeStrategyCommand {
   override public function evtOnCONF(freq: RealMaxFrequency) {
     traceEvent("onCONF");
     if (s_m == s2) {
-      doCONF(freq);
+      doCONF2Level(freq);
       doAggregateFrequenciesWhenFreqIsAdded(freq);
       goto(s2);
     }
