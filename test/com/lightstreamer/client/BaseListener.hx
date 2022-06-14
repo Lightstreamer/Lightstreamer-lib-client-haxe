@@ -42,12 +42,14 @@ class BaseSubscriptionListener implements SubscriptionListener {
 
 class BaseMessageListener implements ClientMessageListener {
   public function new() {}
-  dynamic public function _onProcessed(originalMessage:String) {}
-  public function onProcessed(originalMessage:String) _onProcessed(originalMessage);
-  dynamic public function _onDeny(originalMessage:String, code:Int, error:String) {}
-  public function onDeny(originalMessage:String, code:Int, error:String) _onDeny(originalMessage, code, error);
-
-  public function onAbort(originalMessage:String, sentOnNetwork:Bool) {}
-  public function onDiscarded(originalMessage:String) {}
-  public function onError(originalMessage:String) {}
+  dynamic public function _onProcessed(msg:String) {}
+  public function onProcessed(msg:String) _onProcessed(msg);
+  dynamic public function _onDeny(msg:String, code:Int, error:String) {}
+  public function onDeny(msg:String, code:Int, error:String) _onDeny(msg, code, error);
+  dynamic public function _onAbort(msg:String, sentOnNetwork:Bool) {}
+  public function onAbort(msg:String, sentOnNetwork:Bool) _onAbort(msg, sentOnNetwork);
+  dynamic public function _onDiscarded(msg:String) {}
+  public function onDiscarded(msg:String) _onDiscarded(msg);
+  dynamic public function _onError(msg:String) {}
+  public function onError(msg:String) _onError(msg);
 }

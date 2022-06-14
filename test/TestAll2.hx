@@ -59,6 +59,7 @@ class TestAll2 {
     runner.addCase(TestMachine_WS);
     runner.addCase(TestUpdate);
     runner.addCase(TestUpdate2Level);
+    runner.addCase(TestSendMessage);
   }
 
   public static function main() {
