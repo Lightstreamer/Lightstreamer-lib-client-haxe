@@ -731,7 +731,6 @@ class ClientMachine {
           switch state.s_hs?.m {
           case s800:
             disableHTTP_Streaming();
-            disposeHTTP();
             cause = "http.streaming.unavailable";
             goto(state.s_hs.m = s801);
             cancel_evtTransportTimeout();

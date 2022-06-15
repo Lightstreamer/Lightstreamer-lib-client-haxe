@@ -54,12 +54,12 @@ class LightstreamerClient {
    * @param adapterSet 
    */
   public function new(serverAddress: String, adapterSet: String 
-  #if LS_TEST , ?wsFactory: IWsClientFactory, ?httpFactory: IHttpClientFactory, ?timerFactory: ITimerFactory, ?randomGen: Millis->Millis, ?reachabilityFactory: IReachabilityFactory #end
+  #if LS_TEST , ?wsFactory: IWsClientFactory, ?httpFactory: IHttpClientFactory, ?ctrlFactory: IHttpClientFactory, ?timerFactory: ITimerFactory, ?randomGen: Millis->Millis, ?reachabilityFactory: IReachabilityFactory #end
   ) {
     connectionDetails = new ConnectionDetails(@:nullSafety(Off) this);
     connectionOptions = new ConnectionOptions(@:nullSafety(Off) this);
     #if LS_TEST
-    machine = new ClientMachine(this, wsFactory ?? createWsClient, httpFactory ?? createHttpClient, httpFactory ?? createHttpClient, timerFactory ?? createTimer, randomGen ?? randomMillis, reachabilityFactory ?? createReachabilityManager);
+    machine = new ClientMachine(this, wsFactory ?? createWsClient, httpFactory ?? createHttpClient, ctrlFactory ?? createHttpClient, timerFactory ?? createTimer, randomGen ?? randomMillis, reachabilityFactory ?? createReachabilityManager);
     #else
     machine = new ClientMachine(this, createWsClient, createHttpClient, createHttpClient, createTimer, randomMillis, createReachabilityManager);
     #end
