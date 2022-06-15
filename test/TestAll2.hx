@@ -60,6 +60,7 @@ class TestAll2 {
     runner.addCase(TestUpdate);
     runner.addCase(TestUpdate2Level);
     runner.addCase(TestSendMessage);
+    runner.addCase(TestStreamSense);
   }
 
   public static function main() {
