@@ -2,12 +2,6 @@ package com.lightstreamer.client;
 
 import com.lightstreamer.client.BaseListener.BaseMessageListener;
 
-using com.lightstreamer.client.TestSendMessage;
-
-function _sendMessage(client: LightstreamerClient, message: String, sequence: Null<String> = null, delayTimeout: Null<Int> = -1, listener: Null<ClientMessageListener> = null, enqueueWhileDisconnected: Null<Bool> = false): Void {
-  client.sendMessage(message, sequence, delayTimeout, listener, enqueueWhileDisconnected);
-}
-
 class TestSendMessage extends utest.Test {
   var ws: MockWsClient;
   var client: LightstreamerClient;
