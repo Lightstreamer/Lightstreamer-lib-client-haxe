@@ -91,7 +91,7 @@ class TestMachine_WS extends utest.Test {
     .verify();
   }
 
-  function testCMD(async: utest.Async) {
+  function testSUBCMD(async: utest.Async) {
     exps
     .then(() -> {
       sub = new Subscription("COMMAND", ["item"], ["key", "command"]);
