@@ -57,6 +57,7 @@ class TestAll2 {
     #end
     runner.addCase(TestClient);
     runner.addCase(TestMachine_WS);
+    runner.addCase(TestMachine_HTTP);
     runner.addCase(TestUpdate);
     runner.addCase(TestUpdate2Level);
     runner.addCase(TestSendMessage);
