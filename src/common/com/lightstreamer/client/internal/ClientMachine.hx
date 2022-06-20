@@ -3961,7 +3961,7 @@ class ClientMachine {
   }
 
   function entry_rec(pause: Millis, retryCause: RetryCause) {
-    sessionLogger.logError('Recovering connection in $pause ms. Cause: ${asErrorMsg(retryCause)})');
+    sessionLogger.logError('Recovering connection in $pause ms. Cause: ${asErrorMsg(retryCause)}');
     evtStartRecovery();
     schedule_evtRecoveryTimeout(pause);
   }
