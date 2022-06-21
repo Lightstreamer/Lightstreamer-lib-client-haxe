@@ -56,10 +56,10 @@ class TestAll2 {
     #end
     #end
     runner.addCase(TestClient);
-    runner.addCase(TestMachine_WS);
-    runner.addCase(TestMachine_HTTP);
-    runner.addCase(TestMachine_HTTP_Polling);
-    runner.addCase(TestMachine_WS_Polling);
+    runner.addCase(TestSubscribe_WS);
+    runner.addCase(TestSubscribe_HTTP);
+    runner.addCase(TestSubscribe_HTTP_Polling);
+    runner.addCase(TestSubscribe_WS_Polling);
     runner.addCase(TestUpdate);
     runner.addCase(TestUpdate2Level);
     runner.addCase(TestSendMessage);

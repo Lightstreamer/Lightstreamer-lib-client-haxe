@@ -3,7 +3,7 @@ package com.lightstreamer.client.internal;
 import com.lightstreamer.client.BaseListener.BaseSubscriptionListener;
 import com.lightstreamer.client.BaseListener.BaseClientListener;
 
-class TestMachine_HTTP_Polling extends utest.Test {
+class TestSubscribe_HTTP extends utest.Test {
   var client: LightstreamerClient;
   var listener: BaseClientListener;
   var subListener: BaseSubscriptionListener;
@@ -20,7 +20,7 @@ class TestMachine_HTTP_Polling extends utest.Test {
     scheduler = new MockScheduler(this);
     listener = new BaseClientListener();
     client = new LightstreamerClient("http://server", "TEST", ws.create, http.create, ctrl.create, scheduler.create);
-    client.connectionOptions.setForcedTransport("HTTP-POLLING");
+    client.connectionOptions.setForcedTransport("HTTP-STREAMING");
     client.addListener(listener);
     subListener = new BaseSubscriptionListener();
     sub = new Subscription("DISTINCT", ["item"], ["f1", "f2"]);
@@ -44,7 +44,7 @@ class TestMachine_HTTP_Polling extends utest.Test {
       http.onText("LOOP,0");
     })
     .await("http.dispose")
-    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop")
     .await("ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false")
     .then(() -> async.completed())
     .verify();
@@ -64,7 +64,7 @@ class TestMachine_HTTP_Polling extends utest.Test {
       http.onText("LOOP,0");
     })
     .await("http.dispose")
-    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop")
     .await("ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false")
     .then(() -> {
       ctrl.onText("REQERR,1,-5,error");
@@ -90,7 +90,7 @@ class TestMachine_HTTP_Polling extends utest.Test {
       http.onText("LOOP,0");
     })
     .await("http.dispose")
-    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop")
     .await("ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false")
     .then(() -> {
       ctrl.onText("REQOK,1");
@@ -122,7 +122,7 @@ class TestMachine_HTTP_Polling extends utest.Test {
       http.onText("LOOP,0");
     })
     .await("http.dispose")
-    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop")
     .await("ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=item&LS_schema=key%20command&LS_snapshot=true")
     .then(() -> {
       ctrl.onText("REQOK,1");
@@ -156,7 +156,7 @@ class TestMachine_HTTP_Polling extends utest.Test {
       http.onText("LOOP,0");
     })
     .await("http.dispose")
-    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop")
     .await("ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false")
     .then(() -> {
       ctrl.onText("REQOK,1");
@@ -190,7 +190,7 @@ class TestMachine_HTTP_Polling extends utest.Test {
       http.onText("LOOP,0");
     })
     .await("http.dispose")
-    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop")
     .await("ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false")
     .then(() -> {
       ctrl.onText("REQOK,1");
@@ -234,7 +234,7 @@ class TestMachine_HTTP_Polling extends utest.Test {
       http.onText("LOOP,0");
     })
     .await("http.dispose")
-    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop")
     .await("ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=true")
     .then(() -> {
       ctrl.onText("REQOK,1");
@@ -270,7 +270,7 @@ class TestMachine_HTTP_Polling extends utest.Test {
       http.onText("LOOP,0");
     })
     .await("http.dispose")
-    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop")
     .await("ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false")
     .then(() -> {
       ctrl.onText("REQOK,1");
@@ -300,7 +300,7 @@ class TestMachine_HTTP_Polling extends utest.Test {
       http.onText("LOOP,0");
     })
     .await("http.dispose")
-    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop")
     .await("ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false")
     .then(() -> {
       ctrl.onText("REQOK,1");
@@ -331,7 +331,7 @@ class TestMachine_HTTP_Polling extends utest.Test {
       http.onText("LOOP,0");
     })
     .await("http.dispose")
-    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop")
     .await("ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false")
     .then(() -> {
       ctrl.onText("REQOK,1");
@@ -366,7 +366,7 @@ class TestMachine_HTTP_Polling extends utest.Test {
       http.onText("LOOP,0");
     })
     .await("http.dispose")
-    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop")
     .await("ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false")
     .then(() -> {
       ctrl.onText("REQOK,1");
@@ -400,7 +400,7 @@ class TestMachine_HTTP_Polling extends utest.Test {
       http.onText("LOOP,0");
     })
     .await("http.dispose")
-    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop")
     .await("ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false")
     .then(() -> {
       ctrl.onText("REQOK,1");
@@ -435,7 +435,7 @@ class TestMachine_HTTP_Polling extends utest.Test {
       http.onText("LOOP,0");
     })
     .await("http.dispose")
-    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop")
     .await("ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false")
     .then(() -> {
       ctrl.onText("REQOK,1");
@@ -467,7 +467,7 @@ class TestMachine_HTTP_Polling extends utest.Test {
       http.onText("LOOP,0");
     })
     .await("http.dispose")
-    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop")
     .await("ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false")
     .then(() -> {
       ctrl.onText("REQOK,1");
@@ -501,7 +501,7 @@ class TestMachine_HTTP_Polling extends utest.Test {
       http.onText("LOOP,0");
     })
     .await("http.dispose")
-    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
       http.onText("SUBOK,1,1,2");
@@ -523,7 +523,7 @@ class TestMachine_HTTP_Polling extends utest.Test {
       http.onText("LOOP,0");
     })
     .await("http.dispose")
-    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop")
     .await("ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false")
     .then(() -> scheduler.fireCtrlTimeout())
     .await("ctrl.dispose")
@@ -545,7 +545,7 @@ class TestMachine_HTTP_Polling extends utest.Test {
       http.onText("LOOP,0");
     })
     .await("http.dispose")
-    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop")
     .await("ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false")
     .then(() -> ctrl.onError())
     .await("ctrl.dispose")
@@ -567,7 +567,7 @@ class TestMachine_HTTP_Polling extends utest.Test {
       http.onText("LOOP,0");
     })
     .await("http.dispose")
-    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop")
     .await("ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false")
     .then(() -> {
       ctrl.onText("REQOK,1");
@@ -593,7 +593,7 @@ class TestMachine_HTTP_Polling extends utest.Test {
       http.onText("LOOP,0");
     })
     .await("http.dispose")
-    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop")
     .await("ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false")
     .then(() -> {
       http.onError();
@@ -607,7 +607,7 @@ class TestMachine_HTTP_Polling extends utest.Test {
       http.onText("LOOP,0");
     })
     .await("http.dispose")
-    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop")
     .await("ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid\r\nLS_reqId=2&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false")
     .then(() -> async.completed())
     .verify();

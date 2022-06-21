@@ -3,7 +3,7 @@ package com.lightstreamer.client.internal;
 import com.lightstreamer.client.BaseListener.BaseSubscriptionListener;
 import com.lightstreamer.client.BaseListener.BaseClientListener;
 
-class TestMachine_WS_Polling extends utest.Test {
+class TestSubscribe_WS_Polling extends utest.Test {
   var client: LightstreamerClient;
   var listener: BaseClientListener;
   var subListener: BaseSubscriptionListener;
