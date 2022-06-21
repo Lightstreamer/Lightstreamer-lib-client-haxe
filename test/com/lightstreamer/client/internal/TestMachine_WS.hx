@@ -8,12 +8,18 @@ class TestMachine_WS extends utest.Test {
   var listener: BaseClientListener;
   var subListener: BaseSubscriptionListener;
   var ws: MockWsClient;
+  var http: MockHttpClient;
+  var ctrl: MockHttpClient;
+  var scheduler: MockScheduler;
   var sub: Subscription;
 
   function setup() {
     ws = new MockWsClient(this);
+    http = new MockHttpClient(this);
+    ctrl = new MockHttpClient(this, "ctrl");
+    scheduler = new MockScheduler(this);
     listener = new BaseClientListener();
-    client = new LightstreamerClient("http://server", "TEST", ws.create);
+    client = new LightstreamerClient("http://server", "TEST", ws.create, http.create, ctrl.create, scheduler.create);
     client.addListener(listener);
     subListener = new BaseSubscriptionListener();
     sub = new Subscription("DISTINCT", ["item"], ["f1", "f2"]);
@@ -419,6 +425,40 @@ class TestMachine_WS extends utest.Test {
       ws.onText("SUBOK,1,1,2");
     })
     .await("control\r\nLS_reqId=1&LS_subId=1&LS_op=delete&LS_ack=false&LS_cause=zombie")
+    .then(() -> async.completed())
+    .verify();
+  }
+
+  function testSubscribeAgainAfterSessionError(async: utest.Async) {
+    exps
+    .then(() -> {
+      client.connectionOptions.setSessionRecoveryTimeout(0);
+      client.subscribe(sub);
+      client.connect();
+    })
+    .await("ws.init http://server/lightstreamer")
+    .then(() -> ws.onOpen())
+    .await("wsok")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .then(() -> {
+      ws.onText("WSOK");
+      ws.onText("CONOK,sid,70000,5000,*");
+    })
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false")
+    .then(() -> {
+      ws.onError();
+      scheduler.fireRetryTimeout();
+    })
+    .await("ws.dispose")
+    .await("ws.init http://server/lightstreamer")
+    .then(() -> ws.onOpen())
+    .await("wsok")
+    .await("create_session\r\nLS_keepalive_millis=5000&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_old_session=sid&LS_send_sync=false&LS_cause=ws.error")
+    .then(() -> {
+      ws.onText("WSOK");
+      ws.onText("CONOK,sid,70000,5000,*");
+    })
+    .await("control\r\nLS_reqId=2&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false")
     .then(() -> async.completed())
     .verify();
   }

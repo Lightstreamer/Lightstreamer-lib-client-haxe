@@ -579,4 +579,37 @@ class TestMachine_HTTP extends utest.Test {
     .then(() -> async.completed())
     .verify();
   }
+
+  function testSubscribeAgainAfterSessionError(async: utest.Async) {
+    exps
+    .then(() -> {
+      client.connectionOptions.setSessionRecoveryTimeout(0);
+      client.subscribe(sub);
+      client.connect();
+    })
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_cause=api")
+    .then(() -> {
+      http.onText("CONOK,sid,70000,5000,*");
+      http.onText("LOOP,0");
+    })
+    .await("http.dispose")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop")
+    .await("ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false")
+    .then(() -> {
+      http.onError();
+      scheduler.fireRetryTimeout();
+    })
+    .await("http.dispose")
+    .await("ctrl.dispose")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_old_session=sid&LS_cause=http.error")
+    .then(() -> {
+      http.onText("CONOK,sid,70000,5000,*");
+      http.onText("LOOP,0");
+    })
+    .await("http.dispose")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop")
+    .await("ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.3.0&LS_session=sid\r\nLS_reqId=2&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false")
+    .then(() -> async.completed())
+    .verify();
+  }
 }
