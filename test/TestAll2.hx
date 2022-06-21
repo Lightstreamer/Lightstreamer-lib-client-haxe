@@ -58,6 +58,8 @@ class TestAll2 {
     runner.addCase(TestClient);
     runner.addCase(TestMachine_WS);
     runner.addCase(TestMachine_HTTP);
+    runner.addCase(TestMachine_HTTP_Polling);
+    runner.addCase(TestMachine_WS_Polling);
     runner.addCase(TestUpdate);
     runner.addCase(TestUpdate2Level);
     runner.addCase(TestSendMessage);
