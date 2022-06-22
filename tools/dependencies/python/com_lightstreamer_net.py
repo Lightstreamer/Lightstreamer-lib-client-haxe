@@ -8,14 +8,14 @@ from http.cookies import SimpleCookie
 class LS_IO_Thread(Thread):
   def __init__(self):
     super().__init__(name="LS_IO", daemon=True)
+    self.loop = asyncio.new_event_loop()
 
   def run(self):
-    self.loop = asyncio.new_event_loop()
     asyncio.set_event_loop(self.loop)
     self.loop.run_forever()
 
   def submit_coro(self, coro):
-    asyncio.run_coroutine_threadsafe(coro, self.loop)
+    return asyncio.run_coroutine_threadsafe(coro, self.loop)
 
   def create_future(self):
     return self.loop.create_future()
@@ -25,14 +25,11 @@ ls_io_thread.start()
 
 class CookieHelper:
   instance = None
-  _lock = Lock()
 
   @staticmethod
   def getInstance():
     if CookieHelper.instance is None:
-      with CookieHelper._lock:
-        if CookieHelper.instance is None:
-          CookieHelper.instance = CookieHelper()
+      CookieHelper.instance = CookieHelper()
     return CookieHelper.instance
 
   def __init__(self):
@@ -185,3 +182,9 @@ class WsClientPy:
 
   def on_error(self, client, exception):
     pass
+
+async def _initModule():
+  # init the singletons SessionPy and CookieHelper
+  SessionPy.getInstance()
+
+ls_io_thread.submit_coro(_initModule()).result()
