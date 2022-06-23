@@ -4,3 +4,7 @@ test.common2.hxml
 
 --python bin-test/python/lightstreamer.py
 --cmd python3 bin-test/python/lightstreamer.py
+
+-D LS_HAS_PROXY
+-D LS_HAS_COOKIES
+-D LS_HAS_TRUST_MANAGER

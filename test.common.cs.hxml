@@ -15,3 +15,6 @@
 --cs bin-test/cs
 
 -D LS_TEST
+-D LS_HAS_PROXY
+-D LS_HAS_COOKIES
+-D LS_HAS_TRUST_MANAGER

@@ -26,8 +26,14 @@ class TestClient extends utest.Test {
 
   function teardown() {
     client.disconnect();
-    #if python
-    com.lightstreamer.internal.CookieHelper.instance.clearCookies();
+    #if LS_HAS_COOKIES
+      #if cs
+      com.lightstreamer.internal.CookieHelper.instance.clearCookies(host);
+      #else
+      com.lightstreamer.internal.CookieHelper.instance.clearCookies();
+      #end
+    #end
+    #if (LS_HAS_TRUST_MANAGER && !cs)
     com.lightstreamer.internal.Globals.instance.clearTrustManager();
     #end
   }
@@ -403,36 +409,43 @@ class TestClient extends utest.Test {
     .verify();
   }
 
-  #if python
-  // TODO java and cs
+  #if LS_HAS_COOKIES
   function _testCookies(async: utest.Async) {
     setTransport();
     exps
     .then(() -> {
+      #if python
       equals(0, LightstreamerClient.getCookies(host).toHaxeArray().count());
 
       var dict = new python.Dict<String, String>();
       dict.set("X-Client", "client");
       var cookies = new com.lightstreamer.internal.SimpleCookie(dict);
       LightstreamerClient.addCookies(host, cookies);
+      #else
+      fail("TODO");
+      #end
 
       listener._onStatusChange = status -> if (status == connectedString) exps.signal("connected");
       client.connect();
     })
     .await("connected")
     .then(() -> {
+      #if python
       var cookies = LightstreamerClient.getCookies(host).toHaxeArray();
       equals(2, cookies.count());
       var nCookies = [for (c in cookies) c.output()];
       contains("Set-Cookie: X-Client=client", nCookies);
       contains("Set-Cookie: X-Server=server", nCookies);
+      #else
+      fail("TODO");
+      #end
     })
     .then(() -> async.completed())
     .verify();
   }
   #end
 
-  #if (java || cs || python)
+  #if LS_HAS_PROXY
   function _testProxy(async: utest.Async) {
     setTransport();
     exps
@@ -447,17 +460,20 @@ class TestClient extends utest.Test {
   }
   #end
 
-  #if python
-  // TODO java and cs
+  #if (LS_HAS_TRUST_MANAGER && !cs)
   function _testTrustManager(async: utest.Async) {
     client = new LightstreamerClient("https://localtest.me:8443", "TEST");
     client.addListener(listener);
     setTransport();
     exps
     .then(() -> {
+      #if python
       var sslcontext = com.lightstreamer.internal.SSLContext.SSL.create_default_context({cafile: "test/localtest.me.crt"});
       sslcontext.load_cert_chain({certfile: "test/localtest.me.crt", keyfile: "test/localtest.me.key"});
       LightstreamerClient.setTrustManagerFactory(sslcontext);
+      #else
+      fail("TODO");
+      #end
       listener._onStatusChange = status -> if (status == connectedString) exps.signal("connected");
       client.connect();
     })
