@@ -14,6 +14,7 @@ class TestClient extends utest.Test {
   var listener: BaseClientListener;
   var subListener: BaseSubscriptionListener;
   var msgListener: BaseMessageListener;
+  var connectedString: String;
 
   function setup() {
     client = new LightstreamerClient(host, "TEST");
@@ -25,6 +26,10 @@ class TestClient extends utest.Test {
 
   function teardown() {
     client.disconnect();
+    #if python
+    com.lightstreamer.internal.CookieHelper.instance.clearCookies();
+    com.lightstreamer.internal.Globals.instance.clearTrustManager();
+    #end
   }
 
   function _testConnect(async: utest.Async) {
@@ -385,8 +390,86 @@ class TestClient extends utest.Test {
     .verify();
   }
 
+  function _testHeaders(async: utest.Async) {
+    setTransport();
+    exps
+    .then(() -> {
+      client.connectionOptions.setHttpExtraHeaders(["X-Header" => "header"]);
+      listener._onStatusChange = status -> if (status == connectedString) exps.signal("connected");
+      client.connect();
+    })
+    .await("connected")
+    .then(() -> async.completed())
+    .verify();
+  }
+
+  #if python
+  // TODO java and cs
+  function _testCookies(async: utest.Async) {
+    setTransport();
+    exps
+    .then(() -> {
+      equals(0, LightstreamerClient.getCookies(host).toHaxeArray().count());
+
+      var dict = new python.Dict<String, String>();
+      dict.set("X-Client", "client");
+      var cookies = new com.lightstreamer.internal.SimpleCookie(dict);
+      LightstreamerClient.addCookies(host, cookies);
+
+      listener._onStatusChange = status -> if (status == connectedString) exps.signal("connected");
+      client.connect();
+    })
+    .await("connected")
+    .then(() -> {
+      var cookies = LightstreamerClient.getCookies(host).toHaxeArray();
+      equals(2, cookies.count());
+      var nCookies = [for (c in cookies) c.output()];
+      contains("Set-Cookie: X-Client=client", nCookies);
+      contains("Set-Cookie: X-Server=server", nCookies);
+    })
+    .then(() -> async.completed())
+    .verify();
+  }
+  #end
+
+  #if (java || cs || python)
+  function _testProxy(async: utest.Async) {
+    setTransport();
+    exps
+    .then(() -> {
+      client.connectionOptions.setProxy(new Proxy("HTTP", "localtest.me", 8079, "myuser", "mypassword"));
+      listener._onStatusChange = status -> if (status == connectedString) exps.signal("connected");
+      client.connect();
+    })
+    .await("connected")
+    .then(() -> async.completed())
+    .verify();
+  }
+  #end
+
+  #if python
+  // TODO java and cs
+  function _testTrustManager(async: utest.Async) {
+    client = new LightstreamerClient("https://localtest.me:8443", "TEST");
+    client.addListener(listener);
+    setTransport();
+    exps
+    .then(() -> {
+      var sslcontext = com.lightstreamer.internal.SSLContext.SSL.create_default_context({cafile: "test/localtest.me.crt"});
+      sslcontext.load_cert_chain({certfile: "test/localtest.me.crt", keyfile: "test/localtest.me.key"});
+      LightstreamerClient.setTrustManagerFactory(sslcontext);
+      listener._onStatusChange = status -> if (status == connectedString) exps.signal("connected");
+      client.connect();
+    })
+    .await("connected")
+    .then(() -> async.completed())
+    .verify();
+  }
+  #end
+
   function setTransport() {
     client.connectionOptions.setForcedTransport(_param);
+    connectedString = "CONNECTED:" + _param;
     if (_param.endsWith("POLLING")) {
       client.connectionOptions.setIdleTimeout(0);
       client.connectionOptions.setPollingInterval(100);
