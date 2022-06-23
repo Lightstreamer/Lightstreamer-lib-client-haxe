@@ -3,7 +3,6 @@ package com.lightstreamer.client;
 import com.lightstreamer.client.internal.ClientMachine;
 import com.lightstreamer.internal.NativeTypes;
 import com.lightstreamer.internal.EventDispatcher;
-import com.lightstreamer.internal.Factories;
 import com.lightstreamer.internal.PlatformApi;
 import com.lightstreamer.internal.Types;
 import com.lightstreamer.log.LoggerTools;
@@ -155,4 +154,66 @@ class LightstreamerClient {
     machine.findMpnSubscription(subscriptionId);
   }
   #end
+
+  function createWsClient(url: String, headers: Null<Map<String, String>>, 
+    onOpen: IWsClient->Void,
+    onText: (IWsClient, String)->Void, 
+    onError: (IWsClient, String)->Void): IWsClient {
+    #if java
+    // TODO pass all parameters
+    var proxy = connectionOptions.getProxy();
+    var trustManager = com.lightstreamer.internal.Globals.instance.getTrustManagerFactory();
+    return new com.lightstreamer.internal.WsClient(url, headers, proxy, trustManager, onOpen, onText, onError);
+    #elseif cs
+    var proxy = connectionOptions.getProxy();
+    var trustManager = com.lightstreamer.internal.Globals.instance.getTrustManagerFactory();
+    return new com.lightstreamer.internal.WsClient(url, headers, proxy, trustManager, onOpen, onText, onError);
+    #elseif (js && LS_WEB)
+    return new com.lightstreamer.internal.WsClient(url, onOpen, onText, onError);
+    #elseif js
+    return new com.lightstreamer.internal.WsClient(url, headers, onOpen, onText, onError);
+    #elseif python
+    var proxy = connectionOptions.getProxy();
+    var trustManager = com.lightstreamer.internal.Globals.instance.getTrustManagerFactory();
+    return new com.lightstreamer.internal.WsClient(url, headers, proxy, trustManager, onOpen, onText, onError);
+    #else
+    @:nullSafety(Off)
+    return null;
+    #end
+  }
+  
+  function createHttpClient(url: String, body: String, headers: Null<Map<String, String>>,
+    onText: (IHttpClient, String)->Void, 
+    onError: (IHttpClient, String)->Void, 
+    onDone: IHttpClient->Void): IHttpClient {
+    #if java
+    // TODO pass all parameters
+    var proxy = connectionOptions.getProxy();
+    var trustManager = com.lightstreamer.internal.Globals.instance.getTrustManagerFactory();
+    return new com.lightstreamer.internal.HttpClient(url, body, headers, proxy, trustManager, onText, onError, onDone);
+    #elseif cs
+    return new com.lightstreamer.internal.HttpClient(url, body, headers, onText, onError, onDone);
+    #elseif js
+    return new com.lightstreamer.internal.HttpClient(url, body, headers, onText, onError, onDone);
+    #elseif python
+    var proxy = connectionOptions.getProxy();
+    var trustManager = com.lightstreamer.internal.Globals.instance.getTrustManagerFactory();
+    return new com.lightstreamer.internal.HttpClient(url, body, headers, proxy, trustManager, onText, onError, onDone);
+    #else
+    @:nullSafety(Off)
+    return null;
+    #end
+  }
+  
+  function createReachabilityManager(host: String): IReachability {
+    return new com.lightstreamer.internal.DummyReachabilityManager();
+  }
+  
+  function createTimer(id: String, delay: Millis, callback: ITimer->Void): ITimer {
+    return new com.lightstreamer.internal.Timer(id, delay, callback);
+  }
+  
+  function randomMillis(max: Millis): Millis {
+    return new Millis(Std.random(max.toInt()));
+  }
 }

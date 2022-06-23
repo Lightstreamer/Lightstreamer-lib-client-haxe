@@ -203,7 +203,7 @@ class ConnectionOptions {
     client.eventDispatcher.onPropertyChange("slowingEnabled");
   }
 
-  #if (java || cs)
+  #if (java || cs || python)
   var proxy: Null<Proxy>;
 
   public function setProxy(proxy: Null<Proxy>): Void {
@@ -213,6 +213,11 @@ class ConnectionOptions {
     #end
     this.proxy = proxy;
     client.eventDispatcher.onPropertyChange("proxy");
+  }
+
+  @:allow(com.lightstreamer.client.LightstreamerClient)
+  function getProxy() {
+    return this.proxy;
   }
   #end
 
@@ -235,6 +240,7 @@ class ConnectionOptions {
     map["serverInstanceAddressIgnored"] = serverInstanceAddressIgnored;
     map["HTTPExtraHeadersOnSessionCreationOnly"] = httpExtraHeadersOnSessionCreationOnly;
     map["HTTPExtraHeaders"] = httpExtraHeaders;
+    // TODO log proxy
     return map.toString();
   }
 }

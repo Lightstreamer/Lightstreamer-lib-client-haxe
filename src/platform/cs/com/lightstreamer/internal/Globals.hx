@@ -36,4 +36,8 @@ class Globals {
     validationCallback = callback;
     HttpClient.setRemoteCertificateValidationCallback(callback);
   }
+
+  public function getTrustManagerFactory(): Null<RemoteCertificateValidationCallback> {
+    return validationCallback;
+  }
 }
