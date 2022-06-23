@@ -203,7 +203,7 @@ class ConnectionOptions {
     client.eventDispatcher.onPropertyChange("slowingEnabled");
   }
 
-  #if (java || cs || python)
+  #if LS_HAS_PROXY
   var proxy: Null<Proxy>;
 
   public function setProxy(proxy: Null<Proxy>): Void {
@@ -240,7 +240,9 @@ class ConnectionOptions {
     map["serverInstanceAddressIgnored"] = serverInstanceAddressIgnored;
     map["HTTPExtraHeadersOnSessionCreationOnly"] = httpExtraHeadersOnSessionCreationOnly;
     map["HTTPExtraHeaders"] = httpExtraHeaders;
-    // TODO log proxy
+    #if LS_HAS_PROXY
+    map["proxy"] = proxy;
+    #end
     return map.toString();
   }
 }

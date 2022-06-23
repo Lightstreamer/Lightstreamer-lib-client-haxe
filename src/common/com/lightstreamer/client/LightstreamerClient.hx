@@ -30,7 +30,7 @@ class LightstreamerClient {
     com.lightstreamer.log.LogManager.setLoggerProvider(provider);
   }
 
-  #if (java || LS_NODE || cs || python)
+  #if LS_HAS_COOKIES
   public static function addCookies(uri: NativeURI, cookies: NativeCookieCollection): Void {
     com.lightstreamer.internal.CookieHelper.instance.addCookies(uri, cookies);
   }
@@ -41,7 +41,7 @@ class LightstreamerClient {
   }
   #end
 
-  #if (java || cs || python)
+  #if LS_HAS_TRUST_MANAGER
   public static function setTrustManagerFactory(factory: NativeTrustManager) {
     com.lightstreamer.internal.Globals.instance.setTrustManagerFactory(factory);
   }

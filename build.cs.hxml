@@ -8,3 +8,7 @@ build.common.hxml
 -D real-position
 --cs bin/cs
 --cmd dotnet build bin/cs/Lightstreamer.Client.csproj
+
+-D LS_HAS_PROXY
+-D LS_HAS_COOKIES
+-D LS_HAS_TRUST_MANAGER

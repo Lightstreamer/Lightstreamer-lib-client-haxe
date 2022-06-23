@@ -3,3 +3,7 @@ build.common.hxml
 --class-path src/extern/python
 
 --python bin/python/lightstreamer.py
+
+-D LS_HAS_PROXY
+-D LS_HAS_COOKIES
+-D LS_HAS_TRUST_MANAGER
