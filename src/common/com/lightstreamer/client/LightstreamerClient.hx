@@ -19,7 +19,7 @@ class ClientEventDispatcher extends EventDispatcher<ClientListener> {}
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class LightstreamerClient {
   public static final LIB_NAME: String = "TODO";
-  public static final LIB_VERSIONE: String = "TODO";
+  public static final LIB_VERSION: String = "TODO";
 
   public final connectionDetails: ConnectionDetails;
   public final connectionOptions: ConnectionOptions;
