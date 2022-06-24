@@ -199,7 +199,6 @@ class MpnClientMachine extends ClientMachine {
   }
 
   override function evtMessage(line: String) {
-    // TODO synchronize (called by openWS) (see super)
     if (super.evtMessage(line)) {
       // message already processed by super
     } else if (line.startsWith("MPNREG")) {
