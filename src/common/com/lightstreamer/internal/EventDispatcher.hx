@@ -7,8 +7,7 @@ using com.lightstreamer.log.LoggerTools;
 @:autoBuild(com.lightstreamer.internal.Macros.buildEventDispatcher())
 class EventDispatcher<T> {
   #if python
-  // TODO remove python workaround
-  // workaround for https://github.com/HaxeFoundation/haxe/issues/10562
+  // TODO remove workaround (see issue https://github.com/HaxeFoundation/haxe/issues/10562)
   static function createExecutor() {
     haxe.Log.trace = (v, ?infos) -> {
       @:nullSafety(Off) var out = haxe.Log.formatOutput(v, infos);
