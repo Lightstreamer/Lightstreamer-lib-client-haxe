@@ -160,7 +160,6 @@ class LightstreamerClient {
     onText: (IWsClient, String)->Void, 
     onError: (IWsClient, String)->Void): IWsClient {
     #if java
-    // TODO pass all parameters
     var proxy = connectionOptions.getProxy();
     var trustManager = com.lightstreamer.internal.Globals.instance.getTrustManagerFactory();
     return new com.lightstreamer.internal.WsClient(url, headers, proxy, trustManager, onOpen, onText, onError);
@@ -187,7 +186,6 @@ class LightstreamerClient {
     onError: (IHttpClient, String)->Void, 
     onDone: IHttpClient->Void): IHttpClient {
     #if java
-    // TODO pass all parameters
     var proxy = connectionOptions.getProxy();
     var trustManager = com.lightstreamer.internal.Globals.instance.getTrustManagerFactory();
     return new com.lightstreamer.internal.HttpClient(url, body, headers, proxy, trustManager, onText, onError, onDone);
