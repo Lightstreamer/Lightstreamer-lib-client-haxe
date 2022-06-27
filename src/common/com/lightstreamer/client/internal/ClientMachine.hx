@@ -1987,7 +1987,6 @@ class ClientMachine {
     if (state.s_m == s122) {
       doCONOK_CreateWS(sessionId, reqLimit, keepalive, clink);
       resetCurrentRetryDelay();
-      notifyStatus(CONNECTED_STREAM_SENSING);
       notifyStatus(CONNECTED_WS_STREAMING);
       goto({
         state.s_m = s150;
