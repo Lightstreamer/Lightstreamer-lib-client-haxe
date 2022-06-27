@@ -65,6 +65,7 @@ class TestAll2 {
     runner.addCase(TestSendMessage);
     runner.addCase(TestStreamSense);
     runner.addCase(TestRecovery);
+    runner.addCase(TestControlLink);
   }
 
   public static function main() {
