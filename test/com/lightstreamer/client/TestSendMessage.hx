@@ -32,7 +32,7 @@ class TestSendMessage extends utest.Test {
     })
     .await("ws.init http://server/lightstreamer")
     .await("wsok")
-    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .then(() -> client._sendMessage("foo", "seq", msgListener))
     .await("msg\r\nLS_reqId=1&LS_message=foo&LS_sequence=seq&LS_msg_prog=1")
     .then(() -> async.completed())
@@ -49,7 +49,7 @@ class TestSendMessage extends utest.Test {
     })
     .await("ws.init http://server/lightstreamer")
     .await("wsok")
-    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .then(() -> client._sendMessage("foo", "seq"))
     .await("msg\r\nLS_reqId=1&LS_message=foo&LS_outcome=false&LS_sequence=seq&LS_msg_prog=1")
     .then(() -> async.completed())
@@ -66,7 +66,7 @@ class TestSendMessage extends utest.Test {
     })
     .await("ws.init http://server/lightstreamer")
     .await("wsok")
-    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .then(() -> client._sendMessage("foo"))
     .await("msg\r\nLS_reqId=1&LS_message=foo&LS_outcome=false&LS_ack=false")
     .then(() -> async.completed())
@@ -83,7 +83,7 @@ class TestSendMessage extends utest.Test {
     })
     .await("ws.init http://server/lightstreamer")
     .await("wsok")
-    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .then(() -> client._sendMessage("foo", msgListener))
     .await("msg\r\nLS_reqId=1&LS_message=foo&LS_msg_prog=1")
     .then(() -> async.completed())
@@ -110,7 +110,7 @@ class TestSendMessage extends utest.Test {
     })
     .await("ws.init http://server/lightstreamer")
     .await("wsok")
-    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .await("ws.dispose")
     .then(() -> client._sendMessage("foo", msgListener))
     .await("onAbort foo")
@@ -136,7 +136,7 @@ class TestSendMessage extends utest.Test {
     })
     .await("ws.init http://server/lightstreamer")
     .await("wsok")
-    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .then(() -> {
       client._sendMessage("m10");
       client._sendMessage("m20", msgListener);
@@ -167,7 +167,7 @@ class TestSendMessage extends utest.Test {
     })
     .await("ws.init http://server/lightstreamer")
     .await("wsok")
-    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .then(() -> {
       client._sendMessage("m10", true);
       client._sendMessage("m20", msgListener, true);
@@ -193,7 +193,7 @@ class TestSendMessage extends utest.Test {
     })
     .await("ws.init http://server/lightstreamer")
     .await("wsok")
-    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .then(() -> {
       client._sendMessage("foo", "seq1");
       client._sendMessage("bar", "seq2");
@@ -216,7 +216,7 @@ class TestSendMessage extends utest.Test {
     })
     .await("ws.init http://server/lightstreamer")
     .await("wsok")
-    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .then(() -> {
       client._sendMessage("foo", "seq");
       client._sendMessage("zap");
@@ -239,7 +239,7 @@ class TestSendMessage extends utest.Test {
     })
     .await("ws.init http://server/lightstreamer")
     .await("wsok")
-    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .then(() -> {
       client._sendMessage("foo", "seq", 100);
       client._sendMessage("zap", 100);
@@ -260,7 +260,7 @@ class TestSendMessage extends utest.Test {
     })
     .await("ws.init http://server/lightstreamer")
     .await("wsok")
-    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .then(() -> {
       client._sendMessage("foo", "seq", msgListener);
     })
@@ -281,7 +281,7 @@ class TestSendMessage extends utest.Test {
     })
     .await("ws.init http://server/lightstreamer")
     .await("wsok")
-    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .then(() -> {
       client._sendMessage("foo", msgListener);
       client._sendMessage("bar", msgListener);
@@ -306,7 +306,7 @@ class TestSendMessage extends utest.Test {
     })
     .await("ws.init http://server/lightstreamer")
     .await("wsok")
-    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .then(() -> {
       client._sendMessage("foo", "seq", msgListener);
     })
@@ -327,7 +327,7 @@ class TestSendMessage extends utest.Test {
     })
     .await("ws.init http://server/lightstreamer")
     .await("wsok")
-    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .then(() -> {
       client._sendMessage("foo", msgListener);
       client._sendMessage("bar", msgListener);
@@ -352,7 +352,7 @@ class TestSendMessage extends utest.Test {
     })
     .await("ws.init http://server/lightstreamer")
     .await("wsok")
-    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .then(() -> {
       client._sendMessage("foo1", "seq", msgListener);
       client._sendMessage("foo2", "seq", msgListener);
@@ -378,7 +378,7 @@ class TestSendMessage extends utest.Test {
     })
     .await("ws.init http://server/lightstreamer")
     .await("wsok")
-    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .then(() -> {
       client._sendMessage("foo", "seq", msgListener);
     })
@@ -401,7 +401,7 @@ class TestSendMessage extends utest.Test {
     })
     .await("ws.init http://server/lightstreamer")
     .await("wsok")
-    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .then(() -> {
       client._sendMessage("foo", "seq", msgListener);
     })

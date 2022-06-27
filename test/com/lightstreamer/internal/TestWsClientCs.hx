@@ -21,7 +21,7 @@ class TestWsClientCs extends utest.Test {
     new WsClient(
       host + "/lightstreamer", null, null, null,
       function onOpen(c) {
-        c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i");
+        c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg");
       },
       function onText(c, line) {
         if (c.isDisposed()) return;
@@ -41,7 +41,7 @@ class TestWsClientCs extends utest.Test {
     new WsClient(
       host + "/lightstreamer", null, null, null,
       function onOpen(c) {
-        c.send("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i");
+        c.send("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg");
       },
       function onText(c, line) {
         if (c.isDisposed()) return;
@@ -61,7 +61,7 @@ class TestWsClientCs extends utest.Test {
     new WsClient(
       "wss://push.lightstreamer.com/lightstreamer", null, null, null,
       function onOpen(c) {
-        c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i");
+        c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg");
       },
       function onText(c, line) {
         if (c.isDisposed()) return;
@@ -130,7 +130,7 @@ class TestWsClientCs extends utest.Test {
       host + "/lightstreamer", 
       ["X-Header" => "header"], null, null,
       function onOpen(c) {
-        c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i");
+        c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg");
       },
       function onText(c, line) {
         if (c.isDisposed()) return;

@@ -27,7 +27,7 @@ class TestHttpClientJava extends utest.Test {
   function testPolling(async: utest.Async) {
     new HttpClient(
       host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
-      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null, null, null,
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null,
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
         fail(error); 
@@ -43,7 +43,7 @@ class TestHttpClientJava extends utest.Test {
   function testStreaming(async: utest.Async) {
     new HttpClient(
       host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
-      "LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null, null, null,
+      "LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null,
       function onText(c, line) {
         if (c.isDisposed()) return;
         match(~/CONOK/, line);
@@ -62,7 +62,7 @@ class TestHttpClientJava extends utest.Test {
   function testHttps(async: utest.Async) {
     new HttpClient(
       "https://push.lightstreamer.com/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
-      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null, null, null,
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null,
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
         fail(error); 
@@ -78,7 +78,7 @@ class TestHttpClientJava extends utest.Test {
   function testConnectionError(async: utest.Async) {
     new HttpClient(
       secHost + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
-      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null, null, null,
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null,
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
         #if android
@@ -104,7 +104,7 @@ class TestHttpClientJava extends utest.Test {
 
     new HttpClient(
       host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
-      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null, null, null,
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null,
       function onText(c, line) null, 
       function onError(c, error) { 
         fail(error); 
@@ -122,7 +122,7 @@ class TestHttpClientJava extends utest.Test {
   function testHeaders(async: utest.Async) {
     new HttpClient(
       host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
-      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", 
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", 
       ["X-Header" => "header"], null, null,
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
@@ -139,7 +139,7 @@ class TestHttpClientJava extends utest.Test {
   function testProxy(async: utest.Async) {
     new HttpClient(
       host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
-      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", 
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", 
       null,
       #if android
       new Proxy("HTTP", "10.0.2.2", 8079, "myuser", "mypassword"),
@@ -163,7 +163,7 @@ class TestHttpClientJava extends utest.Test {
   function testProxyHttps(async: utest.Async) {
     new HttpClient(
       "https://push.lightstreamer.com/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
-      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", 
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", 
       null,
       #if android
       new Proxy("HTTP", "10.0.2.2", 8079, "myuser", "mypassword"),
@@ -198,7 +198,7 @@ class TestHttpClientJava extends utest.Test {
     LightstreamerClient.setTrustManagerFactory(tmf);
     new HttpClient(
       secHost + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
-      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null, null, 
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, 
       Globals.instance.getTrustManagerFactory(),
       function onText(c, line) output.push(line), 
       function onError(c, error) { 

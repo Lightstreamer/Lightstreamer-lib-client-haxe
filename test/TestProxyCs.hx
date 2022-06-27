@@ -32,7 +32,7 @@ class TestProxyCs extends  utest.Test {
   function testProxyHttp(async: utest.Async) {
     new HttpClient(
       "http://" + host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
-      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null,
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null,
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
         fail(error); 
@@ -49,7 +49,7 @@ class TestProxyCs extends  utest.Test {
   function testProxyHttps(async: utest.Async) {
     new HttpClient(
       "https://push.lightstreamer.com/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
-      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null,
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null,
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
         fail(error); 
@@ -69,7 +69,7 @@ class TestProxyCs extends  utest.Test {
       proxy,
       null,
       function onOpen(c) {
-        c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i");
+        c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg");
       },
       function onText(c, line) {
         if (c.isDisposed()) return;
@@ -93,7 +93,7 @@ class TestProxyCs extends  utest.Test {
       // NB needs a validator even if the proxy is not secured
       (sender, cert, chain, sslPolicyErrors) -> true,
       function onOpen(c) {
-        c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i");
+        c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg");
       },
       function onText(c, line) {
         if (c.isDisposed()) return;

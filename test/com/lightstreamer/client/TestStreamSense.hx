@@ -27,7 +27,7 @@ class TestStreamSense extends utest.Test {
       ws.onError();
     })
     .await("ws.dispose")
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_cause=ws.unavailable")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=ws.unavailable")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
       http.onText("LOOP,0");

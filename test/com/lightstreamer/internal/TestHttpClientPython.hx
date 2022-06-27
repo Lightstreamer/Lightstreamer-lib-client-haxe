@@ -21,7 +21,7 @@ class TestHttpClientPython extends utest.Test {
   function testPolling(async: utest.Async) {
     new HttpClient(
       host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
-      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null, null, null,
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null,
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
         fail(error); 
@@ -37,7 +37,7 @@ class TestHttpClientPython extends utest.Test {
   function testStreaming(async: utest.Async) {
     new HttpClient(
       host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
-      "LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null, null, null,
+      "LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null,
       function onText(c, line) {
         if (c.isDisposed()) return;
         match(~/CONOK/, line);
@@ -56,7 +56,7 @@ class TestHttpClientPython extends utest.Test {
   function testHttps(async: utest.Async) {
     new HttpClient(
       "https://push.lightstreamer.com/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
-      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null, null, null,
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null,
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
         fail(error); 
@@ -72,7 +72,7 @@ class TestHttpClientPython extends utest.Test {
   function testConnectionError(async: utest.Async) {
     new HttpClient(
       secHost + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
-      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null, null, null,
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null,
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
         equals("Cannot connect to host localtest.me:8443 ssl:True [SSLCertVerificationError: (1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self signed certificate (_ssl.c:1129)')]", error);
@@ -95,7 +95,7 @@ class TestHttpClientPython extends utest.Test {
 
     new HttpClient(
       host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
-      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null, null, null,
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null,
       function onText(c, line) null, 
       function onError(c, error) { 
         fail(error); 
@@ -114,7 +114,7 @@ class TestHttpClientPython extends utest.Test {
   function testHeaders(async: utest.Async) {
     new HttpClient(
       host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
-      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i",
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg",
       ["X-Header" => "header"],  null, null,
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
@@ -131,7 +131,7 @@ class TestHttpClientPython extends utest.Test {
   function testProxy(async: utest.Async) {
     new HttpClient(
       host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
-      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", 
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", 
       null,
       new Proxy("HTTP", "localtest.me", 8079, "myuser", "mypassword"), null,
       function onText(c, line) output.push(line), 
@@ -152,7 +152,7 @@ class TestHttpClientPython extends utest.Test {
     var sslcontext = SSLContext.SSL.create_default_context({cafile: "test/mitmproxy-ca-cert.pem"});
     new HttpClient(
       "https://push.lightstreamer.com/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
-      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", 
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", 
       null,
       new Proxy("HTTP", "localtest.me", 8079, "myuser", "mypassword"), sslcontext,
       function onText(c, line) output.push(line), 
@@ -175,7 +175,7 @@ class TestHttpClientPython extends utest.Test {
     LightstreamerClient.setTrustManagerFactory(sslcontext);
     new HttpClient(
       secHost + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
-      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i", null, null, 
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, 
       Globals.instance.getTrustManagerFactory(),
       function onText(c, line) output.push(line), 
       function onError(c, error) { 

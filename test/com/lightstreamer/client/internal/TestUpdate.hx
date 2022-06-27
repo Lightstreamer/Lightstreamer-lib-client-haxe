@@ -112,7 +112,7 @@ class TestUpdate extends utest.Test {
     .await("ws.init http://server/lightstreamer")
     .then(() -> ws.onOpen())
     .await("wsok")
-    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .then(() -> {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
@@ -191,7 +191,7 @@ class TestUpdate extends utest.Test {
     .await("ws.init http://server/lightstreamer")
     .then(() -> ws.onOpen())
     .await("wsok")
-    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .then(() -> {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
@@ -298,7 +298,7 @@ class TestUpdate extends utest.Test {
     .await("ws.init http://server/lightstreamer")
     .then(() -> ws.onOpen())
     .await("wsok")
-    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .then(() -> {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
@@ -406,7 +406,7 @@ class TestUpdate extends utest.Test {
     .await("ws.init http://server/lightstreamer")
     .then(() -> ws.onOpen())
     .await("wsok")
-    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .then(() -> {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
@@ -505,7 +505,7 @@ class TestUpdate extends utest.Test {
     .await("ws.init http://server/lightstreamer")
     .then(() -> ws.onOpen())
     .await("wsok")
-    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .then(() -> {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
@@ -617,7 +617,7 @@ class TestUpdate extends utest.Test {
     .await("ws.init http://server/lightstreamer")
     .then(() -> ws.onOpen())
     .await("wsok")
-    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .then(() -> {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
@@ -717,7 +717,7 @@ class TestUpdate extends utest.Test {
     .await("ws.init http://server/lightstreamer")
     .then(() -> ws.onOpen())
     .await("wsok")
-    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .then(() -> {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
@@ -839,7 +839,7 @@ class TestUpdate extends utest.Test {
     .await("ws.init http://server/lightstreamer")
     .then(() -> ws.onOpen())
     .await("wsok")
-    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .then(() -> {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
@@ -945,7 +945,7 @@ class TestUpdate extends utest.Test {
     .await("ws.init http://server/lightstreamer")
     .then(() -> ws.onOpen())
     .await("wsok")
-    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .then(() -> {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
@@ -1053,7 +1053,7 @@ class TestUpdate extends utest.Test {
     .await("ws.init http://server/lightstreamer")
     .then(() -> ws.onOpen())
     .await("wsok")
-    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .then(() -> {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
@@ -1107,7 +1107,7 @@ class TestUpdate extends utest.Test {
     .await("ws.init http://server/lightstreamer")
     .then(() -> ws.onOpen())
     .await("wsok")
-    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .then(() -> {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
@@ -1244,7 +1244,7 @@ class TestUpdate extends utest.Test {
     .await("ws.init http://server/lightstreamer")
     .then(() -> ws.onOpen())
     .await("wsok")
-    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .then(() -> {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
@@ -1262,7 +1262,7 @@ class TestUpdate extends utest.Test {
     .await("ws.init http://server/lightstreamer")
     .then(() -> ws.onOpen())
     .await("wsok")
-    .await("create_session\r\nLS_keepalive_millis=5000&LS_adapter_set=TEST&LS_cid=scFuxkwp1ltvcB4BJ4JikvD9i&LS_send_sync=false&LS_cause=api")
+    .await("create_session\r\nLS_keepalive_millis=5000&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
     .then(() -> {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
