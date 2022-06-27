@@ -6,6 +6,7 @@ import com.lightstreamer.internal.EventDispatcher;
 import com.lightstreamer.internal.PlatformApi;
 import com.lightstreamer.internal.Types;
 import com.lightstreamer.log.LoggerTools;
+import com.lightstreamer.internal.Constants;
 
 using com.lightstreamer.log.LoggerTools;
 
@@ -18,8 +19,8 @@ class ClientEventDispatcher extends EventDispatcher<ClientListener> {}
 #if (java || cs || python) @:nativeGen #end
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class LightstreamerClient {
-  public static final LIB_NAME: String = "TODO";
-  public static final LIB_VERSION: String = "TODO";
+  public static final LIB_NAME: String = LS_LIB_NAME;
+  public static final LIB_VERSION: String = LS_LIB_VERSION;
 
   public final connectionDetails: ConnectionDetails;
   public final connectionOptions: ConnectionOptions;
