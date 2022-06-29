@@ -1,4 +1,5 @@
 from lightstreamer import *
+import time
 
 loggerProvider = ConsoleLoggerProvider(ConsoleLogLevel.DEBUG)
 logger = loggerProvider.getLogger("test")
@@ -18,14 +19,48 @@ class SubListener:
   def onListenStart(self, aSub):
     log("SubscriptionListener.onListenStart")
     assert sub == aSub
+  def onClearSnapshot(self, itemName, itemPos):
+    pass
+  def onCommandSecondLevelItemLostUpdates(self, lostUpdates, key):
+    pass
+  def onCommandSecondLevelSubscriptionError(self, code, message, key):
+    pass
+  def onEndOfSnapshot(self, itemName, itemPos):
+    pass
+  def onItemLostUpdates(self, itemName, itemPos, lostUpdates):
+    pass
+  def onItemUpdate(self, update):
+    log("UPDATE " + update.getValue("stock_name") + " " + update.getValue("last_price"))
+  def onListenEnd(self, subscription):
+    pass
+  def onListenStart(self, subscription):
+    pass
+  def onSubscription(self):
+    pass
+  def onSubscriptionError(self, code, message):
+    pass
+  def onUnsubscription(self):
+    pass
+  def onRealMaxFrequency(self, frequency):
+    pass
+
 sub.addListener(SubListener())
 
-# client = lightstreamer.LightstreamerClient("http://push.lightstreamer.com","DEMO")
-client = LightstreamerClient("http://localhost:8080","DEMO")
+client = LightstreamerClient("http://push.lightstreamer.com","DEMO")
+# client = LightstreamerClient("http://localhost:8080","DEMO")
 class ClientListener:
   def onListenStart(self, aClient):
     log("ClientListener.onListenStart")
     assert client == aClient
+  def onListenEnd(self, aClient):
+    log("ClientListener.onListenEnd")
+  def onServerError(self, errorCode, errorMessage):
+    log("onServerError " + errorCode)
+  def onStatusChange(self, status):
+    log(status)
+  def onPropertyChange(self, property):
+    pass
+
 client.addListener(ClientListener())
 
 client.connectionDetails.setUser("user")
@@ -36,3 +71,5 @@ assert client.connectionOptions.getHttpExtraHeaders() == {"Foo": "bar"}
 
 client.subscribe(sub)
 client.connect()
+
+time.sleep(2)
