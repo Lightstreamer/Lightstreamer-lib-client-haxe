@@ -12,9 +12,6 @@ using com.lightstreamer.log.LoggerTools;
 
 class ClientEventDispatcher extends EventDispatcher<ClientListener> {}
 
-/**
- * LightstreamerClient class
- **/
 #if (js || python) @:expose @:native("LightstreamerClient") #end
 #if (java || cs || python) @:nativeGen #end
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
@@ -48,11 +45,6 @@ class LightstreamerClient {
   }
   #end
 
-  /**
-   * LightstreamerClient ctor
-   * @param serverAddress 
-   * @param adapterSet 
-   */
   public function new(serverAddress: String, adapterSet: String 
   #if LS_TEST , ?wsFactory: IWsClientFactory, ?httpFactory: IHttpClientFactory, ?ctrlFactory: IHttpClientFactory, ?timerFactory: ITimerFactory, ?randomGen: Millis->Millis, ?reachabilityFactory: IReachabilityFactory #end
   ) {
@@ -83,9 +75,6 @@ class LightstreamerClient {
     return new NativeList(eventDispatcher.getListeners());
   }
 
-  /**
-   * connect
-   */
   public function connect(): Void {
     machine.connect();
   }
