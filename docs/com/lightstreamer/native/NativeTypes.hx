@@ -1,0 +1,141 @@
+package com.lightstreamer.native;
+
+#if java
+abstract Long(java.StdTypes.Int64) {}
+#elseif cs
+abstract Long(cs.StdTypes.Int64) {}
+#else
+abstract Long(Int) {}
+#end
+
+#if js
+abstract NativeException(js.lib.Error) {}
+#elseif java
+abstract NativeException(java.lang.Throwable) {}
+#elseif cs
+abstract NativeException(cs.system.Exception) {}
+#elseif python
+/**
+ * Alias for [BaseException](https://docs.python.org/3/library/exceptions.html#BaseException).
+ */
+abstract NativeException(python.Exceptions.BaseException) {}
+#elseif php
+abstract NativeException(php.Throwable) {}
+#elseif cpp
+abstract NativeException(Any) {}
+#end
+
+#if java
+abstract IllegalArgumentException(java.lang.IllegalArgumentException) {}
+abstract IllegalStateException(java.lang.IllegalStateException) {}
+#elseif cs
+abstract IllegalArgumentException(cs.system.ArgumentException) {}
+abstract IllegalStateException(cs.system.InvalidOperationException) {}
+#else
+class IllegalArgumentException extends haxe.Exception {}
+class IllegalStateException extends haxe.Exception {}
+#end
+
+#if js
+abstract NativeStringMap(haxe.DynamicAccess<String>) {}
+#elseif java
+abstract NativeStringMap1<V>(java.util.Map<String, V>) {}
+
+abstract NativeIntMap1<V>(java.util.Map<Int, V>) {}
+
+abstract NativeStringMap(java.util.Map<String, String>) {}
+#elseif cs
+abstract NativeStringMap1<V>(cs.system.collections.generic.IDictionary_2<String, V>) {}
+
+abstract NativeIntMap1<V>(cs.system.collections.generic.IDictionary_2<Int, V>) {}
+
+abstract NativeStringMap(cs.system.collections.generic.IDictionary_2<String, String>) 
+to cs.system.collections.generic.IDictionary_2<String, String> {}
+#elseif python
+abstract NativeStringMap1<V>(python.Dict<String, V>) {}
+
+abstract NativeIntMap1<V>(python.Dict<Int, V>) {}
+
+abstract NativeStringMap(python.Dict<String, String>) to python.Dict<String, String> {}
+#elseif php
+abstract NativeStringMap1<V>(php.NativeAssocArray<V>) {}
+
+abstract NativeIntMap1<V>(php.NativeIndexedArray<V>) {}
+
+abstract NativeStringMap(php.NativeAssocArray<String>) {}
+#elseif cpp
+abstract NativeStringMap1<V>(Map<String, V>) to Map<String, V> {}
+
+abstract NativeIntMap1<V>(Map<Int, V>) to Map<Int, V> {}
+
+abstract NativeStringMap(Map<String, String>) from Map<String, String> to Map<String, String> {}
+#end
+
+#if js
+abstract NativeList<T>(Array<T>) {}
+#elseif java
+abstract NativeList<T>(java.util.List<T>) {}
+#elseif cs
+abstract NativeList<T>(cs.system.collections.generic.IList_1<T>) {}
+#elseif python
+/**
+ * Alias for [list](https://docs.python.org/3/library/stdtypes.html#list).
+ */
+abstract NativeList<T>(Array<T>) {}
+#elseif php
+abstract NativeList<T>(php.NativeIndexedArray<T>) {}
+#elseif cpp
+abstract NativeList<T>(Array<T>) {}
+#end
+
+#if js
+abstract NativeArray<T>(Array<T>) {}
+#elseif java
+abstract NativeArray<T>(java.NativeArray<T>) {}
+#elseif cs
+abstract NativeArray<T>(cs.NativeArray<T>) {}
+#elseif python
+abstract NativeArray<T>(Array<T>) {}
+#elseif php
+abstract NativeArray<T>(php.NativeArray) {}
+#elseif cpp
+abstract NativeArray<T>(Array<T>) from Array<T> to Array<T> {}
+#end
+
+#if java
+abstract NativeURI(java.net.URI) {}
+abstract NativeCookieCollection(NativeList<java.net.HttpCookie>) {}
+#elseif LS_NODE
+abstract NativeURI(String) {}
+abstract NativeCookieCollection(Array<String>) {}
+#elseif cs
+abstract NativeURI(cs.system.Uri) {}
+abstract NativeCookieCollection(cs.system.net.CookieCollection) {}
+#elseif python
+/**
+ * Alias for [string](https://docs.python.org/3/library/string.html?#module-string).
+ */
+abstract NativeURI(String) {}
+/**
+ * Alias for [http.cookies.SimpleCookie](https://docs.python.org/3/library/http.cookies.html#http.cookies.SimpleCookie).
+ */
+abstract NativeCookieCollection(SimpleCookie) {}
+#end
+
+#if java
+abstract NativeTrustManager(java.javax.net.ssl.TrustManagerFactory) {}
+#elseif cs
+abstract NativeTrustManager(cs.system.net.security.RemoteCertificateValidationCallback) {}
+#elseif python
+/**
+ * Alias for [ssl.SSLContext](https://docs.python.org/3/library/ssl.html#ssl.SSLContext).
+ */
+abstract NativeTrustManager(SSLContext) {}
+#end
+
+#if python
+@:dox(hide)
+extern class SimpleCookie {}
+@:dox(hide)
+extern class SSLContext {}
+#end
