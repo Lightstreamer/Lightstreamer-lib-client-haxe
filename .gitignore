@@ -2,6 +2,7 @@ node_modules/
 obj/
 bin/
 bin-test/
+dist/
 .vs/
 .vscode/
 .unittest/
