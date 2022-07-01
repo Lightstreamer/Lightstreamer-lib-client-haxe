@@ -7,6 +7,7 @@ final dist = Path.of("dist/python/lightstreamer-client");
 final dist_src = Path.of("dist/python/lightstreamer-client/src/lightstreamer_client");
 
 function main() {
+  // NB the current directory must be the root of the project
   createDir(bin);
   createDir(dist);
   createDir(dist_src);
