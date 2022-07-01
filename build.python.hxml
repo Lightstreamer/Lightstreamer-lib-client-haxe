@@ -2,7 +2,7 @@ build.common.hxml
 --class-path src/platform/python
 --class-path src/extern/python
 
---python bin/python/lightstreamer.py
+--python bin/python/client.py
 
 -D LS_HAS_PROXY
 -D LS_HAS_COOKIES
