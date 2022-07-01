@@ -52,11 +52,16 @@ abstract NativeIntMap1<V>(cs.system.collections.generic.IDictionary_2<Int, V>) {
 abstract NativeStringMap(cs.system.collections.generic.IDictionary_2<String, String>) 
 to cs.system.collections.generic.IDictionary_2<String, String> {}
 #elseif python
+/**
+ * Alias for [dict&lt;String, V&gt;](https://docs.python.org/3/library/stdtypes.html#mapping-types-dict).
+ */
 abstract NativeStringMap1<V>(python.Dict<String, V>) {}
-
+/**
+ * Alias for [dict&lt;Int, V&gt;](https://docs.python.org/3/library/stdtypes.html#mapping-types-dict).
+ */
 abstract NativeIntMap1<V>(python.Dict<Int, V>) {}
 
-abstract NativeStringMap(python.Dict<String, String>) to python.Dict<String, String> {}
+abstract NativeStringMap(python.Dict<String, String>) {}
 #elseif php
 abstract NativeStringMap1<V>(php.NativeAssocArray<V>) {}
 
@@ -68,7 +73,7 @@ abstract NativeStringMap1<V>(Map<String, V>) to Map<String, V> {}
 
 abstract NativeIntMap1<V>(Map<Int, V>) to Map<Int, V> {}
 
-abstract NativeStringMap(Map<String, String>) from Map<String, String> to Map<String, String> {}
+abstract NativeStringMap(Map<String, String>) {}
 #end
 
 #if js
