@@ -1,12 +1,12 @@
-from lightstreamer import *
+from lightstreamer_client.client import *
 import time
 
-loggerProvider = ConsoleLoggerProvider(ConsoleLogLevel.DEBUG)
+loggerProvider = ConsoleLoggerProvider(ConsoleLogLevel.WARN)
 logger = loggerProvider.getLogger("test")
 LightstreamerClient.setLoggerProvider(loggerProvider)
 
 def log(s):
-  logger.info(s)
+  print(s)
 
 sub = Subscription("MERGE",["item1","item2","item3"],["stock_name","last_price"])
 sub.setDataAdapter("QUOTE_ADAPTER")
