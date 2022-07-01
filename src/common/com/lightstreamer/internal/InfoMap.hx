@@ -3,7 +3,7 @@ package com.lightstreamer.internal;
 import haxe.ds.StringMap;
 
 @:forward(toString)
-abstract NullStringMap(StringMap<String>) {
+abstract InfoMap(StringMap<String>) {
   public function new() {
     this = new StringMap();
   }

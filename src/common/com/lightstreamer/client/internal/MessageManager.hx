@@ -1,6 +1,6 @@
 package com.lightstreamer.client.internal;
 
-import com.lightstreamer.internal.NullStringMap;
+import com.lightstreamer.internal.InfoMap;
 import com.lightstreamer.internal.EventDispatcher;
 import com.lightstreamer.client.internal.ClientRequests;
 import com.lightstreamer.internal.RequestBuilder;
@@ -302,7 +302,7 @@ class MessageManager implements Encodable {
   }
 
   public function toString(): String {
-    var map = new NullStringMap();
+    var map = new InfoMap();
     map["text"] = txt;
     map["sequence"] = sequence;
     map["prog"]  = prog;

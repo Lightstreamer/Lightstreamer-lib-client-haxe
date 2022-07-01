@@ -1,6 +1,6 @@
 package com.lightstreamer.client;
 
-import com.lightstreamer.internal.NullStringMap;
+import com.lightstreamer.internal.InfoMap;
 import com.lightstreamer.client.internal.SubscriptionManager;
 import com.lightstreamer.client.internal.SubscriptionManager.SubscriptionManagerLiving;
 import com.lightstreamer.internal.NativeTypes;
@@ -662,7 +662,7 @@ class Subscription {
   }
 
   public function toString(): String {
-    var map = new NullStringMap();
+    var map = new InfoMap();
     map["mode"] = mode;
     map["items"] = items != null ? Std.string(items) : group;
     map["fields"] = fields != null ? Std.string(fields) : schema;

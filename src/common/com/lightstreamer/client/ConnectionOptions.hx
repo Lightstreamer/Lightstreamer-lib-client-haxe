@@ -1,6 +1,6 @@
 package com.lightstreamer.client;
 
-import com.lightstreamer.internal.NullStringMap;
+import com.lightstreamer.internal.InfoMap;
 import com.lightstreamer.internal.NativeTypes;
 import com.lightstreamer.internal.Types;
 import com.lightstreamer.log.LoggerTools;
@@ -222,7 +222,7 @@ class ConnectionOptions {
   #end
 
   public function toString(): String {
-    var map = new NullStringMap();
+    var map = new InfoMap();
     map["forcedTransport"] = forcedTransport;
     map["requestedMaxBandwidth"] = requestedMaxBandwidth;
     map["realMaxBandwidth"] = realMaxBandwidth;

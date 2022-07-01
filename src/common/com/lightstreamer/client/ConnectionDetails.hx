@@ -1,6 +1,6 @@
 package com.lightstreamer.client;
 
-import com.lightstreamer.internal.NullStringMap;
+import com.lightstreamer.internal.InfoMap;
 import com.lightstreamer.internal.NativeTypes;
 import com.lightstreamer.internal.Types;
 import com.lightstreamer.log.LoggerTools;
@@ -102,7 +102,7 @@ class ConnectionDetails {
   }
 
   public function toString(): String {
-    var map = new NullStringMap();
+    var map = new InfoMap();
     map["serverAddress"] = serverAddress;
     map["adapterSet"] = adapterSet;
     map["user"] = user;
