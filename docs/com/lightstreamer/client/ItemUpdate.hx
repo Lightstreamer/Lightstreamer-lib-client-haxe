@@ -254,7 +254,7 @@ interface ItemUpdate {
    * @see `Subscription.setFieldSchema(String)`
    * @see `Subscription.setFields(String[])`
    */
-  function getChangedFields(): NativeStringMap1<Null<String>>;
+  function getChangedFields(): NativeStringMap<Null<String>>;
   /**
    * Returns an immutable Map containing the values for each field changed with the last server update. 
    * The 1-based field position within the field schema or field list is used as key for the values in the map. 
@@ -269,7 +269,7 @@ interface ItemUpdate {
    * @see `Subscription.setFieldSchema(String)`
    * @see `Subscription.setFields(String[])`
    */
-  function getChangedFieldsByPosition(): NativeIntMap1<Null<String>>;
+  function getChangedFieldsByPosition(): NativeIntMap<Null<String>>;
   /**
    * Returns an immutable Map containing the values for each field in the Subscription.
    * The related field name is used as key for the values in the map. 
@@ -281,7 +281,7 @@ interface ItemUpdate {
    * @see `Subscription.setFieldSchema(String)`
    * @see `Subscription.setFields(String[])`
    */
-  function getFields(): NativeStringMap1<Null<String>>;
+  function getFields(): NativeStringMap<Null<String>>;
   /**
    * Returns an immutable Map containing the values for each field in the Subscription.
    * The 1-based field position within the field schema or field list is used as key for the values in the map. 
@@ -291,6 +291,6 @@ interface ItemUpdate {
    * @see `Subscription.setFieldSchema(String)`
    * @see `Subscription.setFields(String[])`
    */
-  function getFieldsByPosition(): NativeIntMap1<Null<String>>;
+  function getFieldsByPosition(): NativeIntMap<Null<String>>;
   #end
 }

@@ -132,7 +132,7 @@ class ConnectionOptions {
    * @see `this.setHttpExtraHeaders(Map)`
    * @see `this.setHttpExtraHeadersOnSessionCreationOnly(boolean)`
    */
-  public function getHttpExtraHeaders(): Null<NativeStringMap> return null;
+  public function getHttpExtraHeaders(): Null<NativeStringMap<String>> return null;
   /**
    * Setter method that enables/disables the setting of extra HTTP headers to all the request performed to the Lightstreamer 
    * server by the client. <BR>
@@ -156,7 +156,7 @@ class ConnectionOptions {
    * @param httpExtraHeaders a Map object containing header-name header-value pairs. Null can be specified to avoid extra 
    * headers to be sent.
    */
-  public function setHttpExtraHeaders(httpExtraHeaders: Null<NativeStringMap>): Void {}
+  public function setHttpExtraHeaders(httpExtraHeaders: Null<NativeStringMap<String>>): Void {}
   /**
    * Inquiry method that gets the maximum time the Server is allowed to wait for any data to be sent 
    * in response to a polling request, if none has accumulated at request time. The wait time used 

@@ -53,45 +53,32 @@ class IllegalStateException extends haxe.Exception {}
 #end
 
 #if js
-abstract NativeStringMap(haxe.DynamicAccess<String>) {}
+abstract NativeStringMap<V>(haxe.DynamicAccess<V>) {}
 #elseif java
-abstract NativeStringMap1<V>(java.util.Map<String, V>) {}
+abstract NativeStringMap<V>(java.util.Map<String, V>) {}
 
-abstract NativeIntMap1<V>(java.util.Map<Int, V>) {}
-
-abstract NativeStringMap(java.util.Map<String, String>) {}
+abstract NativeIntMap<V>(java.util.Map<Int, V>) {}
 #elseif cs
-abstract NativeStringMap1<V>(cs.system.collections.generic.IDictionary_2<String, V>) {}
+abstract NativeStringMap<V>(cs.system.collections.generic.IDictionary_2<String, V>) {}
 
-abstract NativeIntMap1<V>(cs.system.collections.generic.IDictionary_2<Int, V>) {}
-
-abstract NativeStringMap(cs.system.collections.generic.IDictionary_2<String, String>) 
-to cs.system.collections.generic.IDictionary_2<String, String> {}
+abstract NativeIntMap<V>(cs.system.collections.generic.IDictionary_2<Int, V>) {}
 #elseif python
 /**
  * Alias for [dict&lt;String, V&gt;](https://docs.python.org/3/library/stdtypes.html#mapping-types-dict).
  */
-abstract NativeStringMap1<V>(python.Dict<String, V>) {}
+abstract NativeStringMap<V>(python.Dict<String, V>) {}
 /**
  * Alias for [dict&lt;Int, V&gt;](https://docs.python.org/3/library/stdtypes.html#mapping-types-dict).
  */
-abstract NativeIntMap1<V>(python.Dict<Int, V>) {}
-/**
- * Alias for [dict&lt;String, String&gt;](https://docs.python.org/3/library/stdtypes.html#mapping-types-dict).
- */
-abstract NativeStringMap(python.Dict<String, String>) {}
+abstract NativeIntMap<V>(python.Dict<Int, V>) {}
 #elseif php
-abstract NativeStringMap1<V>(php.NativeAssocArray<V>) {}
+abstract NativeStringMap<V>(php.NativeAssocArray<V>) {}
 
-abstract NativeIntMap1<V>(php.NativeIndexedArray<V>) {}
-
-abstract NativeStringMap(php.NativeAssocArray<String>) {}
+abstract NativeIntMap<V>(php.NativeIndexedArray<V>) {}
 #elseif cpp
-abstract NativeStringMap1<V>(Map<String, V>) to Map<String, V> {}
+abstract NativeStringMap<V>(Map<String, V>) to Map<String, V> {}
 
-abstract NativeIntMap1<V>(Map<Int, V>) to Map<Int, V> {}
-
-abstract NativeStringMap(Map<String, String>) {}
+abstract NativeIntMap<V>(Map<Int, V>) to Map<Int, V> {}
 #end
 
 #if js
