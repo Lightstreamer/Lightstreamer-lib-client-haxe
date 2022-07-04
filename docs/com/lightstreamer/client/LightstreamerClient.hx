@@ -31,7 +31,7 @@ class LightstreamerClient {
    * Properties of this object can be overwritten by values received from a 
    * Lightstreamer Server. 
    */
-  public final connectionDetails: ConnectionDetails;
+  public final connectionDetails: ConnectionDetails = null;
   /**
    * Data object that contains options and policies for the connection to 
    * the server. This instance is set up by the LightstreamerClient object at 
@@ -39,7 +39,7 @@ class LightstreamerClient {
    * Properties of this object can be overwritten by values received from a 
    * Lightstreamer Server. 
    */
-  public final connectionOptions: ConnectionOptions;
+  public final connectionOptions: ConnectionOptions = null;
   /**
    * Static method that permits to configure the logging system used by the library. The logging system 
    * must respect the `LoggerProvider`
@@ -150,10 +150,7 @@ class LightstreamerClient {
    * @throws IllegalArgumentException if a not valid address is passed. See
    * `ConnectionDetails.setServerAddress(String)` for details.
    */
-  public function new(serverAddress: String, adapterSet: String) {
-    connectionDetails = new ConnectionDetails();
-    connectionOptions = new ConnectionOptions();
-  }
+  public function new(serverAddress: String, adapterSet: String) {}
   /**
    * Adds a listener that will receive events from the LightstreamerClient instance. <BR> 
    * The same listener can be added to several different LightstreamerClient instances.

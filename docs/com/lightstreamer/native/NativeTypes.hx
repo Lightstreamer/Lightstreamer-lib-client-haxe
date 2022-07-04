@@ -4,6 +4,11 @@ package com.lightstreamer.native;
 abstract Long(java.StdTypes.Int64) {}
 #elseif cs
 abstract Long(cs.StdTypes.Int64) {}
+#elseif python
+/**
+ * Alias for [int](https://docs.python.org/3/library/functions.html#int).
+ */
+abstract Long(Int) {}
 #else
 abstract Long(Int) {}
 #end
@@ -32,7 +37,18 @@ abstract IllegalStateException(java.lang.IllegalStateException) {}
 abstract IllegalArgumentException(cs.system.ArgumentException) {}
 abstract IllegalStateException(cs.system.InvalidOperationException) {}
 #else
+/**
+ * Thrown to indicate that a method has been passed an illegal 
+ * or inappropriate argument.
+ * <BR>Use toString to extract details on the error occurred.
+ */
 class IllegalArgumentException extends haxe.Exception {}
+/**
+ * Thrown to indicate that a method has been invoked at an illegal or 
+ * inappropriate time or that the internal state of an object is incompatible 
+ * with the call.
+ * <BR>Use toString to extract details on the error occurred.
+ */
 class IllegalStateException extends haxe.Exception {}
 #end
 
@@ -60,7 +76,9 @@ abstract NativeStringMap1<V>(python.Dict<String, V>) {}
  * Alias for [dict&lt;Int, V&gt;](https://docs.python.org/3/library/stdtypes.html#mapping-types-dict).
  */
 abstract NativeIntMap1<V>(python.Dict<Int, V>) {}
-
+/**
+ * Alias for [dict&lt;String, String&gt;](https://docs.python.org/3/library/stdtypes.html#mapping-types-dict).
+ */
 abstract NativeStringMap(python.Dict<String, String>) {}
 #elseif php
 abstract NativeStringMap1<V>(php.NativeAssocArray<V>) {}
@@ -100,11 +118,14 @@ abstract NativeArray<T>(java.NativeArray<T>) {}
 #elseif cs
 abstract NativeArray<T>(cs.NativeArray<T>) {}
 #elseif python
+/**
+ * Alias for [list](https://docs.python.org/3/library/stdtypes.html#list).
+ */
 abstract NativeArray<T>(Array<T>) {}
 #elseif php
 abstract NativeArray<T>(php.NativeArray) {}
 #elseif cpp
-abstract NativeArray<T>(Array<T>) from Array<T> to Array<T> {}
+abstract NativeArray<T>(Array<T>) {}
 #end
 
 #if java
