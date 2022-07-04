@@ -20,7 +20,7 @@ class ConnectionOptions {
    * @return The length to be used by the Server for the response body on a HTTP stream connection
    * @see `this.setContentLength(long)`
    */
-  public function getContentLength(): Long return null;
+  public function getContentLength(): Long return 0;
   /**
    * Setter method that sets the length in bytes to be used by the Server for the response body on a stream connection 
    * (a minimum length, however, is ensured by the server). After the content length exhaustion, the connection will
@@ -50,7 +50,7 @@ class ConnectionOptions {
    * @return The max time (in milliseconds) to wait before trying a new connection.
    * @see `this.setFirstRetryMaxDelay(long)`
    */
-  public function getFirstRetryMaxDelay(): Long return null;
+  public function getFirstRetryMaxDelay(): Long return 0;
   /**
    * Setter method that sets the maximum time to wait before trying a new connection to the Server
    * in case the previous one is unexpectedly closed while correctly working.
@@ -166,7 +166,7 @@ class ConnectionOptions {
    * polling requests.
    * @see `this.setIdleTimeout(long)`
    */
-  public function getIdleTimeout(): Long return null;
+  public function getIdleTimeout(): Long return 0;
   /**
    * Setter method that sets the maximum time the Server is allowed to wait for any data to be sent in response to a 
    * polling request, if none has accumulated at request time. Setting this time to a nonzero value and the polling interval 
@@ -206,7 +206,7 @@ class ConnectionOptions {
    * 
    * @see `this.setKeepaliveInterval(long)`
    */
-  public function getKeepaliveInterval(): Long return null;
+  public function getKeepaliveInterval(): Long return 0;
   /**
    * Setter method that sets the interval between two keepalive packets to be sent by Lightstreamer Server on a stream 
    * connection when no actual data is being transmitted. The Server may, however, impose a lower limit on the keepalive 
@@ -302,7 +302,7 @@ class ConnectionOptions {
    * @return The time (in milliseconds) between subsequent polling requests.
    * @see `this.setPollingInterval(long)`
    */
-  public function getPollingInterval(): Long return null;
+  public function getPollingInterval(): Long return 0;
  /**
    * Setter method that sets the polling interval used for polling connections. The client switches from the default 
    * streaming mode to polling mode when the client network infrastructure does not allow streaming. Also, 
@@ -345,7 +345,7 @@ class ConnectionOptions {
    * reconnect to the Server.
    * @see `this.setReconnectTimeout(long)`
    */
-  public function getReconnectTimeout(): Long return null;
+  public function getReconnectTimeout(): Long return 0;
   /**
    * Setter method that sets the time the client, after entering "STALLED" status,
    * is allowed to keep waiting for a keepalive packet or any data on a stream connection,
@@ -380,7 +380,7 @@ class ConnectionOptions {
    * @return The time (in milliseconds) to wait before trying a new connection.
    * @see `this.setRetryDelay(long)`
    */
-  public function getRetryDelay(): Long return null;
+  public function getRetryDelay(): Long return 0;
   /**
    * Setter method that sets 
    * <ol>
@@ -437,7 +437,7 @@ class ConnectionOptions {
    * @return The reverse-heartbeat interval, or 0.
    * @see `this.setReverseHeartbeatInterval(long)`
    */
-  public function getReverseHeartbeatInterval(): Long return null;
+  public function getReverseHeartbeatInterval(): Long return 0;
   /**
    * Setter method that enables/disables the reverse-heartbeat mechanism by setting the
    * heartbeat interval. If the given value (expressed in milliseconds) equals 0 then the reverse-heartbeat mechanism 
@@ -491,7 +491,7 @@ class ConnectionOptions {
    * @return The maximum time allowed for recovery attempts, possibly 0.
    * @see `this.setSessionRecoveryTimeout(long)`
    */
-  public function getSessionRecoveryTimeout(): Long return null;
+  public function getSessionRecoveryTimeout(): Long return 0;
   /**
    * Setter method that sets the maximum time allowed for attempts to recover
    * the current session upon an interruption, after which a new session will be created.
@@ -529,7 +529,7 @@ class ConnectionOptions {
    * @return The idle time (in milliseconds) admitted before entering the "STALLED" status.
    * @see `this.setStalledTimeout(long)`
    */
-  public function getStalledTimeout(): Long return null;
+  public function getStalledTimeout(): Long return 0;
   /**
    * Setter method that sets the extra time the client is allowed to wait when an expected keepalive packet has not been 
    * received on a stream connection (and no actual data has arrived), before entering the "STALLED" status.
@@ -558,7 +558,7 @@ class ConnectionOptions {
    * @see `this.setHttpExtraHeadersOnSessionCreationOnly(boolean)`
    * @see `this.setHttpExtraHeaders(Map)`
    */
-  public function isHttpExtraHeadersOnSessionCreationOnly(): Bool return null;
+  public function isHttpExtraHeadersOnSessionCreationOnly(): Bool return false;
   /**
    * Setter method that enables/disables a restriction on the forwarding of the extra http headers specified through 
    * `this.setHttpExtraHeaders(Map)`. If true, said headers will only be sent during the session creation 
@@ -585,7 +585,7 @@ class ConnectionOptions {
    * @return Whether or not to ignore the server instance address sent by the server.
    * @see `this.setServerInstanceAddressIgnored(boolean)`
    */
-  public function isServerInstanceAddressIgnored(): Bool return null;
+  public function isServerInstanceAddressIgnored(): Bool return false;
   /**
    * Setter method that can be used to disable/enable the automatic handling of server instance address that may 
    * be returned by the Lightstreamer server during session creation. <BR> 
@@ -621,7 +621,7 @@ class ConnectionOptions {
    * @return Whether the slowing algorithm is enabled or not.
    * @see `this.setSlowingEnabled(boolean)`
    */
-  public function isSlowingEnabled(): Bool return null;
+  public function isSlowingEnabled(): Bool return false;
   /**
    * Setter method that turns on or off the slowing algorithm. This heuristic algorithm tries to detect when the client 
    * CPU is not able to keep the pace of the events sent by the Server on a streaming connection. In that case, an automatic

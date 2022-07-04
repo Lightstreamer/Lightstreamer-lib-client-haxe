@@ -252,7 +252,7 @@ class Subscription {
    * @see `LightstreamerClient.subscribe(Subscription)`
    * @see `LightstreamerClient.unsubscribe(Subscription)`
    */
-  public function isActive(): Bool return null;
+  public function isActive(): Bool return false;
   /**  
    * Inquiry method that checks if the Subscription is currently subscribed to
    * through the server or not. <BR>
@@ -266,7 +266,7 @@ class Subscription {
    * @return true/false if the Subscription is subscribed to
    * through the server or not.
    */
-  public function isSubscribed(): Bool return null;
+  public function isSubscribed(): Bool return false;
   /**
    * Inquiry method that can be used to read the name of the Data Adapter specified for this 
    * Subscription through `this.setDataAdapter(String)`.

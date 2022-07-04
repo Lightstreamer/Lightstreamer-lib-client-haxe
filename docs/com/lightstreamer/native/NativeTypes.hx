@@ -1,16 +1,16 @@
 package com.lightstreamer.native;
 
 #if java
-abstract Long(java.StdTypes.Int64) {}
+abstract Long(java.StdTypes.Int64) from Int {}
 #elseif cs
-abstract Long(cs.StdTypes.Int64) {}
+abstract Long(cs.StdTypes.Int64) from Int {}
 #elseif python
 /**
  * Alias for [int](https://docs.python.org/3/library/functions.html#int).
  */
-abstract Long(Int) {}
+abstract Long(Int) from Int {}
 #else
-abstract Long(Int) {}
+abstract Long(Int) from Int {}
 #end
 
 #if js
