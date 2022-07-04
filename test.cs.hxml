@@ -1,5 +1,5 @@
-test.std.cs.hxml
+test.cs.std.hxml
 --next
-test.proxy.cs.hxml
+test.cs.proxy.hxml
 --next
-test.cert.cs.hxml
+test.cs.cert.hxml
