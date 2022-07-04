@@ -31,7 +31,7 @@ class WsClient extends WsClientCs implements IWsClient {
     this.onOpen = onOpen;
     this.onText = onText;
     this.onError = onError;
-    var nHeaders = headers == null ? null : new NativeStringMap(headers);
+    var nHeaders = headers == null ? null : new NativeStringMap<String>(headers);
     @:nullSafety(Off)
     var nProxy = proxy == null ? null : new com.lightstreamer.cs.Proxy(proxy.host, proxy.port, proxy.user, proxy.password);
     @:nullSafety(Off)

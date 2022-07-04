@@ -66,10 +66,10 @@ class ConnectionOptions {
     client.machine.evtExtSetForcedTransport();
   }
 
-  public function getHttpExtraHeaders(): Null<NativeStringMap> {
-    return httpExtraHeaders == null ? null : new NativeStringMap(httpExtraHeaders);
+  public function getHttpExtraHeaders(): Null<NativeStringMap<String>> {
+    return httpExtraHeaders == null ? null : new NativeStringMap<String>(httpExtraHeaders);
   }
-  public function setHttpExtraHeaders(httpExtraHeaders: Null<NativeStringMap>): Void {
+  public function setHttpExtraHeaders(httpExtraHeaders: Null<NativeStringMap<String>>): Void {
     actionLogger.info('httpExtraHeaders changed: $httpExtraHeaders');
     this.httpExtraHeaders = httpExtraHeaders == null ? null : httpExtraHeaders.toHaxe();
     client.eventDispatcher.onPropertyChange("httpExtraHeaders");

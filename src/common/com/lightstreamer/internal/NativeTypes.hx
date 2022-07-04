@@ -42,9 +42,9 @@ class IllegalStateException extends haxe.Exception {}
 #end
 
 #if js
-abstract NativeStringMap(haxe.DynamicAccess<String>) {
+abstract NativeStringMap<V>(haxe.DynamicAccess<V>) {
   @:from
-  static inline function fromHaxeMap(map: Map<String, String>) {
+  static inline function fromHaxeMap<V>(map: Map<String, V>) {
     return new NativeStringMap(map);
   }
 
@@ -53,24 +53,24 @@ abstract NativeStringMap(haxe.DynamicAccess<String>) {
     return toHaxe();
   }
 
-  public overload inline extern function new(map: Map<String, String>) {
+  public overload inline extern function new(map: Map<String, V>) {
     this = fromMapToDynamicAccess(map);
   }
   
-  public overload inline extern function new(map: haxe.DynamicAccess<String>) {
+  public overload inline extern function new(map: haxe.DynamicAccess<V>) {
     this = map.copy();
   }
 
-  static function fromMapToDynamicAccess(map: Map<String, String>) {
-    var out: haxe.DynamicAccess<String> = {};
+  static function fromMapToDynamicAccess<V>(map: Map<String, V>) {
+    var out: haxe.DynamicAccess<V> = {};
     for (k => v in map) {
       out[k] = v;
     }
     return out;
   }
 
-  public function toHaxe(): Map<String, String> {
-    var out = new Map<String, String>();
+  public function toHaxe(): Map<String, V> {
+    var out = new Map<String, V>();
     @:nullSafety(Off) 
     for (k => v in this) {
       out[k] = v;
@@ -78,7 +78,7 @@ abstract NativeStringMap(haxe.DynamicAccess<String>) {
     return out;
   }
 
-  public function toDynamicAccess(): haxe.DynamicAccess<String> {
+  public function toDynamicAccess(): haxe.DynamicAccess<V> {
     @:nullSafety(Off) return this.copy();
   }
 }
@@ -97,20 +97,41 @@ function toMap<K, V>(map: java.util.Map<K, V>, out: Map<K, V>) {
   return out;
 }
 
-abstract NativeStringMap1<V>(java.util.Map<String, V>) {
-  public function new(map: Map<String, V>) {
+abstract NativeStringMap<V>(java.util.Map<String, V>) {
+  public overload function new(map: Map<String, V>) {
     var out = new java.util.HashMap<String, V>();
     this = toNativeMap(map, out);
   }
 
+  public overload function new(map: haxe.DynamicAccess<V>) {
+    var out = new java.util.HashMap<String, V>();
+    for (k => v in map) {
+      out.put(k, v);
+    }
+    this = out;
+  }
+
+  @:from
+  static function fromHaxe(map) {
+    return new NativeStringMap(map);
+  }
+
   @:to
-  function toHaxe(): Map<String, V> {
+  public function toHaxe(): Map<String, V> {
     var out = new Map<String, V>();
     return toMap(this, out);
   }
+
+  public function toDynamicAccess(): haxe.DynamicAccess<V> {
+    var out = new haxe.DynamicAccess<V>();
+    for (entry in this.entrySet()) {
+      out[entry.getKey()] = entry.getValue();
+    }
+    return out;
+  }
 }
 
-abstract NativeIntMap1<V>(java.util.Map<Int, V>) {
+abstract NativeIntMap<V>(java.util.Map<Int, V>) {
   public function new(map: Map<Int, V>) {
     var out = new java.util.HashMap<Int, V>();
     this = toNativeMap(map, out);
@@ -120,44 +141,6 @@ abstract NativeIntMap1<V>(java.util.Map<Int, V>) {
   function toHaxe(): Map<Int, V> {
     var out = new Map<Int, V>();
     return toMap(this, out);
-  }
-}
-
-abstract NativeStringMap(java.util.Map<String, String>) {
-  @:from
-  static inline function fromHaxeMap(map) {
-    return new NativeStringMap(map);
-  }
-
-  @:to
-  inline function toHaxeMap() {
-    return toHaxe();
-  }
-
-  public overload function new(map: Map<String, String>) {
-    var out = new java.util.HashMap<String, String>();
-    this = toNativeMap(map, out);
-  }
-
-  public overload function new(map: haxe.DynamicAccess<String>) {
-    var out = new java.util.HashMap<String, String>();
-    for (k => v in map) {
-      out.put(k, v);
-    }
-    this = out;
-  }
-
-  public function toHaxe(): Map<String, String> {
-    var out = new Map<String, String>();
-    return toMap(this, out);
-  }
-
-  public function toDynamicAccess(): haxe.DynamicAccess<String> {
-    var out = new haxe.DynamicAccess<String>();
-    for (entry in this.entrySet()) {
-      out[entry.getKey()] = entry.getValue();
-    }
-    return out;
   }
 }
 #elseif cs
@@ -177,51 +160,20 @@ function toMap<K, V>(map: cs.system.collections.generic.IDictionary_2<K, V>, out
   return out;
 }
 
-abstract NativeStringMap1<V>(cs.system.collections.generic.IDictionary_2<String, V>) {
+abstract NativeStringMap<V>(cs.system.collections.generic.IDictionary_2<String, V>) to cs.system.collections.generic.IDictionary_2<String, V> {
   public function new(map: Map<String, V>) {
     var out = new cs.system.collections.generic.Dictionary_2<String, V>();
     this = toNativeMap(map, out);
   }
 
-  @:to
-  function toHaxe(): Map<String, V> {
-    var out = new Map<String, V>();
-    return toMap(this, out);
-  }
-}
-
-abstract NativeIntMap1<V>(cs.system.collections.generic.IDictionary_2<Int, V>) {
-  public function new(map: Map<Int, V>) {
-    var out = new cs.system.collections.generic.Dictionary_2<Int, V>();
-    this = toNativeMap(map, out);
-  }
-
-  @:to
-  function toHaxe(): Map<Int, V> {
-    var out = new Map<Int, V>();
-    return toMap(this, out);
-  }
-}
-
-abstract NativeStringMap(cs.system.collections.generic.IDictionary_2<String, String>) 
-to cs.system.collections.generic.IDictionary_2<String, String> {
   @:from
-  static inline function fromHaxeMap(map) {
+  static function fromHaxe(map) {
     return new NativeStringMap(map);
   }
 
   @:to
-  inline function toHaxeMap() {
-    return toHaxe();
-  }
-
-  public function new(map: Map<String, String>) {
-    var out = new cs.system.collections.generic.Dictionary_2<String, String>();
-    this = toNativeMap(map, out);
-  }
-
-  public function toHaxe(): Map<String, String> {
-    var out = new Map<String, String>();
+  public function toHaxe(): Map<String, V> {
+    var out = new Map<String, V>();
     return toMap(this, out);
   }
 
@@ -235,6 +187,19 @@ to cs.system.collections.generic.IDictionary_2<String, String> {
     }
     out.add("}");
     return out.toString();
+  }
+}
+
+abstract NativeIntMap<V>(cs.system.collections.generic.IDictionary_2<Int, V>) {
+  public function new(map: Map<Int, V>) {
+    var out = new cs.system.collections.generic.Dictionary_2<Int, V>();
+    this = toNativeMap(map, out);
+  }
+
+  @:to
+  function toHaxe(): Map<Int, V> {
+    var out = new Map<Int, V>();
+    return toMap(this, out);
   }
 }
 #elseif python
@@ -252,20 +217,25 @@ function toMap<K, V>(map: python.Dict<K, V>, out: Map<K, V>) {
   return out;
 }
 
-abstract NativeStringMap1<V>(python.Dict<String, V>) {
+abstract NativeStringMap<V>(python.Dict<String, V>) to python.Dict<String, V> {
   public function new(map: Map<String, V>) {
     var out = new python.Dict<String, V>();
     this = toNativeMap(map, out);
   }
 
+  @:from
+  static function fromHaxe(map) {
+    return new NativeStringMap(map);
+  }
+
   @:to
-  function toHaxe(): Map<String, V> {
+  public function toHaxe(): Map<String, V> {
     var out = new Map<String, V>();
     return toMap(this, out);
   }
 }
 
-abstract NativeIntMap1<V>(python.Dict<Int, V>) {
+abstract NativeIntMap<V>(python.Dict<Int, V>) {
   public function new(map: Map<Int, V>) {
     var out = new python.Dict<Int, V>();
     this = toNativeMap(map, out);
@@ -277,30 +247,8 @@ abstract NativeIntMap1<V>(python.Dict<Int, V>) {
     return toMap(this, out);
   }
 }
-
-abstract NativeStringMap(python.Dict<String, String>) to python.Dict<String, String> {
-  @:from
-  static inline function fromHaxeMap(map) {
-    return new NativeStringMap(map);
-  }
-
-  @:to
-  inline function toHaxeMap() {
-    return toHaxe();
-  }
-
-  public function new(map: Map<String, String>) {
-    var out = new python.Dict<String, String>();
-    this = toNativeMap(map, out);
-  }
-
-  public function toHaxe(): Map<String, String> {
-    var out = new Map<String, String>();
-    return toMap(this, out);
-  }
-}
 #elseif php
-abstract NativeStringMap1<V>(php.NativeAssocArray<V>) {
+abstract NativeStringMap<V>(php.NativeAssocArray<V>) {
   public function new(map: Map<String, V>) {
     var out = new php.NativeAssocArray<V>();
     for (k => v in map) {
@@ -309,8 +257,13 @@ abstract NativeStringMap1<V>(php.NativeAssocArray<V>) {
     this = out;
   }
 
+  @:from
+  static function fromHaxe(map) {
+    return new NativeStringMap(map);
+  }
+
   @:to
-  function toHaxe(): Map<String, V> {
+  public function toHaxe(): Map<String, V> {
     var out = new Map<String, V>();
     for (k => v in this) {
       out[k] = v;
@@ -319,7 +272,7 @@ abstract NativeStringMap1<V>(php.NativeAssocArray<V>) {
   }
 }
 
-abstract NativeIntMap1<V>(php.NativeIndexedArray<V>) {
+abstract NativeIntMap<V>(php.NativeIndexedArray<V>) {
   public function new(map: Map<Int, V>) {
     var out = new php.NativeIndexedArray<V>();
     for (k => v in map) {
@@ -337,54 +290,20 @@ abstract NativeIntMap1<V>(php.NativeIndexedArray<V>) {
     return out;
   }
 }
-
-abstract NativeStringMap(php.NativeAssocArray<String>) {
-  @:from
-  public static inline function fromHaxeMap(map) {
-    return new NativeStringMap(map);
-  }
-
-  @:to
-  public inline function toHaxeMap() {
-    return toHaxe();
-  }
-
-  public function new(map: Map<String, String>) {
-    var out = new php.NativeAssocArray<String>();
-    for (k => v in map) {
-      out[k] = v;
-    }
-    this = out;
-  }
-
-  public function toHaxe(): Map<String, String> {
-    var out = new Map<String, String>();
-    for (k => v in this) {
-      out[k] = v;
-    }
-    return out;
-  }
-}
 #elseif cpp
-abstract NativeStringMap1<V>(Map<String, V>) to Map<String, V> {
+abstract NativeStringMap<V>(Map<String, V>) from Map<String, V> to Map<String, V> {
   public inline function new(a: Map<String, V>) {
     this = a;
   }
+
+  public inline function toHaxe(): Map<String, V> {
+    return this;
+  }
 }
 
-abstract NativeIntMap1<V>(Map<Int, V>) to Map<Int, V> {
+abstract NativeIntMap<V>(Map<Int, V>) to Map<Int, V> {
   public inline function new(a: Map<Int, V>) {
     this = a;
-  }
-}
-
-abstract NativeStringMap(Map<String, String>) from Map<String, String> to Map<String, String> {
-  public inline function new(a: Map<String, String>) {
-    this = a;
-  }
-
-  public inline function toHaxe(): Map<String, String> {
-    return this;
   }
 }
 #end

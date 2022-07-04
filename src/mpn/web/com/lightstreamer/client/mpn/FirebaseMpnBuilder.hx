@@ -49,11 +49,11 @@ class FirebaseMpnBuilder {
     }
   }
 
-  public function getHeaders(): Null<NativeStringMap> {
+  public function getHeaders(): Null<NativeStringMap<String>> {
     var f = obj.webpush.headers;
-    return f == null ? null : @:nullSafety(Off) new NativeStringMap(f);
+    return f == null ? null : @:nullSafety(Off) new NativeStringMap<String>(f);
   }
-  public function setHeaders(newValue: Null<NativeStringMap>): FirebaseMpnBuilder {
+  public function setHeaders(newValue: Null<NativeStringMap<String>>): FirebaseMpnBuilder {
     obj.webpush.headers = newValue == null ? null : newValue.toDynamicAccess();
     return this;
   }
@@ -82,11 +82,11 @@ class FirebaseMpnBuilder {
     return this;
   }
 
-  public function getData(): Null<NativeStringMap> {
+  public function getData(): Null<NativeStringMap<String>> {
     var f = obj.webpush.data;
-    return f == null ? null : @:nullSafety(Off) new NativeStringMap(f);
+    return f == null ? null : @:nullSafety(Off) new NativeStringMap<String>(f);
   }
-  public function setData(newValue: Null<NativeStringMap>): FirebaseMpnBuilder {
+  public function setData(newValue: Null<NativeStringMap<String>>): FirebaseMpnBuilder {
     obj.webpush.data = newValue == null ? null : newValue.toDynamicAccess();
     return this;
   }

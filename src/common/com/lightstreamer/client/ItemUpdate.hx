@@ -27,9 +27,9 @@ interface ItemUpdate {
   function forEachChangedField(iterator: (fieldName: Null<String>, fieldPos: Int, value: Null<String>) -> Void): Void;
   function forEachField(iterator: (fieldName: Null<String>, fieldPos: Int, value: Null<String>) -> Void): Void;
   #else
-  function getChangedFields(): NativeStringMap1<Null<String>>;
-  function getChangedFieldsByPosition(): NativeIntMap1<Null<String>>;
-  function getFields(): NativeStringMap1<Null<String>>;
-  function getFieldsByPosition(): NativeIntMap1<Null<String>>;
+  function getChangedFields(): NativeStringMap<Null<String>>;
+  function getChangedFieldsByPosition(): NativeIntMap<Null<String>>;
+  function getFields(): NativeStringMap<Null<String>>;
+  function getFieldsByPosition(): NativeIntMap<Null<String>>;
   #end
 }

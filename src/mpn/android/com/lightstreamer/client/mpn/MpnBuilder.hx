@@ -186,12 +186,12 @@ class MpnBuilder {
     return obj.android.notification.click_action;
   }
 
-  public overload function data(newValue: Null<NativeStringMap>): MpnBuilder {
+  public overload function data(newValue: Null<NativeStringMap<String>>): MpnBuilder {
     obj.android.data = newValue == null ? null : newValue.toDynamicAccess();
     return this;
   }
-  public overload function data(): Null<NativeStringMap> {
+  public overload function data(): Null<NativeStringMap<String>> {
     var f = obj.android.data;
-    return f == null ? null : new NativeStringMap(f);
+    return f == null ? null : new NativeStringMap<String>(f);
   }
 }

@@ -24,7 +24,7 @@ class WsClient extends WsClientPy implements IWsClient {
     this.onOpen = onOpen;
     this.onText = onText;
     this.onError = onError;
-    var nHeaders = headers == null ? null : new NativeStringMap(headers);
+    var nHeaders = headers == null ? null : new NativeStringMap<String>(headers);
     var nProxy = proxy != null ? ClientCommon.buildProxy(proxy) : null;
     this.connectAsync(url, Constants.FULL_TLCP_VERSION, nHeaders, nProxy, sslContext);
   }

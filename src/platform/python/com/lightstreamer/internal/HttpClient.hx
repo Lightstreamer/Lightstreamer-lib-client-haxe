@@ -24,7 +24,7 @@ class HttpClient extends HttpClientPy implements IHttpClient {
       this.onText = onText;
       this.onError = onError;
       this.onDone = onDone;
-      var nHeaders = headers == null ? null : new NativeStringMap(headers);
+      var nHeaders = headers == null ? null : new NativeStringMap<String>(headers);
       var nProxy = proxy != null ? ClientCommon.buildProxy(proxy) : null;
       this.sendAsync(url, body, nHeaders, nProxy, sslContext);
   }
