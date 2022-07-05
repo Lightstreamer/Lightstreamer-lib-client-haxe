@@ -353,11 +353,15 @@ class TestClient extends utest.Test {
     subListener._onItemLostUpdates = (name, pos, lost) -> {
       equals("overflow", name);
       equals(1, pos);
-      async.completed();
+      client.unsubscribe(sub);
     };
+    subListener._onUnsubscription = () -> {
+      async.completed();
+    }
     sub.addListener(subListener);
     client.subscribe(sub);
-    client.connectionOptions.setRequestedMaxBandwidth("1");
+    // NB the bandwidth must not be too low otherwise the server can't write the response
+    client.connectionOptions.setRequestedMaxBandwidth("10");
     client.connect();
   }
 
