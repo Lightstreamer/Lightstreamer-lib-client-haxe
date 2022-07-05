@@ -50,6 +50,7 @@ class TestClient extends utest.Test {
     client.connect();
   }
 
+  @:timeout(3000)
   function _testOnlineServer(async: utest.Async) {
     var transport = _param;
     client = new LightstreamerClient("https://push.lightstreamer.com", "DEMO");

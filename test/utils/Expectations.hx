@@ -4,10 +4,12 @@ import haxe.Exception;
 
 private enum Slot {
   Await(expected: String);
+  AwaitGroup(expected: Array<String>);
   Block(block: ()->Void);
 }
 
 @:access(utest.Test)
+@:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class Expectations {
   final expectations: Array<Slot> = [];
   final test: utest.Test;
@@ -20,8 +22,14 @@ class Expectations {
     runBlocks();
   }
 
-  public function await(expected: String): Expectations {
-    expectations.push(Await(expected));
+  public function await(expected: ...String): Expectations {
+    if (expected.length == 0) {
+      throw new haxe.Exception("Expected not empty value");
+    } else if (expected.length == 1) {
+      expectations.push(Await(expected[0]));
+    } else {
+      expectations.push(AwaitGroup(expected));
+    }
     return this;
   }
 
@@ -43,6 +51,14 @@ class Expectations {
     switch slot {
     case Await(expected):
       test.equals(expected, actual);
+    case AwaitGroup(expected):
+      var found = expected.remove(actual);
+      if (!found) {
+        test.fail('"$actual" not found');
+      }
+      if (expected.length > 0) {
+        expectations.unshift(slot);
+      }
     case _:
       throw new Exception('Expected $actual but found a block');
     }
@@ -54,7 +70,7 @@ class Expectations {
       switch slot {
       case Block(block):
         test.delay(block, 0);
-      case Await(_):
+      case Await(_) | AwaitGroup(_):
         break;
       }
       expectations.shift();

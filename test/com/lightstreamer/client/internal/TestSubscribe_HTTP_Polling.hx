@@ -70,8 +70,7 @@ class TestSubscribe_HTTP_Polling extends utest.Test {
       ctrl.onText("REQERR,1,-5,error");
       ctrl.onDone();
     })
-    .await("ctrl.dispose")
-    .await("onError -5 error")
+    .await("onError -5 error", "ctrl.dispose")
     .then(() -> isFalse(sub.isActive()))
     .then(() -> async.completed())
     .verify();
