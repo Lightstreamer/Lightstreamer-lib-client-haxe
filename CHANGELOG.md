@@ -1,4 +1,18 @@
 
+# all
+
+The methods 
+
+- Subscription.getItems
+- Subscription.getItemGroup
+- Subscription.getFields
+- Subscription.getFieldSchema
+- Subscription.getCommandSeconLevelFields
+Subscription.getCommandSecondLevelFieldSchema 
+
+return null when the values are not available. 
+Previously they threw an IllegalStateException.
+
 # js only
 
 - removed ConnectionSharing

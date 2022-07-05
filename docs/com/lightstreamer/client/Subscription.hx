@@ -319,11 +319,7 @@ class Subscription {
    * Note that if the single-item-constructor was used, this method will return an array 
    * of length 1 containing such item.
    *
-   * **lifecycle** This method can only be called if the Subscription has been initialized 
-   * with an "Item List".
-   * @throws IllegalStateException if the Subscription was initialized with an "Item Group" 
-   * or was not initialized at all.
-   * @return the "Item List" to be subscribed to through the server.
+   * @return the "Item List" to be subscribed to through the server or null if the Subscription was initialized with an "Item Group" or was not initialized at all.
    */
   public function getItems(): Null<NativeArray<String>> return null;
   /**
@@ -346,11 +342,7 @@ class Subscription {
   /**
    * Inquiry method that can be used to read the item group specified for this Subscription.
    *
-   * **lifecycle** This method can only be called if the Subscription has been initialized
-   * using an "Item Group"
-   * @throws IllegalStateException if the Subscription was initialized with an "Item List" 
-   * or was not initialized at all.
-   * @return the "Item Group" to be subscribed to through the server.
+   * @return the "Item Group" to be subscribed to through the server or null if the Subscription was initialized with an "Item List" or was not initialized at all.
    */
   public function getItemGroup(): Null<String> return null;
   /**
@@ -372,11 +364,7 @@ class Subscription {
   /**
    * Inquiry method that can be used to read the "Field List" specified for this Subscription.
    *
-   * **lifecycle**  This method can only be called if the Subscription has been initialized 
-   * using a "Field List".
-   * @throws IllegalStateException if the Subscription was initialized with a "Field Schema" 
-   * or was not initialized at all.
-   * @return the "Field List" to be subscribed to through the server.
+   * @return the "Field List" to be subscribed to through the server or null if the Subscription was initialized with a "Field Schema" or was not initialized at all.
    */
   public function getFields(): Null<NativeArray<String>> return null;
   /**
@@ -399,11 +387,7 @@ class Subscription {
   /**
    * Inquiry method that can be used to read the field schema specified for this Subscription.
    *
-   * **lifecycle** This method can only be called if the Subscription has been initialized 
-   * using a "Field Schema"
-   * @throws IllegalStateException if the Subscription was initialized with a "Field List" or was 
-   * not initialized at all.
-   * @return the "Field Schema" to be subscribed to through the server.
+   * @return the "Field Schema" to be subscribed to through the server or null if the Subscription was initialized with a "Field List" or was not initialized at all.
    */
   public function getFieldSchema(): Null<String> return null;
   /**
@@ -678,12 +662,8 @@ class Subscription {
    * Inquiry method that can be used to read the "Field List" specified for second-level 
    * Subscriptions.
    *
-   * **lifecycle** This method can only be called if the second-level of this Subscription 
-   * has been initialized using a "Field List"
-   * @throws IllegalStateException if the Subscription was initialized with a "Field Schema" 
-   * or was not initialized at all.
    * @throws IllegalStateException if the Subscription mode is not COMMAND
-   * @return the list of fields to be subscribed to through the server.
+   * @return the list of fields to be subscribed to through the server or null if the Subscription was initialized with a "Field Schema" or was not initialized at all.
    * @see `Subscription.setCommandSecondLevelFields(String[])`
    */
   public function getCommandSecondLevelFields(): Null<NativeArray<String>> return null;
@@ -729,12 +709,8 @@ class Subscription {
    * Inquiry method that can be used to read the "Field Schema" specified for second-level 
    * Subscriptions.
    *
-   * **lifecycle** This method can only be called if the second-level of this Subscription has 
-   * been initialized using a "Field Schema".
-   * @throws IllegalStateException if the Subscription was initialized with a "Field List" or 
-   * was not initialized at all.
    * @throws IllegalStateException if the Subscription mode is not COMMAND
-   * @return the "Field Schema" to be subscribed to through the server.
+   * @return the "Field Schema" to be subscribed to through the server or null if the Subscription was initialized with a "Field List" or was not initialized at all.
    * @see `Subscription.setCommandSecondLevelFieldSchema(String)`
    */
   public function getCommandSecondLevelFieldSchema(): Null<String> return null;
