@@ -2,6 +2,7 @@ package com.lightstreamer.client;
 
 import com.lightstreamer.internal.NativeTypes;
 
+#if (js || python) @:expose @:native("ItemUpdate") #end
 #if (java || cs || python) @:nativeGen #end
 interface ItemUpdate {
   function getItemName(): Null<String>;

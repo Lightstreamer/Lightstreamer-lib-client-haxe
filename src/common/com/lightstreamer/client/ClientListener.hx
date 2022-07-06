@@ -1,5 +1,6 @@
 package com.lightstreamer.client;
 
+#if (js || python) @:expose @:native("ClientListener") #end
 #if (java || cs || python) @:nativeGen #end
 interface ClientListener {
   public function onListenEnd(client: LightstreamerClient): Void;
