@@ -180,7 +180,7 @@ class LightstreamerClient {
    * @return a list containing the listeners that were added to this client. 
    * @see `this.addListener(ClientListener)`
    */
-  public function getListeners(): #if python Array #elseif java java.util.List #end<ClientListener> return null;
+  public function getListeners(): NativeList<ClientListener> return null;
   /**
    * Operation method that requests to open a Session against the configured Lightstreamer Server. <BR>
    * When connect() is called, unless a single transport was forced through 
