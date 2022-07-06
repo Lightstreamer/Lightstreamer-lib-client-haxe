@@ -56,6 +56,7 @@ class TestAll2 {
     #end
     #end
     runner.addCase(TestClient);
+    runner.addCase(TestClientExtra);
     runner.addCase(TestSubscribe_WS);
     runner.addCase(TestSubscribe_HTTP);
     runner.addCase(TestSubscribe_HTTP_Polling);
