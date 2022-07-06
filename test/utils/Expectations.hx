@@ -9,7 +9,7 @@ private enum Slot {
 }
 
 @:access(utest.Test)
-@:build(com.lightstreamer.internal.Macros.synchronizeClass())
+@:build(utils.Macros.synchronizeClass())
 class Expectations {
   final expectations: Array<Slot> = [];
   final test: utest.Test;
