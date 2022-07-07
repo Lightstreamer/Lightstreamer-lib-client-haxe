@@ -43,7 +43,7 @@ function genJavaDocs(version: String) {
   Sys.command("haxelib", [
     "run", "dox",
     "-i", '$BASE/dist/java/java.xml', 
-    "-o", '$BASE/dist/java/pages', 
+    "-o", '$BASE/dist/java/api', 
     "--toplevel-package", "com.lightstreamer", "--keep-field-order",
     "--title", 'Lightstreamer Java Client SDK $version API Reference', 
     "-D", "version", '$version', 
@@ -65,7 +65,7 @@ function genPythonDocs(version: String) {
   Sys.command("haxelib", [
     "run", "dox",
     "-i", '$BASE/dist/python/python.xml', 
-    "-o", '$BASE/dist/python/pages', 
+    "-o", '$BASE/dist/python/api', 
     "--toplevel-package", "com.lightstreamer", "--keep-field-order",
     "--title", 'Lightstreamer Python Client SDK $version API Reference', 
     "-D", "version", '$version', 
