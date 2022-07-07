@@ -14,7 +14,7 @@ function main() {
   // build the library
   Sys.command("haxe build.python.hxml");
   // copy the artifacts to dist
-  copy("client.py", bin, dist_src);
+  copy("com_lightstreamer_client.py", bin, dist_src);
   copy("com_lightstreamer_net.py", deps, dist_src);
   copy("__init__.py", res, dist_src);
   copy("LICENSE", res, dist);

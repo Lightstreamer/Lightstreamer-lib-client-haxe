@@ -1,7 +1,7 @@
 package com.lightstreamer.client;
 
 #if python
-@:pythonImport("lightstreamer_client.client", "ClientListener")
+@:pythonImport("lightstreamer_client", "ClientListener")
 #end
 extern interface ClientListener {
   public function onStatusChange(status:String): Void;

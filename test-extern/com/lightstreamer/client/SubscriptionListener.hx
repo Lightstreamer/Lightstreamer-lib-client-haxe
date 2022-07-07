@@ -1,7 +1,7 @@
 package com.lightstreamer.client;
 
 #if python
-@:pythonImport("lightstreamer_client.client", "SubscriptionListener")
+@:pythonImport("lightstreamer_client", "SubscriptionListener")
 #end
 extern interface SubscriptionListener {
   public function onSubscription(): Void;

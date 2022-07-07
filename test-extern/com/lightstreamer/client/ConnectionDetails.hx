@@ -1,7 +1,7 @@
 package com.lightstreamer.client;
 
 #if python
-@:pythonImport("lightstreamer_client.client", "ConnectionDetails")
+@:pythonImport("lightstreamer_client", "ConnectionDetails")
 #end
 extern class ConnectionDetails {
   public function getAdapterSet(): Null<String>;

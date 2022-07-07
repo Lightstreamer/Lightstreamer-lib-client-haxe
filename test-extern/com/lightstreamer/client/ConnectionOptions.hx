@@ -1,7 +1,7 @@
 package com.lightstreamer.client;
 
 #if python
-@:pythonImport("lightstreamer_client.client", "ConnectionOptions")
+@:pythonImport("lightstreamer_client", "ConnectionOptions")
 #end
 extern class ConnectionOptions {
   public function getContentLength(): Long;

@@ -1,7 +1,7 @@
 package com.lightstreamer.client;
 
 #if python
-@:pythonImport("lightstreamer_client.client", "Subscription")
+@:pythonImport("lightstreamer_client", "Subscription")
 #end
 extern class Subscription {
   #if js

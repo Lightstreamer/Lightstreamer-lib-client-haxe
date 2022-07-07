@@ -2,7 +2,7 @@ package com.lightstreamer.client;
 
 #if (java || cs || python)
 #if python
-@:pythonImport("lightstreamer_client.client", "Proxy")
+@:pythonImport("lightstreamer_client", "Proxy")
 #end
 extern class Proxy {
   #if (java || cs)

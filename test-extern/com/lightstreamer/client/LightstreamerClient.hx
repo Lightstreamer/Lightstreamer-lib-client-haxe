@@ -1,7 +1,7 @@
 package com.lightstreamer.client;
 
 #if python
-@:pythonImport("lightstreamer_client.client", "LightstreamerClient")
+@:pythonImport("lightstreamer_client", "LightstreamerClient")
 #end
 extern class LightstreamerClient {
    public var connectionDetails(default, null): ConnectionDetails;

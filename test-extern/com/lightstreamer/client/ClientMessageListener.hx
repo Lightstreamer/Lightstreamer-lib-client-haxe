@@ -1,7 +1,7 @@
 package com.lightstreamer.client;
 
 #if python
-@:pythonImport("lightstreamer_client.client", "ClientMessageListener")
+@:pythonImport("lightstreamer_client", "ClientMessageListener")
 #end
 extern interface ClientMessageListener {
   public function onProcessed(msg:String): Void;

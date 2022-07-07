@@ -1,7 +1,7 @@
 package com.lightstreamer.client;
 
 #if python
-@:pythonImport("lightstreamer_client.client", "ItemUpdate")
+@:pythonImport("lightstreamer_client", "ItemUpdate")
 #end
 extern interface ItemUpdate {
   function getItemName(): Null<String>;

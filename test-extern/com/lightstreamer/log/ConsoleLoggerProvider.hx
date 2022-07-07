@@ -1,7 +1,7 @@
 package com.lightstreamer.log;
 
 #if python
-@:pythonImport("lightstreamer_client.client", "ConsoleLogLevel")
+@:pythonImport("lightstreamer_client", "ConsoleLogLevel")
 #end
 extern class ConsoleLogLevel {
   public static final TRACE: Int;
@@ -13,7 +13,7 @@ extern class ConsoleLogLevel {
 }
 
 #if python
-@:pythonImport("lightstreamer_client.client", "ConsoleLoggerProvider")
+@:pythonImport("lightstreamer_client", "ConsoleLoggerProvider")
 #end
 extern class ConsoleLoggerProvider implements LoggerProvider {
   public function new(level: Int);
