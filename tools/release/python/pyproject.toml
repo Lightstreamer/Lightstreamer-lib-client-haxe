@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lightstreamer-client-lib"
-version = "9.0.0"
+version = "::version::"
 description = "Lightstreamer Client SDK"
 readme = "README.md"
 authors = [{ name = "Lightstreamer Srl", email = "support@lightstreamer.com" }]

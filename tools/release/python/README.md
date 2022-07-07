@@ -6,7 +6,7 @@ The library offers automatic recovery from connection failures, automatic select
 
 ## Installation
 
-You can install the Lightstreamer Client SDK from [PyPI](https://pypi.org/project/realpython-reader/):
+You can install the Lightstreamer Client SDK from [PyPI](https://pypi.org/project/lightstreamer-client-lib/):
 
 ```
 python -m pip install lightstreamer-client-lib
@@ -16,7 +16,7 @@ The sdk is supported on Python 3.9 and above.
 
 ## Quickstart
 
-To connect to a Lightstreamer Server, a [LightstreamerClient](https://lightstreamer.com/api/ls-python-client/latest/LightstreamerClient.html) object has to be created, configured, and instructed to connect to the Lightstreamer Server. 
+To connect to a Lightstreamer Server, a [LightstreamerClient](https://lightstreamer.com/api/ls-python-client/::version::/com/lightstreamer/client/LightstreamerClient.html) object has to be created, configured, and instructed to connect to the Lightstreamer Server. 
 A minimal version of the code that creates a LightstreamerClient and connects to the Lightstreamer Server on *https://push.lightstreamer.com* will look like this:
 
 ```python
@@ -26,7 +26,7 @@ client = LightstreamerClient("http://push.lightstreamer.com/","DEMO")
 client.connect()
 ```
 
-For each subscription to be subscribed to a Lightstreamer Server a [Subscription](https://lightstreamer.com/api/ls-python-client/latest/Subscription.html) instance is needed.
+For each subscription to be subscribed to a Lightstreamer Server a [Subscription](https://lightstreamer.com/api/ls-python-client/::version::/com/lightstreamer/client/Subscription.html) instance is needed.
 A simple Subscription containing three items and two fields to be subscribed in *MERGE* mode is easily created (see [Lightstreamer General Concepts](https://lightstreamer.com/docs/ls-server/latest/General%20Concepts.pdf)):
 
 ```python
@@ -36,7 +36,7 @@ sub.setRequestedSnapshot("yes")
 client.subscribe(sub)
 ```
 
-Before sending the subscription to the server, usually at least one [SubscriptionListener](https://lightstreamer.com/api/ls-python-client/latest/SubscriptionListener.html) is attached to the Subscription instance in order to consume the real-time updates. The following code shows the values of the fields *stock_name* and *last_price* each time a new update is received for the subscription:
+Before sending the subscription to the server, usually at least one [SubscriptionListener](https://lightstreamer.com/api/ls-python-client/::version::/com/lightstreamer/client/SubscriptionListener.html) is attached to the Subscription instance in order to consume the real-time updates. The following code shows the values of the fields *stock_name* and *last_price* each time a new update is received for the subscription:
 
 ```python
 class SubListener:
@@ -94,7 +94,7 @@ client.connect()
 
 ## Logging
 
-To enable the internal client logger, create a [LoggerProvider](https://lightstreamer.com/api/ls-python-client/latest/LoggerProvider.html) and set it as the default provider of [LightstreamerClient](https://lightstreamer.com/api/ls-python-client/latest/LightstreamerClient.html).
+To enable the internal client logger, create a [LoggerProvider](https://lightstreamer.com/api/ls-python-client/::version::/com/lightstreamer/log/LoggerProvider.html) and set it as the default provider of [LightstreamerClient](https://lightstreamer.com/api/ls-python-client/::version::/com/lightstreamer/client/LightstreamerClient.html).
 
 ```python
 loggerProvider = ConsoleLoggerProvider(ConsoleLogLevel.DEBUG)
@@ -107,9 +107,9 @@ Compatible with Lightstreamer Server since version 7.2.0.
 
 ## Documentation
 
-- [Live demos](https://demos.lightstreamer.com/)
+- [Live demos](https://demos.lightstreamer.com/?p=lightstreamer&t=client&lclient=python)
 
-- [API Reference](https://lightstreamer.com/api/ls-python-client/latest/)
+- [API Reference](https://lightstreamer.com/api/ls-python-client/::version::/index.html)
 
 ## Support
 
