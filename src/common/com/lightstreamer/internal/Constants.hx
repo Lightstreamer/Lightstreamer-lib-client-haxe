@@ -9,34 +9,34 @@ final LS_LIB_VERSION = "0.0 build 0";
 final LS_CID = "mgQkwtwdysogQz2BJ4Ji kOj2Bg";
 #elseif LS_WEB
 final LS_LIB_NAME = "javascript_client";
-final LS_LIB_VERSION = "9.0.0 build 20220624";
-final LS_CID = "pcYgxn8m8 feOojyA1V661f3g2.pz482h85HM8j";
+final LS_LIB_VERSION = "9.0.0-beta.1 build 20220624";
+final LS_CID = "pcYgxn8m8 feOojyA1V661f4gpAeL83dXoqoH6M982l89l";
 #elseif LS_NODE
 final LS_LIB_NAME = "nodejs_client";
-final LS_LIB_VERSION = "9.0.0 build 20220624";
-final LS_CID = "tqGko0tg4pkpW3EAK3M4hwLri8M4O968hAx";
+final LS_LIB_VERSION = "9.0.0-beta.1 build 20220624";
+final LS_CID = "tqGko0tg4pkpW3EAK3M5hgWg4CHfDprfc85DM4S9Aa";
 #elseif android
 final LS_LIB_NAME = "android_client";
-final LS_LIB_VERSION = "9.0.0 build 20220624";
-final LS_CID = "gpGxttxdysogQz2KJ4L73dXoqoH6M982l89r";
+final LS_LIB_VERSION = "5.0.0-beta.1 build 20220624";
+final LS_CID = "gpGxttxdysogQz2GJ4L74dHzfAL1x-onG37BM6MD86p";
 #elseif java
 final LS_LIB_NAME = "javase_client";
-final LS_LIB_VERSION = "9.0.0 build 20220624";
-final LS_CID = "pcYgxptg4pkpW3EAK3M4hwLri8M4O968hAo";
+final LS_LIB_VERSION = "5.0.0-beta.1 build 20220624";
+final LS_CID = "pcYgxptg4pkpW3AAK3M5hgWg4CHfDprfc85DM4S9Am";
 #elseif cs
 final LS_LIB_NAME = "dotnet_client";
-final LS_LIB_VERSION = "9.0.0 build 20220624";
-final LS_CID = "jqWtj1tg4pkpW3EAK3M4hwLri8M4O968hAj";
+final LS_LIB_VERSION = "6.0.0-beta.1 build 20220624";
+final LS_CID = "jqWtj1tg4pkpW3BAK3M5hgWg4CHfDprfc85DM4S9Ai";
 #elseif python
 final LS_LIB_NAME = "python_client";
-final LS_LIB_VERSION = "9.0.0 build 20220624";
-final LS_CID = "v Wntytg4pkpW3EAK3M4hwLri8M4O968hAe";
+final LS_LIB_VERSION = "1.0.0-beta.1 build 20220624";
+final LS_CID = "v Wntytg4pkpW36AK3M5hgWg4CHfDprfc85DM4S9Ax";
 #elseif php
 final LS_LIB_NAME = "php_client";
-final LS_LIB_VERSION = "9.0.0 build 20220624";
-final LS_CID = "vjSfhw.i6 3Be64BHfDprfc85DM4S9Ai";
+final LS_LIB_VERSION = "1.0.0-beta.1 build 20220624";
+final LS_CID = "vjSfhw.i6 33e64BIf  g1g3g2.pz482h85HM8c";
 #elseif cpp
 final LS_LIB_NAME = "cpp_client";
-final LS_LIB_VERSION = "9.0.0 build 20220624";
-final LS_CID = "irSfhw.i6 3Be64BHfDprfc85DM4S9Ad";
+final LS_LIB_VERSION = "1.0.0-beta.1 build 20220624";
+final LS_CID = "irSfhw.i6 33e64BIf  g1g3g2.pz482h85HM8w";
 #end
