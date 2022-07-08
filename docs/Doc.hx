@@ -6,7 +6,7 @@ final WEBSITE = "https://www.lightstreamer.com";
 function main() {
   var args = Sys.args();
   if (args.length != 2) {
-    println("Syntax: haxe --run Docs <target> <version>");
+    println("Syntax: haxe --run Doc <target> <version>");
     Sys.exit(1);
   }
   var target = args[0];
