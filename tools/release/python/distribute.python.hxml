@@ -1,0 +1,4 @@
+--cwd ../../..
+--library haxe-files
+--class-path tools/release/python
+--run Distribute

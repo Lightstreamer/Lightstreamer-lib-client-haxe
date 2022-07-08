@@ -13,8 +13,5 @@ $ twine upload dist/*
 
 To install 'build' and 'twine', run this command:
 $ python3 -m pip install build twine
-
-NB Before uploading the package, change the version number in the file 'pyproject.toml'.
-If the upload is to Test PyPi, use as the version number a string such as '1.0.0.dev<year><month><day>'.
 ");
 }

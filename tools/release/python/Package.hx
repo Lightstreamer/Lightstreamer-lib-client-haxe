@@ -14,12 +14,17 @@ final dist_src = Path.of("dist/python/lightstreamer-client/src/lightstreamer_cli
 function main() {
   var args = Sys.args();
   if (args.length == 0) {
-    println("Syntax: haxe package.python.hxml <version>");
+    println("Syntax: haxe package.python.hxml <version> [<doc version>]");
     Sys.exit(1);
   }
   var version = args[0];
   if (!~/^\d+\.\d+\.\d+/.match(version)) {
     println("Invalid version: " + version);
+    Sys.exit(1);
+  }
+  var docVersion = args[1] ?? version;
+  if (!~/^\d+\.\d+\.\d+/.match(docVersion)) {
+    println("Invalid doc version: " + docVersion);
     Sys.exit(1);
   }
   createDir(bin);
@@ -32,7 +37,7 @@ function main() {
   pyproject = pyproject.replace("::version::", version);
 
   var readme = File.getContent(res.join("README.md").getAbsolutePath());
-  readme = readme.replace("::version::", version);
+  readme = readme.replace("::version::", docVersion);
   // copy the artifacts to dist
   copy("com_lightstreamer_client.py", bin, dist_src);
   copy("com_lightstreamer_net.py", deps, dist_src);
