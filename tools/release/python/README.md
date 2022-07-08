@@ -94,7 +94,7 @@ client.connect()
 
 ## Logging
 
-To enable the internal client logger, create a [LoggerProvider](https://lightstreamer.com/api/ls-python-client/::version::/com/lightstreamer/log/LoggerProvider.html) and set it as the default provider of [LightstreamerClient](https://lightstreamer.com/api/ls-python-client/::version::/com/lightstreamer/client/LightstreamerClient.html).
+To enable the internal client logger, create a [LoggerProvider](https://lightstreamer.com/api/ls-python-client/::version::/com/lightstreamer/log/LoggerProvider.html) and set it as the default provider of [LightstreamerClient](https://lightstreamer.com/api/ls-python-client/::version::/com/lightstreamer/client/LightstreamerClient.html#setLoggerProvider).
 
 ```python
 loggerProvider = ConsoleLoggerProvider(ConsoleLogLevel.DEBUG)
