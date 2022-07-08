@@ -17,6 +17,7 @@ class TestClientExtra extends utest.Test {
   var connectedString: String;
 
   function setup() {
+    clearGlobalSettings();
     client = new LightstreamerClient(host, "TEST");
     listener = new BaseClientListener();
     subListener = new BaseSubscriptionListener();
@@ -26,6 +27,10 @@ class TestClientExtra extends utest.Test {
 
   function teardown() {
     client.disconnect();
+    clearGlobalSettings();
+  }
+
+  function clearGlobalSettings() {
     #if LS_HAS_COOKIES
       #if cs
       com.lightstreamer.internal.CookieHelper.instance.clearCookies(host);
