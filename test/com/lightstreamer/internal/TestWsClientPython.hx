@@ -90,7 +90,8 @@ class TestWsClientPython extends utest.Test {
         async.completed(); 
       },
       function onError(c, error) { 
-        equals("Cannot connect to host localtest.me:8443 ssl:True [SSLCertVerificationError: (1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self signed certificate (_ssl.c:1129)')]", error);
+        var expected = "Cannot connect to host localtest.me:8443 ssl:True [SSLCertVerificationError";
+        equals(expected, error.substring(0, expected.length));
         async.completed(); 
       });
   }

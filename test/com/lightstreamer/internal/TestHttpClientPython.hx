@@ -75,7 +75,8 @@ class TestHttpClientPython extends utest.Test {
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null,
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
-        equals("Cannot connect to host localtest.me:8443 ssl:True [SSLCertVerificationError: (1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self signed certificate (_ssl.c:1129)')]", error);
+        var expected = "Cannot connect to host localtest.me:8443 ssl:True [SSLCertVerificationError";
+        equals(expected, error.substring(0, expected.length));
         async.completed(); 
       }, 
       function onDone(c) { 
