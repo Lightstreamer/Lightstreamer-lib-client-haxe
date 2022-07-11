@@ -2,9 +2,12 @@ package utils;
 
 import haxe.Exception;
 
+using StringTools;
+
 private enum Slot {
   Await(expected: String);
   AwaitGroup(expected: Array<String>);
+  AwaitPrefix(expected: String);
   Block(block: ()->Void);
 }
 
@@ -30,6 +33,11 @@ class Expectations {
     } else {
       expectations.push(AwaitGroup(expected));
     }
+    return this;
+  }
+
+  public function awaitPrefix(expected: String) {
+    expectations.push(AwaitPrefix(expected));
     return this;
   }
 
@@ -59,7 +67,9 @@ class Expectations {
       if (expected.length > 0) {
         expectations.unshift(slot);
       }
-    case _:
+    case AwaitPrefix(expected):
+      test.equals(expected, actual.substring(0, expected.length));
+    case Block(_):
       throw new Exception('Expected $actual but found a block');
     }
   }
@@ -70,7 +80,7 @@ class Expectations {
       switch slot {
       case Block(block):
         test.delay(block, 0);
-      case Await(_) | AwaitGroup(_):
+      case _:
         break;
       }
       expectations.shift();
