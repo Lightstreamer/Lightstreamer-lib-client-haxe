@@ -5,8 +5,10 @@ import com.lightstreamer.internal.Types;
 import com.lightstreamer.internal.Set;
 import com.lightstreamer.client.internal.update.UpdateUtils;
 import com.lightstreamer.log.LoggerTools;
+
 using com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.internal.NullTools;
+using com.lightstreamer.client.internal.update.UpdateUtils.CurrFieldValTools;
 
 final NO_FIELDS = "The Subscription was initiated using a Field Schema: the field names are not available";
 final POS_OUT_BOUNDS = "The field position is out of bounds";
@@ -17,11 +19,11 @@ class ItemUpdateBase implements ItemUpdate {
   final m_items: Null<Map<Pos, String>>;
   final m_nFields: Int;
   final m_fields: Null<Map<Pos, String>>;
-  final m_newValues: Map<Pos, Null<String>>;
+  final m_newValues: Map<Pos, Null<CurrFieldVal>>;
   final m_changedFields: Set<Pos>;
   final m_isSnapshot: Bool;
 
-  public function new(itemIdx: Pos, sub: Subscription, newValues: Map<Pos, Null<String>>, changedFields: Set<Pos>, isSnapshot: Bool) {
+  public function new(itemIdx: Pos, sub: Subscription, newValues: Map<Pos, Null<CurrFieldVal>>, changedFields: Set<Pos>, isSnapshot: Bool) {
     var items = sub.getItems();
     var fields = sub.getFields();
     this.m_itemIdx = itemIdx;
@@ -106,7 +108,7 @@ class ItemUpdateBase implements ItemUpdate {
     for (fieldPos in m_changedFields) {
       try {
         var fieldName = m_fields != null ? m_fields[fieldPos] : null;
-        iterator(fieldName, fieldPos, m_newValues[fieldPos]);
+        iterator(fieldName, fieldPos, m_newValues[fieldPos].toString());
       } catch(e) {
         actionLogger.logError("An exception was thrown while executing the Function passed to the forEachChangedField method", cast e);
       }
@@ -117,7 +119,7 @@ class ItemUpdateBase implements ItemUpdate {
     for (fieldPos => fieldVal in m_newValues) {
       try {
         var fieldName = m_fields != null ? m_fields[fieldPos] : null;
-        iterator(fieldName, fieldPos, fieldVal);
+        iterator(fieldName, fieldPos, fieldVal.toString());
       } catch(e) {
         actionLogger.logError("An exception was thrown while executing the Function passed to the forEachField method", cast e);
       }
@@ -130,7 +132,7 @@ class ItemUpdateBase implements ItemUpdate {
     }
     var res = new Map<String, Null<String>>();
     for (fieldPos in m_changedFields) {
-      res[m_fields[fieldPos].sure()] = m_newValues[fieldPos];
+      res[m_fields[fieldPos].sure()] = m_newValues[fieldPos].toString();
     }
     return new NativeStringMap(res);
   }
@@ -138,7 +140,7 @@ class ItemUpdateBase implements ItemUpdate {
   public function getChangedFieldsByPosition(): NativeIntMap<Null<String>> {
     var res = new Map<Int, Null<String>>();
     for (fieldPos in m_changedFields) {
-      res[fieldPos] = m_newValues[fieldPos];
+      res[fieldPos] = m_newValues[fieldPos].toString();
     }
     return new NativeIntMap(res);
   }
@@ -149,13 +151,14 @@ class ItemUpdateBase implements ItemUpdate {
     }
     var res = new Map<String, Null<String>>();
     for (fieldPos => fieldName in m_fields) {
-      res[fieldName] = m_newValues[fieldPos];
+      res[fieldName] = m_newValues[fieldPos].toString();
     }
     return new NativeStringMap(res);
   }
 
   public function getFieldsByPosition(): NativeIntMap<Null<String>> {
-    return new NativeIntMap(m_newValues);
+    var map = [for (k => v in m_newValues) k => v.toString()];
+    return new NativeIntMap(map);
   }
   #end
 
@@ -163,7 +166,7 @@ class ItemUpdateBase implements ItemUpdate {
     if (!(1 <= fieldPos && fieldPos <= m_nFields)) {
       throw new IllegalArgumentException(POS_OUT_BOUNDS);
     }
-    return m_newValues[fieldPos];
+    return m_newValues[fieldPos].toString();
   }
 
   function getValueName(fieldName: String): Null<String> {
@@ -174,7 +177,7 @@ class ItemUpdateBase implements ItemUpdate {
     if (fieldPos == null) {
         throw new IllegalArgumentException(UNKNOWN_FIELD_NAME);
     }
-    return m_newValues[fieldPos];
+    return m_newValues[fieldPos].toString();
   }
 
   function isValueChangedPos(fieldPos: Int): Bool {

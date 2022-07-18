@@ -8,8 +8,10 @@ import com.lightstreamer.internal.RLock;
 import com.lightstreamer.internal.MacroTools;
 using com.lightstreamer.internal.NullTools;
 import com.lightstreamer.log.LoggerTools;
+
 using com.lightstreamer.log.LoggerTools;
 using Lambda;
+using com.lightstreamer.client.internal.update.UpdateUtils.CurrFieldValTools;
 
 private enum abstract State_m(Int) {
   var s1 = 1; var s2 = 2; var s3 = 3; var s4 = 4; var s5 = 5;
@@ -20,7 +22,7 @@ private enum abstract State_m(Int) {
 class Key2Level implements ItemKey {
   final keyName: String;
   final item: ItemCommand2Level;
-  var currKeyValues: Null<Map<Pos, Null<String>>>;
+  var currKeyValues: Null<Map<Pos, Null<CurrFieldVal>>>;
   var currKey2Values: Null<Map<Pos, Null<String>>>;
   var listener2Level: Null<Sub2LevelDelegate>;
   var subscription2Level: Null<Subscription>;
@@ -40,7 +42,7 @@ class Key2Level implements ItemKey {
     item.unrelate(keyName);
   }
 
-  public function evtUpdate(keyValues: Map<Pos, Null<String>>, snapshot: Bool) {
+  public function evtUpdate(keyValues: Map<Pos, Null<CurrFieldVal>>, snapshot: Bool) {
     traceEvent("update");
     switch s_m {
     case s1:
@@ -183,7 +185,7 @@ class Key2Level implements ItemKey {
   public function getCommandValue(fieldIdx: Pos): Null<String> {
     var values = currKeyValues; 
     if (values != null && values[fieldIdx] != null) {
-      return values[fieldIdx];
+      return values[fieldIdx].toString();
     } else {
       var values = currKey2Values;
       var nFields = item.subscription.fetch_nFields();
@@ -195,21 +197,21 @@ class Key2Level implements ItemKey {
     }
   }
 
-  function doFirstUpdate(keyValues: Map<Pos, Null<String>>, snapshot: Bool) {
+  function doFirstUpdate(keyValues: Map<Pos, Null<CurrFieldVal>>, snapshot: Bool) {
     var cmdIdx = item.subscription.getCommandPosition().sure();
     currKeyValues = keyValues;
-    currKeyValues[cmdIdx] = "ADD";
+    currKeyValues[cmdIdx] = StringVal("ADD");
     var changedFields = findChangedFields(null, currKeyValues);
     var update = new ItemUpdate2Level(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot);
     
     fireOnItemUpdate(update);
   }
 
-  function doUpdate(keyValues: Map<Pos, Null<String>>, snapshot: Bool) {
+  function doUpdate(keyValues: Map<Pos, Null<CurrFieldVal>>, snapshot: Bool) {
     var cmdIdx = item.subscription.getCommandPosition().sure();
     var prevKeyValues = currKeyValues;
     currKeyValues = keyValues;
-    currKeyValues[cmdIdx] = "UPDATE";
+    currKeyValues[cmdIdx] = StringVal("UPDATE");
     var changedFields = findChangedFields(prevKeyValues, currKeyValues);
     var update = new ItemUpdate2Level(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot);
     
@@ -221,15 +223,15 @@ class Key2Level implements ItemKey {
     var nFields = item.subscription.fetch_nFields().sure();
     var prevKeyValues = currKeyValues.sure().copy();
     @:nullSafety(Off)
-    currKeyValues[cmdIdx] = "UPDATE";
+    currKeyValues[cmdIdx] = StringVal("UPDATE");
     currKey2Values = getFieldsByPosition(update);
     var extKeyValues = currKeyValues.sure().copy();
     for (f => v in currKey2Values) {
-      extKeyValues[f + nFields] = v;
+      extKeyValues[f + nFields] = (v == null ? null : StringVal(v));
     }
     var changedFields = new Set<Pos>();
     @:nullSafety(Off)
-    if (prevKeyValues[cmdIdx] != currKeyValues[cmdIdx]) {
+    if (prevKeyValues[cmdIdx].toString() != currKeyValues[cmdIdx].toString()) {
       changedFields.insert(cmdIdx);
     }
     for (f => _ in getChangedFieldsByPosition(update)) {
@@ -241,19 +243,19 @@ class Key2Level implements ItemKey {
     fireOnItemUpdate(extUpdate);
   }
 
-  function doUpdate1Level(keyValues: Map<Pos, Null<String>>, snapshot: Bool) {
+  function doUpdate1Level(keyValues: Map<Pos, Null<CurrFieldVal>>, snapshot: Bool) {
     var cmdIdx = item.subscription.getCommandPosition().sure();
     var nFields = item.subscription.fetch_nFields().sure();
     var prevKeyValues = currKeyValues.sure();
     currKeyValues =  keyValues;
-    currKeyValues[cmdIdx] = "UPDATE";
+    currKeyValues[cmdIdx] = StringVal("UPDATE");
     var extKeyValues = currKeyValues.sure().copy();
     for (f => v in currKey2Values.sure()) {
-      extKeyValues[f + nFields] = v;
+      extKeyValues[f + nFields] = (v == null ? null : StringVal(v));
     }
     var changedFields = new Set<Pos>();
     for (f in 1...nFields + 1) {
-      if (prevKeyValues[f] != extKeyValues[f]) {
+      if (prevKeyValues[f].toString() != extKeyValues[f].toString()) {
         changedFields.insert(f);
       }
     }
@@ -262,18 +264,18 @@ class Key2Level implements ItemKey {
     fireOnItemUpdate(extUpdate);
   }
 
-  function doDelete(keyValues: Map<Pos, Null<String>>, snapshot: Bool) {
+  function doDelete(keyValues: Map<Pos, Null<CurrFieldVal>>, snapshot: Bool) {
     var n = item.subscription.fetch_nFields().sure();
     var keyIdx = item.subscription.getKeyPosition().sure();
     var cmdIdx = item.subscription.getCommandPosition().sure();
     currKeyValues = null;
     var changedFields = new Set(1...n+1).subtracting([keyIdx]);
-    var extKeyValues = new Map<Pos, Null<String>>();
+    var extKeyValues = new Map<Pos, Null<CurrFieldVal>>();
     for (f in 1...n+1) {
       extKeyValues[f] = null;
     }
-    extKeyValues[keyIdx] = keyName;
-    extKeyValues[cmdIdx] = "DELETE";
+    extKeyValues[keyIdx] = StringVal(keyName);
+    extKeyValues[cmdIdx] = StringVal("DELETE");
     var update = new ItemUpdate2Level(item.itemIdx, item.subscription, extKeyValues, changedFields, snapshot);
     
     item.unrelate(keyName);
@@ -288,7 +290,7 @@ class Key2Level implements ItemKey {
     fireOnItemUpdate(update);
   }
 
-  function doDeleteExt(keyValues: Map<Pos, Null<String>>, snapshot: Bool) {
+  function doDeleteExt(keyValues: Map<Pos, Null<CurrFieldVal>>, snapshot: Bool) {
     var nFields = item.subscription.fetch_nFields().sure();
     var keyIdx = item.subscription.getKeyPosition().sure();
     var cmdIdx = item.subscription.getCommandPosition().sure();
@@ -296,12 +298,12 @@ class Key2Level implements ItemKey {
     currKeyValues = null;
     currKey2Values = null;
     var changedFields = new Set(1...n+1).subtracting([keyIdx]);
-    var extKeyValues = new Map<Pos, Null<String>>();
+    var extKeyValues = new Map<Pos, Null<CurrFieldVal>>();
     for (f in 1...n+1) {
       extKeyValues[f] = null;
     }
-    extKeyValues[keyIdx] = keyName;
-    extKeyValues[cmdIdx] = "DELETE";
+    extKeyValues[keyIdx] = StringVal(keyName);
+    extKeyValues[cmdIdx] = StringVal("DELETE");
     var update = new ItemUpdate2Level(item.itemIdx, item.subscription, extKeyValues, changedFields, snapshot);
     
     item.unrelate(keyName);
@@ -316,13 +318,13 @@ class Key2Level implements ItemKey {
     fireOnItemUpdate(update);
   }
 
-  function doLightDelete(keyValues: Map<Pos, Null<String>>, snapshot: Bool) {
+  function doLightDelete(keyValues: Map<Pos, Null<CurrFieldVal>>, snapshot: Bool) {
     var nFields = item.subscription.fetch_nFields().sure();
     var keyIdx = item.subscription.getKeyPosition().sure();
     var cmdIdx = item.subscription.getCommandPosition().sure();
     currKeyValues = null;
     var changedFields = new Set(1...nFields+1);
-    var values = new Map<Pos, Null<String>>();
+    var values = new Map<Pos, Null<CurrFieldVal>>();
     for (f in 1...nFields+1) {
       values[f] = null;
     }
@@ -333,13 +335,13 @@ class Key2Level implements ItemKey {
     fireOnItemUpdate(update);
   }
 
-  function doDelete1LevelOnly(keyValues: Map<Pos, Null<String>>, snapshot: Bool) {
+  function doDelete1LevelOnly(keyValues: Map<Pos, Null<CurrFieldVal>>, snapshot: Bool) {
     var nFields = item.subscription.fetch_nFields().sure();
     var keyIdx = item.subscription.getKeyPosition().sure();
     var cmdIdx = item.subscription.getCommandPosition().sure();
     currKeyValues = null;
     var changedFields = new Set(1...nFields+1).subtracting([keyIdx]);
-    var values = new Map<Pos, Null<String>>();
+    var values = new Map<Pos, Null<CurrFieldVal>>();
     for (f in 1...nFields+1) {
       values[f] = null;
     }
@@ -428,8 +430,8 @@ class Key2Level implements ItemKey {
     return sub2;
   }
 
-  function isDelete(keyValues: Map<Pos, Null<String>>): Bool {
-    return keyValues[item.subscription.getCommandPosition().sure()] == "DELETE";
+  function isDelete(keyValues: Map<Pos, Null<CurrFieldVal>>): Bool {
+    return keyValues[item.subscription.getCommandPosition().sure()].toString() == "DELETE";
   }
 
   function goto(to: State_m) {

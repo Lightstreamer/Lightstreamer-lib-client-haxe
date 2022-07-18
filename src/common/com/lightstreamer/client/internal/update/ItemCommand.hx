@@ -4,8 +4,10 @@ import com.lightstreamer.internal.NativeTypes;
 import com.lightstreamer.internal.Types;
 import com.lightstreamer.client.internal.update.UpdateUtils;
 import com.lightstreamer.log.LoggerTools;
+
 using com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.internal.NullTools;
+using com.lightstreamer.client.internal.update.UpdateUtils.CurrFieldValTools;
 
 private enum abstract State_m(Int) {
   var s1 = 1; var s2 = 2; var s3 = 3; var s4 = 4; var s5 = 5;
@@ -93,7 +95,7 @@ class ItemCommand extends ItemBase {
 
   override function doUpdate(values: Map<Pos, FieldValue>, snapshot: Bool) {
     var prevValues = currValues;
-    currValues = mapUpdateValues(prevValues, values);
+    currValues = applyUpatesToCurrentFields(prevValues, values);
     var key = selectKey();
     
     key.evtUpdate(currValues, snapshot);
@@ -109,7 +111,7 @@ class ItemCommand extends ItemBase {
 
   function selectKey(): ItemKey {
     @:nullSafety(Off)
-    var keyName: String = currValues[subscription.getKeyPosition()];
+    var keyName: String = currValues[subscription.getKeyPosition()].toString();
     var key = keys[keyName];
     if (key == null) {
       key = createKey(keyName);
