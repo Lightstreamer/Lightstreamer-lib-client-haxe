@@ -2,6 +2,7 @@ build.common.hxml
 --class-path src/extern/node
 --class-path src/platform/js
 --class-path src/platform/node
+--class-path src/extern/js
 --library hxnodejs
 --library hxnodejs-ws
 --library hxtsdgen
@@ -12,3 +13,4 @@ build.common.hxml
 
 -D LS_NODE
 -D LS_HAS_COOKIES
+-D LS_JSON_PATCH
