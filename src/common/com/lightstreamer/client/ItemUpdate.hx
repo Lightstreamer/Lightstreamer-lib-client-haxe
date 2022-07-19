@@ -27,7 +27,8 @@ interface ItemUpdate {
   #if js
   function forEachChangedField(iterator: (fieldName: Null<String>, fieldPos: Int, value: Null<String>) -> Void): Void;
   function forEachField(iterator: (fieldName: Null<String>, fieldPos: Int, value: Null<String>) -> Void): Void;
-  #else
+  #end
+  #if (!js || LS_TEST)
   function getChangedFields(): NativeStringMap<Null<String>>;
   function getChangedFieldsByPosition(): NativeIntMap<Null<String>>;
   function getFields(): NativeStringMap<Null<String>>;
