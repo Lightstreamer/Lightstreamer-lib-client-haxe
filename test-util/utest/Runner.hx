@@ -8,13 +8,33 @@ import haxe.macro.Compiler;
 using Lambda;
 using StringTools;
 
+typedef TestCase = {
+  clazz: Class<Test>, 
+  methodName: String, 
+  isAsync: Bool, 
+  timeout: Null<Int>
+}
+
+enum State {
+  Init; NoTest; FirstTest; TestPassed; TestFailed;
+}
+
 @:access(utest.Test)
+@:build(utils.Macros.synchronizeClass())
 class Runner {
   final classes: Array<Class<Test>> = [];
   final tests: Array<Test> = [];
   final ignoredTests: Array<String> = [];
   var globalPattern: EReg;
   public var numFailures(default, null) = 0;
+  
+  var state = Init;
+  var current: Int = 0;
+  var currentTest: Test = null;
+  var currentTimer: hx.concurrent.executor.Executor.TaskFuture<Void> = null;
+  final testCases: Array<TestCase> = [];
+
+  final sem = new hx.concurrent.lock.Semaphore(0);
 
   public function new() {
     var envPattern = Compiler.getDefine('UTEST_PATTERN');
@@ -23,61 +43,143 @@ class Runner {
     }
   }
 
+  @:unsynchronized
+  public function await() {
+    sem.acquire();
+  }
+
   public function addCase(clazz: Class<Test>) {
     classes.push(clazz);
   }
 
   public function run() {
-    runTests();
+    loadTestCases();
+    evtRun();
+  }
+
+  public function evtRun() {
+    trace('evtRun: state=$state current=$current');
+    if (testCases.length == 0) {
+      gotoNoTest();
+    } else {
+      gotoFirstTest();
+    }
+  }
+
+  public function evtCompleted(testIndex: Int) {
+    trace('evtCompleted: state=$state current=$current testIndex=$testIndex');
+    if (testIndex != current) {
+      return;
+    }
+    gotoTestPassed();
+  }
+
+  public function evtTimeout(testIndex: Int) {
+    trace('evtTimeout: state=$state current=$current testIndex=$testIndex');
+    if (testIndex != current) {
+      return;
+    }
+    gotoTestFailed();
+  }
+
+  function gotoNoTest() {
+    state = NoTest;
+    trace('goto: state=$state');
     printReport();
   }
 
-  function runTests() {
-    forEachTestCase((clazz, methodName, isAsync, timeout) -> {
-      var testName = getClassName(clazz) + "." + methodName;
-      trace('********** $testName **********');
-      var test: Test;
-      try {
-        test = Type.createInstance(clazz, []);
-      } catch(ex) {
-        var test = new Test();
-        test.name = testName;
-        test.addException(ex);
-        tests.push(test);
-        return;
-      }
-      test.name = testName;
-      var async = isAsync ? new Async() : null;
-      try {
-        var setup = Reflect.field(test, "setup");
-        if (setup != null) Reflect.callMethod(test, setup, []);
-        var body = Reflect.field(test, methodName);
-        if (isAsync) {
-          test._async = async;
-          Reflect.callMethod(test, body, [async]);
-          async.tryAcquire(timeout ?? 250);
-        } else {
-          Reflect.callMethod(test, body, []);
-        }
-      } catch(ex) {
-        test.addException(ex);
-      }
-      try {
-        var teardown = Reflect.field(test, "teardown");
-        if (teardown != null) Reflect.callMethod(test, teardown, []);
-      } catch(ex) {
-        test.addException(ex);
-      }
-      if (isAsync && !async.isCompleted) {
-        test.addError("missed async call");
-      } else if (test.passed() && test.numAssertions == 0) {
-        test.addError("no assertion");
-      }
-      tests.push(test);
-    });
+  function gotoFirstTest() {
+    state = FirstTest;
+    trace('goto: state=$state');
+    runCurrent();
   }
 
-  function forEachTestCase(func: (clazz: Class<Test>, methodName: String, isAsync: Bool, timeout: Null<Int>)->Void) {
+  function gotoTestPassed() {
+    state = TestPassed;
+    trace('goto: state=$state');
+    teardownCurrent();
+    current += 1;
+    if (current < testCases.length) {
+      runCurrent();
+    } else {
+      printReport();
+    }
+  }
+
+  function gotoTestFailed() {
+    state = TestFailed;
+    trace('goto: state=$state');
+    teardownCurrent();
+    current += 1;
+    if (current < testCases.length) {
+      runCurrent();
+    } else {
+      printReport();
+    }
+  }
+  
+  function runCurrent() {
+    var testIndex = current;
+    var testCase = testCases[testIndex];
+    var clazz = testCase.clazz;
+    var methodName = testCase.methodName;
+    var isAsync = testCase.isAsync;
+    var timeout = testCase.timeout;
+    var testName = getClassName(clazz) + "." + methodName;
+    trace('********** $testName **********');
+    var test: Test;
+    try {
+      test = currentTest = Type.createInstance(clazz, []);
+    } catch(ex) {
+      var test = currentTest = new Test();
+      test.name = testName;
+      test.addException(ex);
+      tests.push(test);
+      evtCompleted(testIndex);
+      return;
+    }
+    test.name = testName;
+    var async = isAsync ? new Async(this, testIndex) : null;
+    try {
+      var setup = Reflect.field(test, "setup");
+      if (setup != null) Reflect.callMethod(test, setup, []);
+      var body = Reflect.field(test, methodName);
+      if (isAsync) {
+        test._async = async;
+        Reflect.callMethod(test, body, [async]);
+        currentTimer = test.delay(() -> evtTimeout(testIndex), timeout ?? 250);
+      } else {
+        Reflect.callMethod(test, body, []);
+        evtCompleted(testIndex);
+      }
+    } catch(ex) {
+      test.addException(ex);
+      evtCompleted(testIndex);
+    }
+  }
+
+  function teardownCurrent() {
+    var test = currentTest;
+    var async = test._async;
+    var isAsync = async != null;
+    if (isAsync) {
+      currentTimer.cancel();
+    }
+    try {
+      var teardown = Reflect.field(test, "teardown");
+      if (teardown != null) Reflect.callMethod(test, teardown, []);
+    } catch(ex) {
+      test.addException(ex);
+    }
+    if (isAsync && !async.isCompleted) {
+      test.addError("missed async call");
+    } else if (test.passed() && test.numAssertions == 0) {
+      test.addError("no assertion");
+    }
+    tests.push(test);
+  }
+
+  function loadTestCases() {
     for (clazz in classes) {
       var rtti = Rtti.getRtti(clazz);
       var classTimeout = getTimeout(rtti);
@@ -117,15 +219,14 @@ class Runner {
           ignoredTests.push(testName);
           continue;
         }
-        // process test
         if (isAsync) {
           var methodTimeout = getTimeout(field);
           var timeout = if (methodTimeout != null) methodTimeout
             else if (classTimeout != null) classTimeout
             else null;
-          func(clazz, field.name, true, timeout);
+          testCases.push({clazz: clazz, methodName: field.name, isAsync: true, timeout: timeout});
         } else {
-          func(clazz, field.name, false, null);
+          testCases.push({clazz: clazz, methodName: field.name, isAsync: false, timeout: null});
         }
       }
     }
@@ -183,6 +284,8 @@ class Runner {
       }
     }
     numFailures = failed;
+
+    sem.release();
   }
 
   function getClassName(clazz: Class<Any>) {
