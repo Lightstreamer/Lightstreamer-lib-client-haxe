@@ -81,18 +81,14 @@ class TestAll {
   }
 
   #if android
-  // alternative entry point to run tests on android devices:
-  // if the test runner (that internally uses haxe.Timer) is not executed inside a thread
-  // with an event loop (needed by haxe.Timer), the runner doesn’t wait for the completion
-  // of asynchronous tests and the test execution doesn’t seem to produce any results
+  // alternative entry point to run tests on android devices
   public static function androidMain(ctx: android.content.Context) {
     utils.AndroidTools.appContext = ctx;
-    sys.thread.Thread.createWithEventLoop(() -> {
-      var runner = new Runner();
-      buildSuite(runner);
-      runner.run();
-      Sys.exit(runner.numFailures);
-    });
+    var runner = new Runner();
+    buildSuite(runner);
+    runner.run();
+    runner.await();
+    Sys.exit(runner.numFailures);
   }
   #end
 }
