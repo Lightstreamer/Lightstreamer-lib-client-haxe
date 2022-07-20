@@ -17,6 +17,7 @@ class TestProxyCs extends  utest.Test {
     var runner = new Runner();
     runner.addCase(TestProxyCs);
     runner.run();
+    runner.await();
   }
 
   static function setupClass() {

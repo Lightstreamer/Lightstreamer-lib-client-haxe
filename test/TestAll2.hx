@@ -8,7 +8,7 @@ class TestAll2 {
 
   static function buildSuite(runner: Runner) {
     LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.ERROR));
-    //runner.addCase(new TestCase());
+    //runner.addCase(TestCase);
     runner.addCase(TestConnectionDetails);
     runner.addCase(TestConnectionOptions);
     runner.addCase(TestSubscription);
@@ -18,18 +18,18 @@ class TestAll2 {
     runner.addCase(TestRequestBuilder);
     runner.addCase(TestAssocArray);
     runner.addCase(TestRequest);
-    // #if js
-    // runner.addCase(new TestStreamReader());
-    // #end
-    // #if LS_WEB
-    // runner.addCase(new TestHttpClientWeb());
-    // runner.addCase(new TestWsClientWeb());
-    // #end
-    // #if LS_NODE
-    // runner.addCase(new TestCookieHelperNode());
-    // runner.addCase(new TestHttpClientNode());
-    // runner.addCase(new TestWsClientNode());
-    // #end
+    #if js
+    runner.addCase(TestStreamReader);
+    #end
+    #if LS_WEB
+    runner.addCase(TestHttpClientWeb);
+    runner.addCase(TestWsClientWeb);
+    #end
+    #if LS_NODE
+    runner.addCase(TestCookieHelperNode);
+    runner.addCase(TestHttpClientNode);
+    runner.addCase(TestWsClientNode);
+    #end
     #if java
     runner.addCase(TestCookieHelperJava);
     runner.addCase(TestHttpClientJava);
@@ -45,18 +45,20 @@ class TestAll2 {
     #end
     #if LS_MPN
     runner.addCase(com.lightstreamer.client.mpn.TestMpnSubscription);
-    // #if js
-    // runner.addCase(new com.lightstreamer.client.mpn.TestMpnDeviceWeb());
-    // runner.addCase(new com.lightstreamer.client.mpn.TestMpnBuilderFirebase());
-    // runner.addCase(new com.lightstreamer.client.mpn.TestMpnBuilderSafari());
-    // #end
+    #if js
+    runner.addCase(com.lightstreamer.client.mpn.TestMpnDeviceWeb);
+    runner.addCase(com.lightstreamer.client.mpn.TestMpnBuilderFirebase);
+    runner.addCase(com.lightstreamer.client.mpn.TestMpnBuilderSafari);
+    #end
     #if java
     runner.addCase(com.lightstreamer.client.mpn.TestMpnDeviceAndroid);
     runner.addCase(com.lightstreamer.client.mpn.TestMpnBuilderAndroid);
     #end
     #end
+    #if (!php && !cpp)
     runner.addCase(TestClient);
     runner.addCase(TestClientExtra);
+    #end
     runner.addCase(TestSubscribe_WS);
     runner.addCase(TestSubscribe_HTTP);
     runner.addCase(TestSubscribe_HTTP_Polling);
@@ -73,7 +75,10 @@ class TestAll2 {
     var runner = new Runner();
     buildSuite(runner);
     runner.run();
+    #if threads
+    runner.await();
     Sys.exit(runner.numFailures);
+    #end
   }
 
   #if android
