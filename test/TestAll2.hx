@@ -8,7 +8,6 @@ class TestAll2 {
 
   static function buildSuite(runner: Runner) {
     LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.ERROR));
-    //runner.addCase(TestCase);
     runner.addCase(TestConnectionDetails);
     runner.addCase(TestConnectionOptions);
     runner.addCase(TestSubscription);
