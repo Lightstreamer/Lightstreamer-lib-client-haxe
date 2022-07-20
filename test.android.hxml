@@ -1,4 +1,4 @@
-test.common2.hxml
+test.common.hxml
 
 --class-path src/mpn/common
 --class-path src/mpn/android
