@@ -1,4 +1,4 @@
-test.common.hxml
+test.common2.hxml
 --class-path src/platform/js
 --class-path src/platform/web
 --class-path src/mpn/common

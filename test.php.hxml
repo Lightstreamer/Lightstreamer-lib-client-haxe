@@ -1,4 +1,4 @@
-test.common.hxml
+test.common2.hxml
 
 --php bin-test/php
 --cmd php bin-test/php/index.php

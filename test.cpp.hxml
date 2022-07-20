@@ -1,4 +1,4 @@
-test.common.hxml
+test.common2.hxml
 
 --cpp bin-test/cpp
 --cmd ./bin-test/cpp/TestAll

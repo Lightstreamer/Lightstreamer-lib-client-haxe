@@ -1,4 +1,4 @@
-test.common.hxml
+test.common2.hxml
 --class-path src/extern/node
 --class-path src/platform/js
 --class-path src/platform/node
