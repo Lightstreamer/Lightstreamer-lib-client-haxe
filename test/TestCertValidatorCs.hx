@@ -13,6 +13,7 @@ class TestCertValidatorCs extends  utest.Test {
     var runner = new Runner();
     runner.addCase(TestCertValidatorCs);
     runner.run();
+    runner.await();
   }
 
   static function setupClass() {

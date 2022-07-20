@@ -133,6 +133,6 @@ class Test {
   }
 
   function delay(task: ()->Void, ms: Int) {
-    executor.submit(task, Schedule.ONCE(ms));
+    return executor.submit(task, Schedule.ONCE(ms));
   }
 }

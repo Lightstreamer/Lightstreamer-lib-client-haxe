@@ -82,6 +82,32 @@ abstract NativeStringMap<V>(haxe.DynamicAccess<V>) {
     @:nullSafety(Off) return this.copy();
   }
 }
+#if LS_TEST
+abstract NativeIntMap<V>(haxe.DynamicAccess<V>) {
+  public function new(map: Map<Int, V>) {
+    var out: haxe.DynamicAccess<V> = {};
+    for (k => v in map) {
+      out[Std.string(k)] = v;
+    }
+    this = out;
+  }
+
+  @:from
+  static inline function fromHaxeMap<V>(map: Map<Int, V>) {
+    return new NativeIntMap(map);
+  }
+
+  @:to
+  function toHaxe(): Map<Int, V> {
+    var out = new Map<Int, V>();
+    @:nullSafety(Off) 
+    for (k => v in this) {
+      out[Std.parseInt(k)] = v;
+    }
+    return out;
+  }
+}
+#end
 #elseif java
 function toNativeMap<K, V>(map: Map<K, V>, out: java.util.Map<K, V>) {
   for (k => v in map) {

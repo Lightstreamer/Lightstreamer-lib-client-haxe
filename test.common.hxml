@@ -1,8 +1,9 @@
 -D analyzer-optimize
 --class-path src/common
 --class-path test
---library utest
+--class-path test-util
+--library deep_equal
 --library haxe-concurrent
 --main TestAll
 
--D LS_TEST1
+-D LS_TEST

@@ -125,7 +125,8 @@ class ItemUpdateBase implements ItemUpdate {
       }
     }
   }
-  #else
+  #end
+  #if (!js || LS_TEST)
   public function getChangedFields(): NativeStringMap<Null<String>> {
     if (m_fields == null) {
       throw new IllegalStateException(NO_FIELDS);
