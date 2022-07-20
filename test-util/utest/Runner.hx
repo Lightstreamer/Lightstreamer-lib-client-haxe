@@ -273,6 +273,15 @@ class Runner {
       }
     }
     if (failed > 0) {
+      trace("********** Errors **********");
+      for (test in tests) {
+        if (!test.passed()) {
+          trace(test.name, "FAILED");
+          for (error in test.errors) {
+            trace("  " + error.message);
+          }
+        }
+      }
       trace('FAILED [$failed/$total]');
     } else {
       trace('All tests passed [$total/$total]');
