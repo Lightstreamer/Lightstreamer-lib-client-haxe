@@ -1,6 +1,6 @@
 package jsonpatch;
 
-import com.lightstreamer.internal.diff.NativeTypes;
+import com.lightstreamer.internal.diff.Json;
 
 @:jsRequire("jsonpatch")
 extern class JsonPatcher {
