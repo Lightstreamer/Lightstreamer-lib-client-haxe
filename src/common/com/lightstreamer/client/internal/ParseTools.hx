@@ -73,10 +73,25 @@ function parseUpdate(message: String): UpdateInfo {
       values[nextFieldIndex] = changed("");
       nextFieldIndex += 1;
     } else if (value.charAt(0) == "^") { // step D
-      var count = parseInt(value.substring(1));
-      for (_ in 0...count) {
-        values[nextFieldIndex] = unchanged;
-        nextFieldIndex += 1;
+      if (value.charAt(1) == "P") {
+        #if LS_JSON_PATCH
+        var unquoted = value.substring(2).urlDecode();
+        try {
+          var patch = new com.lightstreamer.internal.diff.Json.JsonPatch(unquoted);
+          values[nextFieldIndex] = jsonPatch(patch);
+          nextFieldIndex += 1;
+        } catch(e) {
+          throw new IllegalStateException('The JSON Patch for the field $nextFieldIndex is not well-formed', e);
+        }
+        #else
+        throw new IllegalStateException("JSONPatch compression is not supported by the client");
+        #end
+      } else {
+        var count = parseInt(value.substring(1));
+        for (_ in 0...count) {
+          values[nextFieldIndex] = unchanged;
+          nextFieldIndex += 1;
+        }
       }
     } else { // step E
       values[nextFieldIndex] = changed(value.urlDecode());

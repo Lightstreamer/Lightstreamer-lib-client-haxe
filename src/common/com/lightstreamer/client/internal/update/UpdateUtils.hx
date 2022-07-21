@@ -10,7 +10,7 @@ using com.lightstreamer.client.internal.update.UpdateUtils.CurrFieldValTools;
 enum CurrFieldVal {
   StringVal(string: String);
   #if LS_JSON_PATCH
-  JsonVal(json: com.lightstreamer.internal.diff.NativeTypes.Json);
+  JsonVal(json: com.lightstreamer.internal.diff.Json);
   #end
 }
 
@@ -41,29 +41,28 @@ function applyUpatesToCurrentFields(currentValues: Null<Map<Pos, Null<CurrFieldV
         }
       #if LS_JSON_PATCH
       case jsonPatch(patch):
-        // TODO error messages
         switch currentValues[f] {
         case JsonVal(json):
           try {
-            newValues[f] = JsonVal(jsonpatch.JsonPatcher.apply_patch(json, patch));
+            newValues[f] = JsonVal(json.apply(patch));
           } catch(e) {
-            throw e;
+            throw new IllegalStateException('Cannot apply the JSON Patch to the field $f', e);
           }
         case StringVal(str):
           @:nullSafety(Off)
           var json = null;
           try {
-            json = haxe.Json.parse(str);
+            json = new com.lightstreamer.internal.diff.Json(str);
           } catch(e) {
-            throw e;
+            throw new IllegalStateException('Cannot convert the field $f to JSON', e);
           }
           try {
-            newValues[f] = JsonVal(jsonpatch.JsonPatcher.apply_patch(json, patch));
+            newValues[f] = JsonVal(json.apply(patch));
           } catch(e) {
-            throw e;
+            throw new IllegalStateException('Cannot apply the JSON Patch to the field $f', e);
           }
         case null:
-          throw new IllegalStateException('TODO');
+          throw new IllegalStateException('Cannot apply the JSON patch to the field $f because the field is null');
         }
       #end
       }
@@ -79,8 +78,12 @@ function applyUpatesToCurrentFields(currentValues: Null<Map<Pos, Null<CurrFieldV
         } else {
           newValues[f] = StringVal(value);
         }
-      default:
-        throw new IllegalStateException("Unexpected value");
+      case unchanged:
+        throw new IllegalStateException('Cannot set the field $f because the first update is UNCHANGED');
+      #if LS_JSON_PATCH
+      case jsonPatch(_):
+        throw new IllegalStateException('Cannot set the field $f because the first update is a JSONPatch');
+      #end
       }
     }
     return newValues;

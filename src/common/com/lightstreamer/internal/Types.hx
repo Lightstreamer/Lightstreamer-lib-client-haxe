@@ -10,7 +10,7 @@ enum FieldValue {
   unchanged;
   changed(val: Null<String>);
   #if LS_JSON_PATCH
-  jsonPatch(patch: com.lightstreamer.internal.diff.NativeTypes.JsonPatch);
+  jsonPatch(patch: com.lightstreamer.internal.diff.Json.JsonPatch);
   #end
 }
 
