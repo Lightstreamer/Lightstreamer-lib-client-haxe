@@ -68,6 +68,9 @@ class TestAll {
     runner.addCase(TestStreamSense);
     runner.addCase(TestRecovery);
     runner.addCase(TestControlLink);
+    #if LS_JSON_PATCH
+    runner.addCase(TestJsonPatch);
+    #end
   }
 
   public static function main() {
