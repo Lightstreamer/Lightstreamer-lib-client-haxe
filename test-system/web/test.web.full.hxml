@@ -1,0 +1,15 @@
+--cwd ../..
+
+--class-path test
+--class-path test-util
+--class-path test-extern
+
+--library deep_equal
+--library haxe-concurrent
+
+--main TestCore
+--js bin-test/web/test-full.js
+
+-D LS_WEB
+-D LS_MPN
+-D LS_JSON_PATCH

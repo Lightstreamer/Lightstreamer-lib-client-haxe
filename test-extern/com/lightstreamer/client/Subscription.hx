@@ -3,6 +3,7 @@ package com.lightstreamer.client;
 #if python
 @:pythonImport("lightstreamer_client", "Subscription")
 #end
+#if js @:native("Subscription") #end
 extern class Subscription {
   #if js
   public function new(mode: String, items: NativeArray<String>, fields: NativeArray<String>);

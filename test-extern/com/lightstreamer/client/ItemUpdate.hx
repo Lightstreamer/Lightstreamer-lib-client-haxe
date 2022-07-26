@@ -3,6 +3,7 @@ package com.lightstreamer.client;
 #if python
 @:pythonImport("lightstreamer_client", "ItemUpdate")
 #end
+#if js @:native("ItemUpdate") #end
 extern interface ItemUpdate {
   function getItemName(): Null<String>;
   function getItemPos(): Int;

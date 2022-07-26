@@ -1,5 +1,6 @@
 package com.lightstreamer.log;
 
+#if js @:native("Logger") #end
 extern interface Logger {
   function fatal(line: String, ?exception: NativeException): Void;
   function error(line: String, ?exception: NativeException): Void;
