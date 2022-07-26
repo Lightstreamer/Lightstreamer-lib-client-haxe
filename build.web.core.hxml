@@ -1,8 +1,12 @@
 build.common.hxml
+
+--class-path src/extern/js
 --class-path src/platform/js
 --class-path src/platform/web
 
--D LS_WEB
 -D shallow-expose
 --js bin/web/lightstreamer_orig.core.js
 --cmd haxe -p tools --run WebCoreGenerator
+
+-D LS_WEB
+-D LS_JSON_PATCH

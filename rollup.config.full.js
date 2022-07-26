@@ -1,3 +1,5 @@
+import { nodeResolve } from '@rollup/plugin-node-resolve'
+import commonjs from '@rollup/plugin-commonjs'
 import virtual from '@rollup/plugin-virtual'
 import { terser } from 'rollup-plugin-terser'
 import JsUtils from './tools/JsUtils'
@@ -43,6 +45,8 @@ export default [
       }
     ],
     plugins: [
+      nodeResolve(),
+      commonjs({transformMixedEsModules: true}),
       virtual({ 
         'virtual-entrypoint': generateVirtualEntryPoint()
       })
