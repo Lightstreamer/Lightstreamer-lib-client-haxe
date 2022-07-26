@@ -77,7 +77,7 @@ function parseUpdate(message: String): UpdateInfo {
         #if LS_JSON_PATCH
         var unquoted = value.substring(2).urlDecode();
         try {
-          var patch = new com.lightstreamer.internal.diff.Json.JsonPatch(unquoted);
+          var patch = new com.lightstreamer.internal.patch.Json.JsonPatch(unquoted);
           values[nextFieldIndex] = jsonPatch(patch);
           nextFieldIndex += 1;
         } catch(e) {

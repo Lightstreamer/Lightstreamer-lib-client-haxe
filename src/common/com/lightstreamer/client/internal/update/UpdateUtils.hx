@@ -10,7 +10,7 @@ using com.lightstreamer.client.internal.update.UpdateUtils.CurrFieldValTools;
 enum CurrFieldVal {
   StringVal(string: String);
   #if LS_JSON_PATCH
-  JsonVal(json: com.lightstreamer.internal.diff.Json);
+  JsonVal(json: com.lightstreamer.internal.patch.Json);
   #end
 }
 
@@ -52,7 +52,7 @@ function applyUpatesToCurrentFields(currentValues: Null<Map<Pos, Null<CurrFieldV
           @:nullSafety(Off)
           var json = null;
           try {
-            json = new com.lightstreamer.internal.diff.Json(str);
+            json = new com.lightstreamer.internal.patch.Json(str);
           } catch(e) {
             throw new IllegalStateException('Cannot convert the field $f to JSON', e);
           }
