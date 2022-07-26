@@ -1,10 +1,15 @@
 test.common.hxml
+
+--class-path src/extern/js
 --class-path src/platform/js
 --class-path src/platform/web
 --class-path src/mpn/common
 --class-path src/mpn/web
 
+--js bin-test/web/lightstreamer_orig.js
+--cmd npx rollup --config rollup.config.test.js
+--cmd open index.html
+
 -D LS_WEB
 -D LS_MPN
---js bin-test/web/lightstreamer.js
---cmd open index.html
+-D LS_JSON_PATCH
