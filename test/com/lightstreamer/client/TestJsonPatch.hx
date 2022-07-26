@@ -13,7 +13,7 @@ class TestJsonPatch extends utest.Test {
     client = new LightstreamerClient("http://server", "TEST", ws.create);
     subListener = new BaseSubscriptionListener();
     sub = new Subscription("MERGE", ["count"], ["count"]);
-    sub.setRequestedSnapshot("no");
+    sub.setRequestedSnapshot("yes");
     sub.addListener(subListener);
   }
 
@@ -38,7 +38,7 @@ class TestJsonPatch extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=count&LS_schema=count&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=count&LS_schema=count&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,1,1,1");
       for (upd in updates) {
@@ -72,7 +72,7 @@ class TestJsonPatch extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=count&LS_schema=count&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=count&LS_schema=count&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,1,1,1");
       for (upd in updates) {
@@ -91,7 +91,7 @@ class TestJsonPatch extends utest.Test {
     var updates = [];
     client = new LightstreamerClient("http://localhost:8080", "TEST");
     sub = new Subscription("MERGE", ["count"], ["count"]);
-    sub.setRequestedSnapshot("no");
+    sub.setRequestedSnapshot("yes");
     sub.setDataAdapter("JSON_COUNT");
     sub.addListener(subListener);
     subListener._onItemUpdate = update -> {
@@ -259,7 +259,7 @@ class TestJsonPatch extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=count&LS_schema=count&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=count&LS_schema=count&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,1,1,1");
       ws.onText("U,1,1," + "{}");
@@ -304,7 +304,7 @@ class TestJsonPatch extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=count&LS_schema=count&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=count&LS_schema=count&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,1,1,1");
       ws.onText("U,1,1," + "{}");
