@@ -1,6 +1,6 @@
-package com.lightstreamer.internal.diff;
+package com.lightstreamer.internal.patch;
 
-import jsonpatch.JsonPatcher;
+import com.lightstreamer.internal.patch.JsonPatcher;
 
 abstract Json(Dynamic) {
   public function new(str: String) {
