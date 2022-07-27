@@ -26,7 +26,7 @@ class TestCertValidatorCs extends  utest.Test {
 
   function testRemoteCertificateValidationHttp(async: utest.Async) {
     new HttpClient(
-      secHost + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0", 
+      secHost + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.4.0", 
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null,
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
