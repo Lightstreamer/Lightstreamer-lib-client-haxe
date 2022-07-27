@@ -49,12 +49,19 @@ class TestClientExtra extends utest.Test {
     exps
     .then(() -> {
       #if python
-      equals(0, LightstreamerClient.getCookies(host).toHaxeArray().count());
+      var cookies0 = LightstreamerClient.getCookies(host).toHaxeArray();
+      equals(0, cookies0.length);
 
       var dict = new python.Dict<String, String>();
       dict.set("X-Client", "client");
       var cookies = new com.lightstreamer.internal.SimpleCookie(dict);
       LightstreamerClient.addCookies(host, cookies);
+      #elseif LS_NODE
+      var cookies: Array<String> = LightstreamerClient.getCookies(host);
+      equals(0, cookies.length);
+
+      var cookie = "X-Client=client";
+      LightstreamerClient.addCookies(host, [cookie]);
       #else
       fail("TODO");
       #end
@@ -70,6 +77,11 @@ class TestClientExtra extends utest.Test {
       var nCookies = [for (c in cookies) c.output()];
       contains("Set-Cookie: X-Client=client", nCookies);
       contains("Set-Cookie: X-Server=server", nCookies);
+      #elseif LS_NODE
+      var cookies: Array<String> = LightstreamerClient.getCookies(host);
+      equals(2, cookies.length);
+      contains("X-Client=client; domain=localtest.me; path=/", cookies);
+      contains("X-Server=server; domain=localtest.me; path=/", cookies);
       #else
       fail("TODO");
       #end
