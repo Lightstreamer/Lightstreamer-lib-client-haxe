@@ -2,7 +2,7 @@ package com.lightstreamer.client;
 
 import com.lightstreamer.client.BaseListener;
 
-@:timeout(2000)
+@:timeout(3000)
 @:build(utils.Macros.parameterize(["WS-STREAMING", "HTTP-STREAMING", "WS-POLLING", "HTTP-POLLING"]))
 class TestClient extends utest.Test {
   #if android
