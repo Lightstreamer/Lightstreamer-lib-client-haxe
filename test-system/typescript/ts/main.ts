@@ -1,6 +1,6 @@
 import {Subscription, LightstreamerClient, ConsoleLoggerProvider, ConsoleLogLevel, MpnSubscription, MpnDevice, FirebaseMpnBuilder, SafariMpnBuilder} from 'lightstreamer-client-web'
 
-var loggerProvider = new ConsoleLoggerProvider(ConsoleLogLevel.DEBUG)
+var loggerProvider = new ConsoleLoggerProvider(ConsoleLogLevel.INFO)
 var logger = loggerProvider.getLogger("test")
 LightstreamerClient.setLoggerProvider(loggerProvider)
 
@@ -12,21 +12,48 @@ sub.setDataAdapter("QUOTE_ADAPTER")
 sub.setRequestedSnapshot("yes")
 assert(sub.getDataAdapter() == "QUOTE_ADAPTER")
 assert(sub.getRequestedSnapshot() == "yes")
-// sub.addListener({
-//     onListenStart: function(aSub) {
-//       log("SubscriptionListener.onListenStart")
-//       assert(sub == aSub)
-//     }
-// })
+sub.addListener({
+    onListenStart: function (aSub) {
+        log("SubscriptionListener.onListenStart")
+        assert(sub == aSub)
+    },
+    onItemUpdate: function (obj) {
+        log(obj.getValue("stock_name") + ": " + obj.getValue("last_price"))
+    },
+    onClearSnapshot: function (itemName: string, itemPos: number): void {
+        // throw new Error('Function not implemented.')
+    },
+    onCommandSecondLevelItemLostUpdates: function (lostUpdates: number, key: string): void {
+        // throw new Error('Function not implemented.')
+    },
+    onCommandSecondLevelSubscriptionError: function (code: number, message: string, key: string): void {
+        // throw new Error('Function not implemented.')
+    },
+    onEndOfSnapshot: function (itemName: string, itemPos: number): void {
+        // throw new Error('Function not implemented.')
+    },
+    onItemLostUpdates: function (itemName: string, itemPos: number, lostUpdates: number): void {
+        // throw new Error('Function not implemented.')
+    },
+    onListenEnd: function (subscription: Subscription): void {
+        // throw new Error('Function not implemented.')
+    },
+    onSubscription: function (): void {
+        // throw new Error('Function not implemented.')
+    },
+    onSubscriptionError: function (code: number, message: string): void {
+        // throw new Error('Function not implemented.')
+    },
+    onUnsubscription: function (): void {
+        // throw new Error('Function not implemented.')
+    },
+    onRealMaxFrequency: function (frequency: string): void {
+        // throw new Error('Function not implemented.')
+    }
+})
 
 //var client = new LightstreamerClient("http://localhost:8080","DEMO")
 var client = new LightstreamerClient("http://push.lightstreamer.com","DEMO")  
-// client.addListener({
-//   onListenStart: function(aClient) {
-//     log("ClientListener.onListenStart")
-//     assert(client == aClient)
-//   }
-// })
 
 client.connectionDetails.setUser("user")
 assert(client.connectionDetails.getUser() == "user")
@@ -36,12 +63,6 @@ client.connectionOptions.setHttpExtraHeaders({"Foo": "bar"})
 var device = new MpnDevice(`${Math.round(Math.random() * 100)}`, "com.example.myapp", "Google")
 assert(device.getPlatform() == "Google")
 assert(device.getApplicationId() == "com.example.myapp")
-// device.addListener({
-//   onListenStart: function(aDevice) {
-//     log("MpnDeviceListener.onListenStart")
-//     assert(device == aDevice)
-//   }
-// })
 
 var sbuilder = new SafariMpnBuilder("{\"foo\": 123}")
 sbuilder.setTitle("TITLE")
@@ -64,16 +85,10 @@ msub.setTriggerExpression("x>0")
 assert(msub.getDataAdapter() == "MPN_ADAPTER")
 assert(msub.getNotificationFormat() == "{\"foo\": 123}")
 assert(msub.getTriggerExpression() == "x>0")
-// msub.addListener({
-//   onListenStart: function(aSub) {
-//     log("MpnSubscriptionListener.onListenStart")
-//     assert(msub == aSub)
-//   }
-// })
 
 client.subscribe(sub)
 client.connect()
 
 setTimeout(function() {
     client.disconnect()
-}, 100)
+}, 5*1000)
