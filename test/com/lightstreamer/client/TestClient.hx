@@ -337,7 +337,7 @@ class TestClient extends utest.Test {
   function _testOverflow(async: utest.Async) {
     setTransport();
     var sub = new Subscription("MERGE", ["overflow"], ["value"]);
-    sub.setRequestedSnapshot("no");
+    sub.setRequestedSnapshot("yes");
     sub.setDataAdapter("OVERFLOW");
     sub.setRequestedMaxFrequency("unfiltered");
     subListener._onItemLostUpdates = (name, pos, lost) -> {
@@ -414,6 +414,38 @@ class TestClient extends utest.Test {
       client.connect();
     })
     .await("connected")
+    .then(() -> async.completed())
+    .verify();
+  }
+  #end
+
+  #if LS_JSON_PATCH
+  function _testJsonPatch(async: utest.Async) {
+    var updates = [];
+    client = new LightstreamerClient("http://localhost:8080", "TEST");
+    var sub = new Subscription("MERGE", ["count"], ["count"]);
+    sub.setRequestedSnapshot("yes");
+    sub.setDataAdapter("JSON_COUNT");
+    sub.addListener(subListener);
+    subListener._onItemUpdate = update -> {
+      updates.push(update);
+      exps.signal("onItemUpdate");
+    }
+    client.subscribe(sub);
+
+    exps
+    .then(() -> client.connect())
+    .await("onItemUpdate")
+    .await("onItemUpdate")
+    .then(() -> {
+      var u = updates[1];
+      var patch = patch2json(u.getValueAsJSONPatchIfAvailable(1))[0];
+      equals("replace", patch.op);
+      equals("/value", patch.path);
+      notNull(patch.value);
+      var value = haxe.Json.parse(u.getValue(1));
+      notNull(value.value);
+    })
     .then(() -> async.completed())
     .verify();
   }
