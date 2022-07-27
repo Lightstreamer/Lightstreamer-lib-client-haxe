@@ -23,25 +23,29 @@ class WsClient implements IWsClient {
     streamLogger.logDebug('WS connecting: $url');
     this.ws = new WebSocket(url, Constants.FULL_TLCP_VERSION);
     ws.onopen = () -> {
+      if (isCanceled) return;
       streamLogger.logDebug('WS event: open');
       onOpen(this);
     };
     ws.onmessage = evt -> {
+      if (isCanceled) return;
       var text: String = evt.data;
       for (line in text.split("\r\n")) {
+        if (isCanceled) return;
         if (line == "") continue;
         streamLogger.logDebug('WS event: text($line)');
         onText(this, line);
       }
     };
     ws.onerror = () -> {
+      if (isCanceled) return;
       var msg = "Network error";
       streamLogger.logDebug('WS event: error($msg)');
       onError(this, msg);
       ws.close();
     };
     ws.onclose = evt -> {
-      if (isCanceled) return;  // closing is expected
+      if (isCanceled) return;
       var msg =  "unexpected disconnection: " + evt.code + " - " + evt.reason;
       streamLogger.logDebug('WS event: error($msg)');
       onError(this, msg);
