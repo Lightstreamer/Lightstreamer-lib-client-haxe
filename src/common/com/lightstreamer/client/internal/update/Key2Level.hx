@@ -202,7 +202,7 @@ class Key2Level implements ItemKey {
     currKeyValues = keyValues;
     currKeyValues[cmdIdx] = StringVal("ADD");
     var changedFields = findChangedFields(null, currKeyValues);
-    var update = new ItemUpdate2Level(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot);
+    var update = new ItemUpdate2Level(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot#if LS_JSON_PATCH, []#end);
     
     fireOnItemUpdate(update);
   }
@@ -213,7 +213,7 @@ class Key2Level implements ItemKey {
     currKeyValues = keyValues;
     currKeyValues[cmdIdx] = StringVal("UPDATE");
     var changedFields = findChangedFields(prevKeyValues, currKeyValues);
-    var update = new ItemUpdate2Level(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot);
+    var update = new ItemUpdate2Level(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot#if LS_JSON_PATCH, []#end);
     
     fireOnItemUpdate(update);
   }
@@ -238,7 +238,16 @@ class Key2Level implements ItemKey {
       changedFields.insert(f + nFields);
     }
     var snapshot = update.isSnapshot();
-    var extUpdate = new ItemUpdate2Level(item.itemIdx, item.subscription, extKeyValues, changedFields, snapshot);
+    #if LS_JSON_PATCH
+    var jsonPatches: Map<Pos, com.lightstreamer.internal.patch.Json.JsonPatch> = [];
+    for (f => _ in currKey2Values) {
+      var u = update.getValueAsJSONPatchIfAvailable(f);
+      if (u != null) {
+        jsonPatches[f + nFields] = u;
+      }
+    }
+    #end
+    var extUpdate = new ItemUpdate2Level(item.itemIdx, item.subscription, extKeyValues, changedFields, snapshot#if LS_JSON_PATCH, jsonPatches#end);
     
     fireOnItemUpdate(extUpdate);
   }
@@ -259,7 +268,7 @@ class Key2Level implements ItemKey {
         changedFields.insert(f);
       }
     }
-    var extUpdate = new ItemUpdate2Level(item.itemIdx, item.subscription, extKeyValues, changedFields, snapshot);
+    var extUpdate = new ItemUpdate2Level(item.itemIdx, item.subscription, extKeyValues, changedFields, snapshot#if LS_JSON_PATCH, []#end);
     
     fireOnItemUpdate(extUpdate);
   }
@@ -276,7 +285,7 @@ class Key2Level implements ItemKey {
     }
     extKeyValues[keyIdx] = StringVal(keyName);
     extKeyValues[cmdIdx] = StringVal("DELETE");
-    var update = new ItemUpdate2Level(item.itemIdx, item.subscription, extKeyValues, changedFields, snapshot);
+    var update = new ItemUpdate2Level(item.itemIdx, item.subscription, extKeyValues, changedFields, snapshot#if LS_JSON_PATCH, []#end);
     
     item.unrelate(keyName);
     
@@ -304,7 +313,7 @@ class Key2Level implements ItemKey {
     }
     extKeyValues[keyIdx] = StringVal(keyName);
     extKeyValues[cmdIdx] = StringVal("DELETE");
-    var update = new ItemUpdate2Level(item.itemIdx, item.subscription, extKeyValues, changedFields, snapshot);
+    var update = new ItemUpdate2Level(item.itemIdx, item.subscription, extKeyValues, changedFields, snapshot#if LS_JSON_PATCH, []#end);
     
     item.unrelate(keyName);
     
@@ -330,7 +339,7 @@ class Key2Level implements ItemKey {
     }
     values[keyIdx] = keyValues[keyIdx];
     values[cmdIdx] = keyValues[cmdIdx];
-    var update = new ItemUpdate2Level(item.itemIdx, item.subscription, values, changedFields, snapshot);
+    var update = new ItemUpdate2Level(item.itemIdx, item.subscription, values, changedFields, snapshot#if LS_JSON_PATCH, []#end);
     
     fireOnItemUpdate(update);
   }
@@ -347,7 +356,7 @@ class Key2Level implements ItemKey {
     }
     values[keyIdx] = keyValues[keyIdx];
     values[cmdIdx] = keyValues[cmdIdx];
-    var update = new ItemUpdate2Level(item.itemIdx, item.subscription, values, changedFields, snapshot);
+    var update = new ItemUpdate2Level(item.itemIdx, item.subscription, values, changedFields, snapshot#if LS_JSON_PATCH, []#end);
     
     fireOnItemUpdate(update);
   }

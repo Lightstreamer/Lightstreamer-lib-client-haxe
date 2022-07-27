@@ -84,7 +84,7 @@ class Key1Level implements ItemKey {
     currKeyValues = keyValues;
     currKeyValues[cmdIdx] = StringVal("ADD");
     var changedFields = new Set(1...nFields + 1);
-    var update = new ItemUpdateBase(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot);
+    var update = new ItemUpdateBase(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot#if LS_JSON_PATCH, []#end);
     
     fireOnItemUpdate(update);
   }
@@ -95,7 +95,7 @@ class Key1Level implements ItemKey {
     currKeyValues = keyValues;
     currKeyValues[cmdIdx] = StringVal("UPDATE");
     var changedFields = findChangedFields(prevKeyValues, currKeyValues);
-    var update = new ItemUpdateBase(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot);
+    var update = new ItemUpdateBase(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot#if LS_JSON_PATCH, []#end);
     
     fireOnItemUpdate(update);
   }
@@ -103,7 +103,7 @@ class Key1Level implements ItemKey {
   function doLightDelete(keyValues: Map<Pos, Null<CurrFieldVal>>, snapshot: Bool) {
     currKeyValues = null;
     var changedFields = new Set(keyValues.keys());
-    var update = new ItemUpdateBase(item.itemIdx, item.subscription, nullify(keyValues), changedFields, snapshot);
+    var update = new ItemUpdateBase(item.itemIdx, item.subscription, nullify(keyValues), changedFields, snapshot#if LS_JSON_PATCH, []#end);
     item.unrelate(keyName);
     
     fireOnItemUpdate(update);
@@ -112,7 +112,7 @@ class Key1Level implements ItemKey {
   function doDelete(keyValues: Map<Pos, Null<CurrFieldVal>>, snapshot: Bool) {
     currKeyValues = null;
     var changedFields = new Set(keyValues.keys()).subtracting([item.subscription.getKeyPosition().sure()]);
-    var update = new ItemUpdateBase(item.itemIdx, item.subscription, nullify(keyValues), changedFields, snapshot);
+    var update = new ItemUpdateBase(item.itemIdx, item.subscription, nullify(keyValues), changedFields, snapshot#if LS_JSON_PATCH, []#end);
     item.unrelate(keyName);
     
     fireOnItemUpdate(update);

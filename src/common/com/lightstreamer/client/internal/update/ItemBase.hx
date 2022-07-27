@@ -76,7 +76,10 @@ class ItemBase {
     var prevValues = currValues;
     currValues = applyUpatesToCurrentFields(prevValues, values);
     var changedFields = findChangedFields(prevValues, currValues);
-    var update = new ItemUpdateBase(itemIdx, subscription, currValues, changedFields, snapshot);
+    #if LS_JSON_PATCH
+    var jsonPatches = computeJsonPatches(prevValues, values);
+    #end
+    var update = new ItemUpdateBase(itemIdx, subscription, currValues, changedFields, snapshot#if LS_JSON_PATCH, jsonPatches#end);
     subscription.fireOnItemUpdate(update, m_subId);
   }
 }

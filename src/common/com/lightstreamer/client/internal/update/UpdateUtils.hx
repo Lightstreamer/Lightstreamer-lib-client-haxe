@@ -108,6 +108,29 @@ function findChangedFields(prev: Null<Map<Pos, Null<CurrFieldVal>>>, curr: Map<P
   }
 }
 
+#if LS_JSON_PATCH
+function computeJsonPatches(currentValues: Null<Map<Pos, Null<CurrFieldVal>>>, incomingValues: Map<Pos, FieldValue>): Map<Pos, com.lightstreamer.internal.patch.Json.JsonPatch> {
+  if (currentValues != null) {
+    var res: Map<Pos, com.lightstreamer.internal.patch.Json.JsonPatch> = [];
+    for (f => value in incomingValues) {
+      switch value {
+      case jsonPatch(patch):
+        res[f] = patch;
+      case unchanged:
+        var curr = currentValues[f];
+        if (curr != null && curr.match(JsonVal(_))) {
+          res[f] = new com.lightstreamer.internal.patch.Json.JsonPatch("[]");
+        }
+      case _:
+      }
+    }
+    return res;
+  } else {
+    return [];
+  }
+}
+#end
+
 function toMap(array: Null<Array<String>>): Null<Map<Pos, String>> {
   if (array != null) {
     var map = new Map<Pos, String>();

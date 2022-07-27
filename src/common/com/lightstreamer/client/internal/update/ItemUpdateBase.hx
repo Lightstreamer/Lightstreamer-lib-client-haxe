@@ -22,8 +22,11 @@ class ItemUpdateBase implements ItemUpdate {
   final m_newValues: Map<Pos, Null<CurrFieldVal>>;
   final m_changedFields: Set<Pos>;
   final m_isSnapshot: Bool;
+  #if LS_JSON_PATCH
+  final m_jsonPatches: Map<Pos, com.lightstreamer.internal.patch.Json.JsonPatch>;
+  #end
 
-  public function new(itemIdx: Pos, sub: Subscription, newValues: Map<Pos, Null<CurrFieldVal>>, changedFields: Set<Pos>, isSnapshot: Bool) {
+  public function new(itemIdx: Pos, sub: Subscription, newValues: Map<Pos, Null<CurrFieldVal>>, changedFields: Set<Pos>, isSnapshot: Bool#if LS_JSON_PATCH, jsonPatches: Map<Pos, com.lightstreamer.internal.patch.Json.JsonPatch>#end) {
     var items = sub.getItems();
     var fields = sub.getFields();
     this.m_itemIdx = itemIdx;
@@ -33,6 +36,9 @@ class ItemUpdateBase implements ItemUpdate {
     this.m_newValues = newValues.copy();
     this.m_changedFields = changedFields.copy();
     this.m_isSnapshot = isSnapshot;
+    #if LS_JSON_PATCH
+    this.m_jsonPatches = jsonPatches;
+    #end
   }
 
   public function getItemName(): Null<String> {
@@ -101,6 +107,28 @@ class ItemUpdateBase implements ItemUpdate {
       return isValueChangedName(fieldName);
     }
   }
+
+  #if LS_JSON_PATCH
+  function _getValueAsJSONPatchIfAvailable(fieldNameOrPos: haxe.extern.EitherType<String, Int>): Null<com.lightstreamer.internal.patch.Json.JsonPatch> {
+    if (fieldNameOrPos is Int) {
+      var fieldPos: Int = fieldNameOrPos;
+      return m_jsonPatches[fieldPos];
+    } else {
+      var fieldName = Std.string(fieldNameOrPos);
+      var fieldPos = getFieldIdxFromName(fieldName);
+      return m_jsonPatches[fieldPos];
+    }
+  }
+  #if js
+  public function getValueAsJSONPatchIfAvailable(fieldNameOrPos: haxe.extern.EitherType<String, Int>): Null<Dynamic> {
+    return _getValueAsJSONPatchIfAvailable(fieldNameOrPos);
+  }
+  #else
+  public function getValueAsJSONPatchIfAvailable(fieldNameOrPos: haxe.extern.EitherType<String, Int>): Null<String> {
+    return _getValueAsJSONPatchIfAvailable(fieldNameOrPos).toString();
+  }
+  #end
+  #end
   #end
 
   #if js
@@ -171,13 +199,7 @@ class ItemUpdateBase implements ItemUpdate {
   }
 
   function getValueName(fieldName: String): Null<String> {
-    if (m_fields == null) {
-      throw new IllegalStateException(NO_FIELDS);
-    }
-    var fieldPos = findFirstIndex(m_fields, fieldName);
-    if (fieldPos == null) {
-        throw new IllegalArgumentException(UNKNOWN_FIELD_NAME);
-    }
+    var fieldPos = getFieldIdxFromName(fieldName);
     return m_newValues[fieldPos].toString();
   }
 
@@ -189,6 +211,15 @@ class ItemUpdateBase implements ItemUpdate {
   }
 
   function isValueChangedName(fieldName: String): Bool {
+    var fieldPos = getFieldIdxFromName(fieldName);
+    return m_changedFields.contains(fieldPos);
+  }
+
+  function getFieldNameOrNullFromIdx(fieldIdx: Pos) {
+    return m_fields != null ? m_fields[fieldIdx] : null;
+  }
+
+  function getFieldIdxFromName(fieldName: String): Pos {
     if (m_fields == null) {
       throw new IllegalStateException(NO_FIELDS);
     }
@@ -196,11 +227,7 @@ class ItemUpdateBase implements ItemUpdate {
     if (fieldPos == null) {
         throw new IllegalArgumentException(UNKNOWN_FIELD_NAME);
     }
-    return m_changedFields.contains(fieldPos);
-  }
-
-  function getFieldNameOrNullFromIdx(fieldIdx: Pos) {
-    return m_fields != null ? m_fields[fieldIdx] : null;
+    return fieldPos;
   }
 
   public function toString(): String {

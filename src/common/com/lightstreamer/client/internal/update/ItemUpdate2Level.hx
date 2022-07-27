@@ -20,8 +20,11 @@ class ItemUpdate2Level implements ItemUpdate {
   final m_newValues: Map<Pos, Null<CurrFieldVal>>;
   final m_changedFields: Set<Pos>;
   final m_isSnapshot: Bool;
+  #if LS_JSON_PATCH
+  final m_jsonPatches: Map<Pos, com.lightstreamer.internal.patch.Json.JsonPatch>;
+  #end
 
-  public function new(itemIdx: Pos, sub: Subscription, newValues: Map<Pos, Null<CurrFieldVal>>, changedFields: Set<Pos>, isSnapshot: Bool) {
+  public function new(itemIdx: Pos, sub: Subscription, newValues: Map<Pos, Null<CurrFieldVal>>, changedFields: Set<Pos>, isSnapshot: Bool#if LS_JSON_PATCH, jsonPatches: Map<Pos, com.lightstreamer.internal.patch.Json.JsonPatch>#end) {
     var items = sub.getItems();
     var fields = sub.getFields();
     var fields2 = sub.getCommandSecondLevelFields();
@@ -33,6 +36,9 @@ class ItemUpdate2Level implements ItemUpdate {
     this.m_newValues = newValues.copy();
     this.m_changedFields = changedFields.copy();
     this.m_isSnapshot = isSnapshot;
+    #if LS_JSON_PATCH
+    this.m_jsonPatches = jsonPatches;
+    #end
   }
 
   public function getItemName(): Null<String> {
@@ -101,6 +107,28 @@ class ItemUpdate2Level implements ItemUpdate {
       return isValueChangedName(fieldName);
     }
   }
+
+  #if LS_JSON_PATCH
+  function _getValueAsJSONPatchIfAvailable(fieldNameOrPos: haxe.extern.EitherType<String, Int>): Null<com.lightstreamer.internal.patch.Json.JsonPatch> {
+    if (fieldNameOrPos is Int) {
+      var fieldPos: Int = fieldNameOrPos;
+      return m_jsonPatches[fieldPos];
+    } else {
+      var fieldName = Std.string(fieldNameOrPos);
+      var fieldPos = getFieldIdxFromName(fieldName);
+      return fieldPos != null ? m_jsonPatches[fieldPos] : null;
+    }
+  }
+  #if js
+  public function getValueAsJSONPatchIfAvailable(fieldNameOrPos: haxe.extern.EitherType<String, Int>): Null<Dynamic> {
+    return _getValueAsJSONPatchIfAvailable(fieldNameOrPos);
+  }
+  #else
+  public function getValueAsJSONPatchIfAvailable(fieldNameOrPos: haxe.extern.EitherType<String, Int>): Null<String> {
+    return _getValueAsJSONPatchIfAvailable(fieldNameOrPos).toString();
+  }
+  #end
+  #end
   #end
 
   #if js
