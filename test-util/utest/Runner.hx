@@ -250,15 +250,6 @@ class Runner {
       trace("No test to run");
       return;
     }
-    for (test in tests) {
-      if (test.passed()) {
-        continue;
-      }
-      trace('********** ${test.name} **********');
-      for (error in test.errors) {
-        trace(error.message + error.stack);
-      }
-    }
     var failed = 0;
     var total = tests.length;
     trace("********** Results **********");
