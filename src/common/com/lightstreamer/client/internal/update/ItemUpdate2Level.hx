@@ -125,7 +125,8 @@ class ItemUpdate2Level implements ItemUpdate {
   }
   #else
   public function getValueAsJSONPatchIfAvailable(fieldNameOrPos: haxe.extern.EitherType<String, Int>): Null<String> {
-    return _getValueAsJSONPatchIfAvailable(fieldNameOrPos).toString();
+    var val = _getValueAsJSONPatchIfAvailable(fieldNameOrPos);
+    return val != null ? val.toString() : null;
   }
   #end
   #end
