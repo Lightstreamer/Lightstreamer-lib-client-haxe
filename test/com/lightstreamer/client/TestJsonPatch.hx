@@ -87,7 +87,7 @@ class TestJsonPatch extends utest.Test {
     .verify();
   }
 
-  @:timeout(2000)
+  @:timeout(3000)
   function testRealServer(async: utest.Async) {
     var updates = [];
     client = new LightstreamerClient("http://localhost:8080", "TEST");

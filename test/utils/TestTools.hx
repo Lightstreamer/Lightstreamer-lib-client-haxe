@@ -8,7 +8,7 @@ function _sendMessage(client: LightstreamerClient, message: String, sequence: Nu
 }
 
 function patch2str(patch: Dynamic) {
-  return patch == null ? null : haxe.Json.stringify(patch);
+  return patch == null ? null : patch is String ? patch : haxe.Json.stringify(patch);
 }
 
 function patch2json(patch: Dynamic) {
