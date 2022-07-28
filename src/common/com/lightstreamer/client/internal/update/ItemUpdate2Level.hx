@@ -11,6 +11,15 @@ using com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.internal.NullTools;
 using com.lightstreamer.client.internal.update.UpdateUtils.CurrFieldValTools;
 
+#if LS_JSON_PATCH
+typedef JsonPatchTypeAsReturnedByGetPatch = 
+#if js
+com.lightstreamer.internal.patch.Json.JsonPatch
+#else
+String
+#end
+#end
+
 class ItemUpdate2Level implements ItemUpdate {
   final m_itemIdx: Pos;
   final m_items: Null<Map<Pos, String>>;
@@ -21,10 +30,10 @@ class ItemUpdate2Level implements ItemUpdate {
   final m_changedFields: Set<Pos>;
   final m_isSnapshot: Bool;
   #if LS_JSON_PATCH
-  final m_jsonPatches: Map<Pos, com.lightstreamer.internal.patch.Json.JsonPatch>;
+  final m_jsonPatches: Map<Pos, JsonPatchTypeAsReturnedByGetPatch>;
   #end
 
-  public function new(itemIdx: Pos, sub: Subscription, newValues: Map<Pos, Null<CurrFieldVal>>, changedFields: Set<Pos>, isSnapshot: Bool#if LS_JSON_PATCH, jsonPatches: Map<Pos, com.lightstreamer.internal.patch.Json.JsonPatch>#end) {
+  public function new(itemIdx: Pos, sub: Subscription, newValues: Map<Pos, Null<CurrFieldVal>>, changedFields: Set<Pos>, isSnapshot: Bool#if LS_JSON_PATCH, jsonPatches: Map<Pos, JsonPatchTypeAsReturnedByGetPatch>#end) {
     var items = sub.getItems();
     var fields = sub.getFields();
     var fields2 = sub.getCommandSecondLevelFields();

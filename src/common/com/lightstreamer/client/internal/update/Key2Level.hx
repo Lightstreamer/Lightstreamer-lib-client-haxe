@@ -239,7 +239,7 @@ class Key2Level implements ItemKey {
     }
     var snapshot = update.isSnapshot();
     #if LS_JSON_PATCH
-    var jsonPatches: Map<Pos, com.lightstreamer.internal.patch.Json.JsonPatch> = [];
+    var jsonPatches: Map<Pos, ItemUpdate2Level.JsonPatchTypeAsReturnedByGetPatch> = [];
     for (f => _ in currKey2Values) {
       var u = update.getValueAsJSONPatchIfAvailable(f);
       if (u != null) {
