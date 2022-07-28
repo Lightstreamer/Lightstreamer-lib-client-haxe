@@ -120,7 +120,7 @@ class ItemUpdateBase implements ItemUpdate {
     }
   }
   #if js
-  public function getValueAsJSONPatchIfAvailable(fieldNameOrPos: haxe.extern.EitherType<String, Int>): Null<com.lightstreamer.internal.patch.Json> {
+  public function getValueAsJSONPatchIfAvailable(fieldNameOrPos: haxe.extern.EitherType<String, Int>): Null<com.lightstreamer.internal.patch.Json.JsonPatch> {
     return _getValueAsJSONPatchIfAvailable(fieldNameOrPos);
   }
   #else

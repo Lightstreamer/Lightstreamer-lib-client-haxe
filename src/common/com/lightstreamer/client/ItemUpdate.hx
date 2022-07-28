@@ -29,7 +29,7 @@ interface ItemUpdate {
   function isValueChanged(fieldNameOrPos: haxe.extern.EitherType<String, Int>): Bool;
   #if LS_JSON_PATCH
   #if js
-  function getValueAsJSONPatchIfAvailable(fieldNameOrPos: haxe.extern.EitherType<String, Int>): Null<com.lightstreamer.internal.patch.Json>;
+  function getValueAsJSONPatchIfAvailable(fieldNameOrPos: haxe.extern.EitherType<String, Int>): Null<com.lightstreamer.internal.patch.Json.JsonPatch>;
   #else
   function getValueAsJSONPatchIfAvailable(fieldNameOrPos: haxe.extern.EitherType<String, Int>): Null<String>;
   #end
