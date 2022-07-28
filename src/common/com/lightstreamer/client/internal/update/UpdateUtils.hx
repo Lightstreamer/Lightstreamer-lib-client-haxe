@@ -3,7 +3,9 @@ package com.lightstreamer.client.internal.update;
 import com.lightstreamer.internal.NativeTypes.IllegalStateException;
 import com.lightstreamer.internal.Types;
 import com.lightstreamer.internal.Set;
+import com.lightstreamer.log.LoggerTools;
 
+using com.lightstreamer.log.LoggerTools;
 using Lambda;
 using com.lightstreamer.client.internal.update.UpdateUtils.CurrFieldValTools;
 
@@ -46,7 +48,8 @@ function applyUpatesToCurrentFields(currentValues: Null<Map<Pos, Null<CurrFieldV
           try {
             newValues[f] = JsonVal(json.apply(patch));
           } catch(e) {
-            throw new IllegalStateException('Cannot apply the JSON Patch to the field $f', e);
+            sessionLogger.logErrorEx(e.message, e);
+            throw new IllegalStateException('Cannot apply the JSON Patch to the field $f');
           }
         case StringVal(str):
           @:nullSafety(Off)
@@ -54,12 +57,14 @@ function applyUpatesToCurrentFields(currentValues: Null<Map<Pos, Null<CurrFieldV
           try {
             json = new com.lightstreamer.internal.patch.Json(str);
           } catch(e) {
-            throw new IllegalStateException('Cannot convert the field $f to JSON', e);
+            sessionLogger.logErrorEx(e.message, e);
+            throw new IllegalStateException('Cannot convert the field $f to JSON');
           }
           try {
             newValues[f] = JsonVal(json.apply(patch));
           } catch(e) {
-            throw new IllegalStateException('Cannot apply the JSON Patch to the field $f', e);
+            sessionLogger.logErrorEx(e.message, e);
+            throw new IllegalStateException('Cannot apply the JSON Patch to the field $f');
           }
         case null:
           throw new IllegalStateException('Cannot apply the JSON patch to the field $f because the field is null');

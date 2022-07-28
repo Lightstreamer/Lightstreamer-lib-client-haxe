@@ -95,6 +95,20 @@ class ItemUpdate2Level implements ItemUpdate {
   overload public function isValueChanged(fieldName: String): Bool {
     return isValueChangedName(fieldName);
   }
+  #if LS_JSON_PATCH
+  overload public function getValueAsJSONPatchIfAvailable(fieldName: String): Null<String> {
+    var fieldPos = getFieldIdxFromName(fieldName);
+    if (fieldPos == null) {
+      return null;
+    }
+    var val = m_jsonPatches[fieldPos];
+    return val != null ? val.toString() : null;
+  }
+  overload public function getValueAsJSONPatchIfAvailable(fieldPos: Int): Null<String> {
+    var val = m_jsonPatches[fieldPos];
+    return val != null ? val.toString() : null;
+  }
+  #end
   #end
   #else
   public function getValue(fieldNameOrPos: haxe.extern.EitherType<String, Int>): Null<String> {

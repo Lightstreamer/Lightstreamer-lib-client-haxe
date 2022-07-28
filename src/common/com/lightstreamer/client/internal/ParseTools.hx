@@ -2,6 +2,9 @@ package com.lightstreamer.client.internal;
 
 import com.lightstreamer.internal.NativeTypes.IllegalStateException;
 import com.lightstreamer.internal.Types;
+import com.lightstreamer.log.LoggerTools;
+
+using com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.internal.NullTools;
 using StringTools;
 using com.lightstreamer.client.internal.ParseTools;
@@ -81,7 +84,8 @@ function parseUpdate(message: String): UpdateInfo {
           values[nextFieldIndex] = jsonPatch(patch);
           nextFieldIndex += 1;
         } catch(e) {
-          throw new IllegalStateException('The JSON Patch for the field $nextFieldIndex is not well-formed', e);
+          sessionLogger.logErrorEx(e.message, e);
+          throw new IllegalStateException('The JSON Patch for the field $nextFieldIndex is not well-formed');
         }
         #else
         throw new IllegalStateException("JSONPatch compression is not supported by the client");
