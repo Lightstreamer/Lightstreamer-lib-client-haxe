@@ -184,12 +184,7 @@ class TestHttpClientJava extends utest.Test {
   }
 
   function testTrustManager(async: utest.Async) {
-    #if android
-    var ksIn = AndroidTools.openRawResource("server_certificate");
-    #else
-    var bytes = haxe.Resource.getBytes("server_certificate").getData();
-    var ksIn = new java.io.ByteArrayInputStream(bytes);
-    #end
+    var ksIn = getResourceAsJavaBytes("server_certificate");
     var keyStore = java.security.KeyStore.getInstance("PKCS12");
     keyStore.load(ksIn, (cast "secret":java.NativeString).toCharArray());
     var tmf = java.javax.net.ssl.TrustManagerFactory.getInstance(java.javax.net.ssl.TrustManagerFactory.getDefaultAlgorithm());

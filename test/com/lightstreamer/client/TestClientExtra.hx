@@ -62,6 +62,13 @@ class TestClientExtra extends utest.Test {
 
       var cookie = "X-Client=client";
       LightstreamerClient.addCookies(host, [cookie]);
+      #elseif java
+      var uri = new java.net.URI(host);
+      equals(0, LightstreamerClient.getCookies(uri).toHaxe().length);
+      
+      var cookie = new java.net.HttpCookie("X-Client", "client");
+      cookie.setPath("/");
+      LightstreamerClient.addCookies(uri, new com.lightstreamer.internal.NativeTypes.NativeList([cookie]));
       #else
       fail("TODO");
       #end
@@ -82,6 +89,12 @@ class TestClientExtra extends utest.Test {
       equals(2, cookies.length);
       contains("X-Client=client; domain=localtest.me; path=/", cookies);
       contains("X-Server=server; domain=localtest.me; path=/", cookies);
+      #elseif java
+      var uri = new java.net.URI(host);
+      var cookies = LightstreamerClient.getCookies(uri).toHaxe().map(c -> c.getName() + "=" + c.getValue());
+      equals(2, cookies.length);
+      contains("X-Client=client", cookies);
+      contains("X-Server=server", cookies);
       #else
       fail("TODO");
       #end
@@ -102,6 +115,13 @@ class TestClientExtra extends utest.Test {
       var sslcontext = com.lightstreamer.internal.SSLContext.SSL.create_default_context({cafile: "test/localtest.me.crt"});
       sslcontext.load_cert_chain({certfile: "test/localtest.me.crt", keyfile: "test/localtest.me.key"});
       LightstreamerClient.setTrustManagerFactory(sslcontext);
+      #elseif java
+      var ksIn = getResourceAsJavaBytes("server_certificate");
+      var keyStore = java.security.KeyStore.getInstance("PKCS12");
+      keyStore.load(ksIn, (cast "secret":java.NativeString).toCharArray());
+      var tmf = java.javax.net.ssl.TrustManagerFactory.getInstance(java.javax.net.ssl.TrustManagerFactory.getDefaultAlgorithm());
+      tmf.init(keyStore);
+      LightstreamerClient.setTrustManagerFactory(tmf);
       #else
       fail("TODO");
       #end
