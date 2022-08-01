@@ -25,4 +25,16 @@ function getResourceAsJavaBytes(name: String) {
   #end
   return ksIn;
 }
+
+// keep references to loggers to prevent their configuration from being GC'd
+var okhttpLogger: java.util.logging.Logger;
+
+// see https://square.github.io/okhttp//contribute/debug_logging/
+function enableOkHttpLogger() {
+  okhttpLogger = java.util.logging.Logger.getLogger("okhttp3.OkHttpClient");
+  var handler = new java.util.logging.ConsoleHandler();
+  handler.setLevel(java.util.logging.Level.FINE);
+  okhttpLogger.addHandler(handler);
+  okhttpLogger.setLevel(java.util.logging.Level.FINE);
+}
 #end
