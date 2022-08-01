@@ -413,8 +413,7 @@ class TestSubscribe_HTTP extends utest.Test {
     .await("onSubscription")
     .then(() -> isTrue(sub.isSubscribed()))
     .then(() -> client.unsubscribe(sub))
-    .await("ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.4.0&LS_session=sid\r\nLS_reqId=2&LS_subId=1&LS_op=delete")
-    .await("onUnsubscription")
+    .await("onUnsubscription", "ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.4.0&LS_session=sid\r\nLS_reqId=2&LS_subId=1&LS_op=delete")
     .then(() -> isFalse(sub.isSubscribed()))
     .then(() -> async.completed())
     .verify();

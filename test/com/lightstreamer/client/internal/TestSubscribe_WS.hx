@@ -352,8 +352,7 @@ class TestSubscribe_WS extends utest.Test {
     .await("onSubscription")
     .then(() -> isTrue(sub.isSubscribed()))
     .then(() -> client.unsubscribe(sub))
-    .await("control\r\nLS_reqId=2&LS_subId=1&LS_op=delete&LS_ack=false")
-    .await("onUnsubscription")
+    .await("onUnsubscription", "control\r\nLS_reqId=2&LS_subId=1&LS_op=delete&LS_ack=false")
     .then(() -> isFalse(sub.isSubscribed()))
     .then(() -> async.completed())
     .verify();
