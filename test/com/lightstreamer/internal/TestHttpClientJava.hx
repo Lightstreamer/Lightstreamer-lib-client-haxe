@@ -82,7 +82,7 @@ class TestHttpClientJava extends utest.Test {
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
         #if android
-        equals("Failed to connect to localhost/127.0.0.1:8443", error);
+        equals("java.security.cert.CertPathValidatorException: Trust anchor for certification path not found.", error);
         #else
         equals("PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target", error);
         #end

@@ -90,7 +90,12 @@ class TestJsonPatch extends utest.Test {
   @:timeout(3000)
   function testRealServer(async: utest.Async) {
     var updates = [];
-    client = new LightstreamerClient("http://localhost:8080", "TEST");
+    #if android
+    var host = "http://10.0.2.2:8080";
+    #else
+    var host = "http://localtest.me:8080";
+    #end
+    client = new LightstreamerClient(host, "TEST");
     sub = new Subscription("MERGE", ["count"], ["count"]);
     sub.setRequestedSnapshot("yes");
     sub.setDataAdapter("JSON_COUNT");

@@ -10,9 +10,9 @@ test.common.hxml
 -D android
 -D jvm.dynamic-level=0
 --jvm bin-test/android/TestAll.jar
-#--cmd java -jar bin-test/android/TestAll.jar
 
 -D LS_MPN
 -D LS_HAS_PROXY
 -D LS_HAS_COOKIES
 -D LS_HAS_TRUST_MANAGER
+-D LS_JSON_PATCH

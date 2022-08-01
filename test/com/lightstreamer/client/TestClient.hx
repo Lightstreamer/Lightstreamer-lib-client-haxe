@@ -421,8 +421,8 @@ class TestClient extends utest.Test {
 
   #if LS_JSON_PATCH
   function _testJsonPatch(async: utest.Async) {
+    setTransport();
     var updates = [];
-    client = new LightstreamerClient("http://localhost:8080", "TEST");
     var sub = new Subscription("MERGE", ["count"], ["count"]);
     sub.setRequestedSnapshot("yes");
     sub.setDataAdapter("JSON_COUNT");
