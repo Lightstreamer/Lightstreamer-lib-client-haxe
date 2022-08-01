@@ -96,13 +96,22 @@ class WsClient extends WebSocketListener implements Authenticator implements IWs
 
   // WebSocketListener.onOpen
   override public overload function onOpen(webSocket: WebSocket, response: Response) {
+    if (isDisposed()) {
+      return;
+    }
     streamLogger.logDebug('WS event: open');
     onOpenCb(this);
   }
 
   // WebSocketListener.onMessage
   override public overload function onMessage(webSocket: WebSocket, text: String) {
+    if (isDisposed()) {
+      return;
+    }
     for (line in text.split("\r\n")) {
+      if (isDisposed()) {
+        return;
+      }
       if (line == "") continue;
       streamLogger.logDebug('WS event: text($line)');
       onTextCb(this, line);
@@ -122,6 +131,9 @@ class WsClient extends WebSocketListener implements Authenticator implements IWs
 
   // WebSocketListener.onClosing - graceful shutdown
   override public overload function onClosing(webSocket: WebSocket, code: Int, reason: String) {
+    if (isDisposed()) {
+      return;
+    }
     var msg =  "unexpected disconnection: " + code + " - " + reason;
     streamLogger.logDebug('WS event: error($msg)');
     onErrorCb(this, msg);
