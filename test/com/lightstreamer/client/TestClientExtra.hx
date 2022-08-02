@@ -69,6 +69,15 @@ class TestClientExtra extends utest.Test {
       var cookie = new java.net.HttpCookie("X-Client", "client");
       cookie.setPath("/");
       LightstreamerClient.addCookies(uri, new com.lightstreamer.internal.NativeTypes.NativeList([cookie]));
+      #elseif cs
+      var uri = new cs.system.Uri(host);
+      var cookies: cs.system.net.CookieCollection = LightstreamerClient.getCookies(uri);
+      equals(0, cookies.Count);
+
+      var cookie = new cs.system.net.Cookie("X-Client", "client");
+      var cookies = new cs.system.net.CookieCollection();
+      cookies.Add(cookie);
+      LightstreamerClient.addCookies(uri, cookies);
       #else
       fail("TODO");
       #end
@@ -95,6 +104,13 @@ class TestClientExtra extends utest.Test {
       equals(2, cookies.length);
       contains("X-Client=client", cookies);
       contains("X-Server=server", cookies);
+      #elseif cs
+      var uri = new cs.system.Uri(host);
+      var cookies: cs.system.net.CookieCollection = LightstreamerClient.getCookies(uri);
+      equals(2, cookies.Count);
+      var nCookies = [cookies[0].ToString(), cookies[1].ToString()];
+      contains("X-Client=client", nCookies);
+      contains("X-Server=server", nCookies);
       #else
       fail("TODO");
       #end
