@@ -404,7 +404,7 @@ class TestClient extends utest.Test {
     .verify();
   }
 
-  #if LS_HAS_PROXY
+  #if (LS_HAS_PROXY && !cs)
   function _testProxy(async: utest.Async) {
     setTransport();
     exps
