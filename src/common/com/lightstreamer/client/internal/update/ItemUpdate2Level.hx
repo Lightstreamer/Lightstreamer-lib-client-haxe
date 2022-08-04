@@ -132,7 +132,7 @@ class ItemUpdate2Level implements ItemUpdate {
   }
 
   #if LS_JSON_PATCH
-  function _getValueAsJSONPatchIfAvailable(fieldNameOrPos: haxe.extern.EitherType<String, Int>): Null<com.lightstreamer.internal.patch.Json.JsonPatch> {
+  function _getValueAsJSONPatchIfAvailable(fieldNameOrPos: haxe.extern.EitherType<String, Int>): Null<JsonPatchTypeAsReturnedByGetPatch> {
     if (fieldNameOrPos is Int) {
       var fieldPos: Int = fieldNameOrPos;
       return m_jsonPatches[fieldPos];
