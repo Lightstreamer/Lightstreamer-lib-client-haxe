@@ -97,7 +97,7 @@ class HttpClientPy:
       async with session.request("POST", url, data=body, headers=headers, proxy=proxy_url, proxy_auth=proxy_auth, ssl=sslContext) as resp:
         self.cancellationToken.set_result(resp)
         if not resp.ok:
-          raise Exception("Unexpected HTTP code: " + resp.status)
+          raise Exception("Unexpected HTTP code: " + str(resp.status))
         async for line in resp.content:
           self.on_text(self, line.decode("utf-8").rstrip('\r\n'))
       self.on_done(self)
@@ -151,7 +151,7 @@ class WsClientPy:
               if line != '':
                 self.on_text(self, line)
           else:
-            raise Exception("Unexpected Websocket message: " + msg.type)
+            raise Exception("Unexpected Websocket message: " + str(msg.type))
     except BaseException as ex:
       if not self.isDisposed():
         self.on_error(self, ex)
