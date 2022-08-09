@@ -13,6 +13,9 @@ class TestCore {
     var runner = new Runner();
     buildSuite(runner);
     runner.run();
+    #if sys
+    runner.await();
     Sys.exit(runner.numFailures);
+    #end
   }
 }
