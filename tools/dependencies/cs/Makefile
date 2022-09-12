@@ -6,10 +6,10 @@ build:
 	mkdir -p $(LIB)/cs $(CS_TEST) $(CS_LIB)
 	cd Lightstreamer && msbuild Lightstreamer.sln -target:Lightstreamer_Net:Rebuild
 	cp -f Lightstreamer/Lightstreamer.Net/bin/Debug/netstandard2.1/Lightstreamer.Net.dll $(LIB)/cs/
-	dotnet new console --name TestAll --output $(CS_TEST)
+	dotnet new console --name TestAll --output $(CS_TEST) --force
 	dotnet add $(CS_TEST)/TestAll.csproj reference Lightstreamer/Lightstreamer.Net/Lightstreamer.Net.csproj
 	rm $(CS_TEST)/*.cs
-	dotnet new classlib --framework "netstandard2.1" --name Lightstreamer.Client --output $(CS_LIB)
+	dotnet new classlib --framework "netstandard2.1" --name Lightstreamer.Client --output $(CS_LIB) --force
 	dotnet add $(CS_LIB)/Lightstreamer.Client.csproj reference Lightstreamer/Lightstreamer.Net/Lightstreamer.Net.csproj
 	rm $(CS_LIB)/*.cs
 
