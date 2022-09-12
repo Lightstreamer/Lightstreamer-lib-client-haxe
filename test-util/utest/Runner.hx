@@ -257,11 +257,6 @@ class Runner {
       var passed = test.passed();
       failed += passed ? 0 : 1;
       trace(test.name, passed ? "OK" : "FAILED");
-      if (!passed) {
-        for (error in test.errors) {
-          trace("  " + error.message);
-        }
-      }
     }
     if (failed > 0) {
       trace("********** Errors **********");
