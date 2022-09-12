@@ -129,16 +129,24 @@ class TestJsonPatch extends utest.Test {
     '^P[{ "op": "add", "path": "/hello", "value": ["world"] }]', 
     '^P[{ "op": "remove", "path": "/foo" }]'],
     ['value {"baz":"qux","foo":"bar"}', 'patch null',
-    'value {"baz":"boo","foo":"bar"}', 'patch [{"op":"replace","path":"/baz","value":"boo"}]',
-    'value {"baz":"boo","foo":"bar","hello":["world"]}', 'patch [{"op":"add","path":"/hello","value":["world"]}]',
-    'value {"baz":"boo","hello":["world"]}', 'patch [{"op":"remove","path":"/foo"}]']);
+    'value {"baz":"boo","foo":"bar"}', 
+    #if cs 'patch [{"value":"boo","path":"/baz","op":"replace"}]' 
+    #else  'patch [{"op":"replace","path":"/baz","value":"boo"}]' #end,
+    'value {"baz":"boo","foo":"bar","hello":["world"]}', 
+    #if cs 'patch [{"value":["world"],"path":"/hello","op":"add"}]' 
+    #else  'patch [{"op":"add","path":"/hello","value":["world"]}]' #end ,
+    'value {"baz":"boo","hello":["world"]}', 
+    #if cs 'patch [{"path":"/foo","op":"remove"}]' 
+    #else  'patch [{"op":"remove","path":"/foo"}]' #end]);
   }
 
   function testMultiplePatches(async: utest.Async) {
     updateTemplate(async, ['{"baz":"qux","foo":"bar"}', 
     '^P[{ "op": "replace", "path": "/baz", "value": "boo" },{ "op": "add", "path": "/hello", "value": ["world"] },{ "op": "remove", "path": "/foo" }]'],
     ['value {"baz":"qux","foo":"bar"}', 'patch null',
-    'value {"baz":"boo","hello":["world"]}', 'patch [{"op":"replace","path":"/baz","value":"boo"},{"op":"add","path":"/hello","value":["world"]},{"op":"remove","path":"/foo"}]']);
+    'value {"baz":"boo","hello":["world"]}', 
+    #if cs 'patch [{"value":"boo","path":"/baz","op":"replace"},{"value":["world"],"path":"/hello","op":"add"},{"path":"/foo","op":"remove"}]'
+    #else  'patch [{"op":"replace","path":"/baz","value":"boo"},{"op":"add","path":"/hello","value":["world"]},{"op":"remove","path":"/foo"}]' #end]);
   }
 
   function testInvalidPatch(async: utest.Async) {
@@ -193,7 +201,9 @@ class TestJsonPatch extends utest.Test {
   function testFromStringEvtPatch(async: utest.Async) {
     updateTemplate(async, ['{}', '^P[{"op":"add","path":"/foo","value":1}]'],
     ['value {}', 'patch null',
-    'value {"foo":1}', 'patch [{"op":"add","path":"/foo","value":1}]']);
+    'value {"foo":1}', 
+    #if cs 'patch [{"value":1,"path":"/foo","op":"add"}]'
+    #else  'patch [{"op":"add","path":"/foo","value":1}]' #end]);
   }
   function testFromStringEvtUnchanged(async: utest.Async) {
     updateTemplate(async, ["foo", ""],
@@ -204,25 +214,35 @@ class TestJsonPatch extends utest.Test {
   function testFromJsonEvtNull(async: utest.Async) {
     updateTemplate(async, ['{}', '^P[{"op":"add","path":"/foo","value":1}]', '#'],
     ['value {}', 'patch null',
-    'value {"foo":1}', 'patch [{"op":"add","path":"/foo","value":1}]',
+    'value {"foo":1}', 
+    #if cs 'patch [{"value":1,"path":"/foo","op":"add"}]'
+    #else  'patch [{"op":"add","path":"/foo","value":1}]' #end,
     'value null', 'patch null']);
   }
   function testFromJsonEvtString(async: utest.Async) {
     updateTemplate(async, ['{}', '^P[{"op":"add","path":"/foo","value":1}]', 'foo'],
     ['value {}', 'patch null',
-    'value {"foo":1}', 'patch [{"op":"add","path":"/foo","value":1}]',
+    'value {"foo":1}', 
+    #if cs 'patch [{"value":1,"path":"/foo","op":"add"}]'
+    #else  'patch [{"op":"add","path":"/foo","value":1}]' #end,
     'value foo', 'patch null']);
   }
   function testFromJsonEvtPatch(async: utest.Async) {
     updateTemplate(async, ['{}', '^P[{"op":"add","path":"/foo","value":1}]', '^P[{"op":"add","path":"/bar","value":2}]'],
     ['value {}', 'patch null',
-    'value {"foo":1}', 'patch [{"op":"add","path":"/foo","value":1}]',
-    'value {"foo":1,"bar":2}', 'patch [{"op":"add","path":"/bar","value":2}]']);
+    'value {"foo":1}', 
+    #if cs 'patch [{"value":1,"path":"/foo","op":"add"}]'
+    #else  'patch [{"op":"add","path":"/foo","value":1}]' #end,
+    'value {"foo":1,"bar":2}', 
+    #if cs 'patch [{"value":2,"path":"/bar","op":"add"}]'
+    #else  'patch [{"op":"add","path":"/bar","value":2}]' #end]);
   }
   function testFromJsonEvtUnchanged(async: utest.Async) {
     updateTemplate(async, ['{}', '^P[{"op":"add","path":"/foo","value":1}]', ''],
     ['value {}', 'patch null',
-    'value {"foo":1}', 'patch [{"op":"add","path":"/foo","value":1}]',
+    'value {"foo":1}', 
+    #if cs 'patch [{"value":1,"path":"/foo","op":"add"}]'
+    #else  'patch [{"op":"add","path":"/foo","value":1}]' #end,
     'value {"foo":1}', 'patch []']);
   }
 
@@ -507,8 +527,8 @@ class TestJsonPatch extends utest.Test {
       u = updates[2];
       equals("k1", u.getValue("key"));
       equals('{"x":2}', u.getValue("value"));
-      equals('[{"op":"replace","path":"/x","value":2}]', patch2str(u.getValueAsJSONPatchIfAvailable("value")));
-      equals('[{"op":"replace","path":"/x","value":2}]', patch2str(u.getValueAsJSONPatchIfAvailable(3)));
+      equals(#if cs '[{"value":2,"path":"/x","op":"replace"}]' #else '[{"op":"replace","path":"/x","value":2}]' #end, patch2str(u.getValueAsJSONPatchIfAvailable("value")));
+      equals(#if cs '[{"value":2,"path":"/x","op":"replace"}]' #else '[{"op":"replace","path":"/x","value":2}]' #end, patch2str(u.getValueAsJSONPatchIfAvailable(3)));
     })
     .then(() -> ws.onText("U,1,1,k1|DELETE"))
     .await("onItemUpdate", "control\r\nLS_reqId=3&LS_subId=2&LS_op=delete&LS_ack=false")
