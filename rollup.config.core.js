@@ -1,5 +1,7 @@
-import JsUtils from './tools/JsUtils'
+import { nodeResolve } from '@rollup/plugin-node-resolve'
+import commonjs from '@rollup/plugin-commonjs'
 import { terser } from 'rollup-plugin-terser'
+import JsUtils from './tools/JsUtils'
 import pkg from './bin/web/package.json'
 import classes from './tools/classes.core.json';
 
@@ -37,6 +39,10 @@ export default [
         format: 'cjs',
         banner: JsUtils.generateCopyright("Web", versionNum, buildNum, "CJS", classes)
       }
+    ],
+    plugins: [
+      nodeResolve(),
+      commonjs({transformMixedEsModules: true})
     ]
   }
 ];

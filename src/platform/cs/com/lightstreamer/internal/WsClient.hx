@@ -53,16 +53,25 @@ class WsClient extends WsClientCs implements IWsClient {
   }
 
   overload override public function OnOpen(client: WsClientCs) {
+    if (isDisposed()) {
+      return;
+    }
     streamLogger.logDebug('WS event: open');
     this.onOpen(this);
   }
 
   overload override public function OnText(client: WsClientCs, line: String) {
+    if (isDisposed()) {
+      return;
+    }
     streamLogger.logDebug('WS event: text($line)');
     this.onText(this, line);
   }
 
   overload override public function OnError(client: WsClientCs, error: cs.system.Exception) {
+    if (isDisposed()) {
+      return;
+    }
     streamLogger.logDebug('WS event: error(${error.Message})', error);
     this.onError(this, error.Message);
   }

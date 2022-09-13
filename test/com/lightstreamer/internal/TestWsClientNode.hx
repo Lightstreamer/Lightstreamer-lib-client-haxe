@@ -6,38 +6,37 @@ class TestWsClientNode extends utest.Test {
   var host = "ws://localhost:8080";
   var secHost = "wss://localhost:8443";
   var output: Array<String>;
+  var ws: WsClient;
 
   function setup() {
     output = [];
   }
 
   function teardown() {
+    ws.dispose();
     CookieHelper.instance.clearCookies();
   }
 
   function testPolling(async: utest.Async) {
-    new WsClient(
+    ws = new WsClient(
       host + "/lightstreamer", null,
       function onOpen(c) {
         c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg");
       },
       function onText(c, line) {
-        if (c.isDisposed()) return;
         if (~/LOOP/.match(line)) {
           pass();
-          c.dispose();
           async.completed(); 
         }
       }, 
       function onError(c, error) {
-        if (c.isDisposed()) return;
         fail(error); 
         async.completed(); 
       });
   }
 
   function testStreaming(async: utest.Async) {
-    new WsClient(
+    ws = new WsClient(
       host + "/lightstreamer", null,
       function onOpen(c) {
         c.send("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg");
@@ -45,11 +44,9 @@ class TestWsClientNode extends utest.Test {
       function onText(c, line) {
         if (c.isDisposed()) return;
         match(~/CONOK/, line);
-        c.dispose();
         async.completed();
       }, 
       function onError(c, error) { 
-        if (c.isDisposed()) return;
         fail(error); 
         async.completed(); 
       });
@@ -57,7 +54,7 @@ class TestWsClientNode extends utest.Test {
 
   @:timeout(3000)
   function testHttps(async: utest.Async) {
-    new WsClient(
+    ws = new WsClient(
       "wss://push.lightstreamer.com/lightstreamer", null,
       function onOpen(c) {
         c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg");
@@ -65,18 +62,16 @@ class TestWsClientNode extends utest.Test {
       function onText(c, line) {
         if (c.isDisposed()) return;
         match(~/CONOK/, line);
-        c.dispose();
         async.completed();
       }, 
       function onError(c, error) { 
-        if (c.isDisposed()) return;
         fail(error); 
         async.completed(); 
       });
   }
 
   function testConnectionError(async: utest.Async) {
-    new WsClient(
+    ws = new WsClient(
       "wss://localhost:8443/lightstreamer", null,
       function onOpen(c) {
         fail("Unexpected call"); 
@@ -100,28 +95,25 @@ class TestWsClientNode extends utest.Test {
     var cookie = "X-Client=client";
     LightstreamerClient.addCookies(uri, [cookie]);
 
-    new WsClient(
+    ws = new WsClient(
       host + "/lightstreamer", null,
       function onOpen(c) {
         var cookies: Array<String> = LightstreamerClient.getCookies(uri);
         equals(2, cookies.length);
         contains("X-Client=client; domain=localhost; path=/", cookies);
         contains("X-Server=server; domain=localhost; path=/", cookies);
-        c.dispose();
         async.completed();
       },
       function onText(c, line) {
-        if (c.isDisposed()) return;
       }, 
       function onError(c, error) {
-        if (c.isDisposed()) return;
         fail(error); 
         async.completed(); 
       });
   }
 
   function testHeaders(async: utest.Async) {
-    new WsClient(
+    ws = new WsClient(
       host + "/lightstreamer", 
       ["X-Header" => "header"],
       function onOpen(c) {
@@ -130,11 +122,9 @@ class TestWsClientNode extends utest.Test {
       function onText(c, line) {
         if (c.isDisposed()) return;
         match(~/CONOK/, line);
-        c.dispose();
         async.completed();
       }, 
       function onError(c, error) { 
-        if (c.isDisposed()) return;
         fail(error); 
         async.completed(); 
       });

@@ -1,1 +1,1 @@
-["LightstreamerClient", "Subscription", "ConsoleLoggerProvider", "ConsoleLogLevel"]
+["LightstreamerClient", "Subscription", "ConsoleLoggerProvider", "ConsoleLogLevel", "ClientListener", "ClientMessageListener", "SubscriptionListener"]

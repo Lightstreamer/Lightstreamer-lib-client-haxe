@@ -3,6 +3,7 @@ package com.lightstreamer.client;
 #if python
 @:pythonImport("lightstreamer_client", "ConnectionDetails")
 #end
+#if js @:native("ConnectionDetails") #end
 extern class ConnectionDetails {
   public function getAdapterSet(): Null<String>;
   public function setAdapterSet(adapterSet: Null<String>): Void;

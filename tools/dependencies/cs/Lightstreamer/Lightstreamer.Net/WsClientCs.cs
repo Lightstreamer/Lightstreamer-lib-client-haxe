@@ -61,31 +61,35 @@ namespace com.lightstreamer.cs
                 await ws.ConnectAsync(uri, CancellationToken.None);
                 OnOpen(this);
                 // see https://stackoverflow.com/a/23784968
-                ArraySegment<Byte> buffer = new ArraySegment<byte>(new byte[8192]);
-                using (var ms = new MemoryStream())
+                // and https://stackoverflow.com/a/60232204
+                WebSocketReceiveResult result = null;
+                do
                 {
-                    WebSocketReceiveResult result = null;
-                    do
+                    ArraySegment<Byte> buffer = new ArraySegment<byte>(new byte[8192]);
+                    using (var ms = new MemoryStream())
                     {
-                        result = await ws.ReceiveAsync(buffer, CancellationToken.None);
-                        ms.Write(buffer.Array, buffer.Offset, result.Count);
-                    }
-                    while (!result.EndOfMessage);
-
-                    ms.Seek(0, SeekOrigin.Begin);
-
-                    if (result.MessageType == WebSocketMessageType.Text)
-                    {
-                        using (var reader = new StreamReader(ms, Encoding.UTF8))
+                        do
                         {
-                            string line;
-                            while ((line = await reader.ReadLineAsync()) != null)
+                            result = await ws.ReceiveAsync(buffer, CancellationToken.None);
+                            ms.Write(buffer.Array, buffer.Offset, result.Count);
+                        }
+                        while (!result.EndOfMessage);
+
+                        ms.Seek(0, SeekOrigin.Begin);
+
+                        if (result.MessageType == WebSocketMessageType.Text)
+                        {
+                            using (var reader = new StreamReader(ms, Encoding.UTF8))
                             {
-                                OnText(this, line);
+                                string line;
+                                while ((line = await reader.ReadLineAsync()) != null)
+                                {
+                                    OnText(this, line);
+                                }
                             }
                         }
                     }
-                }
+                } while (result.MessageType != WebSocketMessageType.Close);
             }
             catch (Exception ex)
             {

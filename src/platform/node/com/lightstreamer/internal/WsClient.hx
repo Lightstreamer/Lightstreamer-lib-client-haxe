@@ -44,31 +44,36 @@ class WsClient implements IWsClient {
     // set url and options
     this.ws = new WebSocket(url, Constants.FULL_TLCP_VERSION, options);
     ws.on(Open, () -> {
+      if (isCanceled) return;
       streamLogger.logDebug('WS event: open');
       onOpen(this);
     });
     ws.on(Message, data -> {
+      if (isCanceled) return;
       var text: String = data.asBuffer(ws).toString("utf8");
       for (line in text.split("\r\n")) {
+        if (isCanceled) return;
         if (line == "") continue;
         streamLogger.logDebug('WS event: text($line)');
         onText(this, line);
       }
     });
     ws.on(Error, error -> {
+      if (isCanceled) return;
       var msg = 'Network error: ${error.name} - ${error.message}';
       streamLogger.logDebug('WS event: error($msg)', error);
       onError(this, msg);
       ws.terminate();
     });
     ws.on(Close, (code, reason) -> {
-      if (isCanceled) return;  // closing is expected
+      if (isCanceled) return;
       var msg =  "unexpected disconnection: " + code + " - " + reason;
       streamLogger.logDebug('WS event: error($msg)');
       onError(this, msg);
       ws.terminate();
     });
     ws.on(Upgrade, response -> {
+      if (isCanceled) return;
       // store cookies
       var cookies = getCookies(response.headers);
       if (cookies != null) {

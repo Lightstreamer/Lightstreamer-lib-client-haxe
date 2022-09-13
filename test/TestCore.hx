@@ -13,8 +13,10 @@ class TestCore {
     var runner = new Runner();
     buildSuite(runner);
     runner.run();
-    #if sys
+    #if threads
     runner.await();
+    #end
+    #if sys
     Sys.exit(runner.numFailures);
     #end
   }

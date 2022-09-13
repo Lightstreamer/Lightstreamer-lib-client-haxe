@@ -2,6 +2,9 @@ package com.lightstreamer.client.internal;
 
 import com.lightstreamer.internal.NativeTypes.IllegalStateException;
 import com.lightstreamer.internal.Types;
+import com.lightstreamer.log.LoggerTools;
+
+using com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.internal.NullTools;
 using StringTools;
 using com.lightstreamer.client.internal.ParseTools;
@@ -73,10 +76,26 @@ function parseUpdate(message: String): UpdateInfo {
       values[nextFieldIndex] = changed("");
       nextFieldIndex += 1;
     } else if (value.charAt(0) == "^") { // step D
-      var count = parseInt(value.substring(1));
-      for (_ in 0...count) {
-        values[nextFieldIndex] = unchanged;
-        nextFieldIndex += 1;
+      if (value.charAt(1) == "P") {
+        #if LS_JSON_PATCH
+        var unquoted = value.substring(2).urlDecode();
+        try {
+          var patch = new com.lightstreamer.internal.patch.Json.JsonPatch(unquoted);
+          values[nextFieldIndex] = jsonPatch(patch);
+          nextFieldIndex += 1;
+        } catch(e) {
+          sessionLogger.logErrorEx(e.message, e);
+          throw new IllegalStateException('The JSON Patch for the field $nextFieldIndex is not well-formed');
+        }
+        #else
+        throw new IllegalStateException("JSONPatch compression is not supported by the client");
+        #end
+      } else {
+        var count = parseInt(value.substring(1));
+        for (_ in 0...count) {
+          values[nextFieldIndex] = unchanged;
+          nextFieldIndex += 1;
+        }
       }
     } else { // step E
       values[nextFieldIndex] = changed(value.urlDecode());

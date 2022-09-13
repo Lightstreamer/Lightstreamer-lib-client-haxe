@@ -61,16 +61,18 @@ private class ConsoleLogger implements Logger {
 
   @:access(haxe.Exception.caught)
   function log(level: String, line: String, ?exception: NativeException) {
-    var now = Date.now().toString();
     #if java
-    var msg = '$now|$level|$category|${java.lang.Thread.currentThread().getName()}|$line';
+    var javaTime = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
+    var msg = '$javaTime|$level|$category|${java.lang.Thread.currentThread().getName()}|$line';
     #elseif cs
-    var msg = '$now|$level|$category|${cs.system.threading.Thread.CurrentThread.ManagedThreadId}|$line';
+    var csTime = cs.system.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+    var msg = '$csTime|$level|$category|${cs.system.threading.Thread.CurrentThread.ManagedThreadId}|$line';
     #elseif python
     var pyTime = python.internal.UBuiltins.str(python.lib.datetime.Datetime.now());
     var pyThread = python.lib.Threading.current_thread().name;
     var msg = '$pyTime|$level|$category|$pyThread|$line';
     #else
+    var now = Date.now().toString();
     var msg = '$now|$level|$category|$line';
     #end
     printLog(msg);

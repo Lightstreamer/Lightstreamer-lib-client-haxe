@@ -6,8 +6,19 @@ import com.lightstreamer.internal.Set;
 import com.lightstreamer.client.internal.update.UpdateUtils;
 import com.lightstreamer.internal.MacroTools;
 import com.lightstreamer.log.LoggerTools;
+
 using com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.internal.NullTools;
+using com.lightstreamer.client.internal.update.UpdateUtils.CurrFieldValTools;
+
+#if LS_JSON_PATCH
+typedef JsonPatchTypeAsReturnedByGetPatch = 
+#if js
+com.lightstreamer.internal.patch.Json.JsonPatch
+#else
+String
+#end
+#end
 
 class ItemUpdate2Level implements ItemUpdate {
   final m_itemIdx: Pos;
@@ -15,11 +26,14 @@ class ItemUpdate2Level implements ItemUpdate {
   final m_nFields: Int;
   final m_fields: Null<Map<Pos, String>>;
   final m_fields2: Null<Map<Pos, String>>;
-  final m_newValues: Map<Pos, Null<String>>;
+  final m_newValues: Map<Pos, Null<CurrFieldVal>>;
   final m_changedFields: Set<Pos>;
   final m_isSnapshot: Bool;
+  #if LS_JSON_PATCH
+  final m_jsonPatches: Map<Pos, JsonPatchTypeAsReturnedByGetPatch>;
+  #end
 
-  public function new(itemIdx: Pos, sub: Subscription, newValues: Map<Pos, Null<String>>, changedFields: Set<Pos>, isSnapshot: Bool) {
+  public function new(itemIdx: Pos, sub: Subscription, newValues: Map<Pos, Null<CurrFieldVal>>, changedFields: Set<Pos>, isSnapshot: Bool#if LS_JSON_PATCH, jsonPatches: Map<Pos, JsonPatchTypeAsReturnedByGetPatch>#end) {
     var items = sub.getItems();
     var fields = sub.getFields();
     var fields2 = sub.getCommandSecondLevelFields();
@@ -31,6 +45,9 @@ class ItemUpdate2Level implements ItemUpdate {
     this.m_newValues = newValues.copy();
     this.m_changedFields = changedFields.copy();
     this.m_isSnapshot = isSnapshot;
+    #if LS_JSON_PATCH
+    this.m_jsonPatches = jsonPatches;
+    #end
   }
 
   public function getItemName(): Null<String> {
@@ -78,6 +95,20 @@ class ItemUpdate2Level implements ItemUpdate {
   overload public function isValueChanged(fieldName: String): Bool {
     return isValueChangedName(fieldName);
   }
+  #if LS_JSON_PATCH
+  overload public function getValueAsJSONPatchIfAvailable(fieldName: String): Null<String> {
+    var fieldPos = getFieldIdxFromName(fieldName);
+    if (fieldPos == null) {
+      return null;
+    }
+    var val = m_jsonPatches[fieldPos];
+    return val != null ? val.toString() : null;
+  }
+  overload public function getValueAsJSONPatchIfAvailable(fieldPos: Int): Null<String> {
+    var val = m_jsonPatches[fieldPos];
+    return val != null ? val.toString() : null;
+  }
+  #end
   #end
   #else
   public function getValue(fieldNameOrPos: haxe.extern.EitherType<String, Int>): Null<String> {
@@ -99,6 +130,29 @@ class ItemUpdate2Level implements ItemUpdate {
       return isValueChangedName(fieldName);
     }
   }
+
+  #if LS_JSON_PATCH
+  function _getValueAsJSONPatchIfAvailable(fieldNameOrPos: haxe.extern.EitherType<String, Int>): Null<JsonPatchTypeAsReturnedByGetPatch> {
+    if (fieldNameOrPos is Int) {
+      var fieldPos: Int = fieldNameOrPos;
+      return m_jsonPatches[fieldPos];
+    } else {
+      var fieldName = Std.string(fieldNameOrPos);
+      var fieldPos = getFieldIdxFromName(fieldName);
+      return fieldPos != null ? m_jsonPatches[fieldPos] : null;
+    }
+  }
+  #if js
+  public function getValueAsJSONPatchIfAvailable(fieldNameOrPos: haxe.extern.EitherType<String, Int>): Null<com.lightstreamer.internal.patch.Json.JsonPatch> {
+    return _getValueAsJSONPatchIfAvailable(fieldNameOrPos);
+  }
+  #else
+  public function getValueAsJSONPatchIfAvailable(fieldNameOrPos: haxe.extern.EitherType<String, Int>): Null<String> {
+    var val = _getValueAsJSONPatchIfAvailable(fieldNameOrPos);
+    return val != null ? val.toString() : null;
+  }
+  #end
+  #end
   #end
 
   #if js
@@ -106,7 +160,7 @@ class ItemUpdate2Level implements ItemUpdate {
     for (fieldPos in m_changedFields) {
       try {
         var fieldName = getFieldNameOrNullFromIdx(fieldPos);
-        iterator(fieldName, fieldPos, m_newValues[fieldPos]);
+        iterator(fieldName, fieldPos, m_newValues[fieldPos].toString());
       } catch(e) {
         actionLogger.logError("An exception was thrown while executing the Function passed to the forEachChangedField method", cast e);
       }
@@ -117,7 +171,7 @@ class ItemUpdate2Level implements ItemUpdate {
     for (fieldPos => fieldVal in m_newValues) {
       try {
         var fieldName = getFieldNameOrNullFromIdx(fieldPos);
-        iterator(fieldName, fieldPos, fieldVal);
+        iterator(fieldName, fieldPos, fieldVal.toString());
       } catch(e) {
         actionLogger.logError("An exception was thrown while executing the Function passed to the forEachField method", cast e);
       }
@@ -131,7 +185,7 @@ class ItemUpdate2Level implements ItemUpdate {
     }
     var res = new Map<String, Null<String>>();
     for (fieldPos in m_changedFields) {
-      res[getFieldNameFromIdx(fieldPos)] = m_newValues[fieldPos];
+      res[getFieldNameFromIdx(fieldPos)] = m_newValues[fieldPos].toString();
     }
     return new NativeStringMap(res);
   }
@@ -139,7 +193,7 @@ class ItemUpdate2Level implements ItemUpdate {
   public function getChangedFieldsByPosition(): NativeIntMap<Null<String>> {
     var res = new Map<Int, Null<String>>();
     for (fieldPos in m_changedFields) {
-      res[fieldPos] = m_newValues[fieldPos];
+      res[fieldPos] = m_newValues[fieldPos].toString();
     }
     return new NativeIntMap(res);
   }
@@ -150,18 +204,19 @@ class ItemUpdate2Level implements ItemUpdate {
     }
     var res = new Map<String, Null<String>>();
     for (f => v in m_newValues) {
-      res[getFieldNameFromIdx(f)] = v;
+      res[getFieldNameFromIdx(f)] = v.toString();
     }
     return new NativeStringMap(res);
   }
 
   public function getFieldsByPosition(): NativeIntMap<Null<String>> {
-    return new NativeIntMap(m_newValues);
+    var map = [for (k => v in m_newValues) k => v.toString()];
+    return new NativeIntMap(map);
   }
   #end
 
   function getValuePos(fieldPos: Int): Null<String> {
-    return m_newValues[fieldPos];
+    return m_newValues[fieldPos].toString();
   }
 
   function getValueName(fieldName: String): Null<String> {
@@ -172,7 +227,7 @@ class ItemUpdate2Level implements ItemUpdate {
     if (fieldPos == null) {
       throw new IllegalArgumentException(ItemUpdateBase.UNKNOWN_FIELD_NAME);
     }
-    return m_newValues[fieldPos];
+    return m_newValues[fieldPos].toString();
   }
 
   function isValueChangedPos(fieldPos: Int): Bool {

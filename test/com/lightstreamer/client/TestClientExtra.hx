@@ -49,12 +49,35 @@ class TestClientExtra extends utest.Test {
     exps
     .then(() -> {
       #if python
-      equals(0, LightstreamerClient.getCookies(host).toHaxeArray().count());
+      var cookies0 = LightstreamerClient.getCookies(host).toHaxeArray();
+      equals(0, cookies0.length);
 
       var dict = new python.Dict<String, String>();
       dict.set("X-Client", "client");
       var cookies = new com.lightstreamer.internal.SimpleCookie(dict);
       LightstreamerClient.addCookies(host, cookies);
+      #elseif LS_NODE
+      var cookies: Array<String> = LightstreamerClient.getCookies(host);
+      equals(0, cookies.length);
+
+      var cookie = "X-Client=client";
+      LightstreamerClient.addCookies(host, [cookie]);
+      #elseif java
+      var uri = new java.net.URI(host);
+      equals(0, LightstreamerClient.getCookies(uri).toHaxe().length);
+      
+      var cookie = new java.net.HttpCookie("X-Client", "client");
+      cookie.setPath("/");
+      LightstreamerClient.addCookies(uri, new com.lightstreamer.internal.NativeTypes.NativeList([cookie]));
+      #elseif cs
+      var uri = new cs.system.Uri(host);
+      var cookies: cs.system.net.CookieCollection = LightstreamerClient.getCookies(uri);
+      equals(0, cookies.Count);
+
+      var cookie = new cs.system.net.Cookie("X-Client", "client");
+      var cookies = new cs.system.net.CookieCollection();
+      cookies.Add(cookie);
+      LightstreamerClient.addCookies(uri, cookies);
       #else
       fail("TODO");
       #end
@@ -70,6 +93,24 @@ class TestClientExtra extends utest.Test {
       var nCookies = [for (c in cookies) c.output()];
       contains("Set-Cookie: X-Client=client", nCookies);
       contains("Set-Cookie: X-Server=server", nCookies);
+      #elseif LS_NODE
+      var cookies: Array<String> = LightstreamerClient.getCookies(host);
+      equals(2, cookies.length);
+      contains("X-Client=client; domain=localtest.me; path=/", cookies);
+      contains("X-Server=server; domain=localtest.me; path=/", cookies);
+      #elseif java
+      var uri = new java.net.URI(host);
+      var cookies = LightstreamerClient.getCookies(uri).toHaxe().map(c -> c.getName() + "=" + c.getValue());
+      equals(2, cookies.length);
+      contains("X-Client=client", cookies);
+      contains("X-Server=server", cookies);
+      #elseif cs
+      var uri = new cs.system.Uri(host);
+      var cookies: cs.system.net.CookieCollection = LightstreamerClient.getCookies(uri);
+      equals(2, cookies.Count);
+      var nCookies = [cookies[0].ToString(), cookies[1].ToString()];
+      contains("X-Client=client", nCookies);
+      contains("X-Server=server", nCookies);
       #else
       fail("TODO");
       #end
@@ -90,6 +131,13 @@ class TestClientExtra extends utest.Test {
       var sslcontext = com.lightstreamer.internal.SSLContext.SSL.create_default_context({cafile: "test/localtest.me.crt"});
       sslcontext.load_cert_chain({certfile: "test/localtest.me.crt", keyfile: "test/localtest.me.key"});
       LightstreamerClient.setTrustManagerFactory(sslcontext);
+      #elseif java
+      var ksIn = getResourceAsJavaBytes("server_certificate");
+      var keyStore = java.security.KeyStore.getInstance("PKCS12");
+      keyStore.load(ksIn, (cast "secret":java.NativeString).toCharArray());
+      var tmf = java.javax.net.ssl.TrustManagerFactory.getInstance(java.javax.net.ssl.TrustManagerFactory.getDefaultAlgorithm());
+      tmf.init(keyStore);
+      LightstreamerClient.setTrustManagerFactory(tmf);
       #else
       fail("TODO");
       #end

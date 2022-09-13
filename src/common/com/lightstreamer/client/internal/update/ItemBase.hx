@@ -5,11 +5,13 @@ import com.lightstreamer.internal.RLock;
 import com.lightstreamer.internal.Types;
 import com.lightstreamer.client.internal.update.UpdateUtils;
 
+using com.lightstreamer.client.internal.update.UpdateUtils.CurrFieldValTools;
+
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class ItemBase {
   public final m_subId: Int;
   public final itemIdx: Pos;
-  var currValues: Null<Map<Pos, Null<String>>>;
+  var currValues: Null<Map<Pos, Null<CurrFieldVal>>>;
   public final subscription: Subscription;
   final client: ClientMachine;
   public final lock: RLock;
@@ -43,7 +45,7 @@ class ItemBase {
   }
   
   public function getValue(fieldIdx: Pos): Null<String> {
-    return currValues != null ? currValues[fieldIdx] : null;
+    return currValues != null ? currValues[fieldIdx].toString() : null;
   }
   
   public function getCommandValue(keyName: String, fieldIdx: Pos): Null<String> {
@@ -72,9 +74,12 @@ class ItemBase {
   
   function doUpdate(values: Map<Pos, FieldValue>, snapshot: Bool) {
     var prevValues = currValues;
-    currValues = mapUpdateValues(prevValues, values);
+    currValues = applyUpatesToCurrentFields(prevValues, values);
     var changedFields = findChangedFields(prevValues, currValues);
-    var update = new ItemUpdateBase(itemIdx, subscription, currValues, changedFields, snapshot);
+    #if LS_JSON_PATCH
+    var jsonPatches = computeJsonPatches(prevValues, values);
+    #end
+    var update = new ItemUpdateBase(itemIdx, subscription, currValues, changedFields, snapshot#if LS_JSON_PATCH, jsonPatches#end);
     subscription.fireOnItemUpdate(update, m_subId);
   }
 }

@@ -79,7 +79,7 @@ class Expectations {
     while (expectations.length > 0) {
       switch slot {
       case Block(block):
-        test.delay(block, 0);
+        test.delay(() -> try block() catch(e) test.addException(e), 0);
       case _:
         break;
       }

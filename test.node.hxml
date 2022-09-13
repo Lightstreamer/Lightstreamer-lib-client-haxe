@@ -1,7 +1,10 @@
 test.common.hxml
+
+--class-path src/extern/js
 --class-path src/extern/node
 --class-path src/platform/js
 --class-path src/platform/node
+
 --library hxnodejs
 --library hxnodejs-ws
 
@@ -10,3 +13,4 @@ test.common.hxml
 
 -D LS_NODE
 -D LS_HAS_COOKIES
+-D LS_JSON_PATCH

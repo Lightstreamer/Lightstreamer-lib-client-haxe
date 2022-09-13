@@ -1,6 +1,6 @@
 import {Subscription, LightstreamerClient, StatusWidget, ConsoleLoggerProvider, ConsoleLogLevel, MpnSubscription, MpnDevice, FirebaseMpnBuilder, SafariMpnBuilder} from 'lightstreamer-client-web'
 
-var loggerProvider = new ConsoleLoggerProvider(ConsoleLogLevel.DEBUG)
+var loggerProvider = new ConsoleLoggerProvider(ConsoleLogLevel.INFO)
 var logger = loggerProvider.getLogger("test")
 LightstreamerClient.setLoggerProvider(loggerProvider)
 
@@ -80,4 +80,4 @@ client.connect()
 
 setTimeout(function() {
     client.disconnect()
-}, 100)
+}, 5*1000)

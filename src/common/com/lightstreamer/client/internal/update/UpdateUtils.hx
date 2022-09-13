@@ -3,39 +3,103 @@ package com.lightstreamer.client.internal.update;
 import com.lightstreamer.internal.NativeTypes.IllegalStateException;
 import com.lightstreamer.internal.Types;
 import com.lightstreamer.internal.Set;
-using Lambda;
+import com.lightstreamer.log.LoggerTools;
 
-function mapUpdateValues(oldValues: Null<Map<Pos, Null<String>>>, values: Map<Pos, FieldValue>): Map<Pos, Null<String>> {
-  if (oldValues != null) {
-    var newValues = new Map<Pos, Null<String>>();
-    for (i => fieldValue in values) {
+using com.lightstreamer.log.LoggerTools;
+using Lambda;
+using com.lightstreamer.client.internal.update.UpdateUtils.CurrFieldValTools;
+
+enum CurrFieldVal {
+  StringVal(string: String);
+  #if LS_JSON_PATCH
+  JsonVal(json: com.lightstreamer.internal.patch.Json);
+  #end
+}
+
+class CurrFieldValTools {
+  public static function toString(val: Null<CurrFieldVal>): Null<String> {
+    return switch val {
+      case null: return null;
+      case StringVal(str): return str;
+      #if LS_JSON_PATCH
+      case JsonVal(json): return json.toString();
+      #end
+    }
+  }
+}
+
+function applyUpatesToCurrentFields(currentValues: Null<Map<Pos, Null<CurrFieldVal>>>, incomingValues: Map<Pos, FieldValue>): Map<Pos, Null<CurrFieldVal>> {
+  if (currentValues != null) {
+    var newValues = new Map<Pos, Null<CurrFieldVal>>();
+    for (f => fieldValue in incomingValues) {
       switch fieldValue {
       case unchanged:
-        newValues[i] = oldValues[i];
+        newValues[f] = currentValues[f];
       case changed(var value):
-        newValues[i] = value;
+        if (value == null) {
+          newValues[f] = null;
+        } else {
+          newValues[f] = StringVal(value);
+        }
+      #if LS_JSON_PATCH
+      case jsonPatch(patch):
+        switch currentValues[f] {
+        case JsonVal(json):
+          try {
+            newValues[f] = JsonVal(json.apply(patch));
+          } catch(e) {
+            sessionLogger.logErrorEx(e.message, e);
+            throw new IllegalStateException('Cannot apply the JSON Patch to the field $f');
+          }
+        case StringVal(str):
+          @:nullSafety(Off)
+          var json = null;
+          try {
+            json = new com.lightstreamer.internal.patch.Json(str);
+          } catch(e) {
+            sessionLogger.logErrorEx(e.message, e);
+            throw new IllegalStateException('Cannot convert the field $f to JSON');
+          }
+          try {
+            newValues[f] = JsonVal(json.apply(patch));
+          } catch(e) {
+            sessionLogger.logErrorEx(e.message, e);
+            throw new IllegalStateException('Cannot apply the JSON Patch to the field $f');
+          }
+        case null:
+          throw new IllegalStateException('Cannot apply the JSON patch to the field $f because the field is null');
+        }
+      #end
       }
     }
     return newValues;
   } else {
-    var newValues = new Map<Pos, Null<String>>();
-    for (i => fieldValue in values) {
+    var newValues = new Map<Pos, Null<CurrFieldVal>>();
+    for (f => fieldValue in incomingValues) {
       switch fieldValue {
       case changed(var value):
-        newValues[i] = value;
-      default:
-        throw new IllegalStateException("Unexpected value");
+        if (value == null) {
+          newValues[f] = null;
+        } else {
+          newValues[f] = StringVal(value);
+        }
+      case unchanged:
+        throw new IllegalStateException('Cannot set the field $f because the first update is UNCHANGED');
+      #if LS_JSON_PATCH
+      case jsonPatch(_):
+        throw new IllegalStateException('Cannot set the field $f because the first update is a JSONPatch');
+      #end
       }
     }
     return newValues;
   }
 }
 
-function findChangedFields(prev: Null<Map<Pos, Null<String>>>, curr: Map<Pos, Null<String>>): Set<Pos> {
+function findChangedFields(prev: Null<Map<Pos, Null<CurrFieldVal>>>, curr: Map<Pos, Null<CurrFieldVal>>): Set<Pos> {
   if (prev != null) {
     var changedFields = new Set<Pos>();
     for (i => _ in curr) {
-      if (prev[i] != curr[i]) {
+      if (prev[i].toString() != curr[i].toString()) {
         changedFields.insert(i);
       }
     }
@@ -48,6 +112,29 @@ function findChangedFields(prev: Null<Map<Pos, Null<String>>>, curr: Map<Pos, Nu
     return changedFields;
   }
 }
+
+#if LS_JSON_PATCH
+function computeJsonPatches(currentValues: Null<Map<Pos, Null<CurrFieldVal>>>, incomingValues: Map<Pos, FieldValue>): Map<Pos, com.lightstreamer.internal.patch.Json.JsonPatch> {
+  if (currentValues != null) {
+    var res: Map<Pos, com.lightstreamer.internal.patch.Json.JsonPatch> = [];
+    for (f => value in incomingValues) {
+      switch value {
+      case jsonPatch(patch):
+        res[f] = patch;
+      case unchanged:
+        var curr = currentValues[f];
+        if (curr != null && curr.match(JsonVal(_))) {
+          res[f] = new com.lightstreamer.internal.patch.Json.JsonPatch("[]");
+        }
+      case _:
+      }
+    }
+    return res;
+  } else {
+    return [];
+  }
+}
+#end
 
 function toMap(array: Null<Array<String>>): Null<Map<Pos, String>> {
   if (array != null) {

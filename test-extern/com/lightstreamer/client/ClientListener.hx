@@ -3,6 +3,7 @@ package com.lightstreamer.client;
 #if python
 @:pythonImport("lightstreamer_client", "ClientListener")
 #end
+#if js @:native("ClientListener") #end
 extern interface ClientListener {
   public function onStatusChange(status:String): Void;
   public function onServerError(code:Int, message:String): Void;

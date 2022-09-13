@@ -8,14 +8,14 @@ The methods
 - Subscription.getFields
 - Subscription.getFieldSchema
 - Subscription.getCommandSeconLevelFields
-Subscription.getCommandSecondLevelFieldSchema 
+- Subscription.getCommandSecondLevelFieldSchema 
 
 return null when the values are not available. 
 Previously they threw an IllegalStateException.
 
-# js only
+Added support for JSON field compression.
 
-- removed ConnectionSharing
+removed ConnectionSharing (web only)
 
 revised logging mechanism (same API on all platforms)
 

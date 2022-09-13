@@ -9,6 +9,9 @@ typedef Pos = Int;
 enum FieldValue {
   unchanged;
   changed(val: Null<String>);
+  #if LS_JSON_PATCH
+  jsonPatch(patch: com.lightstreamer.internal.patch.Json.JsonPatch);
+  #end
 }
 
 enum abstract ClientStatus(String) to String {

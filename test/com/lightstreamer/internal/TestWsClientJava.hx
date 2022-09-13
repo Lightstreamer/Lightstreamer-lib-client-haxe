@@ -4,7 +4,7 @@ import com.lightstreamer.client.LightstreamerClient;
 import com.lightstreamer.client.Proxy;
 import com.lightstreamer.internal.NativeTypes.NativeList;
 
-@:timeout(1500)
+@:timeout(2000)
 class TestWsClientJava extends utest.Test {
   #if android
   var host = "http://10.0.2.2:8080";
@@ -14,38 +14,38 @@ class TestWsClientJava extends utest.Test {
   var secHost = "https://localtest.me:8443";
   #end
   var output: Array<String>;
+  var ws: WsClient;
 
   function setup() {
     output = [];
   }
 
   function teardown() {
+    ws.dispose();
     CookieHelper.instance.clearCookies();
     Globals.instance.clearTrustManager();
   }
 
   function testPolling(async: utest.Async) {
-    new WsClient(
+    ws = new WsClient(
       host + "/lightstreamer", null, null, null,
       function onOpen(c) {
         c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg");
       },
       function onText(c, line) {
-        if (c.isDisposed()) return;
         if (~/LOOP/.match(line)) {
           pass();
           async.completed(); 
         }
       }, 
       function onError(c, error) {
-        if (c.isDisposed()) return;
         fail(error); 
         async.completed(); 
       });
   }
 
   function testStreaming(async: utest.Async) {
-    new WsClient(
+    ws = new WsClient(
       host + "/lightstreamer", null, null, null,
       function onOpen(c) {
         c.send("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg");
@@ -53,11 +53,9 @@ class TestWsClientJava extends utest.Test {
       function onText(c, line) {
         if (c.isDisposed()) return;
         match(~/CONOK/, line);
-        c.dispose();
         async.completed();
       }, 
       function onError(c, error) { 
-        if (c.isDisposed()) return;
         fail(error); 
         async.completed(); 
       });
@@ -65,7 +63,7 @@ class TestWsClientJava extends utest.Test {
 
   @:timeout(3000)
   function testHttps(async: utest.Async) {
-    new WsClient(
+    ws = new WsClient(
       "https://push.lightstreamer.com/lightstreamer", null, null, null,
       function onOpen(c) {
         c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg");
@@ -73,18 +71,16 @@ class TestWsClientJava extends utest.Test {
       function onText(c, line) {
         if (c.isDisposed()) return;
         match(~/CONOK/, line);
-        c.dispose();
         async.completed();
       }, 
       function onError(c, error) { 
-        if (c.isDisposed()) return;
         fail(error); 
         async.completed(); 
       });
   }
 
   function testConnectionError(async: utest.Async) {
-    new WsClient(
+    ws = new WsClient(
       secHost + "/lightstreamer", 
       null, null, null,
       function onOpen(c) {
@@ -97,7 +93,7 @@ class TestWsClientJava extends utest.Test {
       },
       function onError(c, error) { 
         #if android
-        equals("Failed to connect to localhost/127.0.0.1:8443", error);
+        equals("java.security.cert.CertPathValidatorException: Trust anchor for certification path not found.", error);
         #else
         equals("PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target", error);
         #end
@@ -113,28 +109,25 @@ class TestWsClientJava extends utest.Test {
     cookie.setPath("/");
     LightstreamerClient.addCookies(uri, new NativeList([cookie]));
 
-    new WsClient(
+    ws = new WsClient(
       host + "/lightstreamer", null, null, null,
       function onOpen(c) {
         var cookies = LightstreamerClient.getCookies(uri).toHaxe().map(c -> c.getName() + "=" + c.getValue());
         equals(2, cookies.length);
         contains("X-Client=client", cookies);
         contains("X-Server=server", cookies);
-        c.dispose();
         async.completed();
       },
       function onText(c, line) {
-        if (c.isDisposed()) return;
       }, 
       function onError(c, error) {
-        if (c.isDisposed()) return;
         fail(error); 
         async.completed(); 
       });
   }
 
   function testHeaders(async: utest.Async) {
-    new WsClient(
+    ws = new WsClient(
       host + "/lightstreamer", 
       ["X-Header" => "header"], null, null,
       function onOpen(c) {
@@ -143,18 +136,16 @@ class TestWsClientJava extends utest.Test {
       function onText(c, line) {
         if (c.isDisposed()) return;
         match(~/CONOK/, line);
-        c.dispose();
         async.completed();
       }, 
       function onError(c, error) {
-        if (c.isDisposed()) return;
         fail(error); 
         async.completed(); 
       });
   }
 
   function testProxy(async: utest.Async) {
-    new WsClient(
+    ws = new WsClient(
       host + "/lightstreamer", 
       null,
       #if android
@@ -169,11 +160,9 @@ class TestWsClientJava extends utest.Test {
       function onText(c, line) {
         if (c.isDisposed()) return;
         match(~/CONOK/, line);
-        c.dispose();
         async.completed();
       }, 
       function onError(c, error) {
-        if (c.isDisposed()) return;
         fail(error); 
         async.completed(); 
       });
@@ -181,7 +170,7 @@ class TestWsClientJava extends utest.Test {
 
   @:timeout(3000)
   function testProxyHttps(async: utest.Async) {
-    new WsClient(
+    ws = new WsClient(
       "https://push.lightstreamer.com/lightstreamer", 
       null,
       #if android
@@ -196,11 +185,9 @@ class TestWsClientJava extends utest.Test {
       function onText(c, line) {
         if (c.isDisposed()) return;
         match(~/CONOK/, line);
-        c.dispose();
         async.completed();
       }, 
       function onError(c, error) {
-        if (c.isDisposed()) return;
         fail(error); 
         async.completed(); 
       });
@@ -219,7 +206,7 @@ class TestWsClientJava extends utest.Test {
     tmf.init(keyStore);
 
     LightstreamerClient.setTrustManagerFactory(tmf);
-    new WsClient(
+    ws = new WsClient(
       secHost + "/lightstreamer", null, null, 
       Globals.instance.getTrustManagerFactory(),
       function onOpen(c) {
@@ -228,11 +215,9 @@ class TestWsClientJava extends utest.Test {
       function onText(c, line) {
         if (c.isDisposed()) return;
         match(~/CONOK/, line);
-        c.dispose();
         async.completed();
       }, 
       function onError(c, error) {
-        if (c.isDisposed()) return;
         fail(error); 
         async.completed(); 
       });

@@ -36,16 +36,25 @@ class HttpClient extends HttpClientCs implements IHttpClient {
   }
 
   overload override public function OnText(client: HttpClientCs, line: String): Void {
+    if (isDisposed()) {
+      return;
+    }
     streamLogger.logDebug('HTTP event: text($line)');
     this.onText(this, line);
   }
 
   overload override public function OnError(client: HttpClientCs, error: cs.system.Exception): Void {
+    if (isDisposed()) {
+      return;
+    }
     streamLogger.logDebug('HTTP event: error(${error.Message})', error);
     this.onError(this, error.Message);
   }
 
   overload override public function OnDone(client: HttpClientCs): Void {
+    if (isDisposed()) {
+      return;
+    }
     streamLogger.logDebug("HTTP event: complete");
     this.onDone(this);
   }

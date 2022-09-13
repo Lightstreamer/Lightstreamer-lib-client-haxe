@@ -1,12 +1,14 @@
 package com.lightstreamer.client.internal.update;
 
-import com.lightstreamer.client.internal.update.UpdateUtils.findChangedFields;
 import com.lightstreamer.internal.Set;
 import com.lightstreamer.internal.Types;
 import com.lightstreamer.internal.RLock;
 import com.lightstreamer.log.LoggerTools;
+import com.lightstreamer.client.internal.update.UpdateUtils;
+
 using com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.internal.NullTools;
+using com.lightstreamer.client.internal.update.UpdateUtils.CurrFieldValTools;
 
 private  enum abstract State_m(Int) {
   var s1 = 1; var s2 = 2; var s3 = 3;
@@ -16,7 +18,7 @@ private  enum abstract State_m(Int) {
 class Key1Level implements ItemKey {
   final keyName: String;
   final item: ItemCommand1Level;
-  var currKeyValues: Null<Map<Pos, Null<String>>>;
+  var currKeyValues: Null<Map<Pos, Null<CurrFieldVal>>>;
   var s_m: State_m = s1;
   final lock: RLock;
   
@@ -31,7 +33,7 @@ class Key1Level implements ItemKey {
     item.unrelate(keyName);
   }
 
-  public function evtUpdate(keyValues: Map<Pos, Null<String>>, snapshot: Bool) {
+  public function evtUpdate(keyValues: Map<Pos, Null<CurrFieldVal>>, snapshot: Bool) {
     traceEvent("update");
     switch s_m {
     case s1:
@@ -73,51 +75,51 @@ class Key1Level implements ItemKey {
   }
 
   public function getCommandValue(fieldIdx: Pos): Null<String> {
-    return currKeyValues != null ? currKeyValues[fieldIdx] : null;
+    return currKeyValues != null ? currKeyValues[fieldIdx].toString() : null;
   }
 
-  function doFirstUpdate(keyValues: Map<Pos, Null<String>>, snapshot: Bool) {
+  function doFirstUpdate(keyValues: Map<Pos, Null<CurrFieldVal>>, snapshot: Bool) {
     var nFields = item.subscription.fetch_nFields().sure();
     var cmdIdx = item.subscription.getCommandPosition().sure();
     currKeyValues = keyValues;
-    currKeyValues[cmdIdx] = "ADD";
+    currKeyValues[cmdIdx] = StringVal("ADD");
     var changedFields = new Set(1...nFields + 1);
-    var update = new ItemUpdateBase(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot);
+    var update = new ItemUpdateBase(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot#if LS_JSON_PATCH, []#end);
     
     fireOnItemUpdate(update);
   }
 
-  function doUpdate(keyValues: Map<Pos, Null<String>>, snapshot: Bool) {
+  function doUpdate(keyValues: Map<Pos, Null<CurrFieldVal>>, snapshot: Bool) {
     var cmdIdx = item.subscription.getCommandPosition().sure();
     var prevKeyValues = currKeyValues;
     currKeyValues = keyValues;
-    currKeyValues[cmdIdx] = "UPDATE";
+    currKeyValues[cmdIdx] = StringVal("UPDATE");
     var changedFields = findChangedFields(prevKeyValues, currKeyValues);
-    var update = new ItemUpdateBase(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot);
+    var update = new ItemUpdateBase(item.itemIdx, item.subscription, currKeyValues, changedFields, snapshot#if LS_JSON_PATCH, []#end);
     
     fireOnItemUpdate(update);
   }
 
-  function doLightDelete(keyValues: Map<Pos, Null<String>>, snapshot: Bool) {
+  function doLightDelete(keyValues: Map<Pos, Null<CurrFieldVal>>, snapshot: Bool) {
     currKeyValues = null;
     var changedFields = new Set(keyValues.keys());
-    var update = new ItemUpdateBase(item.itemIdx, item.subscription, nullify(keyValues), changedFields, snapshot);
+    var update = new ItemUpdateBase(item.itemIdx, item.subscription, nullify(keyValues), changedFields, snapshot#if LS_JSON_PATCH, []#end);
     item.unrelate(keyName);
     
     fireOnItemUpdate(update);
   }
 
-  function doDelete(keyValues: Map<Pos, Null<String>>, snapshot: Bool) {
+  function doDelete(keyValues: Map<Pos, Null<CurrFieldVal>>, snapshot: Bool) {
     currKeyValues = null;
     var changedFields = new Set(keyValues.keys()).subtracting([item.subscription.getKeyPosition().sure()]);
-    var update = new ItemUpdateBase(item.itemIdx, item.subscription, nullify(keyValues), changedFields, snapshot);
+    var update = new ItemUpdateBase(item.itemIdx, item.subscription, nullify(keyValues), changedFields, snapshot#if LS_JSON_PATCH, []#end);
     item.unrelate(keyName);
     
     fireOnItemUpdate(update);
   }
 
-  function nullify(keyValues: Map<Pos, Null<String>>): Map<Pos, Null<String>> {
-    var values = new Map<Pos, Null<String>>();
+  function nullify(keyValues: Map<Pos, Null<CurrFieldVal>>): Map<Pos, Null<CurrFieldVal>> {
+    var values = new Map<Pos, Null<CurrFieldVal>>();
     for (p => val in keyValues) {
       var newVal = p == item.subscription.getCommandPosition() || p == item.subscription.getKeyPosition() ? val : null;
       values[p] = newVal;
@@ -125,8 +127,8 @@ class Key1Level implements ItemKey {
     return values;
   }
 
-  function isDelete(keyValues: Map<Pos, Null<String>>): Bool {
-    return keyValues[item.subscription.getCommandPosition().sure()] == "DELETE";
+  function isDelete(keyValues: Map<Pos, Null<CurrFieldVal>>): Bool {
+    return keyValues[item.subscription.getCommandPosition().sure()].toString() == "DELETE";
   }
 
   function fireOnItemUpdate(update: ItemUpdate) {

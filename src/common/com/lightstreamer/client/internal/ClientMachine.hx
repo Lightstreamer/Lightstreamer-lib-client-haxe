@@ -250,25 +250,27 @@ class ClientMachine {
     }
   }
 
-  public function evtExtDisconnect() {
-    traceEvent("disconnect");
-    var terminationCause = TerminationCause.TC_api;
+  public function evtExtDisconnect(terminationCause: TerminationCause) {
+    traceEvent('disconnect: cause=$terminationCause');
     switch state.s_m {
     case s120, s121, s122:
       disposeWS();
       notifyStatus(DISCONNECTED);
+      notifyServerErrorIfCauseIsError(terminationCause);
       goto(state.s_m = s100);
       cancel_evtTransportTimeout();
       evtTerminate(terminationCause);
     case s130:
       disposeHTTP();
       notifyStatus(DISCONNECTED);
+      notifyServerErrorIfCauseIsError(terminationCause);
       goto(state.s_m = s100);
       cancel_evtTransportTimeout();
       evtTerminate(terminationCause);
     case s140:
       disposeHTTP();
       notifyStatus(DISCONNECTED);
+      notifyServerErrorIfCauseIsError(terminationCause);
       goto(state.s_m = s100);
       cancel_evtTransportTimeout();
       evtTerminate(terminationCause);
@@ -278,6 +280,7 @@ class ClientMachine {
         sendDestroyWS();
         closeWS();
         notifyStatus(DISCONNECTED);
+        notifyServerErrorIfCauseIsError(terminationCause);
         state.clear_w();
         state.goto_m_from_session(s100);
         exit_w();
@@ -286,6 +289,7 @@ class ClientMachine {
       case s220:
         disposeHTTP();
         notifyStatus(DISCONNECTED);
+        notifyServerErrorIfCauseIsError(terminationCause);
         state.goto_m_from_session(s100);
         cancel_evtTransportTimeout();
         evtEndSession();
@@ -293,6 +297,7 @@ class ClientMachine {
       case s230:
         disposeHTTP();
         notifyStatus(DISCONNECTED);
+        notifyServerErrorIfCauseIsError(terminationCause);
         state.goto_m_from_session(s100);
         cancel_evtTransportTimeout();
         evtEndSession();
@@ -301,6 +306,7 @@ class ClientMachine {
         if (state.s_ws?.m == s500) {
           disposeWS();
           notifyStatus(DISCONNECTED);
+          notifyServerErrorIfCauseIsError(terminationCause);
           state.goto_m_from_ws(s100);
           exit_ws_to_m();
           evtTerminate(terminationCause);
@@ -308,6 +314,7 @@ class ClientMachine {
           sendDestroyWS();
           closeWS();
           notifyStatus(DISCONNECTED);
+          notifyServerErrorIfCauseIsError(terminationCause);
           state.goto_m_from_ws(s100);
           exit_ws_to_m();
           evtTerminate(terminationCause);
@@ -316,6 +323,7 @@ class ClientMachine {
         if (state.s_wp?.m == s600 || state.s_wp?.m == s601) {
           disposeWS();
           notifyStatus(DISCONNECTED);
+          notifyServerErrorIfCauseIsError(terminationCause);
           state.goto_m_from_wp(s100);
           exit_ws_to_m();
           evtTerminate(terminationCause);
@@ -323,6 +331,7 @@ class ClientMachine {
           sendDestroyWS();
           closeWS();
           notifyStatus(DISCONNECTED);
+          notifyServerErrorIfCauseIsError(terminationCause);
           state.goto_m_from_wp(s100);
           exit_wp_to_m();
           evtTerminate(terminationCause);
@@ -330,6 +339,7 @@ class ClientMachine {
       case s260:
         disposeHTTP();
         notifyStatus(DISCONNECTED);
+        notifyServerErrorIfCauseIsError(terminationCause);
         state.goto_m_from_rec(s100);
         exit_rec_to_m();
         evtTerminate(terminationCause);
@@ -337,12 +347,14 @@ class ClientMachine {
         if (state.s_h == s710) {
           disposeHTTP();
           notifyStatus(DISCONNECTED);
+          notifyServerErrorIfCauseIsError(terminationCause);
           state.goto_m_from_hs(s100);
           exit_hs_to_m();
           evtTerminate(terminationCause);
         } else if (state.s_h == s720) {
           disposeHTTP();
           notifyStatus(DISCONNECTED);
+          notifyServerErrorIfCauseIsError(terminationCause);
           state.goto_m_from_hp(s100);
           exit_hp_to_m();
           evtTerminate(terminationCause);
@@ -352,6 +364,7 @@ class ClientMachine {
       }
     case s110, s111, s112, s113, s114, s115, s116:
         notifyStatus(DISCONNECTED);
+        notifyServerErrorIfCauseIsError(terminationCause);
         goto(state.s_m = s100);
         cancel_evtRetryTimeout();
         evtTerminate(terminationCause);
@@ -3118,7 +3131,12 @@ class ClientMachine {
         lock.synchronized(() -> {
           if (client.isDisposed())
             return;
-          evtMessage(line);
+          try {
+            evtMessage(line);
+          } catch(e) {
+            sessionLogger.logErrorEx(e.message, e);
+            evtExtDisconnect(TC_standardError(61, e.message));
+          }
         });
       },
       function onError(client, error) {
@@ -3256,7 +3274,12 @@ class ClientMachine {
         lock.synchronized(() -> {   
           if (client.isDisposed())
             return;
-          evtMessage(line);
+          try {
+            evtMessage(line);
+          } catch(e) {
+            sessionLogger.logErrorEx(e.message, e);
+            evtExtDisconnect(TC_standardError(61, e.message));
+          }
         });
       },
       function onError(client, error) {
@@ -3517,6 +3540,17 @@ class ClientMachine {
 
   function resetCurrentRetryDelay() {
     delayCounter.reset(options.retryDelay);
+  }
+
+  function notifyServerErrorIfCauseIsError(terminationCause: TerminationCause) {
+    switch terminationCause {
+    case TC_api:
+      // don't notify onServerError
+    case TC_standardError(code, msg):
+      clientEventDispatcher.onServerError(code, msg);
+      case TC_otherError(msg):
+      clientEventDispatcher.onServerError(61, msg);
+    }
   }
 
   function notifyServerError_CONERR(code: Int, msg: String) {
@@ -4338,7 +4372,7 @@ class ClientMachine {
 
   public function disconnect() {
     actionLogger.logInfo("Disconnection requested");
-    evtExtDisconnect();
+    evtExtDisconnect(TerminationCause.TC_api);
   }
 
   public function getStatus(): String {

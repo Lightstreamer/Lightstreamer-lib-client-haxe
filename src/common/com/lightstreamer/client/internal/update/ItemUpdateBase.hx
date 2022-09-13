@@ -5,8 +5,10 @@ import com.lightstreamer.internal.Types;
 import com.lightstreamer.internal.Set;
 import com.lightstreamer.client.internal.update.UpdateUtils;
 import com.lightstreamer.log.LoggerTools;
+
 using com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.internal.NullTools;
+using com.lightstreamer.client.internal.update.UpdateUtils.CurrFieldValTools;
 
 final NO_FIELDS = "The Subscription was initiated using a Field Schema: the field names are not available";
 final POS_OUT_BOUNDS = "The field position is out of bounds";
@@ -17,11 +19,14 @@ class ItemUpdateBase implements ItemUpdate {
   final m_items: Null<Map<Pos, String>>;
   final m_nFields: Int;
   final m_fields: Null<Map<Pos, String>>;
-  final m_newValues: Map<Pos, Null<String>>;
+  final m_newValues: Map<Pos, Null<CurrFieldVal>>;
   final m_changedFields: Set<Pos>;
   final m_isSnapshot: Bool;
+  #if LS_JSON_PATCH
+  final m_jsonPatches: Map<Pos, com.lightstreamer.internal.patch.Json.JsonPatch>;
+  #end
 
-  public function new(itemIdx: Pos, sub: Subscription, newValues: Map<Pos, Null<String>>, changedFields: Set<Pos>, isSnapshot: Bool) {
+  public function new(itemIdx: Pos, sub: Subscription, newValues: Map<Pos, Null<CurrFieldVal>>, changedFields: Set<Pos>, isSnapshot: Bool#if LS_JSON_PATCH, jsonPatches: Map<Pos, com.lightstreamer.internal.patch.Json.JsonPatch>#end) {
     var items = sub.getItems();
     var fields = sub.getFields();
     this.m_itemIdx = itemIdx;
@@ -31,6 +36,9 @@ class ItemUpdateBase implements ItemUpdate {
     this.m_newValues = newValues.copy();
     this.m_changedFields = changedFields.copy();
     this.m_isSnapshot = isSnapshot;
+    #if LS_JSON_PATCH
+    this.m_jsonPatches = jsonPatches;
+    #end
   }
 
   public function getItemName(): Null<String> {
@@ -78,6 +86,17 @@ class ItemUpdateBase implements ItemUpdate {
   overload public function isValueChanged(fieldName: String): Bool {
     return isValueChangedName(fieldName);
   }
+  #if LS_JSON_PATCH
+  overload public function getValueAsJSONPatchIfAvailable(fieldName: String): Null<String> {
+    var fieldPos = getFieldIdxFromName(fieldName);
+    var val = m_jsonPatches[fieldPos];
+    return val != null ? val.toString() : null;
+  }
+  overload public function getValueAsJSONPatchIfAvailable(fieldPos: Int): Null<String> {
+    var val = m_jsonPatches[fieldPos];
+    return val != null ? val.toString() : null;
+  }
+  #end
   #end
   #else
   public function getValue(fieldNameOrPos: haxe.extern.EitherType<String, Int>): Null<String> {
@@ -99,6 +118,29 @@ class ItemUpdateBase implements ItemUpdate {
       return isValueChangedName(fieldName);
     }
   }
+
+  #if LS_JSON_PATCH
+  function _getValueAsJSONPatchIfAvailable(fieldNameOrPos: haxe.extern.EitherType<String, Int>): Null<com.lightstreamer.internal.patch.Json.JsonPatch> {
+    if (fieldNameOrPos is Int) {
+      var fieldPos: Int = fieldNameOrPos;
+      return m_jsonPatches[fieldPos];
+    } else {
+      var fieldName = Std.string(fieldNameOrPos);
+      var fieldPos = getFieldIdxFromName(fieldName);
+      return m_jsonPatches[fieldPos];
+    }
+  }
+  #if js
+  public function getValueAsJSONPatchIfAvailable(fieldNameOrPos: haxe.extern.EitherType<String, Int>): Null<com.lightstreamer.internal.patch.Json.JsonPatch> {
+    return _getValueAsJSONPatchIfAvailable(fieldNameOrPos);
+  }
+  #else
+  public function getValueAsJSONPatchIfAvailable(fieldNameOrPos: haxe.extern.EitherType<String, Int>): Null<String> {
+    var val = _getValueAsJSONPatchIfAvailable(fieldNameOrPos);
+    return val != null ? val.toString() : null;
+  }
+  #end
+  #end
   #end
 
   #if js
@@ -106,7 +148,7 @@ class ItemUpdateBase implements ItemUpdate {
     for (fieldPos in m_changedFields) {
       try {
         var fieldName = m_fields != null ? m_fields[fieldPos] : null;
-        iterator(fieldName, fieldPos, m_newValues[fieldPos]);
+        iterator(fieldName, fieldPos, m_newValues[fieldPos].toString());
       } catch(e) {
         actionLogger.logError("An exception was thrown while executing the Function passed to the forEachChangedField method", cast e);
       }
@@ -117,7 +159,7 @@ class ItemUpdateBase implements ItemUpdate {
     for (fieldPos => fieldVal in m_newValues) {
       try {
         var fieldName = m_fields != null ? m_fields[fieldPos] : null;
-        iterator(fieldName, fieldPos, fieldVal);
+        iterator(fieldName, fieldPos, fieldVal.toString());
       } catch(e) {
         actionLogger.logError("An exception was thrown while executing the Function passed to the forEachField method", cast e);
       }
@@ -131,7 +173,7 @@ class ItemUpdateBase implements ItemUpdate {
     }
     var res = new Map<String, Null<String>>();
     for (fieldPos in m_changedFields) {
-      res[m_fields[fieldPos].sure()] = m_newValues[fieldPos];
+      res[m_fields[fieldPos].sure()] = m_newValues[fieldPos].toString();
     }
     return new NativeStringMap(res);
   }
@@ -139,7 +181,7 @@ class ItemUpdateBase implements ItemUpdate {
   public function getChangedFieldsByPosition(): NativeIntMap<Null<String>> {
     var res = new Map<Int, Null<String>>();
     for (fieldPos in m_changedFields) {
-      res[fieldPos] = m_newValues[fieldPos];
+      res[fieldPos] = m_newValues[fieldPos].toString();
     }
     return new NativeIntMap(res);
   }
@@ -150,13 +192,14 @@ class ItemUpdateBase implements ItemUpdate {
     }
     var res = new Map<String, Null<String>>();
     for (fieldPos => fieldName in m_fields) {
-      res[fieldName] = m_newValues[fieldPos];
+      res[fieldName] = m_newValues[fieldPos].toString();
     }
     return new NativeStringMap(res);
   }
 
   public function getFieldsByPosition(): NativeIntMap<Null<String>> {
-    return new NativeIntMap(m_newValues);
+    var map = [for (k => v in m_newValues) k => v.toString()];
+    return new NativeIntMap(map);
   }
   #end
 
@@ -164,18 +207,12 @@ class ItemUpdateBase implements ItemUpdate {
     if (!(1 <= fieldPos && fieldPos <= m_nFields)) {
       throw new IllegalArgumentException(POS_OUT_BOUNDS);
     }
-    return m_newValues[fieldPos];
+    return m_newValues[fieldPos].toString();
   }
 
   function getValueName(fieldName: String): Null<String> {
-    if (m_fields == null) {
-      throw new IllegalStateException(NO_FIELDS);
-    }
-    var fieldPos = findFirstIndex(m_fields, fieldName);
-    if (fieldPos == null) {
-        throw new IllegalArgumentException(UNKNOWN_FIELD_NAME);
-    }
-    return m_newValues[fieldPos];
+    var fieldPos = getFieldIdxFromName(fieldName);
+    return m_newValues[fieldPos].toString();
   }
 
   function isValueChangedPos(fieldPos: Int): Bool {
@@ -186,6 +223,15 @@ class ItemUpdateBase implements ItemUpdate {
   }
 
   function isValueChangedName(fieldName: String): Bool {
+    var fieldPos = getFieldIdxFromName(fieldName);
+    return m_changedFields.contains(fieldPos);
+  }
+
+  function getFieldNameOrNullFromIdx(fieldIdx: Pos) {
+    return m_fields != null ? m_fields[fieldIdx] : null;
+  }
+
+  function getFieldIdxFromName(fieldName: String): Pos {
     if (m_fields == null) {
       throw new IllegalStateException(NO_FIELDS);
     }
@@ -193,11 +239,7 @@ class ItemUpdateBase implements ItemUpdate {
     if (fieldPos == null) {
         throw new IllegalArgumentException(UNKNOWN_FIELD_NAME);
     }
-    return m_changedFields.contains(fieldPos);
-  }
-
-  function getFieldNameOrNullFromIdx(fieldIdx: Pos) {
-    return m_fields != null ? m_fields[fieldIdx] : null;
+    return fieldPos;
   }
 
   public function toString(): String {

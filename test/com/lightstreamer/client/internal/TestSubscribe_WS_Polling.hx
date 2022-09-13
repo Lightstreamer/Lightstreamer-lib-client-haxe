@@ -38,7 +38,7 @@ class TestSubscribe_WS_Polling extends utest.Test {
       client.subscribe(sub);
       client.connect();
     })
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.4.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
       http.onText("LOOP,0");
@@ -62,7 +62,7 @@ class TestSubscribe_WS_Polling extends utest.Test {
       isTrue(sub.isActive());
       client.connect();
     })
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.4.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
       http.onText("LOOP,0");
@@ -88,7 +88,7 @@ class TestSubscribe_WS_Polling extends utest.Test {
       client.subscribe(sub);
       client.connect();
     })
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.4.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
       http.onText("LOOP,0");
@@ -119,7 +119,7 @@ class TestSubscribe_WS_Polling extends utest.Test {
       client.subscribe(sub);
       client.connect();
     })
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.4.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
       http.onText("LOOP,0");
@@ -152,7 +152,7 @@ class TestSubscribe_WS_Polling extends utest.Test {
       client.subscribe(sub);
       client.connect();
     })
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.4.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
       http.onText("LOOP,0");
@@ -185,7 +185,7 @@ class TestSubscribe_WS_Polling extends utest.Test {
       client.subscribe(sub);
       client.connect();
     })
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.4.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
       http.onText("LOOP,0");
@@ -228,7 +228,7 @@ class TestSubscribe_WS_Polling extends utest.Test {
       client.subscribe(sub);
       client.connect();
     })
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.4.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
       http.onText("LOOP,0");
@@ -263,7 +263,7 @@ class TestSubscribe_WS_Polling extends utest.Test {
       client.subscribe(sub);
       client.connect();
     })
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.4.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
       http.onText("LOOP,0");
@@ -292,7 +292,7 @@ class TestSubscribe_WS_Polling extends utest.Test {
       client.subscribe(sub);
       client.connect();
     })
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.4.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
       http.onText("LOOP,0");
@@ -322,7 +322,7 @@ class TestSubscribe_WS_Polling extends utest.Test {
       client.subscribe(sub);
       client.connect();
     })
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.4.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
       http.onText("LOOP,0");
@@ -357,7 +357,7 @@ class TestSubscribe_WS_Polling extends utest.Test {
       client.subscribe(sub);
       client.connect();
     })
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.4.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
       http.onText("LOOP,0");
@@ -390,7 +390,7 @@ class TestSubscribe_WS_Polling extends utest.Test {
       client.subscribe(sub);
       client.connect();
     })
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.4.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
       http.onText("LOOP,0");
@@ -409,8 +409,7 @@ class TestSubscribe_WS_Polling extends utest.Test {
     .await("onSubscription")
     .then(() -> isTrue(sub.isSubscribed()))
     .then(() -> client.unsubscribe(sub))
-    .await("control\r\nLS_reqId=2&LS_subId=1&LS_op=delete&LS_ack=false")
-    .await("onUnsubscription")
+    .await("onUnsubscription", "control\r\nLS_reqId=2&LS_subId=1&LS_op=delete&LS_ack=false")
     .then(() -> isFalse(sub.isSubscribed()))
     .then(() -> async.completed())
     .verify();
@@ -424,7 +423,7 @@ class TestSubscribe_WS_Polling extends utest.Test {
       client.subscribe(sub);
       client.connect();
     })
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.4.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
       http.onText("LOOP,0");
@@ -455,7 +454,7 @@ class TestSubscribe_WS_Polling extends utest.Test {
       client.subscribe(sub);
       client.connect();
     })
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.4.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
       http.onText("LOOP,0");
@@ -484,7 +483,7 @@ class TestSubscribe_WS_Polling extends utest.Test {
   function testSUBOK_Zombie(async: utest.Async) {
     exps
     .then(() -> client.connect())
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.4.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
       http.onText("LOOP,0");
@@ -511,7 +510,7 @@ class TestSubscribe_WS_Polling extends utest.Test {
       client.subscribe(sub);
       client.connect();
     })
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.4.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
       http.onText("LOOP,0");
@@ -528,7 +527,7 @@ class TestSubscribe_WS_Polling extends utest.Test {
       scheduler.fireRetryTimeout();
     })
     .await("ws.dispose")
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.3.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_old_session=sid&LS_cause=ws.error")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.4.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_old_session=sid&LS_cause=ws.error")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
       http.onText("LOOP,0");

@@ -8,6 +8,9 @@ class TestAll {
 
   static function buildSuite(runner: Runner) {
     LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.ERROR));
+    #if java
+    utils.TestTools.enableOkHttpLogger();
+    #end
     runner.addCase(TestConnectionDetails);
     runner.addCase(TestConnectionOptions);
     runner.addCase(TestSubscription);
@@ -68,6 +71,9 @@ class TestAll {
     runner.addCase(TestStreamSense);
     runner.addCase(TestRecovery);
     runner.addCase(TestControlLink);
+    #if LS_JSON_PATCH
+    runner.addCase(TestJsonPatch);
+    #end
   }
 
   public static function main() {

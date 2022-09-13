@@ -3,6 +3,7 @@ package com.lightstreamer.client;
 #if python
 @:pythonImport("lightstreamer_client", "ConnectionOptions")
 #end
+#if js @:native("ConnectionOptions") #end
 extern class ConnectionOptions {
   public function getContentLength(): Long;
   public function setContentLength(contentLength: Long): Void;

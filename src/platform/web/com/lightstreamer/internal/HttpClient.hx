@@ -27,6 +27,7 @@ class HttpClient implements IHttpClient {
     xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
     xhr.send(body);
     xhr.onreadystatechange = () -> {
+      if (isCanceled) return;
       var state = xhr.readyState;
       if (state == XMLHttpRequest.HEADERS_RECEIVED) {
         var status = xhr.status;
@@ -42,6 +43,7 @@ class HttpClient implements IHttpClient {
         else
           reader.streamComplete(xhr.responseText);
         for (line in lines) {
+          if (isCanceled) return;
           if (line == "") continue;
           streamLogger.logDebug('HTTP event: text($line)');
           onText(this, line);
@@ -53,6 +55,7 @@ class HttpClient implements IHttpClient {
       }
     };
     xhr.onerror = () -> {
+      if (isCanceled) return;
       var error = "Network error";
       streamLogger.logDebug('HTTP event: error($error)');
       onError(this, error);

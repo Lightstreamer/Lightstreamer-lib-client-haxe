@@ -21,6 +21,7 @@ class HttpClient implements Callback implements Authenticator implements IHttpCl
   final onText: (HttpClient, String)->Void;
   final onError: (HttpClient, String)->Void;
   final onDone: HttpClient->Void;
+  @:volatile var isCanceled: Bool = false;
 
   public function new(url: String, body: String, 
     headers: Null<Map<String, String>>, 
@@ -79,11 +80,12 @@ class HttpClient implements Callback implements Authenticator implements IHttpCl
 
   public function dispose() {
     streamLogger.logDebug("HTTP disposing");
+    isCanceled = true;
     call.cancel();
   }
 
   inline public function isDisposed() {
-    return call.isCanceled();
+    return isCanceled;
   }
 
   // Callback.onFailure
@@ -98,10 +100,13 @@ class HttpClient implements Callback implements Authenticator implements IHttpCl
 
   // Callback.onResponse
 	public function onResponse(call: Call, response: Response) {
+    if (isDisposed()) {
+      response.close();
+      return;
+    }
     if (!response.isSuccessful()) {
       streamLogger.logDebug('HTTP event: error(HTTP code ${response.code()})');
       onError(this, "Unexpected HTTP code: " + response.code());
-      call.cancel();
       response.close();
       return;
     }
@@ -109,17 +114,22 @@ class HttpClient implements Callback implements Authenticator implements IHttpCl
       var line;
       var source = response.body().source();
       while ((line = source.readUtf8Line()) != null) {
+        if (isDisposed()) {
+          response.close();
+          return;
+        }
         streamLogger.logDebug('HTTP event: text($line)');
         onText(this, line);
       }
       streamLogger.logDebug("HTTP event: complete");
       onDone(this);
     } catch(e) {
-      if (!isDisposed()) {
-        streamLogger.logDebugEx('HTTP event: error(${e.message})', e);
-        onError(this, e.message);
-        call.cancel();
+      if (isDisposed()) {
+        response.close();
+        return;
       }
+      streamLogger.logDebugEx('HTTP event: error(${e.message})', e);
+      onError(this, e.message);
     }
     response.close();
   }
