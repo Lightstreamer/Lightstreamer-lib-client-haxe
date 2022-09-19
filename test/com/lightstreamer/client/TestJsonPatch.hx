@@ -246,8 +246,8 @@ class TestJsonPatch extends utest.Test {
     'value {"foo":1}', 'patch []']);
   }
 
-  function testFromNullEvtNull(test) {
-    updateTemplate(test, ["#", "#"], 
+  function testFromNullEvtNull(async: utest.Async) {
+    updateTemplate(async, ["#", "#"], 
     ["value null", "patch null",
     "value null", "patch null"]);
   }
