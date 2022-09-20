@@ -51,9 +51,9 @@ export default /*@__PURE__*/(function() {
     sImg.src = src;
     
     applyStyles(sImg,{
-      display: "none"
- //     width: "32px",
- //     height: "32px",
+      display: "none",
+      width: "28px",
+      height: "28px"
     });
     
     return sImg;
@@ -61,12 +61,12 @@ export default /*@__PURE__*/(function() {
 
   var BLINK_TIME = 500;
 
-  //32x32 PGN "S" image - Base64 encoding - green version
-  var GREEN_IMG = generateImage("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALDwAACw8BkvkDpQAAABl0RVh0U29mdHdhcmUAUGFpbnQuTkVUIHYzLjUuN6eEncwAAAQDSURBVFhH7ZZtaJVlGMet1IpcgZHVF6XQCAJBxVkUEeGG7KzlS8xe9PiyM888vnBg7gyXExbOkmDH3M7mmmVDK9nOKJ2bw41UfJ3tKCgOF80PRUUvREQQZNvd7/9wP3US5vN4Zh8CBz/uc3au+3/9n+u5X64xY279/Z8r0Hn+zXGQDWGogRbohuNwFNqhCabftOdEbAK8BltgLzRbkozH4ApchSE4CE/dlOQITYZqWAUTXdGSd0smQR6UQR20RHatPrz+/chJPidhJ1TAQph8w2ZIlmXL+wvjLAkgNAPegjdgAUyDh+BReAZC0AAXYRiM5U/GJpjgywgJp8KXYCDOxBzotWIhifz0fVUWPAshSyljHbRA8+XByo8/ORk719xTumff0Q1P+EqsIBLeCZdtcrOlrfQz92miuyM9iEfhNPwOG+HedHG+T4IF0AQ/goFhuARvQ/Z1zZC40E2++1iFWdawzCljuLHIdJ2NSkiCotjrqYgZB/Ohy5r4gzGlio04l+RVroGK1mJTWFuIgbBZmSgw3Z+vd5MPInKbl4FrKnMfc8Z7ziH5q66B2L4ikx/PN8HEYrOiLs/s7FzuGvjUUyjTAJKPh/Mykegucwzkx+eZxe/kmlB9wFz8olwmzmSq72seyR+GlEys2xPEQMDk1TxnCuLPm5KmfHNhoHwIE4/5Ess0yO6GzQf6qn+NNC81gZocx4R4qXau2d6x5Pi2jkV3Z6rve55Ov/bU1opNyVXfvLB97t8mZOSVhrzv4l3RGDH3+BbMNFBro3p/JLhwR06/WwmNMrW5LfzDwdTWTelHdaZ5POd19K65q7Zz6YlFO/6phl7PGl6TXhcmKvX6PIVGE8ACfDzVXzZU3BhwFqYqoYWqBWu3cJ8W8mhyeM7FRN+5/jJTlAg4W1RbVVtWW9ea0Fb2Png8M40QgIEOHcm17UHnkAomXnYM6PByDzIdar70ERrrK9AGEX87fC0Dh3rXcky/6NwXOrY3thSnG6gaUZfJy+Ew/Ay6JFohF+7wMkPMOvdS6jwTvRpuDDkGdHHpAkurQOH1DIxFZB7o2vzKFWT8FuqhAB645kK5n/9VwW/W/Iq1763usn3CMFf3kbTkAze0Gw71ls/+6MiG5IFTsUsDVyqTJPgQNKrJULOhxkNVywZnm5G4yCY/y5hLQjWoqoCamWlelXR+V5tk2yW1TW4LpXbqAtTbJE8zPgIPwlSYD2rLtsFM6ZBwJqh9i8O/mhS/RqYgpgbydWiENjWYNJrdfG6FBMQgICOuqE4/UMOqxnWKr2ReQQg9Cert1WKr1R4E9fut8IFFrbla9CWQ5aXp+3fEpsMuUG+vRSV6bHKVtwTmwH93yPh2eytwFBX4C/nwkj6r2tmsAAAAAElFTkSuQmCC");
-  //32x32 PGN "S" image - Base64 encoding - grey version
-  var GREY_IMG = generateImage("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALDgAACw4BQL7hQQAAABp0RVh0U29mdHdhcmUAUGFpbnQuTkVUIHYzLjUuMTAw9HKhAAAD00lEQVRYR+2WWWhUVxzG1bq0aBQsbi+KoiIIgpbGFsW3SmlB1AcfVEQxLi9CFjohZt/IIlRCJqNmAnGIEsjEENCEyczEKCpGM9rEYqlQ81BpCy2IlEJBTa6/73JOSYV4rxP7UHDgx5lkzvm+7557lv+0ae8//+cZGBgYmAWZcAy+hQ5IwA24BpchDBve2XMiNg/2QRVcgIihk/Y6jMILGIMr8Pk7MUdoOVTDUVhoRaurqxfDV/ANBKGjpqYmXldXd4vvnXAWTsJuWP7WYTDLMNP7jPYTCSC0EWqhAnbBGlgKq2ArZMEZ+B7GwTG8pA3DPF9BMFwNP4EDpxn4BdwxYlkSGR0dzYBtkGXIow1CB0SGh4fbe3p67kej0bbu7u71vozVCcM58KMxd5qbm6/ap6mvr08ing234W8ogPkTxfl7MeyCMPwBDozDQzgFmW8Mg/Eea97V1eWUlpa601hZWenE43EJSVAc8Xoq+syCnRAzIZ7T3tOMTToW83IbIBgMOgUFBW6A4uJiJ5FIWPPHiEz3CvDazCxgzGzPMZjvtQEaGhqcvLw817yoqMhpa2uzAbo9hdLtgPls+E4h2tvb3QC5ublOfn6+U1JS4qRSKYUYTFff1zjMl8E9hWDhuSGys7PdIBUVFc7Q0NAYIdb6Eku3k9kNJclk8s/a2lonJyfHDSE0G62trTdaWlo+Slff9zidfv39/Sebmpp+sTNhgxQWFv7GugjQZ65vwXQ7am2Ew+EDgUDgBxtArUKFQqHfCVk08ahO18dzXCwW+zASidwkyD+vRK+HO8DR6yJEsV6fp9BUOrAA1w0ODo6VlZW5C9POhBas2cIpLeSpeHiOJUSKEO4ZoUWpIHod2romhLay98Hj6TRJBwL06EhmN7iHlIIogA4ve5DpUPOlj9BMXx1NJ/rPgCcK0NfX55rruNax3djYODFA+aS6DD4IcXgKuiSisB0+8ApDnxP2UmJRvqiqqnID6OLSBTZhBva8KcBMRL4EXZs/W0HaXyEEO2DRaxfKx/yvHP4y4Q9xSMVMnTDO1Y23W0OIR2+1G7hqPyV9Z29v78ORkZFODC6CWhUZKjZUeGjWMsHdZhgfNuZ3abdjqAJV5ipm1njNpPu7yiRTLqlssiWUyqkHEDImW2hXwhJYDTtBZVkdbJIOhptA5dtp+FeR4jfICsRUQBbCObikApNCM8H3KDRBAL5WECuK2UJQwarCdYUvM69OCH0Gqu1VYqvUfgyq96Nw3qDSXCX6fsjw0vT9O2IboAVU29tP0phreo/DZvjvDhnfad93nMIMvAIArtySMI7UCwAAAABJRU5ErkJggg==");
-  //32x32 PGN "S" image - Base64 encoding - light green version
-  var LIGHT_GREEN_IMG = generateImage("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALDgAACw4BQL7hQQAAABp0RVh0U29mdHdhcmUAUGFpbnQuTkVUIHYzLjUuMTAw9HKhAAAECElEQVRYR+2WX2hbZRjGp9uq4qqguOnNhrKJIAycWJWJdw5RkM2LXaiIYnXeCMLYwLkJFQeK4G5mVOqFQ0VoK+iyxJg2bZrEpK3LRpqky9iyLq3705b9UcSBs/38PWffGWfV5JxOxxC8+PGlzTnv++T9vvf9nnmhUGje1eSqJtcP/28LqE3tWwgtsAE+gA7ohjQkIQztsLLeNs+5AgRbBM/CO/AF7LJ0sfbDETgP07AHHm50xgILINBS2A6vwC1u0P6R/sXwBGyCndCRGknFMwdSP/C5Cz6GLfA0LJ0txlcAyZptec+y3q8ABLoP3oW3YR2sgNvhLngEWuEjKMIMGMsfrO2wyBXSUAAJl8NhMLCDFx+DQRusVUHO/fZjMzwKrZaNrDuhA3ad+XnoqyMncvsqP2U/P3Qse2/gCpDwOqjY5CZfzfa6vyZTSfUQ/HXIwTl4A27yBufvxbAO2mEKDMxAGd6HloZtSOL1bvLK8QGTKCUulLHcZ8YmMgqkgOJlv0HGMwthLcSsiN9Z86pY3S0geZsrYKCaNPFi3BHQV4qa8cmMm7xKkGv8BMyqzM280+R7Bkj+jCsgd6jPRAtRqhA3vcWIKdd6XQHfzCX53z3bqAJNCNgvEaXxrCMgWthj4sNhqhAxp87mJGLgiglQYJLfAXmJSB9MICBiIoVvWXezHVFz6kxuGhF3/xMRQeaAuuGt0cn8L6lKAgFhR4T4vrjbFGo96f212A2XK8JXgBtY0+/oVH7LYDV5TBVwRWjtLkVOFMYym3nmxrkKCSzAI6QpP5p6PjYcHvGKkKihav8kIrd6R7WfoDkLuChkInV9sZbIxIa91QgbbZO2CxHbNMyumAA7hu+ZOp2dTpYjzsG8cEAjzoG1LbxXB/lfuQ3rBaEL9iLCaU21qFpVLavWtSLUyhcHT+C7wK907vcIiGgkF48mnCGVKHU7AjS83EGmoVYv3iVngEALgia2W3At74xLQG0iTRW+c8a1xvbA4aRXQFtdAbz8AsThNOiS6IQ1MN9PDM+85l5KtZOZ87qoJEAXly4wTwXWNxKwgCCPg67NMc8td5zPIXgKbpt1odzK/9rgVyv+xfSBVMz6hBmu7j5P8oONuuEvbVibyD2AcegaPZkrYya6SPAlaJXJkNmQ8VDVWsBpMxK/ZJMPsa4hoQyqKiAzsyJQF8gmWbsk2+RaKNmpYQjZJKtZ74QlsBzWgmzZe7DK3h+rSCr7tgMuMSmBbkMCLQMZyDfhE/haBhOj2c3nTvgQNsOTEuId1SSUYZVxXeZ3ftzv/TzhQwSTt5fFltWugvx+J3xmkTWXRX8OmoMm9hVAsJXwKcjb61CJHptc5X0VHoS6QyaImMu+C4IED/LM/wL+BDxNDVItZyFPAAAAAElFTkSuQmCC");
+  // "S" image - Base64 encoding - green version
+  var GREEN_IMG = generateImage("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGl2ZWxsb18xIiBkYXRhLW5hbWU9IkxpdmVsbG8gMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmlld0JveD0iMCAwIDEyNi4xMDgxIDE2OS41MzgiPgogIDxkZWZzPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJTZnVtYXR1cmFfc2VuemFfbm9tZV83NyIgZGF0YS1uYW1lPSJTZnVtYXR1cmEgc2VuemEgbm9tZSA3NyIgeDE9IjUxLjQ2MTMiIHkxPSI3NC4wMDIyIiB4Mj0iLTM3LjgyMjkiIHkyPSI0OC43MTM2IiBncmFkaWVudFRyYW5zZm9ybT0idHJhbnNsYXRlKDYwLjE5MDkgMTEuNjQ2OCkgcm90YXRlKC0zLjc0MTUpIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZiIvPgogICAgICA8c3RvcCBvZmZzZXQ9Ii4xNjQyIiBzdG9wLWNvbG9yPSIjZmZmIiBzdG9wLW9wYWNpdHk9Ii45NzQzIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iLjM5NTMiIHN0b3AtY29sb3I9IiNmZmYiIHN0b3Atb3BhY2l0eT0iLjkwMjQiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIuNjY2IiBzdG9wLWNvbG9yPSIjZmZmIiBzdG9wLW9wYWNpdHk9Ii43ODQzIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iLjk2NDciIHN0b3AtY29sb3I9IiNmZmYiIHN0b3Atb3BhY2l0eT0iLjYyMTMiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjZmZmIiBzdG9wLW9wYWNpdHk9Ii42Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJTZnVtYXR1cmFfc2VuemFfbm9tZV83Ny0yIiBkYXRhLW5hbWU9IlNmdW1hdHVyYSBzZW56YSBub21lIDc3IiB4MT0iMzcuNzUzMyIgeTE9Ijk1LjkzMiIgeDI9Ii01MS40MDQyIiB5Mj0iNzAuNjc5MyIgeGxpbms6aHJlZj0iI1NmdW1hdHVyYV9zZW56YV9ub21lXzc3Ii8+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9IlNmdW1hdHVyYV9zZW56YV9ub21lXzc3LTMiIGRhdGEtbmFtZT0iU2Z1bWF0dXJhIHNlbnphIG5vbWUgNzciIHgxPSItNjMuNjgwNCIgeTE9IjM1LjE3NiIgeDI9IjU1Ljc4NTgiIHkyPSIzNS4xNzYiIHhsaW5rOmhyZWY9IiNTZnVtYXR1cmFfc2VuemFfbm9tZV83NyIvPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJTZnVtYXR1cmFfc2VuemFfbm9tZV83Ny00IiBkYXRhLW5hbWU9IlNmdW1hdHVyYSBzZW56YSBub21lIDc3IiB4MT0iLTYwLjk2MjMiIHkxPSIxMDUuNjEzIiB4Mj0iNTguNTA0OCIgeTI9IjEwNS42MTMiIHhsaW5rOmhyZWY9IiNTZnVtYXR1cmFfc2VuemFfbm9tZV83NyIvPgogIDwvZGVmcz4KICA8ZyBpZD0ibG9nb01hcmsiPgogICAgPGEgeGxpbms6aHJlZj0iYWRpZW50Ij4KICAgICAgPHBhdGggaWQ9ImxvZ29NYXJrX19QYXRoSXRlbV8iIGRhdGEtbmFtZT0ibG9nb01hcmsgJmFtcDtsdDtQYXRoSXRlbSZhbXA7Z3Q7IiBkPSJNMTExLjkxODMsNjguNDEyMWMtOS4wNzU2LTkuNDUyNy0yMi45ODk1LTExLjc1NDUtMzcuNzI4OS03LjY1ODFsLTE0LjY0NzMsNC4wNDUyYy02LjYyOCwxLjg0MTYtMTIuMzk5Mi0yLjEzMDktMTIuODY2OS04Ljg1NDctLjQ2NzctNi43MjM3LDQuNTQyNi0xMy42ODk1LDExLjE3MDYtMTUuNTMxMSwwLDAtMTQuNTk1Niw0LjA1NTktMjIuODQxOCw2LjM0NzUtMS42NDQ4LDQuMTcyMi0yLjQ0MjcsOC42MTk5LTIuMTM2NSwxMy4wMjEzLDEuMDA0OSwxNC40NDc1LDEzLjE5MTcsMTkuODY3NCwyNy40MzIzLDE1LjkxMTFsMTAuMDQ0Ni0yLjc2NjFjMzMuNzg5NS05LjM4OTEsNDIuOTM4OCwxOS43NjM3LDM2LjY0NjUsMzYuNDAxOCwxMi4yMTM2LTEwLjE5ODgsMTUuMzA1Ni0yNy44NTc0LDQuOTI3NC00MC45MTY5WiIgc3R5bGU9ImZpbGw6IHVybCgjU2Z1bWF0dXJhX3NlbnphX25vbWVfNzcpOyIvPgogICAgPC9hPgogICAgPGEgeGxpbms6aHJlZj0iYWRpZW50Ij4KICAgICAgPHBhdGggaWQ9ImxvZ29NYXJrX19QYXRoSXRlbV8tMiIgZGF0YS1uYW1lPSJsb2dvTWFyayAmYW1wO2x0O1BhdGhJdGVtJmFtcDtndDsiIGQ9Ik02NS42NTQ4LDg3Ljk5MzlsLTE0LjY0NjksNC4wNDY1Yy0xNS4zOTc0LDQuMjc4MS0zOS43MTM3LTMuMDcxNC0zNy41Mzc2LTMzLjM0MTktOC44MTIyLDEwLjQwMjMtMTAuMTM1NywyNS40OTQyLS45ODQxLDM3LjAwOTUsOS4zNDA4LDguNDU4NCwyMi45OTk5LDExLjc0OTMsMzcuNzQ1NCw3LjY1MjdsMTQuNjQ3MS00LjA0NTRjNi42MjY2LTEuODQxNCwxMi4zOTg5LDIuMTI5NSwxMi44NjY2LDguODUzMiwuNDY3Nyw2LjcyMzctNC41NDM2LDEzLjY5MjktMTEuMTcwMywxNS41MzQzLC4yODE2LS4wNzkzLDE0LjQ2MDktNC4wMTg5LDIyLjY1NDctNi4yOTQ4LDcuMTc3OS0yMi45ODQyLTYuNjg2Ni0zNC4xMDYtMjMuNTc0OS0yOS40MTQxWiIgc3R5bGU9ImZpbGw6IHVybCgjU2Z1bWF0dXJhX3NlbnphX25vbWVfNzctMik7Ii8+CiAgICA8L2E+CiAgICA8cGF0aCBpZD0ibG9nb01hcmtfX0NvbXBvdW5kUGF0aEl0ZW1fIiBkYXRhLW5hbWU9ImxvZ29NYXJrICZhbXA7bHQ7Q29tcG91bmRQYXRoSXRlbSZhbXA7Z3Q7IiBkPSJNNjcuNTg5OSwxLjc1NWwtMjMuOTY0NSw2LjYzNDNDMTcuODEzOCwxNS41NjA0LTEuNzAzNSw0Mi42OTg0LC4xMTc4LDY4Ljg4MjJjLjc4MDgsMTEuMjI1NCw1LjM1ODYsMjAuNDgxLDEyLjM2ODQsMjYuODI1OUMtLjkzODMsNzguODE1MSw4LjE2MTEsNTQuMjE5LDMwLjQwNzQsNDguMDM4MmM0Ljg1NzMtMS4zNTA0LDI3LjQzODUtNy42MjQ5LDI3LjQzODUtNy42MjQ5bC40MzQ3LS4wOTdjNi42MjY3LTEuODQxNCwxMi4zOTk1LDIuMTI5NCwxMi44NjcxLDguODUzbDQ2LjU1Ni0xMi45MzU4QzExNS44ODI0LDEwLjA0OTYsOTMuNDAxNS01LjQxNzgsNjcuNTg5OSwxLjc1NVptMTcuMzIzMiwzNS40MTU0Yy00Ljc4NTctMTIuMDg5My0xOC4zNjM2LTExLjg0MjctMjUuOTMxMS05LjczODhsLTEuNjY2NCwuNDM3Ni0yNy40NDAxLDcuNjI1Yy0zLjQ0MTUsLjk1NTctNi43NDI2LDIuMjgwMi05Ljg1NywzLjkyMTgsNS44MzI0LTguODQ4LDE0LjY2MTItMTUuODUwMywyNC44MDcyLTE4LjY2OTdsMjMuOTY2MS02LjYzNDZjMTIuODQ1Ny0zLjU2OTEsMjguNTMsMi4wNTE5LDMzLjM0NjQsMTguMjczMWwtMTcuMjI1LDQuNzg1NVoiIHN0eWxlPSJmaWxsOiB1cmwoI1NmdW1hdHVyYV9zZW56YV9ub21lXzc3LTMpOyIvPgogICAgPHBhdGggaWQ9ImxvZ29NYXJrX19Db21wb3VuZFBhdGhJdGVtXy0yIiBkYXRhLW5hbWU9ImxvZ29NYXJrICZhbXA7bHQ7Q29tcG91bmRQYXRoSXRlbSZhbXA7Z3Q7IiBkPSJNMTExLjkxODMsNjguNDEyMWMxMy40MjQ0LDE2Ljg5MjksNC4zMjQ1LDQxLjQ4OS0xNy45MjEzLDQ3LjY3LTQuODU3MywxLjM1MDQtMjcuNDM4Niw3LjYyNDktMjcuNDM4Niw3LjYyNDlsLS40MzQ2LC4wOTY4Yy02LjYyNjgsMS44NDE2LTEyLjM5OTQtMi4xMjkyLTEyLjg2NzEtOC44NTI5TDYuNjk5OSwxMjcuODg2OWMxLjgyMTMsMjYuMTgzOCwyNC4zMDMsNDEuNjUxMSw1MC4xMTQ1LDM0LjQ3ODRsMjMuOTY0NC02LjYzNDJjMjUuODExOS03LjE3MTIsNDUuMzI5Mi0zNC4zMDkzLDQzLjUwNzktNjAuNDkzLS43ODA4LTExLjIyNTQtNS4zNTg4LTIwLjQ4MS0xMi4zNjg0LTI2LjgyNlptLTMyLjAwNTYsNzQuODY4NWwtMjMuOTY0NCw2LjYzNDRjLTEyLjg0NTgsMy41NjkxLTI4LjUzMTctMi4wNTItMzMuMzQ4MS0xOC4yNzNsMTcuMjI1Mi00Ljc4NThjNC43ODU3LDEyLjA4OTYsMTguMzYzNiwxMS44NDMsMjUuOTMyNyw5Ljc0MDNsMS42NjYzLS40MzksMjcuNDM4Ni03LjYyNTFjMy40NDE0LS45NTU0LDYuNzQ0Mi0yLjI3ODcsOS44NTY5LTMuOTIxNy01LjgzMDYsOC44NDk2LTE0LjY1OTQsMTUuODUwNS0yNC44MDcyLDE4LjY2OTlaIiBzdHlsZT0iZmlsbDogdXJsKCNTZnVtYXR1cmFfc2VuemFfbm9tZV83Ny00KTsiLz4KICA8L2c+Cjwvc3ZnPg==");
+  // "S" image - Base64 encoding - grey version
+  var GREY_IMG = GREEN_IMG; // currently the color switch is not implemented
+  // "S" image - Base64 encoding - light green version
+  var LIGHT_GREEN_IMG = GREEN_IMG; // currently the color switch is not implemented
 
   var imgFallback = false;
 
@@ -156,12 +156,11 @@ export default /*@__PURE__*/(function() {
    * @exports StatusWidget
    * @class This class is a simple implementation of the ClientListener interface, which will display a
    * small widget with details about the status of the connection. The widget contains the "S" logo
-   * and three tiny leds. The "S" logo changes color and luminosity to reflect the current connection status
-   * (connecting, disconnected, connected, and stalled).
+   * and three tiny leds.
    * <ul>
    * <li>The left led indicates the transport in use: green if WS/WSS; yellow if HTTP/HTTPS.</li>
    * <li>The center led indicates the mode in use: green if streaming; yellow if polling.</li>
-   * <li>The right led indicates where the physical connection in held: green if this LightstreamerClient
+   * <li>The right led indicates where the physical connection is held: green if this LightstreamerClient
    * is the master instance, holding the connection; yellow if this LightstreamerClient instance is a slave
    * attached to the master Lightstreamer Client instance.</li>
    * </ul>
@@ -218,7 +217,7 @@ export default /*@__PURE__*/(function() {
       "height": "42px",
       "opacity": "0.95",
       "filter": "alpha(opacity"+"=95)",
-      "backgroundColor": "#135656",
+      "backgroundColor": "#003D06",
       "zIndex": "99999",
       "position": "relative"
     });
@@ -228,10 +227,10 @@ export default /*@__PURE__*/(function() {
     applyStyles(this.statusTextsContainer,{
       "width":"245px",
       "height":"42px",
-      "backgroundColor": "#ECE981",
+      "backgroundColor": "#E2E2E2",
       "fontFamily": "'Open Sans',Arial,sans-serif",
       "fontSize": "11px",
-      "color": "#3E5B3E",
+      "color": "#003D06",
 
       "position": "absolute",
       "zIndex": "99998",
@@ -331,10 +330,10 @@ export default /*@__PURE__*/(function() {
     var imageContainer  = createDefaultElement("div");
     applyStyles(imageContainer,{
       "position": "absolute",
-      "top": "2px",
-      "left": "5px",
-      "width": "32px",
-      "height": "32px"
+      "top": "4px",
+      "left": "7px",
+      "width": "28px",
+      "height": "28px"
     });
 
 
@@ -362,7 +361,8 @@ export default /*@__PURE__*/(function() {
     this.statusTextsContainer.appendChild(this.statusText);
 
     this.updateWidget(OFF_LED,OFF_LED,OFF_LED,"Ready",DATA_STREAMING_SERVER,this.greyImg);
-
+    this.updateWidgetS(this.greyImg);
+        // added temporarily, as currently the color switch is not implemented
 
     this.activate();
 
@@ -498,9 +498,10 @@ export default /*@__PURE__*/(function() {
         this.masterLed.changeColor(l3);
 
         this.statusText.innerHTML = text;
-        this.dataStreamingServer.innerHTML = title;
+        this.dataStreamingServer.innerHTML = "<b>" + title + "</b>";
 
-        this.updateWidgetS(sImage,true);
+        // this.updateWidgetS(sImage,true);
+            // removed temporarily, as currently the color switch is not implemented 
       },
 
       updateWidgetS: function(sImage,stopBlinking) {
@@ -531,7 +532,8 @@ export default /*@__PURE__*/(function() {
        * @private
        */
       startBlinking: function() {
-        this.blinkThread = Executor.addRepetitiveTask(this.doBlinking,BLINK_TIME,this);
+        // this.blinkThread = Executor.addRepetitiveTask(this.doBlinking,BLINK_TIME,this);
+            // removed temporarily, as currently the color switch is not implemented 
       },
 
       /**
@@ -699,9 +701,9 @@ export default /*@__PURE__*/(function() {
       }
   };
 
-  var GREEN_LED = "#709F70";
-  var YELLOW_LED = "#ECE981";
-  var OFF_LED = "#135656";
+  var GREEN_LED = "#00C922";
+  var YELLOW_LED = "#F4DD80";
+  var OFF_LED = "#003D06";
   function Led(container,ledCount) {
     this.led = createDefaultElement("div");
     applyStyles(this.led,{
