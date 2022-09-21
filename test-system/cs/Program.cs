@@ -29,8 +29,8 @@ namespace myapp
       Assert(sub.getRequestedSnapshot() == "yes");
       sub.addListener(new QuoteListener());
 
-      //LightstreamerClient client = new LightstreamerClient("http://push.lightstreamer.com","DEMO");  
-      LightstreamerClient client = new LightstreamerClient("http://localhost:8080", "DEMO");
+      LightstreamerClient client = new LightstreamerClient("http://push.lightstreamer.com","DEMO");  
+      // LightstreamerClient client = new LightstreamerClient("http://localhost:8080", "DEMO");
       client.addListener(new CListener());
 
       client.connectionDetails.setUser("user");
@@ -43,6 +43,8 @@ namespace myapp
 
       client.subscribe(sub);
       client.connect();
+
+      System.Threading.Thread.Sleep (5000);
     }
 
     class CListener: ClientListener {

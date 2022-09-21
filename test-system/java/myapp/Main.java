@@ -21,8 +21,8 @@ public class Main {
     assert sub.getRequestedSnapshot().equals("yes");
     sub.addListener(new QuoteListener());
     
-    //LightstreamerClient client = new LightstreamerClient("http://push.lightstreamer.com","DEMO");  
-    LightstreamerClient client = new LightstreamerClient("http://localhost:8080", "DEMO");
+    LightstreamerClient client = new LightstreamerClient("http://push.lightstreamer.com","DEMO");  
+    // LightstreamerClient client = new LightstreamerClient("http://localhost:8080", "DEMO");
     client.addListener(new CListener());
 
     client.connectionDetails.setUser("user");
@@ -33,7 +33,7 @@ public class Main {
     client.subscribe(sub);
     client.connect();
 
-    Thread.sleep(100);
+    Thread.sleep(5000);
 	}
 
   static class CListener implements ClientListener {
