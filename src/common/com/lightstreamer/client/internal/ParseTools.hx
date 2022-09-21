@@ -84,7 +84,7 @@ function parseUpdate(message: String): UpdateInfo {
           values[nextFieldIndex] = jsonPatch(patch);
           nextFieldIndex += 1;
         } catch(e) {
-          sessionLogger.logErrorEx(e.message, e);
+          sessionLogger.logErrorEx('Invalid JSON patch $unquoted: ${e.message}', e);
           throw new IllegalStateException('The JSON Patch for the field $nextFieldIndex is not well-formed');
         }
         #else
