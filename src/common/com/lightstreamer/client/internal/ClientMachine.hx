@@ -8,6 +8,7 @@ import com.lightstreamer.internal.Types;
 import com.lightstreamer.internal.PlatformApi;
 import com.lightstreamer.internal.Timer;
 import com.lightstreamer.internal.Constants;
+import com.lightstreamer.internal.Threads;
 import com.lightstreamer.client.LightstreamerClient.ClientEventDispatcher;
 import com.lightstreamer.client.internal.ClientStates;
 import com.lightstreamer.client.internal.ClientRequests;
@@ -3141,14 +3142,14 @@ class ClientMachine {
   function openWS(url: String, headers: Null<Map<String, String>>): IWsClient {
     return wsFactory(url, headers, 
       function onOpen(client) {
-        lock.synchronized(() -> {
+        sessionThread.submit(() -> lock.synchronized(() -> {
           if (client.isDisposed())
             return;
           evtWSOpen();
-        });
+        }));
       },
       function onText(client, line) {
-        lock.synchronized(() -> {
+        sessionThread.submit(() -> lock.synchronized(() -> {
           if (client.isDisposed())
             return;
           try {
@@ -3157,14 +3158,14 @@ class ClientMachine {
             sessionLogger.logErrorEx(e.message, e);
             evtExtDisconnect(TC_standardError(61, e.message));
           }
-        });
+        }));
       },
       function onError(client, error) {
-        lock.synchronized(() -> {
+        sessionThread.submit(() -> lock.synchronized(() -> {
           if (client.isDisposed())
             return;
           evtTransportError();
-        });
+        }));
       });
   }
 
@@ -3291,7 +3292,7 @@ class ClientMachine {
   function sendHttpRequest(url: String, req: RequestBuilder, headers: Null<Map<String, String>>): IHttpClient {
     return httpFactory(url, req.getEncodedString(), headers,
       function onText(client, line) {
-        lock.synchronized(() -> {   
+        sessionThread.submit(() -> lock.synchronized(() -> {   
           if (client.isDisposed())
             return;
           try {
@@ -3300,14 +3301,14 @@ class ClientMachine {
             sessionLogger.logErrorEx(e.message, e);
             evtExtDisconnect(TC_standardError(61, e.message));
           }
-        });
+        }));
       },
       function onError(client, error) {
-        lock.synchronized(() -> {   
+        sessionThread.submit(() -> lock.synchronized(() -> {   
           if (client.isDisposed())
             return;
           evtTransportError();
-        });
+        }));
       },
       function onDone(client) {
         // ignore

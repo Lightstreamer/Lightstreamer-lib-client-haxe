@@ -1,5 +1,6 @@
 package com.lightstreamer.internal;
 
+import com.lightstreamer.internal.Threads;
 import com.lightstreamer.internal.NativeTypes.Long;
 import com.lightstreamer.internal.Types;
 import hx.concurrent.executor.Executor;
@@ -64,11 +65,10 @@ abstract TimerStamp(Float) {
 }
 
 class Timer implements ITimer {
-  static final executor = Executor.create();
   final task: TaskFuture<Void>;
 
   public function new(id: String, delay: Types.Millis, callback: ITimer->Void) {
-    task = executor.submit(() -> callback(this), Schedule.ONCE(delay.toInt()));
+    task = sessionThread.submit(() -> callback(this), Schedule.ONCE(delay.toInt()));
   }
 
   inline public function cancel(): Void {

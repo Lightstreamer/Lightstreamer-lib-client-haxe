@@ -1,24 +1,12 @@
 package com.lightstreamer.internal;
 
+import com.lightstreamer.internal.Threads;
 import com.lightstreamer.log.LoggerTools;
 
 using com.lightstreamer.log.LoggerTools;
 
 @:autoBuild(com.lightstreamer.internal.Macros.buildEventDispatcher())
 class EventDispatcher<T> {
-  #if python
-  // TODO remove workaround (see issue https://github.com/HaxeFoundation/haxe/issues/10562)
-  static function createExecutor() {
-    haxe.Log.trace = (v, ?infos) -> {
-      @:nullSafety(Off) var out = haxe.Log.formatOutput(v, infos);
-      Sys.println(out);
-    };
-    return hx.concurrent.executor.Executor.create(1);
-  }
-  static final executor = createExecutor();
-  #else
-  static final executor = hx.concurrent.executor.Executor.create(1);
-  #end
   var listeners = new Array<T>();
 
   public function new() {}
@@ -46,7 +34,7 @@ class EventDispatcher<T> {
   }
 
   function dispatchToOne(listener: T, func: T->Void) {
-    executor.submit(() -> {
+    userThread.submit(() -> {
       try {
         func(listener);
       } catch(e) {
