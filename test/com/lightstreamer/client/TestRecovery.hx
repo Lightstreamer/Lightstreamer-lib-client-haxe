@@ -59,7 +59,6 @@ class TestRecovery extends utest.Test {
       equals("DISCONNECTED:TRYING-RECOVERY", client.getStatus());
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
-      equals("CONNECTED:WS-STREAMING", client.getStatus());
     })
     .then(() -> async.completed())
     .verify();
@@ -104,7 +103,6 @@ class TestRecovery extends utest.Test {
       equals("DISCONNECTED:TRYING-RECOVERY", client.getStatus());
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
-      equals("CONNECTED:WS-STREAMING", client.getStatus());
     })
     .then(() -> async.completed())
     .verify();
@@ -147,7 +145,6 @@ class TestRecovery extends utest.Test {
     .then(() -> {
       equals("DISCONNECTED:TRYING-RECOVERY", client.getStatus());
       ws.onText("CONOK,sid,70000,5000,*");
-      equals("CONNECTED:WS-POLLING", client.getStatus());
     })
     .then(() -> async.completed())
     .verify();
@@ -182,7 +179,6 @@ class TestRecovery extends utest.Test {
     .then(() -> {
       equals("DISCONNECTED:TRYING-RECOVERY", client.getStatus());
       http.onText("CONOK,sid,70000,5000,*");
-      equals("CONNECTED:HTTP-STREAMING", client.getStatus());
     })
     .then(() -> async.completed())
     .verify();
@@ -217,7 +213,6 @@ class TestRecovery extends utest.Test {
     .then(() -> {
       equals("DISCONNECTED:TRYING-RECOVERY", client.getStatus());
       http.onText("CONOK,sid,70000,5000,*");
-      equals("CONNECTED:HTTP-POLLING", client.getStatus());
     })
     .then(() -> async.completed())
     .verify();
@@ -699,7 +694,6 @@ class TestRecovery extends utest.Test {
     .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.4.0\r\nLS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error")
     .then(() -> {
       http.onText("CONERR,4,error");
-      equals("DISCONNECTED:WILL-RETRY", client.getStatus());
       scheduler.fireRetryTimeout();
     })
     .await("http.dispose")
@@ -730,7 +724,6 @@ class TestRecovery extends utest.Test {
     .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.4.0\r\nLS_session=sid&LS_recovery_from=0&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error")
     .then(() -> {
       http.onText("END,41,error");
-      equals("DISCONNECTED:WILL-RETRY", client.getStatus());
       scheduler.fireRetryTimeout();
     })
     .await("http.dispose")

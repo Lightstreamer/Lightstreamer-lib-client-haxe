@@ -1216,8 +1216,8 @@ class TestUpdate2Level extends utest.Test {
       ws.onText("SUBOK,2,1,2");
       sub.setRequestedMaxFrequency("456");
     })
-    .await("control\r\nLS_reqId=3&LS_subId=2&LS_op=reconf&LS_requested_max_frequency=456")
-    .await("control\r\nLS_reqId=4&LS_subId=1&LS_op=reconf&LS_requested_max_frequency=456")
+    .await("control\r\nLS_reqId=3&LS_subId=1&LS_op=reconf&LS_requested_max_frequency=456")
+    .await("control\r\nLS_reqId=4&LS_subId=2&LS_op=reconf&LS_requested_max_frequency=456")
     .then(() -> async.completed())
     .verify();
   }

@@ -3,6 +3,7 @@ package utils;
 import haxe.Exception;
 import com.lightstreamer.internal.PlatformApi.ITimer;
 import com.lightstreamer.internal.Types.Millis;
+import com.lightstreamer.internal.Threads;
 
 @:access(utils.MockScheduler)
 class MockTimer implements ITimer {
@@ -45,42 +46,42 @@ class MockScheduler {
   }
 
   public function fireRetryTimeout() {
-    timeouts["retry.timeout"].perform();
+    sessionThread.submit(() -> timeouts["retry.timeout"].perform());
   }
 
   public function fireTransportTimeout() {
-    timeouts["transport.timeout"].perform();
+    sessionThread.submit(() -> timeouts["transport.timeout"].perform());
   }
 
   public function fireRecoveryTimeout() {
-    timeouts["recovery.timeout"].perform();
+    sessionThread.submit(() -> timeouts["recovery.timeout"].perform());
   }
 
   public function fireIdleTimeout() {
-    timeouts["idle.timeout"].perform();
+    sessionThread.submit(() -> timeouts["idle.timeout"].perform());
   }
 
   public function firePollingTimeout() {
-    timeouts["polling.timeout"].perform();
+    sessionThread.submit(() -> timeouts["polling.timeout"].perform());
   }
 
   public function fireCtrlTimeout() {
-    timeouts["ctrl.timeout"].perform();
+    sessionThread.submit(() -> timeouts["ctrl.timeout"].perform());
   }
 
   public function fireKeepaliveTimeout() {
-    timeouts["keepalive.timeout"].perform();
+    sessionThread.submit(() -> timeouts["keepalive.timeout"].perform());
   }
 
   public function fireStalledTimeout() {
-    timeouts["stalled.timeout"].perform();
+    sessionThread.submit(() -> timeouts["stalled.timeout"].perform());
   }
 
   public function fireReconnectTimeout() {
-    timeouts["reconnect.timeout"].perform();
+    sessionThread.submit(() -> timeouts["reconnect.timeout"].perform());
   }
 
   public function fireRhbTimeout() {
-    timeouts["rhb.timeout"].perform();
+    sessionThread.submit(() -> timeouts["rhb.timeout"].perform());
   }
 }

@@ -51,7 +51,6 @@ class TestStreamSense extends utest.Test {
     .await("http.dispose")
     .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.4.0\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop")
     .then(() -> http.onText("CONOK,sid,70000,5000,*"))
-    .then(() -> equals("CONNECTED:HTTP-POLLING", client.getStatus()))
     .then(() -> async.completed())
     .verify();
   }
