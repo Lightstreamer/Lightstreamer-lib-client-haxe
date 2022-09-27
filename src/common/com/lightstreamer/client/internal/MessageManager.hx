@@ -7,7 +7,7 @@ import com.lightstreamer.internal.RequestBuilder;
 import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
 
-private class MessageEventDispatcher extends EventDispatcher<ClientMessageListener> {}
+class MessageEventDispatcher extends EventDispatcher<ClientMessageListener> {}
 
 private enum abstract State_m(Int) {
   var s1 = 1;

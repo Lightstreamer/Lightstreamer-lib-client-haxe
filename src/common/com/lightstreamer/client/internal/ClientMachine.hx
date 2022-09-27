@@ -4393,7 +4393,7 @@ class ClientMachine {
       }
       messageLogger.logWarn('Message ${sequence != null ? sequence : "UNORDERED_MESSAGES"} $message aborted');
       if (listener != null) {
-        var dispatcher = new ClientMessageDispatcher();
+        var dispatcher = new MessageManager.MessageEventDispatcher();
         dispatcher.addListener(listener);
         dispatcher.onAbort(message, false);
       }
@@ -4515,5 +4515,3 @@ private enum TerminationCause {
 private enum RecoveryRetryCause {
   RRC_transport_timeout; RRC_transport_error;
 }
-
-private class ClientMessageDispatcher extends EventDispatcher<ClientMessageListener> {}
