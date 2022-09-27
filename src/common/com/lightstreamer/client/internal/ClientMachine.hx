@@ -223,7 +223,6 @@ class ClientMachine {
       sendRecovery();
       goto(state.s_rec = s1001);
       cancel_evtRetryTimeout();
-      // send http
       schedule_evtTransportTimeout(options.retryDelay);
     }
   }
@@ -383,14 +382,12 @@ class ClientMachine {
           notifyStatus(CONNECTING);
           openWS_Create();
           goto(state.s_m = s120);
-          // open ws
           evtCreate();
           schedule_evtTransportTimeout(delayCounter.currentRetryDelay);
         case BFC_http:
           notifyStatus(CONNECTING);
           sendCreateHTTP();
           goto(state.s_m = s130);
-          // send http
           evtCreate();
           schedule_evtTransportTimeout(delayCounter.currentRetryDelay);
       }
@@ -1110,7 +1107,6 @@ class ClientMachine {
       sendBindHTTP_Polling();
       goto(state.s_hp.m = s903);
       cancel_evtPollingTimeout();
-      // send http
       schedule_evtIdleTimeout(idleTimeout.sure() + options.retryDelay);
     }
   }
@@ -2560,7 +2556,6 @@ class ClientMachine {
       sendRecovery();
       goto(state.s_rec = s1001);
       cancel_evtRecoveryTimeout();
-      // send http
       schedule_evtTransportTimeout(options.retryDelay);
     }
   }
@@ -2864,7 +2859,6 @@ class ClientMachine {
       notifyStatus(CONNECTING);
       sendCreateTTL();
       goto(state.s_m = s140);
-      // send http
       evtCreate();
       schedule_evtTransportTimeout(new Millis(60_000));
     case s111:
@@ -2873,7 +2867,6 @@ class ClientMachine {
       sendCreateTTL();
       goto(state.s_m = s140);
       cancel_evtRetryTimeout();
-      // send http
       evtCreate();
       schedule_evtTransportTimeout(new Millis(60_000));
     case s113:
@@ -2885,7 +2878,6 @@ class ClientMachine {
         sendRecovery();
         goto(state.s_rec = s1001);
         cancel_evtRetryTimeout();
-        // send http
         schedule_evtTransportTimeout(options.retryDelay);
       }
     default:
@@ -2972,7 +2964,6 @@ class ClientMachine {
           state.s_tr = s240;
           state.s_ws = new StateVar_ws(s500);
         });
-        // open ws
         schedule_evtTransportTimeout(options.retryDelay);
       case BFB_http_streaming:
         sendBindHTTP_Streaming();
@@ -2982,7 +2973,6 @@ class ClientMachine {
           state.s_hs = new StateVar_hs(s800);
           state.s_ctrl = s1100;
         });
-        // send http
         evtCheckCtrlRequests();
         schedule_evtTransportTimeout(options.retryDelay);
       case BFB_ws_polling:
@@ -2991,7 +2981,6 @@ class ClientMachine {
           state.s_tr = s250;
           state.s_wp = new StateVar_wp(s600);
         });
-        // open ws
         schedule_evtTransportTimeout(options.retryDelay);
       case BFB_http_polling:
         sendBindHTTP_Polling();
@@ -3002,7 +2991,6 @@ class ClientMachine {
           state.s_rhb = s320;
           state.s_ctrl = s1100;
         });
-        // send http
         evtCheckCtrlRequests();
         schedule_evtIdleTimeout(idleTimeout.sure() + options.retryDelay);
         evtSelectRhb();
@@ -3025,13 +3013,11 @@ class ClientMachine {
         });
         exit_hs();
         exit_ctrl();
-        // open ws
         schedule_evtTransportTimeout(options.retryDelay);
       case BFB_http_streaming:
         sendBindHTTP_Streaming();
         goto(state.s_hs = new StateVar_hs(s800));
         exit_hs();
-        // send http
         schedule_evtTransportTimeout(options.retryDelay);
       case BFB_ws_polling:
         openWS_Bind();
@@ -3044,7 +3030,6 @@ class ClientMachine {
         });
         exit_hs();
         exit_ctrl();
-        // open ws
         schedule_evtTransportTimeout(options.retryDelay);
       case BFB_http_polling:
         sendBindHTTP_Polling();
@@ -3055,7 +3040,6 @@ class ClientMachine {
           state.s_rhb = s320;
         });
         exit_hs();
-        // send http
         schedule_evtIdleTimeout(idleTimeout.sure() + options.retryDelay);
         evtSelectRhb();
       case BFB_none:
@@ -3077,7 +3061,6 @@ class ClientMachine {
         });
         exit_hp();
         exit_ctrl();
-        // open ws
         schedule_evtTransportTimeout(options.retryDelay);
       case BFB_http_streaming:
         sendBindHTTP_Streaming();
@@ -3087,7 +3070,6 @@ class ClientMachine {
           state.s_hs = new StateVar_hs(s800);
         });
         exit_hp();
-        // send http
         schedule_evtTransportTimeout(options.retryDelay);
       case BFB_ws_polling:
         openWS_Bind();
@@ -3100,7 +3082,6 @@ class ClientMachine {
         });
         exit_hp();
         exit_ctrl();
-        // open ws
         schedule_evtTransportTimeout(options.retryDelay);
       case BFB_http_polling:
         sendBindHTTP_Polling();
@@ -3109,7 +3090,6 @@ class ClientMachine {
           state.s_rhb = s320;
         });
         exit_hp();
-        // send http
         schedule_evtIdleTimeout(idleTimeout.sure() + options.retryDelay);
         evtSelectRhb();
       case BFB_none:
