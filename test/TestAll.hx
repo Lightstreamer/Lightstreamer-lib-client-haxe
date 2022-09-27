@@ -75,7 +75,9 @@ class TestAll {
     #if LS_JSON_PATCH
     runner.addCase(TestJsonPatch);
     #end
+    #if LS_TLCP_DIFF
     runner.addCase(TestDiff);
+    #end
   }
 
   public static function main() {

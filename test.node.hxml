@@ -14,3 +14,4 @@ test.common.hxml
 -D LS_NODE
 -D LS_HAS_COOKIES
 -D LS_JSON_PATCH
+-D LS_TLCP_DIFF
