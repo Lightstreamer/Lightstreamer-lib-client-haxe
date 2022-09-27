@@ -2,6 +2,7 @@ import com.lightstreamer.log.ConsoleLoggerProvider;
 import utest.Runner;
 import com.lightstreamer.client.*;
 import com.lightstreamer.internal.*;
+import com.lightstreamer.internal.patch.*;
 import com.lightstreamer.client.internal.*;
 
 class TestAll {
@@ -74,6 +75,7 @@ class TestAll {
     #if LS_JSON_PATCH
     runner.addCase(TestJsonPatch);
     #end
+    runner.addCase(TestDiff);
   }
 
   public static function main() {
