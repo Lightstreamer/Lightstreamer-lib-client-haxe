@@ -12,6 +12,9 @@ enum FieldValue {
   #if LS_JSON_PATCH
   jsonPatch(patch: com.lightstreamer.internal.patch.Json.JsonPatch);
   #end
+  #if LS_TLCP_DIFF
+  diffPatch(ops: Array<com.lightstreamer.internal.patch.Diff.DiffOperations>);
+  #end
 }
 
 enum abstract ClientStatus(String) to String {

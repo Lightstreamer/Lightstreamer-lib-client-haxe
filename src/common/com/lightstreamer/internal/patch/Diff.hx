@@ -1,5 +1,6 @@
 package com.lightstreamer.internal.patch;
 
+#if LS_TLCP_DIFF
 enum DiffOperations {
   DiffCopy(n: Int);
   DiffAdd(n: Int, s: String);
@@ -28,3 +29,4 @@ function applyDiff(base: String, operations: Array<DiffOperations>): String {
   }
   return result.toString();
 }
+#end
