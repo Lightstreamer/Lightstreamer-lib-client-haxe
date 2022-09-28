@@ -77,6 +77,7 @@ class TestAll {
     #end
     #if LS_TLCP_DIFF
     runner.addCase(TestDiff);
+    runner.addCase(TestDiffPatch);
     #end
   }
 
