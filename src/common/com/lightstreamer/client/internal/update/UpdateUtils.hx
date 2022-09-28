@@ -71,10 +71,10 @@ function applyUpatesToCurrentFields(currentValues: Null<Map<Pos, Null<CurrFieldV
         }
       #end
       #if LS_TLCP_DIFF
-      case diffPatch(ops):
+      case diffPatch(patch):
         switch currentValues[f] {
           case StringVal(str):
-            newValues[f] = StringVal(com.lightstreamer.internal.patch.Diff.applyDiff(str, ops));
+            newValues[f] = StringVal(patch.apply(str));
           case null:
             throw new IllegalStateException('Cannot apply the TLCP-diff to the field $f because the field is null');
           case JsonVal(_):

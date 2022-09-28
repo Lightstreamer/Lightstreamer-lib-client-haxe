@@ -13,7 +13,7 @@ enum FieldValue {
   jsonPatch(patch: com.lightstreamer.internal.patch.Json.JsonPatch);
   #end
   #if LS_TLCP_DIFF
-  diffPatch(ops: Array<com.lightstreamer.internal.patch.Diff.DiffOperations>);
+  diffPatch(patch: com.lightstreamer.internal.patch.Diff.DiffPatch);
   #end
 }
 
