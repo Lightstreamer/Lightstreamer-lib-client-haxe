@@ -7,6 +7,9 @@ import com.lightstreamer.client.internal.*;
 class TestAll {
 
   static function buildSuite(runner: Runner) {
+    #if python
+    Logging.basicConfig({level: Logging.DEBUG, format: "%(message)s"});
+    #end
     LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.ERROR));
     #if java
     utils.TestTools.enableOkHttpLogger();
