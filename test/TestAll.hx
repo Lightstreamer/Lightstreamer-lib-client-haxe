@@ -8,7 +8,7 @@ class TestAll {
 
   static function buildSuite(runner: Runner) {
     #if python
-    Logging.basicConfig({level: Logging.DEBUG, format: "%(message)s"});
+    Logging.basicConfig({level: Logging.DEBUG, format: "%(message)s", stream: python.lib.Sys.stdout});
     #end
     LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.ERROR));
     #if java
