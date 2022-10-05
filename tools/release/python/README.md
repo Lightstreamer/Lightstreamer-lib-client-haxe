@@ -12,7 +12,7 @@ You can install the Lightstreamer Client SDK from [PyPI](https://pypi.org/projec
 python -m pip install lightstreamer-client-lib
 ```
 
-The sdk is supported on Python 3.9 and above.
+The sdk is supported on Python 3.7 and above.
 
 ## Quickstart
 
