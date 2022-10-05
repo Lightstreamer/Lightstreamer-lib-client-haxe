@@ -1,6 +1,7 @@
 package com.lightstreamer.internal;
 
 import python.KwArgs;
+import python.lib.io.IOBase;
 
 @:pythonImport("logging")
 extern class Logging {
@@ -9,7 +10,7 @@ extern class Logging {
   static final WARNING: Int;
   static final INFO: Int;
   static final DEBUG: Int;
-  static function basicConfig(kwargs: KwArgs<{?level: Int, ?format: String}>): Void;
+  static function basicConfig(kwargs: KwArgs<{?level: Int, ?format: String, stream: IOBase}>): Void;
   static function getLogger(name: String): Logger;
 }
 
