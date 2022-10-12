@@ -97,7 +97,7 @@ class TestJsonPatch extends utest.Test {
     #end
     client = new LightstreamerClient(host, "TEST");
     sub = new Subscription("MERGE", ["count"], ["count"]);
-    sub.setRequestedSnapshot("yes");
+    sub.setRequestedSnapshot("no");
     sub.setDataAdapter("JSON_COUNT");
     sub.addListener(subListener);
     subListener._onItemUpdate = update -> {
