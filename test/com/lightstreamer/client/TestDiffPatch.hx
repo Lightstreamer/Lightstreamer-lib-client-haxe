@@ -87,6 +87,37 @@ class TestDiffPatch extends utest.Test {
     .verify();
   }
 
+  @:timeout(3000)
+  function testRealServer(async: utest.Async) {
+    var updates = [];
+    #if android
+    var host = "http://10.0.2.2:8080";
+    #else
+    var host = "http://localtest.me:8080";
+    #end
+    client = new LightstreamerClient(host, "TEST");
+    sub = new Subscription("MERGE", ["count"], ["count"]);
+    sub.setRequestedSnapshot("no");
+    sub.setDataAdapter("DIFF_COUNT");
+    sub.addListener(subListener);
+    subListener._onItemUpdate = update -> {
+      updates.push(update);
+      exps.signal("onItemUpdate");
+    }
+    client.subscribe(sub);
+
+    exps
+    .then(() -> client.connect())
+    .await("onItemUpdate")
+    .await("onItemUpdate")
+    .then(() -> {
+      var u = updates[1];
+      match(~/value=\d+/, u.getValue(1));
+    })
+    .then(() -> async.completed())
+    .verify();
+  }
+
   function testMultiplePatches(async: utest.Async) {
     updateTemplate(async, [
       "foobar", 
