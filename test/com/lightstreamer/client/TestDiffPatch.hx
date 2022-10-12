@@ -183,6 +183,20 @@ class TestDiffPatch extends utest.Test {
     ], "61 - Cannot set the field 1 because the first update is a TLCP-diff");
   }
 
+  function testBadDiff_OutOfRange(async: utest.Async) {
+    errorTemplate(async, [
+      "foo", 
+      "^Tz", // copy(25)
+    ], "61 - Bad TLCP-diff");
+  }
+
+  function testBadDiff_InvalidChar(async: utest.Async) {
+    errorTemplate(async, [
+      "foo", 
+      "^T!",
+    ], "61 - Bad TLCP-diff");
+  }
+
   function testIsChanged(async: utest.Async) {
     exps
     .then(() -> {
