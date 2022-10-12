@@ -123,6 +123,41 @@ class TestJsonPatch extends utest.Test {
     .verify();
   }
 
+  @:timeout(3000)
+  function testRealServer_JsonAndTxt(async: utest.Async) {
+    var updates = [];
+    #if android
+    var host = "http://10.0.2.2:8080";
+    #else
+    var host = "http://localtest.me:8080";
+    #end
+    client = new LightstreamerClient(host, "TEST");
+    sub = new Subscription("MERGE", ["count"], ["count"]);
+    sub.setRequestedMaxFrequency("unfiltered");
+    sub.setRequestedSnapshot("no");
+    sub.setDataAdapter("JSON_DIFF_COUNT");
+    sub.addListener(subListener);
+    subListener._onItemUpdate = update -> {
+      updates.push(update);
+      exps.signal("onItemUpdate");
+    }
+    client.subscribe(sub);
+
+    exps
+    .then(() -> client.connect())
+    .await("onItemUpdate")
+    .await("onItemUpdate")
+    .await("onItemUpdate")
+    .then(() -> {
+      isNull(updates[0].getValueAsJSONPatchIfAvailable(1));
+      notNull(updates[1].getValueAsJSONPatchIfAvailable(1));
+      isNull(updates[2].getValueAsJSONPatchIfAvailable(1));
+    })
+    .then(() -> client.unsubscribe(sub))
+    .then(() -> async.completed())
+    .verify();
+  }
+
   function testPatches(async: utest.Async) {
     updateTemplate(async, ['{"baz":"qux","foo":"bar"}', 
     '^P[{ "op": "replace", "path": "/baz", "value": "boo" }]', 
