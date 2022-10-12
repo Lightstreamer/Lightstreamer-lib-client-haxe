@@ -1,5 +1,7 @@
 package com.lightstreamer.internal.patch;
 
+import haxe.Exception;
+
 #if LS_TLCP_DIFF
 abstract DiffPatch(String) {
   public inline function new(patch: String) this = patch;
@@ -24,21 +26,25 @@ class DiffDecoder {
   }
 
   public function decode() {
-    while (true) {
-      if (diffPos == diff.length) {
-        break;
+    try {
+      while (true) {
+        if (diffPos == diff.length) {
+          break;
+        }
+        applyCopy();
+        if (diffPos == diff.length) {
+          break;
+        }
+        applyAdd();
+        if (diffPos == diff.length) {
+          break;
+        }
+        applyDel();
       }
-      applyCopy();
-      if (diffPos == diff.length) {
-        break;
-      }
-      applyAdd();
-      if (diffPos == diff.length) {
-        break;
-      }
-      applyDel();
+      return buf.toString();
+    } catch(e) {
+      throw new Exception("Bad TLCP-diff", e);
     }
-    return buf.toString();
   }
 
   function applyCopy() {
@@ -75,8 +81,11 @@ class DiffDecoder {
         // small letters used to mark the end of the number
         return n * VARINT_RADIX + (c - "a".code);
       } else {
-        //assert (c >= "A".code && c < ("A".code + VARINT_RADIX));
-        n = n * VARINT_RADIX + (c - "A".code);
+        if (c >= "A".code && c < ("A".code + VARINT_RADIX)) {
+          n = n * VARINT_RADIX + (c - "A".code);
+        } else {
+          throw new Exception('The code point $c is not in the range A-Z');
+        }
       }
     }
   }
