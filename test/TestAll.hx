@@ -2,12 +2,14 @@ import com.lightstreamer.log.ConsoleLoggerProvider;
 import utest.Runner;
 import com.lightstreamer.client.*;
 import com.lightstreamer.internal.*;
+import com.lightstreamer.internal.patch.*;
 import com.lightstreamer.client.internal.*;
 
 class TestAll {
 
   static function buildSuite(runner: Runner) {
-    LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.ERROR));
+    LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(
+      #if LOG_DEBUG ConsoleLogLevel.DEBUG #else ConsoleLogLevel.ERROR #end));
     #if java
     utils.TestTools.enableOkHttpLogger();
     #end
@@ -73,6 +75,10 @@ class TestAll {
     runner.addCase(TestControlLink);
     #if LS_JSON_PATCH
     runner.addCase(TestJsonPatch);
+    #end
+    #if LS_TLCP_DIFF
+    runner.addCase(TestDiff);
+    runner.addCase(TestDiffPatch);
     #end
   }
 

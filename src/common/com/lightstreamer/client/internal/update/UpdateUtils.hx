@@ -70,6 +70,17 @@ function applyUpatesToCurrentFields(currentValues: Null<Map<Pos, Null<CurrFieldV
           throw new IllegalStateException('Cannot apply the JSON patch to the field $f because the field is null');
         }
       #end
+      #if LS_TLCP_DIFF
+      case diffPatch(patch):
+        switch currentValues[f] {
+          case StringVal(str):
+            newValues[f] = StringVal(patch.apply(str));
+          case null:
+            throw new IllegalStateException('Cannot apply the TLCP-diff to the field $f because the field is null');
+          case JsonVal(_):
+            throw new IllegalStateException('Cannot apply the TLCP-diff to the field $f because the field is JSON');
+        }
+      #end
       }
     }
     return newValues;
@@ -88,6 +99,10 @@ function applyUpatesToCurrentFields(currentValues: Null<Map<Pos, Null<CurrFieldV
       #if LS_JSON_PATCH
       case jsonPatch(_):
         throw new IllegalStateException('Cannot set the field $f because the first update is a JSONPatch');
+      #end
+      #if LS_TLCP_DIFF
+      case diffPatch(_):
+        throw new IllegalStateException('Cannot set the field $f because the first update is a TLCP-diff');
       #end
       }
     }

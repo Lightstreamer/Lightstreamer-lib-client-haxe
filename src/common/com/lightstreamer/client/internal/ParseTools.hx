@@ -57,10 +57,12 @@ function parseUpdate(message: String): UpdateInfo {
            A) If its value is empty, the pointed field should be left unchanged and the pointer moved to the next field.
            B) Otherwise, if its value corresponds to a single “#” (UTF-8 code 0x23), the pointed field should be set to a null value and the pointer moved to the next field.
            C) Otherwise, If its value corresponds to a single “$” (UTF-8 code 0x24), the pointed field should be set to an empty value (“”) and the pointer moved to the next field.
-           D) Otherwise, if its value begins with a caret “^” (UTF-8 code 0x5E):
+           D.1) Otherwise, if its value begins with a caret “^” (UTF-8 code 0x5E) and is followed by a digit:
                - take the substring following the caret and convert it to an integer number;
                - for the corresponding count, leave the fields unchanged and move the pointer forward;
                - e.g. if the value is “^3”, leave unchanged the pointed field and the following two fields, and move the pointer 3 fields forward;
+           D.2) if its value begins with a caret “^” and is followed by "P", the value is a JSON patch
+           D.3) if its value begins with a caret “^” and is followed by "T", the value is a TLCP-diff
            E) Otherwise, the value is an actual content: decode any percent-encoding and set the pointed field to the decoded value, then move the pointer to the next field.
             Note: “#”, “$” and “^” characters are percent-encoded if occurring at the beginning of an actual content.
         4) Return to the second step, unless there are no more fields in the schema.
@@ -89,6 +91,15 @@ function parseUpdate(message: String): UpdateInfo {
         }
         #else
         throw new IllegalStateException("JSONPatch compression is not supported by the client");
+        #end
+      } else if (value.charAt(1) == "T") {
+        #if LS_TLCP_DIFF
+        var unquoted = value.substring(2).urlDecode();
+        var patch = new com.lightstreamer.internal.patch.Diff.DiffPatch(unquoted);
+        values[nextFieldIndex] = diffPatch(patch);
+        nextFieldIndex += 1;
+        #else
+        throw new IllegalStateException("TLCP-diff compression is not supported by the client");
         #end
       } else {
         var count = parseInt(value.substring(1));

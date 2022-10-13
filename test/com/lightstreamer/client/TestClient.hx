@@ -424,7 +424,7 @@ class TestClient extends utest.Test {
     setTransport();
     var updates = [];
     var sub = new Subscription("MERGE", ["count"], ["count"]);
-    sub.setRequestedSnapshot("yes");
+    sub.setRequestedSnapshot("no");
     sub.setDataAdapter("JSON_COUNT");
     sub.addListener(subListener);
     subListener._onItemUpdate = update -> {
@@ -445,6 +445,33 @@ class TestClient extends utest.Test {
       notNull(patch.value);
       var value = haxe.Json.parse(u.getValue(1));
       notNull(value.value);
+    })
+    .then(() -> async.completed())
+    .verify();
+  }
+  #end
+
+  #if LS_TLCP_DIFF
+  function _testDiffPatch(async: utest.Async) {
+    setTransport();
+    var updates = [];
+    var sub = new Subscription("MERGE", ["count"], ["count"]);
+    sub.setRequestedSnapshot("no");
+    sub.setDataAdapter("DIFF_COUNT");
+    sub.addListener(subListener);
+    subListener._onItemUpdate = update -> {
+      updates.push(update);
+      exps.signal("onItemUpdate");
+    }
+    client.subscribe(sub);
+
+    exps
+    .then(() -> client.connect())
+    .await("onItemUpdate")
+    .await("onItemUpdate")
+    .then(() -> {
+      var u = updates[1];
+      match(~/value=\d+/, u.getValue(1));
     })
     .then(() -> async.completed())
     .verify();
