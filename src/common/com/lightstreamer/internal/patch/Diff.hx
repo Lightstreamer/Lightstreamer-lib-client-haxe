@@ -50,7 +50,7 @@ class DiffDecoder {
   function applyCopy() {
     var count = decodeVarint();
     if (count > 0) {
-      buf.addSub(base, basePos, count);
+      appendToBuf(base, basePos, count);
       basePos += count;
     }
   }
@@ -58,7 +58,7 @@ class DiffDecoder {
   function applyAdd() {
     var count = decodeVarint();
     if (count > 0) {
-      buf.addSub(diff, diffPos, count);
+      appendToBuf(diff, diffPos, count);
       diffPos += count;
     }
   }
@@ -74,8 +74,7 @@ class DiffDecoder {
     // the number is encoded with letters as digits
     var n = 0;
     while (true) {
-      @:nullSafety(Off)
-      var c: Int = diff.charAt(diffPos).charCodeAt(0);
+      var c = charAt(diff, diffPos);
       diffPos += 1;
       if (c >= "a".code && c < ("a".code + VARINT_RADIX)) {
         // small letters used to mark the end of the number
@@ -87,6 +86,23 @@ class DiffDecoder {
           throw new Exception('The code point $c is not in the range A-Z');
         }
       }
+    }
+  }
+
+  function appendToBuf(s: String, startIndex: Int, count: Int) {
+    if (startIndex + count <= s.length) {
+      buf.addSub(s, startIndex, count);
+    } else {
+      throw new Exception('Index out of range: startIndex=$startIndex count=$count length=${s.length}');
+    }
+  }
+
+  function charAt(s: String, pos: Int): Int {
+    if (pos < s.length) {
+      @:nullSafety(Off)
+      return s.charAt(pos).charCodeAt(0);
+    } else {
+      throw new Exception('Index out of range: pos=$pos length=${s.length}');
     }
   }
 }
