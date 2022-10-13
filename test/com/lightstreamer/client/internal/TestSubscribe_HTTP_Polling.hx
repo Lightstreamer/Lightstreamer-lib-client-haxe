@@ -572,7 +572,7 @@ class TestSubscribe_HTTP_Polling extends utest.Test {
       ctrl.onError();
     })
     .await("ctrl.dispose")
-    .then(() -> scheduler.fireCtrlTimeout())
+    //.then(() -> scheduler.fireCtrlTimeout())
     // NB client doesn't resend the request
     .then(() -> async.completed())
     .verify();
