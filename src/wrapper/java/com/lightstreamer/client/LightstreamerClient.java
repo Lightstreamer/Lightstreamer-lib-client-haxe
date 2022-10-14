@@ -13,6 +13,13 @@ package com.lightstreamer.client;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.*;
+import com.lightstreamer.log.*;
+import com.lightstreamer.client.mpn.*;
+import java.util.concurrent.Future;
+import java.net.URI;
+import java.net.HttpCookie;
+import javax.net.ssl.TrustManagerFactory;
 
 /**
  * Facade class for the management of the communication to
@@ -509,15 +516,15 @@ END_ANDROID_DOC_ONLY
      * To know what features are enabled by your license, please see the License tab of the Monitoring Dashboard (by default,
      * available at /dashboard).
      * 
-     * @lifecycle An {@link MpnDeviceInterface} can be registered at any time. The registration will be notified through a {@link MpnDeviceListener#onRegistered()} event.
+     * @lifecycle An {@link MpnDevice} can be registered at any time. The registration will be notified through a {@link MpnDeviceListener#onRegistered()} event.
      * Note that forwarding of the registration to the server is made in a separate thread.
      * 
-     * @param device An {@link MpnDeviceInterface} instace, carrying all the information about the MPN device.
+     * @param device An {@link MpnDevice} instace, carrying all the information about the MPN device.
      * @throws IllegalArgumentException if the specified device is null.
      * 
      * @see #subscribe(MpnSubscription, boolean)
      */
-  public void registerForMpn(@Nonnull final MpnDeviceInterface device) {
+  public void registerForMpn(@Nonnull final MpnDevice device) {
 
   }
   

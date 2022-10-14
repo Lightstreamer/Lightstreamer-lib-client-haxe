@@ -13,6 +13,7 @@
 
  import javax.annotation.Nonnull;
  import javax.annotation.Nullable;
+ import java.util.*;
  
  /**
   * Class representing a Subscription to be submitted to a Lightstreamer Server. It contains 

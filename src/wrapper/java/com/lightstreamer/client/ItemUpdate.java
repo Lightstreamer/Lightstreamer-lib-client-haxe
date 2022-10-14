@@ -13,6 +13,7 @@ package com.lightstreamer.client;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * Contains all the information related to an update of the field values for an item. 

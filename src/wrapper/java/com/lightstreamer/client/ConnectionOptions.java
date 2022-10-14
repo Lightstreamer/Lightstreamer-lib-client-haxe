@@ -13,6 +13,7 @@ package com.lightstreamer.client;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * Used by LightstreamerClient to provide an extra connection properties data object.
