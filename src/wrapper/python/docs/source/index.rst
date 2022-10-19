@@ -10,6 +10,8 @@ Welcome to lightstreamer-client-lib's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   intro
+   lightstreamer
 
 
 Indices and tables
