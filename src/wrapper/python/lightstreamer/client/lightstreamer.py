@@ -93,7 +93,7 @@ class ClientListener:
     pass
 
   def onPropertyChange(self,property):
-    """Event handler that receives a notification each time  the value of a property of :meth:`LightstreamerClient.connectionDetails` or :meth:`LightstreamerClient.connectionOptions` is changed.
+    """Event handler that receives a notification each time  the value of a property of :attr:`LightstreamerClient.connectionDetails` or :attr:`LightstreamerClient.connectionOptions` is changed.
 
   Properties of these objects can be modified by direct calls to them or
   by server sent events.
@@ -128,8 +128,8 @@ class ClientListener:
       * httpExtraHeaders
       * httpExtraHeadersOnSessionCreationOnly
    
-  .. seealso:: :meth:`LightstreamerClient.connectionDetails`
-  .. seealso:: :meth:`LightstreamerClient.connectionOptions`
+  .. seealso:: :attr:`LightstreamerClient.connectionDetails`
+  .. seealso:: :attr:`LightstreamerClient.connectionOptions`
   """
     pass
 
@@ -756,7 +756,7 @@ class ConnectionDetails:
  to connect to a Lightstreamer Server. 
 
  An instance of this class is attached to every :class:`LightstreamerClient`
- as :meth:`LightstreamerClient.connectionDetails`
+ as :attr:`LightstreamerClient.connectionDetails`
 
  
  .. seealso:: :class:`LightstreamerClient`
@@ -827,7 +827,7 @@ class ConnectionDetails:
    
    **default** The default Adapter Set, configured as "DEFAULT" on the Server.
    
-   **lifecycle** The Adapter Set name should be set on the :meth:`LightstreamerClient.connectionDetails` object 
+   **lifecycle** The Adapter Set name should be set on the :attr:`LightstreamerClient.connectionDetails` object 
    before calling the :meth:`LightstreamerClient.connect` method. However, the value can be changed at any time: 
    the supplied value will be used for the next time a new session is requested to the server. 
 
@@ -857,7 +857,7 @@ class ConnectionDetails:
    **default** If no username is supplied, no user information will be sent at session initiation. 
    The Metadata Adapter, however, may still allow the session.
    
-   **lifecycle** The username should be set on the :meth:`LightstreamerClient.connectionDetails` object before 
+   **lifecycle** The username should be set on the :attr:`LightstreamerClient.connectionDetails` object before 
    calling the :meth:`LightstreamerClient.connect` method. However, the value can be changed at any time: the 
    supplied value will be used for the next time a new session is requested to the server.
    
@@ -878,7 +878,7 @@ class ConnectionDetails:
    **default**  If no password is supplied, no password information will be sent at session initiation. 
    The Metadata Adapter, however, may still allow the session.
    
-   **lifecycle** The username should be set on the :meth:`LightstreamerClient.connectionDetails` object before calling 
+   **lifecycle** The username should be set on the :attr:`LightstreamerClient.connectionDetails` object before calling 
    the :meth:`LightstreamerClient.connect` method. However, the value can be changed at any time: the supplied 
    value will be used for the next time a new session is requested to the server. 
 
@@ -989,7 +989,7 @@ class ConnectionOptions:
  Data object that contains the policy settings used to connect to a Lightstreamer Server. 
 
  An instance of this class is attached to every :class:`LightstreamerClient`
- as :meth:`LightstreamerClient.connectionOptions`
+ as :attr:`LightstreamerClient.connectionOptions`
 
  .. seealso:: :class:`LightstreamerClient`
  """
@@ -1674,10 +1674,6 @@ class LightstreamerClient:
  However, multiple instances of LightstreamerClient can be used,
  toward the same or multiple endpoints.
 
- :ivar connectionOptions: Data object that contains options and policies for the connection to the server. This instance is set up by the LightstreamerClient object at its own creation. Properties of this object can be overwritten by values received from a Lightstreamer Server. 
-
- :ivar connectionDetails: Data object that contains the details needed to open a connection to a Lightstreamer Server. This instance is set up by the LightstreamerClient object at its own creation. Properties of this object can be overwritten by values received from a Lightstreamer Server. 
-
  :param serverAddress: the address of the Lightstreamer Server to which this LightstreamerClient will connect to. It is possible to specify it later by using None here. See :meth:`ConnectionDetails.setServerAddress` for details.
  :param adapterSet: the name of the Adapter Set mounted on Lightstreamer Server to be used to handle all requests in the Session associated with this LightstreamerClient. It is possible not to specify it at all or to specify it later by using None here. See :meth:`ConnectionDetails.setAdapterSet` for details.
 
@@ -1695,6 +1691,10 @@ class LightstreamerClient:
   """
 
   def __init__(self,serverAddress,adapterSet):
+    #: Data object that contains options and policies for the connection to the server. This instance is set up by the LightstreamerClient object at its own creation. Properties of this object can be overwritten by values received from a Lightstreamer Server. 
+    self.connectionOptions = None
+    #: Data object that contains the details needed to open a connection to a Lightstreamer Server. This instance is set up by the LightstreamerClient object at its own creation. Properties of this object can be overwritten by values received from a Lightstreamer Server. 
+    self.connectionDetails = None
     pass
 
   def addListener(self,listener):
