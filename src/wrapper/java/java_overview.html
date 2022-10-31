@@ -1,0 +1,7 @@
+<body>
+This Java library enables any Java application to communicate bidirectionally with the Lightstreamer Server. The API allows to subscribe to real-time data pushed by the server and to send any message to the server.<br><br>
+The library exposes a fully asynchronous API. All the API calls that require any action from the library itself are queued for processing by a dedicated thread before being carried out. The same thread is also used to carry notifications for the appropriate listeners as provided by the custom code. Blocking operations and internal housekeeping are performed on different threads.<br><br>
+The library offers automatic recovery from connection failures, automatic selection of the best available transport, and full decoupling of subscription and connection operations. The subscriptions are always meant as subscriptions "to the LightstreamerClient", not "to the Server"; the LightstreamerClient is responsible of forwarding the subscriptions to the Server and re-forwarding all the subscriptions whenever the connection is broken and then reopened.<br><br>
+Start digging into the API from the {@link com.lightstreamer.client.LightstreamerClient}  object.
+The Java library can be available depending on Edition and License Type. To know what features are enabled by your license, please see the License tab of the Monitoring Dashboard (by default, available at /dashboard).
+</body>
