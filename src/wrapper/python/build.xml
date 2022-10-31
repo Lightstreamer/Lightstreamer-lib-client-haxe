@@ -1,0 +1,12 @@
+<project name="MyProject" default="html" basedir=".">
+  
+  <property name="docs" location="docs"/>
+
+  <target name="html" description="build python docs">
+    <exec executable="make" dir="${docs}">
+      <arg value="clean"/>
+      <arg value="html"/>
+    </exec>
+  </target>
+
+</project>
