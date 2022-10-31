@@ -794,6 +794,7 @@ class ConnectionDetails:
    ClientListener listening to the related LightstreamerClient.
    
    :param serverAddress: The full address of Lightstreamer Server. A None value can also be used, to restore the default value. 
+   
    An IPv4 or IPv6 can also be used in place of a hostname. Some examples of valid values include: ::
     
     http://push.mycompany.com
