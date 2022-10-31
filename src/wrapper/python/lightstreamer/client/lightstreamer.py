@@ -1001,6 +1001,7 @@ class ConnectionOptions:
     """Inquiry method that gets the length expressed in bytes to be used by the Server for the response body on a HTTP stream connection.
 
    :return: The length to be used by the Server for the response body on a HTTP stream connection
+   
    .. seealso:: :meth:`setContentLength`
    """
     pass
@@ -2547,7 +2548,7 @@ differences based on the Subscription status:
     :raises IllegalStateException: if the Subscription was initialized with a "Field List" or was not initialized at all.
     :raises IllegalStateException: if the Subscription mode is not COMMAND
     :return: the "Field Schema" to be subscribed to through the server.
-    
+
     .. seealso:: :meth:`Subscription.setCommandSecondLevelFieldSchema`
     """
     pass
