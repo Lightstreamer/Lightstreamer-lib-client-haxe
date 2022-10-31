@@ -8,7 +8,6 @@
 --main TestCore
 
 --python bin-test/python/test-core.py
---cmd python3 bin-test/python/test-core.py
 
 -D LS_HAS_PROXY
 -D LS_HAS_COOKIES

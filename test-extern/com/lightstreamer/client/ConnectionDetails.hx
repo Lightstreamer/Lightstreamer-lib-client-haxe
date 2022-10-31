@@ -1,7 +1,7 @@
 package com.lightstreamer.client;
 
 #if python
-@:pythonImport("lightstreamer_client", "ConnectionDetails")
+@:pythonImport("lightstreamer.client", "ConnectionDetails")
 #end
 #if js @:native("ConnectionDetails") #end
 extern class ConnectionDetails {

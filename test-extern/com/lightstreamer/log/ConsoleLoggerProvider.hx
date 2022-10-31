@@ -1,7 +1,7 @@
 package com.lightstreamer.log;
 
 #if python
-@:pythonImport("lightstreamer_client", "ConsoleLogLevel")
+@:pythonImport("lightstreamer.client", "ConsoleLogLevel")
 #end
 #if js @:native("ConsoleLogLevel") #end
 extern class ConsoleLogLevel {
@@ -14,7 +14,7 @@ extern class ConsoleLogLevel {
 }
 
 #if python
-@:pythonImport("lightstreamer_client", "ConsoleLoggerProvider")
+@:pythonImport("lightstreamer.client", "ConsoleLoggerProvider")
 #end
 #if js @:native("ConsoleLoggerProvider") #end
 extern class ConsoleLoggerProvider implements LoggerProvider {

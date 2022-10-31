@@ -1,7 +1,7 @@
 package com.lightstreamer.client;
 
 #if python
-@:pythonImport("lightstreamer_client", "ClientMessageListener")
+@:pythonImport("lightstreamer.client", "ClientMessageListener")
 #end
 #if js @:native("ClientMessageListener") #end
 extern interface ClientMessageListener {

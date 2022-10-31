@@ -12,7 +12,7 @@ You can install the Lightstreamer Client SDK from [PyPI](https://pypi.org/projec
 python -m pip install lightstreamer-client-lib
 ```
 
-The sdk is supported on Python 3.9 and above.
+The sdk is supported on Python 3.7 and above.
 
 ## Quickstart
 
@@ -20,7 +20,7 @@ To connect to a Lightstreamer Server, a [LightstreamerClient](https://lightstrea
 A minimal version of the code that creates a LightstreamerClient and connects to the Lightstreamer Server on *https://push.lightstreamer.com* will look like this:
 
 ```python
-from lightstreamer_client import *
+from lightstreamer.client import *
 
 client = LightstreamerClient("http://push.lightstreamer.com/","DEMO")
 client.connect()
@@ -51,7 +51,7 @@ sub.addListener(SubListener())
 Below is the complete Python code:
 
 ```python
-from lightstreamer_client import *
+from lightstreamer.client import *
 
 sub = Subscription("MERGE",["item1","item2","item3"],["stock_name","last_price"])
 sub.setDataAdapter("QUOTE_ADAPTER")

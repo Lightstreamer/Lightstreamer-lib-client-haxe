@@ -9,7 +9,7 @@ final deps = Path.of("tools/dependencies/python");
 final res = Path.of("tools/release/python");
 final bin = Path.of("bin/python");
 final dist = Path.of("dist/python/lightstreamer-client");
-final dist_src = Path.of("dist/python/lightstreamer-client/src/lightstreamer_client");
+final dist_src = Path.of("dist/python/lightstreamer-client/src/lightstreamer/client");
 
 function main() {
   var args = Sys.args();

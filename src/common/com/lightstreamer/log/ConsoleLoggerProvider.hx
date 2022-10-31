@@ -39,6 +39,9 @@ private class ConsoleLogger implements Logger {
   final warnEnabled: Bool;
   final errorEnabled: Bool;
   final fatalEnabled: Bool;
+  #if python
+  static final logger = com.lightstreamer.internal.Logging.getLogger("lightstreamer");
+  #end
 
   public function new(level: Int, category: String) {
     this.level = level;
@@ -59,8 +62,7 @@ private class ConsoleLogger implements Logger {
     #end
   }
 
-  @:access(haxe.Exception.caught)
-  function log(level: String, line: String, ?exception: NativeException) {
+  function format(level: String, line: String) {
     #if java
     var javaTime = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
     var msg = '$javaTime|$level|$category|${java.lang.Thread.currentThread().getName()}|$line';
@@ -75,45 +77,108 @@ private class ConsoleLogger implements Logger {
     var now = Date.now().toString();
     var msg = '$now|$level|$category|$line';
     #end
+    return msg;
+  }
+
+  inline function logFatal(msg: String) {
+    #if python
+    logger.critical(msg);
+    #else
     printLog(msg);
-    if (exception != null) {
-      printLog(exception.details());
-    }
+    #end
+  }
+
+  inline function logError(msg: String) {
+    #if python
+    logger.error(msg);
+    #else
+    printLog(msg);
+    #end
+  }
+
+  inline function logWarn(msg: String) {
+    #if python
+    logger.warning(msg);
+    #else
+    printLog(msg);
+    #end
+  }
+
+  inline function logInfo(msg: String) {
+    #if python
+    logger.info(msg);
+    #else
+    printLog(msg);
+    #end
+  }
+
+  inline function logDebug(msg: String) {
+    #if python
+    logger.debug(msg);
+    #else
+    printLog(msg);
+    #end
+  }
+
+  inline function logTrace(msg: String) {
+    #if python
+    logger.debug(msg);
+    #else
+    printLog(msg);
+    #end
   }
 
   public function fatal(line: String, ?exception: NativeException): Void {
     if (this.fatalEnabled) {
-      log("FATAL", line, exception);
+      logFatal(format("FATAL", line));
+      if (exception != null) {
+        logFatal(exception.details());
+      }
     }
   }
 
   public function error(line: String, ?exception: NativeException): Void {
     if (this.errorEnabled) {
-      log("ERROR", line, exception);
+      logError(format("ERROR", line));
+      if (exception != null) {
+        logError(exception.details());
+      }
     }
   }
 
   public function warn(line: String, ?exception: NativeException): Void {
     if (this.warnEnabled) {
-      log("WARN ", line, exception);
+      logWarn(format("WARN ", line));
+      if (exception != null) {
+        logWarn(exception.details());
+      }
     }
   }
 
   public function info(line: String, ?exception: NativeException): Void {
     if (this.infoEnabled) {
-      log("INFO ", line, exception);
+      logInfo(format("INFO ", line));
+      if (exception != null) {
+        logInfo(exception.details());
+      }
     }
   }
 
   public function debug(line: String, ?exception: NativeException): Void {
     if (this.debugEnabled) {
-      log("DEBUG", line, exception);
+      logDebug(format("DEBUG", line));
+      if (exception != null) {
+        logDebug(exception.details());
+      }
     }
   }
 
   public function trace(line: String, ?exception: NativeException): Void {
     if (this.traceEnabled) {
-      log("TRACE", line, exception);
+      logTrace(format("TRACE", line));
+      if (exception != null) {
+        logTrace(exception.details());
+      }
     }
   }
 

@@ -2,8 +2,8 @@ test.common.hxml
 --class-path src/platform/python
 --class-path src/extern/python
 
---python bin-test/python/lightstreamer.py
---cmd python3 bin-test/python/lightstreamer.py
+--python bin-test/python/test-all.py
+--cmd python3 bin-test/python/test-all.py
 
 -D LS_HAS_PROXY
 -D LS_HAS_COOKIES

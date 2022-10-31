@@ -8,8 +8,10 @@ import com.lightstreamer.client.internal.*;
 class TestAll {
 
   static function buildSuite(runner: Runner) {
-    LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(
-      #if LOG_DEBUG ConsoleLogLevel.DEBUG #else ConsoleLogLevel.ERROR #end));
+    #if python
+    Logging.basicConfig({level: Logging.DEBUG, format: "%(message)s", stream: python.lib.Sys.stdout});
+    #end
+    LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.ERROR));
     #if java
     utils.TestTools.enableOkHttpLogger();
     #end
