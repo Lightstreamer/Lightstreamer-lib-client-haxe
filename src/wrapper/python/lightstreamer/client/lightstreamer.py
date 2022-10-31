@@ -2063,6 +2063,7 @@ Note that all of the methods used to describe the subscription to the server can
     added to this client.
 
     :return: a list containing the listeners that were added to this client. 
+
     .. seealso:: :meth:`addListener`
     """
     pass
@@ -2494,6 +2495,7 @@ differences based on the Subscription status:
     :raises IllegalStateException: if the Subscription was initialized with a "Field Schema" or was not initialized at all.
     :raises IllegalStateException: if the Subscription mode is not COMMAND
     :return: the list of fields to be subscribed to through the server.
+
     .. seealso:: :meth:`Subscription.setCommandSecondLevelFields`
     """
     pass
@@ -2545,6 +2547,7 @@ differences based on the Subscription status:
     :raises IllegalStateException: if the Subscription was initialized with a "Field List" or was not initialized at all.
     :raises IllegalStateException: if the Subscription mode is not COMMAND
     :return: the "Field Schema" to be subscribed to through the server.
+    
     .. seealso:: :meth:`Subscription.setCommandSecondLevelFieldSchema`
     """
     pass
