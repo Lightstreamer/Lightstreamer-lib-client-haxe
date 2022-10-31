@@ -845,8 +845,7 @@ class ConnectionDetails:
       """ Inquiry method that gets the username to be used for the authentication on Lightstreamer Server when 
    initiating the session.
    
-   :return: the username to be used for the authentication on Lightstreamer Server; returns None if no 
-   user name has been configured.
+   :return: the username to be used for the authentication on Lightstreamer Server; returns None if no user name has been configured.
    """
       pass
 
