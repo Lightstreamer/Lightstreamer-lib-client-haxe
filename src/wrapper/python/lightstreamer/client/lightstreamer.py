@@ -76,7 +76,7 @@ class ClientListener:
        * The session was closed on the Server side (via software or by the administrator) (32), or through a client "destroy" request (31);
        * The Metadata Adapter imposes limits on the overall open sessions for the current user and has requested the closure of the current session upon opening of a new session for the same user on a different browser window (35);
        * An unexpected error occurred on the Server while the session was in activity (33, 34);
-       * An unknown or unexpected cause; any code different from the ones identified in the above cases could be issued. A detailed description for the specific cause is currently not supplied (i.e. errorMessage is null in this case).
+       * An unknown or unexpected cause; any code different from the ones identified in the above cases could be issued. A detailed description for the specific cause is currently not supplied (i.e. errorMessage is None in this case).
      
      * 60 - this version of the client is not allowed by the current license terms.
      * 61 - there was an error in the parsing of the server response thus the client cannot continue with the current session.
@@ -260,7 +260,7 @@ class SubscriptionListener:
             * 68 - the Server could not fulfill the request because of an internal error.
             * <= 0 - the Metadata Adapter has refused the subscription or unsubscription request; the code value is dependent on the specific Metadata Adapter implementation
           
-   :param message: The description of the error sent by the Server; it can be null.
+   :param message: The description of the error sent by the Server; it can be None.
    
    .. seealso:: :meth:`ConnectionDetails.setAdapterSet`
    """
@@ -297,7 +297,7 @@ class SubscriptionListener:
    This kind of notification is not possible for second-level items (which are in MERGE 
    mode).
    
-   :param itemName: name of the involved item. If the Subscription was initialized using an "Item Group" then a null value is supplied.
+   :param itemName: name of the involved item. If the Subscription was initialized using an "Item Group" then a None value is supplied.
    :param itemPos: 1-based position of the item within the "Item List" or "Item Group".
    """
     pass
@@ -324,7 +324,7 @@ class SubscriptionListener:
    (which are in MERGE mode) can be received both before and after this notification.
    
    :param itemName: name of the involved item. If the Subscription was initialized using an "Item Group" then a 
-          null value is supplied.
+          None value is supplied.
    :param itemPos: 1-based position of the item within the "Item List" or "Item Group".
    
    .. seealso:: :meth:`Subscription.setRequestedSnapshot`
@@ -345,7 +345,7 @@ class SubscriptionListener:
    
    By implementing this method it is possible to perform recovery actions.
    
-   :param itemName: name of the involved item. If the Subscription was initialized using an "Item Group" then a null value is supplied.
+   :param itemName: name of the involved item. If the Subscription was initialized using an "Item Group" then a None value is supplied.
    :param itemPos: 1-based position of the item within the "Item List" or "Item Group".
    :param lostUpdates: The number of consecutive updates dropped for the item.
    
@@ -368,7 +368,7 @@ class SubscriptionListener:
    Note that a maximum update frequency (that is, a non-unlimited one) may be applied by the Server
    even when the subscription mode is RAW or the Subscription was done with unfiltered dispatching.
    
-   :param frequency:  A decimal number, representing the maximum frequency applied by the Server (expressed in updates per second), or the string "unlimited". A null value is possible in rare cases, when the frequency can no longer be determined.
+   :param frequency:  A decimal number, representing the maximum frequency applied by the Server (expressed in updates per second), or the string "unlimited". A None value is possible in rare cases, when the frequency can no longer be determined.
    """
     pass
 
@@ -392,7 +392,7 @@ class SubscriptionListener:
             * 68 - the Server could not fulfill the request because of an internal error.
             * <= 0 - the Metadata Adapter has refused the subscription or unsubscription request; the code value is dependent on the specific Metadata Adapter implementation
 
-   :param message: The description of the error sent by the Server; it can be null.
+   :param message: The description of the error sent by the Server; it can be None.
    :param key: The value of the key that identifies the second-level item.
    
    .. seealso:: :meth:`ConnectionDetails.setAdapterSet`
@@ -448,7 +448,7 @@ class ItemUpdate:
  fields are always the union of the first-level and second-level fields and each single update 
  can only change either the first-level or the second-level fields (but for the "command" field, 
  which is first-level and is always set to "UPDATE" upon a second-level update); note 
- that the second-level field values are always null until the first second-level update 
+ that the second-level field values are always None until the first second-level update 
  occurs). When the two-level behavior is enabled, in all methods where a field name has to 
  be supplied, the following convention should be followed:
 
@@ -459,7 +459,7 @@ class ItemUpdate:
   def getItemName(self):
     """Inquiry method that retrieves the name of the item to which this update pertains. 
  
-   The name will be null if the related Subscription was initialized using an "Item Group".
+   The name will be None if the related Subscription was initialized using an "Item Group".
 
    :return: The name of the item to which this update pertains.
 
@@ -499,9 +499,9 @@ class ItemUpdate:
 
   :param fieldNameOrPos: The field name or the 1-based position of the field within the "Field List" or "Field Schema".
 
-  :return: The value of the specified field; it can be null in the following cases:
+  :return: The value of the specified field; it can be None in the following cases:
   
-    * a null value has been received from the Server, as null is a possible value for a field;
+    * a None value has been received from the Server, as None is a possible value for a field;
     * no value has been received for the field yet;
     * the item is subscribed to with the COMMAND mode and a DELETE command is received (only the fields used to carry key and command information are valued).
   
@@ -542,13 +542,13 @@ class ItemUpdate:
         
 Note that the last condition can be enforced by leveraging the Server's <jsonpatch_min_length> configuration flag, so that the availability of the JSON Patch form would only depend on the Client and the Data Adapter.
     
-When the above conditions are not met, the method just returns null; in this case, the new value can only be determined through :meth:`ItemUpdate.getValue`. For instance, this will always be needed to get the first value received.
+When the above conditions are not met, the method just returns None; in this case, the new value can only be determined through :meth:`ItemUpdate.getValue`. For instance, this will always be needed to get the first value received.
         
 :raises IllegalArgumentException: if the specified field is not part of the Subscription.
         
 :param fieldNameOrPos: The field name or the 1-based position of the field within the "Field List" or "Field Schema".
         
-:return: A JSON Patch structure representing the difference between the new value and the previous one, or null if the difference in JSON Patch format is not available for any reason.
+:return: A JSON Patch structure representing the difference between the new value and the previous one, or None if the difference in JSON Patch format is not available for any reason.
         
 .. seealso:: :meth:`ItemUpdate.getValue`
     """
@@ -559,7 +559,7 @@ When the above conditions are not met, the method just returns null; in this cas
    The related field name is used as key for the values in the map. 
    Note that if the Subscription mode of the involved Subscription is COMMAND, then changed fields 
    are meant as relative to the previous update for the same key. On such tables if a DELETE command 
-   is received, all the fields, excluding the key field, will be present as changed, with null value. 
+   is received, all the fields, excluding the key field, will be present as changed, with None value. 
    All of this is also true on tables that have the two-level behavior enabled, but in case of 
    DELETE commands second-level fields will not be iterated.
    
@@ -577,7 +577,7 @@ When the above conditions are not met, the method just returns null; in this cas
    The 1-based field position within the field schema or field list is used as key for the values in the map. 
    Note that if the Subscription mode of the involved Subscription is COMMAND, then changed fields 
    are meant as relative to the previous update for the same key. On such tables if a DELETE command 
-   is received, all the fields, excluding the key field, will be present as changed, with null value. 
+   is received, all the fields, excluding the key field, will be present as changed, with None value. 
    All of this is also true on tables that have the two-level behavior enabled, but in case of 
    DELETE commands second-level fields will not be iterated.
    
@@ -793,7 +793,7 @@ class ConnectionDetails:
    :meth:`ClientListener.onPropertyChange` with argument "serverAddress" on any 
    ClientListener listening to the related LightstreamerClient.
    
-   :param serverAddress: The full address of Lightstreamer Server. A null value can also be used, to restore the default value. 
+   :param serverAddress: The full address of Lightstreamer Server. A None value can also be used, to restore the default value. 
    An IPv4 or IPv6 can also be used in place of a hostname. Some examples of valid values include: ::
     
     http://push.mycompany.com
@@ -810,7 +810,7 @@ class ConnectionDetails:
       """Inquiry method that gets the name of the Adapter Set (which defines the Metadata Adapter and one or several 
    Data Adapters) mounted on Lightstreamer Server that supply all the items used in this application.
    
-   :return: the adapterSet the name of the Adapter Set; returns null if no name has been configured, that 
+   :return: the adapterSet the name of the Adapter Set; returns None if no name has been configured, that 
    means that the "DEFAULT" Adapter Set is used.
    
    .. seealso:: :meth:`setAdapterSet`
@@ -837,7 +837,7 @@ class ConnectionDetails:
    :meth:`ClientListener.onPropertyChange` with argument "adapterSet" on any 
    ClientListener listening to the related LightstreamerClient.
    
-   :param adapterSet: The name of the Adapter Set to be used. A null value is equivalent to the "DEFAULT" name.
+   :param adapterSet: The name of the Adapter Set to be used. A None value is equivalent to the "DEFAULT" name.
       """
       pass
 
@@ -845,7 +845,7 @@ class ConnectionDetails:
       """ Inquiry method that gets the username to be used for the authentication on Lightstreamer Server when 
    initiating the session.
    
-   :return: the username to be used for the authentication on Lightstreamer Server; returns null if no 
+   :return: the username to be used for the authentication on Lightstreamer Server; returns None if no 
    user name has been configured.
    """
       pass
@@ -865,7 +865,7 @@ class ConnectionDetails:
    :meth:`ClientListener.onPropertyChange` with argument "user" on any 
    ClientListener listening to the related LightstreamerClient.
    
-   :param user: The username to be used for the authentication on Lightstreamer Server. The username can be null.
+   :param user: The username to be used for the authentication on Lightstreamer Server. The username can be None.
    
    .. seealso:: :meth:`setPassword`
    """
@@ -892,7 +892,7 @@ class ConnectionDetails:
    ClientListener listening to the related LightstreamerClient.
    
    :param password: The password to be used for the authentication on Lightstreamer Server. 
-          The password can be null.
+          The password can be None.
           
    .. seealso:: :meth:`setUser`
       """
@@ -916,7 +916,7 @@ class ConnectionDetails:
    identify various Server instances; in order to ensure that all requests related to a session are issued to 
    the same Server instance, the Server can answer to the session opening request by providing an address which 
    uniquely identifies its own instance. When this is the case, this address is returned by the method; otherwise,
-   null is returned. 
+   None is returned. 
  
    Note that the addresses will always have the http: or https: scheme. In case WebSockets are used, the specified 
    scheme is internally converted to match the related WebSocket protocol (i.e. http becomes ws while 
@@ -950,14 +950,14 @@ class ConnectionDetails:
    **general edition note** Server Clustering is an optional feature, available depending on Edition and License Type.
    To know what features are enabled by your license, please see the License tab of the Monitoring Dashboard (by default, available at /dashboard).
    
-   **lifecycle** If a session is not currently active, null is returned;
+   **lifecycle** If a session is not currently active, None is returned;
    soon after a session is established, the value will become available.
    
    **notification** A change to this setting will be notified through a call to 
    :meth:`ClientListener.onPropertyChange` with argument "serverSocketName" on any 
    ClientListener listening to the related LightstreamerClient.
    
-   :return: name configured for the Server instance which is managing the current session, or null.
+   :return: name configured for the Server instance which is managing the current session, or None.
    """
       pass
 
@@ -971,7 +971,7 @@ class ConnectionDetails:
    Note that in case of polling or in case rebind requests are needed, subsequent requests related to the same 
    session may, in principle, expose a different IP address to the Server; these changes would not be reported.
    
-   **lifecycle** If a session is not currently active, null is returned;
+   **lifecycle** If a session is not currently active, None is returned;
    soon after a session is established, the value may become available; but it is possible
    that this information is not provided by the Server and that it will never be available.
    
@@ -979,7 +979,7 @@ class ConnectionDetails:
    :meth:`ClientListener.onPropertyChange` with argument "clientIp" on any 
    ClientListener listening to the related LightstreamerClient.
    
-   :return:  A canonical representation of an IP address (it can be either IPv4 or IPv6), or null.
+   :return:  A canonical representation of an IP address (it can be either IPv4 or IPv6), or None.
    """
       pass
 
@@ -1066,7 +1066,7 @@ class ConnectionOptions:
   def getForcedTransport(self):
     """Inquiry method that gets the value of the forced transport (if any).
 
-   :return: The forced transport or null
+   :return: The forced transport or None
 
    .. seealso:: :meth:`setForcedTransport`
    """
@@ -1086,7 +1086,7 @@ class ConnectionOptions:
    Note that if the Stream-Sense algorithm is disabled, the client may still enter the "CONNECTED:STREAM-SENSING" status; 
    however, in that case, if it eventually finds out that streaming is not possible, no recovery will be tried.
    
-   **default** null (full Stream-Sense enabled).
+   **default** None (full Stream-Sense enabled).
    
    **lifecycle** This method can be called at any time. If called while the client is connecting or connected it will instruct 
    to switch connection type to match the given configuration.
@@ -1097,9 +1097,9 @@ class ConnectionOptions:
    
    :param forcedTransport: can be one of the following: 
    
-    * null: the Stream-Sense algorithm is enabled and the client will automatically connect using the most appropriate transport and connection type among those made possible by the environment.
-    * "WS": the Stream-Sense algorithm is enabled as in the null case but the client will only use WebSocket based connections. If a connection over WebSocket is not possible because of the environment the client will not connect at all.
-    * "HTTP": the Stream-Sense algorithm is enabled as in the null case but the client will only use HTTP based connections. If a connection over HTTP is not possible because of the environment the client will not connect at all.
+    * None: the Stream-Sense algorithm is enabled and the client will automatically connect using the most appropriate transport and connection type among those made possible by the environment.
+    * "WS": the Stream-Sense algorithm is enabled as in the None case but the client will only use WebSocket based connections. If a connection over WebSocket is not possible because of the environment the client will not connect at all.
+    * "HTTP": the Stream-Sense algorithm is enabled as in the None case but the client will only use HTTP based connections. If a connection over HTTP is not possible because of the environment the client will not connect at all.
     * "WS-STREAMING": the Stream-Sense algorithm is disabled and the client will only connect on Streaming over WebSocket. If Streaming over WebSocket is not possible because of the environment the client will not connect at all.
     * "HTTP-STREAMING": the Stream-Sense algorithm is disabled and the client will only connect on Streaming over HTTP. If Streaming over HTTP is not possible because of the browser/environment the client will not connect at all.
     * "WS-POLLING": the Stream-Sense algorithm is disabled and the client will only connect on Polling over WebSocket. If Polling over WebSocket is not possible because of the environment the client will not connect at all.
@@ -1128,7 +1128,7 @@ For instance, you cannot use this method to specify custom cookies to be sent to
 The use of custom headers might also cause the
 client to send an OPTIONS request to the server before opening the actual connection. 
    
-**default** null (meaning no extra headers are sent).
+**default** None (meaning no extra headers are sent).
    
 **lifecycle** This setting should be performed before calling the
 :meth:`LightstreamerClient.connect` method. However, the value can be changed
@@ -1138,7 +1138,7 @@ at any time: the supplied value will be used for the next HTTP request or WebSoc
 :meth:`ClientListener.onPropertyChange` with argument "httpExtraHeaders" on any 
 ClientListener listening to the related LightstreamerClient.
    
-:param httpExtraHeaders: a Map object containing header-name header-value pairs. Null can be specified to avoid extra headers to be sent.
+:param httpExtraHeaders: a Map object containing header-name header-value pairs. None can be specified to avoid extra headers to be sent.
    """
     pass
 
@@ -1269,11 +1269,11 @@ ClientListener listening to the related LightstreamerClient.
    or because bandwidth management is not supported (in this case it is always "unlimited"),
    but also because of number rounding.
    
-   **lifecycle** If a connection to Lightstreamer Server is not currently active, null is returned;
+   **lifecycle** If a connection to Lightstreamer Server is not currently active, None is returned;
    soon after the connection is established, the value becomes available, as notified
    by a call to :meth:`ClientListener.onPropertyChange` with argument "realMaxBandwidth".
    
-   :return:  A decimal number, which represents the maximum bandwidth applied by the Server for the streaming or polling connection expressed in kbps (kilobits/sec), or the string "unlimited", or null.
+   :return:  A decimal number, which represents the maximum bandwidth applied by the Server for the streaming or polling connection expressed in kbps (kilobits/sec), or the string "unlimited", or None.
    
    .. seealso:: :meth:`setRequestedMaxBandwidth`
    """
@@ -1646,7 +1646,7 @@ ClientListener listening to the related LightstreamerClient.
   def setProxy(self,proxy):
     """Setter method that configures the coordinates to a proxy server to be used to connect to the Lightstreamer Server. 
    
-   **default** null (meaning not to pass through a proxy).
+   **default** None (meaning not to pass through a proxy).
    
    **lifecycle** This value can be set and changed at any time. the supplied value will 
    be used for the next connection attempt.
@@ -1655,7 +1655,7 @@ ClientListener listening to the related LightstreamerClient.
    :meth:`ClientListener.onPropertyChange` with argument "proxy" on any 
    ClientListener listening to the related LightstreamerClient.
    
-   :param proxy: The proxy configuration. Specify null to avoid using a proxy.
+   :param proxy: The proxy configuration. Specify None to avoid using a proxy.
    """
     pass
 
@@ -1678,8 +1678,8 @@ class LightstreamerClient:
 
  :ivar connectionDetails: Data object that contains the details needed to open a connection to a Lightstreamer Server. This instance is set up by the LightstreamerClient object at its own creation. Properties of this object can be overwritten by values received from a Lightstreamer Server. 
 
- :param serverAddress: the address of the Lightstreamer Server to which this LightstreamerClient will connect to. It is possible to specify it later by using null here. See :meth:`ConnectionDetails.setServerAddress` for details.
- :param adapterSet: the name of the Adapter Set mounted on Lightstreamer Server to be used to handle all requests in the Session associated with this LightstreamerClient. It is possible not to specify it at all or to specify it later by using null here. See :meth:`ConnectionDetails.setAdapterSet` for details.
+ :param serverAddress: the address of the Lightstreamer Server to which this LightstreamerClient will connect to. It is possible to specify it later by using None here. See :meth:`ConnectionDetails.setServerAddress` for details.
+ :param adapterSet: the name of the Adapter Set mounted on Lightstreamer Server to be used to handle all requests in the Session associated with this LightstreamerClient. It is possible not to specify it at all or to specify it later by using None here. See :meth:`ConnectionDetails.setAdapterSet` for details.
 
  :raises IllegalArgumentException: if a not valid address is passed. See :meth:`ConnectionDetails.setServerAddress` for details.
  """
@@ -1853,7 +1853,7 @@ class LightstreamerClient:
    connection.
    
    :param message: a text message, whose interpretation is entirely demanded to the Metadata Adapter associated to the current connection.
-   :param sequence: an alphanumeric identifier, used to identify a subset of messages to be managed in sequence; underscore characters are also allowed. If the "UNORDERED_MESSAGES" identifier is supplied, the message will be processed in the special way described above. The parameter is optional; if set to null, "UNORDERED_MESSAGES" is used as the sequence name. 
+   :param sequence: an alphanumeric identifier, used to identify a subset of messages to be managed in sequence; underscore characters are also allowed. If the "UNORDERED_MESSAGES" identifier is supplied, the message will be processed in the special way described above. The parameter is optional; if set to None, "UNORDERED_MESSAGES" is used as the sequence name. 
    :param delayTimeout: a timeout, expressed in milliseconds. If higher than the Server configured timeout on missing messages, the latter will be used instead. The parameter is optional; if a negative value is supplied, the Server configured timeout on missing messages will be applied. This timeout is ignored for the special "UNORDERED_MESSAGES" sequence, although a server-side timeout on missing messages still applies.
    :param listener: an object suitable for receiving notifications about the processing outcome. The parameter is optional; if not supplied, no notification will be available.
    :param enqueueWhileDisconnected: if this flag is set to true, and the client is in a disconnected status when the provided message is handled, then the message is not aborted right away but is queued waiting for a new session. Note that the message can still be aborted later when a new session is established.
@@ -1940,7 +1940,7 @@ The following categories are available to be consumed:
      
 **lifecycle** This method should be invoked before calling the :meth:`LightstreamerClient.connect` method. However it can be invoked at any time; it will affect the internal cookie set immediately and the sending of cookies on the next HTTP request or WebSocket establishment.
    
-:param uri: the URI from which the supplied cookies were received. It cannot be null.
+:param uri: the URI from which the supplied cookies were received. It cannot be None.
    
 :param cookies: an instance of http.cookies.SimpleCookie.
    
@@ -1954,9 +1954,9 @@ The following categories are available to be consumed:
    
 See :meth:`addCookies` for clarifications on when cookies are directly stored by the library and when not.
 
-:param uri: the URI to which the cookies should be sent, or null.
+:param uri: the URI to which the cookies should be sent, or None.
    
-:return: a list with the various cookies that can be sent in a HTTP request for the specified URI. If a null URI was supplied, all available non-expired cookies will be returned.
+:return: a list with the various cookies that can be sent in a HTTP request for the specified URI. If a None URI was supplied, all available non-expired cookies will be returned.
 :rtype: http.cookies.SimpleCookie
    """
     pass
@@ -1968,7 +1968,7 @@ See :meth:`addCookies` for clarifications on when cookies are directly stored by
 **lifecycle** May be called only once before creating any LightstreamerClient instance.
    
 :param factory: an instance of ssl.SSLContext
-:raises NullPointerException: if the factory is null
+:raises NullPointerException: if the factory is None
 :raises IllegalStateException: if a factory is already installed
    """
     pass
@@ -2025,7 +2025,7 @@ Note that all of the methods used to describe the subscription to the server can
 :param fields: an array of fields for the items to be subscribed to through Lightstreamer Server. It is also possible to specify the "Field List" or "Field Schema" later through :meth:`setFields` and :meth:`setFieldSchema`.
 
 :raises IllegalArgumentException: If no or invalid subscription mode is passed.
-:raises IllegalArgumentException: If either the items or the fields array is left null.
+:raises IllegalArgumentException: If either the items or the fields array is left None.
 :raises IllegalArgumentException: If the specified "Item List" or "Field List" is not valid; see :meth:`setItems` and :meth:`setFields` for details.
   """
 
@@ -2103,7 +2103,7 @@ Note that all of the methods used to describe the subscription to the server can
     Subscription through :meth:`setDataAdapter`.
     **lifecycle** This method can be called at any time.
 
-    :return: the name of the Data Adapter; returns null if no name has been configured, so that the "DEFAULT" Adapter Set is used.
+    :return: the name of the Data Adapter; returns None if no name has been configured, so that the "DEFAULT" Adapter Set is used.
     """
     pass
 
@@ -2130,7 +2130,7 @@ Note that all of the methods used to describe the subscription to the server can
     
     :raises IllegalStateException: if the Subscription is currently "active".
     
-    :param dataAdapter: the name of the Data Adapter. A null value is equivalent to the "DEFAULT" name.
+    :param dataAdapter: the name of the Data Adapter. A None value is equivalent to the "DEFAULT" name.
      
     .. seealso:: :meth:`ConnectionDetails.setAdapterSet`
     """
@@ -2169,7 +2169,7 @@ Note that all of the methods used to describe the subscription to the server can
     **lifecycle** This method can only be called while the Subscription
     instance is in its "inactive" state.
     
-    :raises IllegalArgumentException: if any of the item names in the "Item List" contains a space or is a number or is empty/null.
+    :raises IllegalArgumentException: if any of the item names in the "Item List" contains a space or is a number or is empty/None.
     :raises IllegalStateException: if the Subscription is currently "active".
     
     :param items: an array of items to be subscribed to through the server. 
@@ -2224,7 +2224,7 @@ Note that all of the methods used to describe the subscription to the server can
     **lifecycle** This method can only be called while the Subscription
     instance is in its "inactive" state.
     
-    :raises IllegalArgumentException: if any of the field names in the list contains a space or is empty/null.
+    :raises IllegalArgumentException: if any of the field names in the list contains a space or is empty/None.
     :raises IllegalStateException: if the Subscription is currently "active".
     
     :param fields: an array of fields to be subscribed to through the server. 
@@ -2265,7 +2265,7 @@ Note that all of the methods used to describe the subscription to the server can
     
     **lifecycle** This method can be called at any time.
     
-    :return:  An integer number, representing the buffer size to be requested to the server, or the string "unlimited", or null.
+    :return:  An integer number, representing the buffer size to be requested to the server, or the string "unlimited", or None.
     """
     pass
 
@@ -2279,7 +2279,7 @@ Note that all of the methods used to describe the subscription to the server can
     not been requested. Note that the Server may pose an upper limit on the
     size of its internal buffers.
     
-    **default** null, meaning to lean on the Server default based on the subscription
+    **default** None, meaning to lean on the Server default based on the subscription
     mode. This means that the buffer size will be 1 for MERGE 
     subscriptions and "unlimited" for DISTINCT subscriptions. See 
     the "General Concepts" document for further details.
@@ -2288,9 +2288,9 @@ Note that all of the methods used to describe the subscription to the server can
     instance is in its "inactive" state.
     
     :raises IllegalStateException: if the Subscription is currently "active".
-    :raises IllegalArgumentException: if the specified value is not null nor "unlimited" nor a valid positive integer number.
+    :raises IllegalArgumentException: if the specified value is not None nor "unlimited" nor a valid positive integer number.
     
-    :param size:  An integer number, representing the length of the internal queuing buffers to be used in the Server. If the string "unlimited" is supplied, then no buffer size limit is requested (the check is case insensitive). It is also possible to supply a null value to stick to the Server default (which currently depends on the subscription mode).
+    :param size:  An integer number, representing the length of the internal queuing buffers to be used in the Server. If the string "unlimited" is supplied, then no buffer size limit is requested (the check is case insensitive). It is also possible to supply a None value to stick to the Server default (which currently depends on the subscription mode).
     
     .. seealso:: :meth:`Subscription.setRequestedMaxFrequency`
     """
@@ -2303,7 +2303,7 @@ Note that all of the methods used to describe the subscription to the server can
     
     **lifecycle** This method can be called at any time.
     
-    :return:  "yes", "no", null, or an integer number.
+    :return:  "yes", "no", None, or an integer number.
     """
     pass
 
@@ -2313,20 +2313,20 @@ Note that all of the methods used to describe the subscription to the server can
     Subscription mode is MERGE, DISTINCT or COMMAND.
     
     **default** "yes" if the Subscription mode is not "RAW",
-    null otherwise.
+    None otherwise.
     
     **lifecycle** This method can only be called while the Subscription
     instance is in its "inactive" state.
     
     :raises IllegalStateException: if the Subscription is currently "active".
-    :raises IllegalArgumentException: if the specified value is not "yes" nor "no" nor null nor a valid integer positive number.
+    :raises IllegalArgumentException: if the specified value is not "yes" nor "no" nor None nor a valid integer positive number.
     :raises IllegalArgumentException: if the specified value is not compatible with the mode of the Subscription: 
     
-      * In case of a RAW Subscription only null is a valid value;
-      * In case of a non-DISTINCT Subscription only null "yes" and "no" are valid values.
+      * In case of a RAW Subscription only None is a valid value;
+      * In case of a non-DISTINCT Subscription only None "yes" and "no" are valid values.
     
     
-    :param required: "yes"/"no" to request/not request snapshot delivery (the check is case insensitive). If the Subscription mode is DISTINCT, instead of "yes", it is also possible to supply an integer number, to specify the requested length of the snapshot (though the length of the received snapshot may be less than requested, because of insufficient data or server side limits); passing "yes"  means that the snapshot length should be determined only by the Server. Null is also a valid value; if specified, no snapshot preference will be sent to the server that will decide itself whether or not to send any snapshot. 
+    :param required: "yes"/"no" to request/not request snapshot delivery (the check is case insensitive). If the Subscription mode is DISTINCT, instead of "yes", it is also possible to supply an integer number, to specify the requested length of the snapshot (though the length of the received snapshot may be less than requested, because of insufficient data or server side limits); passing "yes"  means that the snapshot length should be determined only by the Server. None is also a valid value; if specified, no snapshot preference will be sent to the server that will decide itself whether or not to send any snapshot. 
     
     .. seealso:: :meth:`ItemUpdate.isSnapshot`
     """
@@ -2339,7 +2339,7 @@ Note that all of the methods used to describe the subscription to the server can
     
     **lifecycle** This method can be called at any time.
     
-    :return:  A decimal number, representing the max frequency to be requested to the server (expressed in updates per second), or the strings "unlimited" or "unfiltered", or null.
+    :return:  A decimal number, representing the max frequency to be requested to the server (expressed in updates per second), or the strings "unlimited" or "unfiltered", or None.
     """
     pass
 
@@ -2367,7 +2367,7 @@ to unfiltered dispatching.
 To know what features are enabled by your license, please see the License tab of the
 Monitoring Dashboard (by default, available at /dashboard).
     
-**default** null, meaning to lean on the Server default based on the subscription
+**default** None, meaning to lean on the Server default based on the subscription
 mode. This consists, for all modes, in not applying any frequency 
 limit to the subscription (the same as "unlimited"); see the "General Concepts"
 document for further details.
@@ -2376,13 +2376,13 @@ document for further details.
 differences based on the Subscription status:
     
   * If the Subscription instance is in its "inactive" state then this method can be called at will.
-  * If the Subscription instance is in its "active" state then the method can still be called unless the current value is "unfiltered" or the supplied value is "unfiltered" or null. If the Subscription instance is in its "active" state and the connection to the server is currently open, then a request to change the frequency of the Subscription on the fly is sent to the server.
+  * If the Subscription instance is in its "active" state then the method can still be called unless the current value is "unfiltered" or the supplied value is "unfiltered" or None. If the Subscription instance is in its "active" state and the connection to the server is currently open, then a request to change the frequency of the Subscription on the fly is sent to the server.
     
 :raises IllegalStateException: if the Subscription is currently "active" and the current value of this property is "unfiltered".
-:raises IllegalStateException: if the Subscription is currently "active" and the given parameter is null or "unfiltered".
-:raises IllegalArgumentException: if the specified value is not null nor one of the special "unlimited" and "unfiltered" values nor a valid positive number.
+:raises IllegalStateException: if the Subscription is currently "active" and the given parameter is None or "unfiltered".
+:raises IllegalArgumentException: if the specified value is not None nor one of the special "unlimited" and "unfiltered" values nor a valid positive number.
     
-:param freq:  A decimal number, representing the maximum update frequency (expressed in updates per second) for each item in the Subscription; for instance, with a setting of 0.5, for each single item, no more than one update every 2 seconds will be received. If the string "unlimited" is supplied, then no frequency limit is requested. It is also possible to supply the string "unfiltered", to ask for unfiltered dispatching, if it is allowed for the items, or a null value to stick to the Server default (which currently corresponds to "unlimited"). The check for the string constants is case insensitive.
+:param freq:  A decimal number, representing the maximum update frequency (expressed in updates per second) for each item in the Subscription; for instance, with a setting of 0.5, for each single item, no more than one update every 2 seconds will be received. If the string "unlimited" is supplied, then no frequency limit is requested. It is also possible to supply the string "unfiltered", to ask for unfiltered dispatching, if it is allowed for the items, or a None value to stick to the Server default (which currently corresponds to "unlimited"). The check for the string constants is case insensitive.
     """
     pass
 
@@ -2401,14 +2401,14 @@ differences based on the Subscription status:
     Subscription. The selector is a filter on the updates received. It is
     executed on the Server and implemented by the Metadata Adapter.
     
-    **default** null (no selector).
+    **default** None (no selector).
     
     **lifecycle** This method can only be called while the Subscription
     instance is in its "inactive" state.
     
     :raises IllegalStateException: if the Subscription is currently "active".
     
-    :param selector: name of a selector, to be recognized by the Metadata Adapter, or null to unset the selector.
+    :param selector: name of a selector, to be recognized by the Metadata Adapter, or None to unset the selector.
     """
     pass
 
@@ -2477,7 +2477,7 @@ differences based on the Subscription status:
     :raises IllegalStateException: if the Subscription is currently "active".
     :raises IllegalStateException: if the Subscription mode is not "COMMAND".
     
-    :param dataAdapter: the name of the Data Adapter. A null value is equivalent to the "DEFAULT" name.
+    :param dataAdapter: the name of the Data Adapter. A None value is equivalent to the "DEFAULT" name.
      
     .. seealso:: :meth:`Subscription.setCommandSecondLevelFields`
     .. seealso:: :meth:`Subscription.setCommandSecondLevelFieldSchema`
@@ -2520,12 +2520,12 @@ differences based on the Subscription status:
     key is deleted by a DELETE command on the first-level Subscription, the 
     associated second-level Subscription is also unsubscribed from. 
  
-    Specifying null as parameter will disable the two-level behavior.
+    Specifying None as parameter will disable the two-level behavior.
           
     **lifecycle** This method can only be called while the Subscription
     instance is in its "inactive" state.
     
-    :raises IllegalArgumentException: if any of the field names in the "Field List" contains a space or is empty/null.
+    :raises IllegalArgumentException: if any of the field names in the "Field List" contains a space or is empty/None.
     :raises IllegalStateException: if the Subscription is currently "active".
     :raises IllegalStateException: if the Subscription mode is not "COMMAND".
     
@@ -2571,7 +2571,7 @@ differences based on the Subscription status:
     key is deleted by a DELETE command on the first-level Subscription, the 
     associated second-level Subscription is also unsubscribed from. 
 
-    Specify null as parameter will disable the two-level behavior.
+    Specify None as parameter will disable the two-level behavior.
     
     **lifecycle** This method can only be called while the Subscription
     instance is in its "inactive" state.
@@ -2599,7 +2599,7 @@ Note that internal data is cleared when the Subscription is
 unsubscribed from. 
      
 **lifecycle** This method can be called at any time; if called 
-to retrieve a value that has not been received yet, then it will return null. 
+to retrieve a value that has not been received yet, then it will return None. 
           
 :raises IllegalArgumentException: if an invalid item name or field name is specified or if the specified item position or field position is out of bounds.
      
@@ -2607,7 +2607,7 @@ to retrieve a value that has not been received yet, then it will return null.
      
 :param fieldIdentifier: a String representing a field in the configured field list or a Number representing the 1-based position of the field in the specified field schema. (In case a field list was specified, passing the field position is also possible).
      
-:return: the current value for the specified field of the specified item(possibly null), or null if no value has been received yet.
+:return: the current value for the specified field of the specified item(possibly None), or None if no value has been received yet.
      """
     pass
 
@@ -2618,7 +2618,7 @@ It is suggested to consume real-time data by implementing and adding a proper :c
      
 Note that internal data is cleared when the Subscription is unsubscribed from. 
      
-**lifecycle** This method can be called at any time; if called to retrieve a value that has not been received yet, then it will return null.
+**lifecycle** This method can be called at any time; if called to retrieve a value that has not been received yet, then it will return None.
           
 :raises IllegalArgumentException: if an invalid item name or field name is specified or if the specified item position or field position is out of bounds.
 :raises IllegalStateException: if the Subscription mode is not COMMAND.
@@ -2629,7 +2629,7 @@ Note that internal data is cleared when the Subscription is unsubscribed from.
      
 :param fieldIdentifier: a String representing a field in the configured field list or a Number representing the 1-based position of the field in the specified field schema. (In case a field list was specified, passing the field position is also possible).
      
-:return: the current value for the specified field of the specified key within the specified item (possibly null), or null if the specified key has not been added yet (note that it might have been added and eventually deleted).
+:return: the current value for the specified field of the specified key within the specified item (possibly None), or None if the specified key has not been added yet (note that it might have been added and eventually deleted).
     """
     pass
 
