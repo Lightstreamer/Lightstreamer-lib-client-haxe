@@ -810,8 +810,7 @@ class ConnectionDetails:
       """Inquiry method that gets the name of the Adapter Set (which defines the Metadata Adapter and one or several 
    Data Adapters) mounted on Lightstreamer Server that supply all the items used in this application.
    
-   :return: the adapterSet the name of the Adapter Set; returns None if no name has been configured, that 
-   means that the "DEFAULT" Adapter Set is used.
+   :return: the adapterSet the name of the Adapter Set; returns None if no name has been configured, that means that the "DEFAULT" Adapter Set is used.
    
    .. seealso:: :meth:`setAdapterSet`
       """
