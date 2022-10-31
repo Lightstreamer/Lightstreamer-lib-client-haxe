@@ -99,37 +99,34 @@ class ClientListener:
   by server sent events.
    
   :param property: the name of the changed property.
+    
+    Possible values are:
   
-  Possible values are:
-
-  
-  * adapterSet
-  * serverAddress
-  * user
-  * password
-  * serverInstanceAddress
-  * serverSocketName
-  * clientIp
-  * sessionId
-  * contentLength
-  * idleTimeout
-  * keepaliveInterval
-  * requestedMaxBandwidth
-  * realMaxBandwidth
-  * pollingInterval
-  * reconnectTimeout
-  * stalledTimeout
-  * retryDelay
-  * firstRetryMaxDelay
-  * slowingEnabled
-  * forcedTransport
-  * serverInstanceAddressIgnored
-  * reverseHeartbeatInterval
-  * earlyWSOpenEnabled
-  * httpExtraHeaders
-  * httpExtraHeadersOnSessionCreationOnly
-  
-  
+      * adapterSet
+      * serverAddress
+      * user
+      * password
+      * serverInstanceAddress
+      * serverSocketName
+      * clientIp
+      * sessionId
+      * contentLength
+      * idleTimeout
+      * keepaliveInterval
+      * requestedMaxBandwidth
+      * realMaxBandwidth
+      * pollingInterval
+      * reconnectTimeout
+      * stalledTimeout
+      * retryDelay
+      * firstRetryMaxDelay
+      * slowingEnabled
+      * forcedTransport
+      * serverInstanceAddressIgnored
+      * reverseHeartbeatInterval
+      * earlyWSOpenEnabled
+      * httpExtraHeaders
+      * httpExtraHeadersOnSessionCreationOnly
    
   .. seealso:: :meth:`LightstreamerClient.connectionDetails`
   .. seealso:: :meth:`LightstreamerClient.connectionOptions`
@@ -139,6 +136,7 @@ class ClientListener:
   def onListenEnd(self,client):
     """Event handler that receives a notification when the ClientListener instance is removed from a LightstreamerClient 
    through :meth:`LightstreamerClient.removeListener`. This is the last event to be fired on the listener.
+
    :param client: the LightstreamerClient this instance was removed from. 
    """
     pass
@@ -146,6 +144,7 @@ class ClientListener:
   def onListenStart(self,client):
     """Event handler that receives a notification when the ClientListener instance is added to a LightstreamerClient 
    through :meth:`LightstreamerClient.addListener`. This is the first event to be fired on the listener.
+
    :param client: the LightstreamerClient this instance was added to.
    """
     pass
