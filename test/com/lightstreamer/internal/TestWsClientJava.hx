@@ -1,7 +1,5 @@
 package com.lightstreamer.internal;
 
-import com.lightstreamer.client.LightstreamerClient;
-import com.lightstreamer.client.Proxy;
 import com.lightstreamer.internal.NativeTypes.NativeList;
 
 @:timeout(2000)

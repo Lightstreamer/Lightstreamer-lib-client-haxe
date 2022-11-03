@@ -9,8 +9,8 @@ class BaseClientListener implements ClientListener {
   dynamic public function _onPropertyChange(property:String) {}
   public function onPropertyChange(property:String) _onPropertyChange(property);
 
-  public function onListenEnd(client:LightstreamerClient) {}
-  public function onListenStart(client:LightstreamerClient) {}
+  public function onListenEnd() {}
+  public function onListenStart() {}
 }
 
 class BaseSubscriptionListener implements SubscriptionListener {
@@ -36,8 +36,8 @@ class BaseSubscriptionListener implements SubscriptionListener {
   dynamic public function _onCommandSecondLevelItemLostUpdates(lostUpdates:Int, key:String) {}
   public function onCommandSecondLevelItemLostUpdates(lostUpdates:Int, key:String) _onCommandSecondLevelItemLostUpdates(lostUpdates, key);
 
-  public function onListenEnd(subscription:Subscription) {}
-  public function onListenStart(subscription:Subscription) {}
+  public function onListenEnd() {}
+  public function onListenStart() {}
 }
 
 class BaseMessageListener implements ClientMessageListener {
