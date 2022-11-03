@@ -4,7 +4,7 @@ import com.lightstreamer.internal.NativeTypes;
 
 #if (js || python) @:expose @:native("ItemUpdate") #end
 #if (java || cs || python) @:nativeGen #end
-interface ItemUpdate {
+extern interface ItemUpdate {
   function getItemName(): Null<String>;
   function getItemPos(): Int;
   function isSnapshot(): Bool;

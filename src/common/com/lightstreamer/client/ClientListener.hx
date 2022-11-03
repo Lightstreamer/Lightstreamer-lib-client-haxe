@@ -2,9 +2,9 @@ package com.lightstreamer.client;
 
 #if (js || python) @:expose @:native("ClientListener") #end
 #if (java || cs || python) @:nativeGen #end
-interface ClientListener {
-  public function onListenEnd(client: LightstreamerClient): Void;
-  public function onListenStart(client: LightstreamerClient): Void;
+extern interface ClientListener {
+  public function onListenEnd(): Void;
+  public function onListenStart(): Void;
   public function onServerError(errorCode: Int, errorMessage: String): Void;
   public function onStatusChange(status: String): Void;
   public function onPropertyChange(property: String): Void;

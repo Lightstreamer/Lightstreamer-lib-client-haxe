@@ -517,7 +517,7 @@ private class Sub2LevelDelegate implements SubscriptionListener {
   public function onCommandSecondLevelItemLostUpdates(lostUpdates:Int, key:String) {}
   public function onCommandSecondLevelSubscriptionError(code:Int, message:String, key:String) {}
   public function onEndOfSnapshot(itemName:Null<String>, itemPos:Int) {}
-  public function onListenEnd(subscription:Subscription) {}
-  public function onListenStart(subscription:Subscription) {}
+  public function onListenEnd() {}
+  public function onListenStart() {}
   public function onSubscription() {}
 }
