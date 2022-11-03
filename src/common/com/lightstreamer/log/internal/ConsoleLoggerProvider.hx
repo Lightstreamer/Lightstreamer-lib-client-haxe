@@ -1,4 +1,4 @@
-package com.lightstreamer.log;
+package com.lightstreamer.log.internal;
 
 import com.lightstreamer.internal.NativeTypes;
 

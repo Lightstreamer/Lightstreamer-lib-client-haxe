@@ -1,4 +1,4 @@
-package com.lightstreamer.client;
+package com.lightstreamer.client.internal;
 
 import com.lightstreamer.client.internal.ClientMachine;
 import com.lightstreamer.internal.NativeTypes;
@@ -64,11 +64,11 @@ class LightstreamerClient {
   }
 
   public function addListener(listener: ClientListener): Void {
-    eventDispatcher.addListenerAndFireOnListenStart(listener, this);
+    eventDispatcher.addListenerAndFireOnListenStart(listener);
   }
 
   public function removeListener(listener: ClientListener): Void {
-    eventDispatcher.removeListenerAndFireOnListenEnd(listener, this);
+    eventDispatcher.removeListenerAndFireOnListenEnd(listener);
   }
 
   public function getListeners(): NativeList<ClientListener> {

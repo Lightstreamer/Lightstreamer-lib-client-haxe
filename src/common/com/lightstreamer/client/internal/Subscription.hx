@@ -1,4 +1,4 @@
-package com.lightstreamer.client;
+package com.lightstreamer.client.internal;
 
 import com.lightstreamer.internal.InfoMap;
 import com.lightstreamer.client.internal.SubscriptionManager;
@@ -101,10 +101,10 @@ class Subscription {
   }
 
   public function addListener(listener: SubscriptionListener): Void {
-    eventDispatcher.addListenerAndFireOnListenStart(listener, this);
+    eventDispatcher.addListenerAndFireOnListenStart(listener);
   }
   public function removeListener(listener: SubscriptionListener): Void {
-    eventDispatcher.removeListenerAndFireOnListenEnd(listener, this);
+    eventDispatcher.removeListenerAndFireOnListenEnd(listener);
   }
   public function getListeners(): NativeList<SubscriptionListener> {
     return new NativeList(eventDispatcher.getListeners());

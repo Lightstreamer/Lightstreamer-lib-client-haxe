@@ -1,4 +1,4 @@
-package com.lightstreamer.client;
+package com.lightstreamer.client.internal;
 
 import com.lightstreamer.internal.InfoMap;
 import com.lightstreamer.internal.NativeTypes;
@@ -8,7 +8,7 @@ using com.lightstreamer.log.LoggerTools;
 
 #if (java || cs || python) @:nativeGen #end
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
-@:access(com.lightstreamer.client.LightstreamerClient)
+@:access(com.lightstreamer.client.internal.LightstreamerClient)
 class ConnectionOptions {
   var contentLength: ContentLength = new ContentLength(50000000);
   var firstRetryMaxDelay: Millis = new Millis(100);
@@ -215,7 +215,7 @@ class ConnectionOptions {
     client.eventDispatcher.onPropertyChange("proxy");
   }
 
-  @:allow(com.lightstreamer.client.LightstreamerClient)
+  @:allow(com.lightstreamer.client.internal.LightstreamerClient)
   function getProxy() {
     return this.proxy;
   }

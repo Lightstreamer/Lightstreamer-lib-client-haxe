@@ -1,4 +1,4 @@
-package com.lightstreamer.client;
+package com.lightstreamer.client.internal;
 
 #if (java || cs || python)
 import com.lightstreamer.internal.NativeTypes.IllegalArgumentException;
