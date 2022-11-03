@@ -4,7 +4,7 @@ build.common.hxml
 --java-lib-extern lib/java
 
 -D jvm.dynamic-level=0
---jvm bin/java/ls-javase-client.jar
+--jvm bin/java/build/haxe/lib/ls-javase-client-haxe.jar
 
 -D LS_HAS_PROXY
 -D LS_HAS_COOKIES
