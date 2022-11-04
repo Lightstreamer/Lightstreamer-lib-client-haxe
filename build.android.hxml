@@ -10,7 +10,7 @@ build.common.hxml
 
 -D android
 -D jvm.dynamic-level=0
---jvm bin/android/ls-android-client.jar
+--jvm bin/android/build/haxe/lib/ls-android-client-haxe.jar
 
 -D LS_MPN
 -D LS_HAS_PROXY

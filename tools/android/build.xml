@@ -1,0 +1,134 @@
+<project name="Android client library" 
+  xmlns:ivy="antlib:org.apache.ivy.ant" 
+  default="package" 
+  basedir="../..">
+
+  <description>
+  Buildfile for the Android client library
+  </description>
+
+  <property environment="env"/>
+
+  <property name="build" location="bin/android/build"/>
+  <property name="deps" location="${build}/deps"/>
+  <property name="lib" location="${build}/lib"/>
+  <property name="lib.jar" location="${lib}/ls-android-client.jar"/>
+  <property name="docs" location="${build}/docs"/>
+
+  <property name="api.src" location="src/wrapper/android/api"/>
+  <property name="api.build" location="${build}/api"/>
+  <property name="api.classes" location="${api.build}/classes"/>
+  <property name="api.lib" location="${api.build}/lib"/>
+  <property name="api.lib.jar" location="${api.lib}/ls-android-client-api.jar"/>
+
+  <property name="wrapper.src" location="src/wrapper/android/classes"/>
+  <property name="wrapper.build" location="${build}/wrapper"/>
+  <property name="wrapper.classes" location="${wrapper.build}/classes"/>
+  <property name="wrapper.lib" location="${wrapper.build}/lib"/>
+  <property name="wrapper.lib.jar" location="${wrapper.lib}/ls-android-client-wrapper.jar"/>
+  
+  <property name="haxe.lib.jar" location="${build}/haxe/lib/ls-android-client-haxe.jar"/>
+
+  <property name="doc.overview" location="tools/android/android_overview.html"/>
+
+  <target name="package" depends="package_wrapper" description="Build the library">
+    <jar destfile="${lib.jar}">
+      <fileset dir="${api.classes}"/>
+      <fileset dir="${wrapper.classes}"/>
+      <zipfileset includes="**/*.class" src="${haxe.lib.jar}"/>
+    </jar>
+  </target>
+
+  <target name="docs" depends="package_haxe" description="Build the docs">
+    <javadoc destdir="${docs}"
+      author="true"
+      version="true"
+      use="true"
+      overview="${doc.overview}"
+      doctitle="Lightstreamer Android Client SDK API Reference"
+      windowtitle="Lightstreamer Android Client SDK API Reference">
+      <packageset dir="${api.src}"/>
+      <packageset dir="${wrapper.src}"/>
+      <classpath>
+        <pathelement location="${haxe.lib.jar}"/>
+        <pathelement location="${env.ANDROID_SDK}/platforms/android-30/android.jar"/>
+        <fileset dir="${deps}">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+      <tag name="default" description="Default:"/>
+      <tag name="lifecycle" description="Lifecycle:"/>
+      <tag name="notification" description="Notification:"/>
+      <tag name="general_edition_note" description="General edition note:"/>
+    </javadoc>
+  </target>
+
+  <target name="test" depends="package_api" description="Run the tests">
+    <exec executable="haxe" failonerror="true">
+        <arg value="test.android.hxml"/>
+      </exec>
+  </target>
+
+  <target name="package_haxe" depends="package_api">
+    <exec executable="haxe" failonerror="true">
+      <arg value="build.android.hxml"/>
+      <!-- output lib is saved in ${haxe.lib.jar} -->
+    </exec>
+  </target>
+
+  <target name="package_wrapper" depends="compile_wrapper">
+    <jar destfile="${wrapper.lib.jar}" basedir="${wrapper.classes}"/>
+  </target>
+
+  <target name="compile_wrapper" depends="package_api,package_haxe">
+    <mkdir dir="${wrapper.classes}"/>
+    <javac srcdir="${wrapper.src}"
+      destdir="${wrapper.classes}"
+      includeantruntime="false"
+      source="1.8"
+      target="1.8"
+      release="8">
+      <!--compilerarg value="-Xlint"/-->
+      <classpath>
+        <pathelement location="${api.lib.jar}"/>
+        <pathelement location="${haxe.lib.jar}"/>
+        <pathelement location="${env.ANDROID_SDK}/platforms/android-30/android.jar"/>
+        <fileset dir="${deps}">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="package_api" depends="compile_api">
+    <jar destfile="${api.lib.jar}" basedir="${api.classes}"/>
+  </target>
+
+  <target name="compile_api" depends="resolve">
+    <mkdir dir="${api.classes}"/>
+    <javac srcdir="${api.src}"
+      destdir="${api.classes}"
+      includeantruntime="false"
+      source="1.8"
+      target="1.8"
+      release="8">
+      <classpath>
+        <fileset dir="${deps}">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="resolve">
+    <ivy:configure/>
+    <ivy:resolve>
+      <dependency org="com.google.code.findbugs" name="jsr305" rev="3.0.2"/>
+    </ivy:resolve>
+    <ivy:retrieve pattern="${deps}/[artifact]-[type]-[revision].[ext]"/>
+  </target>
+
+  <target name="clean" description="Clean the project">
+    <delete dir="${build}"/>
+  </target>
+</project>
