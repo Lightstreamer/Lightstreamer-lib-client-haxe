@@ -1,4 +1,4 @@
-package com.lightstreamer.client.mpn;
+package com.lightstreamer.client.mpn.internal;
 
 import haxe.DynamicAccess;
 import haxe.Json;

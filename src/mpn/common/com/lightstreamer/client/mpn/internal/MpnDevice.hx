@@ -1,4 +1,4 @@
-package com.lightstreamer.client.mpn;
+package com.lightstreamer.client.mpn.internal;
 
 import com.lightstreamer.internal.Types.Timestamp;
 import com.lightstreamer.internal.NativeTypes;
@@ -100,10 +100,10 @@ class MpnDevice {
   #end
 
   public function addListener(listener: MpnDeviceListener): Void {
-    eventDispatcher.addListenerAndFireOnListenStart(listener, this);
+    eventDispatcher.addListenerAndFireOnListenStart(listener);
   }
   public function removeListener(listener: MpnDeviceListener): Void {
-    eventDispatcher.removeListenerAndFireOnListenEnd(listener, this);
+    eventDispatcher.removeListenerAndFireOnListenEnd(listener);
   }
   public function getListeners(): NativeList<MpnDeviceListener> {
     return new NativeList(eventDispatcher.getListeners());

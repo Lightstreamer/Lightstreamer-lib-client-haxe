@@ -114,17 +114,17 @@ class LightstreamerClient {
   }
 
   #if LS_MPN
-  public function registerForMpn(mpnDevice: com.lightstreamer.client.mpn.MpnDevice) {
+  public function registerForMpn(mpnDevice: com.lightstreamer.client.mpn.internal.MpnDevice) {
     var machine = cast(machine, com.lightstreamer.client.internal.MpnClientMachine);
     machine.registerForMpn(mpnDevice);
   }
 
-  public function subscribeMpn(mpnSubscription: com.lightstreamer.client.mpn.MpnSubscription, coalescing: Bool) {
+  public function subscribeMpn(mpnSubscription: com.lightstreamer.client.mpn.internal.MpnSubscription, coalescing: Bool) {
     var machine = cast(machine, com.lightstreamer.client.internal.MpnClientMachine);
     machine.subscribeMpn(mpnSubscription, coalescing);
   }
 
-  public function unsubscribeMpn(mpnSubscription: com.lightstreamer.client.mpn.MpnSubscription) {
+  public function unsubscribeMpn(mpnSubscription: com.lightstreamer.client.mpn.internal.MpnSubscription) {
     var machine = cast(machine, com.lightstreamer.client.internal.MpnClientMachine);
     machine.unsubscribeMpn(mpnSubscription);
   }
@@ -134,12 +134,12 @@ class LightstreamerClient {
     machine.unsubscribeMpnSubscriptions(filter);
   }
 
-  public function getMpnSubscriptions(filter: Null<String>): NativeList<com.lightstreamer.client.mpn.MpnSubscription> {
+  public function getMpnSubscriptions(filter: Null<String>): NativeList<com.lightstreamer.client.mpn.internal.MpnSubscription> {
     var machine = cast(machine, com.lightstreamer.client.internal.MpnClientMachine);
     return new NativeList(machine.getMpnSubscriptions(filter));
   }
 
-  public function findMpnSubscription(subscriptionId: String): Null<com.lightstreamer.client.mpn.MpnSubscription> {
+  public function findMpnSubscription(subscriptionId: String): Null<com.lightstreamer.client.mpn.internal.MpnSubscription> {
     var machine = cast(machine, com.lightstreamer.client.internal.MpnClientMachine);
     machine.findMpnSubscription(subscriptionId);
   }

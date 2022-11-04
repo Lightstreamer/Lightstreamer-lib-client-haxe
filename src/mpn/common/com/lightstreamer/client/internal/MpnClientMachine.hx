@@ -1,13 +1,13 @@
 package com.lightstreamer.client.internal;
 
-import com.lightstreamer.client.mpn.MpnSubscription;
+import com.lightstreamer.client.mpn.internal.MpnSubscription;
 import com.lightstreamer.internal.*;
 import com.lightstreamer.internal.Types;
 import com.lightstreamer.internal.NativeTypes;
 import com.lightstreamer.internal.PlatformApi;
 import com.lightstreamer.internal.MacroTools;
 import com.lightstreamer.internal.Set;
-import com.lightstreamer.client.mpn.MpnDevice;
+import com.lightstreamer.client.mpn.internal.MpnDevice;
 import com.lightstreamer.client.SubscriptionListener;
 import com.lightstreamer.client.internal.ParseTools;
 import com.lightstreamer.client.internal.MpnRequests;
@@ -1126,8 +1126,8 @@ private class SubscriptionDelegateBase implements SubscriptionListener {
   public function onEndOfSnapshot(itemName: String, itemPos: Int): Void {}
   public function onItemLostUpdates(itemName: String, itemPos: Int, lostUpdates: Int): Void {}
   public function onItemUpdate(update: ItemUpdate): Void {}
-  public function onListenEnd(subscription: Subscription): Void {}
-  public function onListenStart(subscription: Subscription): Void {}
+  public function onListenEnd(): Void {}
+  public function onListenStart(): Void {}
   public function onSubscription(): Void {}
   public function onSubscriptionError(code: Int, message: String): Void {}
   public function onUnsubscription(): Void {}

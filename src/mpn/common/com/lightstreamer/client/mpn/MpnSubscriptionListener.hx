@@ -3,9 +3,9 @@ package com.lightstreamer.client.mpn;
 import com.lightstreamer.internal.NativeTypes;
 
 #if (java || cs || python) @:nativeGen #end
-interface MpnSubscriptionListener {
-  public function onListenStart(subscription: MpnSubscription): Void;
-  public function onListenEnd(subscription: MpnSubscription): Void;
+extern interface MpnSubscriptionListener {
+  public function onListenStart(): Void;
+  public function onListenEnd(): Void;
   public function onSubscription(): Void;
   public function onUnsubscription(): Void;
   public function onSubscriptionError(code: Int, message: String): Void;

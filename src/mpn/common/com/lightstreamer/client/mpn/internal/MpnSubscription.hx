@@ -1,5 +1,6 @@
-package com.lightstreamer.client.mpn;
+package com.lightstreamer.client.mpn.internal;
 
+import com.lightstreamer.client.internal.Subscription;
 import com.lightstreamer.client.internal.MpnSubscriptionManager;
 import com.lightstreamer.internal.NativeTypes;
 import com.lightstreamer.internal.Types;
@@ -138,10 +139,10 @@ class MpnSubscription {
   }
 
   public function addListener(listener: MpnSubscriptionListener): Void {
-    eventDispatcher.addListenerAndFireOnListenStart(listener, this);
+    eventDispatcher.addListenerAndFireOnListenStart(listener);
   }
   public function removeListener(listener: MpnSubscriptionListener): Void {
-    eventDispatcher.removeListenerAndFireOnListenEnd(listener, this);
+    eventDispatcher.removeListenerAndFireOnListenEnd(listener);
   }
   public function getListeners(): NativeList<MpnSubscriptionListener> {
     return new NativeList(eventDispatcher.getListeners());
