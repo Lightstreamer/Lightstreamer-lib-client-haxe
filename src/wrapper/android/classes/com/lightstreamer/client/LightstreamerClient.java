@@ -15,35 +15,32 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 import com.lightstreamer.log.*;
-import com.lightstreamer.client.mpn.*;
 import java.util.concurrent.Future;
 import java.net.URI;
 import java.net.HttpCookie;
 import javax.net.ssl.TrustManagerFactory;
+import com.lightstreamer.client.mpn.MpnDevice;
+import com.lightstreamer.client.mpn.MpnSubscription;
 
 /**
  * Facade class for the management of the communication to
  * Lightstreamer Server. Used to provide configuration settings, event
  * handlers, operations for the control of the connection lifecycle,
  * {@link Subscription} handling and to send messages. <BR>
-//BEGIN_ANDROID_ONLY
  * It also provides support for mobile push notificaitons (MPN) via
  * {@link MpnSubscription}, a specific kind of subscription that
  * routes real-time updates via push notifications. <BR>
-//END_ANDROID_ONLY
  * An instance of LightstreamerClient handles the communication with
  * Lightstreamer Server on a specified endpoint. Hence, it hosts one "Session";
  * or, more precisely, a sequence of Sessions, since any Session may fail
  * and be recovered, or it can be interrupted on purpose.
  * So, normally, a single instance of LightstreamerClient is needed. <BR>
  * However, multiple instances of LightstreamerClient can be used,
- * toward the same or multiple endpoints. By default, all instances will
- * share the same thread for their internal operations, but can be
- * instructed to use dedicated threads by setting the custom
- * "com.lightstreamer.client.session.thread" system property as "dedicated".
+ * toward the same or multiple endpoints.
  */
 public class LightstreamerClient {
-  
+  final com.lightstreamer.client.internal.LightstreamerClient delegate;
+
   /**
    * A constant string representing the name of the library.
    */
@@ -93,7 +90,7 @@ public class LightstreamerClient {
    * instance that will be used to generate log messages by the library classes.
    */
   public static void setLoggerProvider(@Nullable LoggerProvider provider) {
-
+    com.lightstreamer.client.internal.LightstreamerClient.setLoggerProvider(provider);
   }
 
   /**
@@ -104,7 +101,7 @@ public class LightstreamerClient {
    * Lightstreamer Server. 
    */
   @Nonnull
-  public final ConnectionOptions connectionOptions = new ConnectionOptions(internalConnectionOptions);
+  public final ConnectionOptions connectionOptions;
   /**
    * Data object that contains the details needed to open a connection to 
    * a Lightstreamer Server. This instance is set up by the LightstreamerClient object at 
@@ -113,7 +110,7 @@ public class LightstreamerClient {
    * Lightstreamer Server. 
    */
   @Nonnull
-  public final ConnectionDetails connectionDetails = new ConnectionDetails(internalConnectionDetails);
+  public final ConnectionDetails connectionDetails;
   
   /**
    * Creates an object to be configured to connect to a Lightstreamer server
@@ -135,7 +132,9 @@ public class LightstreamerClient {
    * {@link ConnectionDetails#setServerAddress(String)} for details.
    */
   public LightstreamerClient(@Nullable String serverAddress, @Nullable String adapterSet) {
-
+    this.delegate = new com.lightstreamer.client.internal.LightstreamerClient(serverAddress, adapterSet);
+    this.connectionOptions = new ConnectionOptions(delegate);
+    this.connectionDetails = new ConnectionDetails(delegate);
   }
   
   /**
@@ -151,7 +150,7 @@ public class LightstreamerClient {
    * @see #removeListener(ClientListener)
    */
   public void addListener(@Nonnull ClientListener listener) {
-
+    delegate.addListener(listener);
   }
   
   /**
@@ -164,7 +163,7 @@ public class LightstreamerClient {
    * @see #addListener(ClientListener)
    */
   public void removeListener(@Nonnull ClientListener listener) {
-
+    delegate.removeListener(listener);
   }
   
   /**
@@ -175,11 +174,8 @@ public class LightstreamerClient {
    */
   @Nonnull
   public List<ClientListener> getListeners() {
-
+    return delegate.getListeners();
   }
-  
-  
-  
   
   /**
    * Operation method that requests to open a Session against the configured Lightstreamer Server. <BR>
@@ -204,7 +200,7 @@ public class LightstreamerClient {
    * @see ConnectionDetails#setServerAddress(String)
    */
   public void connect() {
-
+    delegate.connect();
   }
 
   /**
@@ -222,44 +218,9 @@ public class LightstreamerClient {
    * @see #connect
    */
   public void disconnect() {
-
+    delegate.disconnect();
   }
-//BEGIN_ANDROID_EXCLUDE
-  /**
-   * Works just like {@link LightstreamerClient#disconnect()}, but also returns a {@link Future} which is notified 
-   * when all involved threads started by all {@link LightstreamerClient} instances living in the JVM have been terminated, because no
-   * more activities need to be managed and hence event dispatching is no longer necessary.
-   * 
-   * <p>Such method is especially useful in those environments which require an appropriate resource management, 
-   * like "full" Java EE application servers or even the simpler Servlet Containers.
-   * The method should be used in replacement of {@link LightstreamerClient#disconnect()} in all those circumstances where 
-   * it is indispensable to guarantee a complete shutdown of all user threads, in order to avoid potential memory leaks and waste resources.</p>
-   * 
-   * <p>For example, in a web application, it might be possible to leverage a hook like <a href="http://docs.oracle.com/javaee/6/api/javax/servlet/ServletContextListener.html#contextDestroyed(javax.servlet.ServletContextEvent)">ServletContextListener.contextDestroyed(javax.servlet.ServletContextEvent)</a> 
-   * to trigger the await of threads termination, before the <a href="http://docs.oracle.com/javaee/6/api/javax/servlet/ServletContext.html">ServletContext</a> will be shut down.</p>
-   * 
-   * <pre>
-   * {@code
-   * public void contextDestroyed(ServletContext sce) {
-   *     // client is already instantiated elsewhere and a connection to LightstreamerServer is in place.
-   *     Future disconnected = client.disconnectFuture();
-   *     
-   *     // Blocks until all threads have been terminated.
-   *     disconnected.get()
-   * }
-   * }
-   * </pre>
-   *   
-   * @see #disconnect
-   * @see #connect
-   * @return a {@code Future} object representing pending completion of the disconnection task.
-   * 
-   */
-  @Nonnull
-  public Future<Void> disconnectFuture() {
 
-  }
-//END_ANDROID_EXCLUDE
   /**
    * Inquiry method that gets the current client status and transport (when applicable).
    * 
@@ -285,7 +246,7 @@ public class LightstreamerClient {
    */
   @Nonnull
   public String getStatus() {
-
+    return delegate.getStatus();
   }
   
   /**
@@ -308,7 +269,7 @@ public class LightstreamerClient {
    * @see #unsubscribe(Subscription)
    */
   public void subscribe(@Nonnull final Subscription subscription) {
-
+    delegate.subscribe(subscription.delegate);
   }
   
   /**
@@ -325,7 +286,7 @@ public class LightstreamerClient {
    * instance.
    */
   public void unsubscribe(@Nonnull final Subscription subscription) {
-
+    delegate.unsubscribe(subscription.delegate);
   }
   
   /**
@@ -339,7 +300,7 @@ public class LightstreamerClient {
    */
   @Nonnull
   public List<Subscription> getSubscriptions() {
-
+    throw new RuntimeException("TODO");
   }
   
   /**
@@ -355,7 +316,7 @@ public class LightstreamerClient {
    * associated to the current connection.
    */
   public void sendMessage(@Nonnull String message) {
-
+    delegate.sendMessage(message);
   }
   
   /**
@@ -422,11 +383,10 @@ public class LightstreamerClient {
    * the provided message is handled, then the message is not aborted right away but is queued waiting for a new
    * session. Note that the message can still be aborted later when a new session is established.
    */
-  public void sendMessage(@Nonnull final String message, @Nullable String sequence, final int delayTimeout, 
-          @Nullable final ClientMessageListener listener, final boolean enqueueWhileDisconnected) {
-
+  public void sendMessage(@Nonnull final String message, @Nullable String sequence, final int delayTimeout, @Nullable final ClientMessageListener listener, final boolean enqueueWhileDisconnected) {
+    delegate.sendMessage(message, sequence, delayTimeout, listener, enqueueWhileDisconnected);
   }
-  
+
   /**
    * Static method that can be used to share cookies between connections to the Server
    * (performed by this library) and connections to other sites that are performed
@@ -440,11 +400,9 @@ public class LightstreamerClient {
    * In fact, the library will setup its own local cookie storage only if, upon the first
    * usage of the cookies, a default {@link java.net.CookieHandler} is not available;
    * then it will always stick to the internal storage.
-BEGIN_ANDROID_DOC_ONLY
    * Note that, in this case, setting
    * and changing the default {@link java.net.CookieHandler} afterwards may cause some
    * redundant handling (though only in the "compact" version of the library).
-END_ANDROID_DOC_ONLY
    * </li><li>
    * On the other hand, if a default {@link java.net.CookieHandler} is available
    * upon the first usage of the cookies, the library, from then on, will always stick
@@ -452,10 +410,7 @@ END_ANDROID_DOC_ONLY
    * already shared with the rest of the application. However, whenever a default
    * {@link java.net.CookieHandler} of type different from {@link java.net.CookieManager}
    * is found, the library will not be able to use it and will skip cookie handling
-BEGIN_ANDROID_DOC_ONLY
-   * (though only in the "full" version of the library)
-END_ANDROID_DOC_ONLY
-   * .
+   * (though only in the "full" version of the library).
    * </li></ul>
    * 
    * @lifecycle This method should be invoked before calling the
@@ -470,7 +425,7 @@ END_ANDROID_DOC_ONLY
    * @see #getCookies
    */
   public static void addCookies(@Nonnull URI uri, @Nonnull List<HttpCookie> cookies) {
-
+    com.lightstreamer.client.internal.LightstreamerClient.addCookies(uri, cookies);
   }
   
   /**  
@@ -490,7 +445,7 @@ END_ANDROID_DOC_ONLY
    */
   @Nonnull
   public static List<HttpCookie> getCookies(@Nullable URI uri) {
-
+    return com.lightstreamer.client.internal.LightstreamerClient.getCookies(uri);
   }
   
   /**
@@ -503,68 +458,66 @@ END_ANDROID_DOC_ONLY
    * @throws IllegalStateException if a factory is already installed
    */
   public static void setTrustManagerFactory(@Nonnull TrustManagerFactory factory) {
-
+    com.lightstreamer.client.internal.LightstreamerClient.setTrustManagerFactory(factory);
   }
-  
-//BEGIN_ANDROID_ONLY
 
-    /**
-     * Operation method that registers the MPN device on the server's MPN Module.<BR>
-     * By registering an MPN device, the client enables MPN functionalities such as {@link #subscribe(MpnSubscription, boolean)}.
-     * 
-     * @general_edition_note MPN is an optional feature, available depending on Edition and License Type.
-     * To know what features are enabled by your license, please see the License tab of the Monitoring Dashboard (by default,
-     * available at /dashboard).
-     * 
-     * @lifecycle An {@link MpnDevice} can be registered at any time. The registration will be notified through a {@link MpnDeviceListener#onRegistered()} event.
-     * Note that forwarding of the registration to the server is made in a separate thread.
-     * 
-     * @param device An {@link MpnDevice} instace, carrying all the information about the MPN device.
-     * @throws IllegalArgumentException if the specified device is null.
-     * 
-     * @see #subscribe(MpnSubscription, boolean)
-     */
+  /**
+   * Operation method that registers the MPN device on the server's MPN Module.<BR>
+   * By registering an MPN device, the client enables MPN functionalities such as {@link #subscribe(MpnSubscription, boolean)}.
+   * 
+   * @general_edition_note MPN is an optional feature, available depending on Edition and License Type.
+   * To know what features are enabled by your license, please see the License tab of the Monitoring Dashboard (by default,
+   * available at /dashboard).
+   * 
+   * @lifecycle An {@link MpnDevice} can be registered at any time. The registration will be notified through a {@link com.lightstreamer.client.mpn.MpnDeviceListener#onRegistered()} event.
+   * Note that forwarding of the registration to the server is made in a separate thread.
+   * 
+   * @param device An {@link MpnDevice} instace, carrying all the information about the MPN device.
+   * @throws IllegalArgumentException if the specified device is null.
+   * 
+   * @see #subscribe(MpnSubscription, boolean)
+   */
   public void registerForMpn(@Nonnull final MpnDevice device) {
-
+    delegate.registerForMpn(device.delegate);
   }
   
-    /**
-     * Operation method that subscribes an MpnSubscription on server's MPN Module.<BR>
-     * This operation adds the {@link MpnSubscription} to the list of "active" subscriptions. MPN subscriptions are activated on the server as soon as possible
-     * (i.e. as soon as there is a session available and subsequently as soon as the MPN device registration succeeds). Differently than real-time subscriptions,
-     * MPN subscriptions are persisted on the server's MPN Module database and survive the session they were created on.<BR>
-     * If the <code>coalescing</code> flag is <i>set</i>, the activation of two MPN subscriptions with the same Adapter Set, Data Adapter, Group, Schema and trigger expression will be
-     * considered the same MPN subscription. Activating two such subscriptions will result in the second activation modifying the first MpnSubscription (that
-     * could have been issued within a previous session). If the <code>coalescing</code> flag is <i>not set</i>, two activations are always considered different MPN subscriptions,
-     * whatever the Adapter Set, Data Adapter, Group, Schema and trigger expression are set.<BR>
-     * The rationale behind the <code>coalescing</code> flag is to allow simple apps to always activate their MPN subscriptions when the app starts, without worrying if
-     * the same subscriptions have been activated before or not. In fact, since MPN subscriptions are persistent, if they are activated every time the app starts and
-     * the <code>coalescing</code> flag is not set, every activation is a <i>new</i> MPN subscription, leading to multiple push notifications for the same event.
-     * 
-     * @general_edition_note MPN is an optional feature, available depending on Edition and License Type.
-     * To know what features are enabled by your license, please see the License tab of the Monitoring Dashboard (by default,
-     * available at /dashboard).
-     * 
-     * @lifecycle An MpnSubscription can be given to the LightstreamerClient once an MpnDevice registration has been requested. The MpnSubscription
-     * immediately enters the "active" state.<BR>
-     * Once "active", an MpnSubscription instance cannot be provided again to an LightstreamerClient unless it is first removed from the "active" state through
-     * a call to {@link #unsubscribe(MpnSubscription)}.<BR>
-     * Note that forwarding of the subscription to the server is made in a separate thread.<BR>
-     * A successful subscription to the server will be notified through an {@link MpnSubscriptionListener#onSubscription()} event.
-     * 
-     * @param subscription An MpnSubscription object, carrying all the information to route real-time data via push notifications.
-     * @param coalescing A flag that specifies if the MPN subscription must coalesce with any pre-existing MPN subscription with the same Adapter Set, Data Adapter,
-     * Group, Schema and trigger expression.
-     * @throws IllegalStateException if the given MPN subscription does not contain a field list/field schema.
-     * @throws IllegalStateException if the given MPN subscription does not contain a item list/item group.
-     * @throws IllegalStateException if there is no MPN device registered.
-     * @throws IllegalStateException if the given MPN subscription is already active.
-     * 
-     * @see #unsubscribe(MpnSubscription)
-     * @see #unsubscribeMpnSubscriptions(String)
-     */
+  /**
+   * Operation method that subscribes an MpnSubscription on server's MPN Module.<BR>
+   * This operation adds the {@link MpnSubscription} to the list of "active" subscriptions. MPN subscriptions are activated on the server as soon as possible
+   * (i.e. as soon as there is a session available and subsequently as soon as the MPN device registration succeeds). Differently than real-time subscriptions,
+   * MPN subscriptions are persisted on the server's MPN Module database and survive the session they were created on.<BR>
+   * If the <code>coalescing</code> flag is <i>set</i>, the activation of two MPN subscriptions with the same Adapter Set, Data Adapter, Group, Schema and trigger expression will be
+   * considered the same MPN subscription. Activating two such subscriptions will result in the second activation modifying the first MpnSubscription (that
+   * could have been issued within a previous session). If the <code>coalescing</code> flag is <i>not set</i>, two activations are always considered different MPN subscriptions,
+   * whatever the Adapter Set, Data Adapter, Group, Schema and trigger expression are set.<BR>
+   * The rationale behind the <code>coalescing</code> flag is to allow simple apps to always activate their MPN subscriptions when the app starts, without worrying if
+   * the same subscriptions have been activated before or not. In fact, since MPN subscriptions are persistent, if they are activated every time the app starts and
+   * the <code>coalescing</code> flag is not set, every activation is a <i>new</i> MPN subscription, leading to multiple push notifications for the same event.
+   * 
+   * @general_edition_note MPN is an optional feature, available depending on Edition and License Type.
+   * To know what features are enabled by your license, please see the License tab of the Monitoring Dashboard (by default,
+   * available at /dashboard).
+   * 
+   * @lifecycle An MpnSubscription can be given to the LightstreamerClient once an MpnDevice registration has been requested. The MpnSubscription
+   * immediately enters the "active" state.<BR>
+   * Once "active", an MpnSubscription instance cannot be provided again to an LightstreamerClient unless it is first removed from the "active" state through
+   * a call to {@link #unsubscribe(MpnSubscription)}.<BR>
+   * Note that forwarding of the subscription to the server is made in a separate thread.<BR>
+   * A successful subscription to the server will be notified through an {@link com.lightstreamer.client.mpn.MpnSubscriptionListener#onSubscription()} event.
+   * 
+   * @param subscription An MpnSubscription object, carrying all the information to route real-time data via push notifications.
+   * @param coalescing A flag that specifies if the MPN subscription must coalesce with any pre-existing MPN subscription with the same Adapter Set, Data Adapter,
+   * Group, Schema and trigger expression.
+   * @throws IllegalStateException if the given MPN subscription does not contain a field list/field schema.
+   * @throws IllegalStateException if the given MPN subscription does not contain a item list/item group.
+   * @throws IllegalStateException if there is no MPN device registered.
+   * @throws IllegalStateException if the given MPN subscription is already active.
+   * 
+   * @see #unsubscribe(MpnSubscription)
+   * @see #unsubscribeMpnSubscriptions(String)
+   */
   public void subscribe(@Nonnull final MpnSubscription subscription, final boolean coalescing) {
-
+    delegate.subscribeMpn(subscription.delegate, coalescing);
   }
   
   /**
@@ -577,7 +530,7 @@ END_ANDROID_DOC_ONLY
    * 
    * @lifecycle An MpnSubscription can be unsubscribed from at any time. Once done the MpnSubscription immediately exits the "active" state.<BR>
    * Note that forwarding of the unsubscription to the server is made in a separate thread.<BR>
-   * The unsubscription will be notified through an {@link MpnSubscriptionListener#onUnsubscription()} event.
+   * The unsubscription will be notified through an {@link com.lightstreamer.client.mpn.MpnSubscriptionListener#onUnsubscription()} event.
    * 
    * @param subscription An "active" MpnSubscription object.
    * @throws IllegalStateException if the given MPN subscription is not active.
@@ -587,7 +540,7 @@ END_ANDROID_DOC_ONLY
    * @see #unsubscribeMpnSubscriptions(String)
    */
   public void unsubscribe(@Nonnull final MpnSubscription subscription) {
-
+    delegate.unsubscribeMpn(subscription.delegate);
   }
   
   /**
@@ -601,7 +554,7 @@ END_ANDROID_DOC_ONLY
    * 
    * @lifecycle Multiple unsubscription can be requested at any time. Once done the involved MPN subscriptions immediately exit the "active" state.<BR>
    * Note that forwarding of the unsubscription to the server is made in a separate thread.<BR>
-   * The unsubscription will be notified through an {@link MpnSubscriptionListener#onUnsubscription()} event to all involved MPN subscriptions.
+   * The unsubscription will be notified through an {@link com.lightstreamer.client.mpn.MpnSubscriptionListener#onUnsubscription()} event to all involved MPN subscriptions.
    * 
    * @param filter A status name to be used to select the MPN subscriptions to unsubscribe. If null all existing MPN subscriptions
    * are unsubscribed. Possible filter values are:<ul>
@@ -616,7 +569,7 @@ END_ANDROID_DOC_ONLY
    * @see #unsubscribe(MpnSubscription)
    */
   public void unsubscribeMpnSubscriptions(@Nullable final String filter) {
-
+    delegate.unsubscribeMpnSubscriptions(filter);
   }
   
   /**
@@ -631,7 +584,7 @@ END_ANDROID_DOC_ONLY
    * available at /dashboard).
    * 
    * @lifecycle The collection is available once an MpnDevice registration has been requested, but reflects the actual server's collection only
-   * after an {@link MpnDeviceListener#onSubscriptionsUpdated()} event has been notified.
+   * after an {@link com.lightstreamer.client.mpn.MpnDeviceListener#onSubscriptionsUpdated()} event has been notified.
    * 
    * @param filter An MPN subscription status name to be used to select the MPN subscriptions to return. If null all existing MPN subscriptions
    * are returned. Possible filter values are:<ul>
@@ -646,7 +599,7 @@ END_ANDROID_DOC_ONLY
    * @see #findMpnSubscription(String)
    */
   public @Nonnull List<MpnSubscription> getMpnSubscriptions(@Nullable String filter) {
-
+    throw new RuntimeException("TODO");
   }
   
   /**
@@ -669,31 +622,6 @@ END_ANDROID_DOC_ONLY
    * @see #getMpnSubscriptions(String)
    */
   public @Nullable MpnSubscription findMpnSubscription(@Nonnull String subscriptionId) {
-
+    throw new RuntimeException("TODO");
   }
-  
-//BEGIN_ANDROID_EXCLUDE
-
-  /**
-   * Operation method that resets the counter for the app badge.<BR>
-   * If the <code>AUTO</code> value has been used for the app badge in the {@link MpnSubscription#setNotificationFormat(String)} of one or more MPN subscriptions, 
-   * this operation resets the counter so that the next push notification will have badge "1".
-   * 
-   * @general_edition_note MPN is an optional feature, available depending on Edition and License Type.
-   * To know what features are enabled by your license, please see the License tab of the Monitoring Dashboard (by default,
-   * available at /dashboard).
-   * 
-   * @throws IllegalStateException if there is no MPN device registered.
-   * 
-   * @see MpnSubscription#setNotificationFormat(String)
-   */
-  public void resetMpnBadge() {
-
-  }
-  
-//END_ANDROID_EXCLUDE
-
-
-//END_ANDROID_ONLY
-
 }

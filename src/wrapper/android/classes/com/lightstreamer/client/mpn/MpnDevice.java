@@ -24,6 +24,8 @@ import com.lightstreamer.client.LightstreamerClient;
  * and the device state is reset to "registered" at the first subsequent registration.
  */
 public class MpnDevice {
+  /** @hidden */
+  public final com.lightstreamer.client.mpn.internal.MpnDevice delegate;
 
   /**
      * Creates an object to be used to describe an MPN device that is going to be registered to the MPN Module of Lightstreamer Server.<BR>
@@ -41,6 +43,7 @@ public class MpnDevice {
      * @throws IllegalArgumentException if {@code context}, {@code senderId} or {@code token} are null.
      */
     public MpnDevice(final @Nonnull Context appContext, final @Nonnull String token) {
+      this.delegate = new com.lightstreamer.client.mpn.internal.MpnDevice(appContext, token);
     }
 
     /**
@@ -54,7 +57,7 @@ public class MpnDevice {
      * @see #removeListener(MpnDeviceListener)
      */
     public void addListener(@Nonnull MpnDeviceListener listener) {
-
+      delegate.addListener(listener);
     }
 
     /**
@@ -67,11 +70,11 @@ public class MpnDevice {
      * @see #addListener(MpnDeviceListener)
      */
     public void removeListener(@Nonnull MpnDeviceListener listener) {
-
+      delegate.removeListener(listener);
     }
 
     /**
-     * The platform identifier of this MPN device. In the {@link com.lightstreamer.client.mpn.android.MpnDevice} implementation it equals to the constant <code>Google</code>
+     * The platform identifier of this MPN device. In the {@link com.lightstreamer.client.mpn.MpnDevice} implementation it equals to the constant <code>Google</code>
      * and is used by the server as part of the device identification.
      *  
      * @lifecycle This method can be called at any time.
@@ -80,11 +83,11 @@ public class MpnDevice {
      */
     @Nonnull
     public String getPlatform() {
-
+      return delegate.getPlatform();
     }
 
     /**
-     * The application ID of this MPN device, corresponding to the package name of the application. In the {@link com.lightstreamer.client.mpn.android.MpnDevice} 
+     * The application ID of this MPN device, corresponding to the package name of the application. In the {@link com.lightstreamer.client.mpn.MpnDevice} 
      * implementation it is determined automatically from the Application Context during creation and is used by the server as part of the device identification.
      * 
      * @lifecycle This method can be called at any time.
@@ -93,11 +96,11 @@ public class MpnDevice {
      */
     @Nonnull
     public String getApplicationId() {
-
+      return delegate.getApplicationId();
     }
 
     /**
-     * The device token of this MPN device. In the {@link com.lightstreamer.client.mpn.android.MpnDevice} implementation it is passed during creation and 
+     * The device token of this MPN device. In the {@link com.lightstreamer.client.mpn.MpnDevice} implementation it is passed during creation and 
      * is used by the server as part of the device identification.
      * 
      * @lifecycle This method can be called at any time.
@@ -106,11 +109,11 @@ public class MpnDevice {
      */
     @Nonnull
     public String getDeviceToken() {
-
+      return delegate.getDeviceToken();
     }
 
     /**
-     * The previous device token of this MPN device. In the {@link com.lightstreamer.client.mpn.android.MpnDevice} implementation it is obtained automatically from 
+     * The previous device token of this MPN device. In the {@link com.lightstreamer.client.mpn.MpnDevice} implementation it is obtained automatically from 
      * the Shared Preferences storage during creation and is used by the server to restore MPN subscriptions associated with this previous token. May be null if 
      * no MPN device has been registered yet on the application.
      * 
@@ -120,7 +123,7 @@ public class MpnDevice {
      */
     @Nullable
     public String getPreviousDeviceToken() {
-
+      return delegate.getPreviousDeviceToken();
     }
 
     /**
@@ -134,7 +137,7 @@ public class MpnDevice {
      * @see #getStatus()
      */
     public boolean isRegistered() {
-
+      return delegate.isRegistered();
     }
 
     /**
@@ -149,7 +152,7 @@ public class MpnDevice {
      * @see #getStatus()
      */
     public boolean isSuspended() {
-
+      return delegate.isSuspended();
     }
 
     /**
@@ -171,7 +174,7 @@ public class MpnDevice {
      */
     @Nonnull
     public String getStatus() {
-
+      return delegate.getStatus();
     }
 
     /**
@@ -184,7 +187,7 @@ public class MpnDevice {
      * @see #getStatus()
      */
     public long getStatusTimestamp() {
-
+      return delegate.getStatusTimestamp();
     }
     
     /**
@@ -200,7 +203,7 @@ public class MpnDevice {
      */
     @Nullable
     public String getDeviceId() {
-
+      return delegate.getDeviceId();
     }
     
     /**
@@ -212,6 +215,6 @@ public class MpnDevice {
      */
     @Nonnull
     public List<MpnDeviceListener> getListeners() {
-
+      return delegate.getListeners();
     }
 }

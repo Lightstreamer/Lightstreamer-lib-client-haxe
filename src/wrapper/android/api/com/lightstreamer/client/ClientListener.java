@@ -27,16 +27,14 @@ public interface ClientListener {
   /**
    * Event handler that receives a notification when the ClientListener instance is removed from a LightstreamerClient 
    * through {@link LightstreamerClient#removeListener(ClientListener)}. This is the last event to be fired on the listener.
-   * @param client the LightstreamerClient this instance was removed from. 
    */
-  void onListenEnd(@Nonnull LightstreamerClient client);
+  void onListenEnd();
   
   /**
    * Event handler that receives a notification when the ClientListener instance is added to a LightstreamerClient 
    * through {@link LightstreamerClient#addListener(ClientListener)}. This is the first event to be fired on the listener.
-   * @param client the LightstreamerClient this instance was added to.
    */
-  void onListenStart(@Nonnull LightstreamerClient client);
+  void onListenStart();
   
   /**
    * Event handler that is called when the Server notifies a refusal on the client attempt to open

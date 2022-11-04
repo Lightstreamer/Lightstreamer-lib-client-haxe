@@ -62,8 +62,10 @@
   *  {@link #setFields(String[])} method or by specifying it in the constructor.</li>
   * </ul>
   */
- public class Subscription {
-   
+public class Subscription {
+  /** @hidden */
+  public final com.lightstreamer.client.internal.Subscription delegate;
+
    /**
     * Creates an object to be used to describe a Subscription that is going to be subscribed to 
     * through Lightstreamer Server. The object can be supplied to 
@@ -93,9 +95,9 @@
     * @throws IllegalArgumentException If the specified "Item List" or "Field List" is not valid; 
     * see {@link #setItems(String[])} and {@link #setFields(String[])} for details.
     */
-   public Subscription(@Nonnull String subscriptionMode, @Nonnull String[] items, @Nonnull String[] fields) {
-
-   }
+  public Subscription(@Nonnull String subscriptionMode, @Nonnull String[] items, @Nonnull String[] fields) {
+    this.delegate = new com.lightstreamer.client.internal.Subscription(subscriptionMode, items, fields);
+  }
    
    /**
     * Creates an object to be used to describe a Subscription that is going to be subscribed to 
@@ -124,9 +126,9 @@
     * @throws IllegalArgumentException If the specified "Field List" is not valid; 
     * see {@link #setFields(String[])} for details..
     */
-   public Subscription(@Nonnull String subscriptionMode, @Nonnull String item, @Nonnull String[] fields) {
-
-   }
+  public Subscription(@Nonnull String subscriptionMode, @Nonnull String item, @Nonnull String[] fields) {
+    this.delegate = new com.lightstreamer.client.internal.Subscription(subscriptionMode, item, fields);
+  }
      
    /**
     * Creates an object to be used to describe a Subscription that is going to be subscribed to 
@@ -147,9 +149,9 @@
     *  <li>COMMAND</li>
     * </ul>
     */
-   public Subscription(@Nonnull String subscriptionMode) {
-
-   }
+  public Subscription(@Nonnull String subscriptionMode) {
+    this.delegate = new com.lightstreamer.client.internal.Subscription(subscriptionMode);
+  }
    
    /**
     * Adds a listener that will receive events from the Subscription instance. <BR> 
@@ -163,9 +165,9 @@
     * 
     * @see #removeListener(SubscriptionListener)
     */
-   public void addListener(@Nonnull SubscriptionListener listener) {
-
-   }
+  public void addListener(@Nonnull SubscriptionListener listener) {
+    delegate.addListener(listener);
+  }
    
    /**
     * Removes a listener from the Subscription instance so that it will not receive 
@@ -177,9 +179,9 @@
     * 
     * @see #addListener(SubscriptionListener)
     */
-   public void removeListener(@Nonnull SubscriptionListener listener) {
-
-   }
+  public void removeListener(@Nonnull SubscriptionListener listener) {
+    delegate.removeListener(listener);
+  }
    
    /**
     * Returns a list containing the {@link SubscriptionListener} instances that were 
@@ -187,10 +189,10 @@
     * @return a list containing the listeners that were added to this client. 
     * @see #addListener(SubscriptionListener)
     */
-   @Nonnull 
-   public List<SubscriptionListener> getListeners() {
-
-   }
+  @Nonnull 
+  public List<SubscriptionListener> getListeners() {
+    return delegate.getListeners();
+  }
    
    /**  
     * Inquiry method that checks if the Subscription is currently "active" or not.
@@ -207,9 +209,9 @@
     * @see LightstreamerClient#subscribe(Subscription)
     * @see LightstreamerClient#unsubscribe(Subscription)
     */
-   public boolean isActive() {
-
-   }
+  public boolean isActive() {
+    return delegate.isActive();
+  }
    /**  
     * Inquiry method that checks if the Subscription is currently subscribed to
     * through the server or not. <BR>
@@ -223,9 +225,9 @@
     * @return true/false if the Subscription is subscribed to
     * through the server or not.
     */
-   public boolean isSubscribed() {
-
-   }
+  public boolean isSubscribed() {
+    return delegate.isSubscribed();
+  }
    /**
     * Inquiry method that can be used to read the name of the Data Adapter specified for this 
     * Subscription through {@link #setDataAdapter(String)}.
@@ -233,10 +235,10 @@
     * @return the name of the Data Adapter; returns null if no name has been configured, 
     * so that the "DEFAULT" Adapter Set is used.
     */
-   @Nullable 
-   public String getDataAdapter() {
-
-   }
+  @Nullable 
+  public String getDataAdapter() {
+    return delegate.getDataAdapter();
+  }
    
    /**
     * Setter method that sets the name of the Data Adapter
@@ -265,9 +267,9 @@
     *  
     * @see ConnectionDetails#setAdapterSet(String)
     */
-   public void setDataAdapter(@Nullable String dataAdapter) {
-
-   }
+  public void setDataAdapter(@Nullable String dataAdapter) {
+    delegate.setDataAdapter(dataAdapter);
+  }
    
    /**
     * Inquiry method that can be used to read the mode specified for this
@@ -277,10 +279,10 @@
     * 
     * @return the Subscription mode specified in the constructor.
     */
-   @Nonnull 
-   public String getMode() {
-
-   }
+  @Nonnull 
+  public String getMode() {
+    return delegate.getMode();
+  }
    /**
     * Inquiry method that can be used to read the "Item List" specified for this Subscription. 
     * Note that if the single-item-constructor was used, this method will return an array 
@@ -292,10 +294,10 @@
     * or was not initialized at all.
     * @return the "Item List" to be subscribed to through the server.
     */
-   @Nonnull 
-   public String[] getItems() {
-
-   }
+  @Nonnull 
+  public String[] getItems() {
+    return delegate.getItems();
+  }
    
    /**
     * Setter method that sets the "Item List" to be subscribed to through 
@@ -313,9 +315,9 @@
     * 
     * @param items an array of items to be subscribed to through the server. 
     */
-   public void setItems(@Nullable String[] items) {
-
-   }
+  public void setItems(@Nullable String[] items) {
+    delegate.setItems(items);
+  }
      
    /**
     * Inquiry method that can be used to read the item group specified for this Subscription.
@@ -326,10 +328,10 @@
     * or was not initialized at all.
     * @return the "Item Group" to be subscribed to through the server.
     */
-   @Nonnull 
-   public String getItemGroup() {
-
-   }
+  @Nonnull 
+  public String getItemGroup() {
+    return delegate.getItemGroup();
+  }
    
    /**
     * Setter method that sets the "Item Group" to be subscribed to through 
@@ -346,9 +348,9 @@
     * @param groupName A String to be expanded into an item list by the
     * Metadata Adapter. 
     */
-   public void setItemGroup(@Nullable String groupName) {
-
-   }
+  public void setItemGroup(@Nullable String groupName) {
+    delegate.setItemGroup(groupName);
+  }
    /**
     * Inquiry method that can be used to read the "Field List" specified for this Subscription.
     *
@@ -358,10 +360,10 @@
     * or was not initialized at all.
     * @return the "Field List" to be subscribed to through the server.
     */
-   @Nonnull 
-   public String[] getFields() {
-
-   }
+  @Nonnull 
+  public String[] getFields() {
+    return delegate.getFields();
+  }
    
    /**
     * Setter method that sets the "Field List" to be subscribed to through 
@@ -379,9 +381,9 @@
     * 
     * @param fields an array of fields to be subscribed to through the server. 
     */
-   public void setFields(@Nullable String[] fields) {
-
-   }
+  public void setFields(@Nullable String[] fields) {
+    delegate.setFields(fields);
+  }
      
    /**
     * Inquiry method that can be used to read the field schema specified for this Subscription.
@@ -392,10 +394,10 @@
     * not initialized at all.
     * @return the "Field Schema" to be subscribed to through the server.
     */
-   @Nonnull 
-   public String getFieldSchema() {
-
-   }
+  @Nonnull 
+  public String getFieldSchema() {
+    return delegate.getFieldSchema();
+  }
    
    /**
     * Setter method that sets the "Field Schema" to be subscribed to through 
@@ -412,9 +414,9 @@
     * @param schemaName A String to be expanded into a field list by the
     * Metadata Adapter. 
     */
-   public void setFieldSchema(@Nullable String schemaName) {
-
-   }
+  public void setFieldSchema(@Nullable String schemaName) {
+    delegate.setFieldSchema(schemaName);
+  }
  
    /**
     * Inquiry method that can be used to read the buffer size, configured though
@@ -426,10 +428,10 @@
     * @return  An integer number, representing the buffer size to be requested to the server,
     * or the string "unlimited", or null.
     */
-   @Nullable 
-   public String getRequestedBufferSize() {
-
-   }
+  @Nullable 
+  public String getRequestedBufferSize() {
+    return delegate.getRequestedBufferSize();
+  }
    /**
     * Setter method that sets the length to be requested to Lightstreamer
     * Server for the internal queuing buffers for the items in the Subscription.
@@ -461,9 +463,9 @@
     *
     * @see Subscription#setRequestedMaxFrequency(String)
     */
-   public void setRequestedBufferSize(@Nullable String size) {
-
-   }
+  public void setRequestedBufferSize(@Nullable String size) {
+    delegate.setRequestedBufferSize(size);
+  }
    /**
     * Inquiry method that can be used to read the snapshot preferences, 
     * configured through {@link #setRequestedSnapshot(String)}, to be requested 
@@ -473,10 +475,10 @@
     * 
     * @return  "yes", "no", null, or an integer number.
     */
-   @Nullable 
-   public String getRequestedSnapshot() {
-
-   }
+  @Nullable 
+  public String getRequestedSnapshot() {
+    return delegate.getRequestedSnapshot();
+  }
    /**
     * Setter method that enables/disables snapshot delivery request for the
     * items in the Subscription. The snapshot can be requested only if the
@@ -513,9 +515,9 @@
     * 
     * @see ItemUpdate#isSnapshot
     */
-   public void setRequestedSnapshot(@Nullable String required) {
-
-   }
+  public void setRequestedSnapshot(@Nullable String required) {
+    delegate.setRequestedSnapshot(required);
+  }
    /**
     * Inquiry method that can be used to read the max frequency, configured
     * through {@link #setRequestedMaxFrequency(String)}, to be requested to the 
@@ -526,10 +528,10 @@
     * @return  A decimal number, representing the max frequency to be requested to the server
     * (expressed in updates per second), or the strings "unlimited" or "unfiltered", or null.
     */
-   @Nullable 
-   public String getRequestedMaxFrequency() {
-
-   }
+  @Nullable 
+  public String getRequestedMaxFrequency() {
+    return delegate.getRequestedMaxFrequency();
+  }
    
    /**
     * Setter method that sets the maximum update frequency to be requested to
@@ -589,9 +591,9 @@
     * corresponds to "unlimited").
     * The check for the string constants is case insensitive.
     */
-   public void setRequestedMaxFrequency(@Nullable String freq) {
-
-   }
+  public void setRequestedMaxFrequency(@Nullable String freq) {
+    delegate.setRequestedMaxFrequency(freq);
+  }
    /**
     * Inquiry method that can be used to read the selector name  
     * specified for this Subscription through {@link #setSelector(String)}.
@@ -600,10 +602,10 @@
     * 
     * @return the name of the selector.
     */
-   @Nullable 
-   public String getSelector() {
-
-   }
+  @Nullable 
+  public String getSelector() {
+    return delegate.getSelector();
+  }
    /**
     * Setter method that sets the selector name for all the items in the
     * Subscription. The selector is a filter on the updates received. It is
@@ -620,9 +622,9 @@
     * @param selector name of a selector, to be recognized by the
     * Metadata Adapter, or null to unset the selector.
     */
-   public void setSelector(@Nullable String selector) {
-
-   }
+  public void setSelector(@Nullable String selector) {
+    delegate.setSelector(selector);
+  }
    /**
     * Returns the position of the "command" field in a COMMAND Subscription. <BR>
     * This method can only be used if the Subscription mode is COMMAND and the Subscription 
@@ -636,9 +638,9 @@
     * @throws IllegalStateException if a "Field List" was specified.
     * @return the 1-based position of the "command" field within the "Field Schema".
     */
-   public int getCommandPosition() {
-
-   }
+  public int getCommandPosition() {
+    return delegate.getCommandPosition();
+  }
    
    /**
     * Returns the position of the "key" field in a COMMAND Subscription. <BR>
@@ -653,9 +655,9 @@
     * 
     * @return the 1-based position of the "key" field within the "Field Schema".
     */
-   public int getKeyPosition() {
-
-   }
+  public int getKeyPosition() {
+    return delegate.getKeyPosition();
+  }
    /**
     * Inquiry method that can be used to read the second-level Data Adapter name configured 
     * through {@link #setCommandSecondLevelDataAdapter(String)}.
@@ -665,10 +667,10 @@
     * @return the name of the second-level Data Adapter.
     * @see #setCommandSecondLevelDataAdapter(String)
     */
-   @Nullable 
-   public String getCommandSecondLevelDataAdapter() {
-
-   }
+  @Nullable 
+  public String getCommandSecondLevelDataAdapter() {
+    return delegate.getCommandSecondLevelDataAdapter();
+  }
    
    /**
     * Setter method that sets the name of the second-level Data Adapter (within 
@@ -697,9 +699,9 @@
     * @see Subscription#setCommandSecondLevelFields(String[])
     * @see Subscription#setCommandSecondLevelFieldSchema(String)
     */
-   public void setCommandSecondLevelDataAdapter(@Nullable String dataAdapter) {
-
-   }
+  public void setCommandSecondLevelDataAdapter(@Nullable String dataAdapter) {
+    delegate.setCommandSecondLevelDataAdapter(dataAdapter);
+  }
    /**
     * Inquiry method that can be used to read the "Field List" specified for second-level 
     * Subscriptions.
@@ -712,10 +714,10 @@
     * @return the list of fields to be subscribed to through the server.
     * @see Subscription#setCommandSecondLevelFields(String[])
     */
-   @Nonnull 
-   public String[] getCommandSecondLevelFields() {
- 
-   }
+  @Nonnull 
+  public String[] getCommandSecondLevelFields() {
+    return delegate.getCommandSecondLevelFields();
+  }
    
    /**
     * Setter method that sets the "Field List" to be subscribed to through 
@@ -754,9 +756,9 @@
     * 
     * @see Subscription#setCommandSecondLevelFieldSchema(String)
     */
-   public void setCommandSecondLevelFields(@Nullable String[] fields) {
-
-   }
+  public void setCommandSecondLevelFields(@Nullable String[] fields) {
+    delegate.setCommandSecondLevelFields(fields);
+  }
  
    /**
     * Inquiry method that can be used to read the "Field Schema" specified for second-level 
@@ -770,10 +772,10 @@
     * @return the "Field Schema" to be subscribed to through the server.
     * @see Subscription#setCommandSecondLevelFieldSchema(String)
     */
-   @Nonnull 
-   public String getCommandSecondLevelFieldSchema() {
-
-   }
+  @Nonnull 
+  public String getCommandSecondLevelFieldSchema() {
+    return delegate.getCommandSecondLevelFieldSchema();
+  }
    
    /**
     * Setter method that sets the "Field Schema" to be subscribed to through 
@@ -807,9 +809,9 @@
     * 
     * @see Subscription#setCommandSecondLevelFields
     */
-   public void setCommandSecondLevelFieldSchema(@Nullable String schemaName) {
-
-   }
+  public void setCommandSecondLevelFieldSchema(@Nullable String schemaName) {
+    delegate.setCommandSecondLevelFieldSchema(schemaName);
+  }
    
    /**
     * Returns the latest value received for the specified item/field pair. <BR>
@@ -830,10 +832,10 @@
     * @return the current value for the specified field of the specified item
     * (possibly null), or null if no value has been received yet.
     */
-   @Nullable 
-   public String getValue(@Nonnull String itemName, @Nonnull String fieldName) {
-
-   }
+  @Nullable 
+  public String getValue(@Nonnull String itemName, @Nonnull String fieldName) {
+    return delegate.getValue(itemName, fieldName);
+  }
    
    /**
     * Returns the latest value received for the specified item/field pair. <BR>
@@ -857,10 +859,10 @@
     * @return the current value for the specified field of the specified item
     * (possibly null), or null if no value has been received yet.
     */
-   @Nullable 
-   public String getValue(int itemPos, int fieldPos) {
-
-   }
+  @Nullable 
+  public String getValue(int itemPos, int fieldPos) {
+    return delegate.getValue(itemPos, fieldPos);
+  }
    /**
     * Returns the latest value received for the specified item/field pair. <BR>
     * It is suggested to consume real-time data by implementing and adding
@@ -882,10 +884,10 @@
     * @return the current value for the specified field of the specified item
     * (possibly null), or null if no value has been received yet.
     */
-   @Nullable 
-   public String getValue(@Nonnull String itemName, int fieldPos) {
-
-   }
+  @Nullable 
+  public String getValue(@Nonnull String itemName, int fieldPos) {
+    return delegate.getValue(itemName, fieldPos);
+  }
    /**
     * Returns the latest value received for the specified item/field pair. <BR>
     * It is suggested to consume real-time data by implementing and adding
@@ -907,10 +909,10 @@
     * @return the current value for the specified field of the specified item
     * (possibly null), or null if no value has been received yet.
     */
-   @Nullable 
-   public String getValue(int itemPos, @Nonnull String fieldName) {
-
-   }
+  @Nullable 
+  public String getValue(int itemPos, @Nonnull String fieldName) {
+    return delegate.getValue(itemPos, fieldName);
+  }
    /**
     * Returns the latest value received for the specified item/key/field combination. 
     * This method can only be used if the Subscription mode is COMMAND. 
@@ -931,10 +933,10 @@
     * specified item (possibly null), or null if the specified key has not been added yet 
     * (note that it might have been added and then deleted).
     */
-   @Nullable 
-   public String getCommandValue(@Nonnull String itemName, @Nonnull String keyValue, @Nonnull String fieldName) {
-
-   }
+  @Nullable 
+  public String getCommandValue(@Nonnull String itemName, @Nonnull String keyValue, @Nonnull String fieldName) {
+    return delegate.getCommandValue(itemName, keyValue, fieldName);
+  }
    
    /**
     * Returns the latest value received for the specified item/key/field combination. 
@@ -959,10 +961,10 @@
     * specified item (possibly null), or null if the specified key has not been added yet 
     * (note that it might have been added and then deleted).
     */
-   @Nullable 
-   public String getCommandValue(int itemPos, @Nonnull String keyValue, int fieldPos) {
- 
-   }
+  @Nullable 
+  public String getCommandValue(int itemPos, @Nonnull String keyValue, int fieldPos) {
+    return delegate.getCommandValue(itemPos, keyValue, fieldPos);
+  }
    
    /**
     * Returns the latest value received for the specified item/key/field combination. 
@@ -986,10 +988,10 @@
     * specified item (possibly null), or null if the specified key has not been added yet 
     * (note that it might have been added and then deleted).
     */
-   @Nullable 
-   public String getCommandValue(int itemPos, @Nonnull String keyValue, @Nonnull String fieldName) {
-
-   }
+  @Nullable 
+  public String getCommandValue(int itemPos, @Nonnull String keyValue, @Nonnull String fieldName) {
+    return delegate.getCommandValue(itemPos, keyValue, fieldName);
+  }
    
    /**
     * Returns the latest value received for the specified item/key/field combination. 
@@ -1012,10 +1014,9 @@
     * specified item (possibly null), or null if the specified key has not been added yet 
     * (note that it might have been added and then deleted).
     */
-   @Nullable 
-   public String getCommandValue(@Nonnull String itemName, @Nonnull String keyValue, int fieldPos) {
-
-   }
- }
- 
+  @Nullable 
+  public String getCommandValue(@Nonnull String itemName, @Nonnull String keyValue, int fieldPos) {
+    return delegate.getCommandValue(itemName, keyValue, fieldPos);
+  }
+} 
  

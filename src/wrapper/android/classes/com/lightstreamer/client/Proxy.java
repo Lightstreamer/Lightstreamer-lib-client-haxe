@@ -21,6 +21,7 @@ import javax.annotation.Nullable;
  * instruct a LightstreamerClient to connect to the Lightstreamer Server passing through a proxy.
  */
 public class Proxy {
+  final com.lightstreamer.client.internal.Proxy delegate;
 
   /**
    * This constructor will call {@link #Proxy(String, String, int, String, String)}
@@ -30,7 +31,7 @@ public class Proxy {
    * @param port the proxy port
    */
   public Proxy(@Nonnull String type, @Nonnull String host, int port) {
-
+    this.delegate = new com.lightstreamer.client.internal.Proxy(type, host, port);
   }
   
   /**
@@ -42,7 +43,7 @@ public class Proxy {
    * @param user the user name to be used to validate against the proxy
    */
   public Proxy(@Nonnull String type, @Nonnull String host, int port, @Nullable String user) {
-
+    this.delegate = new com.lightstreamer.client.internal.Proxy(type, host, port, user);
   }
   
   /**
@@ -51,12 +52,10 @@ public class Proxy {
    * Once created the Proxy instance has to be passed to the {@link LightstreamerClient#connectionOptions}
    * instance using the {@link ConnectionOptions#setProxy(Proxy)} method.
    * 
-BEGIN_ANDROID_DOC_ONLY
    * <BR><BR>
    * Note: user and password are ignored. If authentication is required by the proxy in use
    * it is necessary to replace the default java {@link java.net.Authenticator} with a custom one containing 
    * the necessary logic to authenticate the user against the proxy.  
-END_ANDROID_DOC_ONLY
    *
    * @param type the proxy type
    * @param host the proxy host
@@ -65,21 +64,21 @@ END_ANDROID_DOC_ONLY
    * @param password the password to be used to validate against the proxy
    */
   public Proxy(@Nonnull String type, @Nonnull String host, int port, @Nullable String user, @Nullable String password) {
-
+    this.delegate = new com.lightstreamer.client.internal.Proxy(type, host, port, user, password);
   }
   
   @Override
   public String toString() {
-
+    return delegate.toString();
   }
   
   @Override
   public boolean equals(Object obj) {
- 
+    return delegate.equals(obj);
   }
   
   @Override 
   public int hashCode() {
-    return Objects.hash(this.host, this.type, this.port, this.user, this.password);
+    return java.util.Objects.hash(delegate.host, delegate.type, delegate.port, delegate.user, delegate.password);
   }
 }

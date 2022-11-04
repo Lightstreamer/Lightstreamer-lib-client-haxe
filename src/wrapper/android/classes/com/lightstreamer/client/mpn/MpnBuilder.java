@@ -14,13 +14,14 @@ import javax.annotation.Nonnull;
  * @see MpnSubscription#setNotificationFormat(String)
  */
 public class MpnBuilder {
-    
+    final com.lightstreamer.client.mpn.internal.MpnBuilder delegate;
+
     /**
      * Creates an empty object to be used to create a push notification format from scratch.<BR>
      * Use setters methods to set the value of push notification fields.
      */
     public MpnBuilder() {
-
+        this.delegate = new com.lightstreamer.client.mpn.internal.MpnBuilder();
     }
     
     /**
@@ -33,7 +34,7 @@ public class MpnBuilder {
      */
     @SuppressWarnings("unchecked") 
     public MpnBuilder(@Nonnull String notificationFormat) {
-
+        this.delegate = new com.lightstreamer.client.mpn.internal.MpnBuilder(notificationFormat);
     }
 
     /**
@@ -41,7 +42,7 @@ public class MpnBuilder {
      * @return the JSON structure for the push notification format.
      */
     public @Nonnull String build() {
-
+        return delegate.build();
     }
 
     /**
@@ -51,7 +52,8 @@ public class MpnBuilder {
      * @return this MpnBuilder object, for fluent use.
      */
     public MpnBuilder collapseKey(String collapseKey) {
-
+        delegate.collapseKey(collapseKey);
+        return this;
     }
     
     /**
@@ -59,7 +61,7 @@ public class MpnBuilder {
      * @return the value of <code>android.collapse_key</code> field, or null if absent.
      */
     public String collapseKey() {
-
+        return delegate.collapseKey();
     }
     
     /**
@@ -69,7 +71,8 @@ public class MpnBuilder {
      * @return this MpnBuilder object, for fluent use.
      */
     public MpnBuilder priority(String priority) {
-
+        delegate.priority(priority);
+        return this;
     }
     
     /**
@@ -77,53 +80,7 @@ public class MpnBuilder {
      * @return the value of <code>android.priority</code> field, or null if absent.
      */
     public String priority() {
-
-    }
-    
-    /**
-     * @deprecated
-     * The <code>content_available</code> is no more supported on Firebase Cloud Messaging.
-     * 
-     * @param contentAvailable Ignored.
-     * @return this MpnBuilder object, for fluent use.
-     */
-    @Deprecated
-    public MpnBuilder contentAvailable(String contentAvailable) {
-
-    }
-    
-    /**
-     * @deprecated
-     * The <code>content_available</code> is no more supported on Firebase Cloud Messaging.
-     * 
-     * @return always null.
-     */
-    @Deprecated
-    public String contentAvailableAsString() {
-
-    }
-            
-    /**
-     * @deprecated
-     * The <code>content_available</code> is no more supported on Firebase Cloud Messaging.
-     * 
-     * @param contentAvailable Ignored.
-     * @return this MpnBuilder object, for fluent use.
-     */
-    @Deprecated
-    public MpnBuilder contentAvailable(Boolean contentAvailable) {
-
-    }
-    
-    /**
-     * @deprecated
-     * The <code>content_available</code> is no more supported on Firebase Cloud Messaging.
-     * 
-     * @return always null.
-     */
-    @Deprecated
-    public Boolean contentAvailableAsBoolean() {
-
+        return delegate.priority();
     }
 
     /**
@@ -133,7 +90,8 @@ public class MpnBuilder {
      * @return this MpnBuilder object, for fluent use.
      */
     public MpnBuilder timeToLive(String timeToLive) {
-
+        delegate.timeToLive(timeToLive);
+        return this;
     }
     
     /**
@@ -141,7 +99,7 @@ public class MpnBuilder {
      * @return a string with the value of <code>android.ttl</code> field, or null if absent.
      */
     public String timeToLiveAsString() {
-
+        return delegate.timeToLiveAsString();
     }
             
     /**
@@ -151,7 +109,8 @@ public class MpnBuilder {
      * @return this MpnBuilder object, for fluent use.
      */
     public MpnBuilder timeToLive(Integer timeToLive) {
-
+        delegate.timeToLive(timeToLive);
+        return this;
     }
     
     /**
@@ -159,7 +118,7 @@ public class MpnBuilder {
      * @return an integer with the value of <code>android.ttl</code> field, or null if absent.
      */
     public Integer timeToLiveAsInteger() {
-
+        return delegate.timeToLiveAsInteger();
     }
     
     /**
@@ -168,8 +127,9 @@ public class MpnBuilder {
      * @param title A string to be used for the <code>android.notification.title</code> field value, or null to clear it.
      * @return this MpnBuilder object, for fluent use.
      */
-    public MpnBuilder title(String title) {        
-
+    public MpnBuilder title(String title) {  
+        delegate.title(title);      
+        return this;
     }
     
     /**
@@ -177,7 +137,7 @@ public class MpnBuilder {
      * @return the value of <code>android.notification.title</code> field, or null if absent.
      */
     public String title() {
-
+        return delegate.title();
     }
 
     /**
@@ -186,8 +146,9 @@ public class MpnBuilder {
      * @param titleLocKey A string to be used for the <code>android.notification.title_loc_key</code> field value, or null to clear it.
      * @return this MpnBuilder object, for fluent use.
      */
-    public MpnBuilder titleLocKey(String titleLocKey) {        
-
+    public MpnBuilder titleLocKey(String titleLocKey) {      
+        delegate.titleLocKey(titleLocKey);  
+        return this;
     }
     
     /**
@@ -195,7 +156,7 @@ public class MpnBuilder {
      * @return the value of <code>android.notification.title_loc_key</code> field, or null if absent.
      */
     public String titleLocKey() {
-
+        return delegate.titleLocKey();
     }
 
     /**
@@ -204,8 +165,9 @@ public class MpnBuilder {
      * @param titleLocArguments A list of strings to be used for the <code>android.notification.title_loc_args</code> field value, or null to clear it.
      * @return this MpnBuilder object, for fluent use.
      */
-    public MpnBuilder titleLocArguments(List<String> titleLocArguments) {        
-
+    public MpnBuilder titleLocArguments(List<String> titleLocArguments) {  
+        delegate.titleLocArguments(titleLocArguments);      
+        return this;
     }
     
     /**
@@ -213,7 +175,7 @@ public class MpnBuilder {
      * @return a list of strings with the value of <code>android.notification.title_loc_args</code> field, or null if absent.
      */
     public List<String> titleLocArguments() {
-
+        return delegate.titleLocArguments();
     }
 
     /**
@@ -222,8 +184,9 @@ public class MpnBuilder {
      * @param body A string to be used for the <code>android.notification.body</code> field value, or null to clear it.
      * @return this MpnBuilder object, for fluent use.
      */
-    public MpnBuilder body(String body) {        
-
+    public MpnBuilder body(String body) {    
+        delegate.body(body);    
+        return this;
     }
     
     /**
@@ -231,7 +194,7 @@ public class MpnBuilder {
      * @return the value of <code>android.notification.body</code> field, or null if absent.
      */
     public String body() {
-
+        return delegate.body();
     }
 
     /**
@@ -240,8 +203,9 @@ public class MpnBuilder {
      * @param bodyLocKey A string to be used for the <code>android.notification.body_loc_key</code> field value, or null to clear it.
      * @return this MpnBuilder object, for fluent use.
      */
-    public MpnBuilder bodyLocKey(String bodyLocKey) {        
-
+    public MpnBuilder bodyLocKey(String bodyLocKey) {  
+        delegate.bodyLocKey(bodyLocKey);      
+        return this;
     }
     
     /**
@@ -249,7 +213,7 @@ public class MpnBuilder {
      * @return the value of <code>android.notification.body_loc_key</code> field, or null if absent.
      */
     public String bodyLocKey() {
-
+        return delegate.bodyLocKey();
     }
 
     /**
@@ -258,8 +222,9 @@ public class MpnBuilder {
      * @param bodyLocArguments A list of strings to be used for the <code>android.notification.body_loc_args</code> field value, or null to clear it.
      * @return this MpnBuilder object, for fluent use.
      */
-    public MpnBuilder bodyLocArguments(List<String> bodyLocArguments) {        
-
+    public MpnBuilder bodyLocArguments(List<String> bodyLocArguments) { 
+        delegate.bodyLocArguments(bodyLocArguments);       
+        return this;
     }
     
     /**
@@ -267,7 +232,7 @@ public class MpnBuilder {
      * @return a list of strings with the value of <code>android.notification.body_loc_args</code> field, or null if absent.
      */
     public List<String> bodyLocArguments() {
-
+        return delegate.bodyLocArguments();
     }
     
     /**
@@ -276,8 +241,9 @@ public class MpnBuilder {
      * @param icon A string to be used for the <code>android.notification.icon</code> field value, or null to clear it.
      * @return this MpnBuilder object, for fluent use.
      */
-    public MpnBuilder icon(String icon) {        
-
+    public MpnBuilder icon(String icon) {   
+        delegate.icon(icon);     
+        return this;
     }
     
     /**
@@ -285,7 +251,7 @@ public class MpnBuilder {
      * @return the value of <code>android.notification.icon</code> field, or null if absent.
      */
     public String icon() {
-
+        return delegate.icon();
     }
 
     /**
@@ -294,8 +260,9 @@ public class MpnBuilder {
      * @param sound A string to be used for the <code>android.notification.sound</code> field value, or null to clear it.
      * @return this MpnBuilder object, for fluent use.
      */
-    public MpnBuilder sound(String sound) {        
-
+    public MpnBuilder sound(String sound) {     
+        delegate.sound(sound);   
+        return this;
     }
     
     /**
@@ -303,7 +270,7 @@ public class MpnBuilder {
      * @return the value of <code>android.notification.sound</code> field, or null if absent.
      */
     public String sound() {
-
+        return delegate.sound();
     }
     
     /**
@@ -312,8 +279,9 @@ public class MpnBuilder {
      * @param tag A string to be used for the <code>android.notification.tag</code> field value, or null to clear it.
      * @return this MpnBuilder object, for fluent use.
      */
-    public MpnBuilder tag(String tag) {        
-
+    public MpnBuilder tag(String tag) {      
+        delegate.tag(tag);  
+        return this;
     }
     
     /**
@@ -321,7 +289,7 @@ public class MpnBuilder {
      * @return the value of <code>android.notification.tag</code> field, or null if absent.
      */
     public String tag() {
-
+        return delegate.tag();
     }
     
     /**
@@ -330,8 +298,9 @@ public class MpnBuilder {
      * @param color A string to be used for the <code>android.notification.color</code> field value, or null to clear it.
      * @return this MpnBuilder object, for fluent use.
      */
-    public MpnBuilder color(String color) {        
-
+    public MpnBuilder color(String color) {  
+        delegate.color(color);      
+        return this;
     }
     
     /**
@@ -339,7 +308,7 @@ public class MpnBuilder {
      * @return the value of <code>android.notification.color</code> field, or null if absent.
      */
     public String color() {
-
+        return delegate.color();
     }
     
     /**
@@ -348,8 +317,9 @@ public class MpnBuilder {
      * @param clickAction A string to be used for the <code>android.notification.click_action</code> field value, or null to clear it.
      * @return this MpnBuilder object, for fluent use.
      */
-    public MpnBuilder clickAction(String clickAction) {        
-
+    public MpnBuilder clickAction(String clickAction) {    
+        delegate.clickAction(clickAction);    
+        return this;
     }
     
     /**
@@ -357,7 +327,7 @@ public class MpnBuilder {
      * @return the value of <code>android.notification.click_action</code> field, or null if absent.
      */
     public String clickAction() {
-
+        return delegate.clickAction();
     }
      
     /**
@@ -366,8 +336,9 @@ public class MpnBuilder {
      * @param data A map to be used for sub-fields of the <code>android.data</code> field, or null to clear it.
      * @return this MpnBuilder object, for fluent use.
      */
-    public MpnBuilder data(Map<String, String> data) {        
-
+    public MpnBuilder data(Map<String, String> data) {   
+        delegate.data(data);     
+        return this;
     }
     
     /**
@@ -375,6 +346,6 @@ public class MpnBuilder {
      * @return A map with sub-fields of the <code>android.data</code> field, or null if absent. 
      */
     public Map<String, String> data() {
-
+        return delegate.data();
     }
 }

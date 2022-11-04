@@ -4,13 +4,12 @@ import javax.annotation.Nonnull;
 
 import com.lightstreamer.client.ClientListener;
 import com.lightstreamer.client.ClientMessageListener;
-import com.lightstreamer.client.LightstreamerClient;
 import com.lightstreamer.client.SubscriptionListener;
 
 /**
  * Interface to be implemented to receive MPN device events including registration, suspension/resume and status change.<BR>
  * Events for these listeners are dispatched by a different thread than the one that generates them. This means that, upon reception of an event,
- * it is possible that the internal state of the client has changed. On the other hand, all the notifications for a single {@link LightstreamerClient}, including
+ * it is possible that the internal state of the client has changed. On the other hand, all the notifications for a single {@link com.lightstreamer.client.LightstreamerClient}, including
  * notifications to {@link ClientListener}, {@link SubscriptionListener}, {@link ClientMessageListener}, MpnDeviceListener and {@link MpnSubscriptionListener}
  * will be dispatched by the same thread.
  */
@@ -19,18 +18,14 @@ public interface MpnDeviceListener {
     /**
      * Event handler called when the MpnDeviceListener instance is added to an MPN device object through {@link MpnDevice#addListener(MpnDeviceListener)}.<BR>
      * This is the first event to be fired on the listener.
-     * 
-     * @param device The MPN device object this instance was added to.
      */
-    public void onListenStart(@Nonnull MpnDevice device);
+    public void onListenStart();
     
     /**
      * Event handler called when the MpnDeviceListener instance is removed from an MPN device object through {@link MpnDevice#removeListener(MpnDeviceListener)}.<BR>
      * This is the last event to be fired on the listener.
-     * 
-     * @param device The MPN device object this instance was removed from.
      */
-    public void onListenEnd(@Nonnull MpnDevice device);
+    public void onListenEnd();
     
     /**
      * Event handler called when an MPN device object has been successfully registered on the server's MPN Module.<BR>
@@ -91,26 +86,9 @@ public interface MpnDeviceListener {
     /**
      * Event handler called when the server notifies that the list of MPN subscription associated with an MPN device has been updated.<BR>
      * After registration, the list of pre-existing MPN subscriptions for the MPN device is updated and made available through the
-     * {@link LightstreamerClient#getMpnSubscriptions(String)} method.
+     * {@link com.lightstreamer.client.LightstreamerClient#getMpnSubscriptions(String)} method.
      * 
-     * @see LightstreamerClient#getMpnSubscriptions(String)
+     * @see com.lightstreamer.client.LightstreamerClient#getMpnSubscriptions(String)
      */
     public void onSubscriptionsUpdated();
-    
-//BEGIN_ANDROID_EXCLUDE    
-
-    /**
-     * Notifies that the badge of the device has been reset on the server.
-     */
-    public void onBadgeReset();
-    
-    /**
-     * Notifies that the badge of the device has been reset.
-     * 
-     * @param code error code
-     * @param message the cause of the failure
-     */
-    public void onBadgeResetFailed(int code, @Nonnull String message);
-    
-//END_ANDROID_EXCLUDE
 }

@@ -24,6 +24,11 @@ import javax.annotation.Nullable;
  * @see LightstreamerClient
  */
 public class ConnectionDetails {
+  final com.lightstreamer.client.internal.ConnectionDetails delegate;
+
+  ConnectionDetails(com.lightstreamer.client.internal.LightstreamerClient client) {
+    this.delegate = new com.lightstreamer.client.internal.ConnectionDetails(client);
+  }
 
   /**
    * Inquiry method that gets the name of the Adapter Set (which defines the Metadata Adapter and one or several 
@@ -36,7 +41,7 @@ public class ConnectionDetails {
    */
   @Nullable
   public String getAdapterSet() {
-
+    return delegate.getAdapterSet();
   }
 
   /**
@@ -60,7 +65,7 @@ public class ConnectionDetails {
    * @param adapterSet The name of the Adapter Set to be used. A null value is equivalent to the "DEFAULT" name.
    */
   public void setAdapterSet(@Nullable String adapterSet) {
-
+    delegate.setAdapterSet(adapterSet);
   }
 
   /**
@@ -70,7 +75,7 @@ public class ConnectionDetails {
    */
   @Nullable
   public String getServerAddress() {
-
+    return delegate.getServerAddress();
   }
 
   /**
@@ -104,7 +109,7 @@ public class ConnectionDetails {
    * @throws IllegalArgumentException if the given address is not valid.
    */
   public void setServerAddress(@Nullable String serverAddress) {
-
+    delegate.setServerAddress(serverAddress);
   }
 
   /**
@@ -116,7 +121,7 @@ public class ConnectionDetails {
    */
   @Nullable
   public String getUser() {
-
+    return delegate.getUser();
   }
 
   /**
@@ -139,7 +144,7 @@ public class ConnectionDetails {
    * @see #setPassword(String)
    */
   public void setUser(@Nullable String user) {
-
+    delegate.setUser(user);
   }
 
   /**
@@ -167,7 +172,7 @@ public class ConnectionDetails {
    */
   @Nullable
   public String getServerInstanceAddress() {
-
+    return delegate.getServerInstanceAddress();
   }
   
   /**
@@ -194,7 +199,7 @@ public class ConnectionDetails {
    */
   @Nullable
   public String getServerSocketName() {
-
+    return delegate.getServerSocketName();
   }
   
   /**
@@ -218,7 +223,7 @@ public class ConnectionDetails {
    */
   @Nullable
   public String getClientIp() {
-
+    return delegate.getClientIp();
   }
   
   /**
@@ -234,7 +239,7 @@ public class ConnectionDetails {
    */
   @Nullable
   public String getSessionId() {
-
+    return delegate.getSessionId();
   }
 
   /**
@@ -262,6 +267,6 @@ public class ConnectionDetails {
    * @see #setUser(String)
    */
   public void setPassword(@Nullable String password) {
-
+    delegate.setPassword(password);
   }
 }

@@ -5,13 +5,12 @@ import javax.annotation.Nullable;
 
 import com.lightstreamer.client.ClientListener;
 import com.lightstreamer.client.ClientMessageListener;
-import com.lightstreamer.client.LightstreamerClient;
 import com.lightstreamer.client.SubscriptionListener;
 
 /**
  * Interface to be implemented to receive {@link MpnSubscription} events including subscription/unsubscription, triggering and status change.<BR>
  * Events for these listeners are dispatched by a different thread than the one that generates them. This means that, upon reception of an event,
- * it is possible that the internal state of the client has changed. On the other hand, all the notifications for a single {@link LightstreamerClient}, including
+ * it is possible that the internal state of the client has changed. On the other hand, all the notifications for a single {@link com.lightstreamer.client.LightstreamerClient}, including
  * notifications to {@link ClientListener}, {@link SubscriptionListener}, {@link ClientMessageListener}, {@link MpnDeviceListener} and MpnSubscriptionListener
  * will be dispatched by the same thread.
  */
@@ -21,25 +20,21 @@ public interface MpnSubscriptionListener {
      * Event handler called when the MpnSubscriptionListener instance is added to an {@link MpnSubscription} through 
      * {@link MpnSubscription#addListener(MpnSubscriptionListener)}.<BR>
      * This is the first event to be fired on the listener.
-     * 
-     * @param subscription The {@link MpnSubscription} this instance was added to.
      */
-    public void onListenStart(@Nonnull MpnSubscription subscription);
+    public void onListenStart();
     
     /**
      * Event handler called when the MpnSubscriptionListener instance is removed from an {@link MpnSubscription} through 
      * {@link MpnSubscription#removeListener(MpnSubscriptionListener)}.<BR>
      * This is the last event to be fired on the listener.
-     * 
-     * @param subscription The {@link MpnSubscription} this instance was removed from.
      */
-    public void onListenEnd(@Nonnull MpnSubscription subscription);
+    public void onListenEnd();
 
     /**
      * Event handler called when an {@link MpnSubscription} has been successfully subscribed to on the server's MPN Module.<BR>
      * This event handler is always called before other events related to the same subscription.<BR>
      * Note that this event can be called multiple times in the life of an MpnSubscription instance only in case it is subscribed multiple times
-     * through {@link LightstreamerClient#unsubscribe(MpnSubscription)} and {@link LightstreamerClient#subscribe(MpnSubscription, boolean)}. Two consecutive calls 
+     * through {@link com.lightstreamer.client.LightstreamerClient#unsubscribe(MpnSubscription)} and {@link com.lightstreamer.client.LightstreamerClient#subscribe(MpnSubscription, boolean)}. Two consecutive calls 
      * to this method are not possible, as before a second <code>onSubscription()</code> event an {@link #onUnsubscription()} event is always fired.
      */
     public void onSubscription();
@@ -48,7 +43,7 @@ public interface MpnSubscriptionListener {
      * Event handler called when an {@link MpnSubscription} has been successfully unsubscribed from on the server's MPN Module.<BR>
      * After this call no more events can be received until a new {@link #onSubscription()} event.<BR>
      * Note that this event can be called multiple times in the life of an MpnSubscription instance only in case it is subscribed multiple times
-     * through {@link LightstreamerClient#unsubscribe(MpnSubscription)} and {@link LightstreamerClient#subscribe(MpnSubscription, boolean)}. Two consecutive calls 
+     * through {@link com.lightstreamer.client.LightstreamerClient#unsubscribe(MpnSubscription)} and {@link com.lightstreamer.client.LightstreamerClient#subscribe(MpnSubscription, boolean)}. Two consecutive calls 
      * to this method are not possible, as before a second <code>onUnsubscription()</code> event an {@link #onSubscription()} event is always fired.
      */
     public void onUnsubscription();
@@ -109,7 +104,7 @@ public interface MpnSubscriptionListener {
      * For this event to be called the MpnSubscription must have a trigger expression set and it must have been evaluated to true at
      * least once.<BR>
      * Note that this event can be called multiple times in the life of an MpnSubscription instance only in case it is subscribed multiple times
-     * through {@link LightstreamerClient#unsubscribe(MpnSubscription)} and {@link LightstreamerClient#subscribe(MpnSubscription, boolean)}. Two consecutive calls 
+     * through {@link com.lightstreamer.client.LightstreamerClient#unsubscribe(MpnSubscription)} and {@link com.lightstreamer.client.LightstreamerClient#subscribe(MpnSubscription, boolean)}. Two consecutive calls 
      * to this method are not possible.<BR>
      * Note also that in some server clustering configurations this event may not be called. The corrisponding push notification is always sent, though.
      * 
@@ -138,7 +133,7 @@ public interface MpnSubscriptionListener {
     /**
      * Event handler called each time the value of a property of {@link MpnSubscription} is changed.<BR>
      * Properties can be modified by direct calls to their setter or by server sent events. A propery may be changed by a server sent event when the MPN subscription is
-     * modified, or when two MPN subscriptions coalesce (see {@link LightstreamerClient#subscribe(MpnSubscription, boolean)}).
+     * modified, or when two MPN subscriptions coalesce (see {@link com.lightstreamer.client.LightstreamerClient#subscribe(MpnSubscription, boolean)}).
      * 
      * @param propertyName The name of the changed property. It can be one of the following:<ul>
      * <li><code>mode</code></li>
@@ -153,4 +148,17 @@ public interface MpnSubscriptionListener {
      * </ul>
      */
     public void onPropertyChanged(@Nonnull String propertyName);    
+
+    /**
+     * Event handler called when the value of a property of {@link MpnSubscription} cannot be changed.<BR>
+     * Properties can be modified by direct calls to their setters. See {@link MpnSubscription#setNotificationFormat(String)} and {@link MpnSubscription#setTriggerExpression(String)}.
+     * 
+     * @param code The error code sent by the Server.
+     * @param message The description of the error sent by the Server.
+     * @param propertyName The name of the changed property. It can be one of the following:<ul>
+     * <li><code>notification_format</code></li>
+     * <li><code>trigger</code></li>
+     * </ul>
+     */
+    public void onModificationError(int code, String message, String propertyName);
 }

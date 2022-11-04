@@ -90,6 +90,24 @@ public interface Logger {
      * 
     */
     void debug(@Nonnull String line, @Nonnull Throwable exception);
+    
+    /** 
+     * Receives log messages at Trace level.
+     * 
+     * @param line The message to be logged.
+     * 
+    */
+    void trace(@Nonnull String line);
+
+    /** 
+     * Receives log messages at Trace level and a related exception.
+     * 
+     * @param line The message to be logged.
+     * 
+     * @param exception An Exception instance related to the current log message.
+     * 
+    */
+    void trace(@Nonnull String line, @Nonnull Throwable exception);
 
     /** 
      * Receives log messages at Fatal level.
@@ -110,10 +128,20 @@ public interface Logger {
     void fatal(@Nonnull String line, @Nonnull Throwable exception);
 
     /** 
+     * Checks if this logger is enabled for the Trace level. <BR>
+     * The property should be true if this logger is enabled for Trace events, false otherwise. <BR> 
+     * This property is intended to lessen the computational cost of disabled log Trace statements. Note 
+     * that even if the property is false, Trace log lines may be received anyway by the Trace methods.
+     * @return true if the Trace logger is enabled
+    */
+    boolean isTraceEnabled();
+
+    /** 
      * Checks if this logger is enabled for the Debug level. <BR>
      * The property should be true if this logger is enabled for Debug events, false otherwise. <BR> 
      * This property is intended to lessen the computational cost of disabled log Debug statements. Note 
      * that even if the property is false, Debug log lines may be received anyway by the Debug methods.
+     * @return true if the Debug logger is enabled
     */
     boolean isDebugEnabled();
 
@@ -122,6 +150,7 @@ public interface Logger {
      * The property should be true if this logger is enabled for Info events, false otherwise. <BR> 
      * This property is intended to lessen the computational cost of disabled log Info statements. Note 
      * that even if the property is false, Info log lines may be received anyway by the Info methods.
+     * @return true if the Info logger is enabled
     */
     boolean isInfoEnabled();
 
@@ -130,6 +159,7 @@ public interface Logger {
      * The property should be true if this logger is enabled for Warn events, false otherwise. <BR> 
      * This property is intended to lessen the computational cost of disabled log Warn statements. Note 
      * that even if the property is false, Warn log lines may be received anyway by the Warn methods.
+     * @return true if the Warn logger is enabled
     */
     boolean isWarnEnabled();
 
@@ -138,6 +168,7 @@ public interface Logger {
      * The property should be true if this logger is enabled for Error events, false otherwise. <BR> 
      * This property is intended to lessen the computational cost of disabled log Error statements. Note 
      * that even if the property is false, Error log lines may be received anyway by the Error methods.
+     * @return true if the Error logger is enabled
     */
     boolean isErrorEnabled();
 
@@ -146,6 +177,7 @@ public interface Logger {
      * The property should be true if this logger is enabled for Fatal events, false otherwise. <BR> 
      * This property is intended to lessen the computational cost of disabled log Fatal statements. Note 
      * that even if the property is false, Fatal log lines may be received anyway by the Fatal methods.
+     * @return true if the Fatal logger is enabled
     */
     boolean isFatalEnabled();
 }

@@ -26,34 +26,12 @@ import java.util.*;
  * @see LightstreamerClient
  */
 public class ConnectionOptions {
+  final com.lightstreamer.client.internal.ConnectionOptions delegate;
   
-  /**
-   * Returns the same value as {@link #getRetryDelay()}.
-   * @deprecated <b>The method is deprecated: use {@link #getRetryDelay()} instead.</b>
-   * @return the same value as {@link #getRetryDelay()}.
-   */
-  @Nonnull
-  @Deprecated
-  public String getConnectTimeout() {
-
+  ConnectionOptions(com.lightstreamer.client.internal.LightstreamerClient client) {
+    this.delegate = new com.lightstreamer.client.internal.ConnectionOptions(client);
   }
   
-  /**
-   * Inquiry method that gets the maximum time to wait for a response to a request. <BR>
-   * 
-   * This value corresponds to the retry delay, but, in case of multiple failed attempts
-   * on unresponsive connections, it can be changed dynamically by the library to higher values.
-   * When this happens, the current value cannot be altered, but by issuing
-   * {@link LightstreamerClient#disconnect} and {@link LightstreamerClient#connect}
-   * it will restart from the retry delay.
-   *
-   * @return The time (in milliseconds) allowed to wait before trying a new connection.
-   * 
-   * @see #setRetryDelay(long)
-   */
-  public long getCurrentConnectTimeout() {
-
-  }
   /**
    * Inquiry method that gets the length expressed in bytes to be used by the Server for the response body on 
    * a HTTP stream connection.
@@ -62,7 +40,7 @@ public class ConnectionOptions {
    * @see #setContentLength(long)
    */
   public long getContentLength() {
-
+    return delegate.getContentLength();
   }
   /**
    * Inquiry method that gets the maximum time to wait before trying a new connection to the Server
@@ -72,11 +50,7 @@ public class ConnectionOptions {
    * @see #setFirstRetryMaxDelay(long)
    */
   public long getFirstRetryMaxDelay() {
-
-  }
-  
-  public /* @exclude */ long getForceBindTimeout() {
-
+    return delegate.getFirstRetryMaxDelay();
   }
   /**
    * Inquiry method that gets the value of the forced transport (if any).
@@ -86,7 +60,7 @@ public class ConnectionOptions {
    */
   @Nullable
   public String getForcedTransport() {
-
+    return delegate.getForcedTransport();
   }
   /**
    * Inquiry method that gets the Map object containing the extra headers to be sent to the server.
@@ -97,7 +71,7 @@ public class ConnectionOptions {
    */
   @Nullable
   public Map<String,String> getHttpExtraHeaders() {
-
+    return delegate.getHttpExtraHeaders();
   }
   /**
    * Inquiry method that gets the maximum time the Server is allowed to wait for any data to be sent 
@@ -109,7 +83,7 @@ public class ConnectionOptions {
    * @see #setIdleTimeout(long)
    */
   public long getIdleTimeout() {
-
+    return delegate.getIdleTimeout();
   }
   /**
    * Inquiry method that gets the interval between two keepalive packets sent by Lightstreamer Server 
@@ -126,7 +100,7 @@ public class ConnectionOptions {
    * @see #setKeepaliveInterval(long)
    */
   public long getKeepaliveInterval() {
-
+    return delegate.getKeepaliveInterval();
   }
   /**
    * Inquiry method that gets the maximum bandwidth that can be consumed for the data coming from 
@@ -140,7 +114,7 @@ public class ConnectionOptions {
    */
   @Nonnull
   public String getRequestedMaxBandwidth() {
-
+    return delegate.getRequestedMaxBandwidth();
   }
   
   /**
@@ -161,7 +135,7 @@ public class ConnectionOptions {
    */
   @Nullable
   public String getRealMaxBandwidth() {
-
+    return delegate.getRealMaxBandwidth();
   }
   
   /**
@@ -175,7 +149,7 @@ public class ConnectionOptions {
    * @see #setPollingInterval(long)
    */
   public long getPollingInterval() {
-
+    return delegate.getPollingInterval();
   }
   /**
    * Inquiry method that gets the time the client, after entering "STALLED" status,
@@ -187,7 +161,7 @@ public class ConnectionOptions {
    * @see #setReconnectTimeout(long)
    */
   public long getReconnectTimeout() {
-
+    return delegate.getReconnectTimeout();
   }
   /**
    * Inquiry method that gets the minimum time to wait before trying a new connection
@@ -200,7 +174,7 @@ public class ConnectionOptions {
    * @see #setRetryDelay(long)
    */
   public long getRetryDelay() {
-
+    return delegate.getRetryDelay();
   }
   /**
    * Inquiry method that gets the reverse-heartbeat interval expressed in milliseconds.
@@ -210,7 +184,7 @@ public class ConnectionOptions {
    * @see #setReverseHeartbeatInterval(long)
    */
   public long getReverseHeartbeatInterval() {
-
+    return delegate.getReverseHeartbeatInterval();
   }
   /**
    * Inquiry method that gets the extra time the client can wait when an expected keepalive packet 
@@ -221,7 +195,7 @@ public class ConnectionOptions {
    * @see #setStalledTimeout(long)
    */
   public long getStalledTimeout() {
-
+    return delegate.getStalledTimeout();
   }
   /**
    * Inquiry method that gets the maximum time allowed for attempts to recover
@@ -233,19 +207,9 @@ public class ConnectionOptions {
    * @see #setSessionRecoveryTimeout(long)
    */
   public long getSessionRecoveryTimeout() {
-
+    return delegate.getSessionRecoveryTimeout();
   }
   
-  /**
-   * Inquiry method that checks if the client is going to early-open the WebSocket connection to the 
-   * address specified in {@link ConnectionDetails#setServerAddress(String)}.
-   *
-   * @return true/false if the early-open of the WebSocket connection is enabled or not.
-   * @see #setEarlyWSOpenEnabled(boolean)
-   */
-  public boolean isEarlyWSOpenEnabled() {
-
-  }
   /**
    * Inquiry method that checks if the restriction on the forwarding of the configured extra http headers 
    * applies or not. 
@@ -255,7 +219,7 @@ public class ConnectionOptions {
    * @see #setHttpExtraHeaders(Map)
    */
   public boolean isHttpExtraHeadersOnSessionCreationOnly() {
-
+    return delegate.isHttpExtraHeadersOnSessionCreationOnly();
   }
   /**
    * Inquiry method that checks if the client is going to ignore the server instance address that 
@@ -265,7 +229,7 @@ public class ConnectionOptions {
    * @see #setServerInstanceAddressIgnored(boolean)
    */
   public boolean isServerInstanceAddressIgnored() {
-
+    return delegate.isServerInstanceAddressIgnored();
   }
   /**
    * Inquiry method that checks if the slowing algorithm is enabled or not.
@@ -274,27 +238,7 @@ public class ConnectionOptions {
    * @see #setSlowingEnabled(boolean)
    */
   public boolean isSlowingEnabled() {
-
-  }
-  
-  /**
-   * @deprecated <b>The method is deprecated and it has no effect.
-   * To act on connection timeouts use {@link #setRetryDelay(long)}.</b>
-   * @param connectTimeout ignored.
-   */
-  @Deprecated
-  public void setConnectTimeout(@Nonnull String connectTimeout) {
-      // ignore: see setRetryDelay
-  }
-  
-  /**
-   * @deprecated <b>The method is deprecated and it has no effect.
-   * To act on connection timeouts, only {@link #setRetryDelay(long)} is available.</b>
-   * @param connectTimeout ignored.
-   */
-  @Deprecated
-  public void setCurrentConnectTimeout(long connectTimeout) {
-      // ignore: see setRetryDelay
+    return delegate.isSlowingEnabled();
   }
   /**
    * Setter method that sets the length in bytes to be used by the Server for the response body on a stream connection 
@@ -318,37 +262,7 @@ public class ConnectionOptions {
    * @throws IllegalArgumentException if a negative or zero value is configured 
    */
   public void setContentLength(long contentLength) {
-
-  }
-  /**
-   * Setter method that enables/disables the "early-open" of the WebSocket connection. <BR>
-   * When enabled a WebSocket is open to the address specified through {@link ConnectionDetails#setServerAddress} before 
-   * a potential server instance address is received during session creation. In this case if a server instance address 
-   * is received, the previously open WebSocket is closed and a new one is open to the received server instance address. <BR>
-   * If disabled, the session creation is completed to verify if such a server instance address is configured in the server 
-   * before opening the WebSocket. <BR>
-   * For these reasons this setting should be set to false if the server specifies a &lt;control_link_address&gt;
-   * in its configuration; viceversa it should be set to true if such element is not set on the target server(s) configuration.
-   * 
-   * @default false
-   * 
-   * @lifecycle This method can be called at any time. If called while the client already owns a session it will 
-   * be applied the next time a session is requested to a server.
-   * 
-   * @notification A change to this setting will be notified through a call to 
-   * {@link ClientListener#onPropertyChange} with argument "earlyWSOpenEnabled" on any 
-   * ClientListener listening to the related LightstreamerClient.
-   * 
-   * @general_edition_note Server Clustering is an optional feature, available depending on Edition and License Type.
-   * To know what features are enabled by your license, please see the License tab of the Monitoring Dashboard (by default,
-   * available at /dashboard).
-   * 
-   * @param earlyWSOpenEnabled true/false to enable/disable the early-open of the WebSocket connection.
-   * 
-   * @see #setServerInstanceAddressIgnored(boolean)
-   */
-  public void setEarlyWSOpenEnabled(boolean earlyWSOpenEnabled) {
-
+    delegate.setContentLength(contentLength);
   }
   /**
    * Setter method that sets the maximum time to wait before trying a new connection to the Server
@@ -373,7 +287,7 @@ public class ConnectionOptions {
    * @throws IllegalArgumentException if a negative or zero value is configured 
    */
   public void setFirstRetryMaxDelay(long firstRetryMaxDelay) {
-
+    delegate.setFirstRetryMaxDelay(firstRetryMaxDelay);
   }
  
   /**
@@ -420,7 +334,7 @@ public class ConnectionOptions {
    * @throws IllegalArgumentException if the given value is not in the list of the admitted ones.
    */
   public void setForcedTransport(@Nullable String forcedTransport) {
-
+    delegate.setForcedTransport(forcedTransport);
   }
   /**
    * Setter method that enables/disables the setting of extra HTTP headers to all the request performed to the Lightstreamer 
@@ -446,7 +360,7 @@ public class ConnectionOptions {
    * headers to be sent.
    */
   public void setHttpExtraHeaders(@Nullable Map<String,String> httpExtraHeaders) {
-
+    delegate.setHttpExtraHeaders(httpExtraHeaders);
   }
   /**
    * Setter method that enables/disables a restriction on the forwarding of the extra http headers specified through 
@@ -468,7 +382,7 @@ public class ConnectionOptions {
    */
   public void setHttpExtraHeadersOnSessionCreationOnly(
       boolean httpExtraHeadersOnSessionCreationOnly) {
-
+    delegate.setHttpExtraHeadersOnSessionCreationOnly(httpExtraHeadersOnSessionCreationOnly);
   }
   /**
    * Setter method that sets the maximum time the Server is allowed to wait for any data to be sent in response to a 
@@ -495,7 +409,7 @@ public class ConnectionOptions {
    * @throws IllegalArgumentException if a negative value is configured 
    */
   public void setIdleTimeout(long idleTimeout) {
-
+    delegate.setIdleTimeout(idleTimeout);
   }
   /**
    * Setter method that sets the interval between two keepalive packets to be sent by Lightstreamer Server on a stream 
@@ -523,7 +437,7 @@ public class ConnectionOptions {
    * @see #setReconnectTimeout(long)
    */
   public void setKeepaliveInterval(long keepaliveInterval) {
-
+    delegate.setKeepaliveInterval(keepaliveInterval);
   }
   /**
    * Setter method that sets the maximum bandwidth expressed in kilobits/s that can be consumed for the data coming from 
@@ -556,7 +470,7 @@ public class ConnectionOptions {
    * @see #getRealMaxBandwidth()
    */
   public void setRequestedMaxBandwidth(@Nonnull String maxBandwidth) {
-
+    delegate.setRequestedMaxBandwidth(maxBandwidth);
   }
   /**
    * Setter method that sets the polling interval used for polling connections. The client switches from the default 
@@ -591,7 +505,7 @@ public class ConnectionOptions {
    * @throws IllegalArgumentException if a negative value is configured 
    */
   public void setPollingInterval(long pollingInterval) {
-
+    delegate.setPollingInterval(pollingInterval);
   }
   /**
    * Setter method that sets the time the client, after entering "STALLED" status,
@@ -617,7 +531,7 @@ public class ConnectionOptions {
    * @see #setKeepaliveInterval(long)
    */
   public void setReconnectTimeout(long reconnectTimeout) {
-
+    delegate.setReconnectTimeout(reconnectTimeout);
   }
   /**
    * Setter method that sets 
@@ -665,10 +579,9 @@ public class ConnectionOptions {
    * @throws IllegalArgumentException if a negative or zero value is configured 
    * 
    * @see #setFirstRetryMaxDelay
-   * @see #getCurrentConnectTimeout
    */
   public void setRetryDelay(long retryDelay) {
-
+    delegate.setRetryDelay(retryDelay);
   }
   /**
    * Setter method that enables/disables the reverse-heartbeat mechanism by setting the
@@ -714,7 +627,7 @@ public class ConnectionOptions {
    * @throws IllegalArgumentException if a negative value is configured
    */
   public void setReverseHeartbeatInterval(long reverseHeartbeatInterval) {
-
+    delegate.setReverseHeartbeatInterval(reverseHeartbeatInterval);
   }
   /**
    * Setter method that can be used to disable/enable the automatic handling of server instance address that may 
@@ -745,7 +658,7 @@ public class ConnectionOptions {
    * @see ConnectionDetails#setServerAddress(String)
    */
   public void setServerInstanceAddressIgnored(boolean serverInstanceAddressIgnored) {
-
+    delegate.setServerInstanceAddressIgnored(serverInstanceAddressIgnored);
   }
   /**
    * Setter method that turns on or off the slowing algorithm. This heuristic algorithm tries to detect when the client 
@@ -770,7 +683,7 @@ public class ConnectionOptions {
    * @param slowingEnabled true or false, to enable or disable the heuristic algorithm that lowers the item update frequency.
    */
   public void setSlowingEnabled(boolean slowingEnabled) {
-
+    delegate.setSlowingEnabled(slowingEnabled);
   }
   /**
    * Setter method that sets the extra time the client is allowed to wait when an expected keepalive packet has not been 
@@ -792,7 +705,7 @@ public class ConnectionOptions {
    * @see #setKeepaliveInterval(long)
    */
   public void setStalledTimeout(long stalledTimeout) {
-
+    delegate.setStalledTimeout(stalledTimeout);
   }
   /**
    * Setter method that sets the maximum time allowed for attempts to recover
@@ -823,7 +736,7 @@ public class ConnectionOptions {
    * @throws IllegalArgumentException if a negative value is passed.
    */
   public void setSessionRecoveryTimeout(long sessionRecoveryTimeout) {
-
+    delegate.setSessionRecoveryTimeout(sessionRecoveryTimeout);
   }
   
   /**
@@ -842,6 +755,6 @@ public class ConnectionOptions {
    * 
    */
   public void setProxy(Proxy proxy) {
-
+    delegate.setProxy(proxy.delegate);
   }
 }

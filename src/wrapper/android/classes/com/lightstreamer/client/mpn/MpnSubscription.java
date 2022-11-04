@@ -29,7 +29,9 @@ import com.lightstreamer.client.*;
  * server's database and exposes them with the {@link LightstreamerClient#getMpnSubscriptions(String)} method.
  */
 public class MpnSubscription {
-    
+    /** @hidden */
+    public final com.lightstreamer.client.mpn.internal.MpnSubscription delegate;
+
     /**
      * Creates an object to be used to describe an MPN subscription that is going to be subscribed to through the MPN Module of Lightstreamer Server.<BR>
      * The object can be supplied to {@link LightstreamerClient#subscribe(MpnSubscription, boolean)} in order to bring the MPN subscription to "active" state.<BR>
@@ -48,7 +50,7 @@ public class MpnSubscription {
      * @throws IllegalArgumentException If the specified "Item List" or "Field List" is not valid; see {@link #setItems(String[])} and {@link #setFields(String[])} for details.
      */
     public MpnSubscription(@Nonnull String subscriptionMode, @Nonnull String[] items, @Nonnull String[] fields) {
-
+        this.delegate = new com.lightstreamer.client.mpn.internal.MpnSubscription(subscriptionMode, items, fields);
     }
 
     /**
@@ -68,7 +70,7 @@ public class MpnSubscription {
      * @throws IllegalArgumentException If the specified "Field List" is not valid; see {@link #setFields(String[])} for details.
      */
     public MpnSubscription(@Nonnull String subscriptionMode, @Nonnull String item, @Nonnull String[] fields) {
-
+        this.delegate = new com.lightstreamer.client.mpn.internal.MpnSubscription(subscriptionMode, item, fields);
     }
 
     /**
@@ -83,7 +85,7 @@ public class MpnSubscription {
      * @throws IllegalArgumentException If no or invalid subscription mode is passed.
      */
     public MpnSubscription(@Nonnull String subscriptionMode) {
-
+        this.delegate = new com.lightstreamer.client.mpn.internal.MpnSubscription(subscriptionMode);
     }
 
     /**
@@ -94,7 +96,7 @@ public class MpnSubscription {
      * @param copyFrom The Subscription object to copy properties from.
      */
     public MpnSubscription(@Nonnull Subscription copyFrom) {
-
+        this.delegate = new com.lightstreamer.client.mpn.internal.MpnSubscription(copyFrom.delegate);
     }
 
     /**
@@ -107,7 +109,7 @@ public class MpnSubscription {
      * @param copyFrom The MpnSubscription object to copy properties from.
      */
     public MpnSubscription(@Nonnull MpnSubscription copyFrom) {
-
+        this.delegate = new com.lightstreamer.client.mpn.internal.MpnSubscription(copyFrom.delegate);
     }
 
     /**
@@ -121,7 +123,7 @@ public class MpnSubscription {
      * @see #removeListener(MpnSubscriptionListener)
      */
     public void addListener(@Nonnull final MpnSubscriptionListener listener) {
-
+        delegate.addListener(listener);
     }
 
     /**
@@ -134,7 +136,7 @@ public class MpnSubscription {
      * @see #addListener(MpnSubscriptionListener)
      */
     public void removeListener(@Nonnull final MpnSubscriptionListener listener) {
-
+        delegate.removeListener(listener);
     }
 
     /**
@@ -146,7 +148,7 @@ public class MpnSubscription {
      */
     @Nonnull
     public List<MpnSubscriptionListener> getListeners() {
-
+        return delegate.getListeners();
     }
     
     /**
@@ -160,7 +162,7 @@ public class MpnSubscription {
      */
     @Nullable
     public String getNotificationFormat() {
-
+        return delegate.getNotificationFormat();
     }
 
     /**
@@ -178,7 +180,7 @@ public class MpnSubscription {
      * A special server-managed argument may also be used:<ul>
      * <li><code>${LS_MPN_subscription_ID}</code>: the ID of the MPN subscription generating the push notification.
      * </ul>
-     * The {@link com.lightstreamer.client.mpn.util.MpnBuilder} object provides methods to build an appropriate JSON structure from its defining fields.<BR>
+     * The {@link com.lightstreamer.client.mpn.MpnBuilder} object provides methods to build an appropriate JSON structure from its defining fields.<BR>
      * Note: if the MpnSubscription has been created by the client, such as when obtained through {@link LightstreamerClient#getMpnSubscriptions(String)},
      * named arguments are always mapped to its corresponding indexed argument, even if originally the notification format used a named argument.<BR>
      * Note: the content of this property may be subject to length restrictions (See the "General Concepts" document for more information).
@@ -191,10 +193,10 @@ public class MpnSubscription {
      * @param format the JSON structure to be used as the format of push notifications.
      * @throws IllegalStateException if the MpnSubscription is currently "active".
      * 
-     * @see com.lightstreamer.client.mpn.util.MpnBuilder
+     * @see com.lightstreamer.client.mpn.MpnBuilder
      */
     public void setNotificationFormat(@Nonnull String format) {
-
+        delegate.setNotificationFormat(format);
     }
 
     /**
@@ -206,7 +208,7 @@ public class MpnSubscription {
      */
     @Nullable
     public String getTriggerExpression() {
-
+        return delegate.getTriggerExpression();
     }
 
     /**
@@ -240,7 +242,7 @@ public class MpnSubscription {
      * @see #isTriggered()
      */
     public void setTriggerExpression(@Nonnull String expr) {
-
+        delegate.setTriggerExpression(expr);
     }
 
     /**
@@ -259,7 +261,7 @@ public class MpnSubscription {
      * @see LightstreamerClient#unsubscribeMpnSubscriptions(String)
      */
     public boolean isActive() {
-
+        return delegate.isActive();
     }
 
     /**
@@ -277,7 +279,7 @@ public class MpnSubscription {
      * @see LightstreamerClient#unsubscribeMpnSubscriptions(String)
      */
     public boolean isSubscribed() {
-
+        return delegate.isSubscribed();
     }
 
     /**
@@ -297,7 +299,7 @@ public class MpnSubscription {
      * @see LightstreamerClient#unsubscribeMpnSubscriptions(String)
      */
     public boolean isTriggered() {
-
+        return delegate.isTriggered();
     }
 
     /**
@@ -323,7 +325,7 @@ public class MpnSubscription {
      */
     @Nonnull
     public String getStatus() {
-
+        return delegate.getStatus();
     }
 
     /**
@@ -339,7 +341,7 @@ public class MpnSubscription {
      * @see #getStatus()
      */
     public long getStatusTimestamp() {
-
+        return delegate.getStatusTimestamp();
     }
 
     /**
@@ -361,7 +363,7 @@ public class MpnSubscription {
      * "active".
      */
     public void setItems(@Nullable String[] items) {
-
+        delegate.setItems(items);
     }
 
     /**
@@ -380,7 +382,7 @@ public class MpnSubscription {
      */
     @Nonnull
     public String[] getItems() {
-
+        return delegate.getItems();
     }
 
     /**
@@ -401,7 +403,7 @@ public class MpnSubscription {
      * "active".
      */
     public void setItemGroup(@Nonnull String groupName) {
-
+        delegate.setItemGroup(groupName);
     }
 
     /**
@@ -418,7 +420,7 @@ public class MpnSubscription {
      */
     @Nonnull
     public String getItemGroup() {
-
+        return delegate.getItemGroup();
     }
 
     /**
@@ -440,7 +442,7 @@ public class MpnSubscription {
      * "active".
      */
     public void setFields(@Nullable String[] fields) {
-
+        delegate.setFields(fields);
     }
 
     /**
@@ -457,7 +459,7 @@ public class MpnSubscription {
      */
     @Nonnull
     public String[] getFields() {
-
+        return delegate.getFields();
     }
 
     /**
@@ -479,7 +481,7 @@ public class MpnSubscription {
      * "active".
      */
     public void setFieldSchema(@Nonnull String schemaName) {
-
+        delegate.setFieldSchema(schemaName);
     }
 
     /**
@@ -496,7 +498,7 @@ public class MpnSubscription {
      */
     @Nonnull
     public String getFieldSchema() {
-
+        return delegate.getFieldSchema();
     }
 
     /**
@@ -529,7 +531,7 @@ public class MpnSubscription {
      * @see ConnectionDetails#setAdapterSet(String)
      */
     public void setDataAdapter(@Nullable String dataAdapter) {
-
+        delegate.setDataAdapter(dataAdapter);
     }
 
     /**
@@ -543,7 +545,7 @@ public class MpnSubscription {
      */
     @Nullable
     public String getDataAdapter() {
-
+        return delegate.getDataAdapter();
     }
     
     /**
@@ -578,7 +580,7 @@ public class MpnSubscription {
      * @see #setRequestedMaxFrequency(String)
      */
     public void setRequestedBufferSize(@Nullable String size) {
-
+        delegate.setRequestedBufferSize(size);
     }
     
     /**
@@ -593,7 +595,7 @@ public class MpnSubscription {
      */
     @Nullable
     public String getRequestedBufferSize() {
-
+        return delegate.getRequestedBufferSize();
     }
     
     /**
@@ -632,7 +634,7 @@ public class MpnSubscription {
      * null nor the special "unlimited" value nor a valid positive number.
      */
     public void setRequestedMaxFrequency(@Nullable String freq) {
-
+        delegate.setRequestedMaxFrequency(freq);
     }
     
     /**
@@ -647,7 +649,7 @@ public class MpnSubscription {
      */
     @Nullable
     public String getRequestedMaxFrequency() {
-
+        return delegate.getRequestedMaxFrequency();
     }
     
     /**
@@ -660,7 +662,7 @@ public class MpnSubscription {
      */
     @Nonnull
     public String getMode() {
-
+        return delegate.getMode();
     }
     
     /**
@@ -680,16 +682,6 @@ public class MpnSubscription {
      */
     @Nullable
     public String getSubscriptionId() {
-
-    }
-    
-    @Override
-    public int hashCode() {
-
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-
+        return delegate.getSubscriptionId();
     }
 }

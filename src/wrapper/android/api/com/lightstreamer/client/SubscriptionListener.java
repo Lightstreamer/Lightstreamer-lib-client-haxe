@@ -154,18 +154,14 @@ public interface SubscriptionListener {
   /**
    * Event handler that receives a notification when the SubscriptionListener instance is removed from a Subscription 
    * through {@link Subscription#removeListener(SubscriptionListener)}. This is the last event to be fired on the listener.
-   * 
-   * @param subscription the Subscription this instance was removed from.
    */
-  void onListenEnd(@Nonnull Subscription subscription);
+  void onListenEnd();
   
   /**
    * Event handler that receives a notification when the SubscriptionListener instance is added to a Subscription 
    * through {@link Subscription#addListener(SubscriptionListener)}. This is the first event to be fired on the listener.
-   *
-   * @param subscription the Subscription this instance was added to.
    */
-  void onListenStart(@Nonnull Subscription subscription);
+  void onListenStart();
   
   /**
    * Event handler that is called by Lightstreamer to notify that a Subscription has been successfully subscribed 
