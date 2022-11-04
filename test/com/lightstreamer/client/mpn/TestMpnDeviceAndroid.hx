@@ -1,5 +1,6 @@
 package com.lightstreamer.client.mpn;
 
+import com.lightstreamer.client.mpn.internal.MpnDevice;
 import utils.AndroidTools.appContext;
 import com.lightstreamer.internal.NativeTypes.IllegalArgumentException;
 import com.lightstreamer.client.mpn.AndroidTools;
