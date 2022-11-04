@@ -13,13 +13,13 @@
   <property name="lib.jar" location="${lib}/ls-javase-client.jar"/>
   <property name="docs" location="${build}/docs"/>
 
-  <property name="api.src" location="src/wrapper/javase/api"/>
+  <property name="api.src" location="src/wrapper/java/api"/>
   <property name="api.build" location="${build}/api"/>
   <property name="api.classes" location="${api.build}/classes"/>
   <property name="api.lib" location="${api.build}/lib"/>
   <property name="api.lib.jar" location="${api.lib}/ls-javase-client-api.jar"/>
 
-  <property name="wrapper.src" location="src/wrapper/javase/classes"/>
+  <property name="wrapper.src" location="src/wrapper/java/classes"/>
   <property name="wrapper.build" location="${build}/wrapper"/>
   <property name="wrapper.classes" location="${wrapper.build}/classes"/>
   <property name="wrapper.lib" location="${wrapper.build}/lib"/>
@@ -27,7 +27,7 @@
   
   <property name="haxe.lib.jar" location="${build}/haxe/lib/ls-javase-client-haxe.jar"/>
 
-  <property name="doc.overview" location="tools/javase/java_overview.html"/>
+  <property name="doc.overview" location="tools/java/java_overview.html"/>
 
   <target name="package" depends="package_wrapper" description="Build the library">
     <jar destfile="${lib.jar}">
