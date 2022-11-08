@@ -14,6 +14,7 @@ package com.lightstreamer.client;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import com.lightstreamer.client.LSConnectionOptions;
 
 /**
  * Used by LightstreamerClient to provide an extra connection properties data object.
@@ -26,10 +27,10 @@ import java.util.*;
  * @see LightstreamerClient
  */
 public class ConnectionOptions {
-  final com.lightstreamer.client.internal.ConnectionOptions delegate;
+  final LSConnectionOptions delegate;
   
-  ConnectionOptions(com.lightstreamer.client.internal.LightstreamerClient client) {
-    this.delegate = new com.lightstreamer.client.internal.ConnectionOptions(client);
+  ConnectionOptions(com.lightstreamer.client.LSLightstreamerClient client) {
+    this.delegate = new LSConnectionOptions(client);
   }
   
   /**

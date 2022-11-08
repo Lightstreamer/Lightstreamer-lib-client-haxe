@@ -19,6 +19,7 @@ import java.util.concurrent.Future;
 import java.net.URI;
 import java.net.HttpCookie;
 import javax.net.ssl.TrustManagerFactory;
+import com.lightstreamer.client.LSLightstreamerClient;
 
 /**
  * Facade class for the management of the communication to
@@ -34,7 +35,7 @@ import javax.net.ssl.TrustManagerFactory;
  * toward the same or multiple endpoints.
  */
 public class LightstreamerClient {
-  final com.lightstreamer.client.internal.LightstreamerClient delegate;
+  final LSLightstreamerClient delegate;
 
   /**
    * A constant string representing the name of the library.
@@ -85,7 +86,7 @@ public class LightstreamerClient {
    * instance that will be used to generate log messages by the library classes.
    */
   public static void setLoggerProvider(@Nullable LoggerProvider provider) {
-    com.lightstreamer.client.internal.LightstreamerClient.setLoggerProvider(provider);
+    LSLightstreamerClient.setLoggerProvider(provider);
   }
 
   /**
@@ -127,7 +128,7 @@ public class LightstreamerClient {
    * {@link ConnectionDetails#setServerAddress(String)} for details.
    */
   public LightstreamerClient(@Nullable String serverAddress, @Nullable String adapterSet) {
-    this.delegate = new com.lightstreamer.client.internal.LightstreamerClient(serverAddress, adapterSet);
+    this.delegate = new LSLightstreamerClient(serverAddress, adapterSet);
     this.connectionOptions = new ConnectionOptions(delegate);
     this.connectionDetails = new ConnectionDetails(delegate);
   }
@@ -452,7 +453,7 @@ public class LightstreamerClient {
    * @see #getCookies
    */
   public static void addCookies(@Nonnull URI uri, @Nonnull List<HttpCookie> cookies) {
-    com.lightstreamer.client.internal.LightstreamerClient.addCookies(uri, cookies);
+    LSLightstreamerClient.addCookies(uri, cookies);
   }
   
   /**  
@@ -472,7 +473,7 @@ public class LightstreamerClient {
    */
   @Nonnull
   public static List<HttpCookie> getCookies(@Nullable URI uri) {
-    return com.lightstreamer.client.internal.LightstreamerClient.getCookies(uri);
+    return LSLightstreamerClient.getCookies(uri);
   }
   
   /**
@@ -485,6 +486,6 @@ public class LightstreamerClient {
    * @throws IllegalStateException if a factory is already installed
    */
   public static void setTrustManagerFactory(@Nonnull TrustManagerFactory factory) {
-    com.lightstreamer.client.internal.LightstreamerClient.setTrustManagerFactory(factory);
+    LSLightstreamerClient.setTrustManagerFactory(factory);
   }
 }
