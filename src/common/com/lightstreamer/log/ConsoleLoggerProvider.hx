@@ -1,10 +1,10 @@
-package com.lightstreamer.log.internal;
+package com.lightstreamer.log;
 
 import com.lightstreamer.internal.NativeTypes;
 
 #if (js || python) @:expose @:native("ConsoleLogLevel") #end
 #if (java || cs || python) @:nativeGen #end
-class ConsoleLogLevel {
+class LSConsoleLogLevel {
   public static final TRACE = 0;
   public static final DEBUG = 10;
   public static final INFO = 20;
@@ -17,7 +17,7 @@ class ConsoleLogLevel {
 
 #if (js || python) @:expose @:native("ConsoleLoggerProvider") #end
 #if (java || cs || python) @:nativeGen #end
-class ConsoleLoggerProvider implements LoggerProvider {
+class LSConsoleLoggerProvider implements LoggerProvider {
   final level: Int;
 
   public function new(level: Int) {
@@ -46,12 +46,12 @@ private class ConsoleLogger implements Logger {
   public function new(level: Int, category: String) {
     this.level = level;
     this.category = category;
-    this.traceEnabled = level <= ConsoleLogLevel.TRACE;
-    this.debugEnabled = level <= ConsoleLogLevel.DEBUG;
-    this.infoEnabled  = level <= ConsoleLogLevel.INFO;
-    this.warnEnabled  = level <= ConsoleLogLevel.WARN;
-    this.errorEnabled = level <= ConsoleLogLevel.ERROR;
-    this.fatalEnabled = level <= ConsoleLogLevel.FATAL;
+    this.traceEnabled = level <= LSConsoleLogLevel.TRACE;
+    this.debugEnabled = level <= LSConsoleLogLevel.DEBUG;
+    this.infoEnabled  = level <= LSConsoleLogLevel.INFO;
+    this.warnEnabled  = level <= LSConsoleLogLevel.WARN;
+    this.errorEnabled = level <= LSConsoleLogLevel.ERROR;
+    this.fatalEnabled = level <= LSConsoleLogLevel.FATAL;
   }
 
   inline function printLog(msg: String) {
