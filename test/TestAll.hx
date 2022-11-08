@@ -1,3 +1,4 @@
+import com.lightstreamer.client.LightstreamerClient.LSLightstreamerClient as LightstreamerClient;
 import com.lightstreamer.log.internal.ConsoleLoggerProvider;
 import utest.Runner;
 import com.lightstreamer.client.*;
