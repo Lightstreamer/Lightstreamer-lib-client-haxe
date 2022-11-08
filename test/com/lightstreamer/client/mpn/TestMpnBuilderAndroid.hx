@@ -1,6 +1,6 @@
 package com.lightstreamer.client.mpn;
 
-import com.lightstreamer.client.mpn.internal.MpnBuilder;
+import com.lightstreamer.client.mpn.MpnBuilder.LSMpnBuilder as MpnBuilder;
 import com.lightstreamer.internal.NativeTypes.NativeList;
 
 class TestMpnBuilderAndroid extends utest.Test {

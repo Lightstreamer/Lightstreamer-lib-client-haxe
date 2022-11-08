@@ -1,6 +1,5 @@
 package com.lightstreamer.client.mpn;
 
-import com.lightstreamer.client.mpn.internal.MpnSubscription;
 import com.lightstreamer.internal.NativeTypes.IllegalStateException;
 import com.lightstreamer.internal.NativeTypes.IllegalArgumentException;
 
