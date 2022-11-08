@@ -8,7 +8,7 @@ using com.lightstreamer.log.LoggerTools;
 
 #if (java || cs || python) @:nativeGen #end
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
-@:access(com.lightstreamer.client.LightstreamerClient)
+@:access(com.lightstreamer.client)
 class LSConnectionOptions {
   var contentLength: ContentLength = new ContentLength(50000000);
   var firstRetryMaxDelay: Millis = new Millis(100);

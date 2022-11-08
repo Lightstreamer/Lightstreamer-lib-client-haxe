@@ -20,9 +20,7 @@ using com.lightstreamer.internal.NullTools;
 using StringTools;
 using Lambda;
 
-@:access(com.lightstreamer.client.ConnectionDetails)
-@:access(com.lightstreamer.client.ConnectionOptions)
-@:access(com.lightstreamer.client.LightstreamerClient)
+@:access(com.lightstreamer.client)
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class ClientMachine {
   final client: LightstreamerClient;

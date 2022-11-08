@@ -9,7 +9,7 @@ using com.lightstreamer.log.LoggerTools;
 #if (js || python) @:expose @:native("ConnectionDetails") #end
 #if (java || cs || python) @:nativeGen #end
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
-@:access(com.lightstreamer.client.LightstreamerClient)
+@:access(com.lightstreamer.client)
 class LSConnectionDetails {
   var serverAddress: Null<ServerAddress>;
   var adapterSet: Null<String>;
