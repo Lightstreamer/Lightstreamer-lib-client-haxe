@@ -5,7 +5,7 @@ import com.lightstreamer.internal.NativeTypes;
 import com.lightstreamer.client.mpn.Types.MpnSubscriptionMode;
 import com.lightstreamer.internal.RLock;
 import com.lightstreamer.client.internal.ClientRequests.Encodable;
-import com.lightstreamer.client.mpn.internal.MpnSubscription;
+import com.lightstreamer.client.mpn.MpnSubscription.MpnSubscriptionStatus;
 import com.lightstreamer.internal.MacroTools;
 import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;

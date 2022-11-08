@@ -1,6 +1,5 @@
-package com.lightstreamer.client.mpn.internal;
+package com.lightstreamer.client.mpn;
 
-import com.lightstreamer.client.internal.Subscription;
 import com.lightstreamer.client.internal.MpnSubscriptionManager;
 import com.lightstreamer.internal.NativeTypes;
 import com.lightstreamer.internal.Types;
@@ -20,7 +19,7 @@ private class MpnSubscriptionEventDispatcher extends EventDispatcher<MpnSubscrip
 #if (js || python) @:expose @:native("MpnSubscription") #end
 #if (java || cs || python) @:nativeGen #end
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
-class MpnSubscription {
+class LSMpnSubscription {
   final eventDispatcher = new MpnSubscriptionEventDispatcher();
   var mode: MpnSubscriptionMode;
   var items: Null<Items>;

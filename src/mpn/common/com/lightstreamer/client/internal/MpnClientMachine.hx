@@ -1,13 +1,11 @@
 package com.lightstreamer.client.internal;
 
-import com.lightstreamer.client.mpn.internal.MpnSubscription;
 import com.lightstreamer.internal.*;
 import com.lightstreamer.internal.Types;
 import com.lightstreamer.internal.NativeTypes;
 import com.lightstreamer.internal.PlatformApi;
 import com.lightstreamer.internal.MacroTools;
 import com.lightstreamer.internal.Set;
-import com.lightstreamer.client.mpn.internal.MpnDevice;
 import com.lightstreamer.client.SubscriptionListener;
 import com.lightstreamer.client.internal.ParseTools;
 import com.lightstreamer.client.internal.MpnRequests;

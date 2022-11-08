@@ -1,4 +1,4 @@
-package com.lightstreamer.client.mpn.internal;
+package com.lightstreamer.client.mpn;
 
 import haxe.DynamicAccess;
 import haxe.Json;
@@ -29,7 +29,7 @@ private typedef JsonFormat = {
 
 #if (java || cs || python) @:nativeGen #end
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
-class MpnBuilder {
+class LSMpnBuilder {
   final obj: JsonFormat;
 
   public overload function new() {
