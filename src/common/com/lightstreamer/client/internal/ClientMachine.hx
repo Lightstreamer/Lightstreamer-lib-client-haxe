@@ -9,7 +9,7 @@ import com.lightstreamer.internal.PlatformApi;
 import com.lightstreamer.internal.Timer;
 import com.lightstreamer.internal.Constants;
 import com.lightstreamer.internal.Threads;
-import com.lightstreamer.client.internal.LightstreamerClient.ClientEventDispatcher;
+import com.lightstreamer.client.LightstreamerClient.ClientEventDispatcher;
 import com.lightstreamer.client.internal.ClientStates;
 import com.lightstreamer.client.internal.ClientRequests;
 import com.lightstreamer.log.LoggerTools;
@@ -20,9 +20,9 @@ using com.lightstreamer.internal.NullTools;
 using StringTools;
 using Lambda;
 
-@:access(com.lightstreamer.client.internal.ConnectionDetails)
-@:access(com.lightstreamer.client.internal.ConnectionOptions)
-@:access(com.lightstreamer.client.internal.LightstreamerClient)
+@:access(com.lightstreamer.client.ConnectionDetails)
+@:access(com.lightstreamer.client.ConnectionOptions)
+@:access(com.lightstreamer.client.LightstreamerClient)
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class ClientMachine {
   final client: LightstreamerClient;
@@ -227,7 +227,7 @@ class ClientMachine {
     }
   }
 
-  @:allow(com.lightstreamer.client.internal.ConnectionDetails)
+  @:allow(com.lightstreamer.client.ConnectionDetails)
   function evtServerAddressChanged() {
     traceEvent( "nr:serverAddress.changed");
     switch state.s_nr {
@@ -2455,7 +2455,7 @@ class ClientMachine {
     }
   }
 
-  @:allow(com.lightstreamer.client.internal.ConnectionOptions)
+  @:allow(com.lightstreamer.client.ConnectionOptions)
   function evtExtSetReverseHeartbeatInterval() {
     traceEvent("setReverseHeartbeatInterval");
     if (state.s_rhb != null) {
@@ -2885,7 +2885,7 @@ class ClientMachine {
     }
   }
 
-  @:allow(com.lightstreamer.client.internal.ConnectionOptions)
+  @:allow(com.lightstreamer.client.ConnectionOptions)
   function evtExtSetForcedTransport() {
     traceEvent("setForcedTransport");
     if (state.s_swt == s1301) {
@@ -2894,7 +2894,7 @@ class ClientMachine {
     }
   }
 
-  @:allow(com.lightstreamer.client.internal.ConnectionOptions)
+  @:allow(com.lightstreamer.client.ConnectionOptions)
   function evtExtSetRequestedMaxBandwidth() {
     traceEvent("setRequestedMaxBandwidth");
     if (state.s_bw == s1201) {

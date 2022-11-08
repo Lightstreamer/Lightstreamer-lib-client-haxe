@@ -1,4 +1,4 @@
-package com.lightstreamer.client.internal;
+package com.lightstreamer.client;
 
 import com.lightstreamer.client.internal.ClientMachine;
 import com.lightstreamer.internal.NativeTypes;
@@ -15,7 +15,7 @@ class ClientEventDispatcher extends EventDispatcher<ClientListener> {}
 #if (js || python) @:expose @:native("LightstreamerClient") #end
 #if (java || cs || python) @:nativeGen #end
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
-class LightstreamerClient {
+class LSLightstreamerClient {
   public static final LIB_NAME: String = LS_LIB_NAME;
   public static final LIB_VERSION: String = LS_LIB_VERSION;
 

@@ -1,4 +1,4 @@
-package com.lightstreamer.client.internal;
+package com.lightstreamer.client;
 
 #if (java || cs || python)
 import com.lightstreamer.internal.NativeTypes.IllegalArgumentException;
@@ -21,7 +21,7 @@ enum abstract ProxyType(String) to String {
 
 #if (js || python) @:expose @:native("Proxy") #end
 @:nativeGen
-class Proxy {
+class LSProxy {
   public final type: ProxyType;
   public final host: String;
   public final port: Int;

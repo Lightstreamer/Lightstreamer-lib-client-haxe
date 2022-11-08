@@ -1,4 +1,4 @@
-package com.lightstreamer.client.internal;
+package com.lightstreamer.client;
 
 import com.lightstreamer.internal.InfoMap;
 import com.lightstreamer.client.internal.SubscriptionManager;
@@ -22,7 +22,7 @@ private class SubscriptionEventDispatcher extends EventDispatcher<SubscriptionLi
 #if (js || python) @:expose @:native("Subscription") #end
 #if (java || cs || python) @:nativeGen #end
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
-class Subscription {
+class LSSubscription {
   final eventDispatcher = new SubscriptionEventDispatcher();
   final mode: SubscriptionMode;
   var items: Null<Items>;

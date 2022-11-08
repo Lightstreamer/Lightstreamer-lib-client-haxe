@@ -2,7 +2,7 @@ package com.lightstreamer.internal;
 
 import com.lightstreamer.internal.PlatformApi.IWsClient;
 import okhttp3.*;
-import com.lightstreamer.client.internal.Proxy;
+import com.lightstreamer.client.Proxy.LSProxy as Proxy;
 import com.lightstreamer.internal.NativeTypes.IllegalStateException;
 import com.lightstreamer.internal.MacroTools.assert;
 import com.lightstreamer.log.LoggerTools;

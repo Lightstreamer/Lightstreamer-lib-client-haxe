@@ -1,4 +1,4 @@
-package com.lightstreamer.client.internal;
+package com.lightstreamer.client;
 
 import com.lightstreamer.internal.InfoMap;
 import com.lightstreamer.internal.NativeTypes;
@@ -9,8 +9,8 @@ using com.lightstreamer.log.LoggerTools;
 #if (js || python) @:expose @:native("ConnectionDetails") #end
 #if (java || cs || python) @:nativeGen #end
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
-@:access(com.lightstreamer.client.internal.LightstreamerClient)
-class ConnectionDetails {
+@:access(com.lightstreamer.client.LightstreamerClient)
+class LSConnectionDetails {
   var serverAddress: Null<ServerAddress>;
   var adapterSet: Null<String>;
   var user: Null<String>;
