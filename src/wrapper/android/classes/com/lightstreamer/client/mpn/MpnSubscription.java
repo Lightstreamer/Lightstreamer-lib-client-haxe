@@ -6,6 +6,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 import com.lightstreamer.client.*;
+import com.lightstreamer.client.mpn.LSMpnSubscription;
 
 
 /**
@@ -30,7 +31,7 @@ import com.lightstreamer.client.*;
  */
 public class MpnSubscription {
     /** @hidden */
-    public final com.lightstreamer.client.mpn.internal.MpnSubscription delegate;
+    public final LSMpnSubscription delegate;
 
     /**
      * Creates an object to be used to describe an MPN subscription that is going to be subscribed to through the MPN Module of Lightstreamer Server.<BR>
@@ -50,7 +51,7 @@ public class MpnSubscription {
      * @throws IllegalArgumentException If the specified "Item List" or "Field List" is not valid; see {@link #setItems(String[])} and {@link #setFields(String[])} for details.
      */
     public MpnSubscription(@Nonnull String subscriptionMode, @Nonnull String[] items, @Nonnull String[] fields) {
-        this.delegate = new com.lightstreamer.client.mpn.internal.MpnSubscription(subscriptionMode, items, fields);
+        this.delegate = new LSMpnSubscription(subscriptionMode, items, fields);
     }
 
     /**
@@ -70,7 +71,7 @@ public class MpnSubscription {
      * @throws IllegalArgumentException If the specified "Field List" is not valid; see {@link #setFields(String[])} for details.
      */
     public MpnSubscription(@Nonnull String subscriptionMode, @Nonnull String item, @Nonnull String[] fields) {
-        this.delegate = new com.lightstreamer.client.mpn.internal.MpnSubscription(subscriptionMode, item, fields);
+        this.delegate = new LSMpnSubscription(subscriptionMode, item, fields);
     }
 
     /**
@@ -85,7 +86,7 @@ public class MpnSubscription {
      * @throws IllegalArgumentException If no or invalid subscription mode is passed.
      */
     public MpnSubscription(@Nonnull String subscriptionMode) {
-        this.delegate = new com.lightstreamer.client.mpn.internal.MpnSubscription(subscriptionMode);
+        this.delegate = new LSMpnSubscription(subscriptionMode);
     }
 
     /**
@@ -96,7 +97,7 @@ public class MpnSubscription {
      * @param copyFrom The Subscription object to copy properties from.
      */
     public MpnSubscription(@Nonnull Subscription copyFrom) {
-        this.delegate = new com.lightstreamer.client.mpn.internal.MpnSubscription(copyFrom.delegate);
+        this.delegate = new LSMpnSubscription(copyFrom.delegate);
     }
 
     /**
@@ -109,7 +110,7 @@ public class MpnSubscription {
      * @param copyFrom The MpnSubscription object to copy properties from.
      */
     public MpnSubscription(@Nonnull MpnSubscription copyFrom) {
-        this.delegate = new com.lightstreamer.client.mpn.internal.MpnSubscription(copyFrom.delegate);
+        this.delegate = new LSMpnSubscription(copyFrom.delegate);
     }
 
     /**

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import com.lightstreamer.client.mpn.LSMpnBuilder;
 
 /**
  * Utility class that provides methods to build or parse the JSON structure used to represent the format of a push notification.<BR>
@@ -14,14 +15,14 @@ import javax.annotation.Nonnull;
  * @see MpnSubscription#setNotificationFormat(String)
  */
 public class MpnBuilder {
-    final com.lightstreamer.client.mpn.internal.MpnBuilder delegate;
+    final LSMpnBuilder delegate;
 
     /**
      * Creates an empty object to be used to create a push notification format from scratch.<BR>
      * Use setters methods to set the value of push notification fields.
      */
     public MpnBuilder() {
-        this.delegate = new com.lightstreamer.client.mpn.internal.MpnBuilder();
+        this.delegate = new LSMpnBuilder();
     }
     
     /**
@@ -34,7 +35,7 @@ public class MpnBuilder {
      */
     @SuppressWarnings("unchecked") 
     public MpnBuilder(@Nonnull String notificationFormat) {
-        this.delegate = new com.lightstreamer.client.mpn.internal.MpnBuilder(notificationFormat);
+        this.delegate = new LSMpnBuilder(notificationFormat);
     }
 
     /**

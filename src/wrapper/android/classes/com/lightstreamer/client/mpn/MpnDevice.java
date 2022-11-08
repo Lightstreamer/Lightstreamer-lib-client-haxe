@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 import android.content.Context;
 
 import com.lightstreamer.client.LightstreamerClient;
+import com.lightstreamer.client.mpn.LSMpnDevice;
 
 /**
  * Class representing a device that supports Mobile Push Notifications (MPN).<BR>
@@ -25,7 +26,7 @@ import com.lightstreamer.client.LightstreamerClient;
  */
 public class MpnDevice {
   /** @hidden */
-  public final com.lightstreamer.client.mpn.internal.MpnDevice delegate;
+  public final LSMpnDevice delegate;
 
   /**
      * Creates an object to be used to describe an MPN device that is going to be registered to the MPN Module of Lightstreamer Server.<BR>
@@ -43,7 +44,7 @@ public class MpnDevice {
      * @throws IllegalArgumentException if {@code context}, {@code senderId} or {@code token} are null.
      */
     public MpnDevice(final @Nonnull Context appContext, final @Nonnull String token) {
-      this.delegate = new com.lightstreamer.client.mpn.internal.MpnDevice(appContext, token);
+      this.delegate = new LSMpnDevice(appContext, token);
     }
 
     /**

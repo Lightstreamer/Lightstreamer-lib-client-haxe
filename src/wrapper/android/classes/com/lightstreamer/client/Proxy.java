@@ -13,6 +13,7 @@ package com.lightstreamer.client;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import com.lightstreamer.client.LSProxy;
 
 /**
  * Simple class representing a Proxy configuration. <BR>
@@ -21,7 +22,7 @@ import javax.annotation.Nullable;
  * instruct a LightstreamerClient to connect to the Lightstreamer Server passing through a proxy.
  */
 public class Proxy {
-  final com.lightstreamer.client.internal.Proxy delegate;
+  final LSProxy delegate;
 
   /**
    * This constructor will call {@link #Proxy(String, String, int, String, String)}
@@ -31,7 +32,7 @@ public class Proxy {
    * @param port the proxy port
    */
   public Proxy(@Nonnull String type, @Nonnull String host, int port) {
-    this.delegate = new com.lightstreamer.client.internal.Proxy(type, host, port);
+    this.delegate = new LSProxy(type, host, port);
   }
   
   /**
@@ -43,7 +44,7 @@ public class Proxy {
    * @param user the user name to be used to validate against the proxy
    */
   public Proxy(@Nonnull String type, @Nonnull String host, int port, @Nullable String user) {
-    this.delegate = new com.lightstreamer.client.internal.Proxy(type, host, port, user);
+    this.delegate = new LSProxy(type, host, port, user);
   }
   
   /**
@@ -64,7 +65,7 @@ public class Proxy {
    * @param password the password to be used to validate against the proxy
    */
   public Proxy(@Nonnull String type, @Nonnull String host, int port, @Nullable String user, @Nullable String password) {
-    this.delegate = new com.lightstreamer.client.internal.Proxy(type, host, port, user, password);
+    this.delegate = new LSProxy(type, host, port, user, password);
   }
   
   @Override

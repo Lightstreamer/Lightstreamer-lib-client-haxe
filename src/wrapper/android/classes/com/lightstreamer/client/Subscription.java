@@ -14,6 +14,7 @@
  import javax.annotation.Nonnull;
  import javax.annotation.Nullable;
  import java.util.*;
+ import com.lightstreamer.client.LSSubscription;
  
  /**
   * Class representing a Subscription to be submitted to a Lightstreamer Server. It contains 
@@ -64,7 +65,7 @@
   */
 public class Subscription {
   /** @hidden */
-  public final com.lightstreamer.client.internal.Subscription delegate;
+  public final LSSubscription delegate;
 
    /**
     * Creates an object to be used to describe a Subscription that is going to be subscribed to 
@@ -96,7 +97,7 @@ public class Subscription {
     * see {@link #setItems(String[])} and {@link #setFields(String[])} for details.
     */
   public Subscription(@Nonnull String subscriptionMode, @Nonnull String[] items, @Nonnull String[] fields) {
-    this.delegate = new com.lightstreamer.client.internal.Subscription(subscriptionMode, items, fields);
+    this.delegate = new LSSubscription(subscriptionMode, items, fields);
   }
    
    /**
@@ -127,7 +128,7 @@ public class Subscription {
     * see {@link #setFields(String[])} for details..
     */
   public Subscription(@Nonnull String subscriptionMode, @Nonnull String item, @Nonnull String[] fields) {
-    this.delegate = new com.lightstreamer.client.internal.Subscription(subscriptionMode, item, fields);
+    this.delegate = new LSSubscription(subscriptionMode, item, fields);
   }
      
    /**
@@ -150,7 +151,7 @@ public class Subscription {
     * </ul>
     */
   public Subscription(@Nonnull String subscriptionMode) {
-    this.delegate = new com.lightstreamer.client.internal.Subscription(subscriptionMode);
+    this.delegate = new LSSubscription(subscriptionMode);
   }
    
    /**
