@@ -30,6 +30,7 @@ removed methods
 added methods
 - MpnSubscription.getActualTriggerExpression
 - MpnSubscription.getActualNotificationFormat
+- MpnSubscriptionListener.onModificationError
 
 renamed methods (java and cs)
 - LightstreamerClient.subscribe(MpnSubscription sub) as LightstreamerClient.subscribeMpn
@@ -44,6 +45,12 @@ removed methods on android
 moved classes
 - to com.lightstreamer.client.mpn.MpnDevice from com.lightstreamer.client.mpn.android.MpnDevice
 - to com.lightstreamer.client.mpn.MpnBuilder from com.lightstreamer.client.mpn.util.MpnBuilder
+
+java
+- LightstreamerClient: removed support for system property "com.lightstreamer.client.session.thread": By default, all instances will share the same thread for their internal operations, but can be instructed to use dedicated threads by setting the custom "com.lightstreamer.client.session.thread" system property as "dedicated"
+
+android:
+- removed "compact" library
 
 # nodejs
 
