@@ -1,6 +1,6 @@
 package com.lightstreamer.internal;
 
-import com.lightstreamer.client.Proxy;
+import com.lightstreamer.client.Proxy.LSProxy as Proxy;
 import com.lightstreamer.internal.NativeTypes.NativeStringMap;
 import com.lightstreamer.internal.PlatformApi.IHttpClient;
 import com.lightstreamer.log.LoggerTools;

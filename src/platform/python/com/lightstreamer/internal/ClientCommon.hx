@@ -1,6 +1,6 @@
 package com.lightstreamer.internal;
 
-import com.lightstreamer.client.Proxy;
+import com.lightstreamer.client.Proxy.LSProxy as Proxy;
 
 using StringTools;
 
