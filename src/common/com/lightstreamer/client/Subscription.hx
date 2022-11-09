@@ -19,8 +19,6 @@ private class SubscriptionEventDispatcher extends EventDispatcher<SubscriptionLi
 /**
  * Subscription class
  **/
-#if (js || python) @:expose @:native("Subscription") #end
-#if (java || cs || python) @:nativeGen #end
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class LSSubscription {
   final eventDispatcher = new SubscriptionEventDispatcher();

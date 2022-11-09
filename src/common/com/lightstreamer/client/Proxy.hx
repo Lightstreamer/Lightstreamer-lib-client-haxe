@@ -19,8 +19,6 @@ enum abstract ProxyType(String) to String {
   }
 }
 
-#if (js || python) @:expose @:native("Proxy") #end
-@:nativeGen
 class LSProxy {
   public final type: ProxyType;
   public final host: String;

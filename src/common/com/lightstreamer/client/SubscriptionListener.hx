@@ -1,7 +1,5 @@
 package com.lightstreamer.client;
 
-#if (js || python) @:expose @:native("SubscriptionListener") #end
-#if (java || cs || python) @:nativeGen #end
 extern interface SubscriptionListener {
   function onClearSnapshot(itemName: Null<String>, itemPos: Int): Void;
   function onCommandSecondLevelItemLostUpdates(lostUpdates: Int, key: String): Void;
