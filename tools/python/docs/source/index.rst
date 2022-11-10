@@ -3,15 +3,15 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to lightstreamer-client-lib's documentation!
-====================================================
+Lightstreamer Python Client SDK
+===============================
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
    intro
-   lightstreamer
+   modules
 
 
 Indices and tables

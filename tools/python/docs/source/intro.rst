@@ -75,6 +75,7 @@ Logging
 To enable the internal client logger, create a :class:`lightstreamer.LoggerProvider` and set it as the default provider of :meth:`lightstreamer.LightstreamerClient.setLoggerProvider`.
 
 .. code-block:: python
+
   import sys, logging
 
   logging.basicConfig(level=logging.DEBUG, format="%(message)s", stream=sys.stdout)
@@ -92,7 +93,7 @@ Documentation
 
 - `Live demos <https://demos.lightstreamer.com/?p=lightstreamer&t=client&lclient=python>`_
 
-- :doc:`lightstreamer`
+- :doc:`modules`
 
 Support
 *******
