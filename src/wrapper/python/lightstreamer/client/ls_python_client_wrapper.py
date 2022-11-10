@@ -1,3 +1,6 @@
+from .ls_python_client_api import *
+from .ls_python_client_haxe import LSConsoleLoggerProvider, LSConsoleLogLevel, LSProxy, LSSubscription, LSConnectionDetails, LSConnectionOptions, LSLightstreamerClient
+
 class ConnectionDetails:
     """Used by LightstreamerClient to provide a basic connection properties data object.
  
@@ -12,14 +15,14 @@ class ConnectionDetails:
     """
 
     def __init__(self,client):
-      pass
+      self.delegate = LSConnectionDetails(client)
 
     def getServerAddress(self):
       """Inquiry method that gets the configured address of Lightstreamer Server.
    
    :return: the serverAddress the configured address of Lightstreamer Server.
    """
-      pass
+      return self.delegate.getServerAddress()
 
     def setServerAddress(self,serverAddress):
       """Setter method that sets the address of Lightstreamer Server. 
@@ -54,7 +57,7 @@ class ConnectionDetails:
    
    :raises IllegalArgumentException: if the given address is not valid.
       """
-      pass
+      self.delegate.setServerAddress(serverAddress)
 
     def getAdapterSet(self):
       """Inquiry method that gets the name of the Adapter Set (which defines the Metadata Adapter and one or several 
@@ -64,7 +67,7 @@ class ConnectionDetails:
    
    .. seealso:: :meth:`setAdapterSet`
       """
-      pass
+      return self.delegate.getAdapterSet()
 
     def setAdapterSet(self,adapterSet):
       """Setter method that sets the name of the Adapter Set mounted on Lightstreamer Server to be used to handle 
@@ -88,7 +91,7 @@ class ConnectionDetails:
    
    :param adapterSet: The name of the Adapter Set to be used. A None value is equivalent to the "DEFAULT" name.
       """
-      pass
+      self.delegate.setAdapterSet(adapterSet)
 
     def getUser(self):
       """ Inquiry method that gets the username to be used for the authentication on Lightstreamer Server when 
@@ -96,7 +99,7 @@ class ConnectionDetails:
    
    :return: the username to be used for the authentication on Lightstreamer Server; returns None if no user name has been configured.
    """
-      pass
+      return self.delegate.getUser()
 
     def setUser(self,user):
       """Setter method that sets the username to be used for the authentication on Lightstreamer Server when initiating
@@ -117,7 +120,7 @@ class ConnectionDetails:
    
    .. seealso:: :meth:`setPassword`
    """
-      pass
+      self.delegate.setUser(user)
 
     def setPassword(self,password):
       """Setter method that sets the password to be used for the authentication on Lightstreamer Server when initiating 
@@ -144,7 +147,7 @@ class ConnectionDetails:
           
    .. seealso:: :meth:`setUser`
       """
-      pass
+      self.delegate.setPassword(password)
 
     def getSessionId(self):
       """Inquiry method that gets the ID associated by the server to this client session.
@@ -156,7 +159,7 @@ class ConnectionDetails:
    ClientListener listening to the related LightstreamerClient.
    
    :return: ID assigned by the Server to this client session."""
-      pass
+      return self.delegate.getSessionId()
 
     def getServerInstanceAddress(self):
       """Inquiry method that gets the server address to be used to issue all requests related to the current session. 
@@ -182,7 +185,7 @@ class ConnectionDetails:
    
    :return: address used to issue all requests related to the current session.
    """
-      pass
+      return self.delegate.getServerInstanceAddress()
 
     def getServerSocketName(self):
       """ Inquiry method that gets the instance name of the Server which is serving the current session. To be more precise, 
@@ -207,7 +210,7 @@ class ConnectionDetails:
    
    :return: name configured for the Server instance which is managing the current session, or None.
    """
-      pass
+      return self.delegate.getServerSocketName()
 
     def getClientIp(self):
       """Inquiry method that gets the IP address of this client as seen by the Server which is serving
@@ -229,7 +232,7 @@ class ConnectionDetails:
    
    :return:  A canonical representation of an IP address (it can be either IPv4 or IPv6), or None.
    """
-      pass
+      return self.delegate.getClientIp()
 
 class ConnectionOptions:
   """Used by LightstreamerClient to provide an extra connection properties data object.
@@ -243,7 +246,7 @@ class ConnectionOptions:
  """
 
   def __init__(self,client):
-    pass
+    self.delegate = LSConnectionOptions(client)
 
   def getContentLength(self):
     """Inquiry method that gets the length expressed in bytes to be used by the Server for the response body on a HTTP stream connection.
@@ -252,7 +255,7 @@ class ConnectionOptions:
    
    .. seealso:: :meth:`setContentLength`
    """
-    pass
+    return self.delegate.getContentLength()
 
   def setContentLength(self,contentLength):
     """Setter method that sets the length in bytes to be used by the Server for the response body on a stream connection 
@@ -276,7 +279,7 @@ class ConnectionOptions:
    
    :raises IllegalArgumentException: if a negative or zero value is configured 
    """
-    pass
+    self.delegate.setContentLength(contentLength)
 
   def getFirstRetryMaxDelay(self):
     """Inquiry method that gets the maximum time to wait before trying a new connection to the Server in case the previous one is unexpectedly closed while correctly working.
@@ -285,7 +288,7 @@ class ConnectionOptions:
 
    .. seealso:: :meth:`setFirstRetryMaxDelay`
    """
-    pass
+    return self.delegate.getFirstRetryMaxDelay()
 
   def setFirstRetryMaxDelay(self,firstRetryMaxDelay):
     """Setter method that sets the maximum time to wait before trying a new connection to the Server
@@ -310,7 +313,7 @@ class ConnectionOptions:
    
    :raises IllegalArgumentException: if a negative or zero value is configured 
    """
-    pass
+    self.delegate.setFirstRetryMaxDelay(firstRetryMaxDelay)
 
   def getForcedTransport(self):
     """Inquiry method that gets the value of the forced transport (if any).
@@ -319,7 +322,7 @@ class ConnectionOptions:
 
    .. seealso:: :meth:`setForcedTransport`
    """
-    pass
+    return self.delegate.getForcedTransport()
 
   def setForcedTransport(self,forcedTransport):
     """Setter method that can be used to disable/enable the Stream-Sense algorithm and to force the client to use a fixed 
@@ -356,7 +359,7 @@ class ConnectionOptions:
    
    :raises IllegalArgumentException: if the given value is not in the list of the admitted ones.
    """
-    pass
+    self.delegate.setForcedTransport(forcedTransport)
 
   def getHttpExtraHeaders(self):
     """ Inquiry method that gets the Map object containing the extra headers to be sent to the server.
@@ -366,7 +369,7 @@ class ConnectionOptions:
    .. seealso:: :meth:`setHttpExtraHeaders`
    .. seealso:: :meth:`setHttpExtraHeadersOnSessionCreationOnly`
    """
-    pass
+    return self.delegate.getHttpExtraHeaders()
 
   def setHttpExtraHeaders(self,httpExtraHeaders):
     """Setter method that enables/disables the setting of extra HTTP headers to all the request performed to the Lightstreamer server by the client. 
@@ -389,7 +392,7 @@ ClientListener listening to the related LightstreamerClient.
    
 :param httpExtraHeaders: a Map object containing header-name header-value pairs. None can be specified to avoid extra headers to be sent.
    """
-    pass
+    self.delegate.setHttpExtraHeaders(httpExtraHeaders)
 
   def getIdleTimeout(self):
     """Inquiry method that gets the maximum time the Server is allowed to wait for any data to be sent 
@@ -400,7 +403,7 @@ ClientListener listening to the related LightstreamerClient.
 
    .. seealso:: :meth:`setIdleTimeout`
    """
-    pass
+    return self.delegate.getIdleTimeout()
 
   def setIdleTimeout(self,idleTimeout):
     """Setter method that sets the maximum time the Server is allowed to wait for any data to be sent in response to a 
@@ -427,7 +430,7 @@ ClientListener listening to the related LightstreamerClient.
    
    :raises IllegalArgumentException: if a negative value is configured 
    """
-    pass
+    self.delegate.setIdleTimeout(idleTimeout)
 
   def getKeepaliveInterval(self):
     """Inquiry method that gets the interval between two keepalive packets sent by Lightstreamer Server 
@@ -443,7 +446,7 @@ ClientListener listening to the related LightstreamerClient.
    
    .. seealso:: :meth:`setKeepaliveInterval`
    """
-    pass
+    return self.delegate.getKeepaliveInterval()
 
   def setKeepaliveInterval(self,keepaliveInterval):
     """Setter method that sets the interval between two keepalive packets to be sent by Lightstreamer Server on a stream 
@@ -469,7 +472,7 @@ ClientListener listening to the related LightstreamerClient.
    .. seealso:: :meth:`setStalledTimeout`
    .. seealso:: :meth:`setReconnectTimeout`
    """
-    pass
+    self.delegate.setKeepaliveInterval(keepaliveInterval)
 
   def getRequestedMaxBandwidth(self):
     """Inquiry method that gets the maximum bandwidth that can be consumed for the data coming from 
@@ -481,7 +484,7 @@ ClientListener listening to the related LightstreamerClient.
 
    .. seealso:: :meth:`setRequestedMaxBandwidth`
    """
-    pass
+    return self.delegate.getRequestedMaxBandwidth()
 
   def setRequestedMaxBandwidth(self,maxBandwidth):
     """Setter method that sets the maximum bandwidth expressed in kilobits/s that can be consumed for the data coming from 
@@ -507,7 +510,7 @@ ClientListener listening to the related LightstreamerClient.
    
    .. seealso:: :meth:`getRealMaxBandwidth`
    """
-    pass
+    self.delegate.setRequestedMaxBandwidth(maxBandwidth)
 
   def getRealMaxBandwidth(self):
     """Inquiry method that gets the maximum bandwidth that can be consumed for the data coming from 
@@ -526,7 +529,7 @@ ClientListener listening to the related LightstreamerClient.
    
    .. seealso:: :meth:`setRequestedMaxBandwidth`
    """
-    pass
+    return self.delegate.getRealMaxBandwidth()
 
   def getPollingInterval(self):
     """Inquiry method that gets the polling interval used for polling connections. 
@@ -540,7 +543,7 @@ ClientListener listening to the related LightstreamerClient.
 
    .. seealso:: :meth:`setPollingInterval`
    """
-    pass
+    return self.delegate.getPollingInterval()
 
   def setPollingInterval(self,pollingInterval):
     """Setter method that sets the polling interval used for polling connections. The client switches from the default 
@@ -577,7 +580,7 @@ ClientListener listening to the related LightstreamerClient.
    
    :raises IllegalArgumentException: if a negative value is configured 
    """
-    pass
+    self.delegate.setPollingInterval(pollingInterval)
 
   def getReconnectTimeout(self):
     """Inquiry method that gets the time the client, after entering "STALLED" status,
@@ -588,7 +591,7 @@ ClientListener listening to the related LightstreamerClient.
 
    .. seealso:: :meth:`setReconnectTimeout`
    """
-    pass
+    return self.delegate.getReconnectTimeout()
 
   def setReconnectTimeout(self,reconnectTimeout):
     """Setter method that sets the time the client, after entering "STALLED" status,
@@ -612,7 +615,7 @@ ClientListener listening to the related LightstreamerClient.
    .. seealso:: :meth:`setStalledTimeout`
    .. seealso:: :meth:`setKeepaliveInterval`
    """
-    pass
+    self.delegate.setReconnectTimeout(reconnectTimeout)
 
   def getRetryDelay(self):
     """Inquiry method that gets the minimum time to wait before trying a new connection
@@ -625,7 +628,7 @@ ClientListener listening to the related LightstreamerClient.
 
    .. seealso:: :meth:`setRetryDelay`
    """
-    pass
+    return self.delegate.getRetryDelay()
 
   def setRetryDelay(self,retryDelay):
     """Setter method that sets 
@@ -668,7 +671,7 @@ ClientListener listening to the related LightstreamerClient.
    
    .. seealso:: :meth:`setFirstRetryMaxDelay`
    """
-    pass
+    self.delegate.setRetryDelay(retryDelay)
 
   def getReverseHeartbeatInterval(self):
     """Inquiry method that gets the reverse-heartbeat interval expressed in milliseconds.
@@ -678,7 +681,7 @@ ClientListener listening to the related LightstreamerClient.
 
    .. seealso:: :meth:`setReverseHeartbeatInterval`
    """
-    pass
+    return self.delegate.getReverseHeartbeatInterval()
 
   def setReverseHeartbeatInterval(self,reverseHeartbeatInterval):
     """Setter method that enables/disables the reverse-heartbeat mechanism by setting the heartbeat interval. If the given value (expressed in milliseconds) equals 0 then the reverse-heartbeat mechanism will be disabled; otherwise if the given value is greater than 0 the mechanism will be enabled with the specified interval. 
@@ -709,7 +712,7 @@ ClientListener listening to the related LightstreamerClient.
    
 :raises IllegalArgumentException: if a negative value is configured
    """
-    pass
+    self.delegate.setReverseHeartbeatInterval(reverseHeartbeatInterval)
 
   def getSessionRecoveryTimeout(self):
     """Inquiry method that gets the maximum time allowed for attempts to recover
@@ -721,7 +724,7 @@ ClientListener listening to the related LightstreamerClient.
 
    .. seealso:: :meth:`setSessionRecoveryTimeout`
    """
-    pass
+    return self.delegate.getSessionRecoveryTimeout()
 
   def setSessionRecoveryTimeout(self,sessionRecoveryTimeout):
     """Setter method that sets the maximum time allowed for attempts to recover the current session upon an interruption, after which a new session will be created. If the given value (expressed in milliseconds) equals 0, then any attempt to recover the current session will be prevented in the first place.
@@ -749,7 +752,7 @@ ClientListener listening to the related LightstreamerClient.
 
 :raises IllegalArgumentException: if a negative value is passed.
    """
-    pass
+    self.delegate.setSessionRecoveryTimeout(sessionRecoveryTimeout)
 
   def getStalledTimeout(self):
     """Inquiry method that gets the extra time the client can wait when an expected keepalive packet 
@@ -760,7 +763,7 @@ ClientListener listening to the related LightstreamerClient.
 
    .. seealso:: :meth:`setStalledTimeout`
    """
-    pass
+    return self.delegate.getStalledTimeout()
 
   def setStalledTimeout(self,stalledTimeout):
     """Setter method that sets the extra time the client is allowed to wait when an expected keepalive packet has not been 
@@ -781,7 +784,7 @@ ClientListener listening to the related LightstreamerClient.
    .. seealso:: :meth:`setReconnectTimeout`
    .. seealso:: :meth:`setKeepaliveInterval`
    """
-    pass
+    self.delegate.setStalledTimeout(stalledTimeout)
 
   def isHttpExtraHeadersOnSessionCreationOnly(self):
     """ Inquiry method that checks if the restriction on the forwarding of the configured extra http headers 
@@ -792,7 +795,7 @@ ClientListener listening to the related LightstreamerClient.
    .. seealso:: :meth:`setHttpExtraHeadersOnSessionCreationOnly`
    .. seealso:: :meth:`setHttpExtraHeaders`
    """
-    pass
+    return self.delegate.isHttpExtraHeadersOnSessionCreationOnly()
 
   def setHttpExtraHeadersOnSessionCreationOnly(self,httpExtraHeadersOnSessionCreationOnly):
     """Setter method that enables/disables a restriction on the forwarding of the extra http headers specified through 
@@ -812,7 +815,7 @@ ClientListener listening to the related LightstreamerClient.
    
    :param httpExtraHeadersOnSessionCreationOnly: true/false to enable/disable the restriction on extra headers forwarding.
    """
-    pass
+    self.delegate.setHttpExtraHeadersOnSessionCreationOnly(httpExtraHeadersOnSessionCreationOnly)
 
   def isServerInstanceAddressIgnored(self):
     """ Inquiry method that checks if the client is going to ignore the server instance address that 
@@ -822,7 +825,7 @@ ClientListener listening to the related LightstreamerClient.
 
    .. seealso:: :meth:`setServerInstanceAddressIgnored`
    """
-    pass
+    return self.delegate.isServerInstanceAddressIgnored()
 
   def setServerInstanceAddressIgnored(self,serverInstanceAddressIgnored):
     """Setter method that can be used to disable/enable the automatic handling of server instance address that may 
@@ -855,7 +858,7 @@ ClientListener listening to the related LightstreamerClient.
    
    .. seealso:: :meth:`ConnectionDetails.setServerAddress`
    """
-    pass
+    self.delegate.setServerInstanceAddressIgnored(serverInstanceAddressIgnored)
 
   def isSlowingEnabled(self):
     """Inquiry method that checks if the slowing algorithm is enabled or not.
@@ -864,7 +867,7 @@ ClientListener listening to the related LightstreamerClient.
 
    .. seealso:: :meth:`setSlowingEnabled`
    """
-    pass
+    return self.delegate.isSlowingEnabled()
 
   def setSlowingEnabled(self,slowingEnabled):
     """Setter method that turns on or off the slowing algorithm. This heuristic algorithm tries to detect when the client 
@@ -890,7 +893,7 @@ ClientListener listening to the related LightstreamerClient.
    
    :param slowingEnabled: true or false, to enable or disable the heuristic algorithm that lowers the item update frequency.
    """
-    pass
+    self.delegate.setSlowingEnabled(slowingEnabled)
 
   def setProxy(self,proxy):
     """Setter method that configures the coordinates to a proxy server to be used to connect to the Lightstreamer Server. 
@@ -906,7 +909,7 @@ ClientListener listening to the related LightstreamerClient.
    
    :param proxy: The proxy configuration. Specify None to avoid using a proxy.
    """
-    pass
+    self.delegate.setProxy(proxy)
 
 class LightstreamerClient:
   """Facade class for the management of the communication to
@@ -940,10 +943,11 @@ class LightstreamerClient:
   """
 
   def __init__(self,serverAddress,adapterSet):
+    self.delegate = LSLightstreamerClient(serverAddress, adapterSet)
     #: Data object that contains options and policies for the connection to the server. This instance is set up by the LightstreamerClient object at its own creation. Properties of this object can be overwritten by values received from a Lightstreamer Server. 
-    self.connectionOptions = None
+    self.connectionOptions = LSConnectionOptions(self.delegate)
     #: Data object that contains the details needed to open a connection to a Lightstreamer Server. This instance is set up by the LightstreamerClient object at its own creation. Properties of this object can be overwritten by values received from a Lightstreamer Server. 
-    self.connectionDetails = None
+    self.connectionDetails = LSConnectionDetails(self.delegate)
     pass
 
   def addListener(self,listener):
@@ -958,7 +962,7 @@ class LightstreamerClient:
    
    .. seealso:: :meth:`removeListener`
     """
-    pass
+    self.delegate.addListener(listener)
 
   def removeListener(self,listener):
     """ Removes a listener from the LightstreamerClient instance so that it will not receive events anymore.
@@ -969,7 +973,7 @@ class LightstreamerClient:
    
    .. seealso:: :meth:`addListener`
    """
-    pass
+    self.delegate.removeListener(listener)
 
   def getListeners(self):
     """Returns a list containing the :class:`ClientListener` instances that were added to this client.
@@ -978,7 +982,7 @@ class LightstreamerClient:
 
    .. seealso:: :meth:`addListener`
    """
-    pass
+    return self.delegate.getListeners()
 
   def connect(self):
     """Operation method that requests to open a Session against the configured Lightstreamer Server. 
@@ -1006,7 +1010,7 @@ class LightstreamerClient:
    .. seealso:: :meth:`ClientListener.onStatusChange`
    .. seealso:: :meth:`ConnectionDetails.setServerAddress`
    """
-    pass
+    self.delegate.connect()
 
   def disconnect(self):
     """ Operation method that requests to close the Session opened against the configured Lightstreamer Server 
@@ -1025,7 +1029,7 @@ class LightstreamerClient:
    
    .. seealso:: :meth:`connect`
    """
-    pass
+    self.delegate.disconnect()
 
   def getStatus(self):
     """Inquiry method that gets the current client status and transport (when applicable).
@@ -1045,7 +1049,7 @@ class LightstreamerClient:
    
    .. seealso:: :meth:`ClientListener.onStatusChange`
    """
-    pass
+    return self.delegate.getStatus()
 
   def sendMessage(self,message,sequence = None,delayTimeout = None,listener = None,enqueueWhileDisconnected = None):
     """Operation method that sends a message to the Server. The message is interpreted and handled by 
@@ -1107,7 +1111,7 @@ class LightstreamerClient:
    :param listener: an object suitable for receiving notifications about the processing outcome. The parameter is optional; if not supplied, no notification will be available.
    :param enqueueWhileDisconnected: if this flag is set to true, and the client is in a disconnected status when the provided message is handled, then the message is not aborted right away but is queued waiting for a new session. Note that the message can still be aborted later when a new session is established.
    """
-    pass
+    self.delegate.sendMessage(message, sequence, delayTimeout, listener, enqueueWhileDisconnected)
 
   def subscribe(self,subscription):
     """Operation method that adds a Subscription to the list of "active" Subscriptions. The Subscription cannot already 
@@ -1132,7 +1136,7 @@ class LightstreamerClient:
    
    .. seealso:: :meth:`unsubscribe`
    """
-    pass
+    self.delegate.subscribe(subscription.delegate)
 
   def unsubscribe(self,subscription):
     """Operation method that removes a Subscription that is currently in the "active" state. 
@@ -1149,7 +1153,7 @@ class LightstreamerClient:
    
    :param subscription: An "active" Subscription object that was activated by this LightstreamerClient instance.
    """
-    pass
+    self.delegate.unsubscribe(subscription.delegate)
 
   def getSubscriptions(self):
     """ Inquiry method that returns a list containing all the Subscription instances that are 
@@ -1163,7 +1167,7 @@ class LightstreamerClient:
 
    .. seealso:: :meth:`subscribe`
    """
-    pass
+    raise Exception("TODO")
 
   @staticmethod
   def setLoggerProvider(provider):
@@ -1181,7 +1185,7 @@ The following categories are available to be consumed:
     
 :param provider: A :class:`LoggerProvider` instance that will be used to generate log messages by the library classes.
    """
-    pass
+    LSLightstreamerClient.setLoggerProvider(provider)
 
   @staticmethod
   def addCookies(uri,cookies):
@@ -1195,7 +1199,7 @@ The following categories are available to be consumed:
    
 .. seealso:: :meth:`getCookies`
    """
-    pass
+    LSLightstreamerClient.addCookies(uri, cookies)
 
   @staticmethod
   def getCookies(uri):
@@ -1208,7 +1212,7 @@ See :meth:`addCookies` for clarifications on when cookies are directly stored by
 :return: a list with the various cookies that can be sent in a HTTP request for the specified URI. If a None URI was supplied, all available non-expired cookies will be returned.
 :rtype: http.cookies.SimpleCookie
    """
-    pass
+    return LSLightstreamerClient.getCookies(uri)
 
   @staticmethod
   def setTrustManagerFactory(factory):
@@ -1217,10 +1221,10 @@ See :meth:`addCookies` for clarifications on when cookies are directly stored by
 **lifecycle** May be called only once before creating any LightstreamerClient instance.
    
 :param factory: an instance of ssl.SSLContext
-:raises NullPointerException: if the factory is None
+:raises IllegalArgumentException: if the factory is None
 :raises IllegalStateException: if a factory is already installed
    """
-    pass
+    LSLightstreamerClient.setTrustManagerFactory(factory)
 
 class Proxy:
   """Simple class representing a Proxy configuration. 
@@ -1231,12 +1235,15 @@ class Proxy:
  :param type: the proxy type
  :param host: the proxy host
  :param port: the proxy port
- :param user: the user name to be used to validate against the proxy
- :param password: the password to be used to validate against the proxy
+ :param user: the user name to be used to validate against the proxy. Optional.
+ :param password: the password to be used to validate against the proxy. Optional.
  """
 
-  def __init__(self,_hx_type,host,port,user,password):
-    pass
+  def __init__(self,_hx_type,host,port,user=None,password=None):
+    self.delegate = LSProxy(_hx_type, host, port, user, password)
+
+  def __str__(self):
+    return self.delegate.toString()
 
 class Subscription:
   """Class representing a Subscription to be submitted to a Lightstreamer Server. It contains subscription details and the listeners needed to process the real-time data. 
@@ -1279,7 +1286,7 @@ Note that all of the methods used to describe the subscription to the server can
   """
 
   def __init__(self,mode,items,fields):
-    pass
+    self.delegate = LSSubscription(mode, items, fields)
 
   def addListener(self,listener):
     """Adds a listener that will receive events from the Subscription instance. 
@@ -1293,7 +1300,7 @@ Note that all of the methods used to describe the subscription to the server can
     
     .. seealso:: :meth:`removeListener`
     """
-    pass
+    self.delegate.addListener(listener)
 
   def removeListener(self,listener):
     """Removes a listener from the Subscription instance so that it will not receive 
@@ -1305,7 +1312,7 @@ Note that all of the methods used to describe the subscription to the server can
     
     .. seealso:: :meth:`addListener`
     """
-    pass
+    self.delegate.removeListener(listener)
 
   def getListeners(self):
     """Returns a list containing the :class:`SubscriptionListener` instances that were 
@@ -1315,7 +1322,7 @@ Note that all of the methods used to describe the subscription to the server can
 
     .. seealso:: :meth:`addListener`
     """
-    pass
+    return self.delegate.getListeners()
 
   def isActive(self):
     """Inquiry method that checks if the Subscription is currently "active" or not.Most of the Subscription properties cannot be modified if a Subscription is "active". 
@@ -1331,7 +1338,7 @@ Note that all of the methods used to describe the subscription to the server can
     .. seealso:: :meth:`LightstreamerClient.subscribe`
     .. seealso:: :meth:`LightstreamerClient.unsubscribe`
     """
-    pass
+    return self.delegate.isActive()
 
   def isSubscribed(self):
     """Inquiry method that checks if the Subscription is currently subscribed to
@@ -1346,7 +1353,7 @@ Note that all of the methods used to describe the subscription to the server can
     
     :return: true/false if the Subscription is subscribed to through the server or not.
     """
-    pass
+    return self.delegate.isSubscribed()
 
   def getDataAdapter(self):
     """Inquiry method that can be used to read the name of the Data Adapter specified for this 
@@ -1355,7 +1362,7 @@ Note that all of the methods used to describe the subscription to the server can
 
     :return: the name of the Data Adapter; returns None if no name has been configured, so that the "DEFAULT" Adapter Set is used.
     """
-    pass
+    return self.delegate.getDataAdapter()
 
   def setDataAdapter(self,dataAdapter):
     """Setter method that sets the name of the Data Adapter
@@ -1384,7 +1391,7 @@ Note that all of the methods used to describe the subscription to the server can
      
     .. seealso:: :meth:`ConnectionDetails.setAdapterSet`
     """
-    pass
+    self.delegate.setDataAdapter(dataAdapter)
 
   def getMode(self):
     """Inquiry method that can be used to read the mode specified for this
@@ -1394,7 +1401,7 @@ Note that all of the methods used to describe the subscription to the server can
     
     :return: the Subscription mode specified in the constructor.
     """
-    pass
+    return self.delegate.getMode()
 
   def getItems(self):
     """Inquiry method that can be used to read the "Item List" specified for this Subscription. 
@@ -1407,7 +1414,7 @@ Note that all of the methods used to describe the subscription to the server can
     :raises IllegalStateException: if the Subscription was initialized with an "Item Group" or was not initialized at all.
     :return: the "Item List" to be subscribed to through the server.
     """
-    pass
+    return self.delegate.getItems()
 
   def setItems(self,items):
     """Setter method that sets the "Item List" to be subscribed to through 
@@ -1424,7 +1431,7 @@ Note that all of the methods used to describe the subscription to the server can
     
     :param items: an array of items to be subscribed to through the server. 
     """
-    pass
+    self.delegate.setItems(items)
 
   def getItemGroup(self):
     """Inquiry method that can be used to read the item group specified for this Subscription.
@@ -1435,7 +1442,7 @@ Note that all of the methods used to describe the subscription to the server can
     :raises IllegalStateException: if the Subscription was initialized with an "Item List" or was not initialized at all.
     :return: the "Item Group" to be subscribed to through the server.
     """
-    pass
+    return self.delegate.getItemGroup()
 
   def setItemGroup(self,group):
     """Setter method that sets the "Item Group" to be subscribed to through 
@@ -1451,7 +1458,7 @@ Note that all of the methods used to describe the subscription to the server can
     
     :param groupName: A String to be expanded into an item list by the Metadata Adapter. 
     """
-    pass
+    self.delegate.setItemGroup(group)
 
   def getFields(self):
     """Inquiry method that can be used to read the "Field List" specified for this Subscription.
@@ -1462,7 +1469,7 @@ Note that all of the methods used to describe the subscription to the server can
     :raises IllegalStateException: if the Subscription was initialized with a "Field Schema" or was not initialized at all.
     :return: the "Field List" to be subscribed to through the server.
     """
-    pass
+    return self.delegate.getFields()
 
   def setFields(self,fields):
     """Setter method that sets the "Field List" to be subscribed to through 
@@ -1479,7 +1486,7 @@ Note that all of the methods used to describe the subscription to the server can
     
     :param fields: an array of fields to be subscribed to through the server. 
     """
-    pass
+    self.delegate.setFields(fields)
 
   def getFieldSchema(self):
     """Inquiry method that can be used to read the field schema specified for this Subscription.
@@ -1490,7 +1497,7 @@ Note that all of the methods used to describe the subscription to the server can
     :raises IllegalStateException: if the Subscription was initialized with a "Field List" or was not initialized at all.
     :return: the "Field Schema" to be subscribed to through the server.
     """
-    pass
+    return self.delegate.getFieldSchema()
 
   def setFieldSchema(self,schema):
     """Setter method that sets the "Field Schema" to be subscribed to through 
@@ -1506,7 +1513,7 @@ Note that all of the methods used to describe the subscription to the server can
     
     :param schemaName: A String to be expanded into a field list by the Metadata Adapter. 
     """
-    pass
+    self.delegate.setFieldSchema(schema)
 
   def getRequestedBufferSize(self):
     """Inquiry method that can be used to read the buffer size, configured though
@@ -1517,7 +1524,7 @@ Note that all of the methods used to describe the subscription to the server can
     
     :return:  An integer number, representing the buffer size to be requested to the server, or the string "unlimited", or None.
     """
-    pass
+    return self.delegate.getRequestedBufferSize()
 
   def setRequestedBufferSize(self,size):
     """Setter method that sets the length to be requested to Lightstreamer
@@ -1544,7 +1551,7 @@ Note that all of the methods used to describe the subscription to the server can
     
     .. seealso:: :meth:`Subscription.setRequestedMaxFrequency`
     """
-    pass
+    self.delegate.setRequestedBufferSize(size)
 
   def getRequestedSnapshot(self):
     """Inquiry method that can be used to read the snapshot preferences, 
@@ -1555,7 +1562,7 @@ Note that all of the methods used to describe the subscription to the server can
     
     :return:  "yes", "no", None, or an integer number.
     """
-    pass
+    return self.delegate.getRequestedSnapshot()
 
   def setRequestedSnapshot(self,snapshot):
     """Setter method that enables/disables snapshot delivery request for the
@@ -1580,7 +1587,7 @@ Note that all of the methods used to describe the subscription to the server can
     
     .. seealso:: :meth:`ItemUpdate.isSnapshot`
     """
-    pass
+    self.delegate.setRequestedSnapshot(snapshot)
 
   def getRequestedMaxFrequency(self):
     """Inquiry method that can be used to read the max frequency, configured
@@ -1591,7 +1598,7 @@ Note that all of the methods used to describe the subscription to the server can
     
     :return:  A decimal number, representing the max frequency to be requested to the server (expressed in updates per second), or the strings "unlimited" or "unfiltered", or None.
     """
-    pass
+    return self.delegate.getRequestedMaxFrequency()
 
   def setRequestedMaxFrequency(self,freq):
     """Setter method that sets the maximum update frequency to be requested to
@@ -1634,7 +1641,7 @@ differences based on the Subscription status:
     
 :param freq:  A decimal number, representing the maximum update frequency (expressed in updates per second) for each item in the Subscription; for instance, with a setting of 0.5, for each single item, no more than one update every 2 seconds will be received. If the string "unlimited" is supplied, then no frequency limit is requested. It is also possible to supply the string "unfiltered", to ask for unfiltered dispatching, if it is allowed for the items, or a None value to stick to the Server default (which currently corresponds to "unlimited"). The check for the string constants is case insensitive.
     """
-    pass
+    self.delegate.setRequestedMaxFrequency(freq)
 
   def getSelector(self):
     """Inquiry method that can be used to read the selector name  
@@ -1644,7 +1651,7 @@ differences based on the Subscription status:
     
     :return: the name of the selector.
     """
-    pass
+    return self.delegate.getSelector()
 
   def setSelector(self,selector):
     """Setter method that sets the selector name for all the items in the
@@ -1660,7 +1667,7 @@ differences based on the Subscription status:
     
     :param selector: name of a selector, to be recognized by the Metadata Adapter, or None to unset the selector.
     """
-    pass
+    self.delegate.setSelector(selector)
 
   def getCommandPosition(self):
     """Returns the position of the "command" field in a COMMAND Subscription. 
@@ -1676,7 +1683,7 @@ differences based on the Subscription status:
 
     :return: the 1-based position of the "command" field within the "Field Schema".
     """
-    pass
+    return self.delegate.getCommandPosition()
 
   def getKeyPosition(self):
     """Returns the position of the "key" field in a COMMAND Subscription. 
@@ -1690,7 +1697,7 @@ differences based on the Subscription status:
     
     :return: the 1-based position of the "key" field within the "Field Schema".
     """
-    pass
+    return self.delegate.getKeyPosition()
 
   def getCommandSecondLevelDataAdapter(self):
     """Inquiry method that can be used to read the second-level Data Adapter name configured 
@@ -1703,7 +1710,7 @@ differences based on the Subscription status:
     
     .. seealso:: :meth:`setCommandSecondLevelDataAdapter`
     """
-    pass
+    return self.delegate.getCommandSecondLevelAdapter()
 
   def setCommandSecondLevelDataAdapter(self,dataAdapter):
     """Setter method that sets the name of the second-level Data Adapter (within 
@@ -1732,7 +1739,7 @@ differences based on the Subscription status:
     .. seealso:: :meth:`Subscription.setCommandSecondLevelFields`
     .. seealso:: :meth:`Subscription.setCommandSecondLevelFieldSchema`
     """
-    pass
+    self.delegate.setCommandSecondLevelAdapter(dataAdapter)
 
   def getCommandSecondLevelFields(self):
     """Inquiry method that can be used to read the "Field List" specified for second-level 
@@ -1747,7 +1754,7 @@ differences based on the Subscription status:
 
     .. seealso:: :meth:`Subscription.setCommandSecondLevelFields`
     """
-    pass
+    return self.delegate.getCommandSecondLevelFields()
 
   def setCommandSecondLevelFields(self,fields):
     """Setter method that sets the "Field List" to be subscribed to through 
@@ -1784,7 +1791,7 @@ differences based on the Subscription status:
     
     .. seealso:: :meth:`Subscription.setCommandSecondLevelFieldSchema`
     """
-    pass
+    self.delegate.setCommandSecondLevelFields(fields)
 
   def getCommandSecondLevelFieldSchema(self):
     """Inquiry method that can be used to read the "Field Schema" specified for second-level 
@@ -1799,7 +1806,7 @@ differences based on the Subscription status:
 
     .. seealso:: :meth:`Subscription.setCommandSecondLevelFieldSchema`
     """
-    pass
+    return self.delegate.getCommandSecondLevelSchema()
 
   def setCommandSecondLevelFieldSchema(self,schema):
     """Setter method that sets the "Field Schema" to be subscribed to through 
@@ -1835,7 +1842,7 @@ differences based on the Subscription status:
     
     .. seealso:: :meth:`Subscription.setCommandSecondLevelFields`
     """
-    pass
+    return self.delegate.setCommandSecondLevelSchema(schema)
 
   def getValue(self,itemNameOrPos,fieldNameOrPos):
     """Returns the latest value received for the specified item/field pair.
@@ -1855,13 +1862,13 @@ to retrieve a value that has not been received yet, then it will return None.
           
 :raises IllegalArgumentException: if an invalid item name or field name is specified or if the specified item position or field position is out of bounds.
      
-:param itemIdentifier: a String representing an item in the configured item list or a Number representing the 1-based position of the item in the specified item group. (In case an item list was specified, passing the item position is also possible).
+:param itemNameOrPos: a String representing an item in the configured item list or a Number representing the 1-based position of the item in the specified item group. (In case an item list was specified, passing the item position is also possible).
      
-:param fieldIdentifier: a String representing a field in the configured field list or a Number representing the 1-based position of the field in the specified field schema. (In case a field list was specified, passing the field position is also possible).
+:param fieldNameOrPos: a String representing a field in the configured field list or a Number representing the 1-based position of the field in the specified field schema. (In case a field list was specified, passing the field position is also possible).
      
 :return: the current value for the specified field of the specified item(possibly None), or None if no value has been received yet.
      """
-    pass
+    return self.delegate.getValue(itemNameOrPos,fieldNameOrPos)
 
   def getCommandValue(self,itemNameOrPos,keyValue,fieldNameOrPos):
     """Returns the latest value received for the specified item/key/field combination. This method can only be used if the Subscription mode is COMMAND. Subscriptions with two-level behavior are also supported, hence the specified field can be either a first-level or a second-level one.
@@ -1883,7 +1890,7 @@ Note that internal data is cleared when the Subscription is unsubscribed from.
      
 :return: the current value for the specified field of the specified key within the specified item (possibly None), or None if the specified key has not been added yet (note that it might have been added and eventually deleted).
     """
-    pass
+    return self.delegate.getCommandValue(itemNameOrPos,keyValue,fieldNameOrPos)
 
 class ConsoleLoggerProvider(LoggerProvider):
   """This LoggerProvider rests on the standard logging facility provided by the module *logging*. The log events are forwarded to the logger named *lightstreamer*.
@@ -1892,41 +1899,41 @@ class ConsoleLoggerProvider(LoggerProvider):
   """
 
   def __init__(self,level):
-    pass
+    self.delegate = LSConsoleLoggerProvider(level)
 
   def getLogger(self,category):
-    pass
+    return self.delegate.getLogger(category)
 
 class ConsoleLogLevel:
   """The threshold configured for an instance of :class:`ConsoleLoggerProvider`.
   """
 
-  TRACE = 0
+  TRACE = LSConsoleLogLevel.TRACE
   """Trace logging level.
   
   This level enables all logging.
   """
-  DEBUG = 10
+  DEBUG = LSConsoleLogLevel.DEBUG
   """Debug logging level.
   
   This level enables logging for debug, information, warnings, errors and fatal errors.
   """
-  INFO = 20
+  INFO = LSConsoleLogLevel.INFO
   """Info logging level.
   
   This level enables logging for information, warnings, errors and fatal errors.
   """
-  WARN = 30
+  WARN = LSConsoleLogLevel.WARN
   """Warn logging level.
   
   This level enables logging for warnings, errors and fatal errors.
   """
-  ERROR = 40
+  ERROR = LSConsoleLogLevel.ERROR
   """Error logging level.
   
   This level enables logging for errors and fatal errors.
   """
-  FATAL = 50
+  FATAL = LSConsoleLogLevel.FATAL
   """Fatal logging level.
   
   This level enables logging for fatal errors.

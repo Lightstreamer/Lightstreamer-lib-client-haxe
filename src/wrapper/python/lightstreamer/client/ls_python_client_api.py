@@ -133,19 +133,15 @@ class ClientListener:
   """
     pass
 
-  def onListenEnd(self,client):
+  def onListenEnd(self):
     """Event handler that receives a notification when the ClientListener instance is removed from a LightstreamerClient 
    through :meth:`LightstreamerClient.removeListener`. This is the last event to be fired on the listener.
-
-   :param client: the LightstreamerClient this instance was removed from. 
    """
     pass
 
-  def onListenStart(self,client):
+  def onListenStart(self):
     """Event handler that receives a notification when the ClientListener instance is added to a LightstreamerClient 
    through :meth:`LightstreamerClient.addListener`. This is the first event to be fired on the listener.
-
-   :param client: the LightstreamerClient this instance was added to.
    """
     pass
 
@@ -418,18 +414,14 @@ class SubscriptionListener:
    """
     pass
 
-  def onListenEnd(self,subscription):
+  def onListenEnd(self):
     """Event handler that receives a notification when the SubscriptionListener instance is removed from a Subscription 
    through :meth:`Subscription.removeListener`. This is the last event to be fired on the listener.
-   
-   :param subscription: the Subscription this instance was removed from.
    """
     pass
 
-  def onListenStart(self,subscription):
+  def onListenStart(self):
     """Event handler that receives a notification when the SubscriptionListener instance is added to a Subscription through :meth:`Subscription.addListener`. This is the first event to be fired on the listener.
-
-   :param subscription: the Subscription this instance was added to.
    """
     pass
 
