@@ -12,6 +12,7 @@ using com.lightstreamer.log.LoggerTools;
 
 class ClientEventDispatcher extends EventDispatcher<ClientListener> {}
 
+#if (js || python) @:expose @:native("LSLightstreamerClient") #end
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class LSLightstreamerClient {
   public static final LIB_NAME: String = LS_LIB_NAME;

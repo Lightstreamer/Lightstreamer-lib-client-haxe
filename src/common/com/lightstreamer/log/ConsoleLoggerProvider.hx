@@ -2,6 +2,7 @@ package com.lightstreamer.log;
 
 import com.lightstreamer.internal.NativeTypes;
 
+#if (js || python) @:expose @:native("LSConsoleLogLevel") #end
 class LSConsoleLogLevel {
   public static final TRACE = 0;
   public static final DEBUG = 10;
@@ -13,6 +14,7 @@ class LSConsoleLogLevel {
   function new() {}
 }
 
+#if (js || python) @:expose @:native("LSConsoleLoggerProvider") #end
 class LSConsoleLoggerProvider implements LoggerProvider {
   final level: Int;
 

@@ -1,5 +1,12 @@
 package com.lightstreamer.client;
 
+#if python
+#if LS_TEST
+@:pythonImport("ls_python_client_api", "SubscriptionListener")
+#else
+@:pythonImport(".ls_python_client_api", "SubscriptionListener")
+#end
+#end
 extern interface SubscriptionListener {
   function onClearSnapshot(itemName: Null<String>, itemPos: Int): Void;
   function onCommandSecondLevelItemLostUpdates(lostUpdates: Int, key: String): Void;

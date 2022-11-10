@@ -6,6 +6,7 @@ import com.lightstreamer.internal.Types;
 import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
 
+#if (js || python) @:expose @:native("LSConnectionDetails") #end
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 @:access(com.lightstreamer.client)
 class LSConnectionDetails {
