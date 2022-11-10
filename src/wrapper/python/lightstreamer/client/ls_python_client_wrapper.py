@@ -1895,6 +1895,10 @@ Note that internal data is cleared when the Subscription is unsubscribed from.
 class ConsoleLoggerProvider(LoggerProvider):
   """This LoggerProvider rests on the standard logging facility provided by the module *logging*. The log events are forwarded to the logger named *lightstreamer*.
 
+  If you need further customizations, you can leverage the features of module *logging* through, for example, *logging.basicConfig*::
+
+    logging.basicConfig(level=logging.DEBUG, format="%(message)s", stream=sys.stdout)
+
   :param level: the threshold of the loggers created by this provider (see :class:`ConsoleLogLevel`)
   """
 
