@@ -24,7 +24,7 @@ A minimal version of the code that creates a LightstreamerClient and connects to
 
 .. code-block:: python
 
-  from lightstreamer_client import *
+  from lightstreamer.client import *
 
   client = LightstreamerClient("http://push.lightstreamer.com/","DEMO")
   client.connect()
@@ -75,6 +75,9 @@ Logging
 To enable the internal client logger, create a :class:`lightstreamer.LoggerProvider` and set it as the default provider of :meth:`lightstreamer.LightstreamerClient.setLoggerProvider`.
 
 .. code-block:: python
+  import sys, logging
+
+  logging.basicConfig(level=logging.DEBUG, format="%(message)s", stream=sys.stdout)
 
   loggerProvider = ConsoleLoggerProvider(ConsoleLogLevel.DEBUG)
   LightstreamerClient.setLoggerProvider(loggerProvider)
@@ -82,7 +85,7 @@ To enable the internal client logger, create a :class:`lightstreamer.LoggerProvi
 Compatibility
 *************
 
-Compatible with Lightstreamer Server since version 7.2.0.
+Compatible with Lightstreamer Server since version 7.3.0.
 
 Documentation
 *************
