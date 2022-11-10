@@ -1,0 +1,67 @@
+<project name="Python client library" 
+  default="package" 
+  basedir="../..">
+
+  <description>
+  Buildfile for the Python client library
+  </description>
+
+  <property name="tools" location="tools/python"/>
+  <property name="res" location="${tools}/res"/>
+  <property name="docs" location="${tools}/docs"/>
+  <property name="deps.lib" location="${tools}/com_lightstreamer_net.py"/>
+  <property name="build" location="bin/python/build"/>
+  <property name="lib" location="${build}/lib/lightstreamer-client"/>
+  <property name="lib.src" location="${lib}/src/lightstreamer/client"/>
+  <property name="test" location="bin-test/python"/>
+
+  <property name="wrapper" location="src/wrapper/python/lightstreamer/client"/>
+  <property name="api.lib" location="${wrapper}/ls_python_client_api.py"/>
+  <property name="wrapper.lib" location="${wrapper}/ls_python_client_wrapper.py"/>
+  <property name="haxe.lib" location="${build}/haxe/ls_python_client_haxe.py"/>
+
+  <target name="package" depends="package_haxe" description="Build the library">
+    <copy file="${api.lib}" todir="${lib.src}"/>
+    <copy file="${wrapper.lib}" todir="${lib.src}"/>
+    <copy file="${haxe.lib}" todir="${lib.src}"/>
+    <copy file="${deps.lib}" todir="${lib.src}"/>
+    <copy file="${res}/__init__.py" todir="${lib.src}"/>
+
+    <copy file="${res}/pyproject.toml" todir="${lib}">
+      <filterset>
+        <filter token="VERSION" value="1.0.0"/>
+      </filterset>
+    </copy>
+    <copy file="${res}/LICENSE" todir="${lib}"/>
+    <copy file="${res}/README.md" todir="${lib}"/>
+    <copy file="${res}/setup.py" todir="${lib}"/>
+  </target>
+
+  <target name="docs" description="Build the docs">
+    <exec executable="make" dir="${docs}">
+      <arg value="clean"/>
+      <arg value="html"/>
+    </exec>
+  </target>
+
+  <target name="package_haxe">
+    <exec executable="haxe" failonerror="true">
+      <arg value="build.python.hxml"/>
+      <!-- output lib is saved in ${haxe.lib} -->
+    </exec>
+  </target>
+
+  <target name="test" description="Run the tests">
+    <copy file="${api.lib}" todir="${test}"/>
+    <copy file="${deps.lib}" todir="${test}"/>
+    <exec executable="haxe" failonerror="true">
+        <arg value="test.python.hxml"/>
+    </exec>
+  </target>
+
+  <target name="clean" description="Clean the project">
+    <delete dir="${build}"/>
+    <delete dir="${test}"/>
+  </target>
+
+</project>
