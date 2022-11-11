@@ -134,7 +134,14 @@ class TestClient extends utest.Test {
       isTrue(sub.isSubscribed());
       equals(1, sub.getKeyPosition());
       equals(2, sub.getCommandPosition());
-      async.completed();
+    };
+    subListener._onItemUpdate = (update) -> {
+      var val = update.getValue("count") ?? "";
+      var key = update.getValue("key") ?? "";
+      var cmd = update.getValue("command") ?? "";
+      if (~/\d+/.match(val) && key == "count" && cmd == "UPDATE") {
+        async.completed();
+      }
     };
     client.subscribe(sub);
     client.connect();
