@@ -1,13 +1,14 @@
 --cwd ../..
 
---class-path test
+--class-path test-core
 --class-path test-util
 --class-path test-extern
 --library deep_equal
 --library haxe-concurrent
 --main TestCore
 
---python bin-test/python/test-core.py
+--python test-system/python/build/test-core.py
+--cmd python test-system/python/build/test-core.py
 
 -D LS_HAS_PROXY
 -D LS_HAS_COOKIES
