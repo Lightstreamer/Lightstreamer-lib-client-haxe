@@ -14,8 +14,8 @@ class ConnectionDetails:
  .. seealso:: :class:`LightstreamerClient`
     """
 
-    def __init__(self,client):
-      self.delegate = LSConnectionDetails(client)
+    def __init__(self,lsDetails):
+      self.delegate = lsDetails
 
     def getServerAddress(self):
       """Inquiry method that gets the configured address of Lightstreamer Server.
@@ -245,8 +245,8 @@ class ConnectionOptions:
  .. seealso:: :class:`LightstreamerClient`
  """
 
-  def __init__(self,client):
-    self.delegate = LSConnectionOptions(client)
+  def __init__(self,lsOptions):
+    self.delegate = lsOptions
 
   def getContentLength(self):
     """Inquiry method that gets the length expressed in bytes to be used by the Server for the response body on a HTTP stream connection.
@@ -909,7 +909,7 @@ ClientListener listening to the related LightstreamerClient.
    
    :param proxy: The proxy configuration. Specify None to avoid using a proxy.
    """
-    self.delegate.setProxy(proxy)
+    self.delegate.setProxy(proxy.delegate)
 
 class LightstreamerClient:
   """Facade class for the management of the communication to
@@ -945,10 +945,9 @@ class LightstreamerClient:
   def __init__(self,serverAddress,adapterSet):
     self.delegate = LSLightstreamerClient(serverAddress, adapterSet)
     #: Data object that contains options and policies for the connection to the server. This instance is set up by the LightstreamerClient object at its own creation. Properties of this object can be overwritten by values received from a Lightstreamer Server. 
-    self.connectionOptions = LSConnectionOptions(self.delegate)
+    self.connectionOptions = ConnectionOptions(self.delegate.connectionOptions)
     #: Data object that contains the details needed to open a connection to a Lightstreamer Server. This instance is set up by the LightstreamerClient object at its own creation. Properties of this object can be overwritten by values received from a Lightstreamer Server. 
-    self.connectionDetails = LSConnectionDetails(self.delegate)
-    pass
+    self.connectionDetails = ConnectionDetails(self.delegate.connectionDetails)
 
   def addListener(self,listener):
     """Adds a listener that will receive events from the LightstreamerClient instance. 
@@ -1710,7 +1709,7 @@ differences based on the Subscription status:
     
     .. seealso:: :meth:`setCommandSecondLevelDataAdapter`
     """
-    return self.delegate.getCommandSecondLevelAdapter()
+    return self.delegate.getCommandSecondLevelDataAdapter()
 
   def setCommandSecondLevelDataAdapter(self,dataAdapter):
     """Setter method that sets the name of the second-level Data Adapter (within 
@@ -1739,7 +1738,7 @@ differences based on the Subscription status:
     .. seealso:: :meth:`Subscription.setCommandSecondLevelFields`
     .. seealso:: :meth:`Subscription.setCommandSecondLevelFieldSchema`
     """
-    self.delegate.setCommandSecondLevelAdapter(dataAdapter)
+    self.delegate.setCommandSecondLevelDataAdapter(dataAdapter)
 
   def getCommandSecondLevelFields(self):
     """Inquiry method that can be used to read the "Field List" specified for second-level 
@@ -1806,7 +1805,7 @@ differences based on the Subscription status:
 
     .. seealso:: :meth:`Subscription.setCommandSecondLevelFieldSchema`
     """
-    return self.delegate.getCommandSecondLevelSchema()
+    return self.delegate.getCommandSecondLevelFieldSchema()
 
   def setCommandSecondLevelFieldSchema(self,schema):
     """Setter method that sets the "Field Schema" to be subscribed to through 
@@ -1842,7 +1841,7 @@ differences based on the Subscription status:
     
     .. seealso:: :meth:`Subscription.setCommandSecondLevelFields`
     """
-    return self.delegate.setCommandSecondLevelSchema(schema)
+    return self.delegate.setCommandSecondLevelFieldSchema(schema)
 
   def getValue(self,itemNameOrPos,fieldNameOrPos):
     """Returns the latest value received for the specified item/field pair.
