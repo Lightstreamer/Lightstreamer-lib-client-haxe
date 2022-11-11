@@ -932,12 +932,12 @@ class LightstreamerClient:
  :raises IllegalArgumentException: if a not valid address is passed. See :meth:`ConnectionDetails.setServerAddress` for details.
  """
 
-  LIB_NAME = "TODO"
+  LIB_NAME = LSLightstreamerClient.LIB_NAME
   """
   A constant string representing the name of the library.
   """
 
-  LIB_VERSION = "TODO"
+  LIB_VERSION = LSLightstreamerClient.LIB_VERSION
   """
   A constant string representing the version of the library.
   """
