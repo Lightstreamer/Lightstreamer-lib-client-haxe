@@ -5,6 +5,8 @@ package com.lightstreamer.client;
 #end
 #if js @:native("LightstreamerClient") #end
 extern class LightstreamerClient {
+   public static final LIB_NAME: String;
+   public static final LIB_VERSION: String;
    public var connectionDetails(default, null): ConnectionDetails;
    public var connectionOptions(default, null): ConnectionOptions;
    public static function setLoggerProvider(provider: com.lightstreamer.log.LoggerProvider): Void;
