@@ -15,6 +15,6 @@ extern interface SubscriptionListener {
   public function onRealMaxFrequency(frequency:Null<String>): Void;
   public function onCommandSecondLevelSubscriptionError(code:Int, message:String, key:String): Void;
   public function onCommandSecondLevelItemLostUpdates(lostUpdates:Int, key:String): Void;
-  public function onListenEnd(subscription:Subscription): Void;
-  public function onListenStart(subscription:Subscription): Void;
+  public function onListenEnd(): Void;
+  public function onListenStart(): Void;
 }
