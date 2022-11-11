@@ -212,20 +212,34 @@ class TestClient extends utest.Test {
 
   function _testRoundTrip(async: utest.Async) {
     setTransport();
+    equals("TEST", client.connectionDetails.getAdapterSet());
+    equals("http://localtest.me:8080", client.connectionDetails.getServerAddress());
+    equals(50000000, client.connectionOptions.getContentLength());
+    equals(4000, client.connectionOptions.getRetryDelay());
+    equals(15000, client.connectionOptions.getSessionRecoveryTimeout());
     var sub = new Subscription("MERGE", ["count"], ["count"]);
     sub.setDataAdapter("COUNT");
+    equals("COUNT", sub.getDataAdapter());
+    equals("MERGE", sub.getMode());
     sub.addListener(subListener);
     subListener._onSubscription = () -> exps.signal("onSubscription");
     subListener._onItemUpdate = _ -> exps.signal("onItemUpdate");
     subListener._onUnsubscription = () -> exps.signal("onUnsubscription");
+    subListener._onRealMaxFrequency = (freq) -> exps.signal('onRealMaxFrequency $freq');
     listener._onPropertyChange = prop -> {
       switch prop {
+      case "clientIp":
+        equals("127.0.0.1", client.connectionDetails.getClientIp());
+      case "serverSocketName":
+          equals("Lightstreamer HTTP Server", client.connectionDetails.getServerSocketName());
       case "sessionId":
         notNull(client.connectionDetails.getSessionId());
       case "keepaliveInterval":
         equals(5000, client.connectionOptions.getKeepaliveInterval());
-      case "serverSocketName":
-        equals("Lightstreamer HTTP Server", client.connectionDetails.getServerSocketName());
+      case "idleTimeout":
+        equals(0, client.connectionOptions.getIdleTimeout());
+      case "pollingInterval":
+          equals(100, client.connectionOptions.getPollingInterval());
       case "realMaxBandwidth":
         equals("40", client.connectionOptions.getRealMaxBandwidth());
       }
@@ -234,6 +248,7 @@ class TestClient extends utest.Test {
     .then(() -> client.connect())
     .then(() -> client.subscribe(sub))
     .await("onSubscription")
+    .await("onRealMaxFrequency unlimited")
     .await("onItemUpdate")
     .then(() -> client.unsubscribe(sub))
     .await("onUnsubscription")
