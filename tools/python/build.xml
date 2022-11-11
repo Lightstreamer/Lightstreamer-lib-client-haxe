@@ -37,7 +37,7 @@
     <copy file="${res}/setup.py" todir="${lib}"/>
   </target>
 
-  <target name="docs" description="Build the docs">
+  <target name="docs" depends="package" description="Build the docs">
     <exec executable="make" dir="${docs}">
       <arg value="clean"/>
       <arg value="html"/>
