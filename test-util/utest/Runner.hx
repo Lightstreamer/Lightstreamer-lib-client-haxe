@@ -146,8 +146,8 @@ class Runner {
       var body = Reflect.field(test, methodName);
       if (isAsync) {
         test._async = async;
-        Reflect.callMethod(test, body, [async]);
         currentTimer = test.delay(() -> evtTimeout(testIndex), timeout ?? 250);
+        Reflect.callMethod(test, body, [async]);
       } else {
         Reflect.callMethod(test, body, []);
         evtCompleted(testIndex);
