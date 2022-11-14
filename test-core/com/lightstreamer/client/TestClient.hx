@@ -128,7 +128,7 @@ class TestClient extends utest.Test {
 
   function _testSubscribeCommand2Level(async: utest.Async) {
     setTransport();
-    var sub = new Subscription("COMMAND", ["two_level_command_count"], ["key", "command"]);
+    var sub = new Subscription("COMMAND", ["two_level_command_count" + _param], ["key", "command"]);
     sub.setDataAdapter("TWO_LEVEL_COMMAND");
     sub.setCommandSecondLevelDataAdapter("COUNT");
     sub.setCommandSecondLevelFields(["count"]);
