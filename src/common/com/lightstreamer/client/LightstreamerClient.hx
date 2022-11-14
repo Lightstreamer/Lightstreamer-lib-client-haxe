@@ -112,6 +112,10 @@ class LSLightstreamerClient {
     return new NativeList(machine.getSubscriptions());
   }
 
+  public function getSubscriptionWrappers(): NativeList<Any> {
+    return new NativeList([for (sub in machine.getSubscriptions()) if (sub.wrapper != null) (sub.wrapper : Any)]);
+  }
+
   #if LS_MPN
   public function registerForMpn(mpnDevice: MpnDevice) {
     var machine = cast(machine, com.lightstreamer.client.internal.MpnClientMachine);

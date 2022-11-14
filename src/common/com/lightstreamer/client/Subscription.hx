@@ -45,32 +45,38 @@ class LSSubscription {
   var nFields: Null<Int>;
   var m_internal: Bool = false; // special flag used to mark 2-level subscriptions
   var manager: Null<SubscriptionManagerLiving>;
+  public final wrapper: Null<Any>;
 
   #if js
-  public function new(mode: String, items: NativeArray<String>, fields: NativeArray<String>) {
+  public function new(mode: String, items: NativeArray<String>, fields: NativeArray<String>, wrapper: Any = null) {
+    this.wrapper = wrapper;
     this.mode = SubscriptionMode.fromString(mode);
     initSnapshot();
     initItemsAndFields(items is String ? [cast items] : items, fields);
   }
   #elseif (java || cs)
-  overload public function new(mode: String, items: NativeArray<String>, fields: NativeArray<String>) {
+  overload public function new(mode: String, items: NativeArray<String>, fields: NativeArray<String>, wrapper: Any = null) {
+    this.wrapper = wrapper;
     this.mode = SubscriptionMode.fromString(mode);
     initSnapshot();
     initItemsAndFields(items, fields);
   }
 
-  overload public function new(mode: String) {
+  overload public function new(mode: String, wrapper: Any = null) {
+    this.wrapper = wrapper;
     this.mode = SubscriptionMode.fromString(mode);
     initSnapshot();
   }
 
-  overload public function new(mode: String, item: String, fields: NativeArray<String>) {
+  overload public function new(mode: String, item: String, fields: NativeArray<String>, wrapper: Any = null) {
+    this.wrapper = wrapper;
     this.mode = SubscriptionMode.fromString(mode);
     initSnapshot();
     initItemsAndFields([item], fields);
   }
   #else
-  public function new(mode: String, items: NativeArray<String>, fields: NativeArray<String>) {
+  public function new(mode: String, items: NativeArray<String>, fields: NativeArray<String>, wrapper: Any = null) {
+    this.wrapper = wrapper;
     this.mode = SubscriptionMode.fromString(mode);
     initSnapshot();
     initItemsAndFields(items, fields);
