@@ -42,7 +42,7 @@ class ConnectionDetails:
    constructor.
    
    **notification** A change to this setting will be notified through a call to 
-   :meth:`ClientListener.onPropertyChange` with argument "serverAddress" on any 
+   :meth:`.ClientListener.onPropertyChange` with argument "serverAddress" on any 
    ClientListener listening to the related LightstreamerClient.
    
    :param serverAddress: The full address of Lightstreamer Server. A None value can also be used, to restore the default value. 
@@ -86,7 +86,7 @@ class ConnectionDetails:
    This setting can also be specified in the :class:`LightstreamerClient` constructor.
    
    **notification** A change to this setting will be notified through a call to 
-   :meth:`ClientListener.onPropertyChange` with argument "adapterSet" on any 
+   :meth:`.ClientListener.onPropertyChange` with argument "adapterSet" on any 
    ClientListener listening to the related LightstreamerClient.
    
    :param adapterSet: The name of the Adapter Set to be used. A None value is equivalent to the "DEFAULT" name.
@@ -113,7 +113,7 @@ class ConnectionDetails:
    supplied value will be used for the next time a new session is requested to the server.
    
    **notification** A change to this setting will be notified through a call to 
-   :meth:`ClientListener.onPropertyChange` with argument "user" on any 
+   :meth:`.ClientListener.onPropertyChange` with argument "user" on any 
    ClientListener listening to the related LightstreamerClient.
    
    :param user: The username to be used for the authentication on Lightstreamer Server. The username can be None.
@@ -139,7 +139,7 @@ class ConnectionDetails:
    server, that can be checked by your Metadata Adapter.
    
    **notification** A change to this setting will be notified through a call to 
-   :meth:`ClientListener.onPropertyChange` with argument "password" on any 
+   :meth:`.ClientListener.onPropertyChange` with argument "password" on any 
    ClientListener listening to the related LightstreamerClient.
    
    :param password: The password to be used for the authentication on Lightstreamer Server. 
@@ -155,7 +155,7 @@ class ConnectionDetails:
    **lifecycle** The method gives a meaningful answer only when a session is currently active.
    
    **notification** A change to this setting will be notified through a call to 
-   :meth:`ClientListener.onPropertyChange` with argument "sessionId" on any 
+   :meth:`.ClientListener.onPropertyChange` with argument "sessionId" on any 
    ClientListener listening to the related LightstreamerClient.
    
    :return: ID assigned by the Server to this client session."""
@@ -180,7 +180,7 @@ class ConnectionDetails:
    **lifecycle** The method gives a meaningful answer only when a session is currently active.
    
    **notification** A change to this setting will be notified through a call to 
-   :meth:`ClientListener.onPropertyChange` with argument "serverInstanceAddress" on any 
+   :meth:`.ClientListener.onPropertyChange` with argument "serverInstanceAddress" on any 
    ClientListener listening to the related LightstreamerClient.
    
    :return: address used to issue all requests related to the current session.
@@ -205,7 +205,7 @@ class ConnectionDetails:
    soon after a session is established, the value will become available.
    
    **notification** A change to this setting will be notified through a call to 
-   :meth:`ClientListener.onPropertyChange` with argument "serverSocketName" on any 
+   :meth:`.ClientListener.onPropertyChange` with argument "serverSocketName" on any 
    ClientListener listening to the related LightstreamerClient.
    
    :return: name configured for the Server instance which is managing the current session, or None.
@@ -227,7 +227,7 @@ class ConnectionDetails:
    that this information is not provided by the Server and that it will never be available.
    
    **notification** A change to this setting will be notified through a call to 
-   :meth:`ClientListener.onPropertyChange` with argument "clientIp" on any 
+   :meth:`.ClientListener.onPropertyChange` with argument "clientIp" on any 
    ClientListener listening to the related LightstreamerClient.
    
    :return:  A canonical representation of an IP address (it can be either IPv4 or IPv6), or None.
@@ -272,7 +272,7 @@ class ConnectionOptions:
    be used for the next streaming connection (either a bind or a brand new session).
    
    **notification** A change to this setting will be notified through a call to 
-   :meth:`ClientListener.onPropertyChange` with argument "contentLength" on any 
+   :meth:`.ClientListener.onPropertyChange` with argument "contentLength" on any 
    ClientListener listening to the related LightstreamerClient.
    
    :param contentLength: The length to be used by the Server for the response body on a HTTP stream connection.
@@ -306,7 +306,7 @@ class ConnectionOptions:
    **lifecycle** This value can be set and changed at any time.
    
    **notification** A change to this setting will be notified through a call to 
-   :meth:`ClientListener.onPropertyChange` with argument "firstRetryMaxDelay" on any 
+   :meth:`.ClientListener.onPropertyChange` with argument "firstRetryMaxDelay" on any 
    ClientListener listening to the related LightstreamerClient.
    
    :param firstRetryMaxDelay: The max time (in milliseconds) to wait before trying a new connection.
@@ -344,7 +344,7 @@ class ConnectionOptions:
    to switch connection type to match the given configuration.
    
    **notification** A change to this setting will be notified through a call to 
-   :meth:`ClientListener.onPropertyChange` with argument "forcedTransport" on any 
+   :meth:`.ClientListener.onPropertyChange` with argument "forcedTransport" on any 
    ClientListener listening to the related LightstreamerClient.
    
    :param forcedTransport: can be one of the following: 
@@ -387,7 +387,7 @@ client to send an OPTIONS request to the server before opening the actual connec
 at any time: the supplied value will be used for the next HTTP request or WebSocket establishment.
    
 **notification** A change to this setting will be notified through a call to 
-:meth:`ClientListener.onPropertyChange` with argument "httpExtraHeaders" on any 
+:meth:`.ClientListener.onPropertyChange` with argument "httpExtraHeaders" on any 
 ClientListener listening to the related LightstreamerClient.
    
 :param httpExtraHeaders: a Map object containing header-name header-value pairs. None can be specified to avoid extra headers to be sent.
@@ -423,7 +423,7 @@ ClientListener listening to the related LightstreamerClient.
    will be used for the next polling request.
    
    **notification** A change to this setting will be notified through a call to 
-   :meth:`ClientListener.onPropertyChange` with argument "idleTimeout" on any 
+   :meth:`.ClientListener.onPropertyChange` with argument "idleTimeout" on any 
    ClientListener listening to the related LightstreamerClient.
    
    :param idleTimeout: The time (in milliseconds) the Server is allowed to wait for data to send upon polling requests.
@@ -462,7 +462,7 @@ ClientListener listening to the related LightstreamerClient.
    value will be used for the next streaming connection (either a bind or a brand new session). Note that, after a connection, the value may be changed to the one imposed by the Server.
    
    **notification** A change to this setting will be notified through a call to 
-   :meth:`ClientListener.onPropertyChange` with argument "keepaliveInterval" on any 
+   :meth:`.ClientListener.onPropertyChange` with argument "keepaliveInterval" on any 
    ClientListener listening to the related LightstreamerClient.
 
    :param keepaliveInterval: the keepalive interval time (in milliseconds) to set, or 0.
@@ -501,8 +501,8 @@ ClientListener listening to the related LightstreamerClient.
    limit for the connection is changed on the fly. Remember that the Server may apply a different limit.
    
    **notification** A change to this setting will be notified through a call to 
-   :meth:`ClientListener.onPropertyChange` with argument "requestedMaxBandwidth" on any 
-   ClientListener listening to the related LightstreamerClient. Moreover, upon any change or attempt to change the limit, the Server will notify the client and such notification will be received through a call to :meth:`ClientListener.onPropertyChange` with argument "realMaxBandwidth" on any ClientListener listening to the related LightstreamerClient.
+   :meth:`.ClientListener.onPropertyChange` with argument "requestedMaxBandwidth" on any 
+   ClientListener listening to the related LightstreamerClient. Moreover, upon any change or attempt to change the limit, the Server will notify the client and such notification will be received through a call to :meth:`.ClientListener.onPropertyChange` with argument "realMaxBandwidth" on any ClientListener listening to the related LightstreamerClient.
    
    :param maxBandwidth:  A decimal number, which represents the maximum bandwidth requested for the streaming or polling connection expressed in kbps (kilobits/sec). The string "unlimited" is also allowed, to mean that the maximum bandwidth can be entirely decided on the Server side (the check is case insensitive).
    
@@ -523,7 +523,7 @@ ClientListener listening to the related LightstreamerClient.
    
    **lifecycle** If a connection to Lightstreamer Server is not currently active, None is returned;
    soon after the connection is established, the value becomes available, as notified
-   by a call to :meth:`ClientListener.onPropertyChange` with argument "realMaxBandwidth".
+   by a call to :meth:`.ClientListener.onPropertyChange` with argument "realMaxBandwidth".
    
    :return:  A decimal number, which represents the maximum bandwidth applied by the Server for the streaming or polling connection expressed in kbps (kilobits/sec), or the string "unlimited", or None.
    
@@ -573,7 +573,7 @@ ClientListener listening to the related LightstreamerClient.
    Note that, after each polling request, the value may be changed to the one imposed by the Server.
    
    **notification** A change to this setting will be notified through a call to 
-   :meth:`ClientListener.onPropertyChange` with argument "pollingInterval" on any 
+   :meth:`.ClientListener.onPropertyChange` with argument "pollingInterval" on any 
    ClientListener listening to the related LightstreamerClient.
    
    :param pollingInterval: The time (in milliseconds) between subsequent polling requests. Zero is a legal value too, meaning that the client will issue a new polling request as soon as a previous one has returned.
@@ -605,7 +605,7 @@ ClientListener listening to the related LightstreamerClient.
    **lifecycle** This value can be set and changed at any time.
    
    **notification** A change to this setting will be notified through a call to 
-   :meth:`ClientListener.onPropertyChange` with argument "reconnectTimeout" on any 
+   :meth:`.ClientListener.onPropertyChange` with argument "reconnectTimeout" on any 
    ClientListener listening to the related LightstreamerClient.
    
    :param reconnectTimeout: The idle time (in milliseconds) allowed in "STALLED" status before trying to reconnect to the Server.
@@ -662,7 +662,7 @@ ClientListener listening to the related LightstreamerClient.
    **lifecycle** This value can be set and changed at any time.
    
    **notification** A change to this setting will be notified through a call to 
-   :meth:`ClientListener.onPropertyChange` with argument "retryDelay" on any 
+   :meth:`.ClientListener.onPropertyChange` with argument "retryDelay" on any 
    ClientListener listening to the related LightstreamerClient.
    
    :param retryDelay: The time (in milliseconds) to wait before trying a new connection.
@@ -705,7 +705,7 @@ frequency was notified to the Server for the current connection. The setting
 will always be obeyed upon the next connection (either a bind or a brand new session).
    
 **notification** A change to this setting will be notified through a call to 
-:meth:`ClientListener.onPropertyChange` with argument "reverseHeartbeatInterval" on any 
+:meth:`.ClientListener.onPropertyChange` with argument "reverseHeartbeatInterval" on any 
 ClientListener listening to the related LightstreamerClient.
    
 :param reverseHeartbeatInterval: the interval, expressed in milliseconds, between subsequent reverse-heartbeats, or 0.
@@ -745,7 +745,7 @@ but, if too small, it may also prevent successful recovery in some cases.
 **lifecycle** This value can be set and changed at any time.
    
 **notification** A change to this setting will be notified through a
-call to :meth:`ClientListener.onPropertyChange` with argument "sessionRecoveryTimeout" on any 
+call to :meth:`.ClientListener.onPropertyChange` with argument "sessionRecoveryTimeout" on any 
 ClientListener listening to the related LightstreamerClient.
    
 :param sessionRecoveryTimeout: The maximum time allowed for recovery attempts, expressed in milliseconds, including 0.
@@ -774,7 +774,7 @@ ClientListener listening to the related LightstreamerClient.
    **lifecycle**  This value can be set and changed at any time.
    
    **notification** A change to this setting will be notified through a call to 
-   :meth:`ClientListener.onPropertyChange` with argument "stalledTimeout" on any 
+   :meth:`.ClientListener.onPropertyChange` with argument "stalledTimeout" on any 
    ClientListener listening to the related LightstreamerClient.
    
    :param stalledTimeout: The idle time (in milliseconds) allowed before entering the "STALLED" status.
@@ -810,7 +810,7 @@ ClientListener listening to the related LightstreamerClient.
    at any time: the supplied value will be used for the next HTTP request or WebSocket establishment.
    
    **notification** A change to this setting will be notified through a call to 
-   :meth:`ClientListener.onPropertyChange` with argument "httpExtraHeadersOnSessionCreationOnly" on any 
+   :meth:`.ClientListener.onPropertyChange` with argument "httpExtraHeadersOnSessionCreationOnly" on any 
    ClientListener listening to the related LightstreamerClient.
    
    :param httpExtraHeadersOnSessionCreationOnly: true/false to enable/disable the restriction on extra headers forwarding.
@@ -851,7 +851,7 @@ ClientListener listening to the related LightstreamerClient.
    next session creation request is issued.
    
    **notification** A change to this setting will be notified through a call to 
-   :meth:`ClientListener.onPropertyChange` with argument "serverInstanceAddressIgnored" on any 
+   :meth:`.ClientListener.onPropertyChange` with argument "serverInstanceAddressIgnored" on any 
    ClientListener listening to the related LightstreamerClient.
    
    :param serverInstanceAddressIgnored: true or false, to ignore or not the server instance address sent by the server.
@@ -888,7 +888,7 @@ ClientListener listening to the related LightstreamerClient.
    be used for the next streaming connection (either a bind or a brand new session).
    
    **notification** A change to this setting will be notified through a call to 
-   :meth:`ClientListener.onPropertyChange` with argument "slowingEnabled" on any 
+   :meth:`.ClientListener.onPropertyChange` with argument "slowingEnabled" on any 
    ClientListener listening to the related LightstreamerClient.
    
    :param slowingEnabled: true or false, to enable or disable the heuristic algorithm that lowers the item update frequency.
@@ -904,7 +904,7 @@ ClientListener listening to the related LightstreamerClient.
    be used for the next connection attempt.
    
    **notification** A change to this setting will be notified through a call to 
-   :meth:`ClientListener.onPropertyChange` with argument "proxy" on any 
+   :meth:`.ClientListener.onPropertyChange` with argument "proxy" on any 
    ClientListener listening to the related LightstreamerClient.
    
    :param proxy: The proxy configuration. Specify None to avoid using a proxy.
@@ -957,7 +957,7 @@ class LightstreamerClient:
    **lifecycle** A listener can be added at any time. A call to add a listener already 
    present will be ignored.
    
-   :param listener: An object that will receive the events as documented in the :class:`ClientListener` interface.
+   :param listener: An object that will receive the events as documented in the :class:`.ClientListener` interface.
    
    .. seealso:: :meth:`removeListener`
     """
@@ -975,7 +975,7 @@ class LightstreamerClient:
     self.delegate.removeListener(listener)
 
   def getListeners(self):
-    """Returns a list containing the :class:`ClientListener` instances that were added to this client.
+    """Returns a list containing the :class:`.ClientListener` instances that were added to this client.
 
    :return: a list containing the listeners that were added to this client. 
 
@@ -1006,7 +1006,7 @@ class LightstreamerClient:
    
    .. seealso:: :meth:`getStatus`
    .. seealso:: :meth:`disconnect`
-   .. seealso:: :meth:`ClientListener.onStatusChange`
+   .. seealso:: :meth:`.ClientListener.onStatusChange`
    .. seealso:: :meth:`ConnectionDetails.setServerAddress`
    """
     self.delegate.connect()
@@ -1046,7 +1046,7 @@ class LightstreamerClient:
     * "DISCONNECTED:TRYING-RECOVERY" no connection is currently active, but one will be opened as soon as possible, as an attempt to recover the current session after a connection issue; 
     * "DISCONNECTED" no connection is currently active.
    
-   .. seealso:: :meth:`ClientListener.onStatusChange`
+   .. seealso:: :meth:`.ClientListener.onStatusChange`
    """
     return self.delegate.getStatus()
 
@@ -1066,7 +1066,7 @@ class LightstreamerClient:
    For this reason, each message can specify a "delayTimeout", which is the longest time the message, after
    reaching the Server, can be kept waiting if one of more preceding messages haven't been received yet.
    If the "delayTimeout" expires, these preceding messages will be discarded; any discarded message
-   will be notified to the listener through :meth:`ClientMessageListener.onDiscarded`.
+   will be notified to the listener through :meth:`.ClientMessageListener.onDiscarded`.
    Note that, because of the parallel transport of the messages, if a zero or very low timeout is 
    set for a message and the previous message was sent immediately before, it is possible that the
    latter gets discarded even if no communication issues occur.
@@ -1094,7 +1094,7 @@ class LightstreamerClient:
    message can be sent only if a connection is currently active. If the special enqueueWhileDisconnected 
    flag is specified it is possible to call the method at any time and the client will take care of sending
    the message as soon as a connection is available, otherwise, if the current status is "DISCONNECTED*", 
-   the message will be abandoned and the :meth:`ClientMessageListener.onAbort` event will be fired. 
+   the message will be abandoned and the :meth:`.ClientMessageListener.onAbort` event will be fired. 
 
    Note that, in any case, as soon as the status switches again to "DISCONNECTED*", any message still pending 
    is aborted, including messages that were queued with the enqueueWhileDisconnected flag set to true. 
@@ -1128,7 +1128,7 @@ class LightstreamerClient:
 
    Also note that forwarding of the subscription to the server is made in a separate thread. 
 
-   A successful subscription to the server will be notified through a :meth:`SubscriptionListener.onSubscription`
+   A successful subscription to the server will be notified through a :meth:`.SubscriptionListener.onSubscription`
    event.
    
    :param subscription: A Subscription object, carrying all the information needed to process real-time values.
@@ -1148,7 +1148,7 @@ class LightstreamerClient:
 
    Note that forwarding of the unsubscription to the server is made in a separate thread. 
 
-   The unsubscription will be notified through a :meth:`SubscriptionListener.onUnsubscription` event.
+   The unsubscription will be notified through a :meth:`.SubscriptionListener.onUnsubscription` event.
    
    :param subscription: An "active" Subscription object that was activated by this LightstreamerClient instance.
    """
@@ -1170,7 +1170,7 @@ class LightstreamerClient:
 
   @staticmethod
   def setLoggerProvider(provider):
-    """Static method that permits to configure the logging system used by the library. The logging system must respect the :class:`LoggerProvider` interface. A custom class can be used to wrap any third-party logging system. 
+    """Static method that permits to configure the logging system used by the library. The logging system must respect the :class:`.LoggerProvider` interface. A custom class can be used to wrap any third-party logging system. 
 
 If no logging system is specified, all the generated log is discarded. 
 
@@ -1182,7 +1182,7 @@ The following categories are available to be consumed:
     * lightstreamer.subscriptions: logs subscription requests received by the clients and the related updates; at WARN level, alert events from the Server are logged; at INFO level, subscriptions and unsubscriptions are logged; at DEBUG level, requests batching and update details are logged.
     * lightstreamer.actions: logs settings / API calls.
     
-:param provider: A :class:`LoggerProvider` instance that will be used to generate log messages by the library classes.
+:param provider: A :class:`.LoggerProvider` instance that will be used to generate log messages by the library classes.
    """
     LSLightstreamerClient.setLoggerProvider(provider)
 
@@ -1314,7 +1314,7 @@ Note that all of the methods used to describe the subscription to the server can
     self.delegate.removeListener(listener)
 
   def getListeners(self):
-    """Returns a list containing the :class:`SubscriptionListener` instances that were 
+    """Returns a list containing the :class:`.SubscriptionListener` instances that were 
     added to this client.
 
     :return: a list containing the listeners that were added to this client. 
@@ -1584,7 +1584,7 @@ Note that all of the methods used to describe the subscription to the server can
     
     :param required: "yes"/"no" to request/not request snapshot delivery (the check is case insensitive). If the Subscription mode is DISTINCT, instead of "yes", it is also possible to supply an integer number, to specify the requested length of the snapshot (though the length of the received snapshot may be less than requested, because of insufficient data or server side limits); passing "yes"  means that the snapshot length should be determined only by the Server. None is also a valid value; if specified, no snapshot preference will be sent to the server that will decide itself whether or not to send any snapshot. 
     
-    .. seealso:: :meth:`ItemUpdate.isSnapshot`
+    .. seealso:: :meth:`.ItemUpdate.isSnapshot`
     """
     self.delegate.setRequestedSnapshot(snapshot)
 
@@ -1675,9 +1675,9 @@ differences based on the Subscription status:
     was initialized using a "Field Schema".
     
     **lifecycle** This method can be called at any time after the first 
-    :meth:`SubscriptionListener.onSubscription` event.
+    :meth:`.SubscriptionListener.onSubscription` event.
 
-    :raises IllegalStateException: if the Subscription mode is not COMMAND or if the :meth:`SubscriptionListener.onSubscription` event for this Subscription was not yet fired.
+    :raises IllegalStateException: if the Subscription mode is not COMMAND or if the :meth:`.SubscriptionListener.onSubscription` event for this Subscription was not yet fired.
     :raises IllegalStateException: if a "Field List" was specified.
 
     :return: the 1-based position of the "command" field within the "Field Schema".
@@ -1692,7 +1692,7 @@ differences based on the Subscription status:
      
     **lifecycle** This method can be called at any time.
     
-    :raises IllegalStateException: if the Subscription mode is not COMMAND or if the :meth:`SubscriptionListener.onSubscription` event for this Subscription was not yet fired.
+    :raises IllegalStateException: if the Subscription mode is not COMMAND or if the :meth:`.SubscriptionListener.onSubscription` event for this Subscription was not yet fired.
     
     :return: the 1-based position of the "key" field within the "Field Schema".
     """
@@ -1847,7 +1847,7 @@ differences based on the Subscription status:
     """Returns the latest value received for the specified item/field pair.
      
 It is suggested to consume real-time data by implementing and adding
-a proper :class:`SubscriptionListener` rather than probing this method.
+a proper :class:`.SubscriptionListener` rather than probing this method.
 In case of COMMAND Subscriptions, the value returned by this
 method may be misleading, as in COMMAND mode all the keys received, being
 part of the same item, will overwrite each other; for COMMAND Subscriptions,
@@ -1872,7 +1872,7 @@ to retrieve a value that has not been received yet, then it will return None.
   def getCommandValue(self,itemNameOrPos,keyValue,fieldNameOrPos):
     """Returns the latest value received for the specified item/key/field combination. This method can only be used if the Subscription mode is COMMAND. Subscriptions with two-level behavior are also supported, hence the specified field can be either a first-level or a second-level one.
      
-It is suggested to consume real-time data by implementing and adding a proper :class:`SubscriptionListener` rather than probing this method.
+It is suggested to consume real-time data by implementing and adding a proper :class:`.SubscriptionListener` rather than probing this method.
      
 Note that internal data is cleared when the Subscription is unsubscribed from. 
      

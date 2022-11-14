@@ -1,5 +1,5 @@
 class ClientListener:
-  """Interface to be implemented to listen to :class:`LightstreamerClient` events comprehending notifications of 
+  """Interface to be implemented to listen to :class:`.LightstreamerClient` events comprehending notifications of 
  connection activity and errors. 
 
  Events for these listeners are dispatched by a different thread than the one that generates them. 
@@ -11,28 +11,28 @@ class ClientListener:
 
   def onStatusChange(self,status):
     """Event handler that receives a notification each time the LightstreamerClient status has changed. The status changes 
-   may be originated either by custom actions (e.g. by calling :meth:`LightstreamerClient.disconnect`) or by internal 
+   may be originated either by custom actions (e.g. by calling :meth:`.LightstreamerClient.disconnect`) or by internal 
    actions.
 
    The normal cases are the following:
     
      * After issuing connect() when the current status is ``DISCONNECTED*``, the client will switch to ``CONNECTING`` first and to ``CONNECTED:STREAM-SENSING`` as soon as the pre-flight request receives its answer. As soon as the new session is established, it will switch to ``CONNECTED:WS-STREAMING`` if the environment permits WebSockets; otherwise it will switch to ``CONNECTED:HTTP-STREAMING`` if the environment permits streaming or to ``CONNECTED:HTTP-POLLING`` as a last resort.
      * On the other hand, after issuing connect when the status is already ``CONNECTED:*`` a switch to ``CONNECTING`` is usually not needed and the current session is kept.
-     * After issuing :meth:`LightstreamerClient.disconnect`, the status will switch to ``DISCONNECTED``.
+     * After issuing :meth:`.LightstreamerClient.disconnect`, the status will switch to ``DISCONNECTED``.
      * In case of a server connection refusal, the status may switch from ``CONNECTING`` directly to ``DISCONNECTED``. After that, the :meth:`onServerError` event handler will be invoked.
    
    Possible special cases are the following:
    
-     * In case of Server unavailability during streaming, the status may switch from ``CONNECTED:*-STREAMING`` to ``STALLED`` (see :meth:`ConnectionOptions.setStalledTimeout`). If the unavailability ceases, the status will switch back to ``CONNECTED:*-STREAMING``; otherwise, if the unavailability persists (see :meth:`ConnectionOptions.setReconnectTimeout`), the status will switch to ``DISCONNECTED:TRYING-RECOVERY`` and eventually to ``CONNECTED:*-STREAMING``.
+     * In case of Server unavailability during streaming, the status may switch from ``CONNECTED:*-STREAMING`` to ``STALLED`` (see :meth:`.ConnectionOptions.setStalledTimeout`). If the unavailability ceases, the status will switch back to ``CONNECTED:*-STREAMING``; otherwise, if the unavailability persists (see :meth:`.ConnectionOptions.setReconnectTimeout`), the status will switch to ``DISCONNECTED:TRYING-RECOVERY`` and eventually to ``CONNECTED:*-STREAMING``.
      * In case the connection or the whole session is forcibly closed by the Server, the status may switch from ``CONNECTED:*-STREAMING`` or ``CONNECTED:*-POLLING`` directly to ``DISCONNECTED``. After that, the :meth:`onServerError` event handler will be invoked.
-     * Depending on the setting in :meth:`ConnectionOptions.setSlowingEnabled`, in case of slow update processing, the status may switch from ``CONNECTED:WS-STREAMING`` to ``CONNECTED:WS-POLLING`` or from ``CONNECTED:HTTP-STREAMING`` to ``CONNECTED:HTTP-POLLING``.
+     * Depending on the setting in :meth:`.ConnectionOptions.setSlowingEnabled`, in case of slow update processing, the status may switch from ``CONNECTED:WS-STREAMING`` to ``CONNECTED:WS-POLLING`` or from ``CONNECTED:HTTP-STREAMING`` to ``CONNECTED:HTTP-POLLING``.
      * If the status is ``CONNECTED:*-POLLING`` and any problem during an intermediate poll occurs, the status may switch to ``CONNECTING`` and eventually to ``CONNECTED:*-POLLING``. The same may hold for the ``CONNECTED:*-STREAMING`` case, when a rebind is needed.
-     * In case a forced transport was set through :meth:`ConnectionOptions.setForcedTransport`, only the related final status or statuses are possible.
-     * In case of connection problems, the status may switch from any value to ``DISCONNECTED:WILL-RETRY`` (see :meth:`ConnectionOptions.setRetryDelay`), then to ``CONNECTING`` and a new attempt will start. However, in most cases, the client will try to recover the current session; hence, the ``DISCONNECTED:TRYING-RECOVERY`` status will be entered and the recovery attempt will start.
+     * In case a forced transport was set through :meth:`.ConnectionOptions.setForcedTransport`, only the related final status or statuses are possible.
+     * In case of connection problems, the status may switch from any value to ``DISCONNECTED:WILL-RETRY`` (see :meth:`.ConnectionOptions.setRetryDelay`), then to ``CONNECTING`` and a new attempt will start. However, in most cases, the client will try to recover the current session; hence, the ``DISCONNECTED:TRYING-RECOVERY`` status will be entered and the recovery attempt will start.
      * In case of connection problems during a recovery attempt, the status may stay in ``DISCONNECTED:TRYING-RECOVERY`` for long time, while further attempts are made. If the recovery is no longer possible, the current session will be abandoned and the status will switch to ``DISCONNECTED:WILL-RETRY`` before the next attempts.
    
    By setting a custom handler it is possible to perform actions related to connection and disconnection occurrences. 
-   Note that :meth:`LightstreamerClient.connect` and :meth:`LightstreamerClient.disconnect`, as any other method, can 
+   Note that :meth:`.LightstreamerClient.connect` and :meth:`.LightstreamerClient.disconnect`, as any other method, can 
    be issued directly from within a handler.
    
    :param status: The new status. It can be one of the following values:
@@ -41,16 +41,16 @@ class ClientListener:
      * ``CONNECTED:STREAM-SENSING`` the client received a first response from the server and is now evaluating if a streaming connection is fully functional.
      * ``CONNECTED:WS-STREAMING`` a streaming connection over WebSocket has been established.
      * ``CONNECTED:HTTP-STREAMING`` a streaming connection over HTTP has been established.
-     * ``CONNECTED:WS-POLLING`` a polling connection over WebSocket has been started. Note that, unlike polling over HTTP, in this case only one connection is actually opened (see :meth:`ConnectionOptions.setSlowingEnabled`).
+     * ``CONNECTED:WS-POLLING`` a polling connection over WebSocket has been started. Note that, unlike polling over HTTP, in this case only one connection is actually opened (see :meth:`.ConnectionOptions.setSlowingEnabled`).
      * ``CONNECTED:HTTP-POLLING`` a polling connection over HTTP has been started.
      * ``STALLED`` a streaming session has been silent for a while, the status will eventually return to its previous ``CONNECTED:*-STREAMING`` status or will switch to ``DISCONNECTED:WILL-RETRY`` / ``DISCONNECTED:TRYING-RECOVERY``.
      * ``DISCONNECTED:WILL-RETRY`` a connection or connection attempt has been closed; a new attempt will be performed (possibly after a timeout).
      * ``DISCONNECTED:TRYING-RECOVERY`` a connection has been closed and the client has started a connection attempt and is waiting for a Server answer; if successful, the underlying session will be kept.
-     * ``DISCONNECTED`` a connection or connection attempt has been closed. The client will not connect anymore until a new :meth:`LightstreamerClient.connect` call is issued.
+     * ``DISCONNECTED`` a connection or connection attempt has been closed. The client will not connect anymore until a new :meth:`.LightstreamerClient.connect` call is issued.
      
-   .. seealso:: :meth:`LightstreamerClient.connect`
-   .. seealso:: :meth:`LightstreamerClient.disconnect`
-   .. seealso:: :meth:`LightstreamerClient.getStatus`
+   .. seealso:: :meth:`.LightstreamerClient.connect`
+   .. seealso:: :meth:`.LightstreamerClient.disconnect`
+   .. seealso:: :meth:`.LightstreamerClient.getStatus`
    """
     pass
 
@@ -88,12 +88,12 @@ class ClientListener:
    :param errorMessage: The description of the error as sent by the Server.
    
    .. seealso:: :meth:`onStatusChange`
-   .. seealso:: :meth:`ConnectionDetails.setAdapterSet`
+   .. seealso:: :meth:`.ConnectionDetails.setAdapterSet`
    """
     pass
 
   def onPropertyChange(self,property):
-    """Event handler that receives a notification each time  the value of a property of :attr:`LightstreamerClient.connectionDetails` or :attr:`LightstreamerClient.connectionOptions` is changed.
+    """Event handler that receives a notification each time  the value of a property of :attr:`.LightstreamerClient.connectionDetails` or :attr:`.LightstreamerClient.connectionOptions` is changed.
 
   Properties of these objects can be modified by direct calls to them or
   by server sent events.
@@ -128,25 +128,25 @@ class ClientListener:
       * httpExtraHeaders
       * httpExtraHeadersOnSessionCreationOnly
    
-  .. seealso:: :attr:`LightstreamerClient.connectionDetails`
-  .. seealso:: :attr:`LightstreamerClient.connectionOptions`
+  .. seealso:: :attr:`.LightstreamerClient.connectionDetails`
+  .. seealso:: :attr:`.LightstreamerClient.connectionOptions`
   """
     pass
 
   def onListenEnd(self):
     """Event handler that receives a notification when the ClientListener instance is removed from a LightstreamerClient 
-   through :meth:`LightstreamerClient.removeListener`. This is the last event to be fired on the listener.
+   through :meth:`.LightstreamerClient.removeListener`. This is the last event to be fired on the listener.
    """
     pass
 
   def onListenStart(self):
     """Event handler that receives a notification when the ClientListener instance is added to a LightstreamerClient 
-   through :meth:`LightstreamerClient.addListener`. This is the first event to be fired on the listener.
+   through :meth:`.LightstreamerClient.addListener`. This is the first event to be fired on the listener.
    """
     pass
 
 class ClientMessageListener:
-  """Interface to be implemented to listen to :meth:`LightstreamerClient.sendMessage` events reporting a message processing outcome. 
+  """Interface to be implemented to listen to :meth:`.LightstreamerClient.sendMessage` events reporting a message processing outcome. 
  Events for these listeners are dispatched by a different thread than the one that generates them.
  All the notifications for a single LightstreamerClient, including notifications to
  :class:`ClientListener`, :class:`SubscriptionListener` and :class:`ClientMessageListener` will be dispatched by the 
@@ -201,7 +201,7 @@ class ClientMessageListener:
     pass
 
 class SubscriptionListener:
-  """Interface to be implemented to listen to :class:`Subscription` events comprehending notifications of subscription/unsubscription, 
+  """Interface to be implemented to listen to :class:`.Subscription` events comprehending notifications of subscription/unsubscription, 
  updates, errors and others. 
 
  Events for these listeners are dispatched by a different thread than the one that generates them. 
@@ -214,8 +214,8 @@ class SubscriptionListener:
   def onSubscription(self):
     """Event handler that is called by Lightstreamer to notify that a Subscription has been successfully subscribed 
    to through the Server. This can happen multiple times in the life of a Subscription instance, in case the 
-   Subscription is performed multiple times through :meth:`LightstreamerClient.unsubscribe` and 
-   :meth:`LightstreamerClient.subscribe`. This can also happen multiple times in case of automatic 
+   Subscription is performed multiple times through :meth:`.LightstreamerClient.unsubscribe` and 
+   :meth:`.LightstreamerClient.subscribe`. This can also happen multiple times in case of automatic 
    recovery after a connection restart. 
  
    This notification is always issued before the other ones related to the same subscription. It invalidates all 
@@ -225,7 +225,7 @@ class SubscriptionListener:
    fired an :meth:`onUnsubscription` event is eventually fired. 
  
    If the involved Subscription has a two-level behavior enabled
-   (see :meth:`Subscription.setCommandSecondLevelFields` and :meth:`Subscription.setCommandSecondLevelFieldSchema`), second-level subscriptions are not notified.
+   (see :meth:`.Subscription.setCommandSecondLevelFields` and :meth:`.Subscription.setCommandSecondLevelFieldSchema`), second-level subscriptions are not notified.
    """
     pass
   
@@ -233,8 +233,8 @@ class SubscriptionListener:
     """Event handler that is called when the Server notifies an error on a Subscription. By implementing this method it 
    is possible to perform recovery actions. 
 
-   Note that, in order to perform a new subscription attempt, :meth:`LightstreamerClient.unsubscribe`
-   and :meth:`LightstreamerClient.subscribe` should be issued again, even if no change to the Subscription 
+   Note that, in order to perform a new subscription attempt, :meth:`.LightstreamerClient.unsubscribe`
+   and :meth:`.LightstreamerClient.subscribe` should be issued again, even if no change to the Subscription 
    attributes has been applied.
 
    :param code: The error code sent by the Server. It can be one of the following:
@@ -258,15 +258,15 @@ class SubscriptionListener:
           
    :param message: The description of the error sent by the Server; it can be None.
    
-   .. seealso:: :meth:`ConnectionDetails.setAdapterSet`
+   .. seealso:: :meth:`.ConnectionDetails.setAdapterSet`
    """
     pass
 
   def onUnsubscription(self):
     """Event handler that is called by Lightstreamer to notify that a Subscription has been successfully unsubscribed 
    from. This can happen multiple times in the life of a Subscription instance, in case the Subscription is performed 
-   multiple times through :meth:`LightstreamerClient.unsubscribe` and 
-   :meth:`LightstreamerClient.subscribe`. This can also happen multiple times in case of automatic 
+   multiple times through :meth:`.LightstreamerClient.unsubscribe` and 
+   :meth:`.LightstreamerClient.subscribe`. This can also happen multiple times in case of automatic 
    recovery after a connection restart. 
 
    After this notification no more events can be received until a new #onSubscription event. 
@@ -275,7 +275,7 @@ class SubscriptionListener:
    is fired an :meth:`onSubscription` event is eventually fired. 
  
    If the involved Subscription has a two-level behavior enabled
-   (see :meth:`Subscription.setCommandSecondLevelFields` and :meth:`Subscription.setCommandSecondLevelFieldSchema`)
+   (see :meth:`.Subscription.setCommandSecondLevelFields` and :meth:`.Subscription.setCommandSecondLevelFieldSchema`)
    , second-level unsubscriptions are not notified.
    """
     pass
@@ -288,7 +288,7 @@ class SubscriptionListener:
      * For an item delivered in DISTINCT mode, to notify that all the previous updates received for the item should be considered as obsolete; hence, if the listener were showing a list of recent updates for the item, it should clear the list in order to keep a coherent view.
    
    Note that, if the involved Subscription has a two-level behavior enabled
-   (see :meth:`Subscription.setCommandSecondLevelFields` and :meth:`Subscription.setCommandSecondLevelFieldSchema`)
+   (see :meth:`.Subscription.setCommandSecondLevelFields` and :meth:`.Subscription.setCommandSecondLevelFieldSchema`)
    , the notification refers to the first-level item (which is in COMMAND mode).
    This kind of notification is not possible for second-level items (which are in MERGE 
    mode).
@@ -314,7 +314,7 @@ class SubscriptionListener:
    method it is possible to perform actions which require that all the initial values have been received. 
 
    Note that, if the involved Subscription has a two-level behavior enabled
-   (see :meth:`Subscription.setCommandSecondLevelFields` and :meth:`Subscription.setCommandSecondLevelFieldSchema`)
+   (see :meth:`.Subscription.setCommandSecondLevelFields` and :meth:`.Subscription.setCommandSecondLevelFieldSchema`)
    , the notification refers to the first-level item (which is in COMMAND mode).
    Snapshot-related updates for the second-level items 
    (which are in MERGE mode) can be received both before and after this notification.
@@ -323,7 +323,7 @@ class SubscriptionListener:
           None value is supplied.
    :param itemPos: 1-based position of the item within the "Item List" or "Item Group".
    
-   .. seealso:: :meth:`Subscription.setRequestedSnapshot`
+   .. seealso:: :meth:`.Subscription.setRequestedSnapshot`
    .. seealso:: :meth:`ItemUpdate.isSnapshot`
    """
     pass
@@ -345,17 +345,17 @@ class SubscriptionListener:
    :param itemPos: 1-based position of the item within the "Item List" or "Item Group".
    :param lostUpdates: The number of consecutive updates dropped for the item.
    
-   .. seealso:: :meth:`Subscription.setRequestedMaxFrequency`
+   .. seealso:: :meth:`.Subscription.setRequestedMaxFrequency`
    """
     pass
 
   def onRealMaxFrequency(self,frequency):
     """Event handler that is called by Lightstreamer to notify the client with the real maximum update frequency of the Subscription. 
    It is called immediately after the Subscription is established and in response to a requested change
-   (see :meth:`Subscription.setRequestedMaxFrequency`).
+   (see :meth:`.Subscription.setRequestedMaxFrequency`).
    Since the frequency limit is applied on an item basis and a Subscription can involve multiple items,
    this is actually the maximum frequency among all items. For Subscriptions with two-level behavior
-   (see :meth:`Subscription.setCommandSecondLevelFields` and :meth:`Subscription.setCommandSecondLevelFieldSchema`)
+   (see :meth:`.Subscription.setCommandSecondLevelFields` and :meth:`.Subscription.setCommandSecondLevelFieldSchema`)
    , the reported frequency limit applies to both first-level and second-level items. 
 
    The value may differ from the requested one because of restrictions operated on the server side,
@@ -391,9 +391,9 @@ class SubscriptionListener:
    :param message: The description of the error sent by the Server; it can be None.
    :param key: The value of the key that identifies the second-level item.
    
-   .. seealso:: :meth:`ConnectionDetails.setAdapterSet`
-   .. seealso:: :meth:`Subscription.setCommandSecondLevelFields`
-   .. seealso:: :meth:`Subscription.setCommandSecondLevelFieldSchema`
+   .. seealso:: :meth:`.ConnectionDetails.setAdapterSet`
+   .. seealso:: :meth:`.Subscription.setCommandSecondLevelFields`
+   .. seealso:: :meth:`.Subscription.setCommandSecondLevelFieldSchema`
     """
     pass
 
@@ -408,20 +408,20 @@ class SubscriptionListener:
    :param lostUpdates: The number of consecutive updates dropped for the item.
    :param key: The value of the key that identifies the second-level item.
    
-   .. seealso:: :meth:`Subscription.setRequestedMaxFrequency`
-   .. seealso:: :meth:`Subscription.setCommandSecondLevelFields`
-   .. seealso:: :meth:`Subscription.setCommandSecondLevelFieldSchema`
+   .. seealso:: :meth:`.Subscription.setRequestedMaxFrequency`
+   .. seealso:: :meth:`.Subscription.setCommandSecondLevelFields`
+   .. seealso:: :meth:`.Subscription.setCommandSecondLevelFieldSchema`
    """
     pass
 
   def onListenEnd(self):
     """Event handler that receives a notification when the SubscriptionListener instance is removed from a Subscription 
-   through :meth:`Subscription.removeListener`. This is the last event to be fired on the listener.
+   through :meth:`.Subscription.removeListener`. This is the last event to be fired on the listener.
    """
     pass
 
   def onListenStart(self):
-    """Event handler that receives a notification when the SubscriptionListener instance is added to a Subscription through :meth:`Subscription.addListener`. This is the first event to be fired on the listener.
+    """Event handler that receives a notification when the SubscriptionListener instance is added to a Subscription through :meth:`.Subscription.addListener`. This is the first event to be fired on the listener.
    """
     pass
 
@@ -455,8 +455,8 @@ class ItemUpdate:
 
    :return: The name of the item to which this update pertains.
 
-   .. seealso:: :meth:`Subscription.setItemGroup`
-   .. seealso:: :meth:`Subscription.setItems`
+   .. seealso:: :meth:`.Subscription.setItemGroup`
+   .. seealso:: :meth:`.Subscription.setItems`
    """
     pass
 
@@ -465,17 +465,17 @@ class ItemUpdate:
 
    :return: The 1-based position of the item to which this update pertains.
 
-   .. seealso:: :meth:`Subscription.setItemGroup`
-   .. seealso:: :meth:`Subscription.setItems`
+   .. seealso:: :meth:`.Subscription.setItemGroup`
+   .. seealso:: :meth:`.Subscription.setItems`
     """
     pass
 
   def isSnapshot(self):
-    """Inquiry method that asks whether the current update belongs to the item snapshot (which carries the current item state at the time of Subscription). Snapshot events are sent only if snapshot information was requested for the items through :meth:`Subscription.setRequestedSnapshot` and precede the real time events. Snapshot information take different forms in different subscription modes and can be spanned across zero, one or several update events. In particular:
+    """Inquiry method that asks whether the current update belongs to the item snapshot (which carries the current item state at the time of Subscription). Snapshot events are sent only if snapshot information was requested for the items through :meth:`.Subscription.setRequestedSnapshot` and precede the real time events. Snapshot information take different forms in different subscription modes and can be spanned across zero, one or several update events. In particular:
    
   * if the item is subscribed to with the RAW subscription mode, then no snapshot is sent by the Server;
   * if the item is subscribed to with the MERGE subscription mode, then the snapshot consists of exactly one event, carrying the current value for all fields;
-  * if the item is subscribed to with the DISTINCT subscription mode, then the snapshot consists of some of the most recent updates; these updates are as many as specified through :meth:`Subscription.setRequestedSnapshot`, unless fewer are available;
+  * if the item is subscribed to with the DISTINCT subscription mode, then the snapshot consists of some of the most recent updates; these updates are as many as specified through :meth:`.Subscription.setRequestedSnapshot`, unless fewer are available;
   * if the item is subscribed to with the COMMAND subscription mode, then the snapshot consists of an "ADD" event for each key that is currently present.
    
   Note that, in case of two-level behavior, snapshot-related updates for both the first-level item (which is in COMMAND mode) and any second-level items (which are in MERGE mode) are qualified with this flag.
@@ -497,8 +497,8 @@ class ItemUpdate:
     * no value has been received for the field yet;
     * the item is subscribed to with the COMMAND mode and a DELETE command is received (only the fields used to carry key and command information are valued).
   
-  .. seealso:: :meth:`Subscription.setFieldSchema`
-  .. seealso:: :meth:`Subscription.setFields`
+  .. seealso:: :meth:`.Subscription.setFieldSchema`
+  .. seealso:: :meth:`.Subscription.setFields`
     """
     pass
 
@@ -559,8 +559,8 @@ When the above conditions are not met, the method just returns None; in this cas
    
    :return: A map containing the values for each field changed with the last server update.
    
-   .. seealso:: :meth:`Subscription.setFieldSchema`
-   .. seealso:: :meth:`Subscription.setFields`
+   .. seealso:: :meth:`.Subscription.setFieldSchema`
+   .. seealso:: :meth:`.Subscription.setFields`
    """
     pass
 
@@ -575,8 +575,8 @@ When the above conditions are not met, the method just returns None; in this cas
    
    :return: A map containing the values for each field changed with the last server update.
    
-   .. seealso:: :meth:`Subscription.setFieldSchema`
-   .. seealso:: :meth:`Subscription.setFields`
+   .. seealso:: :meth:`.Subscription.setFieldSchema`
+   .. seealso:: :meth:`.Subscription.setFields`
    """
     pass
 
@@ -588,8 +588,8 @@ When the above conditions are not met, the method just returns None; in this cas
    
    :return: A map containing the values for each field in the Subscription.
    
-   .. seealso:: :meth:`Subscription.setFieldSchema`
-   .. seealso:: :meth:`Subscription.setFields`
+   .. seealso:: :meth:`.Subscription.setFieldSchema`
+   .. seealso:: :meth:`.Subscription.setFields`
    """
     pass
 
@@ -599,8 +599,8 @@ When the above conditions are not met, the method just returns None; in this cas
    
    :return: A map containing the values for each field in the Subscription.
    
-   .. seealso:: :meth:`Subscription.setFieldSchema`
-   .. seealso:: :meth:`Subscription.setFields`
+   .. seealso:: :meth:`.Subscription.setFieldSchema`
+   .. seealso:: :meth:`.Subscription.setFields`
    """
     pass
 
@@ -608,7 +608,7 @@ class LoggerProvider:
   """Simple interface to be implemented to provide custom log consumers to the library. 
 
  An instance of the custom implemented class has to be passed to the library through the 
- :meth:`LightstreamerClient.setLoggerProvider`."""
+ :meth:`.LightstreamerClient.setLoggerProvider`."""
   
   def getLogger(self, category):
     """Request for a Logger instance that will be used for logging occuring on the given 
@@ -624,7 +624,7 @@ class LoggerProvider:
 class Logger:
   """Interface to be implemented to consume log from the library.
 
- Instances of implemented classes are obtained by the library through the LoggerProvider instance set on :meth:`LightstreamerClient.setLoggerProvider`.
+ Instances of implemented classes are obtained by the library through the LoggerProvider instance set on :meth:`.LightstreamerClient.setLoggerProvider`.
   """
 
   def fatal(self,line,exception = None):
