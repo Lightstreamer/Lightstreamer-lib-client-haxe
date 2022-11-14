@@ -1892,7 +1892,7 @@ Note that internal data is cleared when the Subscription is unsubscribed from.
     return self.delegate.getCommandValue(itemNameOrPos,keyValue,fieldNameOrPos)
 
 class ConsoleLoggerProvider(LoggerProvider):
-  """This LoggerProvider rests on the standard logging facility provided by the module *logging*. The log events are forwarded to the logger named *lightstreamer*.
+  """This LoggerProvider rests on the logging facility provided by the standard module *logging*. The log events are forwarded to the logger named *lightstreamer*.
 
   If you need further customizations, you can leverage the features of module *logging* through, for example, *logging.basicConfig*::
 
