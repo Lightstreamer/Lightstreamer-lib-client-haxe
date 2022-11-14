@@ -1166,7 +1166,7 @@ class LightstreamerClient:
 
    .. seealso:: :meth:`subscribe`
    """
-    raise Exception("TODO")
+    return self.delegate.getSubscriptionWrappers()
 
   @staticmethod
   def setLoggerProvider(provider):
@@ -1285,7 +1285,7 @@ Note that all of the methods used to describe the subscription to the server can
   """
 
   def __init__(self,mode,items,fields):
-    self.delegate = LSSubscription(mode, items, fields)
+    self.delegate = LSSubscription(mode, items, fields, self)
 
   def addListener(self,listener):
     """Adds a listener that will receive events from the Subscription instance. 
