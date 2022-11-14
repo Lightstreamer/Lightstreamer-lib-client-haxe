@@ -92,6 +92,9 @@ class TestClient extends utest.Test {
       async.completed();
     };
     client.subscribe(sub);
+    var subs = client.getSubscriptions().toHaxe();
+    equals(1, subs.length);
+    isTrue(sub == subs[0]);
     client.connect();
   }
 
@@ -144,6 +147,9 @@ class TestClient extends utest.Test {
       }
     };
     client.subscribe(sub);
+    var subs = client.getSubscriptions().toHaxe();
+    equals(1, subs.length);
+    isTrue(sub == subs[0]);
     client.connect();
   }
 
