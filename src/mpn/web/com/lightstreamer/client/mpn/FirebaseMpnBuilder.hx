@@ -17,7 +17,6 @@ private typedef JsonFormat = {
 }
 
 #if (js || python) @:expose @:native("FirebaseMpnBuilder") #end
-#if (java || cs || python) @:nativeGen #end
 class FirebaseMpnBuilder {
   final obj: JsonFormat;
   

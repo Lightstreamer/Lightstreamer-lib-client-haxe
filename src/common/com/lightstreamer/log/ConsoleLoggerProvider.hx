@@ -27,7 +27,6 @@ class LSConsoleLoggerProvider implements LoggerProvider {
   }
 }
 
-#if (java || cs || python) @:nativeGen #end
 private class ConsoleLogger implements Logger {
   final level: Int;
   final category: String;

@@ -19,7 +19,6 @@ private enum abstract MpnDeviceStatus(String) to String {
 }
 
 #if (js || python) @:expose @:native("MpnDevice") #end
-#if (java || cs || python) @:nativeGen #end
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class LSMpnDevice {
   final eventDispatcher = new MpnDeviceEventDispatcher();

@@ -27,7 +27,6 @@ private typedef JsonFormat = {
   };
 }
 
-#if (java || cs || python) @:nativeGen #end
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class LSMpnBuilder {
   final obj: JsonFormat;
