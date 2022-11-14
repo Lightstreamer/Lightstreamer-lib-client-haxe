@@ -19,7 +19,7 @@ The sdk is supported on Python 3.7 and above.
 Quickstart
 **********
 
-To connect to a Lightstreamer Server, a :class:`lightstreamer.LightstreamerClient` object has to be created, configured, and instructed to connect to the Lightstreamer Server. 
+To connect to a Lightstreamer Server, a :class:`.LightstreamerClient` object has to be created, configured, and instructed to connect to the Lightstreamer Server. 
 A minimal version of the code that creates a LightstreamerClient and connects to the Lightstreamer Server on *https://push.lightstreamer.com* will look like this:
 
 .. code-block:: python
@@ -29,7 +29,7 @@ A minimal version of the code that creates a LightstreamerClient and connects to
   client = LightstreamerClient("http://push.lightstreamer.com/","DEMO")
   client.connect()
 
-For each subscription to be subscribed to a Lightstreamer Server a :class:`lightstreamer.Subscription` instance is needed.
+For each subscription to be subscribed to a Lightstreamer Server a :class:`.Subscription` instance is needed.
 A simple Subscription containing three items and two fields to be subscribed in *MERGE* mode is easily created (see `Lightstreamer General Concepts <https://lightstreamer.com/docs/ls-server/latest/General%20Concepts.pdf>`_):
 
 .. code-block:: python
@@ -39,7 +39,7 @@ A simple Subscription containing three items and two fields to be subscribed in 
   sub.setRequestedSnapshot("yes")
   client.subscribe(sub)
 
-Before sending the subscription to the server, usually at least one :class:`lightstreamer.SubscriptionListener` is attached to the Subscription instance in order to consume the real-time updates. The following code shows the values of the fields *stock_name* and *last_price* each time a new update is received for the subscription:
+Before sending the subscription to the server, usually at least one :class:`.SubscriptionListener` is attached to the Subscription instance in order to consume the real-time updates. The following code shows the values of the fields *stock_name* and *last_price* each time a new update is received for the subscription:
 
 .. code-block:: python
 
@@ -72,7 +72,7 @@ Below is the complete Python code:
 Logging
 *******
 
-To enable the internal client logger, create a :class:`lightstreamer.LoggerProvider` and set it as the default provider of :meth:`lightstreamer.LightstreamerClient.setLoggerProvider`.
+To enable the internal client logger, create a :class:`.LoggerProvider` and set it as the default provider of :meth:`.LightstreamerClient.setLoggerProvider`.
 
 .. code-block:: python
 
