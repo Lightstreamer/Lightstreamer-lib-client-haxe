@@ -23,6 +23,8 @@ extensions = ['sphinx.ext.autodoc']
 templates_path = ['_templates']
 exclude_patterns = []
 
+# Don't prepend module names to generated names
+add_module_names = False
 
 
 # -- Options for HTML output -------------------------------------------------
