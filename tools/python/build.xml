@@ -15,6 +15,8 @@
   <property name="lib.src" location="${lib}/src/lightstreamer/client"/>
   <property name="test" location="bin-test/python"/>
 
+  <property file="${tools}/lib.properties"/>
+
   <property name="wrapper" location="src/wrapper/python/lightstreamer/client"/>
   <property name="api.lib" location="${wrapper}/ls_python_client_api.py"/>
   <property name="wrapper.lib" location="${wrapper}/ls_python_client_wrapper.py"/>
@@ -29,11 +31,15 @@
 
     <copy file="${res}/pyproject.toml" todir="${lib}">
       <filterset>
-        <filter token="VERSION" value="1.0.0"/>
+        <filter token="VERSION" value="${version}"/>
+      </filterset>
+    </copy>
+    <copy file="${res}/README.md" todir="${lib}">
+      <filterset>
+        <filter token="VERSION" value="${version}"/>
       </filterset>
     </copy>
     <copy file="${res}/LICENSE" todir="${lib}"/>
-    <copy file="${res}/README.md" todir="${lib}"/>
     <copy file="${res}/setup.py" todir="${lib}"/>
   </target>
 
@@ -45,8 +51,13 @@
   </target>
 
   <target name="package_haxe">
+    <echo message="Version: ${version} build ${build.number}"/>
+    <echo message="CID: ${cid}"/>
     <exec executable="haxe" failonerror="true">
       <arg value="build.python.hxml"/>
+      <arg value="-D"/><arg value="LS_VERSION=${version}"/>
+      <arg value="-D"/><arg value="LS_BUILD=${build.number}"/>
+      <arg value="-D"/><arg value="LS_CID=${cid}"/>
       <!-- output lib is saved in ${haxe.lib} -->
     </exec>
   </target>
