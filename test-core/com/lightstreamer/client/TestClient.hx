@@ -432,21 +432,6 @@ class TestClient extends utest.Test {
     .verify();
   }
 
-  #if (LS_HAS_PROXY && !cs)
-  function _testProxy(async: utest.Async) {
-    setTransport();
-    exps
-    .then(() -> {
-      client.connectionOptions.setProxy(new Proxy("HTTP", "localtest.me", 8079, "myuser", "mypassword"));
-      listener._onStatusChange = status -> if (status == connectedString) exps.signal("connected");
-      client.connect();
-    })
-    .await("connected")
-    .then(() -> async.completed())
-    .verify();
-  }
-  #end
-
   #if LS_JSON_PATCH
   function _testJsonPatch(async: utest.Async) {
     setTransport();
