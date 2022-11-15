@@ -44,7 +44,13 @@
   </target>
 
   <target name="docs" depends="package" description="Build the docs">
-    <exec executable="make" dir="${docs}">
+    <exec executable="make" dir="${docs}" osfamily="unix">
+      <arg value="clean"/>
+      <arg value="html"/>
+    </exec>
+    <exec executable="cmd" dir="${docs}" osfamily="windows">
+      <arg value="/c"/>
+      <arg value="make.bat"/>
       <arg value="clean"/>
       <arg value="html"/>
     </exec>
