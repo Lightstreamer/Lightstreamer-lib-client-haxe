@@ -17,7 +17,7 @@
   <property name="docs.from" location="${docs}/build/html"/>
   <property name="docs.to" location="${build}/docs/api"/>
 
-  <property file="${tools}/lib.properties"/>
+  <property file="${tools}/build.properties"/>
 
   <property name="wrapper" location="src/wrapper/python/lightstreamer/client"/>
   <property name="api.lib" location="${wrapper}/ls_python_client_api.py"/>
