@@ -2,13 +2,7 @@ package com.lightstreamer.log;
 
 import com.lightstreamer.internal.NativeTypes;
 
-#if python
-#if LS_TEST
-@:pythonImport("ls_python_client_api", "Logger")
-#else
-@:pythonImport(".ls_python_client_api", "Logger")
-#end
-#end
+@:build(com.lightstreamer.internal.Macros.buildPythonImport("ls_python_client_api", "Logger"))
 extern interface Logger {
   function fatal(line: String, ?exception: NativeException): Void;
   function error(line: String, ?exception: NativeException): Void;

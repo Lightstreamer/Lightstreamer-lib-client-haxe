@@ -141,4 +141,18 @@ function buildEventDispatcher(): Array<Field> {
   }
   return fields;
 }
+
+function buildPythonImport(typeModule: String, typeName: String): Array<Field> {
+  var isPython = Context.defined("python");
+  if (isPython) {
+    var pos = Context.currentPos();
+    var localClass: ClassType = Context.getLocalClass().get();
+    var isTest = Context.defined("LS_TEST");
+    if (!isTest) {
+      typeModule = "." + typeModule;
+    }
+    localClass.meta.add(":pythonImport", [macro $v{typeModule}, macro $v{typeName}], pos);
+  }
+  return null;
+}
 #end

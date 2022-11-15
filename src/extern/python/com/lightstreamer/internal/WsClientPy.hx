@@ -1,10 +1,6 @@
 package com.lightstreamer.internal;
 
-#if LS_TEST
-@:pythonImport("com_lightstreamer_net", "WsClientPy")
-#else
-@:pythonImport(".com_lightstreamer_net", "WsClientPy")
-#end
+@:build(com.lightstreamer.internal.Macros.buildPythonImport("com_lightstreamer_net", "WsClientPy"))
 extern class WsClientPy {
   function new();
   function connectAsync(url: String, protocol: String, headers: Null<python.Dict<String, String>>, proxy: Null<TypesPy.Proxy>, sslContext: Null<SSLContext>): Void;

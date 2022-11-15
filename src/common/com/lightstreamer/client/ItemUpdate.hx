@@ -2,13 +2,7 @@ package com.lightstreamer.client;
 
 import com.lightstreamer.internal.NativeTypes;
 
-#if python
-#if LS_TEST
-@:pythonImport("ls_python_client_api", "ItemUpdate")
-#else
-@:pythonImport(".ls_python_client_api", "ItemUpdate")
-#end
-#end
+@:build(com.lightstreamer.internal.Macros.buildPythonImport("ls_python_client_api", "ItemUpdate"))
 extern interface ItemUpdate {
   function getItemName(): Null<String>;
   function getItemPos(): Int;

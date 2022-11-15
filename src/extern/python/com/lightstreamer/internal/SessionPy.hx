@@ -1,10 +1,6 @@
 package com.lightstreamer.internal;
 
-#if LS_TEST
-@:pythonImport("com_lightstreamer_net", "SessionPy")
-#else
-@:pythonImport(".com_lightstreamer_net", "SessionPy")
-#end
+@:build(com.lightstreamer.internal.Macros.buildPythonImport("com_lightstreamer_net", "SessionPy"))
 extern class SessionPy {
   static function getInstance(): Any;
   static function freeInstance(): Any;

@@ -1,10 +1,6 @@
 package com.lightstreamer.internal;
 
-#if LS_TEST
-@:pythonImport("com_lightstreamer_net", "CookieHelper")
-#else
-@:pythonImport(".com_lightstreamer_net", "CookieHelper")
-#end
+@:build(com.lightstreamer.internal.Macros.buildPythonImport("com_lightstreamer_net", "CookieHelper"))
 extern class CookieHelper {
   static var instance(get, never): CookieHelper;
   inline static function get_instance() return getInstance();
