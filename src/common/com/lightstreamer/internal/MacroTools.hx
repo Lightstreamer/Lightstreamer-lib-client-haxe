@@ -13,3 +13,8 @@ macro function goto(e) {
   var ee = [e, macro state.traceState()];
   return macro @:nullSafety(Off) @:privateAccess $b{ee}
 }
+
+macro function getDefine(key: String, defaultVal: String) {
+  var val = haxe.macro.Context.definedValue(key);
+  return macro $v{val ?? defaultVal};
+}

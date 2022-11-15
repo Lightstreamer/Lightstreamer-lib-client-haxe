@@ -1,5 +1,7 @@
 package com.lightstreamer.internal;
 
+import com.lightstreamer.internal.MacroTools.getDefine;
+
 final TLCP_VERSION = "TLCP-2.4.0";
 final FULL_TLCP_VERSION = TLCP_VERSION + ".lightstreamer.com";
 
@@ -29,8 +31,8 @@ final LS_LIB_VERSION = "6.0.0-beta.1 build 20220624";
 final LS_CID = "jqWtj1tg4pkpW3BAK3M5hgWg4CHfDprfc85DM4S9Ai";
 #elseif python
 final LS_LIB_NAME = "python_client";
-final LS_LIB_VERSION = "1.0.0-beta.2 build 20220809";
-final LS_CID = "v Wntytg4pkpW36AK3M5hgWg4DHfDprfc85DM4U7Fe";
+final LS_LIB_VERSION = getDefine("LS_VERSION", "0.0") + " build " + getDefine("LS_BUILD", "0");
+final LS_CID = getDefine("LS_CID", "mgQkwtwdysogQz2BJ4Ji kOj2Bg");
 #elseif php
 final LS_LIB_NAME = "php_client";
 final LS_LIB_VERSION = "1.0.0-beta.1 build 20220624";
