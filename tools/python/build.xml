@@ -14,6 +14,8 @@
   <property name="lib" location="${build}/lib/lightstreamer-client"/>
   <property name="lib.src" location="${lib}/src/lightstreamer/client"/>
   <property name="test" location="bin-test/python"/>
+  <property name="docs.from" location="${docs}/build/html"/>
+  <property name="docs.to" location="${build}/docs/api"/>
 
   <property file="${tools}/lib.properties"/>
 
@@ -54,6 +56,9 @@
       <arg value="clean"/>
       <arg value="html"/>
     </exec>
+    <copy todir="${docs.to}">
+      <fileset dir="${docs.from}"/>
+    </copy>
   </target>
 
   <target name="package_haxe">
