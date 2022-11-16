@@ -16,9 +16,6 @@ private enum SubscriptionState {
 
 private class SubscriptionEventDispatcher extends EventDispatcher<SubscriptionListener> {}
 
-/**
- * Subscription class
- **/
  #if (js || python) @:expose @:native("LSSubscription") #end
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class LSSubscription {
