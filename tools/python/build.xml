@@ -24,6 +24,38 @@
   <property name="wrapper.lib" location="${wrapper}/ls_python_client_wrapper.py"/>
   <property name="haxe.lib" location="${build}/haxe/ls_python_client_haxe.py"/>
 
+  <target name="distribute" depends="package" description="Upload the library to Pypi">
+    <exec executable="python" dir="${lib}" failonerror="true">
+      <arg value="-m"/>
+      <arg value="build"/>
+    </exec>
+    <exec executable="twine" dir="${lib}" failonerror="true">
+      <arg value="check"/>
+      <arg value="dist/*"/>
+    </exec>
+    <exec executable="twine" dir="${lib}" failonerror="true">
+      <arg value="upload"/>
+      <arg value="dist/*"/>
+    </exec>
+  </target>
+
+  <target name="distribute.test" depends="package" description="Upload the library to TestPypi">
+    <exec executable="python" dir="${lib}" failonerror="true">
+      <arg value="-m"/>
+      <arg value="build"/>
+    </exec>
+    <exec executable="twine" dir="${lib}" failonerror="true">
+      <arg value="check"/>
+      <arg value="dist/*"/>
+    </exec>
+    <exec executable="twine" dir="${lib}" failonerror="true">
+      <arg value="upload"/>
+      <arg value="-r"/>
+      <arg value="testpypi"/>
+      <arg value="dist/*"/>
+    </exec>
+  </target>
+
   <target name="package" depends="package_haxe" description="Build the library">
     <copy file="${api.lib}" todir="${lib.src}"/>
     <copy file="${wrapper.lib}" todir="${lib.src}"/>
@@ -46,11 +78,11 @@
   </target>
 
   <target name="docs" depends="package" description="Build the docs">
-    <exec executable="make" dir="${docs}" osfamily="unix">
+    <exec executable="make" dir="${docs}" failonerror="true" osfamily="unix">
       <arg value="clean"/>
       <arg value="html"/>
     </exec>
-    <exec executable="cmd" dir="${docs}" osfamily="windows">
+    <exec executable="cmd" dir="${docs}" failonerror="true" osfamily="windows">
       <arg value="/c"/>
       <arg value="make.bat"/>
       <arg value="clean"/>
