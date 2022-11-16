@@ -46,6 +46,9 @@ moved classes
 - to com.lightstreamer.client.mpn.MpnDevice from com.lightstreamer.client.mpn.android.MpnDevice
 - to com.lightstreamer.client.mpn.MpnBuilder from com.lightstreamer.client.mpn.util.MpnBuilder
 
+all
+Added new error code 70 to ClientListener.onServerError, to report that an unusable port was configured on the server address; previously, a similar case was treated as a request syntax error.
+
 java
 - LightstreamerClient: removed support for system property "com.lightstreamer.client.session.thread": By default, all instances will share the same thread for their internal operations, but can be instructed to use dedicated threads by setting the custom "com.lightstreamer.client.session.thread" system property as "dedicated"
 
