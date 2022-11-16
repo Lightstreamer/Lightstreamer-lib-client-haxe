@@ -82,6 +82,7 @@ class ClientListener:
      * 61 - there was an error in the parsing of the server response thus the client cannot continue with the current session.
      * 66 - an unexpected exception was thrown by the Metadata Adapter while authorizing the connection.
      * 68 - the Server could not open or continue with the session because of an internal error.
+     * 70 - an unusable port was configured on the server address.
      * 71 - this kind of client is not allowed by the current license terms.
      * <= 0 - the Metadata Adapter has refused the user connection; the code value is dependent on the specific Metadata Adapter implementation
    

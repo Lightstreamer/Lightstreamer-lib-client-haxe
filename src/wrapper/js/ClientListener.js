@@ -65,6 +65,7 @@ END_NODE_JSDOC_EXCLUDE
      * <li>61 - there was an error in the parsing of the server response thus the client cannot continue with the current session.</li>
      * <li>66 - an unexpected exception was thrown by the Metadata Adapter while authorizing the connection.</li>
      * <li>68 - the Server could not open or continue with the session because of an internal error.</li>
+     * <li>70 - an unusable port was configured on the server address.</li>
      * <li>71 - this kind of client is not allowed by the current license terms.</li>
      * <li>&lt;= 0 - the Metadata Adapter has refused the user connection;
      * the code value is dependent on the specific Metadata Adapter
