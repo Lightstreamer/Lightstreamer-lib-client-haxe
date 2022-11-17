@@ -1,12 +1,12 @@
 test.common.hxml
 --class-path src/platform/java
 --class-path src/extern/java
---java-lib lib/java
+--java-lib bin/java/build/deps
 --java-lib bin/java/build/api/lib
 
 -D jvm.dynamic-level=0
---jvm bin-test/java/ls-javase-client.jar
---cmd java -jar bin-test/java/ls-javase-client.jar
+--jvm bin-test/java/test-all.jar
+--cmd java -jar bin-test/java/test-all.jar
 
 --resource test/localtest.me.pfx@server_certificate
 

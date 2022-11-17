@@ -1,7 +1,7 @@
 build.common.hxml
 --class-path src/platform/java
 --class-path src/extern/java
---java-lib-extern lib/java
+--java-lib-extern bin/java/build/deps
 
 -D jvm.dynamic-level=0
 --jvm bin/java/build/haxe/lib/ls-javase-client-haxe.jar
