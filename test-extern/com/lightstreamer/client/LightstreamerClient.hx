@@ -30,7 +30,7 @@ extern class LightstreamerClient {
    public function sendMessage(message: String, sequence: Null<String> = null, delayTimeout: Null<Int> = -1, listener: Null<ClientMessageListener> = null, enqueueWhileDisconnected: Null<Bool> = false): Void;
    #end
    #if (java || cs)
-   overload public function sendMessage(message: String);  
+   overload public function sendMessage(message: String): Void;
    #end
    public function subscribe(subscription: Subscription): Void;
    public function unsubscribe(subscription: Subscription): Void;

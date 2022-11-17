@@ -8,7 +8,7 @@ extern class Subscription {
   #if js
   public function new(mode: String, items: NativeArray<String>, fields: NativeArray<String>);
   #elseif (java || cs)
-  overload public function new(mode: String, items:  haxe.extern.EitherType<String, NativeArray<String>>, fields: NativeArray<String>);
+  overload public function new(mode: String, items: NativeArray<String>, fields: NativeArray<String>);
   overload public function new(mode: String);
   overload public function new(mode: String, item: String, fields: NativeArray<String>);
   #else
