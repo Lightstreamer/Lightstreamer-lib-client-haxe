@@ -120,8 +120,7 @@
 
   <target name="resolve">
     <ivy:configure/>
-    <ivy:resolve file="${tools.ivy}">
-    </ivy:resolve>
+    <ivy:resolve file="${tools.ivy}"/>
     <ivy:retrieve pattern="${deps}/[artifact]-[type]-[revision].[ext]"/>
   </target>
 
