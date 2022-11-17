@@ -12,7 +12,7 @@ public class Main {
   }
 
 	public static void main(String[] args) throws Exception {
-    LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.DEBUG));
+    LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.INFO));
 		
     Subscription sub = new Subscription("MERGE", new String[] { "item1", "item2", "item3" }, new String[] { "stock_name", "last_price" });
     sub.setDataAdapter("QUOTE_ADAPTER");
@@ -34,13 +34,15 @@ public class Main {
     client.connect();
 
     Thread.sleep(5000);
+
+    client.disconnect();
 	}
 
   static class CListener implements ClientListener {
-    public void onListenStart(LightstreamerClient client) {
+    public void onListenStart() {
       log("ClientListener.onListenStart");
     }
-    public void onListenEnd(LightstreamerClient client) {}
+    public void onListenEnd() {}
     public void onServerError(int errorCode, String errorMessage) {}
     public void onStatusChange(String status) {}
     public void onPropertyChange(String property) {}
@@ -75,21 +77,15 @@ public class Main {
 
     public void onItemUpdate(ItemUpdate itemUpdate)
     {
-        //System.out.println("New update for " + itemUpdate.ItemName);
-
-        //IDictionary<String, String> listc = itemUpdate.ChangedFields;
-        //foreach (String value in listc.Values)
-        //{
-        //    System.out.println(" >>>>>>>>>>>>> " + value);
-        //}
+        System.out.println(itemUpdate.getValue("stock_name") + " " + itemUpdate.getValue("last_price"));
     }
 
-    public void onListenEnd(Subscription subscription)
+    public void onListenEnd()
     {
         // throw new System.NotImplementedException();
     }
 
-    public void onListenStart(Subscription subscription)
+    public void onListenStart()
     {
       log("SubscriptionListener.onListenStart");
     }

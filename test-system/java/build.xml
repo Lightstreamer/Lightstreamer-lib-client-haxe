@@ -1,0 +1,22 @@
+<project default="build">
+  <property name="bin" location="../../bin/java/build"/>
+
+  <target name="build">
+    <javac srcdir="src"  
+      destdir="build"
+      includeantruntime="false">
+      <classpath>
+        <pathelement location="${bin}/lib/ls-javase-client.jar"/>
+      </classpath>
+    </javac>
+    <java classname="myapp.Main">
+      <classpath>
+        <pathelement location="build"/>
+        <pathelement location="${bin}/lib/ls-javase-client.jar"/>
+        <fileset dir="${bin}/deps">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+    </java>
+  </target>
+</project>
