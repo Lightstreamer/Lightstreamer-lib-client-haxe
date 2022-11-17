@@ -27,7 +27,9 @@
   
   <property name="haxe.lib.jar" location="${build}/haxe/lib/ls-javase-client-haxe.jar"/>
 
-  <property name="doc.overview" location="tools/java/java_overview.html"/>
+  <property name="tools" location="tools/java"/>
+  <property name="tools.ivy" location="${tools}/ivy.xml"/>
+  <property name="tools.doc.overview" location="${tools}/java_overview.html"/>
 
   <target name="package" depends="package_wrapper" description="Build the library">
     <jar destfile="${lib.jar}">
@@ -42,7 +44,7 @@
       author="true"
       version="true"
       use="true"
-      overview="${doc.overview}"
+      overview="${tools.doc.overview}"
       doctitle="Lightstreamer Java Client SDK API Reference"
       windowtitle="Lightstreamer Java Client SDK API Reference">
       <packageset dir="${api.src}"/>
@@ -118,8 +120,7 @@
 
   <target name="resolve">
     <ivy:configure/>
-    <ivy:resolve>
-      <dependency org="com.google.code.findbugs" name="jsr305" rev="3.0.2"/>
+    <ivy:resolve file="${tools.ivy}">
     </ivy:resolve>
     <ivy:retrieve pattern="${deps}/[artifact]-[type]-[revision].[ext]"/>
   </target>
