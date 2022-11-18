@@ -29,8 +29,8 @@ import com.lightstreamer.client.LSConnectionOptions;
 public class ConnectionOptions {
   final LSConnectionOptions delegate;
   
-  ConnectionOptions(com.lightstreamer.client.LSLightstreamerClient client) {
-    this.delegate = new LSConnectionOptions(client);
+  ConnectionOptions(LSConnectionOptions options) {
+    this.delegate = options;
   }
   
   /**

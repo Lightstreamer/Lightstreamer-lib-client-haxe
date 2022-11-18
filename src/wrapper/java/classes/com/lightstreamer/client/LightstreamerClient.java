@@ -41,12 +41,12 @@ public class LightstreamerClient {
    * A constant string representing the name of the library.
    */
   @Nonnull
-  public static final String LIB_NAME = "name_placeholder";
+  public static final String LIB_NAME = LSLightstreamerClient.LIB_NAME;
   /**
    * A constant string representing the version of the library.
    */
   @Nonnull
-  public static final String LIB_VERSION = "version_placeholder build build_placeholderextra_placeholder".trim();
+  public static final String LIB_VERSION = LSLightstreamerClient.LIB_VERSION;
   
   /**
    * Static method that permits to configure the logging system used by the library. The logging system 
@@ -129,8 +129,8 @@ public class LightstreamerClient {
    */
   public LightstreamerClient(@Nullable String serverAddress, @Nullable String adapterSet) {
     this.delegate = new LSLightstreamerClient(serverAddress, adapterSet);
-    this.connectionOptions = new ConnectionOptions(delegate);
-    this.connectionDetails = new ConnectionDetails(delegate);
+    this.connectionOptions = new ConnectionOptions(delegate.connectionOptions);
+    this.connectionDetails = new ConnectionDetails(delegate.connectionDetails);
   }
   
   /**
@@ -331,7 +331,7 @@ public class LightstreamerClient {
    */
   @Nonnull
   public List<Subscription> getSubscriptions() {
-    throw new RuntimeException("TODO");
+    return delegate.getSubscriptionWrappers();
   }
   
   /**
