@@ -97,7 +97,7 @@ public class Subscription {
     * see {@link #setItems(String[])} and {@link #setFields(String[])} for details.
     */
   public Subscription(@Nonnull String subscriptionMode, @Nonnull String[] items, @Nonnull String[] fields) {
-    this.delegate = new LSSubscription(subscriptionMode, items, fields);
+    this.delegate = new LSSubscription(subscriptionMode, items, fields, this);
   }
    
    /**
@@ -128,7 +128,7 @@ public class Subscription {
     * see {@link #setFields(String[])} for details..
     */
   public Subscription(@Nonnull String subscriptionMode, @Nonnull String item, @Nonnull String[] fields) {
-    this.delegate = new LSSubscription(subscriptionMode, item, fields);
+    this.delegate = new LSSubscription(subscriptionMode, item, fields, this);
   }
      
    /**
@@ -151,7 +151,7 @@ public class Subscription {
     * </ul>
     */
   public Subscription(@Nonnull String subscriptionMode) {
-    this.delegate = new LSSubscription(subscriptionMode);
+    this.delegate = new LSSubscription(subscriptionMode, this);
   }
    
    /**

@@ -28,8 +28,8 @@ import com.lightstreamer.client.LSLightstreamerClient;
 public class ConnectionDetails {
   final LSConnectionDetails delegate;
 
-  ConnectionDetails(LSLightstreamerClient client) {
-    this.delegate = new LSConnectionDetails(client);
+  ConnectionDetails(LSConnectionDetails details) {
+    this.delegate = details;
   }
 
   /**

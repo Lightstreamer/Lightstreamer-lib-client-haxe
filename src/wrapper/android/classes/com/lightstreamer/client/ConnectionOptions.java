@@ -30,8 +30,8 @@ import com.lightstreamer.client.LSLightstreamerClient;
 public class ConnectionOptions {
   final LSConnectionOptions delegate;
   
-  ConnectionOptions(LSLightstreamerClient client) {
-    this.delegate = new LSConnectionOptions(client);
+  ConnectionOptions(LSConnectionOptions options) {
+    this.delegate = options;
   }
   
   /**
