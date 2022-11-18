@@ -1,0 +1,12 @@
+<ivy-module version="2.0">
+  <info organisation="com.lightstreamer" module="ls-android-client"/>
+  <configurations>
+    <conf name="default" visibility="public"></conf>
+  </configurations>
+  <dependencies>
+      <dependency org="com.google.code.findbugs" name="jsr305" rev="3.0.2" conf="default->default"/>
+      <dependency org="com.squareup.okhttp3" name="okhttp" rev="4.9.3" conf="default->default"/>
+      <dependency org="com.squareup.okhttp3" name="okhttp-urlconnection" rev="4.9.3" conf="default->default"/>
+      <dependency org="com.flipkart.zjsonpatch" name="zjsonpatch" rev="0.4.12" conf="default->default"/>
+  </dependencies>
+</ivy-module>
