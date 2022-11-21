@@ -1139,7 +1139,7 @@ private class MpnDeviceDelegate extends SubscriptionDelegateBase {
       var status = itemUpdate.getValue("status");
       var timestamp = itemUpdate.getValue("status_timestamp");
       if (status != null) {
-        client.evtDEV_Update(status, parseInt(timestamp ?? "0"));
+        client.evtDEV_Update(status, parseLong(timestamp ?? "0"));
       }
     });
   }

@@ -50,9 +50,9 @@ class LSLightstreamerClient {
     connectionDetails = new ConnectionDetails(@:nullSafety(Off) this);
     connectionOptions = new ConnectionOptions(@:nullSafety(Off) this);
     #if LS_TEST
-    machine = new ClientMachine(this, wsFactory ?? createWsClient, httpFactory ?? createHttpClient, ctrlFactory ?? createHttpClient, timerFactory ?? createTimer, randomGen ?? randomMillis, reachabilityFactory ?? createReachabilityManager);
+    machine = new #if LS_MPN com.lightstreamer.client.internal.MpnClientMachine #else ClientMachine #end(this, wsFactory ?? createWsClient, httpFactory ?? createHttpClient, ctrlFactory ?? createHttpClient, timerFactory ?? createTimer, randomGen ?? randomMillis, reachabilityFactory ?? createReachabilityManager);
     #else
-    machine = new ClientMachine(this, createWsClient, createHttpClient, createHttpClient, createTimer, randomMillis, createReachabilityManager);
+    machine = new #if LS_MPN com.lightstreamer.client.internal.MpnClientMachine #else ClientMachine #end(this, createWsClient, createHttpClient, createHttpClient, createTimer, randomMillis, createReachabilityManager);
     #end
     if (serverAddress != null) {
       connectionDetails.setServerAddress(serverAddress);
@@ -142,9 +142,19 @@ class LSLightstreamerClient {
     return new NativeList(machine.getMpnSubscriptions(filter));
   }
 
+  public function getMpnSubscriptionWrappers(filter: Null<String>): NativeList<Any> {
+    var machine = cast(machine, com.lightstreamer.client.internal.MpnClientMachine);
+    return new NativeList([for (sub in machine.getMpnSubscriptions(filter)) if (sub.wrapper != null) (sub.wrapper : Any)]);
+  }
+
   public function findMpnSubscription(subscriptionId: String): Null<MpnSubscription> {
     var machine = cast(machine, com.lightstreamer.client.internal.MpnClientMachine);
     machine.findMpnSubscription(subscriptionId);
+  }
+
+  public function findMpnSubscriptionWrapper(subscriptionId: String): Null<Any> {
+    var sub = findMpnSubscription(subscriptionId);
+    return sub?.wrapper;
   }
   #end
 

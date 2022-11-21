@@ -38,9 +38,11 @@ class LSMpnSubscription {
   var madeByServer: Bool;
   var m_status: MpnSubscriptionStatus = Unknown;
   var m_manager: Null<MpnSubscriptionManager>;
+  public final wrapper: Null<Any>;
 
   #if js
-  public function new(mode: EitherType<String, EitherType<Subscription, MpnSubscription>>, items: NativeArray<String>, fields: NativeArray<String>) {
+  public function new(mode: EitherType<String, EitherType<Subscription, MpnSubscription>>, items: NativeArray<String>, fields: NativeArray<String>, wrapper: Null<Any> = null) {
+    this.wrapper = wrapper;
     if (mode is String) {
       this.mode = MpnSubscriptionMode.fromString(mode);
       this.madeByServer = false;
@@ -63,30 +65,35 @@ class LSMpnSubscription {
     }
   }
   #elseif java
-  overload public function new(mode: String, items: NativeArray<String>, fields: NativeArray<String>) {
+  overload public function new(mode: String, items: NativeArray<String>, fields: NativeArray<String>, wrapper: Null<Any> = null) {
+    this.wrapper = wrapper;
     this.mode = MpnSubscriptionMode.fromString(mode);
     this.madeByServer = false;
     initItemsAndFields(items, fields);
   }
 
-  overload public function new(mode: String) {
+  overload public function new(mode: String, wrapper: Null<Any> = null) {
+    this.wrapper = wrapper;
     this.mode = MpnSubscriptionMode.fromString(mode);
     this.madeByServer = false;
   }
 
-  overload public function new(mode: String, item: String, fields: NativeArray<String>) {
+  overload public function new(mode: String, item: String, fields: NativeArray<String>, wrapper: Null<Any> = null) {
+    this.wrapper = wrapper;
     this.mode = MpnSubscriptionMode.fromString(mode);
     this.madeByServer = false;
     initItemsAndFields([item], fields);
   }
 
-  overload public function new(subscription: Subscription) {
+  overload public function new(subscription: Subscription, wrapper: Null<Any> = null) {
+    this.wrapper = wrapper;
     this.mode = MpnSubscriptionMode.fromString(subscription.getMode());
     this.madeByServer = false;
     initFromSubscription(subscription);
   }
 
-  overload public function new(mpnSubscription: MpnSubscription) {
+  overload public function new(mpnSubscription: MpnSubscription, wrapper: Null<Any> = null) {
+    this.wrapper = wrapper;
     this.mode = mpnSubscription.mode;
     this.madeByServer = false;
     initFromMpnSubscription(mpnSubscription);
@@ -288,7 +295,7 @@ class LSMpnSubscription {
   @:synchronized
   @:allow(com.lightstreamer.client.internal.MpnSubscriptionManager)
   function changeStatus(status: MpnSubscriptionStatus, statusTs: Null<String>) {
-    var statusTs = statusTs == null ? m_statusTs : new Timestamp(parseInt(statusTs));
+    var statusTs = statusTs == null ? m_statusTs : new Timestamp(parseLong(statusTs));
     if (status != m_status) {
       m_status = status;
       eventDispatcher.onStatusChanged(getStatus(), statusTs);
@@ -301,7 +308,7 @@ class LSMpnSubscription {
     if (rawStatusTs == null) {
       return;
     }
-    var statusTs = new Timestamp(parseInt(rawStatusTs));
+    var statusTs = new Timestamp(parseLong(rawStatusTs));
     if (statusTs != m_statusTs) {
       m_statusTs = statusTs;
       fireOnPropertyChange("status_timestamp");

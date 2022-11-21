@@ -1,6 +1,7 @@
 package com.lightstreamer.client.internal;
 
 import com.lightstreamer.internal.NativeTypes.IllegalStateException;
+import com.lightstreamer.internal.NativeTypes.Long;
 import com.lightstreamer.internal.Types;
 import com.lightstreamer.log.LoggerTools;
 
@@ -15,6 +16,14 @@ function parseInt(s: String) {
 
 function parseFloat(s: String) {
   return Std.parseFloat(s).sure();
+}
+
+function parseLong(s: String): Long {
+  #if (js || python)
+  return parseInt(s);
+  #else
+  return haxe.Int64.parseString(s);
+  #end
 }
 
 class UpdateInfo {
