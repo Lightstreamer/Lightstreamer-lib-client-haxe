@@ -104,7 +104,6 @@ class TestAll {
     buildSuite(runner);
     runner.run();
     runner.await();
-    Sys.exit(runner.numFailures);
   }
   #end
 }
