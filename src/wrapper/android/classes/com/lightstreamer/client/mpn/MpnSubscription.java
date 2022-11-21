@@ -51,7 +51,7 @@ public class MpnSubscription {
      * @throws IllegalArgumentException If the specified "Item List" or "Field List" is not valid; see {@link #setItems(String[])} and {@link #setFields(String[])} for details.
      */
     public MpnSubscription(@Nonnull String subscriptionMode, @Nonnull String[] items, @Nonnull String[] fields) {
-        this.delegate = new LSMpnSubscription(subscriptionMode, items, fields);
+        this.delegate = new LSMpnSubscription(subscriptionMode, items, fields, this);
     }
 
     /**
@@ -71,7 +71,7 @@ public class MpnSubscription {
      * @throws IllegalArgumentException If the specified "Field List" is not valid; see {@link #setFields(String[])} for details.
      */
     public MpnSubscription(@Nonnull String subscriptionMode, @Nonnull String item, @Nonnull String[] fields) {
-        this.delegate = new LSMpnSubscription(subscriptionMode, item, fields);
+        this.delegate = new LSMpnSubscription(subscriptionMode, item, fields, this);
     }
 
     /**
@@ -86,7 +86,7 @@ public class MpnSubscription {
      * @throws IllegalArgumentException If no or invalid subscription mode is passed.
      */
     public MpnSubscription(@Nonnull String subscriptionMode) {
-        this.delegate = new LSMpnSubscription(subscriptionMode);
+        this.delegate = new LSMpnSubscription(subscriptionMode, this);
     }
 
     /**
@@ -97,7 +97,7 @@ public class MpnSubscription {
      * @param copyFrom The Subscription object to copy properties from.
      */
     public MpnSubscription(@Nonnull Subscription copyFrom) {
-        this.delegate = new LSMpnSubscription(copyFrom.delegate);
+        this.delegate = new LSMpnSubscription(copyFrom.delegate, this);
     }
 
     /**
@@ -110,7 +110,7 @@ public class MpnSubscription {
      * @param copyFrom The MpnSubscription object to copy properties from.
      */
     public MpnSubscription(@Nonnull MpnSubscription copyFrom) {
-        this.delegate = new LSMpnSubscription(copyFrom.delegate);
+        this.delegate = new LSMpnSubscription(copyFrom.delegate, this);
     }
 
     /**

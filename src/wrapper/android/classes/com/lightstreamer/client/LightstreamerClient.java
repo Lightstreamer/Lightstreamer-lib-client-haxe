@@ -600,7 +600,7 @@ public class LightstreamerClient {
    * @see #findMpnSubscription(String)
    */
   public @Nonnull List<MpnSubscription> getMpnSubscriptions(@Nullable String filter) {
-    throw new RuntimeException("TODO");
+    return delegate.getMpnSubscriptionWrappers(filter);
   }
   
   /**
@@ -623,6 +623,6 @@ public class LightstreamerClient {
    * @see #getMpnSubscriptions(String)
    */
   public @Nullable MpnSubscription findMpnSubscription(@Nonnull String subscriptionId) {
-    throw new RuntimeException("TODO");
+    return (MpnSubscription) delegate.findMpnSubscriptionWrapper(subscriptionId);
   }
 }
