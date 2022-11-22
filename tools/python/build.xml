@@ -24,7 +24,7 @@
   <property name="wrapper.lib" location="${wrapper}/ls_python_client_wrapper.py"/>
   <property name="haxe.lib" location="${build}/haxe/ls_python_client_haxe.py"/>
 
-  <target name="distribute" depends="package" description="Upload the library to Pypi">
+  <target name="distribute" description="Upload the library to Pypi">
     <exec executable="python" dir="${lib}" failonerror="true">
       <arg value="-m"/>
       <arg value="build"/>
@@ -39,7 +39,7 @@
     </exec>
   </target>
 
-  <target name="distribute.test" depends="package" description="Upload the library to TestPypi">
+  <target name="distribute.test" description="Upload the library to TestPypi">
     <exec executable="python" dir="${lib}" failonerror="true">
       <arg value="-m"/>
       <arg value="build"/>
@@ -77,7 +77,7 @@
     <copy file="${res}/setup.py" todir="${lib}"/>
   </target>
 
-  <target name="docs" depends="package" description="Build the docs">
+  <target name="docs" description="Build the docs">
     <exec executable="make" dir="${docs}" failonerror="true" osfamily="unix">
       <arg value="clean"/>
       <arg value="html"/>
