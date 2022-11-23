@@ -32,10 +32,6 @@ added methods
 - MpnSubscription.getActualNotificationFormat
 - MpnSubscriptionListener.onModificationError
 
-renamed methods (java and cs)
-- LightstreamerClient.subscribe(MpnSubscription sub) as LightstreamerClient.subscribeMpn
-- LightstreamerClient.unsubscribe(MpnSubscription sub) as LightstreamerClient.unsubscribeMpn
-
 removed methods on android
 - MpnBuilder.contentAvailable(String contentAvailable)
 - MpnBuilder.contentAvailableAsString()
