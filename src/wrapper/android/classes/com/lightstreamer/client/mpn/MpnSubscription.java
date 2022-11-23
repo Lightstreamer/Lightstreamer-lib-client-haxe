@@ -92,7 +92,7 @@ public class MpnSubscription {
     /**
      * Creates an MpnSubscription object copying subscription mode, items, fields and data adapter from the specified real-time subscription.<BR>
      * The object can be supplied to {@link LightstreamerClient#subscribe(MpnSubscription, boolean)} in order to bring the MPN subscription to "active" state.<BR>
-     * Note that all of the methods used to describe the subscription to the server can only be called while the instance is in the "inactive" state.
+     * Note that all of the methods used to describe the subscription to the server, except {@link #setTriggerExpression(String)} and {@link #setNotificationFormat(String)}, can only be called while the instance is in the "inactive" state.
      * 
      * @param copyFrom The Subscription object to copy properties from.
      */
@@ -101,11 +101,11 @@ public class MpnSubscription {
     }
 
     /**
-     * Creates an MpnSubscription object copying all properties (including the subscription ID) from the specified MPN subscription.<BR>
-     * The created MpnSubscription is a copy of the original MpnSubscription object and represents the same MPN subscription, since their subscription ID is
-     * the same. When the object is supplied to {@link LightstreamerClient#subscribe(MpnSubscription, boolean)} in order to bring it to "active" state, the MPN subscription
-     * is modified: any property changed in this MpnSubscription replaces the corresponding value of the MPN subscription on the server.<BR>
-     * Note that all of the methods used to describe the subscription to the server can only be called while the instance is in the "inactive" state.
+     * Creates an MPNSubscription object copying all properties from the specified MPN subscription.
+     *
+     * The object can be supplied to {@link LightstreamerClient#subscribeMpn()} in order to bring the MPN subscription to "active" state.
+     *
+     * Note that all of the methods used to describe the subscription to the server, except {@link #setTriggerExpression(String)} and {@link #setNotificationFormat(String)}, can only be called while the instance is in the "inactive" state.
      * 
      * @param copyFrom The MpnSubscription object to copy properties from.
      */
@@ -153,17 +153,28 @@ public class MpnSubscription {
     }
     
     /**
-     * Returns the JSON structure to be used as the format of push notifications.<BR>
-     * This JSON structure is sent by the server to the push notification service provider (i.e. Google's FCM), hence it must follow
-     * its specifications.<BR>
+     * Inquiry method that gets the JSON structure requested by the user to be used as the format of push notifications.<BR>
      * 
-     * @return the JSON structure to be used as the format of push notifications.
+     * @return the JSON structure requested by the user to be used as the format of push notifications.
      * 
      * @see #setNotificationFormat(String)
+     * @see #getActualNotificationFormat()
      */
     @Nullable
     public String getNotificationFormat() {
         return delegate.getNotificationFormat();
+    }
+
+    /**
+     * Inquiry method that gets the JSON structure used by the Sever to send notifications.
+     *
+     * @return the JSON structure used by the Server to send notifications or null if the value is not available.
+     *
+     * @see #getNotificationFormat()
+     */
+    @Nullable
+    public String getActualNotificationFormat() {
+        return delegate.getActualNotificationFormat();
     }
 
     /**
@@ -186,13 +197,12 @@ public class MpnSubscription {
      * named arguments are always mapped to its corresponding indexed argument, even if originally the notification format used a named argument.<BR>
      * Note: the content of this property may be subject to length restrictions (See the "General Concepts" document for more information).
      * 
-     * @lifecycle This method can only be called while the MpnSubscription instance is in its "inactive" state.
+     * @lifecycle This property can be changed at any time.
      * 
      * @notification A change to this setting will be notified through a call to {@link MpnSubscriptionListener#onPropertyChanged(String)}
      * with argument <code>notification_format</code> on any {@link MpnSubscriptionListener} listening to the related MpnSubscription.
      * 
      * @param format the JSON structure to be used as the format of push notifications.
-     * @throws IllegalStateException if the MpnSubscription is currently "active".
      * 
      * @see com.lightstreamer.client.mpn.MpnBuilder
      */
@@ -201,15 +211,28 @@ public class MpnSubscription {
     }
 
     /**
-     * Returns the boolean expression that is evaluated against each update and acts as a trigger to deliver the push notification.
+     *  Inquiry method that gets the trigger expression requested by the user.
      * 
-     * @return the boolean expression that acts as a trigger to deliver the push notification.
+     * @return returns the trigger requested by the user or null if the value is not available.
      * 
      * @see #setTriggerExpression(String)
+     * @see #getActualTriggerExpression()
      */
     @Nullable
     public String getTriggerExpression() {
         return delegate.getTriggerExpression();
+    }
+
+    /**
+     * Inquiry method that gets the trigger expression evaluated by the Sever.
+     *
+     * @return returns the trigger sent by the Server or null if the value is not available.
+     *
+     * @see #getTriggerExpression()
+     */
+    @Nullable
+    public String getActualTriggerExpression() {
+        return delegate.getActualTriggerExpression();
     }
 
     /**
@@ -232,17 +255,16 @@ public class MpnSubscription {
      * named arguments are always mapped to its corresponding indexed argument, even if originally the trigger expression used a named argument.<BR>
      * Note: the content of this property may be subject to length restrictions (See the "General Concepts" document for more information).
      * 
-     * @lifecycle This method can only be called while the MpnSubscription instance is in its "inactive" state.
+     * @lifecycle This property can be changed at any time.
      * 
      * @notification A change to this setting will be notified through a call to {@link MpnSubscriptionListener#onPropertyChanged(String)}
      * with argument <code>trigger</code> on any {@link MpnSubscriptionListener} listening to the related MpnSubscription.
      * 
-     * @param expr the boolean expression that acts as a trigger to deliver the push notification.
-     * @throws IllegalStateException if the MpnSubscription is currently "active".
+     * @param expr the boolean expression that acts as a trigger to deliver the push notification. If the value is null, no trigger is set on the subscription.
      * 
      * @see #isTriggered()
      */
-    public void setTriggerExpression(@Nonnull String expr) {
+    public void setTriggerExpression(@Nullable String expr) {
         delegate.setTriggerExpression(expr);
     }
 
