@@ -27,4 +27,16 @@ class TestAssocArray extends utest.Test {
       [1 => "one", 4 => "four", 6 => "six"], 
       [for (k => v in a) k => v]);
   }
+
+  function testRemove() {
+    a.remove(4);
+    same(
+      [1 => "one", 6 => "six"], 
+      [for (k => v in a) k => v]);
+  }
+
+  function testContainsValue() {
+    isTrue(a.containsValue("four"));
+    isFalse(a.containsValue("seven"));
+  }
 }

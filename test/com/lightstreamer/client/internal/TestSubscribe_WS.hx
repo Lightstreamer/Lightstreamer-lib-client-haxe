@@ -461,4 +461,58 @@ class TestSubscribe_WS extends utest.Test {
     .then(() -> async.completed())
     .verify();
   }
+
+  /**
+   * Test that the unsubscriptions made in a session don't leak in the next session.
+   */
+  function testUnsubscriptionLeaking(async: utest.Async) {
+    var sub2 = new Subscription("DISTINCT", ["item"], ["f1", "f2"]);
+    sub2.setRequestedSnapshot("no");
+    exps
+    .then(() -> {
+      subListener._onSubscription = () -> exps.signal("onSubscription");
+      client.subscribe(sub);
+      client.subscribe(sub2);
+      client.connect();
+    })
+    .await("ws.init http://server/lightstreamer")
+    .then(() -> ws.onOpen())
+    .await("wsok")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .then(() -> {
+      ws.onText("WSOK");
+      ws.onText("CONOK,sid,70000,5000,*");
+    })
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false")
+    .then(() -> {
+      ws.onText("SUBOK,2,1,2");
+      ws.onText("SUBOK,1,1,2");
+    })
+    .await("onSubscription")
+    .then(() -> {
+      client.unsubscribe(sub);
+      client.unsubscribe(sub2);
+    })
+    .await("control\r\nLS_reqId=3&LS_subId=1&LS_op=delete&LS_ack=false")
+    .await("control\r\nLS_reqId=4&LS_subId=2&LS_op=delete&LS_ack=false")
+    .then(() -> {
+      equals(0, client.getSubscriptions().toHaxe().length);
+      client.disconnect();
+    })
+    .await("control\r\nLS_reqId=5&LS_op=destroy&LS_close_socket=true&LS_cause=api")
+    .await("ws.dispose")
+    .then(() -> client.connect())
+    .await("ws.init http://server/lightstreamer")
+    .then(() -> ws.onOpen())
+    .await("wsok")
+    .await("create_session\r\nLS_keepalive_millis=5000&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .then(() -> {
+      ws.onText("WSOK");
+      ws.onText("CONOK,sid,70000,5000,*");
+      client.connectionOptions.setRequestedMaxBandwidth("1000");
+    })
+    .await("control\r\nLS_reqId=6&LS_op=constrain&LS_requested_max_bandwidth=1000")
+    .then(() -> async.completed())
+    .verify();
+  }
 }

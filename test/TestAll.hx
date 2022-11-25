@@ -25,6 +25,7 @@ class TestAll {
     runner.addCase(TestUrl);
     runner.addCase(TestRequestBuilder);
     runner.addCase(TestAssocArray);
+    runner.addCase(TestMyList);
     runner.addCase(TestRequest);
     #if js
     runner.addCase(TestStreamReader);
