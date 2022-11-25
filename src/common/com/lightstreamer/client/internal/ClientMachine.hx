@@ -55,7 +55,7 @@ class ClientMachine {
   var disabledTransports: Set<TransportSelection> = new Set();
   // messages
   final sequenceMap: Map<String, Int> = [];
-  final messageManagers: Array<MessageManager> = [];
+  final messageManagers = new MyList<MessageManager>();
   // subscriptions
   final subscriptionManagers: AssocArray<SubscriptionManager> = new AssocArray();
   // request types

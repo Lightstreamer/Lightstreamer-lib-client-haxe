@@ -19,7 +19,7 @@ using com.lightstreamer.internal.ArrayTools;
 
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class MpnClientMachine extends ClientMachine {
-  final mpnSubscriptionManagers = new Array<MpnSubscriptionManager>();
+  final mpnSubscriptionManagers = new MyList<MpnSubscriptionManager>();
   var mpn_device: Null<MpnDevice>;
   var mpn_deviceId: Null<String>;
   var mpn_deviceToken: Null<String>;

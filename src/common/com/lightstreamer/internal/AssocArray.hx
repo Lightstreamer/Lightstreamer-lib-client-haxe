@@ -14,10 +14,10 @@ private class AssocPair<T> {
 
 // like an Array (and unlike Map), AssocArray returns its elements in the order they were originally inserted
 @:forward(length)
-abstract AssocArray<T>(Array<AssocPair<T>>) {
+abstract AssocArray<T>(MyList<AssocPair<T>>) {
 
   public function new() {
-    this = [];
+    this = new MyList();
   }
 
   @:op([]) 
@@ -34,10 +34,7 @@ abstract AssocArray<T>(Array<AssocPair<T>>) {
   }
 
   public function remove(key: Int) {
-    var i = this.findIndex(p -> p.key == key);
-    if (i != -1) {
-      this.splice(i, 1);
-    }
+    this.removeIf(p -> p.key == key);
   }
 
   public function keyValueIterator() {
@@ -47,11 +44,6 @@ abstract AssocArray<T>(Array<AssocPair<T>>) {
   }
 
   public function containsValue(val: T) {
-    for (k => v in keyValueIterator()) {
-      if (v == val) {
-        return true;
-      }
-    }
-    return false;
+    return this.exists(p -> p.value == val);
   }
 }
