@@ -557,6 +557,7 @@ class MpnClientMachine extends ClientMachine {
     if (state.s_mpn.sbs == s421) {
       goto(state.s_mpn.sbs = s424);
       genSUBS_EOS();
+      notifyOnSubscriptionsUpdated();
     } else if (state.s_mpn.sbs == s423) {
       if (mpn_snapshotSet.count() > 0) {
         goto(state.s_mpn.sbs = s424);
