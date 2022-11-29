@@ -53,6 +53,17 @@ namespace com.lightstreamer.log
         void Debug(string line, Exception exception);
 
         /// <summary>
+        /// <para>Receives log messages at Trace level and a related exception.</para>
+        /// </summary>
+        /// <param name="line">
+        /// The message to be logged.
+        /// </param>
+        /// <param name="exception">
+        /// An Exception instance related to the current log message.
+        /// </param>
+        void Trace(string line, Exception exception);
+
+        /// <summary>
         /// <para>Receives log messages at Fatal level and a related exception.</para>
         /// </summary>
         /// <param name="line">
@@ -70,6 +81,17 @@ namespace com.lightstreamer.log
         /// that even if the property is false, Debug log lines may be received anyway by the Debug methods.</para>
         /// </summary>
         bool IsDebugEnabled
+        {
+            get;
+        }
+
+        /// <summary>
+        /// <para>Checks if this logger is enabled for the Trace level.</para>
+        /// <para>The property should be true if this logger is enabled for Trace events, false otherwise.</para> 
+        /// <para>This property is intended to lessen the computational cost of disabled log Trace statements. Note 
+        /// that even if the property is false, Trace log lines may be received anyway by the Trace methods.</para>
+        /// </summary>
+        bool IsTraceEnabled
         {
             get;
         }
