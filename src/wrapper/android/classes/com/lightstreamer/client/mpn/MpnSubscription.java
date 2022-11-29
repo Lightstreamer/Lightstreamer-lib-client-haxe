@@ -103,7 +103,7 @@ public class MpnSubscription {
     /**
      * Creates an MPNSubscription object copying all properties from the specified MPN subscription.
      *
-     * The object can be supplied to {@link LightstreamerClient#subscribeMpn()} in order to bring the MPN subscription to "active" state.
+     * The object can be supplied to {@link LightstreamerClient#subscribe(MpnSubscription, boolean)} in order to bring the MPN subscription to "active" state.
      *
      * Note that all of the methods used to describe the subscription to the server, except {@link #setTriggerExpression(String)} and {@link #setNotificationFormat(String)}, can only be called while the instance is in the "inactive" state.
      * 
