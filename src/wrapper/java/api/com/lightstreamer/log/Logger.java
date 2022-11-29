@@ -12,20 +12,13 @@
 package com.lightstreamer.log;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /** 
  * Interface to be implemented to consume log from the library. <BR>
  * Instances of implemented classes are obtained by the library through the LoggerProvider instance set on {@link com.lightstreamer.client.LightstreamerClient#setLoggerProvider}.
 */
 public interface Logger {
-
-    /** 
-     * Receives log messages at Error level.
-     * 
-     * @param line The message to be logged.
-     * 
-     */
-    void error(@Nonnull String line);
 
     /** 
      * Receives log messages at Error level and a related exception.
@@ -35,15 +28,7 @@ public interface Logger {
      * @param exception An Exception instance related to the current log message.
      * 
      */
-    void error(@Nonnull String line, @Nonnull Throwable exception);
-
-    /** 
-     * Receives log messages at Warn level.
-     * 
-     * @param line The message to be logged.
-     * 
-    */
-    void warn(@Nonnull String line);
+    void error(@Nonnull String line, @Nullable Throwable exception);
 
     /** 
      * Receives log messages at Warn level and a related exception.
@@ -53,15 +38,7 @@ public interface Logger {
      * @param exception An Exception instance related to the current log message.
      * 
     */
-    void warn(@Nonnull String line, @Nonnull Throwable exception);
-
-    /** 
-     * Receives log messages at Info level.
-     * 
-     * @param line The message to be logged.
-     * 
-    */
-    void info(@Nonnull String line);
+    void warn(@Nonnull String line, @Nullable Throwable exception);
 
     /** 
      * Receives log messages at Info level and a related exception.
@@ -71,15 +48,7 @@ public interface Logger {
      * @param exception An Exception instance related to the current log message.
      * 
     */
-    void info(@Nonnull String line, @Nonnull Throwable exception);
-
-    /** 
-     * Receives log messages at Debug level.
-     * 
-     * @param line The message to be logged.
-     * 
-    */
-    void debug(@Nonnull String line);
+    void info(@Nonnull String line, @Nullable Throwable exception);
 
     /** 
      * Receives log messages at Debug level and a related exception.
@@ -89,15 +58,7 @@ public interface Logger {
      * @param exception An Exception instance related to the current log message.
      * 
     */
-    void debug(@Nonnull String line, @Nonnull Throwable exception);
-    
-    /** 
-     * Receives log messages at Trace level.
-     * 
-     * @param line The message to be logged.
-     * 
-    */
-    void trace(@Nonnull String line);
+    void debug(@Nonnull String line, @Nullable Throwable exception);
 
     /** 
      * Receives log messages at Trace level and a related exception.
@@ -107,15 +68,7 @@ public interface Logger {
      * @param exception An Exception instance related to the current log message.
      * 
     */
-    void trace(@Nonnull String line, @Nonnull Throwable exception);
-
-    /** 
-     * Receives log messages at Fatal level.
-     * 
-     * @param line The message to be logged.
-     * 
-    */
-    void fatal(@Nonnull String line);
+    void trace(@Nonnull String line, @Nullable Throwable exception);
 
     /** 
      * Receives log messages at Fatal level and a related exception.
@@ -125,7 +78,7 @@ public interface Logger {
      * @param exception An Exception instance related to the current log message.
      * 
     */
-    void fatal(@Nonnull String line, @Nonnull Throwable exception);
+    void fatal(@Nonnull String line, @Nullable Throwable exception);
 
     /** 
      * Checks if this logger is enabled for the Trace level. <BR>

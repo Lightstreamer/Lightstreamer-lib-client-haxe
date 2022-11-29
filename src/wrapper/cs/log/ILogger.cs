@@ -8,15 +8,6 @@ namespace com.lightstreamer.log
     /// </summary>
     public interface ILogger
     {
-
-        /// <summary>
-        /// <para>Receives log messages at Error level.</para>
-        /// </summary>
-        /// <param name="line">
-        /// The message to be logged.
-        /// </param>
-        void Error(string line);
-
         /// <summary>
         /// <para>Receives log messages at Error level and a related exception.</para>
         /// </summary>
@@ -27,14 +18,6 @@ namespace com.lightstreamer.log
         /// An Exception instance related to the current log message.
         /// </param>
         void Error(string line, Exception exception);
-
-        /// <summary>
-        /// <para>Receives log messages at Warn level.</para>
-        /// </summary>
-        /// <param name="line">
-        /// The message to be logged.
-        /// </param>
-        void Warn(string line);
 
         /// <summary>
         /// <para>Receives log messages at Warn level and a related exception.</para>
@@ -48,14 +31,6 @@ namespace com.lightstreamer.log
         void Warn(string line, Exception exception);
 
         /// <summary>
-        /// <para>Receives log messages at Info level.</para>
-        /// </summary>
-        /// <param name="line">
-        /// The message to be logged.
-        /// </param>
-        void Info(string line);
-
-        /// <summary>
         /// <para>Receives log messages at Info level and a related exception.</para>
         /// </summary>
         /// <param name="line">
@@ -67,14 +42,6 @@ namespace com.lightstreamer.log
         void Info(string line, Exception exception);
 
         /// <summary>
-        /// <para>Receives log messages at Debug level.</para>
-        /// </summary>
-        /// <param name="line">
-        /// The message to be logged.
-        /// </param>
-        void Debug(string line);
-
-        /// <summary>
         /// <para>Receives log messages at Debug level and a related exception.</para>
         /// </summary>
         /// <param name="line">
@@ -84,14 +51,6 @@ namespace com.lightstreamer.log
         /// An Exception instance related to the current log message.
         /// </param>
         void Debug(string line, Exception exception);
-
-        /// <summary>
-        /// <para>Receives log messages at Fatal level.</para>
-        /// </summary>
-        /// <param name="line">
-        /// The message to be logged.
-        /// </param>
-        void Fatal(string line);
 
         /// <summary>
         /// <para>Receives log messages at Fatal level and a related exception.</para>
