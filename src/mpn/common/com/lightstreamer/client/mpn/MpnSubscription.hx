@@ -1,5 +1,6 @@
 package com.lightstreamer.client.mpn;
 
+import com.lightstreamer.internal.InfoMap;
 import com.lightstreamer.client.internal.MpnSubscriptionManager;
 import com.lightstreamer.internal.NativeTypes;
 import com.lightstreamer.internal.Types;
@@ -558,5 +559,18 @@ class LSMpnSubscription {
       return;
     }
     m_manager = null;
+  }
+
+  public function toString(): String {
+    var map = new InfoMap();
+    map["mode"] = mode;
+    map["items"] = items != null ? Std.string(items) : group;
+    map["fields"] = fields != null ? Std.string(fields) : schema;
+    map["dataAdapter"] = dataAdapter;
+    map["requestedBufferSize"] = bufferSize;
+    map["requestedMaxFrequency"] = requestedMaxFrequency;
+    map["trigger"] = requestedTrigger;
+    map["notificationFormat"] = requestedFormat;
+    return map.toString();
   }
 }

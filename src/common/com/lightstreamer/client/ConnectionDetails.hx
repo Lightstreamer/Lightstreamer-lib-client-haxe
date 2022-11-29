@@ -109,6 +109,7 @@ class LSConnectionDetails {
     map["serverInstanceAddress"] = serverInstanceAddress;
     map["serverSocketName"] = serverSocketName;
     map["clientIp"] = clientIp;
+    map["libVersion"] = LightstreamerClient.LIB_NAME + " " + LightstreamerClient.LIB_VERSION;
     return map.toString();
   }
 }

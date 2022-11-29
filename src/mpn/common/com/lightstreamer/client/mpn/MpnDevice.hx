@@ -1,5 +1,6 @@
 package com.lightstreamer.client.mpn;
 
+import com.lightstreamer.internal.InfoMap;
 import com.lightstreamer.internal.Types.Timestamp;
 import com.lightstreamer.internal.NativeTypes;
 import com.lightstreamer.internal.EventDispatcher;
@@ -233,5 +234,14 @@ class LSMpnDevice {
     lock.synchronized(() -> {
       mpnDeviceLogger.logInfo('MPN badge successfully reset: $deviceId');
     });
+  }
+
+  public function toString(): String {
+    var map = new InfoMap();
+    map["platform"] = platform;
+    map["applicationId"] = applicationId;
+    map["deviceToken"] = deviceToken;
+    map["prevDeviceToken"] = prevDeviceToken;
+    return map.toString();
   }
 }
