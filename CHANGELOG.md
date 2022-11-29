@@ -18,6 +18,10 @@ Added support for JSON field compression.
 removed ConnectionSharing (web only)
 
 revised logging mechanism (same API on all platforms)
+consisting of:
+- Logger and LoggerProvider interfaces
+- ConsoleLoggerProvider class, which prints messages to standard output
+- java and cs: removed methods fatal(String), error(String), warn(String), info(String) and debug(String) from Logger interface
 
 removed methods
 - ConnectionOptions.getConnectTimeout
@@ -26,6 +30,12 @@ removed methods
 - ConnectionOptions.setCurrentConnectTimeout
 - ConnectionOptions.isEarlyWSOpenEnabled
 - ConnectionOptions.setEarlyWSOpenEnabled
+
+changed methods:
+- ClientListener.onListenStart and ClientListener.onListendEnd: removed parameter of type LightstreamerClient
+- SubscriptionListener.onListenStart and SubscriptionListener.onListendEnd: removed parameter of type Subscription
+- MpnDeviceListener.onListenStart and MpnDeviceListener.onListendEnd: removed parameter of type MpnDevice
+- MpnSubscriptionListener.onListenStart and MpnSubscriptionListener.onListendEnd: removed parameter of type MpnSubscription
 
 added methods
 - MpnSubscription.getActualTriggerExpression
