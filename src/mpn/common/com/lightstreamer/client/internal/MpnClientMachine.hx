@@ -725,6 +725,7 @@ class MpnClientMachine extends ClientMachine {
     var deviceSub = new Subscription("MERGE", 
       ['DEV-$deviceId'],
       ["status", "status_timestamp"]);
+    deviceSub.setInternal();
     deviceSub.setDataAdapter(adapterName);
     deviceSub.setRequestedMaxFrequency("unfiltered");
     deviceSub.addListener(mpn_deviceListener);
@@ -734,6 +735,7 @@ class MpnClientMachine extends ClientMachine {
     var itemSub = new Subscription("COMMAND", 
       ['SUBS-$deviceId'],
       ["key", "command"]);
+    itemSub.setInternal();
     itemSub.setDataAdapter(adapterName);
     itemSub.setRequestedMaxFrequency("unfiltered");
     itemSub.setCommandSecondLevelFields([

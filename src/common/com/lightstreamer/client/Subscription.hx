@@ -554,6 +554,7 @@ class LSSubscription {
 
   @:synchronized
   @:allow(com.lightstreamer.client.internal.update.Key2Level)
+  @:allow(com.lightstreamer.client.internal.MpnClientMachine)
   function setInternal() {
     m_internal = true;
   }
