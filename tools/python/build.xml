@@ -89,6 +89,7 @@
     <exec executable="make" dir="${docs}" failonerror="true" osfamily="unix">
       <arg value="clean"/>
       <arg value="html"/>
+      <arg value="SPHINXOPTS=-D release=${version}"/>
     </exec>
     <exec executable="cmd" dir="${docs}" failonerror="true" osfamily="windows">
       <arg value="/c"/>
