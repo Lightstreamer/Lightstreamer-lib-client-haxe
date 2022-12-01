@@ -19,12 +19,12 @@ final LS_LIB_VERSION = "9.0.0-beta.1 build 20220624";
 final LS_CID = "tqGko0tg4pkpW3EAK3M5hgWg4CHfDprfc85DM4S9Aa";
 #elseif android
 final LS_LIB_NAME = "android_client";
-final LS_LIB_VERSION = "5.0.0-beta.1 build 20220624";
-final LS_CID = "gpGxttxdysogQz2GJ4L74dHzfAL1x-onG37BM6MD86p";
+final LS_LIB_VERSION = getDefine("LS_VERSION", "0.0") + " build " + getDefine("LS_BUILD", "0");
+final LS_CID = getDefine("LS_CID", "mgQkwtwdysogQz2BJ4Ji kOj2Bg");
 #elseif java
 final LS_LIB_NAME = "javase_client";
-final LS_LIB_VERSION = "5.0.0-beta.1 build 20220624";
-final LS_CID = "pcYgxptg4pkpW3AAK3M5hgWg4CHfDprfc85DM4S9Am";
+final LS_LIB_VERSION = getDefine("LS_VERSION", "0.0") + " build " + getDefine("LS_BUILD", "0");
+final LS_CID = getDefine("LS_CID", "mgQkwtwdysogQz2BJ4Ji kOj2Bg");
 #elseif cs
 final LS_LIB_NAME = "dotnet_client";
 final LS_LIB_VERSION = "6.0.0-beta.1 build 20220624";
