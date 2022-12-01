@@ -82,6 +82,12 @@ class LSLightstreamerClient {
     machine.disconnect();
   }
 
+  #if ((java && !android) || cs)
+  public function disconnectFuture(): NativeFuture {
+    return machine.disconnectFuture();
+  }
+  #end
+
   public function getStatus(): String {
     return machine.getStatus();
   }

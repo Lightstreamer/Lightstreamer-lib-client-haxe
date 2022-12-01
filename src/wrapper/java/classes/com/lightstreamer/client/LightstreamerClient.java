@@ -249,7 +249,7 @@ public class LightstreamerClient {
    */
   @Nonnull
   public Future<Void> disconnectFuture() {
-    throw new RuntimeException("TODO");
+    return delegate.disconnectFuture();
   }
 
   /**

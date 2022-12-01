@@ -553,3 +553,25 @@ typedef NativeTrustManager = cs.system.net.security.RemoteCertificateValidationC
 #elseif python
 typedef NativeTrustManager = com.lightstreamer.internal.SSLContext;
 #end
+
+#if java
+private class RunnableImpl implements java.lang.Runnable {
+  final task: ()->Void;
+
+  public function new(task: ()->Void) {
+    this.task = task;
+  }
+
+	public function run() {
+    task();
+  }
+}
+
+@:forward(run)
+abstract NativeFuture(java.util.concurrent.FutureTask<Dynamic>) {
+  public function new(task: ()->Void) {
+    this = new java.util.concurrent.FutureTask(new RunnableImpl(task), null);
+  }
+}
+#elseif cs
+#end

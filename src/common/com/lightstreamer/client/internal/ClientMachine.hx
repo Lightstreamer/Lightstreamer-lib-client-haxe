@@ -4374,6 +4374,24 @@ class ClientMachine {
     evtExtDisconnect(TerminationCause.TC_api);
   }
 
+  #if ((java && !android) || cs)
+  public function disconnectFuture(): NativeFuture {
+    actionLogger.logInfo("Future disconnection requested");
+    evtExtDisconnect(TerminationCause.TC_api);
+
+    var future = new NativeFuture(() -> {
+      actionLogger.logInfo("Starting shutdown...");
+      sessionThread.stop();
+      hx.concurrent.thread.Threads.await(() -> sessionThread.state == hx.concurrent.Service.ServiceState.STOPPED, -1);
+      userThread.stop();
+      hx.concurrent.thread.Threads.await(() -> userThread.state == hx.concurrent.Service.ServiceState.STOPPED, -1);
+      actionLogger.logInfo("Shutdown completed");
+    });
+    hx.concurrent.thread.Threads.spawn(future.run);
+    return future;
+  }
+  #end
+
   public function getStatus(): String {
     return m_status;
   }
