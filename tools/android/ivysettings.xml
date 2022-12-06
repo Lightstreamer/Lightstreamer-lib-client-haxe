@@ -1,0 +1,24 @@
+<ivysettings>
+
+  <settings defaultResolver="default"/>
+
+  <credentials host="oss.sonatype.org" realm="Sonatype Nexus Repository Manager" username="${repo.user}" passwd="${repo.password}"/>
+
+  <include url="${ivy.default.settings.dir}/ivysettings-public.xml"/>
+
+  <resolvers>
+
+    <ibiblio name="nexus-central" root="https://oss.sonatype.org/service/local/staging/deploy/maven2/" m2compatible="true"/>
+
+    <ibiblio name="nexus-snapshot" root="https://oss.sonatype.org/content/repositories/snapshots/" m2compatible="true"/>
+
+    <filesystem name="local-m2-publish" m2compatible="true">
+      <artifact pattern="${user.home}/.m2/repository/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
+    </filesystem>
+
+    <chain name="default">
+      <resolver ref="public"/>
+    </chain>
+
+  </resolvers>
+</ivysettings>

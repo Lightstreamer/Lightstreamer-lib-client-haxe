@@ -14,6 +14,13 @@
   <property name="lib" location="${build}/lib"/>
   <property name="lib.jar" location="${lib}/ls-android-client.jar"/>
   <property name="docs" location="${build}/docs/api"/>
+  <property name="dist" location="${build}/dist"/>
+
+  <property name="client.name" value="ls-android-client"/>
+  <property name="dist.pom" location="${dist}/${client.name}.pom"/>
+  <property name="dist.lib" location="${dist}/${client.name}.jar"/>
+  <property name="dist.javadoc" location="${dist}/${client.name}-javadoc.jar"/>
+  <property name="dist.sources" location="${dist}/${client.name}-sources.jar"/>
 
   <property name="api.src" location="src/wrapper/android/api"/>
   <property name="api.build" location="${build}/api"/>
@@ -31,8 +38,45 @@
 
   <property name="tools" location="tools/android"/>
   <property name="tools.ivy" location="${tools}/ivy.xml"/>
+  <property name="tools.ivysettings" location="${tools}/ivysettings.xml"/>
   <property name="tools.doc.overview" location="${tools}/android_overview.html"/>
   <property file="${tools}/build.properties"/>
+
+  <target name="prepare.dist" depends="resolve">
+    <ivy:makepom ivyfile="${tools.ivy}" pomfile="${dist.pom}" conf="default">
+      <mapping conf="default" scope="compile"/>
+    </ivy:makepom>
+    <copy file="${lib.jar}" tofile="${dist.lib}"/>
+    <jar destfile="${dist.javadoc}" basedir="${docs}"/>
+    <jar destfile="${dist.sources}">
+      <fileset dir="${api.src}"/>
+      <fileset dir="${wrapper.src}"/>
+    </jar>
+    <condition property="lib.is.snapshot">
+      <contains string="${version}" substring="-SNAPSHOT"/>
+    </condition>
+  </target>
+
+  <target name="distribute.local" depends="package,docs,prepare.dist" description="Publish the library to local .m2 folder">
+    <ivy:publish resolver="local-m2-publish" forcedeliver="true" overwrite="true" publishivy="false">
+      <artifacts pattern="${dist}/[artifact](-[classifier]).[ext]"/>
+    </ivy:publish>
+  </target>
+
+  <target name="distribute.snapshot" depends="prepare.dist" if="lib.is.snapshot">
+    <ivy:publish resolver="nexus-snapshot" overwrite="true" publishivy="false">
+      <artifacts pattern="${dist}/[artifact](-[classifier]).[ext]"/>
+    </ivy:publish>
+  </target>
+
+  <target name="distribute.release" depends="prepare.dist" unless="lib.is.snapshot">
+    <ivy:publish resolver="nexus-central" publishivy="false">
+      <artifacts pattern="${dist}/[artifact](-[classifier]).[ext]"/>
+    </ivy:publish>
+  </target>
+
+  <target name="distribute" depends="distribute.snapshot,distribute.release" description="Publish the library to Maven Central">
+  </target>
 
   <target name="package" depends="package_wrapper" description="Build the library">
     <jar destfile="${lib.jar}">
@@ -129,7 +173,7 @@
   </target>
 
   <target name="resolve">
-    <ivy:configure/>
+    <ivy:configure file="${tools.ivysettings}"/>
     <ivy:resolve file="${tools.ivy}"/>
     <ivy:retrieve pattern="${deps}/[artifact]-[type]-[revision].[ext]"/>
   </target>
