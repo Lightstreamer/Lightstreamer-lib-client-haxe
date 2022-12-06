@@ -36,9 +36,9 @@
     <exec executable="twine" dir="${lib}" failonerror="true">
       <arg value="upload"/>
       <arg value="-u"/>
-      <arg value="${pypi.user}"/>
+      <arg value="${repo.user}"/>
       <arg value="-p"/>
-      <arg value="${pypi.password}"/>
+      <arg value="${repo.password}"/>
       <arg value="dist/*"/>
     </exec>
   </target>
@@ -57,9 +57,9 @@
       <arg value="-r"/>
       <arg value="testpypi"/>
       <arg value="-u"/>
-      <arg value="${pypi.user}"/>
+      <arg value="${repo.user}"/>
       <arg value="-p"/>
-      <arg value="${pypi.password}"/>
+      <arg value="${repo.password}"/>
       <arg value="dist/*"/>
     </exec>
   </target>
