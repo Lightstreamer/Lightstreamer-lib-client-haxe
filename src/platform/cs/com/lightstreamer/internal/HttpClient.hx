@@ -59,7 +59,7 @@ class HttpClient extends HttpClientCs implements IHttpClient {
     this.onDone(this);
   }
 
-  public static function setProxy(proxy: com.lightstreamer.client.Proxy) {
+  public static function setProxy(proxy: com.lightstreamer.client.Proxy.LSProxy) {
     @:nullSafety(Off)
     HttpClientCs.SetProxy(proxy.host, proxy.port, proxy.user, proxy.password);
   }

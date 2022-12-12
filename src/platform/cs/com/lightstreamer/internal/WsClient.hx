@@ -2,7 +2,7 @@ package com.lightstreamer.internal;
 
 import com.lightstreamer.internal.PlatformApi.IWsClient;
 import com.lightstreamer.internal.NativeTypes.NativeStringMap;
-import com.lightstreamer.client.Proxy;
+import com.lightstreamer.client.Proxy.LSProxy as Proxy;
 import com.lightstreamer.cs.WsClientCs;
 import com.lightstreamer.log.LoggerTools;
 
