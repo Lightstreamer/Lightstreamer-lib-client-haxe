@@ -25,14 +25,12 @@ namespace com.lightstreamer.client
         /// <summary>
         /// Event handler that receives a notification when the ClientListener instance is removed from a LightstreamerClient 
         /// through <seealso cref="LightstreamerClient.removeListener(ClientListener)"/>. This is the last event to be fired on the listener. </summary>
-        /// <param name="client"> the LightstreamerClient this instance was removed from.  </param>
-        void onListenEnd(LightstreamerClient client);
+        void onListenEnd();
 
         /// <summary>
         /// Event handler that receives a notification when the ClientListener instance is added to a LightstreamerClient 
         /// through <seealso cref="LightstreamerClient.addListener(ClientListener)"/>. This is the first event to be fired on the listener. </summary>
-        /// <param name="client"> the LightstreamerClient this instance was added to. </param>
-        void onListenStart(LightstreamerClient client);
+        void onListenStart();
 
         /// <summary>
         /// Event handler that is called when the Server notifies a refusal on the client attempt to open

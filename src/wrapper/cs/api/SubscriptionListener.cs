@@ -146,15 +146,13 @@ namespace com.lightstreamer.client
         /// Event handler that receives a notification when the SubscriptionListener instance is removed from a Subscription 
         /// through <seealso cref="Subscription.removeListener"/>. This is the last event to be fired on the listener.
         /// </summary>
-        /// <param name="subscription"> the Subscription this instance was removed from. </param>
-        void onListenEnd(Subscription subscription);
+        void onListenEnd();
 
         /// <summary>
         /// Event handler that receives a notification when the SubscriptionListener instance is added to a Subscription 
         /// through <seealso cref="Subscription.addListener"/>. This is the first event to be fired on the listener.
         /// </summary>
-        /// <param name="subscription"> the Subscription this instance was added to. </param>
-        void onListenStart(Subscription subscription);
+        void onListenStart();
 
         /// <summary>
         /// Event handler that is called by Lightstreamer to notify that a Subscription has been successfully subscribed 
