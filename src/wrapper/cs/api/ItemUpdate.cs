@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Collections.Immutable;
 
 /*
  * Copyright (c) 2004-2019 Lightstreamer s.r.l., Via Campanini, 6 - 20124 Milano, Italy.
@@ -39,19 +38,16 @@ namespace com.lightstreamer.client
     ///  of the first-level schema length would be required.</li>
     /// </ul>
     /// </summary>
-    public class ItemUpdate
+    public interface ItemUpdate
     {
         /// <value>
         /// Read-only property <c>ItemName</c> represents the name of the item to which this update pertains.<br/> 
         /// The name will be null if the related Subscription was initialized using an "Item Group".<br/>
         /// See also: <seealso cref="Subscription.ItemGroup"/>, <seealso cref="Subscription.Items"/>.<br/>
         /// </value>
-        public virtual string ItemName
+        public string ItemName
         {
-            get
-            {
-
-            }
+            get;
         }
 
         /// <value>
@@ -59,12 +55,9 @@ namespace com.lightstreamer.client
         /// "Item Group" of the item to which this update pertains.<br/>
         /// See also: <seealso cref="Subscription.ItemGroup"/>, <seealso cref="Subscription.Items"/>.<br/>
         /// </value>
-        public virtual int ItemPos
+        public int ItemPos
         {
-            get
-            {
-
-            }
+            get;
         }
 
         /// <summary>
@@ -80,10 +73,7 @@ namespace com.lightstreamer.client
         /// </ul> 
         /// </returns>
         /// <seealso cref="Subscription.Fields" />
-        public virtual string getValue(string fieldName)
-        {
-
-        }
+        public string getValue(string fieldName);
 
         /// <summary>
         /// Returns the current value for the specified field </summary>
@@ -98,10 +88,7 @@ namespace com.lightstreamer.client
         /// </ul> </returns>
         /// <seealso cref="Subscription.FieldSchema" />
         /// <seealso cref="Subscription.Fields" />
-        public virtual string getValue(int fieldPos)
-        {
-
-        }
+        public string getValue(int fieldPos);
 
         /// <summary>
         /// Inquiry method that asks whether the current update belongs to the item snapshot (which carries 
@@ -124,12 +111,9 @@ namespace com.lightstreamer.client
         /// (which is in COMMAND mode) and any second-level items (which are in MERGE mode) are qualified with 
         /// this flag. </summary>
         /// <returns> true if the current update event belongs to the item snapshot; false otherwise. </returns>
-        public virtual bool Snapshot
+        public bool Snapshot
         {
-            get
-            {
-
-            }
+            get;
         }
 
         /// <summary>
@@ -153,10 +137,7 @@ namespace com.lightstreamer.client
         /// </ul>
         /// In all other cases, the return value is false. </returns>
         /// <seealso cref="Subscription.Fields" />
-        public virtual bool isValueChanged(string fieldName)
-        {
-
-        }
+        public bool isValueChanged(string fieldName);
 
         /// <summary>
         /// Inquiry method that asks whether the value for a field has changed after the reception of the last 
@@ -180,10 +161,7 @@ namespace com.lightstreamer.client
         /// In all other cases, the return value is false. </returns>
         /// <seealso cref="Subscription.FieldSchema" />
         /// <seealso cref="Subscription.Fields" />
-        public virtual bool isValueChanged(int fieldPos)
-        {
-
-        }
+        public bool isValueChanged(int fieldPos);
 
         /// <summary>
         /// Returns an immutable Map containing the values for each field changed with the last server update. 
@@ -199,12 +177,9 @@ namespace com.lightstreamer.client
         /// </returns>
         /// <seealso cref="Subscription.FieldSchema" />
         /// <seealso cref="Subscription.Fields" />
-        public virtual IDictionary<string, string> ChangedFields
+        public IDictionary<string, string> ChangedFields
         {
-            get
-            {
-
-            }
+            get;
         }
 
         /// <summary>
@@ -220,12 +195,9 @@ namespace com.lightstreamer.client
         /// </returns>
         /// <seealso cref="Subscription.FieldSchema" />
         /// <seealso cref="Subscription.Fields" />
-        public virtual IDictionary<int, string> ChangedFieldsByPosition
+        public IDictionary<int, string> ChangedFieldsByPosition
         {
-            get
-            {
-
-            }
+            get;
         }
 
         /// <summary>
@@ -236,12 +208,9 @@ namespace com.lightstreamer.client
         /// </returns>
         /// <seealso cref="Subscription.FieldSchema" />
         /// <seealso cref="Subscription.Fields" />
-        public virtual IDictionary<string, string> Fields
+        public IDictionary<string, string> Fields
         {
-            get
-            {
-
-            }
+            get;
         }
 
         /// <summary>
@@ -252,12 +221,9 @@ namespace com.lightstreamer.client
         /// </returns>
         /// <seealso cref="Subscription.FieldSchema" />
         /// <seealso cref="Subscription.Fields" />
-        public virtual IDictionary<int, string> FieldsByPosition
+        public IDictionary<int, string> FieldsByPosition
         {
-            get
-            {
-              
-            }
+            get;
         }
     }
 }
