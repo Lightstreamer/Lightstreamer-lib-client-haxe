@@ -574,4 +574,13 @@ abstract NativeFuture(java.util.concurrent.FutureTask<Dynamic>) {
   }
 }
 #elseif cs
+abstract NativeFuture(cs.system.threading.tasks.Task) {
+  public function new(task: ()->Void) {
+    this = new cs.system.threading.tasks.Task(task);
+  }
+
+  inline public function run() {
+    this.Start();
+  }
+}
 #end
