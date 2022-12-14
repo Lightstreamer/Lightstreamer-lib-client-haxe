@@ -55,13 +55,6 @@ namespace com.lightstreamer.client
         /// to connect to a Lightstreamer server passing through a proxy. <BR>
         /// Once created the Proxy instance has to be passed to the <seealso cref="LightstreamerClient#connectionOptions"/>
         /// instance using the <seealso cref="ConnectionOptions#setProxy(Proxy)"/> method.
-        /// 
-        /// BEGIN_ANDROID_DOC_ONLY
-        /// <BR><BR>
-        /// Note: user and password are ignored. If authentication is required by the proxy in use
-        /// it is necessary to replace the default java <seealso cref="java.net.Authenticator"/> with a custom one containing 
-        /// the necessary logic to authenticate the user against the proxy.  
-        /// END_ANDROID_DOC_ONLY
         /// </summary>
         /// <param name="type"> the proxy type </param>
         /// <param name="host"> the proxy host </param>
