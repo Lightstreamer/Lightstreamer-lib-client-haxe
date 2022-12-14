@@ -63,6 +63,8 @@ namespace com.lightstreamer.client
     /// </summary>
     public class Subscription
     {
+        internal readonly LSSubscription _delegate;
+
         /// <summary>
         /// Creates an object to be used to describe a Subscription that is going to be subscribed to 
         /// through Lightstreamer Server. The object can be supplied to 
@@ -90,7 +92,7 @@ namespace com.lightstreamer.client
         /// </param>
         public Subscription(string subscriptionMode, string[] items, string[] fields)
         {
-
+            this._delegate = new LSSubscription(subscriptionMode, items, fields, this);
         }
 
         /// <summary>
@@ -118,7 +120,7 @@ namespace com.lightstreamer.client
         /// </param>
         public Subscription(string subscriptionMode, string item, string[] fields)
         {
-
+            this._delegate = new LSSubscription(subscriptionMode, item, fields, this);
         }
 
         /// <summary>
@@ -141,7 +143,7 @@ namespace com.lightstreamer.client
         /// </ul> </param>
         public Subscription(string subscriptionMode)
         {
-
+            this._delegate = new LSSubscription(subscriptionMode, this);
         }
 
         /// <summary>
@@ -157,7 +159,7 @@ namespace com.lightstreamer.client
         /// <seealso cref="Subscription.removeListener(SubscriptionListener)" />
         public virtual void addListener(SubscriptionListener listener)
         {
-          
+          _delegate.addListener(listener);
         }
 
         /// <summary>
@@ -171,7 +173,7 @@ namespace com.lightstreamer.client
         /// <seealso cref="Subscription.addListener(SubscriptionListener)" />
         public virtual void removeListener(SubscriptionListener listener)
         {
-          
+          _delegate.removeListener(listener);
         }
 
         /// <summary>
@@ -183,7 +185,7 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getListeners();
             }
         }
 
@@ -203,7 +205,7 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.isActive();
             }
         }
 
@@ -222,7 +224,7 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.isSubscribed();
             }
         }
 
@@ -245,11 +247,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getDataAdapter();
             }
             set
             {
-              
+              _delegate.setDataAdapter(value);
             }
         }
 
@@ -263,7 +265,7 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getMode();
             }
         }
 
@@ -280,11 +282,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getItems();
             }
             set
             {
-              
+              _delegate.setItems(value);
             }
         }
 
@@ -300,11 +302,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getItemGroup();
             }
             set
             {
-              
+              _delegate.setItemGroup(value);
             }
         }
 
@@ -318,11 +320,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getFields();
             }
             set
             {
-              
+              _delegate.setFields(value);
             }
         }
 
@@ -336,11 +338,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getFieldSchema();
             }
             set
             {
-              
+              _delegate.setFieldSchema(value);
             }
         }
 
@@ -367,11 +369,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getRequestedBufferSize();
             }
             set
             {
-              
+              _delegate.setRequestedBufferSize(value);
             }
         }
 
@@ -395,11 +397,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-
+              return _delegate.getRequestedSnapshot();
             }
             set
             {
-              
+              _delegate.setRequestedSnapshot(value);
             }
         }
 
@@ -448,11 +450,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getRequestedMaxFrequency();
             }
             set
             {
-              
+              _delegate.setRequestedMaxFrequency(value);
             }
         }
 
@@ -472,11 +474,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getSelector();
             }
             set
             {
-              
+              _delegate.setSelector(value);
             }
         }
 
@@ -494,7 +496,7 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getCommandPosition();
             }
         }
 
@@ -511,7 +513,7 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getKeyPosition();
             }
         }
 
@@ -535,11 +537,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getCommandSecondLevelDataAdapter();
             }
             set
             {
-              
+              _delegate.setCommandSecondLevelDataAdapter(value);
             }
         }
 
@@ -571,11 +573,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getCommandSecondLevelFields();
             }
             set
             {
-              
+              _delegate.setCommandSecondLevelFields(value);
             }
         }
 
@@ -606,11 +608,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getCommandSecondLevelFieldSchema();
             }
             set
             {
-              
+              _delegate.setCommandSecondLevelFieldSchema(value);
             }
         }
 
@@ -635,7 +637,7 @@ namespace com.lightstreamer.client
         /// </returns>
         public virtual string getValue(string itemName, string fieldName)
         {
-          
+          return _delegate.getValue(itemName, fieldName);
         }
 
         /// <summary>
@@ -662,7 +664,7 @@ namespace com.lightstreamer.client
         /// </returns>
         public virtual string getValue(int itemPos, int fieldPos)
         {
-          
+          return _delegate.getValue(itemPos, fieldPos);
         }
         /// <summary>
         /// Returns the latest value received for the specified item/field pair.<br/>
@@ -686,7 +688,7 @@ namespace com.lightstreamer.client
         /// </returns>
         public virtual string getValue(string itemName, int fieldPos)
         {
-          
+          return _delegate.getValue(itemName, fieldPos);
         }
 
         /// <summary>
@@ -710,7 +712,7 @@ namespace com.lightstreamer.client
         /// </returns>
         public virtual string getValue(int itemPos, string fieldName)
         {
-          
+          return _delegate.getValue(itemPos, fieldName);
         }
         /// <summary>
         /// Returns the latest value received for the specified item/key/field combination. 
@@ -731,7 +733,7 @@ namespace com.lightstreamer.client
         /// (note that it might have been added and then deleted). </returns>
         public virtual string getCommandValue(string itemName, string keyValue, string fieldName)
         {
-          
+          return _delegate.getCommandValue(itemName, keyValue, fieldName);
         }
 
         /// <summary>
@@ -755,7 +757,7 @@ namespace com.lightstreamer.client
         /// (note that it might have been added and then deleted). </returns>
         public virtual string getCommandValue(int itemPos, string keyValue, int fieldPos)
         {
-          
+          return _delegate.getCommandValue(itemPos, keyValue, fieldPos);
         }
 
         /// <summary>
@@ -778,7 +780,7 @@ namespace com.lightstreamer.client
         /// (note that it might have been added and then deleted). </returns>
         public virtual string getCommandValue(int itemPos, string keyValue, string fieldName)
         {
-          
+          return _delegate.getCommandValue(itemPos, keyValue, fieldName);
         }
 
         /// <summary>
@@ -801,7 +803,7 @@ namespace com.lightstreamer.client
         /// (note that it might have been added and then deleted). </returns>
         public virtual string getCommandValue(string itemName, string keyValue, int fieldPos)
         {
-          
+          return _delegate.getCommandValue(itemName, keyValue, fieldPos);
         }
     }
 }

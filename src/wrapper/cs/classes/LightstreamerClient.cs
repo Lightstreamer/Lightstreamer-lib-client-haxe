@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Security;
+using com.lightstreamer.log;
 
 /*
  * Copyright (c) 2004-2019 Lightstreamer s.r.l., Via Campanini, 6 - 20124 Milano, Italy.
@@ -31,15 +32,17 @@ namespace com.lightstreamer.client
     /// </summary>
     public class LightstreamerClient
     {
+        readonly LSLightstreamerClient _delegate;
+
         /// <summary>
         /// A constant string representing the name of the library.
         /// </summary>
-        public const string LIB_NAME = "Lightstreamer.DotNetStandard.Client";
+        public static readonly string LIB_NAME = LSLightstreamerClient.LIB_NAME;
 
         /// <summary>
         /// A constant string representing the version of the library.
         /// </summary>
-        public static readonly string LIB_VERSION = "5.1.2".Trim();
+        public static readonly string LIB_VERSION = LSLightstreamerClient.LIB_VERSION;
 
         /// <summary>
         /// Static method that permits to configure the logging system used by the library. The logging system 
@@ -80,7 +83,7 @@ namespace com.lightstreamer.client
         /// instance that will be used to generate log messages by the library classes. </param>
         public static void setLoggerProvider(ILoggerProvider provider)
         {
-
+            LSLightstreamerClient.setLoggerProvider(provider);
         }
 
         /// <summary>
@@ -90,7 +93,7 @@ namespace com.lightstreamer.client
         /// Properties of this object can be overwritten by values received from a 
         /// Lightstreamer Server. 
         /// </summary>
-        public ConnectionOptions connectionOptions;
+        public readonly ConnectionOptions connectionOptions;
         /// <summary>
         /// Data object that contains the details needed to open a connection to 
         /// a Lightstreamer Server. This instance is set up by the LightstreamerClient object at 
@@ -98,7 +101,7 @@ namespace com.lightstreamer.client
         /// Properties of this object can be overwritten by values received from a 
         /// Lightstreamer Server. 
         /// </summary>
-        public ConnectionDetails connectionDetails;
+        public readonly ConnectionDetails connectionDetails;
 
         /// <summary>
         /// Creates an object to be configured to connect to a Lightstreamer server
@@ -118,7 +121,9 @@ namespace com.lightstreamer.client
         /// </param>
         public LightstreamerClient(string serverAddress, string adapterSet)
         {
-
+            this._delegate = new LSLightstreamerClient(serverAddress, adapterSet);
+            this.connectionOptions = new ConnectionOptions(_delegate.connectionOptions);
+            this.connectionDetails = new ConnectionDetails(_delegate.connectionDetails);
         }
 
         /// <summary>
@@ -134,7 +139,7 @@ namespace com.lightstreamer.client
         /// <seealso cref="removeListener" />
         public virtual void addListener(ClientListener listener)
         {
-          
+          _delegate.addListener(listener);
         }
 
         /// <summary>
@@ -147,7 +152,7 @@ namespace com.lightstreamer.client
         /// <seealso cref="addListener" />
         public virtual void removeListener(ClientListener listener)
         {
-          
+          _delegate.removeListener(listener);
         }
 
         /// <summary>
@@ -157,7 +162,10 @@ namespace com.lightstreamer.client
         /// <seealso cref="addListener" />
         public virtual IList<ClientListener> Listeners
         {
-          
+            get
+            {
+                return _delegate.getListeners();
+            }
         }
 
         /// <summary>
@@ -182,7 +190,7 @@ namespace com.lightstreamer.client
         /// <seealso cref="ConnectionDetails.ServerAddress" />
         public virtual void connect()
         {
-          
+          _delegate.connect();
         }
 
         /// <summary>
@@ -200,7 +208,7 @@ namespace com.lightstreamer.client
         /// <seealso cref="connect" />
         public virtual void disconnect()
         {
-          
+          _delegate.disconnect();
         }
 
         /// <summary>
@@ -219,9 +227,9 @@ namespace com.lightstreamer.client
         /// all  <seealso cref="LightstreamerClient"/> instances are terminated.
         /// </returns>
         /// <seealso cref="disconnect" />
-        public Task DisconnectFuture() 
+        public System.Threading.Tasks.Task DisconnectFuture() 
         {
-          
+          return _delegate.disconnectFuture();
         }
 
         /// <summary>
@@ -250,7 +258,7 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getStatus();
             }
         }
 
@@ -274,7 +282,7 @@ namespace com.lightstreamer.client
         /// <seealso cref="unsubscribe" />
         public virtual void subscribe(Subscription subscription)
         {
-          
+          _delegate.subscribe(subscription._delegate);
         }
 
         /// <summary>
@@ -291,7 +299,7 @@ namespace com.lightstreamer.client
         /// instance. </param>
         public virtual void unsubscribe(Subscription subscription)
         {
-          
+          _delegate.unsubscribe(subscription._delegate);
         }
 
         /// <summary>
@@ -304,7 +312,10 @@ namespace com.lightstreamer.client
         /// <seealso cref="subscribe" />
         public virtual IList<Subscription> Subscriptions
         {
-          
+            get
+            {
+                return (IList<Subscription>)_delegate.getSubscriptionWrappers();
+            }
         }
 
         /// <summary>
@@ -320,7 +331,7 @@ namespace com.lightstreamer.client
         /// associated to the current connection. </param>
         public virtual void sendMessage(string message)
         {
-          
+          _delegate.sendMessage(message);
         }
 
         /// <summary>
@@ -382,7 +393,7 @@ namespace com.lightstreamer.client
         /// session. Note that the message can still be aborted later when a new session is established. </param>
         public virtual void sendMessage(string message, string sequence, int delayTimeout, ClientMessageListener listener, bool enqueueWhileDisconnected)
         {
-          
+          _delegate.sendMessage(message, sequence, delayTimeout, listener, enqueueWhileDisconnected);
         }
 
         /// <summary>
@@ -392,20 +403,6 @@ namespace com.lightstreamer.client
         /// can be added (or replaced if already present) to the cookie set used by the
         /// library to access the Server. Obviously, only cookies whose domain is compatible
         /// with the Server domain will be used internally.
-        /// <br/>More precisely, this explicit sharing is only needed when the library uses
-        /// its own cookie storage. This depends on the availability of a default global storage.
-        /// <ul><li>
-        /// In fact, the library will setup its own local cookie storage only if, upon the first
-        /// usage of the cookies, a default CookieHandler is not available;
-        /// then it will always stick to the internal storage.
-        /// </li><li>
-        /// On the other hand, if a default CookieHandler is available
-        /// upon the first usage of the cookies, the library, from then on, will always stick
-        /// to the default it finds upon each request; in this case, the cookie storage will be
-        /// already shared with the rest of the application. However, whenever a default
-        /// CookieHandler of type different from CookieManager
-        /// is found, the library will not be able to use it and will skip cookie handling.
-        /// </li></ul>
         /// 
         /// <b>Lifecycle:</b>  This method should be invoked before calling the
         /// <seealso cref="LightstreamerClient.connect"/> method. However it can be invoked at any time;
@@ -414,12 +411,12 @@ namespace com.lightstreamer.client
         /// </summary>
         /// <param name="uri"> the URI from which the supplied cookies were received. It cannot be null.
         /// </param>
-        /// <param name="cookies"> a list of cookies, represented in the HttpCookie type.
+        /// <param name="cookies"> a collection of cookies.
         /// </param>
         /// <seealso cref="getCookies" />
-        public static void addCookies(Uri uri, IList<HttpCookie> cookies)
+        public static void addCookies(Uri uri, CookieCollection cookies)
         {
-
+            LSLightstreamerClient.addCookies(uri, cookies);
         }
 
         /// <summary>
@@ -432,12 +429,12 @@ namespace com.lightstreamer.client
         /// </summary>
         /// <param name="uri"> the URI to which the cookies should be sent, or null.
         /// </param>
-        /// <returns> an immutable list with the various cookies that can
+        /// <returns> a collection with the various cookies that can
         /// be sent in a HTTP request for the specified URI. If a null URI was supplied,
         /// all available non-expired cookies will be returned.</returns>
-        public static IList<HttpCookie> getCookies(Uri uri)
+        public static CookieCollection getCookies(Uri uri)
         {
-
+            return LSLightstreamerClient.getCookies(uri);
         }
 
         /// <summary>
@@ -449,7 +446,7 @@ namespace com.lightstreamer.client
         {
             set
             {
-
+                LSLightstreamerClient.setTrustManagerFactory(value);
             }
         }
     }

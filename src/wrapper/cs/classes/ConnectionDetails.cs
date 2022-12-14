@@ -21,6 +21,13 @@ namespace com.lightstreamer.client
     /// <seealso cref="LightstreamerClient" />
     public class ConnectionDetails
     {
+        readonly LSConnectionDetails _delegate;
+
+        internal ConnectionDetails(LSConnectionDetails details)
+        {
+            this._delegate = details;
+        }
+
         /// <value>
         /// Property <c>AdapterSet</c> represents the name of the Adapter Set (which defines the Metadata Adapter and one or several 
         /// Data Adapters) mounted on Lightstreamer Server that supply all the items used in this application.
@@ -38,11 +45,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-
+                return _delegate.getAdapterSet();
             }
             set
             {
-
+                _delegate.setAdapterSet(value);
             }
         }
 
@@ -76,11 +83,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+                return _delegate.getServerAddress();
             }
             set
             {
-              
+                _delegate.setServerAddress(value);
             }
         }
 
@@ -102,11 +109,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+                return _delegate.getUser();
             }
             set
             {
-              
+                _delegate.setUser(value);
             }
         }
 
@@ -136,7 +143,7 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+                return _delegate.getServerInstanceAddress();
             }
         }
 
@@ -164,7 +171,7 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+                return _delegate.getServerSocketName();
             }
         }
 
@@ -189,7 +196,7 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+                return _delegate.getClientIp();
             }
         }
 
@@ -206,7 +213,7 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+                return _delegate.getSessionId();
             }
         }
 
@@ -233,7 +240,7 @@ namespace com.lightstreamer.client
         {
             set
             {
-              
+                _delegate.setPassword(value);
             }
         }
     }

@@ -20,12 +20,7 @@ namespace com.lightstreamer.client
     /// </summary>
     public class Proxy
     {
-       
-
-        public Proxy(Proxy proxy)
-        {
-
-        }
+       internal readonly LSProxy _delegate;
 
         /// <summary>
         /// This constructor will call <seealso cref="#Proxy(String, String, int, String, String)"/>
@@ -35,7 +30,7 @@ namespace com.lightstreamer.client
         /// <param name="port"> the proxy port </param>
         public Proxy(string type, string host, int port)
         {
-
+            this._delegate = new LSProxy(type, host, port);
         }
 
         /// <summary>
@@ -47,7 +42,7 @@ namespace com.lightstreamer.client
         /// <param name="user"> the user name to be used to validate against the proxy </param>
         public Proxy(string type, string host, int port, string user)
         {
-
+            this._delegate = new LSProxy(type, host, port, user);
         }
 
         /// <summary>
@@ -63,22 +58,24 @@ namespace com.lightstreamer.client
         /// <param name="password"> the password to be used to validate against the proxy </param>
         public Proxy(string type, string host, int port, string user, string password)
         {
-
+            this._delegate = new LSProxy(type, host, port, user, password);
         }
 
         public override string ToString()
         {
-
+            return _delegate.toString();
         }
 
         public override bool Equals(object obj)
         {
-
+            // TODO
+            return false;
         }
 
         public override int GetHashCode()
         {
-          
+            // TODO
+            return 0;
         }
     }
 }

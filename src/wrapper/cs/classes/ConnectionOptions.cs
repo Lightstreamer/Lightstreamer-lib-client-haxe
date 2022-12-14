@@ -25,39 +25,10 @@ namespace com.lightstreamer.client
     /// <seealso cref="LightstreamerClient" />
     public class ConnectionOptions
     {
-        /// <value>Property <c>ConnectTimeout</c> represents the same value as <seealso cref="RetryDelay" />.<br/>
-        /// <b>The property is deprecated: use <seealso cref="RetryDelay" /> instead.</b>
-        /// </value>
-        [Obsolete("ConnectTimeout is deprecated, please use RetryDelay instead.")]
-        public virtual string ConnectTimeout
-        {
-            get
-            {
+        readonly LSConnectionOptions _delegate;
 
-            }
-            set
-            {
-              
-            }
-        }
-
-        /// <value>
-        /// Read-only property <c>CurrentConnectTimeout</c> represents the extra time to wait for a response
-        /// to a request before dropping the connection and try with a different approach.<br/>
-        /// This value can be changed any time by the library according to the network condition. The user cannot alter it but
-        /// can set the minimum value (see <seealso cref="RetryDelay"/>).
-        /// </value>
-        /// <seealso cref="RetryDelay" />
-        public virtual long CurrentConnectTimeout
-        {
-            get
-            {
-              
-            }
-            set
-            {
-              
-            }
+        internal ConnectionOptions(LSConnectionOptions options) {
+            this._delegate = options;
         }
 
         /// <value>
@@ -83,11 +54,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getContentLength();
             }
             set
             {
-              
+              _delegate.setContentLength(value);
             }
         }
 
@@ -115,23 +86,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getFirstRetryMaxDelay();
             }
             set
             {
-              
-            }
-        }
-
-        public virtual long ForceBindTimeout
-        {
-            get
-            {
-              
-            }
-            set
-            {
-              
+              _delegate.setFirstRetryMaxDelay(value);
             }
         }
 
@@ -186,11 +145,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getForcedTransport();
             }
             set
             {
-              
+              _delegate.setForcedTransport(value);
             }
         }
 
@@ -223,11 +182,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getHttpExtraHeaders();
             }
             set
             {
-              
+              _delegate.setHttpExtraHeaders(value);
             }
         }
 
@@ -259,11 +218,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getIdleTimeout();
             }
             set
             {
-              
+              _delegate.setIdleTimeout(value);
             }
         }
 
@@ -292,11 +251,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getKeepaliveInterval();
             }
             set
             {
-              
+              _delegate.setKeepaliveInterval(value);
             }
         }
 
@@ -332,11 +291,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getRequestedMaxBandwidth();
             }
             set
             {
-              
+              _delegate.setRequestedMaxBandwidth(value);
             }
         }
 
@@ -359,7 +318,7 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getRealMaxBandwidth();
             }
         }
 
@@ -401,11 +360,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getPollingInterval();
             }
             set
             {
-              
+              _delegate.setPollingInterval(value);
             }
         }
 
@@ -429,11 +388,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getReconnectTimeout();
             }
             set
             {
-              
+              _delegate.setReconnectTimeout(value);
             }
         }
 
@@ -481,11 +440,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getRetryDelay();
             }
             set
             {
-              
+              _delegate.setRetryDelay(value);
             }
         }
 
@@ -526,11 +485,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getReverseHeartbeatInterval();
             }
             set
             {
-              
+              _delegate.setReverseHeartbeatInterval(value);
             }
         }
 
@@ -552,11 +511,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getStalledTimeout();
             }
             set
             {
-              
+              _delegate.setStalledTimeout(value);
             }
         }
 
@@ -586,64 +545,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.getSessionRecoveryTimeout();
             }
             set
             {
-              
-            }
-        }
-
-        public virtual long SwitchCheckTimeout
-        {
-            get
-            {
-              
-            }
-            set
-            {
-              
-            }
-        }
-
-        /// <value>
-        /// Property <c>EarlyWSOpenEnabled</c> enables/disables the "early-open" of the WebSocket
-        /// connection.<br/>
-        /// When enabled a WebSocket is open to the address specified through
-        /// <seealso cref="ConnectionDetails.ServerAddress"/> before a potential server instance
-        /// address is received during session creation. In this case if a server instance address is
-        /// received, the previously open WebSocket is closed and a new one is open to the received
-        /// server instance address.<br/>
-        /// If disabled, the session creation is completed to verify if such a server instance address
-        /// is configured in the server before opening the WebSocket.<br/>
-        /// For these reasons this setting should be set to false if the server specifies a control_link_address
-        /// in its configuration; viceversa it should be set to true if such element is not set on the
-        /// target server(s) configuration.<br/>
-        /// Values can be true/false to enable/disable the early-open of the WebSocket connection.
-        /// See also: <seealso cref="ServerInstanceAddressIgnored"/>.<br/>
-        /// <br/>
-        /// <b>Edition Note:</b> Server Clustering is an optional feature, available depending on Edition and License
-        /// Type. To know what features are enabled by your license, please see the License tab of the Monitoring
-        /// Dashboard (by default, available at /dashboard).<br/>
-        /// <br/>
-        /// <b>Lifecycle:</b> This method can be called at any time. If called while the client already owns a session
-        /// it will be applied the next time a session is requested to a server.<br/>
-        /// <br/>
-        /// <b>Related notifications:</b> A change to this setting will be notified through a call to
-        /// <seealso cref="ClientListener.onPropertyChange"/> with argument "earlyWSOpenEnabled" on any
-        /// ClientListener listening to the related LightstreamerClient.<br/>
-        /// <br/>
-        /// <b>Default value:</b> false
-        /// </value>
-        public virtual bool EarlyWSOpenEnabled
-        {
-            get
-            {
-              
-            }
-            set
-            {
-              
+              _delegate.setSessionRecoveryTimeout(value);
             }
         }
 
@@ -671,11 +577,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.isHttpExtraHeadersOnSessionCreationOnly();
             }
             set
             {
-              
+              _delegate.setHttpExtraHeadersOnSessionCreationOnly(value);
             }
         }
 
@@ -712,11 +618,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.isServerInstanceAddressIgnored();
             }
             set
             {
-              
+               _delegate.setServerInstanceAddressIgnored(value);
             }
         }
 
@@ -749,11 +655,11 @@ namespace com.lightstreamer.client
         {
             get
             {
-              
+              return _delegate.isSlowingEnabled();
             }
             set
             {
-              
+              _delegate.setSlowingEnabled(value);
             }
         }
 
@@ -774,7 +680,7 @@ namespace com.lightstreamer.client
         {
             set
             {
-              
+              _delegate.setProxy(value._delegate);
             }
         }
     }
