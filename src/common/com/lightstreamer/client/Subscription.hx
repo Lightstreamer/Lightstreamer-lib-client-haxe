@@ -235,11 +235,19 @@ class LSSubscription {
     this.selector = Name.fromString(selector);
   }
 
-  public function getCommandPosition(): Null<Int> {
-    return cmdIdx;
+  public function getCommandPosition(): Int {
+    checkCommand();
+    if (cmdIdx == null) {
+      throw new IllegalStateException("The position of the command field is currently unknown");
+    }
+    return (cmdIdx : Int);
   }
-  public function getKeyPosition(): Null<Int> {
-    return keyIdx;
+  public function getKeyPosition(): Int {
+    checkCommand();
+    if (keyIdx == null) {
+      throw new IllegalStateException("The position of the key field is currently unknown");
+    }
+    return (keyIdx : Int);
   }
 
   public function getCommandSecondLevelDataAdapter(): Null<String> {

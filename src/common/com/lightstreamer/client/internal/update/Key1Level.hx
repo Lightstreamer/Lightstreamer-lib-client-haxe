@@ -80,7 +80,7 @@ class Key1Level implements ItemKey {
 
   function doFirstUpdate(keyValues: Map<Pos, Null<CurrFieldVal>>, snapshot: Bool) {
     var nFields = item.subscription.fetch_nFields().sure();
-    var cmdIdx = item.subscription.getCommandPosition().sure();
+    var cmdIdx = item.subscription.getCommandPosition();
     currKeyValues = keyValues;
     currKeyValues[cmdIdx] = StringVal("ADD");
     var changedFields = new Set(1...nFields + 1);
@@ -90,7 +90,7 @@ class Key1Level implements ItemKey {
   }
 
   function doUpdate(keyValues: Map<Pos, Null<CurrFieldVal>>, snapshot: Bool) {
-    var cmdIdx = item.subscription.getCommandPosition().sure();
+    var cmdIdx = item.subscription.getCommandPosition();
     var prevKeyValues = currKeyValues;
     currKeyValues = keyValues;
     currKeyValues[cmdIdx] = StringVal("UPDATE");
@@ -111,7 +111,7 @@ class Key1Level implements ItemKey {
 
   function doDelete(keyValues: Map<Pos, Null<CurrFieldVal>>, snapshot: Bool) {
     currKeyValues = null;
-    var changedFields = new Set(keyValues.keys()).subtracting([item.subscription.getKeyPosition().sure()]);
+    var changedFields = new Set(keyValues.keys()).subtracting([item.subscription.getKeyPosition()]);
     var update = new ItemUpdateBase(item.itemIdx, item.subscription, nullify(keyValues), changedFields, snapshot#if LS_JSON_PATCH, []#end);
     item.unrelate(keyName);
     
@@ -128,7 +128,7 @@ class Key1Level implements ItemKey {
   }
 
   function isDelete(keyValues: Map<Pos, Null<CurrFieldVal>>): Bool {
-    return keyValues[item.subscription.getCommandPosition().sure()].toString() == "DELETE";
+    return keyValues[item.subscription.getCommandPosition()].toString() == "DELETE";
   }
 
   function fireOnItemUpdate(update: ItemUpdate) {

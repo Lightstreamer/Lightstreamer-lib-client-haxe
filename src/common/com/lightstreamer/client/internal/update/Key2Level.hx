@@ -198,7 +198,7 @@ class Key2Level implements ItemKey {
   }
 
   function doFirstUpdate(keyValues: Map<Pos, Null<CurrFieldVal>>, snapshot: Bool) {
-    var cmdIdx = item.subscription.getCommandPosition().sure();
+    var cmdIdx = item.subscription.getCommandPosition();
     currKeyValues = keyValues;
     currKeyValues[cmdIdx] = StringVal("ADD");
     var changedFields = findChangedFields(null, currKeyValues);
@@ -208,7 +208,7 @@ class Key2Level implements ItemKey {
   }
 
   function doUpdate(keyValues: Map<Pos, Null<CurrFieldVal>>, snapshot: Bool) {
-    var cmdIdx = item.subscription.getCommandPosition().sure();
+    var cmdIdx = item.subscription.getCommandPosition();
     var prevKeyValues = currKeyValues;
     currKeyValues = keyValues;
     currKeyValues[cmdIdx] = StringVal("UPDATE");
@@ -219,7 +219,7 @@ class Key2Level implements ItemKey {
   }
 
   function doUpdate2Level(update: ItemUpdate) {
-    var cmdIdx = item.subscription.getCommandPosition().sure();
+    var cmdIdx = item.subscription.getCommandPosition();
     var nFields = item.subscription.fetch_nFields().sure();
     var prevKeyValues = currKeyValues.sure().copy();
     @:nullSafety(Off)
@@ -253,7 +253,7 @@ class Key2Level implements ItemKey {
   }
 
   function doUpdate1Level(keyValues: Map<Pos, Null<CurrFieldVal>>, snapshot: Bool) {
-    var cmdIdx = item.subscription.getCommandPosition().sure();
+    var cmdIdx = item.subscription.getCommandPosition();
     var nFields = item.subscription.fetch_nFields().sure();
     var prevKeyValues = currKeyValues.sure();
     currKeyValues =  keyValues;
@@ -275,8 +275,8 @@ class Key2Level implements ItemKey {
 
   function doDelete(keyValues: Map<Pos, Null<CurrFieldVal>>, snapshot: Bool) {
     var n = item.subscription.fetch_nFields().sure();
-    var keyIdx = item.subscription.getKeyPosition().sure();
-    var cmdIdx = item.subscription.getCommandPosition().sure();
+    var keyIdx = item.subscription.getKeyPosition();
+    var cmdIdx = item.subscription.getCommandPosition();
     currKeyValues = null;
     var changedFields = new Set(1...n+1).subtracting([keyIdx]);
     var extKeyValues = new Map<Pos, Null<CurrFieldVal>>();
@@ -301,8 +301,8 @@ class Key2Level implements ItemKey {
 
   function doDeleteExt(keyValues: Map<Pos, Null<CurrFieldVal>>, snapshot: Bool) {
     var nFields = item.subscription.fetch_nFields().sure();
-    var keyIdx = item.subscription.getKeyPosition().sure();
-    var cmdIdx = item.subscription.getCommandPosition().sure();
+    var keyIdx = item.subscription.getKeyPosition();
+    var cmdIdx = item.subscription.getCommandPosition();
     var n = nFields + currKey2Values.sure().count();
     currKeyValues = null;
     currKey2Values = null;
@@ -329,8 +329,8 @@ class Key2Level implements ItemKey {
 
   function doLightDelete(keyValues: Map<Pos, Null<CurrFieldVal>>, snapshot: Bool) {
     var nFields = item.subscription.fetch_nFields().sure();
-    var keyIdx = item.subscription.getKeyPosition().sure();
-    var cmdIdx = item.subscription.getCommandPosition().sure();
+    var keyIdx = item.subscription.getKeyPosition();
+    var cmdIdx = item.subscription.getCommandPosition();
     currKeyValues = null;
     var changedFields = new Set(1...nFields+1);
     var values = new Map<Pos, Null<CurrFieldVal>>();
@@ -346,8 +346,8 @@ class Key2Level implements ItemKey {
 
   function doDelete1LevelOnly(keyValues: Map<Pos, Null<CurrFieldVal>>, snapshot: Bool) {
     var nFields = item.subscription.fetch_nFields().sure();
-    var keyIdx = item.subscription.getKeyPosition().sure();
-    var cmdIdx = item.subscription.getCommandPosition().sure();
+    var keyIdx = item.subscription.getKeyPosition();
+    var cmdIdx = item.subscription.getCommandPosition();
     currKeyValues = null;
     var changedFields = new Set(1...nFields+1).subtracting([keyIdx]);
     var values = new Map<Pos, Null<CurrFieldVal>>();
@@ -440,7 +440,7 @@ class Key2Level implements ItemKey {
   }
 
   function isDelete(keyValues: Map<Pos, Null<CurrFieldVal>>): Bool {
-    return keyValues[item.subscription.getCommandPosition().sure()].toString() == "DELETE";
+    return keyValues[item.subscription.getCommandPosition()].toString() == "DELETE";
   }
 
   function goto(to: State_m) {
