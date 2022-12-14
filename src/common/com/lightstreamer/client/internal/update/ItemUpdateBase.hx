@@ -14,7 +14,7 @@ final NO_FIELDS = "The Subscription was initiated using a Field Schema: the fiel
 final POS_OUT_BOUNDS = "The field position is out of bounds";
 final UNKNOWN_FIELD_NAME = "The field name is unknown";
 
-class ItemUpdateBase implements ItemUpdate {
+class ItemUpdateBase extends AbstractItemUpdate {
   final m_itemIdx: Pos;
   final m_items: Null<Map<Pos, String>>;
   final m_nFields: Int;

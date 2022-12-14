@@ -34,7 +34,7 @@ class LogManager {
   }
 }
 
-private class EmptyLogger implements Logger {
+private class EmptyLogger extends AbstractLogger {
   inline public function new() {}
   inline public function fatal(line: String, ?exception: NativeException) {}
 	inline public function error(line: String, ?exception: NativeException) {}
@@ -50,7 +50,7 @@ private class EmptyLogger implements Logger {
   inline public function isTraceEnabled(): Bool return false;
 }
 
-private class LoggerProxy implements Logger {
+private class LoggerProxy extends AbstractLogger {
   public var wrappedLogger(null, default): Logger;
 
   inline public function new(logger: Logger) {

@@ -22,12 +22,13 @@ class LSConsoleLoggerProvider implements LoggerProvider {
     this.level = level;
   }
 
+  #if cs @:native("GetLogger") #end
   public function getLogger(category: String): Logger {
     return new ConsoleLogger(this.level, category);
   }
 }
 
-private class ConsoleLogger implements Logger {
+private class ConsoleLogger extends AbstractLogger {
   final level: Int;
   final category: String;
   final traceEnabled: Bool;

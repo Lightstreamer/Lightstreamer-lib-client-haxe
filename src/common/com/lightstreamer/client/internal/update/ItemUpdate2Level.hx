@@ -16,11 +16,11 @@ typedef JsonPatchTypeAsReturnedByGetPatch =
 #if js
 com.lightstreamer.internal.patch.Json.JsonPatch
 #else
-String
+String;
 #end
 #end
 
-class ItemUpdate2Level implements ItemUpdate {
+class ItemUpdate2Level extends AbstractItemUpdate {
   final m_itemIdx: Pos;
   final m_items: Null<Map<Pos, String>>;
   final m_nFields: Int;

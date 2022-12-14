@@ -3,10 +3,17 @@ package com.lightstreamer.client;
 import com.lightstreamer.internal.NativeTypes;
 
 @:build(com.lightstreamer.internal.Macros.buildPythonImport("ls_python_client_api", "ItemUpdate"))
+#if cs @:using(ItemUpdate.ItemUpdateExtender) #end
 extern interface ItemUpdate {
+  #if !cs
   function getItemName(): Null<String>;
   function getItemPos(): Int;
   function isSnapshot(): Bool;
+  #else
+  var ItemName(get, never): Null<String>;
+  var ItemPos(get, never): Int;
+  var Snapshot(get, never): Bool;
+  #end
   #if static
   #if cpp
   function getValue(fieldName: String): Null<String>;
@@ -39,9 +46,29 @@ extern interface ItemUpdate {
   function forEachField(iterator: (fieldName: Null<String>, fieldPos: Int, value: Null<String>) -> Void): Void;
   #end
   #if (!js || LS_TEST)
+  #if !cs
   function getChangedFields(): NativeStringMap<Null<String>>;
   function getChangedFieldsByPosition(): NativeIntMap<Null<String>>;
   function getFields(): NativeStringMap<Null<String>>;
   function getFieldsByPosition(): NativeIntMap<Null<String>>;
+  #else
+  var ChangedFields(get, never): NativeStringMap<Null<String>>;
+  var ChangedFieldsByPosition(get, never): NativeIntMap<Null<String>>;
+  var Fields(get, never): NativeStringMap<Null<String>>;
+  var FieldsByPosition(get, never): NativeIntMap<Null<String>>;
+  #end
   #end
 }
+
+#if cs
+@:publicFields
+class ItemUpdateExtender {
+  inline static function getItemName(update: ItemUpdate) return update.ItemName;
+  inline static function getItemPos(update: ItemUpdate) return update.ItemPos;
+  inline static function isSnapshot(update: ItemUpdate) return update.Snapshot;
+  inline static function getChangedFields(update: ItemUpdate) return update.ChangedFields;
+  inline static function getChangedFieldsByPosition(update: ItemUpdate) return update.ChangedFieldsByPosition;
+  inline static function getFields(update: ItemUpdate) return update.Fields;
+  inline static function getFieldsByPosition(update: ItemUpdate) return update.FieldsByPosition;
+}
+#end
