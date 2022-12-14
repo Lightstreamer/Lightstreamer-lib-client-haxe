@@ -164,6 +164,74 @@ namespace com.lightstreamer.client
         public bool isValueChanged(int fieldPos);
 
         /// <summary>
+        /// Inquiry method that gets the difference between the new value and the previous one
+        /// as a JSON Patch structure, provided that the Server has used the JSON Patch format
+        /// to send this difference, as part of the "delta delivery" mechanism.
+        /// This, in turn, requires that:<ul>
+        /// <li>the Data Adapter has explicitly indicated JSON Patch as the privileged type of
+        /// compression for this field;</li>
+        /// <li>both the previous and new value are suitable for the JSON Patch computation
+        /// (i.e. they are valid JSON representations);</li>
+        /// <li>the item was subscribed to in MERGE or DISTINCT mode (note that, in case of
+        /// two-level behavior, this holds for all fields related with second-level items,
+        /// as these items are in MERGE mode);</li>
+        /// <li>sending the JSON Patch difference has been evaluated by the Server as more
+        /// efficient than sending the full new value.</li>
+        /// </ul>
+        /// Note that the last condition can be enforced by leveraging the Server's
+        /// &lt;jsonpatch_min_length&gt; configuration flag, so that the availability of the
+        /// JSON Patch form would only depend on the Client and the Data Adapter.
+        /// <BR>When the above conditions are not met, the method just returns null; in this
+        /// case, the new value can only be determined through {@link ItemUpdate#getValue}. For instance,
+        /// this will always be needed to get the first value received.</summary>
+        /// 
+        /// <exception cref="ArgumentException"> if the specified field is not
+        /// part of the Subscription.</exception>
+        /// 
+        /// <param name="fieldName"> The field name as specified within the "Field List".</param>
+        /// 
+        /// <returns> A JSON Patch structure representing the difference between
+        /// the new value and the previous one, or null if the difference in JSON Patch format
+        /// is not available for any reason.</returns>
+        /// 
+        /// <seealso cref="ItemUpdate.getValue"/>
+        public string getValueAsJSONPatchIfAvailable(string fieldName);
+
+        /// <summary>
+        /// Inquiry method that gets the difference between the new value and the previous one
+        /// as a JSON Patch structure, provided that the Server has used the JSON Patch format
+        /// to send this difference, as part of the "delta delivery" mechanism.
+        /// This, in turn, requires that:<ul>
+        /// <li>the Data Adapter has explicitly indicated JSON Patch as the privileged type of
+        /// compression for this field;</li>
+        /// <li>both the previous and new value are suitable for the JSON Patch computation
+        /// (i.e. they are valid JSON representations);</li>
+        /// <li>the item was subscribed to in MERGE or DISTINCT mode (note that, in case of
+        /// two-level behavior, this holds for all fields related with second-level items,
+        /// as these items are in MERGE mode);</li>
+        /// <li>sending the JSON Patch difference has been evaluated by the Server as more
+        /// efficient than sending the full new value.</li>
+        /// </ul>
+        /// Note that the last condition can be enforced by leveraging the Server's
+        /// &lt;jsonpatch_min_length&gt; configuration flag, so that the availability of the
+        /// JSON Patch form would only depend on the Client and the Data Adapter.
+        /// <BR>When the above conditions are not met, the method just returns null; in this
+        /// case, the new value can only be determined through {@link ItemUpdate#getValue}. For instance,
+        /// this will always be needed to get the first value received.</summary>
+        /// 
+        /// <exception cref="ArgumentException"> if the specified field is not
+        /// part of the Subscription.</exception>
+        /// 
+        /// <param name="fieldPos"> The 1-based position of the field within the "Field List" or "Field Schema".</param>
+        /// 
+        /// <returns> A JSON Patch structure representing the difference between
+        /// the new value and the previous one, or null if the difference in JSON Patch format
+        /// is not available for any reason.</returns>
+        /// 
+        /// <seealso cref="ItemUpdate.getValue"/>
+        public string getValueAsJSONPatchIfAvailable(int fieldPos);
+
+        /// <summary>
         /// Returns an immutable Map containing the values for each field changed with the last server update. 
         /// The related field name is used as key for the values in the map. 
         /// Note that if the Subscription mode of the involved Subscription is COMMAND, then changed fields 
