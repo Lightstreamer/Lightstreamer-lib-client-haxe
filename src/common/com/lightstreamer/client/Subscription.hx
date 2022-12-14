@@ -247,9 +247,7 @@ class LSSubscription {
   }
   public function setCommandSecondLevelDataAdapter(dataAdapter: Null<String>): Void {
     checkActive();
-    if (mode != Command) {
-      throw new IllegalStateException("The operation is only available on COMMAND Subscriptions");
-    }
+    checkCommand();
     this.dataAdapter2 = Name.fromString(dataAdapter);
   }
 
@@ -258,10 +256,8 @@ class LSSubscription {
   }
   public function setCommandSecondLevelFields(fields: Null<NativeArray<String>>) {
     checkActive();
+    checkCommand();
     var newValue = Fields.fromArray(fields == null ? null : fields.toHaxe());
-    if (mode != Command) {
-      throw new IllegalStateException("The operation is only available on COMMAND Subscriptions");
-    }
     this.fields2 = newValue;
     this.schema2 = null;
   }
@@ -271,9 +267,7 @@ class LSSubscription {
   }
   public function setCommandSecondLevelFieldSchema(schema: String): Void {
     checkActive();
-    if (mode != Command) {
-      throw new IllegalStateException("The operation is only available on COMMAND Subscriptions");
-    }
+    checkCommand();
     this.schema2 = Name.fromString(schema);
     this.fields2 = null;
   }
@@ -312,9 +306,7 @@ class LSSubscription {
 
   @:unsynchronized
   overload public function getCommandValue(itemPos: Int, keyValue: String, fieldPos: Int): Null<String> {
-    if (mode != Command) {
-      throw new IllegalStateException("This method can only be used on COMMAND subscriptions");
-    }
+    checkCommand();
     if (itemPos < 1 || fieldPos < 1) {
       throw new IllegalArgumentException("The specified position is out of bounds");
     }
@@ -410,9 +402,7 @@ class LSSubscription {
   }
 
   function getCommandValuePosPos(itemPos: Int, keyValue: String, fieldPos: Int): Null<String> {
-    if (mode != Command) {
-      throw new IllegalStateException("This method can only be used on COMMAND subscriptions");
-    }
+    checkCommand();
     if (itemPos < 1 || fieldPos < 1) {
       throw new IllegalArgumentException("The specified position is out of bounds");
     }
@@ -461,6 +451,12 @@ class LSSubscription {
   function checkActive() {
     if (isActive()) {
       throw new IllegalStateException("Cannot modify an active Subscription. Please unsubscribe before applying any change");
+    }
+  }
+
+  function checkCommand() {
+    if (mode != Command) {
+      throw new IllegalStateException("This method can only be used on COMMAND subscriptions");
     }
   }
 
