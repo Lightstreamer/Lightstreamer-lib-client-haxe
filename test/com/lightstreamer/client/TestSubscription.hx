@@ -134,17 +134,17 @@ class TestSubscription extends utest.Test {
   }
 
   function testCommandPosition() {
-    equals(null, sub.getCommandPosition());
+    raisesEx(() -> sub.getCommandPosition(), IllegalArgumentException, "This method can only be used on COMMAND subscriptions");
   }
 
   function testKeyPosition() {
-    equals(null, sub.getKeyPosition());
+    raisesEx(() -> sub.getKeyPosition(), IllegalArgumentException, "This method can only be used on COMMAND subscriptions");
   }
 
   function testCommandSecondLevelAdapter() {
     equals(null, sub.getCommandSecondLevelDataAdapter());
 
-    raisesEx(() -> sub.setCommandSecondLevelDataAdapter("adapter2"), IllegalStateException, "The operation is only available on COMMAND Subscriptions");
+    raisesEx(() -> sub.setCommandSecondLevelDataAdapter("adapter2"), IllegalStateException, "This method can only be used on COMMAND subscriptions");
 
     var sub = new Subscription("COMMAND", ["i1"], ["key", "command"]);
     sub.setCommandSecondLevelDataAdapter("adapter2");
