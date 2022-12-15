@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.810.25
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lightstreamer.DotNetStandard.Client.Api", "Lightstreamer.DotNetStandard.Client.Api\Lightstreamer.DotNetStandard.Client.Api.csproj", "{1A12731E-644D-4204-A763-83AFEBF560E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lightstreamer.DotNetStandard.Client.Net", "Lightstreamer.DotNetStandard.Client.Net\Lightstreamer.DotNetStandard.Client.Net.csproj", "{3B5C1988-D0CC-480F-93CE-956672DE230E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lightstreamer.DotNetStandard.Client.Haxe", "Lightstreamer.DotNetStandard.Client.Haxe\Lightstreamer.DotNetStandard.Client.Haxe.csproj", "{A5EFB814-D47B-4AFA-A771-641E0E177E5C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lightstreamer.DotNetStandard.Client", "Lightstreamer.DotNetStandard.Client\Lightstreamer.DotNetStandard.Client.csproj", "{79F3E9CF-F007-44B9-8ECA-1E2D6443029B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1A12731E-644D-4204-A763-83AFEBF560E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A12731E-644D-4204-A763-83AFEBF560E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A12731E-644D-4204-A763-83AFEBF560E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A12731E-644D-4204-A763-83AFEBF560E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B5C1988-D0CC-480F-93CE-956672DE230E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B5C1988-D0CC-480F-93CE-956672DE230E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B5C1988-D0CC-480F-93CE-956672DE230E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B5C1988-D0CC-480F-93CE-956672DE230E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5EFB814-D47B-4AFA-A771-641E0E177E5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5EFB814-D47B-4AFA-A771-641E0E177E5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5EFB814-D47B-4AFA-A771-641E0E177E5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5EFB814-D47B-4AFA-A771-641E0E177E5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79F3E9CF-F007-44B9-8ECA-1E2D6443029B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79F3E9CF-F007-44B9-8ECA-1E2D6443029B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79F3E9CF-F007-44B9-8ECA-1E2D6443029B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79F3E9CF-F007-44B9-8ECA-1E2D6443029B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F8717EC3-CF3A-4B37-A351-B273413BEDF5}
+	EndGlobalSection
+EndGlobal
