@@ -92,7 +92,11 @@ class TestClient extends utest.Test {
       async.completed();
     };
     client.subscribe(sub);
+    #if !cs
     var subs = client.getSubscriptions().toHaxe();
+    #else
+    var subs = cast(client.getSubscriptions().toHaxe(), Array<Dynamic>);
+    #end
     equals(1, subs.length);
     isTrue(sub == subs[0]);
     client.connect();
@@ -140,7 +144,11 @@ class TestClient extends utest.Test {
       async.completed();
     };
     client.subscribe(sub);
+    #if !cs
     var subs = client.getSubscriptions().toHaxe();
+    #else
+    var subs = cast(client.getSubscriptions().toHaxe(), Array<Dynamic>);
+    #end
     equals(1, subs.length);
     isTrue(sub == subs[0]);
     client.connect();

@@ -1,4 +1,4 @@
-import com.lightstreamer.client.LightstreamerClient;
+import com.lightstreamer.client.LightstreamerClient.LSLightstreamerClient as LightstreamerClient;
 import utest.Runner;
 import com.lightstreamer.internal.*;
 

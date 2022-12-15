@@ -1,7 +1,6 @@
 import utest.Runner;
-import com.lightstreamer.log.ConsoleLoggerProvider;
-import com.lightstreamer.client.Proxy;
-import com.lightstreamer.client.LightstreamerClient;
+import com.lightstreamer.client.Proxy.LSProxy as Proxy;
+import com.lightstreamer.client.LightstreamerClient.LSLightstreamerClient as LightstreamerClient;
 import com.lightstreamer.internal.*;
 
 @:timeout(1500)
@@ -110,13 +109,13 @@ class TestProxyCs extends  utest.Test {
   }
 
   function testInstallSameProxy() {
-    var proxy = new com.lightstreamer.client.Proxy("HTTP", "localtest.me", 8079, "myuser", "mypassword");
+    var proxy = new Proxy("HTTP", "localtest.me", 8079, "myuser", "mypassword");
     new LightstreamerClient(null, null).connectionOptions.setProxy(proxy);
     pass();
   }
 
   function testInstallDifferentProxy() {
-    var proxy = new com.lightstreamer.client.Proxy("HTTP", "localtest.me", 8079);
+    var proxy = new Proxy("HTTP", "localtest.me", 8079);
     raisesEx(
       () -> new LightstreamerClient(null, null).connectionOptions.setProxy(proxy),
       com.lightstreamer.internal.NativeTypes.IllegalStateException,
