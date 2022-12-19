@@ -314,7 +314,12 @@ namespace com.lightstreamer.client
         {
             get
             {
-                return (IList<Subscription>)_delegate.getSubscriptionWrappers();
+                IList<object> subs = _delegate.getSubscriptionWrappers();
+                IList<Subscription> res = new List<Subscription>();
+                foreach (var sub in subs) {
+                    res.Add((Subscription)sub);
+                }
+                return res;
             }
         }
 
