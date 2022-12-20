@@ -8,7 +8,7 @@ class TestClient extends utest.Test {
   #if android
   var host = "http://10.0.2.2:8080";
   #else
-  var host = "http://localtest.me:8080";
+  var host = "http://127.0.0.1:8080";
   #end
   var client: LightstreamerClient;
   var listener: BaseClientListener;
@@ -26,6 +26,18 @@ class TestClient extends utest.Test {
 
   function teardown() {
     client.disconnect();
+  }
+
+  function testListeners() {
+    var ls = client.getListeners().toHaxe();
+    equals(1, ls.length);
+    isTrue(listener == ls[0]);
+
+    var sub = new Subscription("MERGE", ["count"], ["count"]);
+    sub.addListener(subListener);
+    var subls = sub.getListeners().toHaxe();
+    equals(1, subls.length);
+    isTrue(subListener == subls[0]);
   }
 
   function _testConnect(async: utest.Async) {
@@ -226,7 +238,7 @@ class TestClient extends utest.Test {
   function _testRoundTrip(async: utest.Async) {
     setTransport();
     equals("TEST", client.connectionDetails.getAdapterSet());
-    equals("http://localtest.me:8080", client.connectionDetails.getServerAddress());
+    equals("http://127.0.0.1:8080", client.connectionDetails.getServerAddress());
     equals(50000000, client.connectionOptions.getContentLength());
     equals(4000, client.connectionOptions.getRetryDelay());
     equals(15000, client.connectionOptions.getSessionRecoveryTimeout());
@@ -428,6 +440,10 @@ class TestClient extends utest.Test {
       client.connect();
     })
     .await("connected")
+    .then(() -> {
+      var hs = client.connectionOptions.getHttpExtraHeaders().toHaxe();
+      equals("header", hs["X-Header"]);
+    })
     .then(() -> async.completed())
     .verify();
   }
