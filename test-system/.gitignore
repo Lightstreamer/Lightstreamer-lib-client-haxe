@@ -2,4 +2,6 @@ dist/
 build/
 cs/cs.dll
 cs/Program.exe
+cs/*/src
+hxcs_build.txt
 java/myapp/*.class

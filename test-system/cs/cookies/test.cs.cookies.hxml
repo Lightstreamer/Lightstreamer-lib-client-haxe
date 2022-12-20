@@ -1,0 +1,31 @@
+--cwd ../../..
+
+--class-path test-core
+--class-path test-util
+--class-path test-extern
+--library deep_equal
+--library haxe-concurrent
+
+-D LS_HAS_PROXY
+-D LS_HAS_COOKIES
+-D LS_HAS_TRUST_MANAGER
+-D LS_JSON_PATCH
+-D LS_TLCP_DIFF
+
+-D no-compilation
+--main TestCookies
+--cs test-system/cs/cookies
+--cmd dotnet run --project test-system/cs/cookies/TestProj.csproj
+
+--each
+
+-D UTEST_PATTERN=WS_STREAMING
+
+--next
+-D UTEST_PATTERN=WS_POLLING
+
+--next
+-D UTEST_PATTERN=HTTP_STREAMING
+
+--next
+-D UTEST_PATTERN=HTTP_POLLING

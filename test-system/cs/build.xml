@@ -1,0 +1,30 @@
+<project default="test-all">
+
+  <target name="test-all" depends="test-core,test-cookies,test-proxy,test-cert">
+  </target>
+
+  <target name="test-core">
+    <exec executable="haxe" dir="core">
+      <arg value="test.cs.core.hxml"/>
+    </exec>
+  </target>
+
+  <target name="test-cookies">
+    <exec executable="haxe" dir="cookies">
+      <arg value="test.cs.cookies.hxml"/>
+    </exec>
+  </target>
+
+  <target name="test-proxy">
+    <exec executable="haxe" dir="proxy">
+      <arg value="test.cs.proxy.hxml"/>
+    </exec>
+  </target>
+
+  <target name="test-cert">
+    <exec executable="haxe" dir="cert">
+      <arg value="test.cs.cert.hxml"/>
+    </exec>
+  </target>
+
+</project>

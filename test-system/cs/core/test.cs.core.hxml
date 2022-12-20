@@ -1,0 +1,19 @@
+--cwd ../../..
+
+--class-path test-core
+--class-path test-util
+--class-path test-extern
+--library deep_equal
+--library haxe-concurrent
+--main TestCore
+
+-D no-compilation
+--cs test-system/cs/core
+#--cmd dotnet build test-system/cs/core/TestProj.csproj
+--cmd dotnet run --project test-system/cs/core/TestProj.csproj
+
+-D LS_HAS_PROXY
+-D LS_HAS_COOKIES
+-D LS_HAS_TRUST_MANAGER
+-D LS_JSON_PATCH
+-D LS_TLCP_DIFF
