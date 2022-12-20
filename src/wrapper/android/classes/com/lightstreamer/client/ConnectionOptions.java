@@ -746,7 +746,7 @@ public class ConnectionOptions {
    * 
    * @default null (meaning not to pass through a proxy).
    * 
-   * @lifecycle This value can be set and changed at any time. the supplied value will 
+   * @lifecycle This value can be set and changed at any time. The supplied value will 
    * be used for the next connection attempt.
    * 
    * @notification A change to this setting will be notified through a call to 
