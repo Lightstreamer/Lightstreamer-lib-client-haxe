@@ -445,7 +445,7 @@ namespace com.lightstreamer.client
         /// <summary>
         /// Provides a mean to control the way TLS certificates are evaluated, with the possibility to accept untrusted ones.
         /// 
-        /// <b>Lifecycle:</b>  May be called only once before creating any LightstreamerClient instance.
+        /// <b>Lifecycle:</b> May be called only once before creating any LightstreamerClient instance.
         /// </summary>
         public static RemoteCertificateValidationCallback TrustManagerFactory
         {

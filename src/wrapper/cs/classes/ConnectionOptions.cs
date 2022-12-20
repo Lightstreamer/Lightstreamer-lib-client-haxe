@@ -667,8 +667,7 @@ namespace com.lightstreamer.client
         /// Setter method that configures the coordinates to a proxy server to be used to connect
         /// to the Lightstreamer Server.<br/>
         /// <br/>
-        /// <b>Lifecycle:</b> This value can be set and changed at any time. The supplied value will
-        /// be used for the next connection attempt.<br/>
+        /// <b>Lifecycle:</b> May be called only once before creating any LightstreamerClient instance.<br/>
         /// <br/>
         /// <b>Related notifications:</b> A change to this setting will be notified through a call to
         /// <seealso cref="ClientListener.onPropertyChange"/> with argument "proxy" on any
