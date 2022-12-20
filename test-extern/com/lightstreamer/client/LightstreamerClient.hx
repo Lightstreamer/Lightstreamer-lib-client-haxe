@@ -20,10 +20,8 @@ extern class LightstreamerClient {
    public function new(serverAddress: String, adapterSet: String);
    public function addListener(listener: ClientListener): Void;
    public function removeListener(listener: ClientListener): Void;
-   public function getListeners(): NativeList<ClientListener>;
    public function connect(): Void;
    public function disconnect(): Void;
-   public function getStatus(): String;
    #if (java || cs)
    overload public function sendMessage(message: String, sequence: Null<String>, delayTimeout: Int, listener: Null<ClientMessageListener>, enqueueWhileDisconnected: Bool): Void;
    #else
@@ -34,5 +32,13 @@ extern class LightstreamerClient {
    #end
    public function subscribe(subscription: Subscription): Void;
    public function unsubscribe(subscription: Subscription): Void;
-   public function getSubscriptions(): NativeList<Subscription>;
+   #if !cs 
+   public function getListeners(): NativeList<ClientListener>;
+   public function getStatus(): String; 
+   public function getSubscriptions(): NativeList<Subscription>; 
+   #else
+   public var Listeners(default, never): NativeList<ClientListener>;
+   public var Status(default, never): String; 
+   public var Subscriptions(default, never): NativeList<Subscription>; 
+   #end
 }

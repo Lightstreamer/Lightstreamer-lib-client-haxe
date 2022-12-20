@@ -5,6 +5,7 @@ package com.lightstreamer.client;
 #end
 #if js @:native("ConnectionOptions") #end
 extern class ConnectionOptions {
+  #if !cs
   public function getContentLength(): Long;
   public function setContentLength(contentLength: Long): Void;
   public function getFirstRetryMaxDelay(): Long;
@@ -38,8 +39,31 @@ extern class ConnectionOptions {
   public function setServerInstanceAddressIgnored(serverInstanceAddressIgnored: Bool): Void;
   public function isSlowingEnabled(): Bool;
   public function setSlowingEnabled(slowingEnabled: Bool): Void;
+  #else
+  public var ContentLength(default, default): Long;
+  public var FirstRetryMaxDelay(default, default): Long;
+  public var ForcedTransport(default, default): Null<String>;
+  public var HttpExtraHeaders(default, default): Null<NativeStringMap<String>>;
+  public var IdleTimeout(default, default): Long;
+  public var KeepaliveInterval(default, default): Long;
+  public var RequestedMaxBandwidth(default, default): String;
+  public var RealMaxBandwidth(default, never): Null<String>;
+  public var PollingInterval(default, default): Long;
+  public var ReconnectTimeout(default, default): Long;
+  public var RetryDelay(default, default): Long;
+  public var ReverseHeartbeatInterval(default, default): Long;
+  public var SessionRecoveryTimeout(default, default): Long;
+  public var StalledTimeout(default, default): Long;
+  public var HttpExtraHeadersOnSessionCreationOnly(default, default): Bool;
+  public var ServerInstanceAddressIgnored(default, default): Bool;
+  public var SlowingEnabled(default, default): Bool;
+  #end
 
   #if LS_HAS_PROXY
+  #if !cs
   public function setProxy(proxy: Null<Proxy>): Void;
+  #else
+  public var Proxy(never, default): Null<Proxy>;
+  #end
   #end
 }

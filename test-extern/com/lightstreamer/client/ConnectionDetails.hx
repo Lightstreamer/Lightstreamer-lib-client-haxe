@@ -5,6 +5,7 @@ package com.lightstreamer.client;
 #end
 #if js @:native("ConnectionDetails") #end
 extern class ConnectionDetails {
+  #if !cs
   public function getAdapterSet(): Null<String>;
   public function setAdapterSet(adapterSet: Null<String>): Void;
   public function getServerAddress(): Null<String>;
@@ -16,4 +17,14 @@ extern class ConnectionDetails {
   public function getServerInstanceAddress(): Null<String>;
   public function getServerSocketName(): Null<String>;
   public function getClientIp(): Null<String>;
+  #else
+  public var AdapterSet(default, default): Null<String>;
+  public var ServerAddress(default, default): Null<String>;
+  public var User(default, default): Null<String>;
+  public var Password(never, default): Null<String>;
+  public var SessionId(default, never): Null<String>;
+  public var ServerInstanceAddress(default, never): Null<String>;
+  public var ServerSocketName(default, never): Null<String>;
+  public var ClientIp(default, never): Null<String>;
+  #end
 }

@@ -345,7 +345,7 @@ abstract NativeList<T>(cs.system.collections.generic.IList_1<T>) {
     this = out;
   }
 
-  public function toHaxe(): Array<T> {
+  public inline function toHaxe(): Array<T> {
     var out = [];
     var it = this.GetEnumerator();
     while (it.MoveNext()) {

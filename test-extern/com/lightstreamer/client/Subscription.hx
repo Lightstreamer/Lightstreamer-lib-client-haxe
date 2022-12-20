@@ -16,6 +16,7 @@ extern class Subscription {
   #end
   public function addListener(listener: SubscriptionListener): Void;
   public function removeListener(listener: SubscriptionListener): Void;
+  #if !cs
   public function getListeners(): NativeList<SubscriptionListener>;
   public function isActive(): Bool;
   public function isSubscribed(): Bool;
@@ -46,6 +47,26 @@ extern class Subscription {
   public function setCommandSecondLevelFields(fields: Null<NativeArray<String>>): Void;
   public function getCommandSecondLevelFieldSchema(): Null<String>;
   public function setCommandSecondLevelFieldSchema(schema: String): Void;
+  #else
+  public var Listeners(default, never): NativeList<SubscriptionListener>;
+  public var Active(default, never): Bool;
+  public var Subscribed(default, never): Bool;
+  public var DataAdapter(default, default): Null<String>;
+  public var Mode(default, never): String;
+  public var Items(default, default): Null<NativeArray<String>>;
+  public var ItemGroup(default, default): Null<String>;
+  public var Fields(default, default): Null<NativeArray<String>>;
+  public var FieldSchema(default, default): Null<String>;
+  public var RequestedBufferSize(default, default): Null<String>;
+  public var RequestedSnapshot(default, default): Null<String>;
+  public var RequestedMaxFrequency(default, default): Null<String>;
+  public var Selector(default, default): Null<String>;
+  public var CommandPosition(default, never): Int;
+  public var KeyPosition(default, never): Int;
+  public var CommandSecondLevelDataAdapter(default, default): Null<String>;
+  public var CommandSecondLevelFields(default, default): Null<NativeArray<String>>;
+  public var CommandSecondLevelFieldSchema(default, default): Null<String>;
+  #end
 
   #if (java || cs)
   overload public function getValue(itemPos: Int, fieldPos: Int): Null<String>;
