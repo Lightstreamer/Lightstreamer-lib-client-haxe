@@ -5,6 +5,9 @@ import com.lightstreamer.client.BaseListener;
 import com.lightstreamer.log.ConsoleLoggerProvider;
 
 using StringTools;
+#if cs
+using com.lightstreamer.CsExtender;
+#end
 
 @:timeout(3000)
 @:build(utils.Macros.parameterize(["WS-STREAMING", "HTTP-STREAMING", "WS-POLLING", "HTTP-POLLING"]))

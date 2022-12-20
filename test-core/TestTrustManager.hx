@@ -5,6 +5,9 @@ import com.lightstreamer.client.BaseListener;
 import com.lightstreamer.log.ConsoleLoggerProvider;
 
 using StringTools;
+#if cs
+using com.lightstreamer.CsExtender;
+#end
 
 @:timeout(3000)
 @:build(utils.Macros.parameterize(["WS-STREAMING", "HTTP-STREAMING", "WS-POLLING", "HTTP-POLLING"]))
@@ -45,6 +48,9 @@ class TestTrustManager extends utest.Test {
       var tmf = java.javax.net.ssl.TrustManagerFactory.getInstance(java.javax.net.ssl.TrustManagerFactory.getDefaultAlgorithm());
       tmf.init(keyStore);
       LightstreamerClient.setTrustManagerFactory(tmf);
+      #elseif cs
+      var myCert: Dynamic = cs.system.security.cryptography.x509certificates.X509Certificate.CreateFromCertFile("test/localtest.me.crt");
+      LightstreamerClient.TrustManagerFactory = (sender, cert, chain, sslPolicyErrors) -> myCert.Equals(cert);
       #else
       fail("TODO");
       #end

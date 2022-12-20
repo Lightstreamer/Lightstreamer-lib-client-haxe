@@ -25,6 +25,10 @@ class CsExtender {
     obj.HttpExtraHeaders = value;
   }
 
+  static function setProxy(obj: ConnectionOptions, value: Proxy) {
+    obj.Proxy = value;
+  }
+
   static function getHttpExtraHeaders(obj: ConnectionOptions): NativeStringMap<String> {
     return obj.HttpExtraHeaders;
   }
