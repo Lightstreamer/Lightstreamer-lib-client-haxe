@@ -13,7 +13,13 @@ The methods
 return null when the values are not available. 
 Previously they threw an IllegalStateException.
 
-Added support for JSON field compression.
+**Added support for JSON field compression**
+
+1) Improved the "delta delivery" mechanism, by adding the support for value differences, as per the extension introduced in Server version 7.3.0.
+Currently two "diff" formats are supported: JSON Patch and TLCP-diff.
+
+2) Added the getValueAsJSONPatchIfAvailable function in the ItemUpdate class, to take advantage of the new support for JSON Patch differences, which may prove useful in some use cases.
+See the Docs for details.
 
 removed ConnectionSharing (web only)
 
@@ -79,14 +85,16 @@ The behavior of the copy constructor `MpnSubscription(MpnSubscription)` has been
 
 # cs
 
-- changed signatures of LightstreamerClient.addCookies and LightstreamerClient.getCookies
+- changed signatures of LightstreamerClient.addCookies and LightstreamerClient.getCookies: now they take and return an object of type System.Net.CookieCollection (before it was an objet of type `IList<HttpCookie>`, where HttpCookie was a third-party library)
+
+- ConnectionOptions.Proxy: changed the lifecyle: May be called only once before creating any LightstreamerClient instance
+
+- LightstreamerClient.TrustManagerFactory: changed the lifecyle: May be called only once before creating any LightstreamerClient instance
+
+- not anymore compatible wiht .net standard 2.0: now .net standard 2.1 is requested
 
 - LightstreamerClient.addCookies: remove "More precisely, this explicit sharing is only needed when the library uses its own cookie storage. This depends on the availability of a default global storage.
 In fact, the library will setup its own local cookie storage only if, upon the first usage of the cookies, a default CookieHandler is not available; then it will always stick to the internal storage.
 On the other hand, if a default CookieHandler is available upon the first usage of the cookies, the library, from then on, will always stick to the default it finds upon each request; in this case, the cookie storage will be already shared with the rest of the application. However, whenever a default CookieHandler of type different from CookieManager is found, the library will not be able to use it and will skip cookie handling."
 
-- LightstreamerClient.getCookies: remove ", or null." and "If a null URI was supplied, all available non-expired cookies will be returned."
-
-- ConnectionOptions.setProxy: remove "Lifecycle: This value can be set and changed at any time. The supplied value will be used for the next connection attempt." and change to "Lifecycle: the proxy is shared by all the client instances; hence once set, it cannot be changed with another value."
-
-- compatible with .net standard 2.1
+- the logging classes are not in the namespace `Lightstreamer.DotNet.Logging.Log` anymore but in `com.lightstreamer.log`
