@@ -15,7 +15,11 @@ extern class LightstreamerClient {
    public static function getCookies(uri: Null<NativeURI>): NativeCookieCollection;
    #end
    #if LS_HAS_TRUST_MANAGER
+   #if !cs
    public static function setTrustManagerFactory(factory: NativeTrustManager): Void;
+   #else
+   public static var TrustManagerFactory(never, default): NativeTrustManager;
+   #end
    #end
    public function new(serverAddress: String, adapterSet: String);
    public function addListener(listener: ClientListener): Void;
