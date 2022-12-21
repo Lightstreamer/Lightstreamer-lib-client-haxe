@@ -5,23 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\..\..\src\wrapper\cs\api\ILogger.cs">
-      <Link>ILogger.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\src\wrapper\cs\api\ClientListener.cs">
-      <Link>ClientListener.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\src\wrapper\cs\api\ILoggerProvider.cs">
-      <Link>ILoggerProvider.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\src\wrapper\cs\api\ClientMessageListener.cs">
-      <Link>ClientMessageListener.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\src\wrapper\cs\api\ItemUpdate.cs">
-      <Link>ItemUpdate.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\src\wrapper\cs\api\SubscriptionListener.cs">
-      <Link>SubscriptionListener.cs</Link>
+    <Compile Include="..\..\..\..\src\wrapper\cs\api\**\*.cs">
     </Compile>
   </ItemGroup>
 </Project>

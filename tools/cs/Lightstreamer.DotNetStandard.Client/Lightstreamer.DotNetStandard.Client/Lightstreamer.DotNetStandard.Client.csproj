@@ -5,26 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\..\..\src\wrapper\cs\classes\Proxy.cs">
-      <Link>Proxy.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\src\wrapper\cs\classes\ConsoleLoggerProvider.cs">
-      <Link>ConsoleLoggerProvider.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\src\wrapper\cs\classes\ConsoleLogLevel.cs">
-      <Link>ConsoleLogLevel.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\src\wrapper\cs\classes\ConnectionOptions.cs">
-      <Link>ConnectionOptions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\src\wrapper\cs\classes\Subscription.cs">
-      <Link>Subscription.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\src\wrapper\cs\classes\ConnectionDetails.cs">
-      <Link>ConnectionDetails.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\src\wrapper\cs\classes\LightstreamerClient.cs">
-      <Link>LightstreamerClient.cs</Link>
+    <Compile Include="..\..\..\..\src\wrapper\cs\classes\**\*.cs">
     </Compile>
   </ItemGroup>
   <ItemGroup>
