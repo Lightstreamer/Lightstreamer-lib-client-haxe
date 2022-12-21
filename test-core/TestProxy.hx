@@ -44,6 +44,32 @@ class TestProxy extends utest.Test {
     .verify();
   }
 
+  function _testEquals(async: utest.Async) {
+    var p1: Dynamic = new Proxy("HTTP", "localtest.me", 8079, "myuser", "mypassword");
+    var p2: Dynamic = new Proxy("HTTP", "localtest.me", 8079, "myuser", "mypassword2");
+    var p3: Dynamic = new Proxy("HTTP", "localtest.me", 8079, "myuser", "mypassword");
+    #if java
+    isTrue(p1.equals(p3));
+    isFalse(p1.equals(p2));
+    isFalse(p1.equals({}));
+    isTrue(p1.hashCode() == p3.hashCode());
+    isFalse(p1.hashCode() == p2.hashCode());
+    #elseif python
+    isTrue(p1 == p3);
+    isFalse(p1 == p2);
+    isFalse(p1 == {});
+    #elseif cs
+    isTrue(p1.Equals(p3));
+    isFalse(p1.Equals(p2));
+    isFalse(p1.Equals({}));
+    isTrue(p1.GetHashCode() == p3.GetHashCode());
+    isFalse(p1.GetHashCode() == p2.GetHashCode());
+    #else
+    fail("TODO");
+    #end
+    async.completed();
+  }
+
   function setTransport() {
     client.connectionOptions.setForcedTransport(_param);
     connectedString = "CONNECTED:" + _param;
