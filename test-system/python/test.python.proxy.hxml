@@ -1,0 +1,17 @@
+--cwd ../..
+
+--class-path test-core
+--class-path test-util
+--class-path test-extern
+--library deep_equal
+--library haxe-concurrent
+
+-D LS_HAS_PROXY
+-D LS_HAS_COOKIES
+-D LS_HAS_TRUST_MANAGER
+-D LS_JSON_PATCH
+-D LS_TLCP_DIFF
+
+--main TestProxy
+--python test-system/python/build/test-proxy.py
+--cmd python test-system/python/build/test-proxy.py

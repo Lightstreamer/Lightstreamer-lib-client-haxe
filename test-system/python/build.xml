@@ -1,0 +1,81 @@
+<project default="test-all">
+
+  <target name="test-all" depends="test-core,test-cookies,test-proxy,test-cert">
+  </target>
+
+  <target name="test-core">
+    <exec executable="haxe">
+      <arg value="test.python.core.hxml"/>
+    </exec>
+  </target>
+
+  <target name="test-proxy">
+    <exec executable="haxe">
+      <arg value="test.python.proxy.hxml"/>
+      <arg value="-D"/>
+      <arg value="UTEST_PATTERN=WS_STREAMING"/>
+    </exec>
+    <exec executable="haxe">
+      <arg value="test.python.proxy.hxml"/>
+      <arg value="-D"/>
+      <arg value="UTEST_PATTERN=WS_POLLING"/>
+    </exec>
+    <exec executable="haxe">
+      <arg value="test.python.proxy.hxml"/>
+      <arg value="-D"/>
+      <arg value="UTEST_PATTERN=HTTP_STREAMING"/>
+    </exec>
+    <exec executable="haxe">
+      <arg value="test.python.proxy.hxml"/>
+      <arg value="-D"/>
+      <arg value="UTEST_PATTERN=HTTP_POLLING"/>
+    </exec>
+  </target>
+
+  <target name="test-cookies">
+    <exec executable="haxe">
+      <arg value="test.python.cookies.hxml"/>
+      <arg value="-D"/>
+      <arg value="UTEST_PATTERN=WS_STREAMING"/>
+    </exec>
+    <exec executable="haxe">
+      <arg value="test.python.cookies.hxml"/>
+      <arg value="-D"/>
+      <arg value="UTEST_PATTERN=WS_POLLING"/>
+    </exec>
+    <exec executable="haxe">
+      <arg value="test.python.cookies.hxml"/>
+      <arg value="-D"/>
+      <arg value="UTEST_PATTERN=HTTP_STREAMING"/>
+    </exec>
+    <exec executable="haxe">
+      <arg value="test.python.cookies.hxml"/>
+      <arg value="-D"/>
+      <arg value="UTEST_PATTERN=HTTP_POLLING"/>
+    </exec>
+  </target>
+
+  <target name="test-cert">
+    <exec executable="haxe">
+      <arg value="test.python.cert.hxml"/>
+      <arg value="-D"/>
+      <arg value="UTEST_PATTERN=WS_STREAMING"/>
+    </exec>
+    <exec executable="haxe">
+      <arg value="test.python.cert.hxml"/>
+      <arg value="-D"/>
+      <arg value="UTEST_PATTERN=WS_POLLING"/>
+    </exec>
+    <exec executable="haxe">
+      <arg value="test.python.cert.hxml"/>
+      <arg value="-D"/>
+      <arg value="UTEST_PATTERN=HTTP_STREAMING"/>
+    </exec>
+    <exec executable="haxe">
+      <arg value="test.python.cert.hxml"/>
+      <arg value="-D"/>
+      <arg value="UTEST_PATTERN=HTTP_POLLING"/>
+    </exec>
+  </target>
+
+</project>
