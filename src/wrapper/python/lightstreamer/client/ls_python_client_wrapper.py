@@ -1244,6 +1244,11 @@ class Proxy:
   def __str__(self):
     return self.delegate.toString()
 
+  def __eq__(self, other):
+    if other is not None and isinstance(other, Proxy):
+      return self.delegate.isEqualTo(other.delegate)
+    return False
+
 class Subscription:
   """Class representing a Subscription to be submitted to a Lightstreamer Server. It contains subscription details and the listeners needed to process the real-time data. 
 

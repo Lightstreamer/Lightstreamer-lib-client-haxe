@@ -75,7 +75,11 @@ public class Proxy {
   
   @Override
   public boolean equals(Object obj) {
-    return delegate.equals(obj);
+    if (obj != null && obj instanceof Proxy) {
+      Proxy _obj = (Proxy)obj;
+      return delegate.isEqualTo(_obj.delegate);
+    }
+    return false;
   }
   
   @Override 

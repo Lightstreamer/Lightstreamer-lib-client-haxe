@@ -17,7 +17,7 @@ class Globals {
     if (proxy == null) {
       throw new IllegalArgumentException("Expected a non-null Proxy");
     }
-    if (webProxy != null && !webProxy.equals(proxy)) {
+    if (webProxy != null && !webProxy.isEqualTo(proxy)) {
       throw new IllegalStateException("Proxy already installed");
     }
     if (webProxy == null) {

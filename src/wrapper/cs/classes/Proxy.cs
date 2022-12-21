@@ -68,14 +68,13 @@ namespace com.lightstreamer.client
 
         public override bool Equals(object obj)
         {
-            // TODO
-            return false;
+            var proxy = obj as Proxy;
+            return proxy != null && _delegate.isEqualTo(proxy._delegate);
         }
 
         public override int GetHashCode()
         {
-            // TODO
-            return 0;
+            return System.HashCode.Combine(_delegate.type, _delegate.host, _delegate.port, _delegate.user, _delegate.password);
         }
     }
 }
