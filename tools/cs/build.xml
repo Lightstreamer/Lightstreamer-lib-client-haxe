@@ -18,7 +18,7 @@
   <property name="nuspec.file" location="${tools.project}/Lightstreamer.DotNetStandard.Client.nuspec"/>
 
   <target name="package" depends="build" description="Create the Nuget package">
-    <copy file="${nuspec.template}" tofile="${nuspec.file}">
+    <copy file="${nuspec.template}" tofile="${nuspec.file}" overwrite="true">
       <filterset>
         <filter token="VERSION" value="${version}"/>
       </filterset>
