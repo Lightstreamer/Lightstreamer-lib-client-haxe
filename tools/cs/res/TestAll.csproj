@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <NoWarn>CS0108</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\tools\cs\Lightstreamer.DotNetStandard.Client\Lightstreamer.DotNetStandard.Client.Net\Lightstreamer.DotNetStandard.Client.Net.csproj" />
+    <ProjectReference Include="..\..\tools\cs\Lightstreamer.DotNetStandard.Client\Lightstreamer.DotNetStandard.Client.Api\Lightstreamer.DotNetStandard.Client.Api.csproj" />
+  </ItemGroup>
+
+</Project>

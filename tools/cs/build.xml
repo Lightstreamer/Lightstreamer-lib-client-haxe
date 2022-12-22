@@ -7,15 +7,30 @@
   </description>
 
   <property name="build" location="bin/cs"/>
+  <property name="test" location="bin-test/cs"/>
   <property name="dist" location="${build}/dist"/>
 
   <property name="tools" location="tools/cs"/>
   <property name="tools.solution" location="${tools}/Lightstreamer.DotNetStandard.Client"/>
   <property name="tools.project" location="${tools.solution}/Lightstreamer.DotNetStandard.Client"/>
+  <property name="test.project" location="${tools}/res/TestAll.csproj"/>
   <property file="${tools}/build.properties"/>
 
   <property name="nuspec.template" location="${tools}/res/Lightstreamer.DotNetStandard.Client.nuspec"/>
   <property name="nuspec.file" location="${tools.project}/Lightstreamer.DotNetStandard.Client.nuspec"/>
+
+  <target name="test" description="Run the tests">
+    <copy file="${test.project}" todir="${test}"/>
+    <exec executable="haxe">
+      <arg value="test.cs.std.hxml"/>
+    </exec>
+    <exec executable="haxe">
+      <arg value="test.cs.proxy.hxml"/>
+    </exec>
+    <exec executable="haxe">
+      <arg value="test.cs.cert.hxml"/>
+    </exec>
+  </target>
 
   <target name="package" depends="build" description="Create the Nuget package">
     <copy file="${nuspec.template}" tofile="${nuspec.file}" overwrite="true">
@@ -60,6 +75,7 @@ ${nuspec.contents}
 
   <target name="clean" description="Clean the project">
     <delete dir="${build}"/>
+    <delete dir="${test}"/>
     <exec executable="dotnet" dir="${tools.solution}">
       <arg value="clean"/>
     </exec>
