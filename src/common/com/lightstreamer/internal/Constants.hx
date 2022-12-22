@@ -27,8 +27,8 @@ final LS_LIB_VERSION = getDefine("LS_VERSION", "0.0") + " build " + getDefine("L
 final LS_CID = getDefine("LS_CID", "mgQkwtwdysogQz2BJ4Ji kOj2Bg");
 #elseif cs
 final LS_LIB_NAME = "dotnet_client";
-final LS_LIB_VERSION = "6.0.0-beta.1 build 20220624";
-final LS_CID = "jqWtj1tg4pkpW3BAK3M5hgWg4CHfDprfc85DM4S9Ai";
+final LS_LIB_VERSION = getDefine("LS_VERSION", "0.0") + " build " + getDefine("LS_BUILD", "0");
+final LS_CID = getDefine("LS_CID", "mgQkwtwdysogQz2BJ4Ji kOj2Bg");
 #elseif python
 final LS_LIB_NAME = "python_client";
 final LS_LIB_VERSION = getDefine("LS_VERSION", "0.0") + " build " + getDefine("LS_BUILD", "0");
