@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>Lightstreamer.DotNetStandard.Client</id>
+    <version>6.0.0-SNAPSHOT</version>
+    <title>Lightstreamer .NET Standard Client SDK</title>
+    <authors>support@lightstreamer.com</authors>
+    <owners>support@lightstreamer.com</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://lightstreamer.com/distr/ls-server/7.3.0/Lightstreamer Software License Agreement.pdf</licenseUrl>
+    <projectUrl>https://lightstreamer.com/</projectUrl>
+    <iconUrl>https://lightstreamer.com/img/icoNews/lslogonew.png</iconUrl>
+    <description>The API allows to subscribe to real-time data pushed by a Lightstreamer server and to send any message to the server. The library offers automatic recovery from connection failures, automatic selection of the best available transport, and full decoupling of subscription and connection operations.</description>
+    <copyright>Copyright (c) Lightstreamer Srl.</copyright>
+    <tags>Lightstreamer Realtime real-time Pub/Sub Messaging Publish Subscribe realtime comet HTTP Unity Xamarin Core websocket websockets streaming</tags>
+    <dependencies>
+        <dependency id="Microsoft.AspNetCore.JsonPatch" version="6.0.11" />
+    </dependencies>
+  </metadata>
+</package>

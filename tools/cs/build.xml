@@ -1,0 +1,67 @@
+<project name=".Net client library" 
+  default="package" 
+  basedir="../..">
+
+  <description>
+  Buildfile for the .Net client library
+  </description>
+
+  <property name="build" location="bin/cs"/>
+  <property name="dist" location="${build}/dist"/>
+
+  <property name="tools" location="tools/cs"/>
+  <property name="tools.solution" location="${tools}/Lightstreamer.DotNetStandard.Client"/>
+  <property name="tools.project" location="${tools.solution}/Lightstreamer.DotNetStandard.Client"/>
+  <property file="${tools}/build.properties"/>
+
+  <property name="nuspec.template" location="${tools}/res/Lightstreamer.DotNetStandard.Client.nuspec"/>
+  <property name="nuspec.file" location="${tools.project}/Lightstreamer.DotNetStandard.Client.nuspec"/>
+
+  <target name="package" depends="build" description="Create the Nuget package">
+    <copy file="${nuspec.template}" tofile="${nuspec.file}">
+      <filterset>
+        <filter token="VERSION" value="${version}"/>
+      </filterset>
+    </copy>
+    <exec executable="nuget" dir="${tools.project}" failonerror="true">
+      <arg value="pack"/>
+      <arg value="Lightstreamer.DotNetStandard.Client.csproj"/>
+      <arg value="-OutputDirectory"/>
+      <arg value="${dist}"/>
+      <arg value="-IncludeReferencedProjects"/>
+    </exec>
+    <loadfile property="nuspec.contents" srcFile="${nuspec.file}"/>
+    <echo>
+WARNING 
+**********
+check that the dependencies listed in the nuspec file at `${nuspec.file}` are in synch with those declared in the Visual Studio projects at `${tools.solution}`
+**********
+${nuspec.contents}
+    </echo>
+  </target>
+
+  <target name="build" depends="build_haxe" description="Build the library">
+    <exec executable="dotnet" dir="${tools.project}" failonerror="true">
+      <arg value="build"/>
+    </exec>
+  </target>
+
+  <target name="build_haxe">
+    <echo message="Version: ${version} build ${build.number}"/>
+    <echo message="CID: ${cid}"/>
+    <exec executable="haxe" failonerror="true">
+      <arg value="build.cs.hxml"/>
+      <arg value="-D"/><arg value="LS_VERSION=${version}"/>
+      <arg value="-D"/><arg value="LS_BUILD=${build.number}"/>
+      <arg value="-D"/><arg value="LS_CID=${cid}"/>
+      <!-- output is saved in ${build}/src -->
+    </exec>
+  </target>
+
+  <target name="clean" description="Clean the project">
+    <delete dir="${build}"/>
+    <exec executable="dotnet" dir="${tools.solution}">
+      <arg value="clean"/>
+    </exec>
+  </target>
+</project>
