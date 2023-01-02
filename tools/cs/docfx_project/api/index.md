@@ -1,2 +1,5 @@
-# PLACEHOLDER
-TODO: Add .NET projects to the *src* folder and run `docfx` to generate **REAL** *API Documentation*!
+# Lightstreamer .NET Standard Client @VERSION@ Api Reference
+
+This .NET library enables any .NET (Standard, Core, Unity) application to communicate bidirectionally with the Lightstreamer Server.
+
+See: [General Introduction](../articles/intro.md)
