@@ -12,34 +12,34 @@
 namespace com.lightstreamer.log
 {
 
-  /// Logging level.
+  /// <summary>Logging level. See <seealso cref="ConsoleLoggerProvider"/>.</summary>
   public class ConsoleLogLevel {
 
     private ConsoleLogLevel() {}
 
-    /// Trace logging level.
+    /// <summary>Trace logging level.
     ///
-    /// This level enables all logging.
+    /// This level enables all logging.</summary>
     public static readonly int TRACE = LSConsoleLogLevel.TRACE;
-    /// Debug logging level.
+    /// <summary>Debug logging level.
     ///
-    /// This level enables all logging except tracing.
+    /// This level enables all logging except tracing.</summary>
     public static readonly int DEBUG = LSConsoleLogLevel.DEBUG;
-    /// Info logging level.
+    /// <summary>Info logging level.
     /// 
-    /// This level enables logging for information, warnings, errors and fatal errors.
+    /// This level enables logging for information, warnings, errors and fatal errors.</summary>
     public static readonly int INFO = LSConsoleLogLevel.INFO;
-    /// Warn logging level.
+    /// <summary>Warn logging level.
     ///
-    /// This level enables logging for warnings, errors and fatal errors.
+    /// This level enables logging for warnings, errors and fatal errors.</summary>
     public static readonly int WARN = LSConsoleLogLevel.WARN;
-    /// Error logging level.
+    /// <summary>Error logging level.
     ///
-    /// This level enables logging for errors and fatal errors.
+    /// This level enables logging for errors and fatal errors.</summary>
     public static readonly int ERROR = LSConsoleLogLevel.ERROR;
-    /// Fatal logging level.
+    /// <summary>Fatal logging level.
     ///
-    /// This level enables logging for fatal errors only.
+    /// This level enables logging for fatal errors only.</summary>
     public static readonly int FATAL = LSConsoleLogLevel.FATAL;
   }
 }

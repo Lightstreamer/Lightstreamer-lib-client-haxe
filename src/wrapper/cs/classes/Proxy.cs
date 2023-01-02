@@ -13,9 +13,9 @@
 namespace com.lightstreamer.client
 {
     /// <summary>
-    /// Simple class representing a Proxy configuration. <BR>
+    /// Simple class representing a Proxy configuration. <br/>
     /// 
-    /// An instance of this class can be used through <seealso cref="ConnectionOptions#setProxy(Proxy)"/> to
+    /// An instance of this class can be used through <seealso cref="ConnectionOptions.Proxy"/> to
     /// instruct a LightstreamerClient to connect to the Lightstreamer Server passing through a proxy.
     /// </summary>
     public class Proxy
@@ -23,7 +23,7 @@ namespace com.lightstreamer.client
        internal readonly LSProxy _delegate;
 
         /// <summary>
-        /// This constructor will call <seealso cref="#Proxy(String, String, int, String, String)"/>
+        /// This constructor will call <seealso cref="Proxy(string, string, int, string, string)"/>
         /// specifying null user and null password. </summary>
         /// <param name="type"> the proxy type </param>
         /// <param name="host"> the proxy host </param>
@@ -34,8 +34,8 @@ namespace com.lightstreamer.client
         }
 
         /// <summary>
-        /// This constructor will call <seealso cref="#Proxy(String, String, int, String, String)"/>
-        /// specifying a null null password. </summary>
+        /// This constructor will call <seealso cref="Proxy(string, string, int, string, string)"/>
+        /// specifying a null password. </summary>
         /// <param name="type"> the proxy type </param>
         /// <param name="host"> the proxy host </param>
         /// <param name="port"> the proxy port </param>
@@ -47,9 +47,9 @@ namespace com.lightstreamer.client
 
         /// <summary>
         /// Creates a Proxy instance containing all the informations required by the <seealso cref="LightstreamerClient"/>
-        /// to connect to a Lightstreamer server passing through a proxy. <BR>
-        /// Once created the Proxy instance has to be passed to the <seealso cref="LightstreamerClient#connectionOptions"/>
-        /// instance using the <seealso cref="ConnectionOptions#setProxy(Proxy)"/> method.
+        /// to connect to a Lightstreamer server passing through a proxy. <br/>
+        /// Once created the Proxy instance has to be passed to the <seealso cref="LightstreamerClient.connectionOptions"/>
+        /// instance using the <seealso cref="ConnectionOptions.Proxy"/> method.
         /// </summary>
         /// <param name="type"> the proxy type </param>
         /// <param name="host"> the proxy host </param>

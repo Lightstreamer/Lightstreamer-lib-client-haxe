@@ -14,7 +14,7 @@ namespace com.lightstreamer.log
   /// <summary>
   /// Simple concrete logging provider that logs on the system console.
   ///
-  /// To be used, an instance of this class has to be passed to the library through the <seealso cref="LightstreamerClient.setLoggerProvider"/>.
+  /// To be used, an instance of this class has to be passed to the library through the <seealso cref="com.lightstreamer.client.LightstreamerClient.setLoggerProvider(ILoggerProvider)"/>.
   /// </summary>
   public class ConsoleLoggerProvider: ILoggerProvider {
     readonly LSConsoleLoggerProvider _delegate;

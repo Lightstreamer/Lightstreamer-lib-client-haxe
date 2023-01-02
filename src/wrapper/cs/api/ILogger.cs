@@ -4,7 +4,7 @@ namespace com.lightstreamer.log
 {
     /// <summary>
     /// <para>Interface to be implemented to consume log from the library.</para>
-    /// <para>Instances of implemented classes are obtained by the library through the ILoggerProvider instance set on Server.SetLoggerProvider.</para>
+    /// <para>Instances of implemented classes are obtained by the library through the ILoggerProvider instance set on LightstreamerClient.setLoggerProvider.</para>
     /// </summary>
     public interface ILogger
     {
