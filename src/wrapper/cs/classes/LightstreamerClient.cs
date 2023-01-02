@@ -47,7 +47,7 @@ namespace com.lightstreamer.client
         /// <summary>
         /// Static method that permits to configure the logging system used by the library. The logging system 
         /// must respect the 
-        /// <a href="log_javadoc_url_placeholder/com/lightstreamer/log/LoggerProvider.html">LoggerProvider</a> 
+        /// <seealso cref="com.lightstreamer.log.ILoggerProvider"/> 
         /// interface. A custom class can be used to wrap any third-party 
         /// .NET logging tools. <br/>
         /// If no logging system is specified, all the generated log is discarded. <br/>
@@ -79,7 +79,7 @@ namespace com.lightstreamer.client
         ///  </li>
         /// </ul>
         /// </summary>
-        /// <param name="provider"> A <a href="log_javadoc_url_placeholder/com/lightstreamer/log/LoggerProvider.html">LoggerProvider</a>
+        /// <param name="provider"> A <seealso cref="com.lightstreamer.log.ILoggerProvider"/>
         /// instance that will be used to generate log messages by the library classes. </param>
         public static void setLoggerProvider(ILoggerProvider provider)
         {
