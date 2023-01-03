@@ -8,9 +8,12 @@
 
   <property name="build" location="bin/cs"/>
   <property name="test" location="bin-test/cs"/>
+  <property name="docs" location="${build}/docs"/>
   <property name="dist" location="${build}/dist"/>
 
   <property name="tools" location="tools/cs"/>
+  <property name="tools.docfx" location="${tools}/docfx_project"/>
+  <property name="tools.docfx.json" location="${tools.docfx}/docfx.json"/>
   <property name="tools.solution" location="${tools}/Lightstreamer.DotNetStandard.Client"/>
   <property name="tools.project" location="${tools.solution}/Lightstreamer.DotNetStandard.Client"/>
   <property name="test.project" location="${tools}/res/TestAll.csproj"/>
@@ -51,8 +54,18 @@ WARNING
 **********
 check that the dependencies listed in the nuspec file at `${nuspec.file}` are in synch with those declared in the Visual Studio projects at `${tools.solution}`
 **********
-${nuspec.contents}
     </echo>
+  </target>
+
+  <target name="docs" description="Build the docs">
+    <echo message="${version}" file="${tools.docfx}/version.md"/>
+    <exec executable="docfx" failonerror="true">
+      <arg value="${tools.docfx.json}"/>
+      <arg value="-o"/>
+      <arg value="${docs}"/>
+    </exec>
+    <delete dir="${docs}/api"/>
+    <move file="${docs}/_site" tofile="${docs}/api"/>
   </target>
 
   <target name="build" depends="build_haxe" description="Build the library">
