@@ -1,4 +1,4 @@
-# Lightstreamer .NET Standard Client @VERSION@
+# Lightstreamer .NET Standard Client [!include[version](~/version.md)]
 
 Lightstreamer Client SDK enables any .NET application to communicate bidirectionally with a **Lightstreamer Server**. The API allows to subscribe to real-time data pushed by the server and to send any message to the server.
 
