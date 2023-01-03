@@ -4,15 +4,15 @@
       "src": [
         {
           "files": [
-            "Lightstreamer.DotNetStandard.Client/Lightstreamer.DotNetStandard.Client.Api/Lightstreamer.DotNetStandard.Client.Api.csproj"
+            "Lightstreamer.DotNetStandard.Client.Api.csproj"
           ],
-          "src": ".."
+          "src": "../Lightstreamer.DotNetStandard.Client/Lightstreamer.DotNetStandard.Client.Api"
         },
         {
           "files": [
-            "Lightstreamer.DotNetStandard.Client/Lightstreamer.DotNetStandard.Client/Lightstreamer.DotNetStandard.Client.csproj"
+            "Lightstreamer.DotNetStandard.Client.csproj"
           ],
-          "src": ".."
+          "src": "../Lightstreamer.DotNetStandard.Client/Lightstreamer.DotNetStandard.Client"
         }
       ],
       "dest": "api",
