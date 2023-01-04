@@ -1,6 +1,6 @@
 build.common.hxml
 --class-path src/platform/cs
---net-lib lib/cs/Lightstreamer.Net.dll
+--net-lib tools/cs/Lightstreamer.DotNetStandard.Client/Lightstreamer.DotNetStandard.Client.Net/bin/Debug/netstandard2.1/Lightstreamer.DotNetStandard.Client.Net.dll
 
 -D net-ver=45
 -D no-root
