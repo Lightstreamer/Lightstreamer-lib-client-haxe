@@ -12,7 +12,7 @@
 namespace com.lightstreamer.client
 {
     /// <summary>
-    /// Interface to be implemented to listen to <seealso cref="Subscription"/> events comprehending notifications of subscription/unsubscription, 
+    /// Interface to be implemented to listen to <c>Subscription</c> events comprehending notifications of subscription/unsubscription, 
     /// updates, errors and others.<br/>
     /// Events for this listeners are executed asynchronously with respect to the code that generates them. 
     /// This means that, upon reception of an event, it is possible that the internal state of the client has changed.
@@ -33,7 +33,7 @@ namespace com.lightstreamer.client
         ///       should clear the list in order to keep a coherent view.</li>
         /// </ul>
         /// Note that, if the involved Subscription has a two-level behavior enabled
-        /// (see <seealso cref="Subscription.CommandSecondLevelFields"/> and <seealso cref="Subscription.CommandSecondLevelFieldSchema"/>)
+        /// (see <c>Subscription.CommandSecondLevelFields</c> and <c>Subscription.CommandSecondLevelFieldSchema</c>)
         /// , the notification refers to the first-level item (which is in COMMAND mode).
         /// This kind of notification is not possible for second-level items (which are in MERGE 
         /// mode).
@@ -53,9 +53,9 @@ namespace com.lightstreamer.client
         /// <param name="lostUpdates"> The number of consecutive updates dropped for the item. </param>
         /// <param name="key"> The value of the key that identifies the second-level item.
         /// </param>
-        /// <seealso cref="Subscription.RequestedMaxFrequency" />
-        /// <seealso cref="Subscription.CommandSecondLevelFields" />
-        /// <seealso cref="Subscription.CommandSecondLevelFieldSchema"/>
+        /// <c>Subscription.RequestedMaxFrequency</c>
+        /// <c>Subscription.CommandSecondLevelFields</c>
+        /// <c>Subscription.CommandSecondLevelFieldSchema</c>
         void onCommandSecondLevelItemLostUpdates(int lostUpdates, string key);
 
         /// <summary>
@@ -86,9 +86,9 @@ namespace com.lightstreamer.client
         /// <param name="message"> The description of the error sent by the Server; it can be null. </param>
         /// <param name="key"> The value of the key that identifies the second-level item.
         /// </param>
-        /// <seealso cref="ConnectionDetails.AdapterSet" />
-        /// <seealso cref="Subscription.CommandSecondLevelFields" />
-        /// <seealso cref="Subscription.CommandSecondLevelFieldSchema"/>
+        /// <c>ConnectionDetails.AdapterSet</c>
+        /// <c>Subscription.CommandSecondLevelFields</c>
+        /// <c>Subscription.CommandSecondLevelFieldSchema</c>
         void onCommandSecondLevelSubscriptionError(int code, string message, string key);
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace com.lightstreamer.client
         /// subscription mode and snapshot information was indeed requested for the items. By implementing this 
         /// method it is possible to perform actions which require that all the initial values have been received.<br/>
         /// Note that, if the involved Subscription has a two-level behavior enabled
-        /// (see <seealso cref="Subscription.CommandSecondLevelFields" /> and <seealso cref="Subscription.CommandSecondLevelFieldSchema"/>)
+        /// (see <c>Subscription.CommandSecondLevelFields</c> and <c>Subscription.CommandSecondLevelFieldSchema</c>)
         /// , the notification refers to the first-level item (which is in COMMAND mode).
         /// Snapshot-related updates for the second-level items 
         /// (which are in MERGE mode) can be received both before and after this notification.
@@ -107,8 +107,8 @@ namespace com.lightstreamer.client
         ///        null value is supplied. </param>
         /// <param name="itemPos"> 1-based position of the item within the "Item List" or "Item Group".
         /// </param>
-        /// <seealso cref="Subscription.RequestedSnapshot" />
-        /// <seealso cref="ItemUpdate.isSnapshot" />
+        /// <c>Subscription.RequestedSnapshot</c>
+        /// <c>ItemUpdate.isSnapshot</c>
         void onEndOfSnapshot(string itemName, int itemPos);
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace com.lightstreamer.client
         /// <param name="itemPos"> 1-based position of the item within the "Item List" or "Item Group". </param>
         /// <param name="lostUpdates"> The number of consecutive updates dropped for the item.
         /// </param>
-        /// <seealso cref="Subscription.RequestedMaxFrequency" />
+        /// <c>Subscription.RequestedMaxFrequency</c>
         void onItemLostUpdates(string itemName, int itemPos, int lostUpdates);
 
         /// <summary>
@@ -144,28 +144,28 @@ namespace com.lightstreamer.client
 
         /// <summary>
         /// Event handler that receives a notification when the SubscriptionListener instance is removed from a Subscription 
-        /// through <seealso cref="Subscription.removeListener"/>. This is the last event to be fired on the listener.
+        /// through <c>Subscription.removeListener</c>. This is the last event to be fired on the listener.
         /// </summary>
         void onListenEnd();
 
         /// <summary>
         /// Event handler that receives a notification when the SubscriptionListener instance is added to a Subscription 
-        /// through <seealso cref="Subscription.addListener"/>. This is the first event to be fired on the listener.
+        /// through <c>Subscription.addListener</c>. This is the first event to be fired on the listener.
         /// </summary>
         void onListenStart();
 
         /// <summary>
         /// Event handler that is called by Lightstreamer to notify that a Subscription has been successfully subscribed 
         /// to through the Server. This can happen multiple times in the life of a Subscription instance, in case the 
-        /// Subscription is performed multiple times through <seealso cref="LightstreamerClient.unsubscribe"/> and 
-        /// <seealso cref="LightstreamerClient.subscribe"/>. This can also happen multiple times in case of automatic 
+        /// Subscription is performed multiple times through <c>LightstreamerClient.unsubscribe</c> and 
+        /// <c>LightstreamerClient.subscribe</c>. This can also happen multiple times in case of automatic 
         /// recovery after a connection restart.<br/> 
         /// This notification is always issued before the other ones related to the same subscription. It invalidates all 
         /// data that has been received previously.<br/>
         /// Note that two consecutive calls to this method are not possible, as before a second onSubscription event is 
         /// fired an <seealso cref="SubscriptionListener.onUnsubscription"/> event is eventually fired.<br/> 
         /// If the involved Subscription has a two-level behavior enabled
-        /// (see <seealso cref="Subscription.CommandSecondLevelFields"/> and <seealso cref="Subscription.CommandSecondLevelFieldSchema"/>)
+        /// (see <c>Subscription.CommandSecondLevelFields</c> and <c>Subscription.CommandSecondLevelFieldSchema</c>)
         /// , second-level subscriptions are not notified.
         /// </summary>
         void onSubscription();
@@ -173,8 +173,8 @@ namespace com.lightstreamer.client
         /// <summary>
         /// Event handler that is called when the Server notifies an error on a Subscription. By implementing this method it 
         /// is possible to perform recovery actions.<br/>
-        /// Note that, in order to perform a new subscription attempt, <seealso cref="LightstreamerClient.unsubscribe"/>
-        /// and <seealso cref="LightstreamerClient.subscribe"/> should be issued again, even if no change to the Subscription 
+        /// Note that, in order to perform a new subscription attempt, <c>LightstreamerClient.unsubscribe</c>
+        /// and <c>LightstreamerClient.subscribe</c> should be issued again, even if no change to the Subscription 
         /// attributes has been applied.
         /// </summary>
         /// <param name="code"> The error code sent by the Server. It can be one of the following:
@@ -203,20 +203,20 @@ namespace com.lightstreamer.client
         /// </param>
         /// <param name="message"> The description of the error sent by the Server; it can be null.
         /// </param>
-        /// <seealso cref="ConnectionDetails.AdapterSet" />
+        /// <c>ConnectionDetails.AdapterSet</c>
         void onSubscriptionError(int code, string message);
 
         /// <summary>
         /// Event handler that is called by Lightstreamer to notify that a Subscription has been successfully unsubscribed 
         /// from. This can happen multiple times in the life of a Subscription instance, in case the Subscription is performed 
-        /// multiple times through <seealso cref="LightstreamerClient.unsubscribe(Subscription)"/> and 
-        /// <seealso cref="LightstreamerClient.subscribe(Subscription)"/>. This can also happen multiple times in case of automatic 
+        /// multiple times through <c>LightstreamerClient.unsubscribe(Subscription)</c> and 
+        /// <c>LightstreamerClient.subscribe(Subscription)</c>. This can also happen multiple times in case of automatic 
         /// recovery after a connection restart.<br/>
         /// After this notification no more events can be received until a new <seealso cref="SubscriptionListener.onSubscription"/> event.<br/> 
         /// Note that two consecutive calls to this method are not possible, as before a second onUnsubscription event 
         /// is fired an <seealso cref="SubscriptionListener.onSubscription"/> event is eventually fired.<br/> 
         /// If the involved Subscription has a two-level behavior enabled
-        /// (see <seealso cref="Subscription.CommandSecondLevelFields"/> and <seealso cref="Subscription.CommandSecondLevelFieldSchema"/>)
+        /// (see <c>Subscription.CommandSecondLevelFields</c> and <c>Subscription.CommandSecondLevelFieldSchema</c>)
         /// , second-level unsubscriptions are not notified.
         /// </summary>
         void onUnsubscription();
@@ -224,10 +224,10 @@ namespace com.lightstreamer.client
         /// <summary>
         /// Event handler that is called by Lightstreamer to notify the client with the real maximum update frequency of the Subscription. 
         /// It is called immediately after the Subscription is established and in response to a requested change
-        /// (see <seealso cref="Subscription.requestedMaxFrequency"/>).
+        /// (see <c>Subscription.requestedMaxFrequency</c>).
         /// Since the frequency limit is applied on an item basis and a Subscription can involve multiple items,
         /// this is actually the maximum frequency among all items. For Subscriptions with two-level behavior
-        /// (see <seealso cref="Subscription.CommandSecondLevelFields"/> and <seealso cref="Subscription.CommandSecondLevelFieldSchema"/>)
+        /// (see <c>Subscription.CommandSecondLevelFields</c> and <c>Subscription.CommandSecondLevelFieldSchema</c>)
         /// , the reported frequency limit applies to both first-level and second-level items.<br/>
         /// The value may differ from the requested one because of restrictions operated on the server side,
         /// but also because of number rounding.<br/>

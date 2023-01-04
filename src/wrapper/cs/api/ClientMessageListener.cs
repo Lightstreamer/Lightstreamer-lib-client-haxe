@@ -12,7 +12,7 @@
 namespace com.lightstreamer.client
 {
     /// <summary>
-    /// Interface to be implemented to listen to <seealso cref="LightstreamerClient.sendMessage(string) "/> events reporting a message processing outcome. 
+    /// Interface to be implemented to listen to <c>LightstreamerClient.sendMessage(string) </c> events reporting a message processing outcome. 
     /// Events for these listeners are dispatched by a different thread than the one that generates them.
     /// All the notifications for a single LightstreamerClient, including notifications to
     /// <seealso cref="ClientListener"/>s, <seealso cref="SubscriptionListener"/>s and <seealso cref="ClientMessageListener"/>s will be dispatched by the 

@@ -43,7 +43,7 @@ namespace com.lightstreamer.client
         /// <value>
         /// Read-only property <c>ItemName</c> represents the name of the item to which this update pertains.<br/> 
         /// The name will be null if the related Subscription was initialized using an "Item Group".<br/>
-        /// See also: <seealso cref="Subscription.ItemGroup"/>, <seealso cref="Subscription.Items"/>.<br/>
+        /// See also: <c>Subscription.ItemGroup</c>, <c>Subscription.Items</c>.<br/>
         /// </value>
         public string ItemName
         {
@@ -53,7 +53,7 @@ namespace com.lightstreamer.client
         /// <value>
         /// Read-only property <c>ItemPos</c> represents the 1-based the position in the "Item List" or
         /// "Item Group" of the item to which this update pertains.<br/>
-        /// See also: <seealso cref="Subscription.ItemGroup"/>, <seealso cref="Subscription.Items"/>.<br/>
+        /// See also: <c>Subscription.ItemGroup</c>, <c>Subscription.Items</c>.<br/>
         /// </value>
         public int ItemPos
         {
@@ -72,7 +72,7 @@ namespace com.lightstreamer.client
         ///  (only the fields used to carry key and command informations are valued).</li>
         /// </ul> 
         /// </returns>
-        /// <seealso cref="Subscription.Fields" />
+        /// <c>Subscription.Fields</c>
         public string getValue(string fieldName);
 
         /// <summary>
@@ -86,14 +86,14 @@ namespace com.lightstreamer.client
         ///  <li>the item is subscribed to with the COMMAND mode and a DELETE command is received 
         ///  (only the fields used to carry key and command informations are valued).</li>
         /// </ul> </returns>
-        /// <seealso cref="Subscription.FieldSchema" />
-        /// <seealso cref="Subscription.Fields" />
+        /// <c>Subscription.FieldSchema</c>
+        /// <c>Subscription.Fields</c>
         public string getValue(int fieldPos);
 
         /// <summary>
         /// Inquiry method that asks whether the current update belongs to the item snapshot (which carries 
         /// the current item state at the time of Subscription). Snapshot events are sent only if snapshot 
-        /// information was requested for the items through <seealso cref="Subscription.RequestedSnapshot"/> 
+        /// information was requested for the items through <c>Subscription.RequestedSnapshot</c> 
         /// and precede the real time events. Snapshot informations take different forms in different 
         /// subscription modes and can be spanned across zero, one or several update events. In particular:
         /// <ul>
@@ -103,7 +103,7 @@ namespace com.lightstreamer.client
         ///  of exactly one event, carrying the current value for all fields;</li>
         ///  <li>if the item is subscribed to with the DISTINCT subscription mode, then the snapshot 
         ///  consists of some of the most recent updates; these updates are as many as specified 
-        ///  through <seealso cref="Subscription.RequestedSnapshot"/>, unless fewer are available;</li>
+        ///  through <c>Subscription.RequestedSnapshot</c>, unless fewer are available;</li>
         ///  <li>if the item is subscribed to with the COMMAND subscription mode, then the snapshot 
         ///  consists of an "ADD" event for each key that is currently present.</li>
         /// </ul>
@@ -136,7 +136,7 @@ namespace com.lightstreamer.client
         ///  used to carry key information).</li>
         /// </ul>
         /// In all other cases, the return value is false. </returns>
-        /// <seealso cref="Subscription.Fields" />
+        /// <c>Subscription.Fields</c>
         public bool isValueChanged(string fieldName);
 
         /// <summary>
@@ -159,8 +159,8 @@ namespace com.lightstreamer.client
         ///  used to carry key information).</li>
         /// </ul>
         /// In all other cases, the return value is false. </returns>
-        /// <seealso cref="Subscription.FieldSchema" />
-        /// <seealso cref="Subscription.Fields" />
+        /// <c>Subscription.FieldSchema</c>
+        /// <c>Subscription.Fields</c>
         public bool isValueChanged(int fieldPos);
 
         /// <summary>
@@ -182,10 +182,10 @@ namespace com.lightstreamer.client
         /// &lt;jsonpatch_min_length&gt; configuration flag, so that the availability of the
         /// JSON Patch form would only depend on the Client and the Data Adapter.
         /// <br/>When the above conditions are not met, the method just returns null; in this
-        /// case, the new value can only be determined through {@link ItemUpdate#getValue}. For instance,
+        /// case, the new value can only be determined through <seelaso cref="ItemUpdate.getValue(string)" />. For instance,
         /// this will always be needed to get the first value received.</summary>
         /// 
-        /// <exception cref="ArgumentException"> if the specified field is not
+        /// <exception cref="System.ArgumentException"> if the specified field is not
         /// part of the Subscription.</exception>
         /// 
         /// <param name="fieldName"> The field name as specified within the "Field List".</param>
@@ -194,7 +194,7 @@ namespace com.lightstreamer.client
         /// the new value and the previous one, or null if the difference in JSON Patch format
         /// is not available for any reason.</returns>
         /// 
-        /// <seealso cref="ItemUpdate.getValue"/>
+        /// <c>ItemUpdate.getValue</c>
         public string getValueAsJSONPatchIfAvailable(string fieldName);
 
         /// <summary>
@@ -216,10 +216,10 @@ namespace com.lightstreamer.client
         /// &lt;jsonpatch_min_length&gt; configuration flag, so that the availability of the
         /// JSON Patch form would only depend on the Client and the Data Adapter.
         /// <br/>When the above conditions are not met, the method just returns null; in this
-        /// case, the new value can only be determined through {@link ItemUpdate#getValue}. For instance,
+        /// case, the new value can only be determined through <seelaso cref="ItemUpdate.getValue(int)" />. For instance,
         /// this will always be needed to get the first value received.</summary>
         /// 
-        /// <exception cref="ArgumentException"> if the specified field is not
+        /// <exception cref="System.ArgumentException"> if the specified field is not
         /// part of the Subscription.</exception>
         /// 
         /// <param name="fieldPos"> The 1-based position of the field within the "Field List" or "Field Schema".</param>
@@ -228,7 +228,7 @@ namespace com.lightstreamer.client
         /// the new value and the previous one, or null if the difference in JSON Patch format
         /// is not available for any reason.</returns>
         /// 
-        /// <seealso cref="ItemUpdate.getValue"/>
+        /// <c>ItemUpdate.getValue</c>
         public string getValueAsJSONPatchIfAvailable(int fieldPos);
 
         /// <summary>
@@ -243,8 +243,8 @@ namespace com.lightstreamer.client
         /// <returns> An immutable Map containing the values for each field changed with the last
         /// server update.
         /// </returns>
-        /// <seealso cref="Subscription.FieldSchema" />
-        /// <seealso cref="Subscription.Fields" />
+        /// <c>Subscription.FieldSchema</c>
+        /// <c>Subscription.Fields</c>
         public IDictionary<string, string> ChangedFields
         {
             get;
@@ -261,8 +261,8 @@ namespace com.lightstreamer.client
         /// </summary>
         /// <returns> An immutable Map containing the values for each field changed with the last server update.
         /// </returns>
-        /// <seealso cref="Subscription.FieldSchema" />
-        /// <seealso cref="Subscription.Fields" />
+        /// <c>Subscription.FieldSchema</c>
+        /// <c>Subscription.Fields</c>
         public IDictionary<int, string> ChangedFieldsByPosition
         {
             get;
@@ -274,8 +274,8 @@ namespace com.lightstreamer.client
         /// </summary>
         /// <returns> An immutable Map containing the values for each field in the Subscription.
         /// </returns>
-        /// <seealso cref="Subscription.FieldSchema" />
-        /// <seealso cref="Subscription.Fields" />
+        /// <c>Subscription.FieldSchema</c>
+        /// <c>Subscription.Fields</c>
         public IDictionary<string, string> Fields
         {
             get;
@@ -287,8 +287,8 @@ namespace com.lightstreamer.client
         /// </summary>
         /// <returns> An immutable Map containing the values for each field in the Subscription.
         /// </returns>
-        /// <seealso cref="Subscription.FieldSchema" />
-        /// <seealso cref="Subscription.Fields" />
+        /// <c>Subscription.FieldSchema</c>
+        /// <c>Subscription.Fields</c>
         public IDictionary<int, string> FieldsByPosition
         {
             get;

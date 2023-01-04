@@ -12,7 +12,7 @@
 namespace com.lightstreamer.client
 {
     /// <summary>
-    /// Interface to be implemented to listen to <seealso cref="LightstreamerClient"/> events comprehending notifications of 
+    /// Interface to be implemented to listen to <c>LightstreamerClient</c> events comprehending notifications of 
     /// connection activity and errors. <br/>
     /// Events for these listeners are dispatched by a different thread than the one that generates them. 
     /// This means that, upon reception of an event, it is possible that the internal state of the client has changed.
@@ -24,12 +24,12 @@ namespace com.lightstreamer.client
     {
         /// <summary>
         /// Event handler that receives a notification when the ClientListener instance is removed from a LightstreamerClient 
-        /// through <seealso cref="LightstreamerClient.removeListener(ClientListener)"/>. This is the last event to be fired on the listener. </summary>
+        /// through <c>LightstreamerClient.removeListener(ClientListener)</c>. This is the last event to be fired on the listener. </summary>
         void onListenEnd();
 
         /// <summary>
         /// Event handler that receives a notification when the ClientListener instance is added to a LightstreamerClient 
-        /// through <seealso cref="LightstreamerClient.addListener(ClientListener)"/>. This is the first event to be fired on the listener. </summary>
+        /// through <c>LightstreamerClient.addListener(ClientListener)</c>. This is the first event to be fired on the listener. </summary>
         void onListenStart();
 
         /// <summary>
@@ -73,12 +73,12 @@ namespace com.lightstreamer.client
         /// <param name="errorMessage"> The description of the error as sent by the Server.
         /// </param>
         /// <seealso cref="ClientListener.onStatusChange" />
-        /// <seealso cref="ConnectionDetails.AdapterSet" />
+        /// <c>ConnectionDetails.AdapterSet</c>
         void onServerError(int errorCode, string errorMessage);
 
         /// <summary>
         /// Event handler that receives a notification each time the LightstreamerClient status has changed. The status changes 
-        /// may be originated either by custom actions (e.g. by calling <seealso cref="LightstreamerClient.disconnect"/>) or by internal 
+        /// may be originated either by custom actions (e.g. by calling <c>LightstreamerClient.disconnect</c>) or by internal 
         /// actions.
         /// The normal cases are the following:
         /// <ul>
@@ -89,30 +89,30 @@ namespace com.lightstreamer.client
         ///       or to "CONNECTED:HTTP-POLLING" as a last resort.</li>
         ///   <li>On the other hand, after issuing connect when the status is already "CONNECTED:*" a switch to "CONNECTING"
         ///       is usually not needed and the current session is kept.</li>
-        ///   <li>After issuing <seealso cref="LightstreamerClient.disconnect"/>, the status will switch to "DISCONNECTED".</li>
+        ///   <li>After issuing <c>LightstreamerClient.disconnect</c>, the status will switch to "DISCONNECTED".</li>
         ///   <li>In case of a server connection refusal, the status may switch from "CONNECTING" directly to "DISCONNECTED". 
         ///       After that, the <seealso cref="ClientListener.onServerError"/> event handler will be invoked.</li>
         /// </ul>
         /// Possible special cases are the following:
         /// <ul>
         ///   <li>In case of Server unavailability during streaming, the status may switch from "CONNECTED:*-STREAMING" 
-        ///       to "STALLED" (see <seealso cref="ConnectionOptions.StalledTimeout"/>). If the unavailability ceases, the status 
+        ///       to "STALLED" (see <c>ConnectionOptions.StalledTimeout</c>). If the unavailability ceases, the status 
         ///       will switch back to "CONNECTED:*-STREAMING"; otherwise, if the unavailability persists 
-        ///       (see <seealso cref="ConnectionOptions.ReconnectTimeout"/>), the status will switch to "DISCONNECTED:TRYING-RECOVERY"
+        ///       (see <c>ConnectionOptions.ReconnectTimeout</c>), the status will switch to "DISCONNECTED:TRYING-RECOVERY"
         ///       and eventually to "CONNECTED:*-STREAMING".</li>
         ///   <li>In case the connection or the whole session is forcibly closed by the Server, the status may switch 
         ///       from "CONNECTED:*-STREAMING" or "CONNECTED:*-POLLING" directly to "DISCONNECTED". After that, 
         ///       the <seealso cref="ClientListener.onServerError"/> event handler will be invoked.</li>
-        ///   <li>Depending on the setting in <seealso cref="ConnectionOptions.SlowingEnabled"/>, in case of slow update processing, 
+        ///   <li>Depending on the setting in <c>ConnectionOptions.SlowingEnabled</c>, in case of slow update processing, 
         ///       the status may switch from "CONNECTED:WS-STREAMING" to "CONNECTED:WS-POLLING" or from "CONNECTED:HTTP-STREAMING" 
         ///       to "CONNECTED:HTTP-POLLING".</li>
         ///   <li>If the status is "CONNECTED:*-POLLING" and any problem during an intermediate poll occurs, the status may 
         ///       switch to "CONNECTING" and eventually to "CONNECTED:*-POLLING". The same may hold for the "CONNECTED:*-STREAMING" case, 
         ///       when a rebind is needed.</li>
-        ///   <li>In case a forced transport was set through <seealso cref="ConnectionOptions.ForcedTransport"/>, only the 
+        ///   <li>In case a forced transport was set through <c>ConnectionOptions.ForcedTransport</c>, only the 
         ///       related final status or statuses are possible.</li>
         ///   <li>In case of connection problems, the status may switch from any value
-        ///       to "DISCONNECTED:WILL-RETRY" (see <seealso cref="ConnectionOptions.RetryDelay"/>),
+        ///       to "DISCONNECTED:WILL-RETRY" (see <c>ConnectionOptions.RetryDelay</c>),
         ///       then to "CONNECTING" and a new attempt will start.
         ///       However, in most cases, the client will try to recover the current session;
         ///       hence, the "DISCONNECTED:TRYING-RECOVERY" status will be used and the recovery attempt will start.</li>
@@ -122,7 +122,7 @@ namespace com.lightstreamer.client
         ///       and the status will switch to "DISCONNECTED:WILL-RETRY" before the next attempts.</li>
         /// </ul>
         /// By setting a custom handler it is possible to perform actions related to connection and disconnection occurrences. 
-        /// Note that <seealso cref="LightstreamerClient.connect"/> and <seealso cref="LightstreamerClient.disconnect"/>, as any other method, can 
+        /// Note that <c>LightstreamerClient.connect</c> and <c>LightstreamerClient.disconnect</c>, as any other method, can 
         /// be issued directly from within a handler.
         /// </summary>
         /// <param name="status"> The new status. It can be one of the following values:
@@ -133,7 +133,7 @@ namespace com.lightstreamer.client
         ///   <li>"CONNECTED:WS-STREAMING" a streaming connection over WebSocket has been established.</li>
         ///   <li>"CONNECTED:HTTP-STREAMING" a streaming connection over HTTP has been established.</li>
         ///   <li>"CONNECTED:WS-POLLING" a polling connection over WebSocket has been started. Note that, unlike polling over 
-        ///   HTTP, in this case only one connection is actually opened (see <seealso cref="ConnectionOptions.SlowingEnabled"/>).</li>
+        ///   HTTP, in this case only one connection is actually opened (see <c>ConnectionOptions.SlowingEnabled</c>).</li>
         ///   <li>"CONNECTED:HTTP-POLLING" a polling connection over HTTP has been started.</li>
         ///   <li>"STALLED" a streaming session has been silent for a while, the status will eventually return to its previous 
         ///   CONNECTED:*-STREAMING status or will switch to "DISCONNECTED:WILL-RETRY".</li>
@@ -143,17 +143,17 @@ namespace com.lightstreamer.client
         ///   the client has started a connection attempt and is waiting for a Server answer;
         ///   if successful, the underlying session will be kept.</li>
         ///   <li>"DISCONNECTED" a connection or connection attempt has been closed. The client will not connect anymore until 
-        ///   a new <seealso cref="LightstreamerClient.connect"/> call is issued.</li>
+        ///   a new <c>LightstreamerClient.connect</c> call is issued.</li>
         /// </ul>
         /// </param>
-        /// <seealso cref="LightstreamerClient.connect" />
-        /// <seealso cref="LightstreamerClient.disconnect" />
-        /// <seealso cref="LightstreamerClient.Status" />
+        /// <c>LightstreamerClient.connect</c>
+        /// <c>LightstreamerClient.disconnect</c>
+        /// <c>LightstreamerClient.Status</c>
         void onStatusChange(string status);
 
         /// <summary>
         /// Event handler that receives a notification each time  the value of a property of 
-        /// <seealso cref="LightstreamerClient.connectionDetails"/> or <seealso cref="LightstreamerClient.connectionOptions"/> 
+        /// <c>LightstreamerClient.connectionDetails</c> or <c>LightstreamerClient.connectionOptions</c> 
         /// is changed. <br/>
         /// Properties of these objects can be modified by direct calls to them or
         /// by server sent events.
@@ -191,8 +191,8 @@ namespace com.lightstreamer.client
         /// 
         /// </ul>
         /// </param>
-        /// <seealso cref="LightstreamerClient.connectionDetails" />
-        /// <seealso cref="LightstreamerClient.connectionOptions" />
+        /// <c>LightstreamerClient.connectionDetails</c>
+        /// <c>LightstreamerClient.connectionOptions</c>
         void onPropertyChange(string property);
     }
 }
