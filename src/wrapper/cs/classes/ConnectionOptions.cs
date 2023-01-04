@@ -426,7 +426,7 @@ namespace com.lightstreamer.client
         /// <b>This setting imposes only a minimum delay. In order to avoid network congestion, the
         /// library may use a longer delay if the issue preventing the establishment of a session
         /// persists.</b><br/>
-        /// See also: <seealso cref="FirstRetryMaxDelay"/>, <seealso cref="CurrentConnectTimeout"/>.<br/>
+        /// See also: <seealso cref="FirstRetryMaxDelay"/>.<br/>
         /// <br/>
         /// <b>Lifecycle:</b> This value can be set and changed at any time.<br/>
         /// <br/>

@@ -61,17 +61,20 @@ namespace com.lightstreamer.client
             this._delegate = new LSProxy(type, host, port, user, password);
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return _delegate.toString();
         }
 
+        /// <inheritdoc/>
         public override bool Equals(object obj)
         {
             var proxy = obj as Proxy;
             return proxy != null && _delegate.isEqualTo(proxy._delegate);
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             return System.HashCode.Combine(_delegate.type, _delegate.host, _delegate.port, _delegate.user, _delegate.password);

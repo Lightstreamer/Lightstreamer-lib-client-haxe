@@ -213,7 +213,7 @@ namespace com.lightstreamer.client
 
         /// <summary>
         /// Works just like <seealso cref="LightstreamerClient.disconnect()"/>, but also returns 
-        /// a  <seealso cref="Task"/> which will be completed
+        /// a  <seealso cref="System.Threading.Tasks.Task"/> which will be completed
         /// when all involved threads started by all <seealso cref="LightstreamerClient"/>
         /// instances have been terminated, because no more activities
         /// need to be managed and hence event dispatching is no longer necessary.

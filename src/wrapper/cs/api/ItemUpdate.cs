@@ -181,7 +181,7 @@ namespace com.lightstreamer.client
         /// Note that the last condition can be enforced by leveraging the Server's
         /// &lt;jsonpatch_min_length&gt; configuration flag, so that the availability of the
         /// JSON Patch form would only depend on the Client and the Data Adapter.
-        /// <BR>When the above conditions are not met, the method just returns null; in this
+        /// <br/>When the above conditions are not met, the method just returns null; in this
         /// case, the new value can only be determined through {@link ItemUpdate#getValue}. For instance,
         /// this will always be needed to get the first value received.</summary>
         /// 
@@ -215,7 +215,7 @@ namespace com.lightstreamer.client
         /// Note that the last condition can be enforced by leveraging the Server's
         /// &lt;jsonpatch_min_length&gt; configuration flag, so that the availability of the
         /// JSON Patch form would only depend on the Client and the Data Adapter.
-        /// <BR>When the above conditions are not met, the method just returns null; in this
+        /// <br/>When the above conditions are not met, the method just returns null; in this
         /// case, the new value can only be determined through {@link ItemUpdate#getValue}. For instance,
         /// this will always be needed to get the first value received.</summary>
         /// 

@@ -27,6 +27,7 @@ namespace com.lightstreamer.log
         this._delegate = new LSConsoleLoggerProvider(level);
     }
 
+    /// <inheritdoc/>
     public ILogger GetLogger(string category) {
         return _delegate.GetLogger(category);
     }
