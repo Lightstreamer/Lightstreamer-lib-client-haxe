@@ -1,0 +1,3 @@
+The Lightstreamer .Net Standard Client SDK allows to subscribe to real-time data pushed by a [Lightstreamer](https://lightstreamer.com) server and to send any message to the server. The library offers automatic recovery from connection failures, automatic selection of the best available transport, and full decoupling of subscription and connection operations.
+
+For the full documentation, see the [docs](https://sdk.lightstreamer.com/ls-dotnetstandard-client/@VERSION@/api/index.html).

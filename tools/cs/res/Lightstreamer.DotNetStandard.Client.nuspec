@@ -10,7 +10,8 @@
     <license type="expression">Apache-2.0</license>
     <projectUrl>https://lightstreamer.com/</projectUrl>
     <icon>images\icon.png</icon>
-    <description>The Lightstreamer Client SDK allows to subscribe to real-time data pushed by a Lightstreamer server and to send any message to the server. The library offers automatic recovery from connection failures, automatic selection of the best available transport, and full decoupling of subscription and connection operations.</description>
+    <readme>docs\readme.md</readme>
+    <description>The Lightstreamer .Net Standard Client SDK allows to subscribe to real-time data pushed by a Lightstreamer server and to send any message to the server. The library offers automatic recovery from connection failures, automatic selection of the best available transport, and full decoupling of subscription and connection operations.</description>
     <copyright>Copyright (c) Lightstreamer Srl.</copyright>
     <tags>Lightstreamer Realtime real-time Pub/Sub Messaging Publish Subscribe realtime comet HTTP Unity Xamarin Core websocket websockets streaming</tags>
     <dependencies>
@@ -19,5 +20,6 @@
   </metadata>
   <files>
     <file src="images\icon.png" target="images\" />
+    <file src="docs\readme.md" target="docs\" />
   </files>
 </package>
