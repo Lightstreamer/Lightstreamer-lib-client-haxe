@@ -101,13 +101,15 @@ LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.
 
 ## Compatibility ##
 
-The library requires Server 7.3.0. 
+The library requires Server 7.3.2. 
 
 ## Documentation
 
 - [Live demos](https://demos.lightstreamer.com/?p=lightstreamer&t=client&sclientmicrosoft=dotnet)
 
 - [API Reference](../api/index.md)
+
+- [Changelog](../articles/changelog.md)
 
 ## Support
 
