@@ -27,4 +27,19 @@
     </exec>
   </target>
 
+  <target name="clean">
+    <exec executable="dotnet" dir="core">
+      <arg value="clean"/>
+    </exec>
+    <exec executable="dotnet" dir="cookies">
+      <arg value="clean"/>
+    </exec>
+    <exec executable="dotnet" dir="proxy">
+      <arg value="clean"/>
+    </exec>
+    <exec executable="dotnet" dir="cert">
+      <arg value="clean"/>
+    </exec>
+  </target>
+
 </project>
