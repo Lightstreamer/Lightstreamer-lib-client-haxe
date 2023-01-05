@@ -8,6 +8,7 @@ import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
 using Lambda;
 using com.lightstreamer.client.internal.update.UpdateUtils.CurrFieldValTools;
+using com.lightstreamer.internal.NullTools;
 
 enum CurrFieldVal {
   StringVal(string: String);
@@ -61,7 +62,7 @@ function applyUpatesToCurrentFields(currentValues: Null<Map<Pos, Null<CurrFieldV
             throw new IllegalStateException('Cannot convert the field $f to JSON');
           }
           try {
-            newValues[f] = JsonVal(json.apply(patch));
+            newValues[f] = JsonVal(json.sure().apply(patch));
           } catch(e) {
             sessionLogger.logErrorEx(e.message, e);
             throw new IllegalStateException('Cannot apply the JSON Patch to the field $f');

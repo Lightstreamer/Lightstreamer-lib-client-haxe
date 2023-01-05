@@ -570,7 +570,7 @@ private class RunnableImpl implements java.lang.Runnable {
 @:forward(run)
 abstract NativeFuture(java.util.concurrent.FutureTask<Dynamic>) {
   public function new(task: ()->Void) {
-    this = new java.util.concurrent.FutureTask(new RunnableImpl(task), null);
+    this = new java.util.concurrent.FutureTask<Dynamic>(new RunnableImpl(task), null);
   }
 }
 #elseif cs
