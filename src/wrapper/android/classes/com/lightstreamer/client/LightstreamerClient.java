@@ -401,9 +401,6 @@ public class LightstreamerClient {
    * In fact, the library will setup its own local cookie storage only if, upon the first
    * usage of the cookies, a default {@link java.net.CookieHandler} is not available;
    * then it will always stick to the internal storage.
-   * Note that, in this case, setting
-   * and changing the default {@link java.net.CookieHandler} afterwards may cause some
-   * redundant handling (though only in the "compact" version of the library).
    * </li><li>
    * On the other hand, if a default {@link java.net.CookieHandler} is available
    * upon the first usage of the cookies, the library, from then on, will always stick
