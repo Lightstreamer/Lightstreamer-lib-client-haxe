@@ -83,7 +83,7 @@ LightstreamerClient.setLoggerProvider(loggerProvider)
 
 ## Compatibility ##
 
-Compatible with Lightstreamer Server since version 7.3.0.
+Compatible with Lightstreamer Server since version 7.3.2.
 
 ## Documentation
 

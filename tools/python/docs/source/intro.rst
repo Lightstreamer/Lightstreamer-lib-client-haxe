@@ -86,7 +86,7 @@ To enable the internal client logger, create a :class:`.LoggerProvider` and set 
 Compatibility
 *************
 
-Compatible with Lightstreamer Server since version 7.3.0.
+Compatible with Lightstreamer Server since version 7.3.2.
 
 Documentation
 *************
