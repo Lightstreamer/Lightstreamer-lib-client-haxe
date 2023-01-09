@@ -1,7 +1,9 @@
 package com.lightstreamer.client.internal.update;
 
+#if cs
 import com.lightstreamer.internal.NativeTypes.NativeIntMap;
 import com.lightstreamer.internal.NativeTypes.NativeStringMap;
+#end
 
 abstract class AbstractItemUpdate implements ItemUpdate {
   #if cs
