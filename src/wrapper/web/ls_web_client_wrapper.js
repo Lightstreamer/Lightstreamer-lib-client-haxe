@@ -87,7 +87,7 @@ ConnectionDetails.prototype = {
    
  /**
   * Setter method that sets the address of Lightstreamer Server.
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * Setting Lightstreamer Server address is not required when the front-end
   * pages are supplied by Lightstreamer Server itself (although this
   * scenario is advised only for demo purpose).
@@ -99,7 +99,7 @@ START_NODE_JSDOC_EXCLUDE
   * requirement is not respected, the client, depending on the browser in use, 
   * may be unable to open a streaming connection and will try to resort
   * to polling. 
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * <BR>Note that the addresses specified must always have the http: or https: scheme.
   * In case WebSockets are used, the specified scheme is 
   * internally converted to match the related WebSocket protocol
@@ -110,10 +110,10 @@ END_NODE_JSDOC_EXCLUDE
 * To know what features are enabled by your license, please see the License tab of the
 * Monitoring Dashboard (by default, available at /dashboard).</p>
   * 
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * <p class="default-value"><b>Default value:</b> the address of the server
   * that supplies the library pages if any, null otherwise.</p>
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * 
   * <p class="lifecycle"><b>Lifecycle:</b>This method can be called at any time. If called while connected, 
   * it will be applied when the next session creation request is issued.
@@ -123,11 +123,11 @@ END_NODE_JSDOC_EXCLUDE
   * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
   * call to {@link ClientListener#onPropertyChange} with argument "serverAddress" on any 
   * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * listening to any LightstreamerClient sharing the same 
   * connection with the LightstreamerClient owning the ConnectionDetails upon 
   * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * .</p>
   * 
   * @throws {IllegalArgumentException} if the given address is not valid.
@@ -179,11 +179,11 @@ END_NODE_JSDOC_EXCLUDE
   * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
   * call to {@link ClientListener#onPropertyChange} with argument "adapterSet" on any 
   * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * listening to any LightstreamerClient sharing the same 
   * connection with the LightstreamerClient owning the ConnectionDetails upon 
   * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * .</p>
   * 
   * @param {String} adapterSet The name of the Adapter Set to be used. A null value 
@@ -227,11 +227,11 @@ END_NODE_JSDOC_EXCLUDE
   * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
   * call to {@link ClientListener#onPropertyChange} with argument "user" on any 
   * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * listening to any LightstreamerClient sharing the same 
   * connection with the LightstreamerClient owning the ConnectionDetails upon 
   * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * .</p>
   *
   * @param {String} user The username to be used for the authentication
@@ -283,11 +283,11 @@ END_NODE_JSDOC_EXCLUDE
   * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
   * call to {@link ClientListener#onPropertyChange} with argument "password" on any 
   * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * listening to any LightstreamerClient sharing the same 
   * connection with the LightstreamerClient owning the ConnectionDetails upon 
   * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * .</p>
   * 
   * @param {String} password The password to be used for the authentication
@@ -326,11 +326,11 @@ END_NODE_JSDOC_EXCLUDE
   * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
   * call to {@link ClientListener#onPropertyChange} with argument "serverInstanceAddress" on any 
   * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * listening to any LightstreamerClient sharing the same 
   * connection with the LightstreamerClient that received the setting from the
   * server
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * .</p>
   *
   * @return {String} address used to issue all requests related to the current
@@ -365,11 +365,11 @@ END_NODE_JSDOC_EXCLUDE
   * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
   * call to {@link ClientListener#onPropertyChange} with argument "serverSocketName" on any 
   * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * listening to any LightstreamerClient sharing the same 
   * connection with the LightstreamerClient that received the setting from the
   * server
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * .</p>
   *
   * @return {String} name configured for the Server instance which is managing the
@@ -389,11 +389,11 @@ END_NODE_JSDOC_EXCLUDE
   * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
   * call to {@link ClientListener#onPropertyChange} with argument "sessionId" on any
   * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * listening to any LightstreamerClient sharing the same
   * connection with the LightstreamerClient that received the setting from the
   * server
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * .</p>
   *
   * @return {String} ID assigned by the Server to this client session.
@@ -465,11 +465,11 @@ ConnectionOptions.prototype = {
   * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
   * call to {@link ClientListener#onPropertyChange} with argument "contentLength" on any 
   * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * listening to any LightstreamerClient sharing the same 
   * connection with the LightstreamerClient owning the ConnectionOptions upon 
   * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * .</p>
   * 
   * @throws {IllegalArgumentException} if a negative, zero, decimal
@@ -516,11 +516,11 @@ END_NODE_JSDOC_EXCLUDE
   * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
   * call to {@link ClientListener#onPropertyChange} with argument "idleTimeout" on any 
   * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * listening to any LightstreamerClient sharing the same 
   * connection with the LightstreamerClient owning the ConnectionOptions upon 
   * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * .</p>
   * 
   * @throws {IllegalArgumentException} if a negative or a decimal
@@ -572,12 +572,12 @@ END_NODE_JSDOC_EXCLUDE
   * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
   * call to {@link ClientListener#onPropertyChange} with argument "keepaliveInterval" on any 
   * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * listening to any LightstreamerClient sharing the same 
   * connection with the LightstreamerClient owning the ConnectionOptions upon 
   * which the setter was called or that received the setting from the
   * server
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * .</p>
   * 
   * @throws {IllegalArgumentException} if a negative or a decimal
@@ -628,24 +628,24 @@ END_NODE_JSDOC_EXCLUDE
   * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a call to 
   * {@link ClientListener#onPropertyChange} with argument "requestedMaxBandwidth" on any 
   * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * listening to any LightstreamerClient sharing the same 
   * connection with the LightstreamerClient owning the ConnectionOptions upon 
   * which the setter was called or that received the setting from the
   * server
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * .
   * <BR>
   * Moreover, upon any change or attempt to change the limit, the Server will notify the client
   * and such notification will be received through a call to 
   * {@link ClientListener#onPropertyChange} with argument "realMaxBandwidth" on any 
   * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * listening to any LightstreamerClient sharing the same 
   * connection with the LightstreamerClient owning the ConnectionOptions upon 
   * which the setter was called or that received the setting from the
   * server
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * .</p>
   * 
   * @param {Number} maxBandwidth A decimal number, which represents the maximum bandwidth requested for the streaming
@@ -734,12 +734,12 @@ END_NODE_JSDOC_EXCLUDE
   * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
   * call to {@link ClientListener#onPropertyChange} with argument "pollingInterval" on any 
   * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * listening to any LightstreamerClient sharing the same 
   * connection with the LightstreamerClient owning the ConnectionOptions upon 
   * which the setter was called or that received the setting from the
   * server.
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * </p>
   * 
   * @throws {IllegalArgumentException} if a negative or a decimal
@@ -787,11 +787,11 @@ END_NODE_JSDOC_EXCLUDE
   * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
   * call to {@link ClientListener#onPropertyChange} with argument "reconnectTimeout" on any 
   * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * listening to any LightstreamerClient sharing the same 
   * connection with the LightstreamerClient owning the ConnectionOptions upon 
   * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * .</p>
   * 
   * @throws {IllegalArgumentException} if a negative, zero, or a not-number 
@@ -834,11 +834,11 @@ END_NODE_JSDOC_EXCLUDE
   * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
   * call to {@link ClientListener#onPropertyChange} with argument "stalledTimeout" on any 
   * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * listening to any LightstreamerClient sharing the same 
   * connection with the LightstreamerClient owning the ConnectionOptions upon 
   * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * .</p>
   * 
   * @throws {IllegalArgumentException} if a negative, zero, or a not-number 
@@ -962,11 +962,11 @@ END_NODE_JSDOC_EXCLUDE
   * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
   * call to {@link ClientListener#onPropertyChange} with argument "retryDelay" on any 
   * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * listening to any LightstreamerClient sharing the same 
   * connection with the LightstreamerClient owning the ConnectionOptions upon 
   * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * .</p>
   * 
   * @throws {IllegalArgumentException} if a negative, zero, or a not-number 
@@ -1015,11 +1015,11 @@ END_NODE_JSDOC_EXCLUDE
   * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
   * call to {@link ClientListener#onPropertyChange} with argument "firstRetryMaxDelay" on any 
   * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * listening to any LightstreamerClient sharing the same 
   * connection with the LightstreamerClient owning the ConnectionOptions upon 
   * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * .</p>
   * 
   * @throws {IllegalArgumentException} if a negative, zero, or a not-number 
@@ -1068,11 +1068,11 @@ END_NODE_JSDOC_EXCLUDE
   * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
   * call to {@link ClientListener#onPropertyChange} with argument "slowingEnabled" on any 
   * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * listening to any LightstreamerClient sharing the same 
   * connection with the LightstreamerClient owning the ConnectionOptions upon 
   * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * .</p>
   * 
   * @throws {IllegalArgumentException} if a not boolean value is given.
@@ -1119,11 +1119,11 @@ END_NODE_JSDOC_EXCLUDE
   * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
   * call to {@link ClientListener#onPropertyChange} with argument "forcedTransport" on any 
   * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * listening to any LightstreamerClient sharing the same 
   * connection with the LightstreamerClient owning the ConnectionOptions upon 
   * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * .</p>
   * 
   * @throws {IllegalArgumentException} if the given value is not in the list
@@ -1206,11 +1206,11 @@ END_NODE_JSDOC_EXCLUDE
   * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
   * call to {@link ClientListener#onPropertyChange} with argument "serverInstanceAddressIgnored" on any 
   * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * listening to any LightstreamerClient sharing the same 
   * connection with the LightstreamerClient owning the ConnectionOptions upon 
   * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * .</p>
   *
   * @throws {IllegalArgumentException} if a not boolean value is given.
@@ -1242,15 +1242,15 @@ END_NODE_JSDOC_EXCLUDE
   * client side.
   * Enabling this policy will guarantee that cookies pertaining to the 
   * Lightstreamer Server will be sent with each request.
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * <BR>This holds for both cookies returned by the Server (possibly affinity cookies
   * inserted by a Load Balancer standing in between) and for cookies set by
   * other sites (for instance on the front-end page) and with a domain
   * specification which includes Lightstreamer Server host.
   * Likewise, cookies set by Lightstreamer Server and with a domain
   * specification which includes other sites will be forwarded to them.
-END_NODE_JSDOC_EXCLUDE
-START_WEB_JSDOC_EXCLUDE
+// #endif
+// #ifndef START_WEB_JSDOC_EXCLUDE
   * <BR>This holds only for cookies returned by the Server (possibly affinity cookies
   * inserted by a Load Balancer standing in between). If other cookies received
   * by the application also pertain to Lightstreamer Server host, they must be
@@ -1258,7 +1258,7 @@ START_WEB_JSDOC_EXCLUDE
   * Likewise, cookies set by Lightstreamer Server and also pertaining to other hosts
   * accessed by the application must be manually extracted through the static
   * {@link LightstreamerClient.getCookies} method and handled properly.
-END_WEB_JSDOC_EXCLUDE
+// #endif
   * <BR>On the other hand enabling this setting may prevent the client from
   * opening a streaming connection or even to connect at all depending on the
   * browser/environment.
@@ -1327,11 +1327,11 @@ END_WEB_JSDOC_EXCLUDE
   * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
   * call to {@link ClientListener#onPropertyChange} with argument "earlyWSOpenEnabled" on any 
   * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * listening to any LightstreamerClient sharing the same 
   * connection with the LightstreamerClient owning the ConnectionOptions upon 
   * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * .</p>
   *
   * @throws {IllegalArgumentException} if a not boolean value is given.
@@ -1399,11 +1399,11 @@ END_NODE_JSDOC_EXCLUDE
   * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
   * call to {@link ClientListener#onPropertyChange} with argument "reverseHeartbeatInterval" on any 
   * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * listening to any LightstreamerClient sharing the same 
   * connection with the LightstreamerClient owning the ConnectionOptions upon 
   * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * .</p>
   *
   * @throws {IllegalArgumentException} if a negative, decimal
@@ -1433,9 +1433,9 @@ END_NODE_JSDOC_EXCLUDE
   * Setter method that enables/disables the setting of extra HTTP headers to all the 
   * request performed to the Lightstreamer server by the client.
   * Note that when the value is set WebSockets are disabled
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * (as the current browser client API does not support the setting of custom HTTP headers)
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * unless {@link ConnectionOptions#setHttpExtraHeadersOnSessionCreationOnly}
   * is set to true. <BR> Also note that
   * if the browser/environment does not have the possibility to send extra headers while 
@@ -1443,22 +1443,22 @@ END_NODE_JSDOC_EXCLUDE
   * Also note that the Content-Type header is reserved by the client library itself,
   * while other headers might be refused by the browser/environment and others might cause the
   * connection to the server to fail.
-START_WEB_JSDOC_EXCLUDE
+// #ifndef START_WEB_JSDOC_EXCLUDE
   * <BR>For instance, you cannot use this method to specify custom cookies to be sent to
   * Lightstreamer Server. Use the static {@link LightstreamerClient.addCookies} instead
   * (and {@link LightstreamerClient.getCookies} for inquiries). <BR>
-END_WEB_JSDOC_EXCLUDE
-START_NODE_JSDOC_EXCLUDE
+// #endif
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * <BR>For instance, you cannot use this method to specify custom cookies to be sent to
   * Lightstreamer Server. They can only be set and inquired through the browser's
   * document.cookie object. <BR>
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * The use of custom headers might also cause the
   * browser/environment to send an OPTIONS request to the server before opening the actual connection.
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * Finally, note that, in case of cross-origin requests, extra headers have to be authorized
   * on the server configuration file, in the cross_domain_policy element.
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * 
   * <p class="default-value"><b>Default value:</b> null (meaning no extra headers are sent).</p>
   * 
@@ -1469,11 +1469,11 @@ END_NODE_JSDOC_EXCLUDE
   * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
   * call to {@link ClientListener#onPropertyChange} with argument "httpExtraHeaders" on any 
   * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * listening to any LightstreamerClient sharing the same 
   * connection with the LightstreamerClient owning the ConnectionOptions upon 
   * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * .</p>
   * 
   * @param {Object} headersObj a JSON object containing header-name header-value pairs. 
@@ -1515,11 +1515,11 @@ END_NODE_JSDOC_EXCLUDE
   * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
   * call to {@link ClientListener#onPropertyChange} with argument "httpExtraHeadersOnSessionCreationOnly" on any 
   * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * listening to any LightstreamerClient sharing the same 
   * connection with the LightstreamerClient owning the ConnectionOptions upon 
   * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * .</p>
   *
   * @throws {IllegalArgumentException} if a not boolean value is given.
@@ -1565,11 +1565,11 @@ END_NODE_JSDOC_EXCLUDE
   * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
   * call to {@link ClientListener#onPropertyChange} with argument "sessionRecoveryTimeout" on any 
   * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
   * listening to any LightstreamerClient sharing the same 
   * connection with the LightstreamerClient owning the ConnectionOptions upon 
   * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+// #endif
   * .</p>
   *
   * @throws {IllegalArgumentException} if a negative, decimal
@@ -1603,10 +1603,10 @@ END_NODE_JSDOC_EXCLUDE
    * It is possible to instantiate as many LightstreamerClient as needed.
    * Each LightstreamerClient is the entry point to connect to a Lightstreamer server,
    * subscribe to as many items as needed and to send messages.
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
    * Multiple LightstreamerClient instances may share the same connection if
    * configured to behave that way through {@link LightstreamerClient#enableSharing}.
-END_NODE_JSDOC_EXCLUDE
+// #endif
    * @constructor
    *
    * @exports LightstreamerClient
@@ -1627,11 +1627,11 @@ END_NODE_JSDOC_EXCLUDE
    * Lightstreamer Server. Used to provide configuration settings, event
    * handlers, operations for the control of the connection lifecycle,
    * {@link Subscription} handling and to send messages.
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
    * <BR>It can be configured to share its connection with other LightstreamerClient
    * instances (even if on different html pages) through
    * {@link LightstreamerClient#enableSharing} calls.
-END_NODE_JSDOC_EXCLUDE
+// #endif
    */
 var LightstreamerClient = function(serverAddress, adapterSet) {
   this.delegate = new LSLightstreamerClient(serverAddress, adapterSet);
@@ -1642,13 +1642,13 @@ var LightstreamerClient = function(serverAddress, adapterSet) {
    * <BR>Properties of this object can be overwritten by values received from a
    * Lightstreamer Server. Such changes will be notified through a
    * {@link ClientListener#onPropertyChange} event on listeners of this instance.
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
    * <BR>In case of a shared connection the involved LightstreamerClient instances
    * will keep this data object synchronized so that a change on a property of an object
    * of one of the instances will be reflected on all the others. Any change will
    * be notified through a {@link ClientListener#onPropertyChange} event on
    * listeners of this instance.
-END_NODE_JSDOC_EXCLUDE
+// #endif
    *
    * @type ConnectionOptions
    *
@@ -1663,13 +1663,13 @@ END_NODE_JSDOC_EXCLUDE
    * <BR>Properties of this object can be overwritten by values received from a
    * Lightstreamer Server. Such changes will be notified through a
    * {@link ClientListener#onPropertyChange} event on listeners of this instance.
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
    * <BR>In case of a shared connection the involved LightstreamerClient instances
    * will keep this data object synchronized so that a change on a property of an object
    * of one of the instances will be reflected on all the others. Any change will
    * be notified through a {@link ClientListener#onPropertyChange} event on
    * listeners of this instance.
-END_NODE_JSDOC_EXCLUDE
+// #endif
    *
    * @type ConnectionDetails
    *
@@ -1679,7 +1679,7 @@ END_NODE_JSDOC_EXCLUDE
 };
 
 
-//START_WEB_JSDOC_EXCLUDE
+// #ifndef START_WEB_JSDOC_EXCLUDE
 /**
  * Static method that can be used to share cookies between connections to the Server
  * (performed by this library) and connections to other sites that are performed
@@ -1703,12 +1703,12 @@ END_NODE_JSDOC_EXCLUDE
  *
  * @static
  */
-//END_WEB_JSDOC_EXCLUDE
+// #endif
 LightstreamerClient.addCookies = function(uri, cookieList) {
     LSLightstreamerClient.addCookies(uri, cookieList);
 };
 
-//START_WEB_JSDOC_EXCLUDE
+// #ifndef START_WEB_JSDOC_EXCLUDE
 /**
  * Static inquiry method that can be used to share cookies between connections to the Server
  * (performed by this library) and connections to other sites that are performed
@@ -1728,7 +1728,7 @@ LightstreamerClient.addCookies = function(uri, cookieList) {
  *
  * @static
  */
-//END_WEB_JSDOC_EXCLUDE
+// #endif
 LightstreamerClient.getCookies = function(uri) {
     return LSLightstreamerClient.getCookies(uri);
 };
@@ -1775,7 +1775,7 @@ LightstreamerClient.getCookies = function(uri) {
  * lightstreamer.actions:
  * <BR>logs settings / API calls.
  * </li>
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
  * <li>
  * lightstreamer.grids:
  * <BR>logs grid-related code.
@@ -1787,7 +1787,7 @@ START_NODE_JSDOC_EXCLUDE
  * <BR>at INFO level, found/lost events are logged;
  * <BR>at DEBUG level, connection management details and regular checks on the current connection are logged.
  * </li>
-END_NODE_JSDOC_EXCLUDE
+// #endif
  * </ul>
  *
  * @param {LoggerProvider} provider A LoggerProvider instance that will be used
@@ -1815,7 +1815,7 @@ LightstreamerClient.LIB_VERSION = LSLightstreamerClient.LIB_VERSION;
 
 LightstreamerClient.prototype = {
 
-// START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
     /**
      * Configures the client to share its connection and/or attach to a shared connection.
      * Different windows trying to share the connection to Lightstreamer Server must share the
@@ -1838,12 +1838,12 @@ LightstreamerClient.prototype = {
      *
      * @param {ConnectionSharing} sharing The sharing parameters or null to prevent any sharing
      */
-// END_NODE_JSDOC_EXCLUDE
+// #endif
     enableSharing: function(sharing) {
         // TODO remove
     },
 
-// START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
     /**
      * Inquiry method that checks if the LightstreamerClient has its own connection or if it is using
      * a connection shared by another LightstreamerClient.
@@ -1863,7 +1863,7 @@ LightstreamerClient.prototype = {
      *
      * @see ConnectionSharing
      */
-// END_NODE_JSDOC_EXCLUDE
+// #endif
     isMaster: function() {
         // TODO remove
     },
@@ -1879,7 +1879,7 @@ LightstreamerClient.prototype = {
      * will automatically open a polling connection.
      * <BR>A polling connection may also be opened if the environment is not suitable
      * for a streaming connection.
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
      * <BR>When connect() is used to activate the Lightstreamer
      * Session on page start up, it is suggested to make this call as the
      * latest action of the scripts in the page. Otherwise, if the stream
@@ -1894,7 +1894,7 @@ START_NODE_JSDOC_EXCLUDE
      * first call to connect, then a default call will be performed with the
      * following parameter:
      * <BR><CODE>new ConnectionSharing("randomstring","IGNORE", "CREATE", true, null);</CODE>
-END_NODE_JSDOC_EXCLUDE
+// #endif
      * <BR>Note that as "polling connection" we mean a loop of polling
      * requests, each of which requires opening a synchronous (i.e. not
      * streaming) connection to Lightstreamer Server.
@@ -1908,13 +1908,13 @@ END_NODE_JSDOC_EXCLUDE
      * <BR>When the request to connect is finally being executed, if the current status
      * of the client is not DISCONNECTED, then nothing will be done.</p>
      *
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
      * @throws {IllegalStateException} if the LightstreamerClient cannot
      * connect to the server due to the sharing policies configured in the
      * {@link ConnectionSharing} object.
      * @see ConnectionSharing
      *
-END_NODE_JSDOC_EXCLUDE
+// #endif
      * @throws {IllegalStateException} if no server address was configured
      * and there is no suitable default address to be used.
      *
@@ -1934,10 +1934,10 @@ END_NODE_JSDOC_EXCLUDE
      * <BR>Note that active {@link Subscription} instances, associated with this
      * LightstreamerClient instance, are preserved to be re-subscribed to on future
      * Sessions.
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
      * <BR>In case of a shared connection, the disconnect() call will apply to such
      * shared connection regardless of which LightstreamerClient is calling it.
-END_NODE_JSDOC_EXCLUDE
+// #endif
      *
      * <p class="lifecycle"><b>Lifecycle:</b>
      * Note that the request to disconnect is accomplished by the client
@@ -1996,13 +1996,13 @@ END_NODE_JSDOC_EXCLUDE
      * <BR>Upon subsequent calls to the method, the sequential management of
      * the involved messages is guaranteed. The ordering is determined by the
      * order in which the calls to sendMessage are issued
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
      * ; in case of calls
      * issued from different LightstreamerClient instances on different html pages
      * sharing the same connection, the relative order is determined by the client
      * owning the shared connection. Anyway two messages sent through the same
      * LightstreamerClient instance will never surpass each other
-END_NODE_JSDOC_EXCLUDE
+// #endif
      * .
      * <BR>If a message, for any reason, doesn't reach the Server (this is possible with the HTTP transport),
      * it will be resent; however, this may cause the subsequent messages to be delayed.
@@ -2204,7 +2204,7 @@ END_NODE_JSDOC_EXCLUDE
         return this.delegate.getListeners();
     },
 
-// START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
     /**
      * Operation method that registers the MPN device on the server's MPN Module.<BR>
      * By registering an MPN device, the client enables MPN functionalities such as {@link LightstreamerClient#subscribeMpn}.
@@ -2220,12 +2220,12 @@ END_NODE_JSDOC_EXCLUDE
      *
      * @see #subscribeMpn
      */
-// END_NODE_JSDOC_EXCLUDE
+// #endif
     registerForMpn: function(device) {
         this.delegate.registerForMpn(device);
     },
 
-// START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
     /**
      * Operation method that subscribes an MpnSubscription on server's MPN Module.<BR>
      * This operation adds the {@link MpnSubscription} to the list of "active" subscriptions. MPN subscriptions are activated on the server as soon as possible
@@ -2260,12 +2260,12 @@ END_NODE_JSDOC_EXCLUDE
      * @see #unsubscribeMpn
      * @see #unsubscribeMpnSubscriptions
      */
-// END_NODE_JSDOC_EXCLUDE
+// #endif
     subscribeMpn: function(subscription, coalescing) {
         this.delegate.subscribeMpn(subscription, coalescing);
     },
 
-// START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
     /**
      * Operation method that unsubscribes an MpnSubscription from the server's MPN Module.<BR>
      * This operation removes the MpnSubscription from the list of "active" subscriptions.
@@ -2284,12 +2284,12 @@ END_NODE_JSDOC_EXCLUDE
      * @see #subscribeMpn
      * @see #unsubscribeMpnSubscriptions
      */
-// END_NODE_JSDOC_EXCLUDE
+// #endif
     unsubscribeMpn: function(/*MpnSubscription*/ subscription) {
         this.delegate.unsubscribeMpn(subscription);
     },
 
-// START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
     /**
      * Operation method that unsubscribes all the MPN subscriptions with a specified status from the server's MPN Module.<BR>
      * By specifying a status filter it is possible to unsubscribe multiple MPN subscriptions at once. E.g. by passing <code>TRIGGERED</code> it is possible
@@ -2314,12 +2314,12 @@ END_NODE_JSDOC_EXCLUDE
      * @see #subscribeMpn
      * @see #unsubscribeMpn
      */
-// END_NODE_JSDOC_EXCLUDE
+// #endif
     unsubscribeMpnSubscriptions: function(filter) {
         this.delegate.unsubscribeMpnSubscriptions(filter);
     },
 
-// START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
     /**
      * Inquiry method that returns a collection of the existing MPN subscription with a specified status.<BR>
      * Can return both objects created by the user, via {@link MpnSubscription} constructors, and objects created by the client, to represent pre-existing MPN subscriptions.<BR>
@@ -2346,12 +2346,12 @@ END_NODE_JSDOC_EXCLUDE
      *
      * @see #findMpnSubscription
      */
-// END_NODE_JSDOC_EXCLUDE
+// #endif
     getMpnSubscriptions: function(filter) {
         return this.delegate.getMpnSubscriptionWrappers();
     },
 
-// START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
     /**
      * Inquiry method that returns the MpnSubscription with the specified subscription ID, or null if not found.<BR>
      * The object returned by this method can be an object created by the user, via MpnSubscription constructors, or an object created by the client,
@@ -2371,7 +2371,7 @@ END_NODE_JSDOC_EXCLUDE
      *
      * @see #getMpnSubscriptions
      */
-// END_NODE_JSDOC_EXCLUDE
+// #endif
     findMpnSubscription: function(subscriptionId) {
         return this.delegate.findMpnSubscriptionWrapper(subscriptionId);
     },

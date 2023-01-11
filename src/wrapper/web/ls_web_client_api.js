@@ -212,10 +212,10 @@ LoggerProvider.prototype = {
    * <BR>Note that it is not necessary to implement all of the interface methods for
    * the listener to be successfully passed to the {@link LightstreamerClient#addListener}
    * method.
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
    * <BR>A ClientListener implementation is distributed together with the library:
    * {@link StatusWidget}.
-END_NODE_JSDOC_EXCLUDE
+// #endif
    */
 function ClientListener() {
 
@@ -251,9 +251,9 @@ ClientListener.prototype = {
      * <li>The Metadata Adapter imposes limits on the overall open sessions
      * for the current user and has requested the closure of the current session
      * upon opening of a new session for the same user
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
      * on a different browser window
-END_NODE_JSDOC_EXCLUDE
+// #endif
      * (35);</li>
      * <li>An unexpected error occurred on the Server while the session was in
      * activity (33, 34);</li>
@@ -345,13 +345,13 @@ END_NODE_JSDOC_EXCLUDE
      * a preliminary switch to CONNECTED:STREAM-SENSING. If the recovery is finally
      * unsuccessful, the current session will be abandoned and the status
      * will switch to "DISCONNECTED:WILL-RETRY" before the next attempts.</li>
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
      * <li>In case the local LightstreamerClient is exploiting the connection of a
      * different LightstreamerClient (see {@link ConnectionSharing}) and such
      * LightstreamerClient or its container window is disposed, the status will
      * switch to "DISCONNECTED:WILL-RETRY" unless the current status is "DISCONNECTED".
      * In the latter case it will remain "DISCONNECTED".</li>
-END_NODE_JSDOC_EXCLUDE
+// #endif
      * </ul>
      *
      * <BR>By setting a custom handler it is possible to perform
@@ -401,11 +401,11 @@ END_NODE_JSDOC_EXCLUDE
      * Event handler that receives a notification each time  the value of a property of
      * {@link LightstreamerClient#connectionDetails} or {@link LightstreamerClient#connectionOptions}
      * is changed.
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
      * <BR>Properties of these objects can be modified by direct calls to them, but
      * also by calls performed on other LightstreamerClient instances sharing the
      * same connection and by server sent events.
-END_NODE_JSDOC_EXCLUDE
+// #endif
      *
      * @param {String} the name of the changed property.
      * <BR>Possible values are:
@@ -443,7 +443,7 @@ END_NODE_JSDOC_EXCLUDE
     onPropertyChange: function(propertyName) {
     },
 
-// START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
     /**
      * Event handler that receives a notification in case a connection
      * sharing is aborted.
@@ -453,7 +453,7 @@ END_NODE_JSDOC_EXCLUDE
      * <BR>If this event is fired the client will never be able to connect to
      * the server unless a new call to enableSharing is issued.
      */
-// END_NODE_JSDOC_EXCLUDE
+// #endif
     onShareAbort: function() {
 
     },
@@ -484,7 +484,7 @@ END_NODE_JSDOC_EXCLUDE
 
     },
 
-// START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
     /**
      * Notifies that the Server has sent a keepalive message because a streaming connection
      * is in place and no update had been sent for the configured time
@@ -492,7 +492,7 @@ END_NODE_JSDOC_EXCLUDE
      * However, note that the lack of both updates and keepalives is already managed by the library
      * (see {@link ConnectionOptions#setReconnectTimeout} and {@link ConnectionOptions#setStalledTimeout}).
      */
-// END_NODE_JSDOC_EXCLUDE
+// #endif
     onServerKeepalive: function() {
 
     }
@@ -819,14 +819,14 @@ ItemUpdate.prototype = {
    * <BR>Note that it is not necessary to implement all of the interface methods for 
    * the listener to be successfully passed to the {@link Subscription#addListener}
    * method.
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
    * <BR>The {@link AbstractWidget} and its subclasses, distributed together 
    * with the library, implement this interface.
    * 
    * @see DynaGrid
    * @see StaticGrid
    * @see Chart
-END_NODE_JSDOC_EXCLUDE
+// #endif
    */
 var SubscriptionListener = function() {
 };
