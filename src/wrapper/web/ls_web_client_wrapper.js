@@ -1654,7 +1654,7 @@ var LightstreamerClient = function(serverAddress, adapterSet) {
    *
    * @see ClientListener#onPropertyChange
    */
-  this.connectionOptions = new ConnectionOptions(delegate.connectionOptions);
+  this.connectionOptions = new ConnectionOptions(this.delegate.connectionOptions);
 
   /**
    * Data object that contains the details needed to open a connection to
@@ -1675,7 +1675,7 @@ var LightstreamerClient = function(serverAddress, adapterSet) {
    *
    * @see ClientListener#onPropertyChange
    */
-  this.connectionDetails = new ConnectionDetails(delegate.connectionDetails);
+  this.connectionDetails = new ConnectionDetails(this.delegate.connectionDetails);
 };
 
 
@@ -2133,7 +2133,7 @@ LightstreamerClient.prototype = {
      * @see SubscriptionListener#onSubscription
      */
     subscribe: function(subscription) {
-        this.delegate.subscribe(subscription);
+        this.delegate.subscribe(subscription.delegate);
     },
 
     /**
@@ -2159,7 +2159,7 @@ LightstreamerClient.prototype = {
      * @see SubscriptionListener#onUnsubscription
      */
     unsubscribe: function(subscription) {
-        this.delegate.unsubscribe(subscription);
+        this.delegate.unsubscribe(subscription.delegate);
     },
 
     /**
