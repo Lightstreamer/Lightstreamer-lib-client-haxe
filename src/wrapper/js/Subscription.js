@@ -97,8 +97,8 @@
    * </li> 
    * </ul>
    */
- var Subscription = function(subscriptionMode, items, fields) {
- 
+var Subscription = function(subscriptionMode, items, fields) {
+  this.delegate = new LSSubscription(subscriptionMode, items, fields, this);
 };
 
 Subscription.prototype = {
@@ -118,7 +118,7 @@ Subscription.prototype = {
    * @see LightstreamerClient#unsubscribe
    */
   isActive: function() {
-
+    return this.delegate.isActive();
   },
   
   /**  
@@ -135,7 +135,7 @@ Subscription.prototype = {
    * through the server or not.
    */
   isSubscribed: function() {
-
+    return this.delegate.isSubscribed();
   },
  
   /**
@@ -157,7 +157,7 @@ Subscription.prototype = {
    * be subscribed to through the server. 
    */
   setItems: function(items) {
-
+    this.delegate.setItems(items);
   },
   
   /**
@@ -176,7 +176,7 @@ Subscription.prototype = {
    * @return {String[]} the "Item List" to be subscribed to through the server. 
    */
   getItems: function() {
-
+    return this.delegate.getItems();
   },
   
   /**
@@ -195,7 +195,7 @@ Subscription.prototype = {
    * Metadata Adapter. 
    */
   setItemGroup: function(groupName) {
-
+    this.delegate.setItemGroup(groupName);
   },
 
   /**
@@ -212,7 +212,7 @@ Subscription.prototype = {
    * @return {String} the "Item Group" to be subscribed to through the server. 
    */
   getItemGroup: function() {
-
+    return this.delegate.getItemGroup();
   },
   
   /**
@@ -234,7 +234,7 @@ Subscription.prototype = {
    * be subscribed to through the server. 
    */
   setFields: function(fields) {
-
+    this.delegate.setFields(fields);
   },
 
   /**
@@ -251,7 +251,7 @@ Subscription.prototype = {
    * @return {String[]} the "Field List" to be subscribed to through the server. 
    */
   getFields: function() {
-
+    return this.delegate.getFields();
   },
   
   /**
@@ -270,7 +270,7 @@ Subscription.prototype = {
    * Metadata Adapter. 
    */
   setFieldSchema: function(schemaName) {
-
+    this.delegate.setFieldSchema(schemaName);
   },
 
   /**
@@ -287,7 +287,7 @@ Subscription.prototype = {
    * @return {String} the "Field Schema" to be subscribed to through the server. 
    */
   getFieldSchema: function() {
-
+    return this.delegate.getFieldSchema();
   },
   
   /**
@@ -299,7 +299,7 @@ Subscription.prototype = {
    * @return {String} the Subscription mode specified in the constructor.
    */
   getMode: function() {
-
+    return this.delegate.getMode();
   },
  
   /**
@@ -330,7 +330,7 @@ Subscription.prototype = {
    * @see ConnectionDetails#setAdapterSet
    */
   setDataAdapter: function(dataAdapter) {
-
+    this.delegate.setDataAdapter(dataAdapter);
   },
   
   /**
@@ -343,7 +343,7 @@ Subscription.prototype = {
    * has been configured, so that the "DEFAULT" Adapter Set is used.
    */
   getDataAdapter: function() {
-
+    return this.delegate.getDataAdapter();
   },
   
   /**
@@ -363,7 +363,7 @@ Subscription.prototype = {
    * Metadata Adapter, or null to unset the selector.
    */
   setSelector: function(selector) {
-
+    this.delegate.setSelector(selector);
   },
   
   /**
@@ -375,7 +375,7 @@ Subscription.prototype = {
    * @return {String} the name of the selector.
    */
   getSelector: function() {
-
+    return this.delegate.getSelector();
   },
     
   /**
@@ -438,7 +438,7 @@ Subscription.prototype = {
    * The check for the string constants is case insensitive.
    */
   setRequestedMaxFrequency: function(freq) {
-
+    this.delegate.setRequestedMaxFrequency(freq);
   },
   
   /**
@@ -452,7 +452,7 @@ Subscription.prototype = {
    * (expressed in updates per second), or the strings "unlimited" or "unfiltered", or null.
    */
   getRequestedMaxFrequency: function() {
-
+    return this.delegate.getRequestedMaxFrequency();
   },
 
   /**
@@ -487,7 +487,7 @@ Subscription.prototype = {
    * @see Subscription#setRequestedMaxFrequency
    */
   setRequestedBufferSize: function(size) {
-
+    this.delegate.setRequestedBufferSize(size);
   },
   
   /**
@@ -500,7 +500,7 @@ Subscription.prototype = {
    * @return {String} the buffer size to be requested to the server.
    */
   getRequestedBufferSize: function() {
-
+    return this.delegate.getRequestedBufferSize();
   },
 
 
@@ -541,7 +541,7 @@ Subscription.prototype = {
    * @see ItemUpdate#isSnapshot
    */
   setRequestedSnapshot: function(required) {
-
+    this.delegate.setRequestedSnapshot(required);
   },
   
   /**
@@ -554,7 +554,7 @@ Subscription.prototype = {
    * @return {String} the snapshot preference to be requested to the server.
    */
   getRequestedSnapshot: function() {
-
+    return this.delegate.getRequestedSnapshot();
   },
   
   /**
@@ -597,7 +597,7 @@ Subscription.prototype = {
    * @see Subscription#setCommandSecondLevelFieldSchema
    */
   setCommandSecondLevelFields: function(fields) {
-
+    this.delegate.setCommandSecondLevelFields(fields);
   },
   
   /**
@@ -614,7 +614,7 @@ Subscription.prototype = {
    * @return {String[]} the list of fields to be subscribed to through the server. 
    */
   getCommandSecondLevelFields: function() {
-
+    return this.delegate.getCommandSecondLevelFields();
   },
   
   /**
@@ -650,7 +650,7 @@ Subscription.prototype = {
    * @see Subscription#setCommandSecondLevelFields
    */
   setCommandSecondLevelFieldSchema: function(schemaName) {
-
+    this.delegate.setCommandSecondLevelFieldSchema(schemaName);
   },
   
   /**
@@ -667,7 +667,7 @@ Subscription.prototype = {
    * @return {String} the "Field Schema" to be subscribed to through the server. 
    */
   getCommandSecondLevelFieldSchema: function() {
-
+    return this.delegate.getCommandSecondLevelFieldSchema();
   },
   
   /**
@@ -698,7 +698,7 @@ Subscription.prototype = {
    * @see Subscription#setCommandSecondLevelFieldSchema
    */
   setCommandSecondLevelDataAdapter: function(dataAdapter) {
-
+    this.delegate.setCommandSecondLevelDataAdapter(dataAdapter);
   },
   
   /**
@@ -710,7 +710,7 @@ Subscription.prototype = {
    * @return {String} the name of the second-level Data Adapter.
    */
   getCommandSecondLevelDataAdapter : function() {
-
+    return this.delegate.getCommandSecondLevelDataAdapter();
   },
   
   /**
@@ -746,7 +746,7 @@ Subscription.prototype = {
    * (possibly null), or null if no value has been received yet.
    */
   getValue: function(itemIdentifier, fieldIdentifier) {
-
+    return this.delegate.getValue(itemIdentifier, fieldIdentifier);
   },
   
   /**
@@ -787,7 +787,7 @@ Subscription.prototype = {
    * key has not been added yet (note that it might have been added and eventually deleted).
    */
   getCommandValue: function(itemIdentifier, keyValue, fieldIdentifier) {
-
+    return this.delegate.getCommandValue(itemIdentifier, keyValue, fieldIdentifier);
   },  
   
   /**
@@ -804,7 +804,7 @@ Subscription.prototype = {
    * @return {Number} the 1-based position of the "key" field within the "Field Schema".
    */
   getKeyPosition: function() {
-
+    return this.delegate.getKeyPosition();
   },
   
   /**
@@ -821,7 +821,7 @@ Subscription.prototype = {
    * @return {Number} the 1-based position of the "command" field within the "Field Schema".
    */
   getCommandPosition: function() {
-
+    return this.delegate.getCommandPosition();
   },
   
   /**
@@ -840,7 +840,7 @@ Subscription.prototype = {
    * listener. In the latter case it will obviously receive no events.
    */
   addListener: function(listener) {
-
+    this.delegate.addListener(listener);
   },
   
   /**
@@ -852,7 +852,7 @@ Subscription.prototype = {
    * @param {SubscriptionListener} listener The listener to be removed.
    */
   removeListener: function(listener) {
-
+    this.delegate.removeListener(listener);
   },
   
   /**
@@ -863,8 +863,6 @@ Subscription.prototype = {
    * Listeners added multiple times are included multiple times in the array.
    */
   getListeners: function() {
-
+    return this.delegate.getListeners();
   },
 };
-
-export default Subscription;

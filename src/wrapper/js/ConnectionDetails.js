@@ -13,15 +13,15 @@
    * 
    * @see LightstreamerClient
    */
- var ConnectionDetails = function(){
-    
-};
-
-ConnectionDetails.prototype = {
+var ConnectionDetails = function(details){
+   this.delegate = details;
+ };
+ 
+ ConnectionDetails.prototype = {
     
   /**
    * Setter method that sets the address of Lightstreamer Server.
-START_NODE_JSDOC_EXCLUDE
+ // #ifndef START_NODE_JSDOC_EXCLUDE
    * Setting Lightstreamer Server address is not required when the front-end
    * pages are supplied by Lightstreamer Server itself (although this
    * scenario is advised only for demo purpose).
@@ -33,7 +33,7 @@ START_NODE_JSDOC_EXCLUDE
    * requirement is not respected, the client, depending on the browser in use, 
    * may be unable to open a streaming connection and will try to resort
    * to polling. 
-END_NODE_JSDOC_EXCLUDE
+ // #endif
    * <BR>Note that the addresses specified must always have the http: or https: scheme.
    * In case WebSockets are used, the specified scheme is 
    * internally converted to match the related WebSocket protocol
@@ -44,10 +44,10 @@ END_NODE_JSDOC_EXCLUDE
  * To know what features are enabled by your license, please see the License tab of the
  * Monitoring Dashboard (by default, available at /dashboard).</p>
    * 
-START_NODE_JSDOC_EXCLUDE
+ // #ifndef START_NODE_JSDOC_EXCLUDE
    * <p class="default-value"><b>Default value:</b> the address of the server
    * that supplies the library pages if any, null otherwise.</p>
-END_NODE_JSDOC_EXCLUDE
+ // #endif
    * 
    * <p class="lifecycle"><b>Lifecycle:</b>This method can be called at any time. If called while connected, 
    * it will be applied when the next session creation request is issued.
@@ -57,11 +57,11 @@ END_NODE_JSDOC_EXCLUDE
    * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
    * call to {@link ClientListener#onPropertyChange} with argument "serverAddress" on any 
    * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+ // #ifndef START_NODE_JSDOC_EXCLUDE
    * listening to any LightstreamerClient sharing the same 
    * connection with the LightstreamerClient owning the ConnectionDetails upon 
    * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+ // #endif
    * .</p>
    * 
    * @throws {IllegalArgumentException} if the given address is not valid.
@@ -79,7 +79,7 @@ END_NODE_JSDOC_EXCLUDE
    * 
    */
   setServerAddress: function(serverAddress) {
-
+   this.delegate.setServerAddress(serverAddress);
   },  
   
   /**
@@ -88,9 +88,9 @@ END_NODE_JSDOC_EXCLUDE
    * @return {String} the configured address of Lightstreamer Server.
    */
   getServerAddress: function() {
-
+   return this.delegate.getServerAddress();
   },
-
+ 
   /** 
    * Setter method that sets the name of the Adapter Set mounted on 
    * Lightstreamer Server to be used to handle all requests in the session.
@@ -113,18 +113,18 @@ END_NODE_JSDOC_EXCLUDE
    * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
    * call to {@link ClientListener#onPropertyChange} with argument "adapterSet" on any 
    * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+ // #ifndef START_NODE_JSDOC_EXCLUDE
    * listening to any LightstreamerClient sharing the same 
    * connection with the LightstreamerClient owning the ConnectionDetails upon 
    * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+ // #endif
    * .</p>
    * 
    * @param {String} adapterSet The name of the Adapter Set to be used. A null value 
    * is equivalent to the "DEFAULT" name.
    */
   setAdapterSet: function(adapterSet) {
-
+   this.delegate.setAdapterSet(adapterSet);
   },
   
   /**  
@@ -138,7 +138,7 @@ END_NODE_JSDOC_EXCLUDE
    * @see ConnectionDetails#setAdapterSet
    */
   getAdapterSet: function() {
-
+   return this.delegate.getAdapterSet();
   },
       
   
@@ -161,11 +161,11 @@ END_NODE_JSDOC_EXCLUDE
    * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
    * call to {@link ClientListener#onPropertyChange} with argument "user" on any 
    * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+ // #ifndef START_NODE_JSDOC_EXCLUDE
    * listening to any LightstreamerClient sharing the same 
    * connection with the LightstreamerClient owning the ConnectionDetails upon 
    * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+ // #endif
    * .</p>
    *
    * @param {String} user The username to be used for the authentication
@@ -174,7 +174,7 @@ END_NODE_JSDOC_EXCLUDE
    * @see ConnectionDetails#setPassword
    */
   setUser: function(user) {
-
+   this.delegate.setUser(user);
   },
   
   /**  
@@ -188,7 +188,7 @@ END_NODE_JSDOC_EXCLUDE
    * @see ConnectionDetails#setUser
    */
   getUser: function() {
-
+   return this.delegate.getUser();
   },
   
   /**
@@ -217,11 +217,11 @@ END_NODE_JSDOC_EXCLUDE
    * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
    * call to {@link ClientListener#onPropertyChange} with argument "password" on any 
    * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+ // #ifndef START_NODE_JSDOC_EXCLUDE
    * listening to any LightstreamerClient sharing the same 
    * connection with the LightstreamerClient owning the ConnectionDetails upon 
    * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+ // #endif
    * .</p>
    * 
    * @param {String} password The password to be used for the authentication
@@ -230,7 +230,7 @@ END_NODE_JSDOC_EXCLUDE
    * @see ConnectionDetails#setUser
    */
   setPassword: function(password) {
-
+   this.delegate.setPassword(password);
   },
   
   /**
@@ -260,18 +260,18 @@ END_NODE_JSDOC_EXCLUDE
    * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
    * call to {@link ClientListener#onPropertyChange} with argument "serverInstanceAddress" on any 
    * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+ // #ifndef START_NODE_JSDOC_EXCLUDE
    * listening to any LightstreamerClient sharing the same 
    * connection with the LightstreamerClient that received the setting from the
    * server
-END_NODE_JSDOC_EXCLUDE
+ // #endif
    * .</p>
    *
    * @return {String} address used to issue all requests related to the current
    * session.
    */
   getServerInstanceAddress: function() { 
-
+   return this.delegate.getServerInstanceAddress();
   },
   
   /**
@@ -299,20 +299,20 @@ END_NODE_JSDOC_EXCLUDE
    * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
    * call to {@link ClientListener#onPropertyChange} with argument "serverSocketName" on any 
    * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+ // #ifndef START_NODE_JSDOC_EXCLUDE
    * listening to any LightstreamerClient sharing the same 
    * connection with the LightstreamerClient that received the setting from the
    * server
-END_NODE_JSDOC_EXCLUDE
+ // #endif
    * .</p>
    *
    * @return {String} name configured for the Server instance which is managing the
    * current session.
    */
   getServerSocketName: function() { 
-
+   return this.delegate.getServerSocketName();
   },
-
+ 
   /**
    * Inquiry method that gets the ID associated by the server
    * to this client session.
@@ -323,17 +323,17 @@ END_NODE_JSDOC_EXCLUDE
    * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
    * call to {@link ClientListener#onPropertyChange} with argument "sessionId" on any
    * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+ // #ifndef START_NODE_JSDOC_EXCLUDE
    * listening to any LightstreamerClient sharing the same
    * connection with the LightstreamerClient that received the setting from the
    * server
-END_NODE_JSDOC_EXCLUDE
+ // #endif
    * .</p>
    *
    * @return {String} ID assigned by the Server to this client session.
    */
   getSessionId: function() {
-
+   return this.delegate.getSessionId();
   },
   
   /**
@@ -356,9 +356,7 @@ END_NODE_JSDOC_EXCLUDE
    * @return {String} A canonical representation of an IP address (it can be either IPv4 or IPv6), or null.
    */
   getClientIp: function() {
-
+   return this.delegate.getClientIp();
   }
   
-};
-
-export default ConnectionDetails;
+ };

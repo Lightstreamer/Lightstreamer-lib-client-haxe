@@ -4,10 +4,10 @@
    * It is possible to instantiate as many LightstreamerClient as needed.
    * Each LightstreamerClient is the entry point to connect to a Lightstreamer server,
    * subscribe to as many items as needed and to send messages.
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
    * Multiple LightstreamerClient instances may share the same connection if
    * configured to behave that way through {@link LightstreamerClient#enableSharing}.
-END_NODE_JSDOC_EXCLUDE
+// #endif
    * @constructor
    *
    * @exports LightstreamerClient
@@ -28,14 +28,14 @@ END_NODE_JSDOC_EXCLUDE
    * Lightstreamer Server. Used to provide configuration settings, event
    * handlers, operations for the control of the connection lifecycle,
    * {@link Subscription} handling and to send messages.
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
    * <BR>It can be configured to share its connection with other LightstreamerClient
    * instances (even if on different html pages) through
    * {@link LightstreamerClient#enableSharing} calls.
-END_NODE_JSDOC_EXCLUDE
+// #endif
    */
 var LightstreamerClient = function(serverAddress, adapterSet) {
-
+this.delegate = new LSLightstreamerClient(serverAddress, adapterSet);
   /**
    * Data object that contains options and policies for the connection to
    * the server. This instance is set up by the LightstreamerClient object at
@@ -43,19 +43,19 @@ var LightstreamerClient = function(serverAddress, adapterSet) {
    * <BR>Properties of this object can be overwritten by values received from a
    * Lightstreamer Server. Such changes will be notified through a
    * {@link ClientListener#onPropertyChange} event on listeners of this instance.
-START_NODE_JSDOC_EXCLUDE
+ // #ifndef START_NODE_JSDOC_EXCLUDE
    * <BR>In case of a shared connection the involved LightstreamerClient instances
    * will keep this data object synchronized so that a change on a property of an object
    * of one of the instances will be reflected on all the others. Any change will
    * be notified through a {@link ClientListener#onPropertyChange} event on
    * listeners of this instance.
-END_NODE_JSDOC_EXCLUDE
+// #endif
    *
    * @type ConnectionOptions
    *
    * @see ClientListener#onPropertyChange
    */
-  this.connectionOptions = new ConnectionOptions();
+this.connectionOptions = new ConnectionOptions(this.delegate.connectionOptions);
 
   /**
    * Data object that contains the details needed to open a connection to
@@ -64,23 +64,23 @@ END_NODE_JSDOC_EXCLUDE
    * <BR>Properties of this object can be overwritten by values received from a
    * Lightstreamer Server. Such changes will be notified through a
    * {@link ClientListener#onPropertyChange} event on listeners of this instance.
-START_NODE_JSDOC_EXCLUDE
+ // #ifndef START_NODE_JSDOC_EXCLUDE
    * <BR>In case of a shared connection the involved LightstreamerClient instances
    * will keep this data object synchronized so that a change on a property of an object
    * of one of the instances will be reflected on all the others. Any change will
    * be notified through a {@link ClientListener#onPropertyChange} event on
    * listeners of this instance.
-END_NODE_JSDOC_EXCLUDE
+// #endif
    *
    * @type ConnectionDetails
    *
    * @see ClientListener#onPropertyChange
    */
-  this.connectionDetails = new ConnectionDetails();
+this.connectionDetails = new ConnectionDetails(this.delegate.connectionDetails);
 };
 
 
-//START_WEB_JSDOC_EXCLUDE
+// #ifndef START_WEB_JSDOC_EXCLUDE
 /**
  * Static method that can be used to share cookies between connections to the Server
  * (performed by this library) and connections to other sites that are performed
@@ -104,12 +104,12 @@ END_NODE_JSDOC_EXCLUDE
  *
  * @static
  */
-//END_WEB_JSDOC_EXCLUDE
+// #endif
 LightstreamerClient.addCookies = function(uri, cookieList) {
-
+    LSLightstreamerClient.addCookies(uri, cookieList);
 };
 
-//START_WEB_JSDOC_EXCLUDE
+// #ifndef START_WEB_JSDOC_EXCLUDE
 /**
  * Static inquiry method that can be used to share cookies between connections to the Server
  * (performed by this library) and connections to other sites that are performed
@@ -129,9 +129,9 @@ LightstreamerClient.addCookies = function(uri, cookieList) {
  *
  * @static
  */
-//END_WEB_JSDOC_EXCLUDE
+// #endif
 LightstreamerClient.getCookies = function(uri) {
-
+    return LSLightstreamerClient.getCookies(uri);
 };
 
 /**
@@ -176,7 +176,7 @@ LightstreamerClient.getCookies = function(uri) {
  * lightstreamer.actions:
  * <BR>logs settings / API calls.
  * </li>
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
  * <li>
  * lightstreamer.grids:
  * <BR>logs grid-related code.
@@ -188,7 +188,7 @@ START_NODE_JSDOC_EXCLUDE
  * <BR>at INFO level, found/lost events are logged;
  * <BR>at DEBUG level, connection management details and regular checks on the current connection are logged.
  * </li>
-END_NODE_JSDOC_EXCLUDE
+// #endif
  * </ul>
  *
  * @param {LoggerProvider} provider A LoggerProvider instance that will be used
@@ -197,7 +197,7 @@ END_NODE_JSDOC_EXCLUDE
  * @static
  */
 LightstreamerClient.setLoggerProvider = function(provider) {
-
+    LSLightstreamerClient.setLoggerProvider(provider);
 };
 
 /**
@@ -205,18 +205,18 @@ LightstreamerClient.setLoggerProvider = function(provider) {
  *
  * @type String
  */
-LightstreamerClient.LIB_NAME = Constants.LIBRARY_TAG;
+LightstreamerClient.LIB_NAME = LSLightstreamerClient.LIB_NAME;
 
 /**
  * A constant string representing the version of the library.
  *
  * @type String
  */
-LightstreamerClient.LIB_VERSION = Constants.LIBRARY_VERSION + " build " + Constants.BUILD;
+LightstreamerClient.LIB_VERSION = LSLightstreamerClient.LIB_VERSION;
 
 LightstreamerClient.prototype = {
 
-// START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
     /**
      * Configures the client to share its connection and/or attach to a shared connection.
      * Different windows trying to share the connection to Lightstreamer Server must share the
@@ -239,12 +239,12 @@ LightstreamerClient.prototype = {
      *
      * @param {ConnectionSharing} sharing The sharing parameters or null to prevent any sharing
      */
-// END_NODE_JSDOC_EXCLUDE
+// #endif
     enableSharing: function(sharing) {
-
+        // TODO remove
     },
 
-// START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
     /**
      * Inquiry method that checks if the LightstreamerClient has its own connection or if it is using
      * a connection shared by another LightstreamerClient.
@@ -264,9 +264,9 @@ LightstreamerClient.prototype = {
      *
      * @see ConnectionSharing
      */
-// END_NODE_JSDOC_EXCLUDE
+// #endif
     isMaster: function() {
-
+        // TODO remove
     },
 
 
@@ -280,7 +280,7 @@ LightstreamerClient.prototype = {
      * will automatically open a polling connection.
      * <BR>A polling connection may also be opened if the environment is not suitable
      * for a streaming connection.
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
      * <BR>When connect() is used to activate the Lightstreamer
      * Session on page start up, it is suggested to make this call as the
      * latest action of the scripts in the page. Otherwise, if the stream
@@ -295,7 +295,7 @@ START_NODE_JSDOC_EXCLUDE
      * first call to connect, then a default call will be performed with the
      * following parameter:
      * <BR><CODE>new ConnectionSharing("randomstring","IGNORE", "CREATE", true, null);</CODE>
-END_NODE_JSDOC_EXCLUDE
+// #endif
      * <BR>Note that as "polling connection" we mean a loop of polling
      * requests, each of which requires opening a synchronous (i.e. not
      * streaming) connection to Lightstreamer Server.
@@ -309,13 +309,13 @@ END_NODE_JSDOC_EXCLUDE
      * <BR>When the request to connect is finally being executed, if the current status
      * of the client is not DISCONNECTED, then nothing will be done.</p>
      *
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
      * @throws {IllegalStateException} if the LightstreamerClient cannot
      * connect to the server due to the sharing policies configured in the
      * {@link ConnectionSharing} object.
      * @see ConnectionSharing
      *
-END_NODE_JSDOC_EXCLUDE
+// #endif
      * @throws {IllegalStateException} if no server address was configured
      * and there is no suitable default address to be used.
      *
@@ -325,7 +325,7 @@ END_NODE_JSDOC_EXCLUDE
      * @see ConnectionDetails#setServerAddress
      */
     connect: function() {
-
+        this.delegate.connect();
     },
 
     /**
@@ -335,10 +335,10 @@ END_NODE_JSDOC_EXCLUDE
      * <BR>Note that active {@link Subscription} instances, associated with this
      * LightstreamerClient instance, are preserved to be re-subscribed to on future
      * Sessions.
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
      * <BR>In case of a shared connection, the disconnect() call will apply to such
      * shared connection regardless of which LightstreamerClient is calling it.
-END_NODE_JSDOC_EXCLUDE
+// #endif
      *
      * <p class="lifecycle"><b>Lifecycle:</b>
      * Note that the request to disconnect is accomplished by the client
@@ -350,7 +350,7 @@ END_NODE_JSDOC_EXCLUDE
      * "DISCONNECTED", then nothing will be done.</p>
      */
     disconnect: function() {
-
+        this.delegate.disconnect();
     },
 
     /**
@@ -382,7 +382,7 @@ END_NODE_JSDOC_EXCLUDE
      * @see ClientListener#onStatusChange
      */
     getStatus: function() {
-
+        return this.delegate.getStatus();
     },
 
     /**
@@ -397,13 +397,13 @@ END_NODE_JSDOC_EXCLUDE
      * <BR>Upon subsequent calls to the method, the sequential management of
      * the involved messages is guaranteed. The ordering is determined by the
      * order in which the calls to sendMessage are issued
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
      * ; in case of calls
      * issued from different LightstreamerClient instances on different html pages
      * sharing the same connection, the relative order is determined by the client
      * owning the shared connection. Anyway two messages sent through the same
      * LightstreamerClient instance will never surpass each other
-END_NODE_JSDOC_EXCLUDE
+// #endif
      * .
      * <BR>If a message, for any reason, doesn't reach the Server (this is possible with the HTTP transport),
      * it will be resent; however, this may cause the subsequent messages to be delayed.
@@ -486,7 +486,7 @@ END_NODE_JSDOC_EXCLUDE
      * session is established.
      */
     sendMessage: function(msg,sequence,delayTimeout,listener,enqueueWhileDisconnected) {
-
+        this.delegate.sendMessage(msg, sequence, delayTimeout, listener, enqueueWhileDisconnected);
     },
 
     /**
@@ -499,7 +499,7 @@ END_NODE_JSDOC_EXCLUDE
      * <BR>The array can be empty.
      */
     getSubscriptions: function() {
-
+        return this.delegate.getSubscriptionWrappers();
     },
 
     /**
@@ -534,7 +534,7 @@ END_NODE_JSDOC_EXCLUDE
      * @see SubscriptionListener#onSubscription
      */
     subscribe: function(subscription) {
-
+        this.delegate.subscribe(subscription.delegate);
     },
 
     /**
@@ -560,7 +560,7 @@ END_NODE_JSDOC_EXCLUDE
      * @see SubscriptionListener#onUnsubscription
      */
     unsubscribe: function(subscription) {
-
+        this.delegate.unsubscribe(subscription.delegate);
     },
 
     /**
@@ -579,7 +579,7 @@ END_NODE_JSDOC_EXCLUDE
      * listener. In the latter case it will obviously receive no events.
      */
     addListener: function(listener) {
-
+        this.delegate.addListener(listener);
     },
 
     /**
@@ -591,7 +591,7 @@ END_NODE_JSDOC_EXCLUDE
      * @param {ClientListener} listener The listener to be removed.
      */
     removeListener: function(listener) {
-
+        this.delegate.removeListener(listener);
     },
 
     /**
@@ -602,10 +602,10 @@ END_NODE_JSDOC_EXCLUDE
      * Listeners added multiple times are included multiple times in the array.
      */
     getListeners: function() {
-
+        return this.delegate.getListeners();
     },
 
-// START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
     /**
      * Operation method that registers the MPN device on the server's MPN Module.<BR>
      * By registering an MPN device, the client enables MPN functionalities such as {@link LightstreamerClient#subscribeMpn}.
@@ -621,12 +621,12 @@ END_NODE_JSDOC_EXCLUDE
      *
      * @see #subscribeMpn
      */
-// END_NODE_JSDOC_EXCLUDE
+// #endif
     registerForMpn: function(device) {
-
+        this.delegate.registerForMpn(device);
     },
 
-// START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
     /**
      * Operation method that subscribes an MpnSubscription on server's MPN Module.<BR>
      * This operation adds the {@link MpnSubscription} to the list of "active" subscriptions. MPN subscriptions are activated on the server as soon as possible
@@ -661,12 +661,12 @@ END_NODE_JSDOC_EXCLUDE
      * @see #unsubscribeMpn
      * @see #unsubscribeMpnSubscriptions
      */
-// END_NODE_JSDOC_EXCLUDE
+// #endif
     subscribeMpn: function(subscription, coalescing) {
-
+        this.delegate.subscribeMpn(subscription, coalescing);
     },
 
-// START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
     /**
      * Operation method that unsubscribes an MpnSubscription from the server's MPN Module.<BR>
      * This operation removes the MpnSubscription from the list of "active" subscriptions.
@@ -685,12 +685,12 @@ END_NODE_JSDOC_EXCLUDE
      * @see #subscribeMpn
      * @see #unsubscribeMpnSubscriptions
      */
-// END_NODE_JSDOC_EXCLUDE
+// #endif
     unsubscribeMpn: function(/*MpnSubscription*/ subscription) {
-
+        this.delegate.unsubscribeMpn(subscription);
     },
 
-// START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
     /**
      * Operation method that unsubscribes all the MPN subscriptions with a specified status from the server's MPN Module.<BR>
      * By specifying a status filter it is possible to unsubscribe multiple MPN subscriptions at once. E.g. by passing <code>TRIGGERED</code> it is possible
@@ -715,12 +715,12 @@ END_NODE_JSDOC_EXCLUDE
      * @see #subscribeMpn
      * @see #unsubscribeMpn
      */
-// END_NODE_JSDOC_EXCLUDE
+// #endif
     unsubscribeMpnSubscriptions: function(filter) {
-
+        this.delegate.unsubscribeMpnSubscriptions(filter);
     },
 
-// START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
     /**
      * Inquiry method that returns a collection of the existing MPN subscription with a specified status.<BR>
      * Can return both objects created by the user, via {@link MpnSubscription} constructors, and objects created by the client, to represent pre-existing MPN subscriptions.<BR>
@@ -747,12 +747,12 @@ END_NODE_JSDOC_EXCLUDE
      *
      * @see #findMpnSubscription
      */
-// END_NODE_JSDOC_EXCLUDE
+// #endif
     getMpnSubscriptions: function(filter) {
-
+        return this.delegate.getMpnSubscriptionWrappers();
     },
 
-// START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
     /**
      * Inquiry method that returns the MpnSubscription with the specified subscription ID, or null if not found.<BR>
      * The object returned by this method can be an object created by the user, via MpnSubscription constructors, or an object created by the client,
@@ -772,10 +772,8 @@ END_NODE_JSDOC_EXCLUDE
      *
      * @see #getMpnSubscriptions
      */
-// END_NODE_JSDOC_EXCLUDE
+// #endif
     findMpnSubscription: function(subscriptionId) {
-
+        return this.delegate.findMpnSubscriptionWrapper(subscriptionId);
     },
 };
-
-export default LightstreamerClient;

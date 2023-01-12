@@ -11,14 +11,14 @@
    * <BR>Note that it is not necessary to implement all of the interface methods for 
    * the listener to be successfully passed to the {@link Subscription#addListener}
    * method.
-START_NODE_JSDOC_EXCLUDE
+// #ifndef START_NODE_JSDOC_EXCLUDE
    * <BR>The {@link AbstractWidget} and its subclasses, distributed together 
    * with the library, implement this interface.
    * 
    * @see DynaGrid
    * @see StaticGrid
    * @see Chart
-END_NODE_JSDOC_EXCLUDE
+// #endif
    */
 var SubscriptionListener = function() {
 };

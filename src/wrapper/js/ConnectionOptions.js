@@ -13,9 +13,9 @@
    * 
    * @see LightstreamerClient
    */
-  var ConnectionOptions = function() {
-
-  };
+var ConnectionOptions = function(options) {
+     this.delegate = options;
+   };
   
   ConnectionOptions.prototype = {
     /** 
@@ -36,11 +36,11 @@
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "contentLength" on any 
      * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+   // #ifndef START_NODE_JSDOC_EXCLUDE
      * listening to any LightstreamerClient sharing the same 
      * connection with the LightstreamerClient owning the ConnectionOptions upon 
      * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+   // #endif
      * .</p>
      * 
      * @throws {IllegalArgumentException} if a negative, zero, decimal
@@ -50,7 +50,7 @@ END_NODE_JSDOC_EXCLUDE
      * response body on a HTTP stream connection.
      */
     setContentLength: function(contentLength) {
-
+     this.delegate.setContentLength(contentLength);
     },
     
     /**
@@ -61,7 +61,7 @@ END_NODE_JSDOC_EXCLUDE
      * for the response body on a HTTP stream connection
      */
     getContentLength: function() {
-
+     return this.delegate.getContentLength();
     },
     
     /**
@@ -87,11 +87,11 @@ END_NODE_JSDOC_EXCLUDE
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "idleTimeout" on any 
      * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+   // #ifndef START_NODE_JSDOC_EXCLUDE
      * listening to any LightstreamerClient sharing the same 
      * connection with the LightstreamerClient owning the ConnectionOptions upon 
      * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+   // #endif
      * .</p>
      * 
      * @throws {IllegalArgumentException} if a negative or a decimal
@@ -103,7 +103,7 @@ END_NODE_JSDOC_EXCLUDE
      * @see ConnectionOptions#setPollingInterval
      */
     setIdleTimeout: function(idleTimeout) {
-
+     this.delegate.setIdleTimeout(idleTimeout);
     },
     
     /**  
@@ -118,7 +118,7 @@ END_NODE_JSDOC_EXCLUDE
      * @see ConnectionOptions#setIdleTimeout
      */
     getIdleTimeout: function() {
-
+     return this.delegate.getIdleTimeout();
     },
     
     /**
@@ -143,12 +143,12 @@ END_NODE_JSDOC_EXCLUDE
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "keepaliveInterval" on any 
      * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+   // #ifndef START_NODE_JSDOC_EXCLUDE
      * listening to any LightstreamerClient sharing the same 
      * connection with the LightstreamerClient owning the ConnectionOptions upon 
      * which the setter was called or that received the setting from the
      * server
-END_NODE_JSDOC_EXCLUDE
+   // #endif
      * .</p>
      * 
      * @throws {IllegalArgumentException} if a negative or a decimal
@@ -158,7 +158,7 @@ END_NODE_JSDOC_EXCLUDE
      * between two keepalive packets, or 0.
      */
     setKeepaliveInterval: function(keepaliveInterval) {
-
+     this.delegate.setKeepaliveInterval(keepaliveInterval);
     },
     
     /**  
@@ -178,7 +178,7 @@ END_NODE_JSDOC_EXCLUDE
      * @see ConnectionOptions#setKeepaliveInterval
      */
     getKeepaliveInterval: function() {
-
+     return this.delegate.getKeepaliveInterval();
     },
     
     /**
@@ -187,9 +187,9 @@ END_NODE_JSDOC_EXCLUDE
      * furtherly restrict this limit. The limit applies to the bytes received in each streaming or polling connection.
      *
      * <p class="edition-note"><B>Edition Note:</B> Bandwidth Control is
-	 * an optional feature, available depending on Edition and License Type.
-	 * To know what features are enabled by your license, please see the License tab of the
-	 * Monitoring Dashboard (by default, available at /dashboard).</p>
+   * an optional feature, available depending on Edition and License Type.
+   * To know what features are enabled by your license, please see the License tab of the
+   * Monitoring Dashboard (by default, available at /dashboard).</p>
      *
      * <p class="default-value"><b>Default value:</b> "unlimited".</p>
      * 
@@ -199,24 +199,24 @@ END_NODE_JSDOC_EXCLUDE
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a call to 
      * {@link ClientListener#onPropertyChange} with argument "requestedMaxBandwidth" on any 
      * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+   // #ifndef START_NODE_JSDOC_EXCLUDE
      * listening to any LightstreamerClient sharing the same 
      * connection with the LightstreamerClient owning the ConnectionOptions upon 
      * which the setter was called or that received the setting from the
      * server
-END_NODE_JSDOC_EXCLUDE
+   // #endif
      * .
      * <BR>
      * Moreover, upon any change or attempt to change the limit, the Server will notify the client
      * and such notification will be received through a call to 
      * {@link ClientListener#onPropertyChange} with argument "realMaxBandwidth" on any 
      * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+   // #ifndef START_NODE_JSDOC_EXCLUDE
      * listening to any LightstreamerClient sharing the same 
      * connection with the LightstreamerClient owning the ConnectionOptions upon 
      * which the setter was called or that received the setting from the
      * server
-END_NODE_JSDOC_EXCLUDE
+   // #endif
      * .</p>
      * 
      * @param {Number} maxBandwidth A decimal number, which represents the maximum bandwidth requested for the streaming
@@ -228,9 +228,9 @@ END_NODE_JSDOC_EXCLUDE
      * @see ConnectionOptions#getRealMaxBandwidth
      */
     setRequestedMaxBandwidth: function(maxBandwidth) {
-
+     this.delegate.setRequestedMaxBandwidth(maxBandwidth);
     },
-  
+   
     /**
      * Inquiry method that gets the maximum bandwidth that can be consumed for the data coming from 
      * Lightstreamer Server, as requested for this session.
@@ -243,7 +243,7 @@ END_NODE_JSDOC_EXCLUDE
      * @see ConnectionOptions#setRequestedMaxBandwidth
      */
     getRequestedMaxBandwidth: function() {
-
+     return this.delegate.getRequestedMaxBandwidth();
     },
     
     /**
@@ -264,7 +264,7 @@ END_NODE_JSDOC_EXCLUDE
      * @see ConnectionOptions#setRequestedMaxBandwidth
      */
     getRealMaxBandwidth: function() {
-
+     return this.delegate.getRealMaxBandwidth();
     },
     
     /**
@@ -305,12 +305,12 @@ END_NODE_JSDOC_EXCLUDE
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "pollingInterval" on any 
      * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+   // #ifndef START_NODE_JSDOC_EXCLUDE
      * listening to any LightstreamerClient sharing the same 
      * connection with the LightstreamerClient owning the ConnectionOptions upon 
      * which the setter was called or that received the setting from the
      * server.
-END_NODE_JSDOC_EXCLUDE
+   // #endif
      * </p>
      * 
      * @throws {IllegalArgumentException} if a negative or a decimal
@@ -324,7 +324,7 @@ END_NODE_JSDOC_EXCLUDE
      * @see ConnectionOptions#setIdleTimeout
      */
     setPollingInterval: function(pollingInterval) {
-
+     this.delegate.setPollingInterval(pollingInterval);
     },
     
     /**  
@@ -341,7 +341,7 @@ END_NODE_JSDOC_EXCLUDE
      * @see ConnectionOptions#setPollingInterval
      */
     getPollingInterval: function() {
-
+     return this.delegate.getPollingInterval();
     },
     
     /**
@@ -358,11 +358,11 @@ END_NODE_JSDOC_EXCLUDE
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "reconnectTimeout" on any 
      * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+   // #ifndef START_NODE_JSDOC_EXCLUDE
      * listening to any LightstreamerClient sharing the same 
      * connection with the LightstreamerClient owning the ConnectionOptions upon 
      * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+   // #endif
      * .</p>
      * 
      * @throws {IllegalArgumentException} if a negative, zero, or a not-number 
@@ -375,7 +375,7 @@ END_NODE_JSDOC_EXCLUDE
      * @see ConnectionOptions#setStalledTimeout
      */
     setReconnectTimeout: function(reconnectTimeout) {
-
+     this.delegate.setReconnectTimeout(reconnectTimeout);
     },
     
     /**  
@@ -389,7 +389,7 @@ END_NODE_JSDOC_EXCLUDE
      * @see ConnectionOptions#setReconnectTimeout
      */
     getReconnectTimeout: function() {
-
+     return this.delegate.getReconnectTimeout();
     },
     
     /**
@@ -405,11 +405,11 @@ END_NODE_JSDOC_EXCLUDE
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "stalledTimeout" on any 
      * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+   // #ifndef START_NODE_JSDOC_EXCLUDE
      * listening to any LightstreamerClient sharing the same 
      * connection with the LightstreamerClient owning the ConnectionOptions upon 
      * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+   // #endif
      * .</p>
      * 
      * @throws {IllegalArgumentException} if a negative, zero, or a not-number 
@@ -421,9 +421,9 @@ END_NODE_JSDOC_EXCLUDE
      * @see ConnectionOptions#setReconnectTimeout
      */
     setStalledTimeout: function(stalledTimeout) {
-
+     this.delegate.setStalledTimeout(stalledTimeout);
     },
-  
+   
     /**  
      * Inquiry method that gets the extra time the client can wait
      * when an expected keepalive packet has not been received on a stream
@@ -436,7 +436,7 @@ END_NODE_JSDOC_EXCLUDE
      * @see ConnectionOptions#setStalledTimeout
      */
     getStalledTimeout: function() {
-
+     return this.delegate.getStalledTimeout();
     },
     
     /**
@@ -448,18 +448,18 @@ END_NODE_JSDOC_EXCLUDE
     setConnectTimeout: function(connectTimeout) {
         // ignore: see setRetryDelay
     },
-
-
+   
+   
     /**
      * Returns the same value as {@link ConnectionOptions#getRetryDelay}.
      * <p>
      * <b>The method is deprecated: use {@link ConnectionOptions#getRetryDelay} instead.</b>
      */
     getConnectTimeout: function() {
-
+     return this.delegate.getConnectTimeout();
     },
-
-
+   
+   
     /**
      * Does nothing.
      * <p>
@@ -469,8 +469,8 @@ END_NODE_JSDOC_EXCLUDE
     setCurrentConnectTimeout: function(currentConnectTimeout) {
         // ignore: see setRetryDelay
     },
-
-
+   
+   
     /**
      * Inquiry method that gets the maximum time to wait for a response to a request.
      * 
@@ -486,9 +486,9 @@ END_NODE_JSDOC_EXCLUDE
      * @see ConnectionOptions#setRetryDelay
      */
     getCurrentConnectTimeout: function() {
-
+     return this.delegate.getCurrentConnectTimeout();
     },
-
+   
     
     /**
      * Setter method that sets 
@@ -533,11 +533,11 @@ END_NODE_JSDOC_EXCLUDE
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "retryDelay" on any 
      * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+   // #ifndef START_NODE_JSDOC_EXCLUDE
      * listening to any LightstreamerClient sharing the same 
      * connection with the LightstreamerClient owning the ConnectionOptions upon 
      * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+   // #endif
      * .</p>
      * 
      * @throws {IllegalArgumentException} if a negative, zero, or a not-number 
@@ -550,7 +550,7 @@ END_NODE_JSDOC_EXCLUDE
      * @see ConnectionOptions#getCurrentConnectTimeout
      */
     setRetryDelay: function(retryDelay) {
-
+     this.delegate.setRetryDelay(retryDelay);
     },
     
     /**  
@@ -565,7 +565,7 @@ END_NODE_JSDOC_EXCLUDE
      * @see ConnectionOptions#setRetryDelay
      */
     getRetryDelay: function() {
-
+     return this.delegate.getRetryDelay();
     },
     
     
@@ -586,11 +586,11 @@ END_NODE_JSDOC_EXCLUDE
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "firstRetryMaxDelay" on any 
      * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+   // #ifndef START_NODE_JSDOC_EXCLUDE
      * listening to any LightstreamerClient sharing the same 
      * connection with the LightstreamerClient owning the ConnectionOptions upon 
      * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+   // #endif
      * .</p>
      * 
      * @throws {IllegalArgumentException} if a negative, zero, or a not-number 
@@ -600,7 +600,7 @@ END_NODE_JSDOC_EXCLUDE
      * to wait before trying a new connection. 
      */
     setFirstRetryMaxDelay: function(firstRetryMaxDelay) {
-
+     this.delegate.setFirstRetryMaxDelay(firstRetryMaxDelay);
     },
     
     /**  
@@ -613,7 +613,7 @@ END_NODE_JSDOC_EXCLUDE
      * @see ConnectionOptions#setFirstRetryMaxDelay
      */
     getFirstRetryMaxDelay: function() {
-
+     return this.delegate.getFirstRetryMaxDelay();
     },
     
     /**
@@ -639,11 +639,11 @@ END_NODE_JSDOC_EXCLUDE
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "slowingEnabled" on any 
      * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+   // #ifndef START_NODE_JSDOC_EXCLUDE
      * listening to any LightstreamerClient sharing the same 
      * connection with the LightstreamerClient owning the ConnectionOptions upon 
      * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+   // #endif
      * .</p>
      * 
      * @throws {IllegalArgumentException} if a not boolean value is given.
@@ -652,7 +652,7 @@ END_NODE_JSDOC_EXCLUDE
      * the heuristic algorithm that lowers the item update frequency. 
      */
     setSlowingEnabled: function(slowingEnabled) {
-
+     this.delegate.setSlowingEnabled(slowingEnabled);
     },
     
     /**  
@@ -663,7 +663,7 @@ END_NODE_JSDOC_EXCLUDE
      * @see ConnectionOptions#setSlowingEnabled
      */
     isSlowingEnabled: function() {
-
+     return this.delegate.isSlowingEnabled();
     },
     
     /**
@@ -690,11 +690,11 @@ END_NODE_JSDOC_EXCLUDE
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "forcedTransport" on any 
      * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+   // #ifndef START_NODE_JSDOC_EXCLUDE
      * listening to any LightstreamerClient sharing the same 
      * connection with the LightstreamerClient owning the ConnectionOptions upon 
      * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+   // #endif
      * .</p>
      * 
      * @throws {IllegalArgumentException} if the given value is not in the list
@@ -734,7 +734,7 @@ END_NODE_JSDOC_EXCLUDE
      *  </ul>
      */
     setForcedTransport: function(forcedTransport) {
-
+     this.delegate.setForcedTransport(forcedTransport);
     },
     
     /**  
@@ -745,10 +745,10 @@ END_NODE_JSDOC_EXCLUDE
      * @see ConnectionOptions#setForcedTransport
      */
     getForcedTransport: function() {
-
+     return this.delegate.getForcedTransport();
     },
-
-
+   
+   
     /**
      * Setter method that can be used to disable/enable the automatic handling of 
      * server instance address that may be returned by the Lightstreamer server 
@@ -765,9 +765,9 @@ END_NODE_JSDOC_EXCLUDE
      * to a specific Server instance in the cluster.
      *
      * <p class="edition-note"><B>Edition Note:</B> Server Clustering is
-	 * an optional feature, available depending on Edition and License Type.
-	 * To know what features are enabled by your license, please see the License tab of the
-	 * Monitoring Dashboard (by default, available at /dashboard).</p>
+   * an optional feature, available depending on Edition and License Type.
+   * To know what features are enabled by your license, please see the License tab of the
+   * Monitoring Dashboard (by default, available at /dashboard).</p>
      *
      * <p class="default-value"><b>Default value:</b> false.</p>
      * 
@@ -777,11 +777,11 @@ END_NODE_JSDOC_EXCLUDE
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "serverInstanceAddressIgnored" on any 
      * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+   // #ifndef START_NODE_JSDOC_EXCLUDE
      * listening to any LightstreamerClient sharing the same 
      * connection with the LightstreamerClient owning the ConnectionOptions upon 
      * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+   // #endif
      * .</p>
      *
      * @throws {IllegalArgumentException} if a not boolean value is given.
@@ -792,7 +792,7 @@ END_NODE_JSDOC_EXCLUDE
      * @see ConnectionDetails#setServerAddress
      */
     setServerInstanceAddressIgnored: function(serverInstanceAddressIgnored) {
-
+     this.delegate.setServerInstanceAddressIgnored(serverInstanceAddressIgnored);
     },
     
     /**  
@@ -805,7 +805,7 @@ END_NODE_JSDOC_EXCLUDE
      * @see ConnectionOptions#setServerInstanceAddressIgnored
      */
     isServerInstanceAddressIgnored: function() {
-
+     return this.delegate.isServerInstanceAddressIgnored();
     },
     
     /**
@@ -813,15 +813,15 @@ END_NODE_JSDOC_EXCLUDE
      * client side.
      * Enabling this policy will guarantee that cookies pertaining to the 
      * Lightstreamer Server will be sent with each request.
-START_NODE_JSDOC_EXCLUDE
+   // #ifndef START_NODE_JSDOC_EXCLUDE
      * <BR>This holds for both cookies returned by the Server (possibly affinity cookies
      * inserted by a Load Balancer standing in between) and for cookies set by
      * other sites (for instance on the front-end page) and with a domain
      * specification which includes Lightstreamer Server host.
      * Likewise, cookies set by Lightstreamer Server and with a domain
      * specification which includes other sites will be forwarded to them.
-END_NODE_JSDOC_EXCLUDE
-START_WEB_JSDOC_EXCLUDE
+   // #endif
+   // #ifndef START_WEB_JSDOC_EXCLUDE
      * <BR>This holds only for cookies returned by the Server (possibly affinity cookies
      * inserted by a Load Balancer standing in between). If other cookies received
      * by the application also pertain to Lightstreamer Server host, they must be
@@ -829,7 +829,7 @@ START_WEB_JSDOC_EXCLUDE
      * Likewise, cookies set by Lightstreamer Server and also pertaining to other hosts
      * accessed by the application must be manually extracted through the static
      * {@link LightstreamerClient.getCookies} method and handled properly.
-END_WEB_JSDOC_EXCLUDE
+   // #endif
      * <BR>On the other hand enabling this setting may prevent the client from
      * opening a streaming connection or even to connect at all depending on the
      * browser/environment.
@@ -852,7 +852,7 @@ END_WEB_JSDOC_EXCLUDE
      * cookies-are-required policy.
      */
     setCookieHandlingRequired: function(cookieHandlingRequired) {
-
+     this.delegate.setCookieHandlingRequired(cookieHandlingRequired);
     },
     
     /**  
@@ -864,7 +864,7 @@ END_WEB_JSDOC_EXCLUDE
      * @see ConnectionOptions#setCookieHandlingRequired
      */
     isCookieHandlingRequired: function() {
-
+     return this.delegate.isCookieHandlingRequired();
     },
     
     /**
@@ -885,9 +885,9 @@ END_WEB_JSDOC_EXCLUDE
      * the target server(s) configuration.
      * 
      * <p class="edition-note"><B>Edition Note:</B> Server Clustering is
-	 * an optional feature, available depending on Edition and License Type.
-	 * To know what features are enabled by your license, please see the License tab of the
-	 * Monitoring Dashboard (by default, available at /dashboard).</p>
+   * an optional feature, available depending on Edition and License Type.
+   * To know what features are enabled by your license, please see the License tab of the
+   * Monitoring Dashboard (by default, available at /dashboard).</p>
      *
      * <p class="default-value"><b>Default value:</b> false.</p>
      * 
@@ -898,11 +898,11 @@ END_WEB_JSDOC_EXCLUDE
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "earlyWSOpenEnabled" on any 
      * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+   // #ifndef START_NODE_JSDOC_EXCLUDE
      * listening to any LightstreamerClient sharing the same 
      * connection with the LightstreamerClient owning the ConnectionOptions upon 
      * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+   // #endif
      * .</p>
      *
      * @throws {IllegalArgumentException} if a not boolean value is given.
@@ -913,7 +913,7 @@ END_NODE_JSDOC_EXCLUDE
      * @see ConnectionOptions#setServerInstanceAddressIgnored
      */
     setEarlyWSOpenEnabled: function(earlyWSOpenEnabled) {
-
+     this.delegate.setEarlyWSOpenEnabled(earlyWSOpenEnabled);
     },
     
     /**  
@@ -927,7 +927,7 @@ END_NODE_JSDOC_EXCLUDE
      * @see ConnectionOptions#setEarlyWSOpenEnabled
      */
     isEarlyWSOpenEnabled: function() {
-
+     return this.delegate.isEarlyWSOpenEnabled();
     },
     
     /**
@@ -970,11 +970,11 @@ END_NODE_JSDOC_EXCLUDE
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "reverseHeartbeatInterval" on any 
      * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+   // #ifndef START_NODE_JSDOC_EXCLUDE
      * listening to any LightstreamerClient sharing the same 
      * connection with the LightstreamerClient owning the ConnectionOptions upon 
      * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+   // #endif
      * .</p>
      *
      * @throws {IllegalArgumentException} if a negative, decimal
@@ -984,7 +984,7 @@ END_NODE_JSDOC_EXCLUDE
      * between subsequent reverse-heartbeats, or 0.
      */
     setReverseHeartbeatInterval: function(reverseHeartbeatInterval) {
-
+     this.delegate.setReverseHeartbeatInterval(reverseHeartbeatInterval);
     },
     
     /**
@@ -997,16 +997,16 @@ END_NODE_JSDOC_EXCLUDE
      * @see ConnectionOptions#setReverseHeartbeatInterval
      */
     getReverseHeartbeatInterval: function() {
-
+     return this.delegate.getReverseHeartbeatInterval();
     },
     
     /**
      * Setter method that enables/disables the setting of extra HTTP headers to all the 
      * request performed to the Lightstreamer server by the client.
      * Note that when the value is set WebSockets are disabled
-START_NODE_JSDOC_EXCLUDE
+   // #ifndef START_NODE_JSDOC_EXCLUDE
      * (as the current browser client API does not support the setting of custom HTTP headers)
-END_NODE_JSDOC_EXCLUDE
+   // #endif
      * unless {@link ConnectionOptions#setHttpExtraHeadersOnSessionCreationOnly}
      * is set to true. <BR> Also note that
      * if the browser/environment does not have the possibility to send extra headers while 
@@ -1014,22 +1014,22 @@ END_NODE_JSDOC_EXCLUDE
      * Also note that the Content-Type header is reserved by the client library itself,
      * while other headers might be refused by the browser/environment and others might cause the
      * connection to the server to fail.
-START_WEB_JSDOC_EXCLUDE
+   // #ifndef START_WEB_JSDOC_EXCLUDE
      * <BR>For instance, you cannot use this method to specify custom cookies to be sent to
      * Lightstreamer Server. Use the static {@link LightstreamerClient.addCookies} instead
      * (and {@link LightstreamerClient.getCookies} for inquiries). <BR>
-END_WEB_JSDOC_EXCLUDE
-START_NODE_JSDOC_EXCLUDE
+   // #endif
+   // #ifndef START_NODE_JSDOC_EXCLUDE
      * <BR>For instance, you cannot use this method to specify custom cookies to be sent to
      * Lightstreamer Server. They can only be set and inquired through the browser's
      * document.cookie object. <BR>
-END_NODE_JSDOC_EXCLUDE
+   // #endif
      * The use of custom headers might also cause the
      * browser/environment to send an OPTIONS request to the server before opening the actual connection.
-START_NODE_JSDOC_EXCLUDE
+   // #ifndef START_NODE_JSDOC_EXCLUDE
      * Finally, note that, in case of cross-origin requests, extra headers have to be authorized
      * on the server configuration file, in the cross_domain_policy element.
-END_NODE_JSDOC_EXCLUDE
+   // #endif
      * 
      * <p class="default-value"><b>Default value:</b> null (meaning no extra headers are sent).</p>
      * 
@@ -1040,18 +1040,18 @@ END_NODE_JSDOC_EXCLUDE
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "httpExtraHeaders" on any 
      * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+   // #ifndef START_NODE_JSDOC_EXCLUDE
      * listening to any LightstreamerClient sharing the same 
      * connection with the LightstreamerClient owning the ConnectionOptions upon 
      * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+   // #endif
      * .</p>
      * 
      * @param {Object} headersObj a JSON object containing header-name header-value pairs. 
      * Null can be specified to avoid extra headers to be sent.
      */
     setHttpExtraHeaders: function(headersObj) {
-      
+     this.delegate.setHttpExtraHeaders(headersObj);
     },
     
     /**
@@ -1064,7 +1064,7 @@ END_NODE_JSDOC_EXCLUDE
      * @see ConnectionOptions#setHttpExtraHeaders
      */
     getHttpExtraHeaders: function() {
-
+     return this.delegate.getHttpExtraHeaders();
     },
     
     /**
@@ -1086,11 +1086,11 @@ END_NODE_JSDOC_EXCLUDE
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "httpExtraHeadersOnSessionCreationOnly" on any 
      * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+   // #ifndef START_NODE_JSDOC_EXCLUDE
      * listening to any LightstreamerClient sharing the same 
      * connection with the LightstreamerClient owning the ConnectionOptions upon 
      * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+   // #endif
      * .</p>
      *
      * @throws {IllegalArgumentException} if a not boolean value is given.
@@ -1099,7 +1099,7 @@ END_NODE_JSDOC_EXCLUDE
      * restriction on extra headers forwarding.
      */
     setHttpExtraHeadersOnSessionCreationOnly: function(httpExtraHeadersOnSessionCreationOnly) {
-
+     this.delegate.setHttpExtraHeadersOnSessionCreationOnly(httpExtraHeadersOnSessionCreationOnly);
     },
     
     /**  
@@ -1111,7 +1111,7 @@ END_NODE_JSDOC_EXCLUDE
      * @see ConnectionOptions#setHttpExtraHeadersOnSessionCreationOnly
      */
     isHttpExtraHeadersOnSessionCreationOnly: function() {
-
+     return this.delegate.isHttpExtraHeadersOnSessionCreationOnly();
     },
     
     /**
@@ -1136,11 +1136,11 @@ END_NODE_JSDOC_EXCLUDE
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "sessionRecoveryTimeout" on any 
      * {@link ClientListener}
-START_NODE_JSDOC_EXCLUDE
+   // #ifndef START_NODE_JSDOC_EXCLUDE
      * listening to any LightstreamerClient sharing the same 
      * connection with the LightstreamerClient owning the ConnectionOptions upon 
      * which the setter was called
-END_NODE_JSDOC_EXCLUDE
+   // #endif
      * .</p>
      *
      * @throws {IllegalArgumentException} if a negative, decimal
@@ -1150,7 +1150,7 @@ END_NODE_JSDOC_EXCLUDE
      * for recovery attempts, expressed in milliseconds, including 0.
      */
     setSessionRecoveryTimeout: function(sessionRecoveryTimeout) {
-
+     this.delegate.setSessionRecoveryTimeout(sessionRecoveryTimeout);
     },
     
     /**
@@ -1164,8 +1164,6 @@ END_NODE_JSDOC_EXCLUDE
      * @see ConnectionOptions#setSessionRecoveryTimeout
      */
     getSessionRecoveryTimeout: function() {
-
+     return this.delegate.getSessionRecoveryTimeout();
     },
-  };
-
-export default ConnectionOptions;
+   };
