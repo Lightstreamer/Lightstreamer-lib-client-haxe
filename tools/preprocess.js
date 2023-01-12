@@ -27,12 +27,17 @@ var Preprocessor = require("preprocessor"),
 
 if (process.argv.length < 3) {
     console.log("Preprocessor.js - https://github.com/dcodeIO/Preprocessor.js\n");
-    console.log("  Usage: "+path.basename(process.argv[1])+" sourceFile [baseDirectory] [-o outFile] [-myKey[=myValue], ...]");
+    console.log("  Usage: "+path.basename(process.argv[1])+" sourceFile [-b baseDirectory] [-o outFile] [-myKey[=myValue], ...]");
     process.exit(11);
 }
 var sourceFile = process.argv[2];
 var baseDir = ".", i=3;
-if (process.argv.length > i && process.argv[i].indexOf("=") < 0 && process.argv[i] != "-o") {
+if (process.argv.length > i && process.argv[i] == "-b") {
+    i++;
+    if (process.argv.length <= i) {
+        console.log("Missing baseDirectory");
+        process.exit(98);
+    }
     baseDir = process.argv[i];
     i++;
 }
