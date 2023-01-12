@@ -13,6 +13,7 @@
     "jsonpatch": "^3.1.0",
     "lightstreamer-client-node": "file:bin/node",
     "lightstreamer-client-web": "file:bin/web",
+    "preprocessor": "^1.4.0",
     "requirejs": "^2.3.6",
     "rollup": "^2.60.1",
     "rollup-plugin-terser": "^7.0.2",
