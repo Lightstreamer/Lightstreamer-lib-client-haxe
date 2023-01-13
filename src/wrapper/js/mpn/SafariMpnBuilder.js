@@ -13,8 +13,8 @@
      *
      * @see MpnSubscription#setNotificationFormat
      */
-  var SafariMpnBuilder = function(notificationFormat) {
-
+var SafariMpnBuilder = function(notificationFormat) {
+  this.delegate = new LSSafariMpnBuilder(notificationFormat);
 };
 
 SafariMpnBuilder.prototype = {
@@ -24,7 +24,7 @@ SafariMpnBuilder.prototype = {
          * @return {String} the JSON structure for the push notification format.
          */
         build: function() {
-
+          return this.delegate.build();
         },
 
         /**
@@ -32,7 +32,7 @@ SafariMpnBuilder.prototype = {
          * @return {String} the value of <code>aps&period;alert&period;title</code> field, or null if absent.
          */
         getTitle: function() {
-
+          return this.delegate.getTitle();
         },
 
         /**
@@ -42,7 +42,8 @@ SafariMpnBuilder.prototype = {
          * @return {SafariMpnBuilder} this MpnBuilder object, for fluent use.
          */
         setTitle: function(title) {
-
+          this.delegate.setTitle(title);
+          return this;
         },
 
         /**
@@ -50,7 +51,7 @@ SafariMpnBuilder.prototype = {
          * @return {String} the value of <code>aps&period;alert&period;body</code> field, or null if absent.
          */
         getBody: function() {
-
+          return this.delegate.getBody();
         },
 
         /**
@@ -60,7 +61,8 @@ SafariMpnBuilder.prototype = {
          * @return {SafariMpnBuilder} this MpnBuilder object, for fluent use.
          */
         setBody: function(body) {
-
+          this.delegate.setBody(body);
+          return this;
         },
 
         /**
@@ -68,7 +70,7 @@ SafariMpnBuilder.prototype = {
          * @return {String} the value of <code>aps&period;alert&period;action</code> field, or null if absent.
          */
         getAction: function() {
-
+          return this.delegate.getAction();
         },
 
         /**
@@ -78,7 +80,8 @@ SafariMpnBuilder.prototype = {
          * @return {SafariMpnBuilder} this MpnBuilder object, for fluent use.
          */
         setAction: function(action) {
-
+          this.delegate.setAction(action);
+          return this;
         },
 
         /**
@@ -86,7 +89,7 @@ SafariMpnBuilder.prototype = {
          * @return {String[]} the value of <code>aps&period;url-args</code> field, or null if absent.
          */
         getUrlArguments: function() {
-
+          return this.delegate.getUrlArguments();
         },
 
         /**
@@ -96,8 +99,7 @@ SafariMpnBuilder.prototype = {
          * @return {SafariMpnBuilder} this MpnBuilder object, for fluent use.
          */
         setUrlArguments: function(urlArguments) {
-
+          this.delegate.setUrlArguments(urlArguments);
+          return this;
         }
 };
-
-export default SafariMpnBuilder;

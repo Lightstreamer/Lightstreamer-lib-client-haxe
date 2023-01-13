@@ -14,19 +14,15 @@
            * Event handler called when the MpnSubscriptionListener instance is added to an {@link MpnSubscription} through 
            * {@link MpnSubscription#addListener}.<BR>
            * This is the first event to be fired on the listener.
-           * 
-           * @param {MpnSubscription} subscription The {@link MpnSubscription} this instance was added to.
            */
-          onListenStart: function(/*MpnSubscription*/ subscription) {},
+          onListenStart: function() {},
           
           /**
            * Event handler called when the MpnSubscriptionListener instance is removed from an {@link MpnSubscription} through 
            * {@link MpnSubscription#removeListener}.<BR>
            * This is the last event to be fired on the listener.
-           * 
-           * @param {MpnSubscription} subscription The {@link MpnSubscription} this instance was removed from.
            */
-          onListenEnd: function(/*MpnSubscription*/ subscription) {},
+          onListenEnd: function() {},
 
           /**
            * Event handler called when an {@link MpnSubscription} has been successfully subscribed to on the server's MPN Module.<BR>
@@ -145,5 +141,18 @@
            * <li><code>status_timestamp</code></li>
            * </ul>
            */
-          onPropertyChanged: function(propertyName) {}
+          onPropertyChanged: function(propertyName) {},
+
+          /**
+           * Event handler called when the value of a property of {@link MpnSubscription} cannot be changed.<BR>
+           * Properties can be modified by direct calls to their setters. See {@link MpnSubscription#setNotificationFormat} and {@link MpnSubscription#setTriggerExpression}.
+           * 
+           * @param {Number} code The error code sent by the Server.
+           * @param {String} message The description of the error sent by the Server.
+           * @param {String} propertyName The name of the changed property. It can be one of the following:<ul>
+           * <li><code>notification_format</code></li>
+           * <li><code>trigger</code></li>
+           * </ul>
+           */
+          onModificationError: function(code, message, propertyName) {}
   };

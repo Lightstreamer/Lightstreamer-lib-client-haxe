@@ -8,12 +8,7 @@
      * <ul>
      * <li> {@link Subscription}: the new object is initialized by copying subscription mode, items, fields 
      * and data adapter from the specified real-time subscription; or</li>
-     * <li> {@link MpnSubscription}: the new object is initialized by copying all properties 
-     * (including the subscription ID) from the specified MPN subscription. <b>The created MpnSubscription is a copy of 
-     * the original MpnSubscription object and represents the same MPN subscription, since their subscription ID 
-     * is the same. When the object is supplied to {@link LightstreamerClient#subscribeMpn} in order to bring it 
-     * to "active" state, the MPN subscription is modified: any property changed in this MpnSubscription 
-     * replaces the corresponding value of the MPN subscription on the server.</b></li>
+     * <li> {@link MpnSubscription}: the new object is initialized by copying all properties from the specified MPN subscription.</li>
      * </ul>
      * 
      * @constructor
@@ -50,8 +45,9 @@
      * MPN subscriptions are associated with the MPN device, and after the device has been registered the client retrieves pre-existing MPN subscriptions from the
      * server's database and exposes them with the {@link LightstreamerClient#getMpnSubscriptions} method.
      */
- var MpnSubscription = function() {
-  
+var MpnSubscription = function() {
+  var mode = arguments[0], items = arguments[1], fields = arguments[2];
+  this.delegate = new LSMpnSubscription(mode, items, fields, this);
 };
 
 MpnSubscription.prototype = {
@@ -72,7 +68,7 @@ MpnSubscription.prototype = {
        * listener. In the latter case it will obviously receive no events.
        */
       addListener: function(listener) {
-
+        this.delegate.addListener(listener);
       },
 
       /**
@@ -84,7 +80,7 @@ MpnSubscription.prototype = {
        * @param {MpnSubscriptionListener} listener The listener to be removed.
        */
       removeListener: function(listener) {
-
+        this.delegate.removeListener(listener);
       },
 
       /**
@@ -95,20 +91,32 @@ MpnSubscription.prototype = {
        * Listeners added multiple times are included multiple times in the array.
        */
       getListeners: function() {
-
+        return this.delegate.getListeners();
       },
 
       /**
-       * Returns the JSON structure to be used as the format of push notifications.<BR>
+       * Inquiry method that gets the JSON structure requested by the user to be used as the format of push notifications.<BR>
        * This JSON structure is sent by the server to the push notification service provider (FCM or APNs), hence it must follow
        * its specifications.<BR>
        *
-       * @return {String} the JSON structure to be used as the format of push notifications.
+       * @return {String} the JSON structure requested by the user to be used as the format of push notifications.
        *
        * @see #setNotificationFormat
+       * @see #getActualNotificationFormat
        */
       getNotificationFormat: function() {
+        return this.delegate.getNotificationFormat();
+      },
 
+      /**
+       * Inquiry method that gets the JSON structure used by the Sever to send notifications.
+       *
+       * @return the JSON structure used by the Server to send notifications or null if the value is not available.
+       *
+       * @see #getNotificationFormat
+       */
+      getActualNotificationFormat: function() {
+        return this.delegate.getActualNotificationFormat();
       },
 
       /**
@@ -131,30 +139,41 @@ MpnSubscription.prototype = {
        * named arguments are always mapped to its corresponding indexed argument, even if originally the notification format used a named argument.<BR>
        * Note: the content of this property may be subject to length restrictions (See the "General Concepts" document for more information).
        *
-       * <p class="lifecycle"><b>Lifecycle:</b> This method can only be called while the MpnSubscription instance is in its "inactive" state.</p>
+       * <p class="lifecycle"><b>Lifecycle:</b>This property can be changed at any time</p>
        *
        * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a call to {@link MpnSubscriptionListener#onPropertyChanged}
        * with argument <code>notification_format</code> on any {@link MpnSubscriptionListener} listening to the related MpnSubscription.</p>
        *
        * @param {String} format the JSON structure to be used as the format of push notifications.
-       * @throws IllegalStateException if the MpnSubscription is currently "active".
        *
        * @see FirebaseMpnBuilder
        * @see SafariMpnBuilder
        */
       setNotificationFormat: function(format) {
-
+        this.delegate.setNotificationFormat(format);
       },
 
       /**
-       * Returns the boolean expression that is evaluated against each update and acts as a trigger to deliver the push notification.
+       * Inquiry method that gets the trigger expression requested by the user.
        *
-       * @return {boolean} the boolean expression that acts as a trigger to deliver the push notification.
+       * @return {boolean} returns the trigger requested by the user or null if the value is not available.
        *
        * @see #setTriggerExpression
+       * @see #getActualTriggerExpression
        */
       getTriggerExpression: function() {
+        return this.delegate.getTriggerExpression();
+      },
 
+      /**
+       * Inquiry method that gets the trigger expression evaluated by the Sever.
+       *
+       * @return returns the trigger sent by the Server or null if the value is not available.
+       *
+       * @see #getTriggerExpression
+       */
+      getActualTriggerExpression: function() {
+        return this.delegate.getActualTriggerExpression();
       },
 
       /**
@@ -177,18 +196,17 @@ MpnSubscription.prototype = {
        * named arguments are always mapped to its corresponding indexed argument, even if originally the trigger expression used a named argument.<BR>
        * Note: the content of this property may be subject to length restrictions (See the "General Concepts" document for more information).
        *
-       * <p class="lifecycle"><b>Lifecycle:</b> This method can only be called while the MpnSubscription instance is in its "inactive" state.</p>
+       * <p class="lifecycle"><b>Lifecycle:</b>This property can be changed at any time.</p>
        *
        * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a call to {@link MpnSubscriptionListener#onPropertyChanged}
        * with argument <code>trigger</code> on any {@link MpnSubscriptionListener} listening to the related MpnSubscription.</p>
        *
-       * @param {boolean} expr the boolean expression that acts as a trigger to deliver the push notification.
-       * @throws IllegalStateException if the MpnSubscription is currently "active".
+       * @param {boolean} expr the boolean expression that acts as a trigger to deliver the push notification.  If the value is null, no trigger is set on the subscription.
        *
        * @see #isTriggered
        */
       setTriggerExpression: function(expr) {
-
+        this.delegate.setTriggerExpression(expr);
       },
 
       /**
@@ -207,7 +225,7 @@ MpnSubscription.prototype = {
        * @see LightstreamerClient#unsubscribeMpnSubscriptions
        */
       isActive: function() {
-
+        return this.delegate.isActive();
       },
 
       /**
@@ -225,7 +243,7 @@ MpnSubscription.prototype = {
        * @see LightstreamerClient#unsubscribeMpnSubscriptions
        */
       isSubscribed: function() {
-
+        return this.delegate.isSubscribed();
       },
 
       /**
@@ -245,7 +263,7 @@ MpnSubscription.prototype = {
        * @see LightstreamerClient#unsubscribeMpnSubscriptions
        */
       isTriggered: function() {
-
+        return this.delegate.isTriggered();
       },
 
       /**
@@ -270,7 +288,7 @@ MpnSubscription.prototype = {
        * @see #isTriggered
        */
       getStatus: function() {
-
+        return this.delegate.getStatus();
       },
 
       /**
@@ -286,7 +304,7 @@ MpnSubscription.prototype = {
        * @see #getStatus
        */
       getStatusTimestamp: function() {
-
+        return this.delegate.getStatusTimestamp();
       },
 
       /**
@@ -308,7 +326,7 @@ MpnSubscription.prototype = {
        * "active".
        */
       setItems: function(items) {
-
+        this.delegate.setItems(items);
       },
 
       /**
@@ -326,7 +344,7 @@ MpnSubscription.prototype = {
        * @throws IllegalStateException if the MpnSubscription was not initialized.
        */
       getItems: function() {
-
+        return this.delegate.getItems();
       },
 
       /**
@@ -347,7 +365,7 @@ MpnSubscription.prototype = {
        * "active".
        */
       setItemGroup: function(group) {
-
+        this.delegate.setItemGroup(group);
       },
 
       /**
@@ -363,7 +381,7 @@ MpnSubscription.prototype = {
        * @throws IllegalStateException if the MpnSubscription was not initialized.
        */
       getItemGroup: function() {
-
+        return this.delegate.getItemGroup();
       },
 
       /**
@@ -385,7 +403,7 @@ MpnSubscription.prototype = {
        * "active".
        */
       setFields: function(fields) {
-
+        this.delegate.setFields(fields);
       },
 
       /**
@@ -401,7 +419,7 @@ MpnSubscription.prototype = {
        * @throws IllegalStateException if the MpnSubscription was not initialized.
        */
       getFields: function() {
-
+        return this.delegate.getFields();
       },
 
       /**
@@ -423,7 +441,7 @@ MpnSubscription.prototype = {
        * "active".
        */
       setFieldSchema: function(schema) {
-
+        this.delegate.setFieldSchema(schema);
       },
 
       /**
@@ -439,7 +457,7 @@ MpnSubscription.prototype = {
        * @throws IllegalStateException if the MpnSubscription was not initialized.
        */
       getFieldSchema: function() {
-
+        return this.delegate.getFieldSchema();
       },
 
       /**
@@ -472,7 +490,7 @@ MpnSubscription.prototype = {
        * @see ConnectionDetails#setAdapterSet
        */
       setDataAdapter: function(adapter) {
-
+        this.delegate.setAdapterSet(adapter);
       },
 
       /**
@@ -485,7 +503,7 @@ MpnSubscription.prototype = {
        * so that the "DEFAULT" Adapter Set is used.
        */
       getDataAdapter: function() {
-
+        return this.delegate.getDataAdapter();
       },
 
       /**
@@ -520,7 +538,7 @@ MpnSubscription.prototype = {
        * @see MpnSubscription#setRequestedMaxFrequency
        */
       setRequestedBufferSize: function(size) {
-
+        this.delegate.setRequestedBufferSize(size);
       },
 
       /**
@@ -534,7 +552,7 @@ MpnSubscription.prototype = {
        * or the string "unlimited", or null.
        */
       getRequestedBufferSize: function() {
-
+        return this.delegate.getRequestedBufferSize();
       },
 
       /**
@@ -573,7 +591,7 @@ MpnSubscription.prototype = {
        * null nor the special "unlimited" value nor a valid positive number.
        */
       setRequestedMaxFrequency: function(freq) {
-
+        this.delegate.setRequestedMaxFrequency(freq);
       },
 
       /**
@@ -587,7 +605,7 @@ MpnSubscription.prototype = {
        * (expressed in updates per second), or the string "unlimited", or null.
        */
       getRequestedMaxFrequency: function() {
-
+        return this.delegate.getRequestedMaxFrequency();
       },
 
       /**
@@ -599,7 +617,7 @@ MpnSubscription.prototype = {
        * @return {String} the MpnSubscription mode specified in the constructor.
        */
       getMode: function() {
-
+        return this.delegate.getMode();
       },
 
       /**
@@ -618,8 +636,6 @@ MpnSubscription.prototype = {
        * @return {String} the MPN subscription ID.
        */
       getSubscriptionId: function() {
-
+        return this.delegate.getSubscriptionId();
       },
 };
-
-export default MpnSubscription;

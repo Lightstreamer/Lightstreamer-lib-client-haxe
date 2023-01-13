@@ -13,18 +13,14 @@
          /**
           * Event handler called when the MpnDeviceListener instance is added to an MPN device object through {@link MpnDevice#addListener}.<BR>
           * This is the first event to be fired on the listener.
-          * 
-          * @param {MpnDevice} device The MPN device object this instance was added to.
           */
-         onListenStart: function(/*MpnDevice*/ device) {},
+         onListenStart: function() {},
          
          /**
           * Event handler called when the MpnDeviceListener instance is removed from an MPN device object through {@link MpnDevice#removeListener}.<BR>
           * This is the last event to be fired on the listener.
-          * 
-          * @param {MpnDevice} device The MPN device object this instance was removed from.
           */
-         onListenEnd: function(/*MpnDevice*/ device) {},
+         onListenEnd: function() {},
          
          /**
           * Event handler called when an MPN device object has been successfully registered on the server's MPN Module.<BR>

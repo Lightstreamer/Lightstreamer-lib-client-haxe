@@ -27,8 +27,8 @@
 	 * An MpnDevice's state may become "suspended" if errors occur during push notification delivery. In this case MPN subscriptions stop sending notifications
 	 * and the device state is reset to "registered" at the first subsequent registration.
 	 */
- var MpnDevice = function(deviceToken, appId, platform) {
-
+var MpnDevice = function(deviceToken, appId, platform) {
+  this.delegate = new LSMpnDevice(deviceToken, appId, platform);
 };
 
 MpnDevice.prototype = {
@@ -49,7 +49,7 @@ MpnDevice.prototype = {
        * listener. In the latter case it will obviously receive no events.
        */
       addListener: function(listener) {
-
+        this.delegate.addListener(listener);
       },
 
       /**
@@ -61,7 +61,7 @@ MpnDevice.prototype = {
        * @param {MpnDeviceListener} listener The listener to be removed.
        */
       removeListener: function(listener) {
-
+        this.delegate.removeListener(listener);
       },
 
       /**
@@ -72,7 +72,7 @@ MpnDevice.prototype = {
        * Listeners added multiple times are included multiple times in the array.
        */
       getListeners: function() {
-
+        return this.delegate.getListeners();
       },
 
       /**
@@ -83,7 +83,7 @@ MpnDevice.prototype = {
        * @return {String} the MPN device platform.
        */
       getPlatform: function() {
-
+        return this.delegate.getPlatform();
       },
 
       /**
@@ -94,7 +94,7 @@ MpnDevice.prototype = {
        * @return {String} the MPN device application ID.
        */
       getApplicationId: function() {
-
+        return this.delegate.getApplicationId();
       },
 
       /**
@@ -106,7 +106,7 @@ MpnDevice.prototype = {
        * @return {String} the MPN device token.
        */
       getDeviceToken: function() {
-
+        return this.delegate.getDeviceToken();
       },
 
       /**
@@ -119,7 +119,7 @@ MpnDevice.prototype = {
        * @return {String} the previous MPN device token, or null if no MPN device has been registered yet.
        */
       getPreviousDeviceToken: function() {
-
+        return this.delegate.getPreviousDeviceToken();
       },
 
       /**
@@ -133,7 +133,7 @@ MpnDevice.prototype = {
        * @see #getStatus
        */
       isRegistered: function() {
-
+        return this.delegate.isRegistered();
       },
 
       /**
@@ -148,7 +148,7 @@ MpnDevice.prototype = {
        * @see #getStatus
        */
       isSuspended: function() {
-
+        return this.delegate.isSuspended();
       },
 
       /**
@@ -169,7 +169,7 @@ MpnDevice.prototype = {
        * @see #isSuspended
        */
       getStatus: function() {
-
+        return this.delegate.getStatus();
       },
 
       /**
@@ -182,7 +182,7 @@ MpnDevice.prototype = {
        * @see #getStatus
        */
       getStatusTimestamp: function() {
-
+        return this.delegate.getStatusTimestamp();
       },
 
       /**
@@ -197,8 +197,6 @@ MpnDevice.prototype = {
        * @return {String} the MPN device ID.
        */
       getDeviceId: function() {
-
+        return this.delegate.getDeviceId();
       }
 };
-
-export default MpnDevice;

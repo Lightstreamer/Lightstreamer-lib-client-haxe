@@ -13,8 +13,8 @@
      *
      * @see MpnSubscription#setNotificationFormat
      */
- var FirebaseMpnBuilder = function(notificationFormat) {
-
+var FirebaseMpnBuilder = function(notificationFormat) {
+  this.delegate = new LSFirebaseMpnBuilder(notificationFormat);
 };
 
 FirebaseMpnBuilder.prototype = {
@@ -24,7 +24,7 @@ FirebaseMpnBuilder.prototype = {
        * @return {String} the JSON structure for the push notification format.
        */
       build: function() {
-
+        return this.delegate.build();
       },
 
       /**
@@ -32,7 +32,7 @@ FirebaseMpnBuilder.prototype = {
        * @return {Object} a map with sub-fields of the <code>webpush&period;headers</code> field, or null if absent.
        */
       getHeaders: function() {
-
+        return this.delegate.getHeaders();
       },
 
       /**
@@ -42,7 +42,8 @@ FirebaseMpnBuilder.prototype = {
        * @return {FirebaseMpnBuilder} this MpnBuilder object, for fluent use.
        */
       setHeaders: function(headers) {
-
+        this.delegate.setHeaders(headers);
+        return this;
       },
 
       /**
@@ -50,7 +51,7 @@ FirebaseMpnBuilder.prototype = {
        * @return {String} the value of <code>webpush&period;notification&period;title</code> field, or null if absent.
        */
       getTitle: function() {
-
+        return this.delegate.getTitle();
       },
 
       /**
@@ -60,7 +61,8 @@ FirebaseMpnBuilder.prototype = {
        * @return {FirebaseMpnBuilder} this MpnBuilder object, for fluent use.
        */
       setTitle: function(title) {
-
+        this.delegate.setTitle(title);
+        return this;
       },
 
       /**
@@ -68,7 +70,7 @@ FirebaseMpnBuilder.prototype = {
        * @return {String} the value of <code>webpush&period;notification&period;body</code> field, or null if absent.
        */
       getBody: function() {
-
+        return this.delegate.getBody();
       },
 
       /**
@@ -78,7 +80,8 @@ FirebaseMpnBuilder.prototype = {
        * @return {FirebaseMpnBuilder} this MpnBuilder object, for fluent use.
        */
       setBody: function(body) {
-
+        this.delegate.setBody(body);
+        return this;
       },
 
       /**
@@ -86,7 +89,7 @@ FirebaseMpnBuilder.prototype = {
        * @return {String} the value of <code>webpush&period;notification&period;icon</code> field, or null if absent.
        */
       getIcon: function() {
-
+        return this.delegate.getIcon();
       },
 
       /**
@@ -96,7 +99,8 @@ FirebaseMpnBuilder.prototype = {
        * @return {FirebaseMpnBuilder} this MpnBuilder object, for fluent use.
        */
       setIcon: function(icon) {
-
+        this.delegate.setIcon(icon);
+        return this;
       },
 
       /**
@@ -104,7 +108,7 @@ FirebaseMpnBuilder.prototype = {
        * @return {Object} a map with sub-fields of the <code>webpush&period;data</code> field, or null if absent.
        */
       getData: function() {
-
+        return this.delegate.getData();
       },
 
       /**
@@ -114,8 +118,7 @@ FirebaseMpnBuilder.prototype = {
        * @return {FirebaseMpnBuilder} this MpnBuilder object, for fluent use.
        */
       setData: function(data) {
-
+        this.delegate.setData(data);
+        return this;
       }
 };
-
-export default FirebaseMpnBuilder;
