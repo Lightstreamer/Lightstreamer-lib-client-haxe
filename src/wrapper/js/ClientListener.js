@@ -262,11 +262,8 @@ ClientListener.prototype = {
      * is added to a LightstreamerClient through
      * {@link LightstreamerClient#addListener}.
      * This is the first event to be fired on the listener.
-     *
-     * @param {LightstreamerClient} lsClient the LightstreamerClient this
-     * instance was added to.
      */
-    onListenStart: function(lsClient) {
+    onListenStart: function() {
 
     },
 
@@ -275,11 +272,8 @@ ClientListener.prototype = {
      * is removed from a LightstreamerClient through
      * {@link LightstreamerClient#removeListener}.
      * This is the last event to be fired on the listener.
-     *
-     * @param {LightstreamerClient} lsClient the LightstreamerClient this
-     * instance was removed from.
      */
-    onListenEnd: function(lsClient) {
+    onListenEnd: function() {
 
     },
 

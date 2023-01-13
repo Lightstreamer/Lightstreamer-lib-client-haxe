@@ -267,11 +267,8 @@ SubscriptionListener.prototype = {
      * is added to a Subscription through 
      * {@link Subscription#addListener}.
      * This is the first event to be fired on the listener.
-     *
-     * @param {Subscription} subscription the Subscription this
-     * instance was added to.
      */
-    onListenStart: function(subscription) {
+    onListenStart: function() {
       
     },
     
@@ -280,11 +277,8 @@ SubscriptionListener.prototype = {
      * is removed from a Subscription through 
      * {@link Subscription#removeListener}.
      * This is the last event to be fired on the listener.
-     *
-     * @param {Subscription} subscription the Subscription this
-     * instance was removed from.
      */
-    onListenEnd: function(subscription) {
+    onListenEnd: function() {
       
     },
     
