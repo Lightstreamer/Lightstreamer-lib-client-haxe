@@ -1,14 +1,14 @@
 --cwd ../..
 
---class-path test
+--class-path test-core
 --class-path test-util
 --class-path test-extern
-
 --library deep_equal
 --library haxe-concurrent
-
 --main TestCore
+
 --js bin-test/web/test-core.js
+--cmd open test-system/web/test-core.html
 
 -D LS_WEB
 -D LS_JSON_PATCH
