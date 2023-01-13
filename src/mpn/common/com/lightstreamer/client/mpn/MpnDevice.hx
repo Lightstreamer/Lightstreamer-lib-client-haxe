@@ -19,7 +19,7 @@ private enum abstract MpnDeviceStatus(String) to String {
   var SUSPENDED;
 }
 
-#if (js || python) @:expose @:native("MpnDevice") #end
+#if (js || python) @:expose @:native("LSMpnDevice") #end
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class LSMpnDevice {
   final eventDispatcher = new MpnDeviceEventDispatcher();

@@ -14,7 +14,7 @@ private typedef JsonFormat = {
   };
 }
 
-#if (js || python) @:expose @:native("SafariMpnBuilder") #end
+#if (js || python) @:expose @:native("LSSafariMpnBuilder") #end
 class SafariMpnBuilder {
   final obj: JsonFormat;
 

@@ -17,7 +17,7 @@ enum MpnSubscriptionStatus {
 
 private class MpnSubscriptionEventDispatcher extends EventDispatcher<MpnSubscriptionListener> {}
 
-#if (js || python) @:expose @:native("MpnSubscription") #end
+#if (js || python) @:expose @:native("LSMpnSubscription") #end
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class LSMpnSubscription {
   final eventDispatcher = new MpnSubscriptionEventDispatcher();
