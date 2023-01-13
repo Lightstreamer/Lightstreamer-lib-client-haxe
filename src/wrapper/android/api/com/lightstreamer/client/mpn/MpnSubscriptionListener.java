@@ -114,7 +114,7 @@ public interface MpnSubscriptionListener {
     
     /**
      * Event handler called when the server notifies that an {@link MpnSubscription} changed its status.<BR>
-     * Note that in some server clustering configurations the status change for the MPN subscription's trigger event may not be called. The corrisponding push
+     * Note that in some server clustering configurations the status change for the MPN subscription's trigger event may not be called. The corresponding push
      * notification is always sent, though.
      * 
      * @param status The new status of the MPN subscription. It can be one of the following:<ul>
