@@ -8,6 +8,7 @@ private enum Slot {
   Await(expected: String);
   AwaitGroup(expected: Array<String>);
   AwaitPrefix(expected: String);
+  AwaitUntil(expected: String);
   Block(block: ()->Void);
 }
 
@@ -36,6 +37,11 @@ class Expectations {
     return this;
   }
 
+  public function awaitUntil(expected: String): Expectations {
+    expectations.push(AwaitUntil(expected));
+    return this;
+  }
+
   public function awaitPrefix(expected: String) {
     expectations.push(AwaitPrefix(expected));
     return this;
@@ -52,6 +58,7 @@ class Expectations {
   }
 
   function consumeSignal(actual: String) {
+    trace("SIGNAL -> " + actual);
     if (expectations.length == 0) {
       return;
     }
@@ -65,6 +72,10 @@ class Expectations {
         test.fail('"$actual" not found');
       }
       if (expected.length > 0) {
+        expectations.unshift(slot);
+      }
+    case AwaitUntil(expected):
+      if (expected != actual) {
         expectations.unshift(slot);
       }
     case AwaitPrefix(expected):
