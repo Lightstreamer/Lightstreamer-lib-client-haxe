@@ -490,7 +490,7 @@ MpnSubscription.prototype = {
        * @see ConnectionDetails#setAdapterSet
        */
       setDataAdapter: function(adapter) {
-        this.delegate.setAdapterSet(adapter);
+        this.delegate.setDataAdapter(adapter);
       },
 
       /**

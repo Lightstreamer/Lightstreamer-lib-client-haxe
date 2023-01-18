@@ -623,7 +623,7 @@ LightstreamerClient.prototype = {
      */
 // #endif
     registerForMpn: function(device) {
-        this.delegate.registerForMpn(device);
+        this.delegate.registerForMpn(device.delegate);
     },
 
 // #ifndef START_NODE_JSDOC_EXCLUDE
@@ -663,7 +663,7 @@ LightstreamerClient.prototype = {
      */
 // #endif
     subscribeMpn: function(subscription, coalescing) {
-        this.delegate.subscribeMpn(subscription, coalescing);
+        this.delegate.subscribeMpn(subscription.delegate, coalescing);
     },
 
 // #ifndef START_NODE_JSDOC_EXCLUDE
@@ -687,7 +687,7 @@ LightstreamerClient.prototype = {
      */
 // #endif
     unsubscribeMpn: function(/*MpnSubscription*/ subscription) {
-        this.delegate.unsubscribeMpn(subscription);
+        this.delegate.unsubscribeMpn(subscription.delegate);
     },
 
 // #ifndef START_NODE_JSDOC_EXCLUDE
@@ -749,7 +749,7 @@ LightstreamerClient.prototype = {
      */
 // #endif
     getMpnSubscriptions: function(filter) {
-        return this.delegate.getMpnSubscriptionWrappers();
+        return this.delegate.getMpnSubscriptionWrappers(filter);
     },
 
 // #ifndef START_NODE_JSDOC_EXCLUDE
