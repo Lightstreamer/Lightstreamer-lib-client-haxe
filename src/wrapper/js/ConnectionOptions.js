@@ -36,11 +36,6 @@ var ConnectionOptions = function(options) {
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "contentLength" on any 
      * {@link ClientListener}
-   // #ifndef START_NODE_JSDOC_EXCLUDE
-     * listening to any LightstreamerClient sharing the same 
-     * connection with the LightstreamerClient owning the ConnectionOptions upon 
-     * which the setter was called
-   // #endif
      * .</p>
      * 
      * @throws {IllegalArgumentException} if a negative, zero, decimal
@@ -87,11 +82,6 @@ var ConnectionOptions = function(options) {
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "idleTimeout" on any 
      * {@link ClientListener}
-   // #ifndef START_NODE_JSDOC_EXCLUDE
-     * listening to any LightstreamerClient sharing the same 
-     * connection with the LightstreamerClient owning the ConnectionOptions upon 
-     * which the setter was called
-   // #endif
      * .</p>
      * 
      * @throws {IllegalArgumentException} if a negative or a decimal
@@ -143,12 +133,6 @@ var ConnectionOptions = function(options) {
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "keepaliveInterval" on any 
      * {@link ClientListener}
-   // #ifndef START_NODE_JSDOC_EXCLUDE
-     * listening to any LightstreamerClient sharing the same 
-     * connection with the LightstreamerClient owning the ConnectionOptions upon 
-     * which the setter was called or that received the setting from the
-     * server
-   // #endif
      * .</p>
      * 
      * @throws {IllegalArgumentException} if a negative or a decimal
@@ -199,24 +183,12 @@ var ConnectionOptions = function(options) {
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a call to 
      * {@link ClientListener#onPropertyChange} with argument "requestedMaxBandwidth" on any 
      * {@link ClientListener}
-   // #ifndef START_NODE_JSDOC_EXCLUDE
-     * listening to any LightstreamerClient sharing the same 
-     * connection with the LightstreamerClient owning the ConnectionOptions upon 
-     * which the setter was called or that received the setting from the
-     * server
-   // #endif
      * .
      * <BR>
      * Moreover, upon any change or attempt to change the limit, the Server will notify the client
      * and such notification will be received through a call to 
      * {@link ClientListener#onPropertyChange} with argument "realMaxBandwidth" on any 
      * {@link ClientListener}
-   // #ifndef START_NODE_JSDOC_EXCLUDE
-     * listening to any LightstreamerClient sharing the same 
-     * connection with the LightstreamerClient owning the ConnectionOptions upon 
-     * which the setter was called or that received the setting from the
-     * server
-   // #endif
      * .</p>
      * 
      * @param {Number} maxBandwidth A decimal number, which represents the maximum bandwidth requested for the streaming
@@ -305,12 +277,6 @@ var ConnectionOptions = function(options) {
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "pollingInterval" on any 
      * {@link ClientListener}
-   // #ifndef START_NODE_JSDOC_EXCLUDE
-     * listening to any LightstreamerClient sharing the same 
-     * connection with the LightstreamerClient owning the ConnectionOptions upon 
-     * which the setter was called or that received the setting from the
-     * server.
-   // #endif
      * </p>
      * 
      * @throws {IllegalArgumentException} if a negative or a decimal
@@ -358,11 +324,6 @@ var ConnectionOptions = function(options) {
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "reconnectTimeout" on any 
      * {@link ClientListener}
-   // #ifndef START_NODE_JSDOC_EXCLUDE
-     * listening to any LightstreamerClient sharing the same 
-     * connection with the LightstreamerClient owning the ConnectionOptions upon 
-     * which the setter was called
-   // #endif
      * .</p>
      * 
      * @throws {IllegalArgumentException} if a negative, zero, or a not-number 
@@ -405,11 +366,6 @@ var ConnectionOptions = function(options) {
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "stalledTimeout" on any 
      * {@link ClientListener}
-   // #ifndef START_NODE_JSDOC_EXCLUDE
-     * listening to any LightstreamerClient sharing the same 
-     * connection with the LightstreamerClient owning the ConnectionOptions upon 
-     * which the setter was called
-   // #endif
      * .</p>
      * 
      * @throws {IllegalArgumentException} if a negative, zero, or a not-number 
@@ -482,11 +438,6 @@ var ConnectionOptions = function(options) {
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "retryDelay" on any 
      * {@link ClientListener}
-   // #ifndef START_NODE_JSDOC_EXCLUDE
-     * listening to any LightstreamerClient sharing the same 
-     * connection with the LightstreamerClient owning the ConnectionOptions upon 
-     * which the setter was called
-   // #endif
      * .</p>
      * 
      * @throws {IllegalArgumentException} if a negative, zero, or a not-number 
@@ -534,11 +485,6 @@ var ConnectionOptions = function(options) {
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "firstRetryMaxDelay" on any 
      * {@link ClientListener}
-   // #ifndef START_NODE_JSDOC_EXCLUDE
-     * listening to any LightstreamerClient sharing the same 
-     * connection with the LightstreamerClient owning the ConnectionOptions upon 
-     * which the setter was called
-   // #endif
      * .</p>
      * 
      * @throws {IllegalArgumentException} if a negative, zero, or a not-number 
@@ -587,11 +533,6 @@ var ConnectionOptions = function(options) {
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "slowingEnabled" on any 
      * {@link ClientListener}
-   // #ifndef START_NODE_JSDOC_EXCLUDE
-     * listening to any LightstreamerClient sharing the same 
-     * connection with the LightstreamerClient owning the ConnectionOptions upon 
-     * which the setter was called
-   // #endif
      * .</p>
      * 
      * @throws {IllegalArgumentException} if a not boolean value is given.
@@ -638,11 +579,6 @@ var ConnectionOptions = function(options) {
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "forcedTransport" on any 
      * {@link ClientListener}
-   // #ifndef START_NODE_JSDOC_EXCLUDE
-     * listening to any LightstreamerClient sharing the same 
-     * connection with the LightstreamerClient owning the ConnectionOptions upon 
-     * which the setter was called
-   // #endif
      * .</p>
      * 
      * @throws {IllegalArgumentException} if the given value is not in the list
@@ -725,11 +661,6 @@ var ConnectionOptions = function(options) {
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "serverInstanceAddressIgnored" on any 
      * {@link ClientListener}
-   // #ifndef START_NODE_JSDOC_EXCLUDE
-     * listening to any LightstreamerClient sharing the same 
-     * connection with the LightstreamerClient owning the ConnectionOptions upon 
-     * which the setter was called
-   // #endif
      * .</p>
      *
      * @throws {IllegalArgumentException} if a not boolean value is given.
@@ -790,9 +721,7 @@ var ConnectionOptions = function(options) {
      * 
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "cookieHandlingRequired" on any 
-     * {@link ClientListener} listening to any LightstreamerClient sharing the same 
-     * connection with the LightstreamerClient owning the ConnectionOptions upon 
-     * which the setter was called.</p>
+     * {@link ClientListener}.</p>
      *
      * @throws {IllegalArgumentException} if a not boolean value is given.
      * 
@@ -855,11 +784,6 @@ var ConnectionOptions = function(options) {
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "reverseHeartbeatInterval" on any 
      * {@link ClientListener}
-   // #ifndef START_NODE_JSDOC_EXCLUDE
-     * listening to any LightstreamerClient sharing the same 
-     * connection with the LightstreamerClient owning the ConnectionOptions upon 
-     * which the setter was called
-   // #endif
      * .</p>
      *
      * @throws {IllegalArgumentException} if a negative, decimal
@@ -925,11 +849,6 @@ var ConnectionOptions = function(options) {
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "httpExtraHeaders" on any 
      * {@link ClientListener}
-   // #ifndef START_NODE_JSDOC_EXCLUDE
-     * listening to any LightstreamerClient sharing the same 
-     * connection with the LightstreamerClient owning the ConnectionOptions upon 
-     * which the setter was called
-   // #endif
      * .</p>
      * 
      * @param {Object} headersObj a JSON object containing header-name header-value pairs. 
@@ -971,11 +890,6 @@ var ConnectionOptions = function(options) {
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "httpExtraHeadersOnSessionCreationOnly" on any 
      * {@link ClientListener}
-   // #ifndef START_NODE_JSDOC_EXCLUDE
-     * listening to any LightstreamerClient sharing the same 
-     * connection with the LightstreamerClient owning the ConnectionOptions upon 
-     * which the setter was called
-   // #endif
      * .</p>
      *
      * @throws {IllegalArgumentException} if a not boolean value is given.
@@ -1021,11 +935,6 @@ var ConnectionOptions = function(options) {
      * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
      * call to {@link ClientListener#onPropertyChange} with argument "sessionRecoveryTimeout" on any 
      * {@link ClientListener}
-   // #ifndef START_NODE_JSDOC_EXCLUDE
-     * listening to any LightstreamerClient sharing the same 
-     * connection with the LightstreamerClient owning the ConnectionOptions upon 
-     * which the setter was called
-   // #endif
      * .</p>
      *
      * @throws {IllegalArgumentException} if a negative, decimal

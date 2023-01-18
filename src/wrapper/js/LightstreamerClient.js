@@ -4,10 +4,6 @@
    * It is possible to instantiate as many LightstreamerClient as needed.
    * Each LightstreamerClient is the entry point to connect to a Lightstreamer server,
    * subscribe to as many items as needed and to send messages.
-// #ifndef START_NODE_JSDOC_EXCLUDE
-   * Multiple LightstreamerClient instances may share the same connection if
-   * configured to behave that way through {@link LightstreamerClient#enableSharing}.
-// #endif
    * @constructor
    *
    * @exports LightstreamerClient
@@ -28,11 +24,6 @@
    * Lightstreamer Server. Used to provide configuration settings, event
    * handlers, operations for the control of the connection lifecycle,
    * {@link Subscription} handling and to send messages.
-// #ifndef START_NODE_JSDOC_EXCLUDE
-   * <BR>It can be configured to share its connection with other LightstreamerClient
-   * instances (even if on different html pages) through
-   * {@link LightstreamerClient#enableSharing} calls.
-// #endif
    */
 var LightstreamerClient = function(serverAddress, adapterSet) {
   this.delegate = new LSLightstreamerClient(serverAddress, adapterSet);
@@ -43,13 +34,6 @@ var LightstreamerClient = function(serverAddress, adapterSet) {
    * <BR>Properties of this object can be overwritten by values received from a
    * Lightstreamer Server. Such changes will be notified through a
    * {@link ClientListener#onPropertyChange} event on listeners of this instance.
- // #ifndef START_NODE_JSDOC_EXCLUDE
-   * <BR>In case of a shared connection the involved LightstreamerClient instances
-   * will keep this data object synchronized so that a change on a property of an object
-   * of one of the instances will be reflected on all the others. Any change will
-   * be notified through a {@link ClientListener#onPropertyChange} event on
-   * listeners of this instance.
-// #endif
    *
    * @type ConnectionOptions
    *
@@ -64,13 +48,6 @@ var LightstreamerClient = function(serverAddress, adapterSet) {
    * <BR>Properties of this object can be overwritten by values received from a
    * Lightstreamer Server. Such changes will be notified through a
    * {@link ClientListener#onPropertyChange} event on listeners of this instance.
- // #ifndef START_NODE_JSDOC_EXCLUDE
-   * <BR>In case of a shared connection the involved LightstreamerClient instances
-   * will keep this data object synchronized so that a change on a property of an object
-   * of one of the instances will be reflected on all the others. Any change will
-   * be notified through a {@link ClientListener#onPropertyChange} event on
-   * listeners of this instance.
-// #endif
    *
    * @type ConnectionDetails
    *
@@ -176,19 +153,6 @@ LightstreamerClient.getCookies = function(uri) {
  * lightstreamer.actions:
  * <BR>logs settings / API calls.
  * </li>
-// #ifndef START_NODE_JSDOC_EXCLUDE
- * <li>
- * lightstreamer.grids:
- * <BR>logs grid-related code.
- * </li><li>
- * lightstreamer.sharing:
- * <BR>logs creation / sharing / election of the Master and Slave
- * {@link LightstreamerClient};
- * <BR>at WARN level, problems getting a connection up and ready are logged;
- * <BR>at INFO level, found/lost events are logged;
- * <BR>at DEBUG level, connection management details and regular checks on the current connection are logged.
- * </li>
-// #endif
  * </ul>
  *
  * @param {LoggerProvider} provider A LoggerProvider instance that will be used
@@ -235,12 +199,6 @@ LightstreamerClient.prototype = {
      * of the streaming response could be delayed to the point that the Client
      * switches to polling mode. This is usually not the case nowadays but may
      * still happen if the client is used on old machines.
-     * <BR>In case of a shared connection the connect call will apply to such
-     * shared connection regardless of which LightstreamerClient is calling it.
-     * <BR>If {@link LightstreamerClient#enableSharing} has not been called before the
-     * first call to connect, then a default call will be performed with the
-     * following parameter:
-     * <BR><CODE>new ConnectionSharing("randomstring","IGNORE", "CREATE", true, null);</CODE>
 // #endif
      * <BR>Note that as "polling connection" we mean a loop of polling
      * requests, each of which requires opening a synchronous (i.e. not
@@ -255,13 +213,6 @@ LightstreamerClient.prototype = {
      * <BR>When the request to connect is finally being executed, if the current status
      * of the client is not DISCONNECTED, then nothing will be done.</p>
      *
-// #ifndef START_NODE_JSDOC_EXCLUDE
-     * @throws {IllegalStateException} if the LightstreamerClient cannot
-     * connect to the server due to the sharing policies configured in the
-     * {@link ConnectionSharing} object.
-     * @see ConnectionSharing
-     *
-// #endif
      * @throws {IllegalStateException} if no server address was configured
      * and there is no suitable default address to be used.
      *
@@ -281,10 +232,6 @@ LightstreamerClient.prototype = {
      * <BR>Note that active {@link Subscription} instances, associated with this
      * LightstreamerClient instance, are preserved to be re-subscribed to on future
      * Sessions.
-// #ifndef START_NODE_JSDOC_EXCLUDE
-     * <BR>In case of a shared connection, the disconnect() call will apply to such
-     * shared connection regardless of which LightstreamerClient is calling it.
-// #endif
      *
      * <p class="lifecycle"><b>Lifecycle:</b>
      * Note that the request to disconnect is accomplished by the client
@@ -343,13 +290,6 @@ LightstreamerClient.prototype = {
      * <BR>Upon subsequent calls to the method, the sequential management of
      * the involved messages is guaranteed. The ordering is determined by the
      * order in which the calls to sendMessage are issued
-// #ifndef START_NODE_JSDOC_EXCLUDE
-     * ; in case of calls
-     * issued from different LightstreamerClient instances on different html pages
-     * sharing the same connection, the relative order is determined by the client
-     * owning the shared connection. Anyway two messages sent through the same
-     * LightstreamerClient instance will never surpass each other
-// #endif
      * .
      * <BR>If a message, for any reason, doesn't reach the Server (this is possible with the HTTP transport),
      * it will be resent; however, this may cause the subsequent messages to be delayed.

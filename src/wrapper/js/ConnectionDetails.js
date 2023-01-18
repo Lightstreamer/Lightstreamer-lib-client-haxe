@@ -57,11 +57,6 @@ var ConnectionDetails = function(details){
    * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
    * call to {@link ClientListener#onPropertyChange} with argument "serverAddress" on any 
    * {@link ClientListener}
- // #ifndef START_NODE_JSDOC_EXCLUDE
-   * listening to any LightstreamerClient sharing the same 
-   * connection with the LightstreamerClient owning the ConnectionDetails upon 
-   * which the setter was called
- // #endif
    * .</p>
    * 
    * @throws {IllegalArgumentException} if the given address is not valid.
@@ -113,11 +108,6 @@ var ConnectionDetails = function(details){
    * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
    * call to {@link ClientListener#onPropertyChange} with argument "adapterSet" on any 
    * {@link ClientListener}
- // #ifndef START_NODE_JSDOC_EXCLUDE
-   * listening to any LightstreamerClient sharing the same 
-   * connection with the LightstreamerClient owning the ConnectionDetails upon 
-   * which the setter was called
- // #endif
    * .</p>
    * 
    * @param {String} adapterSet The name of the Adapter Set to be used. A null value 
@@ -161,11 +151,6 @@ var ConnectionDetails = function(details){
    * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
    * call to {@link ClientListener#onPropertyChange} with argument "user" on any 
    * {@link ClientListener}
- // #ifndef START_NODE_JSDOC_EXCLUDE
-   * listening to any LightstreamerClient sharing the same 
-   * connection with the LightstreamerClient owning the ConnectionDetails upon 
-   * which the setter was called
- // #endif
    * .</p>
    *
    * @param {String} user The username to be used for the authentication
@@ -217,11 +202,6 @@ var ConnectionDetails = function(details){
    * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
    * call to {@link ClientListener#onPropertyChange} with argument "password" on any 
    * {@link ClientListener}
- // #ifndef START_NODE_JSDOC_EXCLUDE
-   * listening to any LightstreamerClient sharing the same 
-   * connection with the LightstreamerClient owning the ConnectionDetails upon 
-   * which the setter was called
- // #endif
    * .</p>
    * 
    * @param {String} password The password to be used for the authentication
@@ -260,11 +240,6 @@ var ConnectionDetails = function(details){
    * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
    * call to {@link ClientListener#onPropertyChange} with argument "serverInstanceAddress" on any 
    * {@link ClientListener}
- // #ifndef START_NODE_JSDOC_EXCLUDE
-   * listening to any LightstreamerClient sharing the same 
-   * connection with the LightstreamerClient that received the setting from the
-   * server
- // #endif
    * .</p>
    *
    * @return {String} address used to issue all requests related to the current
@@ -299,11 +274,6 @@ var ConnectionDetails = function(details){
    * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
    * call to {@link ClientListener#onPropertyChange} with argument "serverSocketName" on any 
    * {@link ClientListener}
- // #ifndef START_NODE_JSDOC_EXCLUDE
-   * listening to any LightstreamerClient sharing the same 
-   * connection with the LightstreamerClient that received the setting from the
-   * server
- // #endif
    * .</p>
    *
    * @return {String} name configured for the Server instance which is managing the
@@ -323,11 +293,6 @@ var ConnectionDetails = function(details){
    * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
    * call to {@link ClientListener#onPropertyChange} with argument "sessionId" on any
    * {@link ClientListener}
- // #ifndef START_NODE_JSDOC_EXCLUDE
-   * listening to any LightstreamerClient sharing the same
-   * connection with the LightstreamerClient that received the setting from the
-   * server
- // #endif
    * .</p>
    *
    * @return {String} ID assigned by the Server to this client session.
