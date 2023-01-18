@@ -1,5 +1,9 @@
 package com.lightstreamer.client;
 
+#if LS_MPN
+import com.lightstreamer.client.mpn.*;
+#end
+
 #if python
 @:pythonImport("lightstreamer.client", "LightstreamerClient")
 #end
@@ -44,5 +48,18 @@ extern class LightstreamerClient {
    public var Listeners(default, never): NativeList<ClientListener>;
    public var Status(default, never): String; 
    public var Subscriptions(default, never): NativeList<Subscription>; 
+   #end
+   #if LS_MPN
+   public function registerForMpn(mpnDevice: MpnDevice): Void;
+  
+    public function subscribeMpn(mpnSubscription: MpnSubscription, coalescing: Bool): Void;
+  
+    public function unsubscribeMpn(mpnSubscription: MpnSubscription): Void;
+  
+    public function unsubscribeMpnSubscriptions(filter: Null<String>): Void;
+  
+    public function getMpnSubscriptions(?filter: Null<String>): NativeList<MpnSubscription>;
+  
+    public function findMpnSubscription(subscriptionId: String): Null<MpnSubscription>;
    #end
 }
