@@ -949,4 +949,25 @@ class TestMpnClient extends utest.Test {
     .then(() -> async.completed())
     .verify();
   }
+
+  function testFirebaseBuilder() {
+    var format = new FirebaseMpnBuilder()
+      .setTitle("TITLE")
+      .setBody("BODY")
+      .setIcon("ICON")
+      .setHeaders(["h"=>"H"])
+      .setData(["d"=>"D"])
+      .build();
+    equals("{\"webpush\":{\"notification\":{\"title\":\"TITLE\",\"body\":\"BODY\",\"icon\":\"ICON\"},\"headers\":{\"h\":\"H\"},\"data\":{\"d\":\"D\"}}}", format);
+  }
+
+  function testSafariBuilder() {
+    var format = new SafariMpnBuilder()
+      .setTitle("TITLE")
+      .setBody("BODY")
+      .setAction("ACTION")
+      .setUrlArguments(["a1", "a2"])
+      .build();
+    equals("{\"aps\":{\"alert\":{\"title\":\"TITLE\",\"body\":\"BODY\",\"action\":\"ACTION\"},\"url-args\":[\"a1\",\"a2\"]}}", format);
+  }
 }
