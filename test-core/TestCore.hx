@@ -1,5 +1,6 @@
 import utest.Runner;
 import com.lightstreamer.client.*;
+import com.lightstreamer.client.mpn.*;
 import com.lightstreamer.internal.*;
 import com.lightstreamer.log.ConsoleLoggerProvider;
 
@@ -11,6 +12,9 @@ class TestCore {
     #end
     LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.ERROR));
     runner.addCase(TestClient);
+    #if LS_MPN
+    runner.addCase(com.lightstreamer.client.mpn.TestMpnClient);
+    #end
   }
 
   public static function main() {
