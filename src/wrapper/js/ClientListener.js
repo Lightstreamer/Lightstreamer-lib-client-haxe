@@ -144,13 +144,6 @@ ClientListener.prototype = {
      * a preliminary switch to CONNECTED:STREAM-SENSING. If the recovery is finally
      * unsuccessful, the current session will be abandoned and the status
      * will switch to "DISCONNECTED:WILL-RETRY" before the next attempts.</li>
-// #ifndef START_NODE_JSDOC_EXCLUDE
-     * <li>In case the local LightstreamerClient is exploiting the connection of a
-     * different LightstreamerClient (see {@link ConnectionSharing}) and such
-     * LightstreamerClient or its container window is disposed, the status will
-     * switch to "DISCONNECTED:WILL-RETRY" unless the current status is "DISCONNECTED".
-     * In the latter case it will remain "DISCONNECTED".</li>
-// #endif
      * </ul>
      *
      * <BR>By setting a custom handler it is possible to perform
@@ -200,11 +193,6 @@ ClientListener.prototype = {
      * Event handler that receives a notification each time  the value of a property of
      * {@link LightstreamerClient#connectionDetails} or {@link LightstreamerClient#connectionOptions}
      * is changed.
-// #ifndef START_NODE_JSDOC_EXCLUDE
-     * <BR>Properties of these objects can be modified by direct calls to them, but
-     * also by calls performed on other LightstreamerClient instances sharing the
-     * same connection and by server sent events.
-// #endif
      *
      * @param {String} the name of the changed property.
      * <BR>Possible values are:
@@ -242,21 +230,6 @@ ClientListener.prototype = {
     onPropertyChange: function(propertyName) {
     },
 
-// #ifndef START_NODE_JSDOC_EXCLUDE
-    /**
-     * Event handler that receives a notification in case a connection
-     * sharing is aborted.
-     * A connection sharing can only be aborted if one of the policies specified
-     * in the {@link ConnectionSharing} instance supplied to the
-     * {@link LightstreamerClient#enableSharing} method is "ABORT".
-     * <BR>If this event is fired the client will never be able to connect to
-     * the server unless a new call to enableSharing is issued.
-     */
-// #endif
-    onShareAbort: function() {
-
-    },
-
     /**
      * Event handler that receives a notification when the ClientListener instance
      * is added to a LightstreamerClient through
@@ -285,9 +258,9 @@ ClientListener.prototype = {
      * However, note that the lack of both updates and keepalives is already managed by the library
      * (see {@link ConnectionOptions#setReconnectTimeout} and {@link ConnectionOptions#setStalledTimeout}).
      */
-// #endif
     onServerKeepalive: function() {
-
+         
     }
+// #endif
 
 };

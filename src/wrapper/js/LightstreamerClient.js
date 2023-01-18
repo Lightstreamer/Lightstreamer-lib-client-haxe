@@ -35,7 +35,7 @@
 // #endif
    */
 var LightstreamerClient = function(serverAddress, adapterSet) {
-this.delegate = new LSLightstreamerClient(serverAddress, adapterSet);
+  this.delegate = new LSLightstreamerClient(serverAddress, adapterSet);
   /**
    * Data object that contains options and policies for the connection to
    * the server. This instance is set up by the LightstreamerClient object at
@@ -55,7 +55,7 @@ this.delegate = new LSLightstreamerClient(serverAddress, adapterSet);
    *
    * @see ClientListener#onPropertyChange
    */
-this.connectionOptions = new ConnectionOptions(this.delegate.connectionOptions);
+  this.connectionOptions = new ConnectionOptions(this.delegate.connectionOptions);
 
   /**
    * Data object that contains the details needed to open a connection to
@@ -76,7 +76,7 @@ this.connectionOptions = new ConnectionOptions(this.delegate.connectionOptions);
    *
    * @see ClientListener#onPropertyChange
    */
-this.connectionDetails = new ConnectionDetails(this.delegate.connectionDetails);
+  this.connectionDetails = new ConnectionDetails(this.delegate.connectionDetails);
 };
 
 
@@ -104,10 +104,10 @@ this.connectionDetails = new ConnectionDetails(this.delegate.connectionDetails);
  *
  * @static
  */
-// #endif
 LightstreamerClient.addCookies = function(uri, cookieList) {
-    LSLightstreamerClient.addCookies(uri, cookieList);
+  LSLightstreamerClient.addCookies(uri, cookieList);
 };
+// #endif
 
 // #ifndef START_WEB_JSDOC_EXCLUDE
 /**
@@ -129,10 +129,10 @@ LightstreamerClient.addCookies = function(uri, cookieList) {
  *
  * @static
  */
-// #endif
 LightstreamerClient.getCookies = function(uri) {
-    return LSLightstreamerClient.getCookies(uri);
+  return LSLightstreamerClient.getCookies(uri);
 };
+// #endif
 
 /**
  * Static method that permits to configure the logging system used by the library.
@@ -215,60 +215,6 @@ LightstreamerClient.LIB_NAME = LSLightstreamerClient.LIB_NAME;
 LightstreamerClient.LIB_VERSION = LSLightstreamerClient.LIB_VERSION;
 
 LightstreamerClient.prototype = {
-
-// #ifndef START_NODE_JSDOC_EXCLUDE
-    /**
-     * Configures the client to share its connection and/or attach to a shared connection.
-     * Different windows trying to share the connection to Lightstreamer Server must share the
-     * exact same origin. Depending on the browser in use, connection sharing might not work.
-     * Specify null to prevent any kind of sharing (this is also the default). In case
-     * a connection is not currently required (i.e. the client is in DISCONNECTED status)
-     * specifying null will also have the effect to dismiss resources currently held by the
-     * client: failing to do that when a LightstreamerClient instance is not needed anymore
-     * might prevent the VM from collecting all the allocated resources. Note that in this case
-     * required resources will be prepared again once a call to {@link LightstreamerClient#connect}
-     * is performed.
-     *
-     * <p class="default-value"><b>Default value:</b> by default no sharing is configured.</p>
-     *
-     * <p class="lifecycle"><b>Lifecycle:</b> this method can be called at any time.
-     * <BR>Note that if multiple calls to this method are performed, the last one will
-     * override the previous ones. Also if a call to enableSharing is made on a
-     * Master client, the current connection (if any) will be dropped and the
-     * remaining clients will enter the election algorithm.</p>
-     *
-     * @param {ConnectionSharing} sharing The sharing parameters or null to prevent any sharing
-     */
-// #endif
-    enableSharing: function(sharing) {
-        // TODO remove
-    },
-
-// #ifndef START_NODE_JSDOC_EXCLUDE
-    /**
-     * Inquiry method that checks if the LightstreamerClient has its own connection or if it is using
-     * a connection shared by another LightstreamerClient.
-     * This LightstreamerClient is not a Master if:
-     * <ul>
-     * <li>it is attached to another LightstreamerClient connection</li>
-     * <li>no call to {@link LightstreamerClient#connect} or {@link LightstreamerClient#enableSharing}
-     * was performed on it.</li>
-     * <li>the {@link ClientListener#onShareAbort} event has been fired and no following
-     * {@link LightstreamerClient#enableSharing} has been performed.</li>
-     * <li>a call to {@link LightstreamerClient#enableSharing} has been performed and the client is currently
-     * searching for a shared connection</li>
-     * <li>a call to {@link LightstreamerClient#enableSharing} has been performed with null as parameter and no
-     * subsequent call to connect has been performed</li>
-     *
-     * @return {boolean} Whenever the LightstreamerClient owning this instance is a Master or not.
-     *
-     * @see ConnectionSharing
-     */
-// #endif
-    isMaster: function() {
-        // TODO remove
-    },
-
 
     /**
      * Operation method that requests to open a Session against the configured
