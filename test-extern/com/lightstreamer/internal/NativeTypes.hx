@@ -309,7 +309,7 @@ abstract NativeIntMap<V>(Map<Int, V>) to Map<Int, V> {
 #end
 
 #if js
-abstract NativeList<T>(Array<T>) {
+abstract NativeList<T>(Array<T>) from Array<T> {
   public inline function new(lst: Array<T>) {
     this = lst.copy();
   }
