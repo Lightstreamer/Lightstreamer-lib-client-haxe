@@ -46,6 +46,22 @@ class Test {
     }
   }
 
+  function notEquals(expected: Any, actual: Any) {
+    numAssertions++;
+    if (expected is Int) {
+      // fix for cs: DeepEqual.compare has problems when comparing different types of integers
+      if (expected == actual) {
+        addError("Should be not equal");
+      }
+    } else {
+      switch DeepEqual.compare(expected, actual) {
+        case Success(_):
+          addError("Should be not equal");
+        case Failure(_):
+      }
+    }
+  }
+
   function strictEquals<T>(expected: T, actual: T) {
     equals(expected, actual);
   }
