@@ -491,7 +491,7 @@ LightstreamerClient.prototype = {
         return this.delegate.getListeners();
     },
 
-// #ifndef START_NODE_JSDOC_EXCLUDE
+// #ifdef LS_MPN
     /**
      * Operation method that registers the MPN device on the server's MPN Module.<BR>
      * By registering an MPN device, the client enables MPN functionalities such as {@link LightstreamerClient#subscribeMpn}.
@@ -507,12 +507,10 @@ LightstreamerClient.prototype = {
      *
      * @see #subscribeMpn
      */
-// #endif
     registerForMpn: function(device) {
         this.delegate.registerForMpn(device.delegate);
     },
 
-// #ifndef START_NODE_JSDOC_EXCLUDE
     /**
      * Operation method that subscribes an MpnSubscription on server's MPN Module.<BR>
      * This operation adds the {@link MpnSubscription} to the list of "active" subscriptions. MPN subscriptions are activated on the server as soon as possible
@@ -547,12 +545,10 @@ LightstreamerClient.prototype = {
      * @see #unsubscribeMpn
      * @see #unsubscribeMpnSubscriptions
      */
-// #endif
     subscribeMpn: function(subscription, coalescing) {
         this.delegate.subscribeMpn(subscription.delegate, coalescing);
     },
 
-// #ifndef START_NODE_JSDOC_EXCLUDE
     /**
      * Operation method that unsubscribes an MpnSubscription from the server's MPN Module.<BR>
      * This operation removes the MpnSubscription from the list of "active" subscriptions.
@@ -571,12 +567,10 @@ LightstreamerClient.prototype = {
      * @see #subscribeMpn
      * @see #unsubscribeMpnSubscriptions
      */
-// #endif
     unsubscribeMpn: function(/*MpnSubscription*/ subscription) {
         this.delegate.unsubscribeMpn(subscription.delegate);
     },
 
-// #ifndef START_NODE_JSDOC_EXCLUDE
     /**
      * Operation method that unsubscribes all the MPN subscriptions with a specified status from the server's MPN Module.<BR>
      * By specifying a status filter it is possible to unsubscribe multiple MPN subscriptions at once. E.g. by passing <code>TRIGGERED</code> it is possible
@@ -601,12 +595,10 @@ LightstreamerClient.prototype = {
      * @see #subscribeMpn
      * @see #unsubscribeMpn
      */
-// #endif
     unsubscribeMpnSubscriptions: function(filter) {
         this.delegate.unsubscribeMpnSubscriptions(filter);
     },
 
-// #ifndef START_NODE_JSDOC_EXCLUDE
     /**
      * Inquiry method that returns a collection of the existing MPN subscription with a specified status.<BR>
      * Can return both objects created by the user, via {@link MpnSubscription} constructors, and objects created by the client, to represent pre-existing MPN subscriptions.<BR>
@@ -633,12 +625,10 @@ LightstreamerClient.prototype = {
      *
      * @see #findMpnSubscription
      */
-// #endif
     getMpnSubscriptions: function(filter) {
         return this.delegate.getMpnSubscriptionWrappers(filter);
     },
 
-// #ifndef START_NODE_JSDOC_EXCLUDE
     /**
      * Inquiry method that returns the MpnSubscription with the specified subscription ID, or null if not found.<BR>
      * The object returned by this method can be an object created by the user, via MpnSubscription constructors, or an object created by the client,
@@ -658,8 +648,8 @@ LightstreamerClient.prototype = {
      *
      * @see #getMpnSubscriptions
      */
-// #endif
     findMpnSubscription: function(subscriptionId) {
         return this.delegate.findMpnSubscriptionWrapper(subscriptionId);
     },
+// #endif
 };
