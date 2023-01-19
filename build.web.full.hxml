@@ -9,8 +9,7 @@ build.common.hxml
 --library hxtsdgen
 
 -D shallow-expose
---js bin/web/lightstreamer_orig.full.js
---cmd haxe -p tools --run WebFullGenerator
+--js bin/web/build/full/obj/ls_web_client_haxe_orig.js
 
 -D LS_WEB
 -D LS_MPN

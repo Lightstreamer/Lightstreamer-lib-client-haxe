@@ -1,6 +1,6 @@
 {
   "name": "lightstreamer-client-web",
-  "version": "9.0.0+123",
+  "version": "@VERSION@",
   "description": "This package includes the resources needed to write a Lightstreamer client.",
   "license": "Apache-2.0",
   "keywords": [
