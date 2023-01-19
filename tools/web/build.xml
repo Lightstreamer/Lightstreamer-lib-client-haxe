@@ -1,0 +1,18 @@
+<project name="Web client library" 
+  default="package">
+
+  <description>
+  Buildfile for the Web client library
+  </description>
+
+  <target name="package" description="Build the library">
+    <ant antfile="build-core.xml" target="package" useNativeBasedir="true"/>
+    <ant antfile="build-full.xml" target="package" useNativeBasedir="true"/>
+  </target>
+
+  <target name="clean" description="Clean the project">
+    <ant antfile="build-core.xml" target="clean" useNativeBasedir="true"/>
+    <ant antfile="build-full.xml" target="clean" useNativeBasedir="true"/>
+  </target>
+
+</project>
