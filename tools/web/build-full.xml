@@ -12,7 +12,6 @@
   <property name="obj" location="${build}/obj"/>
   <property name="obj.api.lib" location="${obj}/ls_web_client_api.js"/>
   <property name="obj.wrapper.lib" location="${obj}/ls_web_client_wrapper.js"/>
-  <property name="dashboard.dir" location="${build}/../dist-dashboard"/>
   <property name="test" location="bin-test/web"/>
   <property name="tools.base.dir" location="tools"/>
   <property name="build.base.dir" location="bin/web/build"/>
@@ -23,8 +22,7 @@
   <property name="rollup.config" location="${tools}/res/rollup.config.full.js"/>
   
   <property name="rollup.config.widgets" location="${tools}/res/rollup.config.widgets.js"/>
-  <property name="obj.widgets.lib" location="${obj}/lightstreamer-widgets.js"/>
-  <property name="dist.widgets.lib" location="${dashboard.dir}/lightstreamer-widgets.js"/>
+  <property name="widgets.lib" location="${obj}/lightstreamer-widgets.js"/>
   <property name="res.package.json" location="${tools}/res/package.json"/>
   <property name="dist.package.json" location="${dist}/package.json"/>
 
@@ -51,9 +49,8 @@
       <arg value="rollup"/>
       <arg value="--config"/>
       <arg value="${rollup.config.widgets}"/>
-      <!-- output lib is saved in ${obj.widgets.lib} -->
+      <!-- output lib is saved in ${widgets.lib} -->
     </exec>
-    <copy file="${obj.widgets.lib}" tofile="${dist.widgets.lib}"/>
   </target>
 
   <target name="package_haxe" depends="preprocess">
