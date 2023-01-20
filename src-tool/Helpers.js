@@ -23,6 +23,7 @@ export default /*@__PURE__*/(function() {
   /**
    * This module is a motley collection of simple "shortcut" methods
    * @exports Helpers
+   * @private
    */
   var Helpers = {
       

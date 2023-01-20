@@ -169,6 +169,7 @@ export default /*@__PURE__*/(function() {
      * 
      * @exports Executor
      * @extends module:ExecutorInterface
+     * @private
      */
     var Executor = {  
       

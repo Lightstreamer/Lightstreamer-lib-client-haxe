@@ -27,6 +27,7 @@ export default /*@__PURE__*/(function() {
    * If a conditions is not met ASSERT.failures is increased
    * and an error log line is printed on the ASSERT category
    * @exports ASSERT
+   * @private
    */
   var ASSERT = {
     /**

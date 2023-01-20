@@ -83,7 +83,7 @@ export default /*@__PURE__*/(function() {
    *   Inheritance(MyClass,Setter,true);
    *   return MyClass;
    * });
-   * 
+   * @private
    */
   var Setter = function() {
     

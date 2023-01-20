@@ -52,7 +52,7 @@ export default /*@__PURE__*/(function() {
    *  
    * });
    * 
-   * 
+   * @private
    */
   var LoggerManager = {
       

@@ -113,6 +113,7 @@ export default /*@__PURE__*/(function() {
    * the values and values are the keys of the first map. 
    * For this reason the map can't contain duplicated values: collisions are 
    * handled by swapping values. 
+   * @private
    */
   var DoubleKeyMap = function() {
     /**

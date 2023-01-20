@@ -41,6 +41,7 @@ export default /*@__PURE__*/(function() {
    * this class anyway.
    * 
    * @extends Matrix
+   * @private
    */
   var DoubleKeyMatrix = function() {
     this._callSuperConstructor(DoubleKeyMatrix);

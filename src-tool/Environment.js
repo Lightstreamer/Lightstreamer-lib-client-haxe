@@ -25,6 +25,7 @@ export default /*@__PURE__*/(function() {
   }
   /**
    * @exports Environment
+   * @private
    */
   var Environment = {
       

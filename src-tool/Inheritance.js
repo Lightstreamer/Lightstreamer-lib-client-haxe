@@ -52,6 +52,7 @@ export default /*@__PURE__*/(function() {
    * This module introduce a "classic" inheritance mechanism as well as an helper to
    * copy methods from one class to another. See the Inheritance method documentation below for details.
    * @exports Inheritance
+   * @private
    */
   var Inheritance = {
       

@@ -160,6 +160,7 @@ export default /*@__PURE__*/(function() {
    * As most of the methods are based on User Agent inspections all the method names contain the "probably" word to recall their
    * intrinsic weakness.
    * @exports BrowserDetection
+   * @private
    */
   var BrowserDetection = {
       /**

@@ -76,6 +76,7 @@ export default /*@__PURE__*/(function() {
    *   
    *   return MyClassListener;
    * });
+   * @private
    */
   var EventDispatcher = function() {
     this.initDispatcher();

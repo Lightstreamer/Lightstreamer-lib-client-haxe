@@ -118,6 +118,7 @@ export default /*@__PURE__*/(function() {
    * Tries to track the loading status of the page. It may fallback to using timeouts or DOMContentLoaded events to address browser compatibilities: in such
    * cases there is a chance that the registered onload handlers are fired before the actual onload is. Also unload and beforeunload may not fire at all.
    * @exports EnvironmentStatus
+   * @private
    */
   var EnvironmentStatus = {
     /**

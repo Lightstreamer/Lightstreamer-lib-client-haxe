@@ -49,6 +49,7 @@ export default /*@__PURE__*/(function() {
    * <br>Other than the proxied methods it offers some utility methods that will join
    * together all of the specified parameters in a single string before passing it to
    * the proxied instance. 
+   * @private
    */
   var LoggerProxy = function(toWrap) {//called simply Log on the original .NET implementation
     this.setWrappedInstance(toWrap);

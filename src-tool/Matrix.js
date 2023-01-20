@@ -23,6 +23,7 @@ export default /*@__PURE__*/(function() {
    * 
    * @exports Matrix
    * @class Very simple object-backed bi-dimensional Matrix implementation.
+   * @private
    */
   var Matrix = function(inputMatrix) {
     /**
