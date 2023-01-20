@@ -9,38 +9,38 @@ var ConsoleLogLevel = function() {
 };
 
   /**
-    Trace logging level.
- 
-    This level enables all logging.
-  */
+   * Trace logging level.
+   * 
+   * This level enables all logging.
+   */
   ConsoleLogLevel.TRACE = LSConsoleLogLevel.TRACE;
   /**
-    Debug logging level.
-     
-    This level enables all logging except tracing.
+   * Debug logging level.
+   * 
+   * This level enables all logging except tracing.
    */
   ConsoleLogLevel.DEBUG = LSConsoleLogLevel.DEBUG;
   /**
-    Info logging level.
-     
-    This level enables logging for information, warnings, errors and fatal errors.
+   * Info logging level.
+   * 
+   * This level enables logging for information, warnings, errors and fatal errors.
    */
   ConsoleLogLevel.INFO = LSConsoleLogLevel.INFO;
   /**
-    Warn logging level.
-     
-    This level enables logging for warnings, errors and fatal errors.
+   * Warn logging level.
+   * 
+   * This level enables logging for warnings, errors and fatal errors.
    */
   ConsoleLogLevel.WARN = LSConsoleLogLevel.WARN;
   /**
-    Error logging level.
-     
-    This level enables logging for errors and fatal errors.
+   * Error logging level.
+   * 
+   * This level enables logging for errors and fatal errors.
    */
   ConsoleLogLevel.ERROR = LSConsoleLogLevel.ERROR;
   /**
-    Fatal logging level.
-     
-    This level enables logging for fatal errors only.
+   * Fatal logging level.
+   * 
+   * This level enables logging for fatal errors only.
    */
   ConsoleLogLevel.FATAL = LSConsoleLogLevel.FATAL;
