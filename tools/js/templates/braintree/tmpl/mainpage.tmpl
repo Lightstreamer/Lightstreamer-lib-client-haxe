@@ -1,0 +1,14 @@
+<?js 
+var data = obj;
+var templates = env.conf.templates;
+var weswit = templates['weswit'];
+?>
+
+<?js if (data.readme) { ?>
+  <section class="readme">
+    <article>
+      <h1><?js= weswit.extendedLibraryName ?></h1>
+      <?js= data.readme ?>
+    </article>
+  </section>
+<?js } ?>

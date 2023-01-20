@@ -1,0 +1,24 @@
+  .active .methods {
+    display: block;
+  }
+
+  .methods {
+    display: none;
+  }
+
+  nav > ul > li {
+    padding: 20px 0;
+  }
+
+  nav > ul > li > a {
+    padding: 0;
+  }
+
+  nav > ul > li.active a {
+    margin-bottom: 10px;
+  }
+
+  nav > ul > li.active > a {
+    margin-bottom: 15px;
+  }
+

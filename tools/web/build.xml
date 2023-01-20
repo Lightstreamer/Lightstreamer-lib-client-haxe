@@ -1,18 +1,61 @@
-<project name="Web client library" 
-  default="package">
+<project name="Web client library"
+  default="package" 
+  basedir="../..">
 
   <description>
   Buildfile for the Web client library
   </description>
 
+  <property name="tools" location="tools/web"/>
+  <property name="build" location="bin/web/build"/>
+  <property name="docs" location="${build}/docs"/>
+  <property name="jsdoc.logo" location="${tools}/../js/logo.png"/>
+  <property name="jsdoc.template" location="${tools}/../js/templates/braintree"/>
+  <property name="jsdoc.search" location="${tools}/../js/templates/jsdoc-search"/>
+  <property name="jsdoc.out" location="${build}/docs/api"/>
+  <property name="jsdoc.config" location="${build}/docs/jsdoc3.json"/>
+  <property name="jsdoc.config.tmpl" location="${tools}/res/doc/jsdoc3.json"/>
+  <property name="jsdoc.summary" location="${tools}/res/doc/jsdoc_summary.md"/>
+  <property name="jsdoc.src" location="${build}/docs/src"/>
+
+  <property file="${tools}/build.properties"/>
+
+  <target name="docs" depends="docs.src" description="Build the docs">
+    <copy file="${jsdoc.config.tmpl}" tofile="${jsdoc.config}" overwrite="true">
+      <filterset>
+        <filter token="SEARCH_PLUGIN" value="${jsdoc.search}"/>
+        <filter token="VERSION" value="${version}"/>
+        <filter token="SUMMARY.MD" value="${jsdoc.summary}"/>
+        <filter token="LOGO.IMG" value="${jsdoc.logo}"/>
+      </filterset>
+    </copy>
+    <mkdir dir="${jsdoc.out}"/>
+    <exec executable="npx" failonerror="true">
+      <arg value="jsdoc"/>
+      <arg value="-r"/>
+      <arg value="-t"/><arg value="${jsdoc.template}"/>
+      <arg value="-d"/><arg value="${jsdoc.out}"/>
+      <arg value="-c"/><arg value="${jsdoc.config}"/>
+      <arg value="${jsdoc.src}"/>
+    </exec>
+  </target>
+
+  <target name="docs.src">
+    <copy file="${build}/dist/lightstreamer.js" tofile="${jsdoc.src}/lightstreamer.js" overwrite="true"/>
+    <!-- restore docs tree-shaked by rollup.js -->
+    <copy file="src-widget/ChartListener.js" tofile="${jsdoc.src}/ChartListener.js" overwrite="true"/>
+    <copy file="src-widget/DynaGridListener.js" tofile="${jsdoc.src}/DynaGridListener.js" overwrite="true"/>
+    <copy file="src-widget/StaticGridListener.js" tofile="${jsdoc.src}/StaticGridListener.js" overwrite="true"/>
+  </target>
+
   <target name="package" description="Build the library">
-    <ant antfile="build-core.xml" target="package" useNativeBasedir="true"/>
-    <ant antfile="build-full.xml" target="package" useNativeBasedir="true"/>
+    <ant antfile="${tools}/build-core.xml" target="package" useNativeBasedir="true" inheritAll="false"/>
+    <ant antfile="${tools}/build-full.xml" target="package" useNativeBasedir="true" inheritAll="false"/>
   </target>
 
   <target name="clean" description="Clean the project">
-    <ant antfile="build-core.xml" target="clean" useNativeBasedir="true"/>
-    <ant antfile="build-full.xml" target="clean" useNativeBasedir="true"/>
+    <ant antfile="${tools}/build-core.xml" target="clean" useNativeBasedir="true" inheritAll="false"/>
+    <ant antfile="${tools}/build-full.xml" target="clean" useNativeBasedir="true" inheritAll="false"/>
   </target>
 
 </project>
