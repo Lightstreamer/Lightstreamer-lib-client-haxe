@@ -1,0 +1,13 @@
+[
+  "LSConnectionDetails",
+  "LSConnectionOptions",
+  "LSLightstreamerClient",
+  "LSSubscription",
+  "LSConsoleLogLevel",
+  "LSConsoleLoggerProvider",
+
+  "LSMpnDevice", 
+  "LSMpnSubscription", 
+  "LSSafariMpnBuilder", 
+  "LSFirebaseMpnBuilder"
+]
