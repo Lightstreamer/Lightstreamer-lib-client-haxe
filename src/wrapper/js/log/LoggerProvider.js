@@ -3,11 +3,10 @@
    * @constructor
    * 
    * @exports LoggerProvider
-   * @class Simple interface to be implemented to provide custom log producers
-   * through {@link module:LoggerManager.setLoggerProvider}.
+   * @class Simple interface to be implemented to provide custom log producers.
    * 
    * <BR>A simple implementation of this interface is included with this library: 
-   * {@link SimpleLoggerProvider}.
+   * {@link ConsoleLoggerProvider}.
    */
 var LoggerProvider = function() {
     
@@ -16,7 +15,7 @@ var LoggerProvider = function() {
 LoggerProvider.prototype = {
   
     /**
-     * Invoked by the {@link module:LoggerManager} to request a {@link Logger} instance that will be used for logging occurring 
+     * Invoked to request a {@link Logger} instance that will be used for logging occurring 
      * on the given category. It is suggested, but not mandatory, that subsequent 
      * calls to this method related to the same category return the same {@link Logger}
      * instance.
