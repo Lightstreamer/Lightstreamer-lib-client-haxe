@@ -21,7 +21,7 @@ Currently two "diff" formats are supported: JSON Patch and TLCP-diff.
 2) Added the getValueAsJSONPatchIfAvailable function in the ItemUpdate class, to take advantage of the new support for JSON Patch differences, which may prove useful in some use cases.
 See the Docs for details.
 
-removed ConnectionSharing (web only)
+removed ConnectionSharing (web only) (which methods?) (explain why it was removed)
 
 revised logging mechanism (same API on all platforms)
 consisting of:
