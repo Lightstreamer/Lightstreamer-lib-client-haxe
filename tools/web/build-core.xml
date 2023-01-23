@@ -20,8 +20,6 @@
   <property name="haxe.orig.lib" location="${obj}/ls_web_client_haxe_orig.js"/>
   <property name="haxe.lib" location="${obj}/ls_web_client_haxe.js"/>
   <property name="rollup.config" location="${tools}/res/rollup.config.core.js"/>
-  <property name="res.package.json" location="${tools}/res/package.json"/>
-  <property name="dist.package.json" location="${dist}/package.json"/>
 
   <property name="wrapper" location="src/wrapper/web"/>
   <property name="api.lib" location="${wrapper}/api.core.inc"/>
@@ -29,11 +27,6 @@
   <property name="inc.base.dir" location="src/wrapper/js"/>
 
   <target name="package" depends="package_haxe" description="Build the library">
-    <copy file="${res.package.json}" tofile="${dist.package.json}" overwrite="true">
-      <filterset>
-        <filter token="VERSION" value="${version}"/>
-      </filterset>
-    </copy>
     <exec executable="npx" failonerror="true">
       <arg value="rollup"/>
       <arg value="--config"/>

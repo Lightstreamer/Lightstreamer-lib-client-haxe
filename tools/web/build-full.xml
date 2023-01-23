@@ -23,8 +23,10 @@
   
   <property name="rollup.config.widgets" location="${tools}/res/rollup.config.widgets.js"/>
   <property name="widgets.lib" location="${obj}/lightstreamer-widgets.js"/>
-  <property name="res.package.json" location="${tools}/res/package.json"/>
-  <property name="dist.package.json" location="${dist}/package.json"/>
+  <property name="package.json.template" location="${tools}/res/package.json"/>
+  <property name="package.json" location="${dist}/package.json"/>
+  <property name="readme.md.template" location="${tools}/res/doc/README.md"/>
+  <property name="readme.md" location="${dist}/README.md"/>
 
   <property name="wrapper" location="src/wrapper/web"/>
   <property name="api.lib" location="${wrapper}/api.full.inc"/>
@@ -39,18 +41,26 @@
     </exec>
   </target>
 
-  <target name="package_widgets">
-    <copy file="${res.package.json}" tofile="${dist.package.json}" overwrite="true">
-      <filterset>
-        <filter token="VERSION" value="${version}"/>
-      </filterset>
-    </copy>
+  <target name="package_widgets" depends="package_common">
     <exec executable="npx" failonerror="true">
       <arg value="rollup"/>
       <arg value="--config"/>
       <arg value="${rollup.config.widgets}"/>
       <!-- output lib is saved in ${widgets.lib} -->
     </exec>
+  </target>
+
+  <target name="package_common">
+     <copy file="${package.json.template}" tofile="${package.json}" overwrite="true">
+      <filterset>
+        <filter token="VERSION" value="${version}"/>
+      </filterset>
+    </copy>
+    <copy file="${readme.md.template}" tofile="${readme.md}" overwrite="true">
+      <filterset>
+        <filter token="VERSION" value="${version}"/>
+      </filterset>
+    </copy>
   </target>
 
   <target name="package_haxe" depends="preprocess">
