@@ -3,7 +3,7 @@ import JsUtils from '../../JsUtils'
 import pkg from '../../../bin/web/build/dist/package.json'
 
 const [versionNum, buildNum] = JsUtils.parseSemVer(pkg.version)
-const classes = ["Chart", "DynaGrid", "SimpleChartListener", "StaticGrid", "StatusWidget"]
+const classes = ["Chart", "DynaGrid", "SimpleChartListener", "StaticGrid", "StatusWidget", "ChartListener", "DynaGridListener", "StaticGridListener"]
 
 export default [
   {

@@ -18,6 +18,6 @@ export { LightstreamerClient, Subscription, ConsoleLogLevel, ConsoleLoggerProvid
 
 export { MpnDevice, MpnSubscription, SafariMpnBuilder, FirebaseMpnBuilder };
 
-export { Chart, DynaGrid, SimpleChartListener, StaticGrid, StatusWidget } from "./lightstreamer-widgets.esm.js";
+export { Chart, DynaGrid, SimpleChartListener, StaticGrid, StatusWidget, ChartListener, DynaGridListener, StaticGridListener } from "./lightstreamer-widgets.esm.js";
 
 export * from "./ls_web_client_api";

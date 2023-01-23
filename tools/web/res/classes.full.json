@@ -22,5 +22,8 @@
   "ItemUpdate", 
   "SubscriptionListener",
   "MpnDeviceListener",
-  "MpnSubscriptionListener"
+  "MpnSubscriptionListener",
+  "ChartListener", 
+  "DynaGridListener", 
+  "StaticGridListener"
 ]
