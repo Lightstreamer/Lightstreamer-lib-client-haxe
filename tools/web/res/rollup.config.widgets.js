@@ -1,6 +1,6 @@
 import virtual from '@rollup/plugin-virtual'
 import JsUtils from '../../JsUtils'
-import pkg from '../../../bin/web/build/dist/package.json'
+import pkg from '../../../bin/web/build/dist/npm/package.json'
 
 const [versionNum, buildNum] = JsUtils.parseSemVer(pkg.version)
 const classes = ["Chart", "DynaGrid", "SimpleChartListener", "StaticGrid", "StatusWidget", "ChartListener", "DynaGridListener", "StaticGridListener"]

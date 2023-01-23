@@ -8,7 +8,7 @@
 
   <property name="tools" location="tools/web"/>
   <property name="build" location="bin/web/build/core"/>
-  <property name="dist" location="bin/web/build/dist"/>
+  <property name="dist" location="bin/web/build/dist/npm"/>
   <property name="obj" location="${build}/obj"/>
   <property name="obj.api.lib" location="${obj}/ls_web_client_api.js"/>
   <property name="obj.wrapper.lib" location="${obj}/ls_web_client_wrapper.js"/>
@@ -21,17 +21,35 @@
   <property name="haxe.lib" location="${obj}/ls_web_client_haxe.js"/>
   <property name="rollup.config" location="${tools}/res/rollup.config.core.js"/>
 
+  <property name="package.json.template" location="${tools}/res/package.json"/>
+  <property name="package.json" location="${dist}/package.json"/>
+  <property name="readme.md.template" location="${tools}/res/doc/README.md"/>
+  <property name="readme.md" location="${dist}/README.md"/>
+
   <property name="wrapper" location="src/wrapper/web"/>
   <property name="api.lib" location="${wrapper}/api.core.inc"/>
   <property name="wrapper.lib" location="${wrapper}/wrapper.core.inc"/>
   <property name="inc.base.dir" location="src/wrapper/js"/>
 
-  <target name="package" depends="package_haxe" description="Build the library">
+  <target name="package" depends="package_common,package_haxe" description="Build the library">
     <exec executable="npx" failonerror="true">
       <arg value="rollup"/>
       <arg value="--config"/>
       <arg value="${rollup.config}"/>
     </exec>
+  </target>
+
+  <target name="package_common">
+     <copy file="${package.json.template}" tofile="${package.json}" overwrite="true">
+      <filterset>
+        <filter token="VERSION" value="${version}"/>
+      </filterset>
+    </copy>
+    <copy file="${readme.md.template}" tofile="${readme.md}" overwrite="true">
+      <filterset>
+        <filter token="VERSION" value="${version}"/>
+      </filterset>
+    </copy>
   </target>
 
   <target name="package_haxe" depends="preprocess">

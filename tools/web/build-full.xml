@@ -8,7 +8,7 @@
 
   <property name="tools" location="tools/web"/>
   <property name="build" location="bin/web/build/full"/>
-  <property name="dist" location="bin/web/build/dist"/>
+  <property name="dist" location="bin/web/build/dist/npm"/>
   <property name="obj" location="${build}/obj"/>
   <property name="obj.api.lib" location="${obj}/ls_web_client_api.js"/>
   <property name="obj.wrapper.lib" location="${obj}/ls_web_client_wrapper.js"/>

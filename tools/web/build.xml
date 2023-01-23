@@ -16,7 +16,7 @@
   <property name="jsdoc.config" location="${build}/docs/jsdoc3.json"/>
   <property name="jsdoc.config.tmpl" location="${tools}/res/doc/jsdoc3.json"/>
   <property name="jsdoc.summary" location="${tools}/res/doc/jsdoc_summary.md"/>
-  <property name="jsdoc.src" location="${build}/dist/lightstreamer.js"/>
+  <property name="jsdoc.src" location="${build}/dist/npm/lightstreamer.js"/>
 
   <property file="${tools}/build.properties"/>
 
