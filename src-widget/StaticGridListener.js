@@ -62,3 +62,5 @@
       }
   };
 //<----  Listener Interface  
+
+export default StaticGridListener
