@@ -2,6 +2,7 @@ package com.lightstreamer.client.mpn;
 
 import com.lightstreamer.internal.NativeTypes;
 
+@:jsRequire("./ls_web_client_api", "MpnSubscriptionListener")
 extern interface MpnSubscriptionListener {
   public function onListenStart(): Void;
   public function onListenEnd(): Void;
