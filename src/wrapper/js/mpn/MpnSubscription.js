@@ -111,7 +111,7 @@ MpnSubscription.prototype = {
       /**
        * Inquiry method that gets the JSON structure used by the Sever to send notifications.
        *
-       * @return the JSON structure used by the Server to send notifications or null if the value is not available.
+       * @return {String} the JSON structure used by the Server to send notifications or null if the value is not available.
        *
        * @see #getNotificationFormat
        */
@@ -156,7 +156,7 @@ MpnSubscription.prototype = {
       /**
        * Inquiry method that gets the trigger expression requested by the user.
        *
-       * @return {boolean} returns the trigger requested by the user or null if the value is not available.
+       * @return {String} returns the trigger requested by the user or null if the value is not available.
        *
        * @see #setTriggerExpression
        * @see #getActualTriggerExpression
@@ -168,7 +168,7 @@ MpnSubscription.prototype = {
       /**
        * Inquiry method that gets the trigger expression evaluated by the Sever.
        *
-       * @return returns the trigger sent by the Server or null if the value is not available.
+       * @return {String} returns the trigger sent by the Server or null if the value is not available.
        *
        * @see #getTriggerExpression
        */
@@ -201,7 +201,7 @@ MpnSubscription.prototype = {
        * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a call to {@link MpnSubscriptionListener#onPropertyChanged}
        * with argument <code>trigger</code> on any {@link MpnSubscriptionListener} listening to the related MpnSubscription.</p>
        *
-       * @param {boolean} expr the boolean expression that acts as a trigger to deliver the push notification.  If the value is null, no trigger is set on the subscription.
+       * @param {String} expr the boolean expression that acts as a trigger to deliver the push notification.  If the value is null, no trigger is set on the subscription.
        *
        * @see #isTriggered
        */
