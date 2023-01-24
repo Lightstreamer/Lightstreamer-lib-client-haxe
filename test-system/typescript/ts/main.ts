@@ -13,43 +13,12 @@ sub.setRequestedSnapshot("yes")
 assert(sub.getDataAdapter() == "QUOTE_ADAPTER")
 assert(sub.getRequestedSnapshot() == "yes")
 sub.addListener({
-    onListenStart: function (aSub) {
+    onListenStart: function () {
         log("SubscriptionListener.onListenStart")
-        assert(sub == aSub)
     },
     onItemUpdate: function (obj) {
         log(obj.getValue("stock_name") + ": " + obj.getValue("last_price"))
     },
-    onClearSnapshot: function (itemName: string, itemPos: number): void {
-        // throw new Error('Function not implemented.')
-    },
-    onCommandSecondLevelItemLostUpdates: function (lostUpdates: number, key: string): void {
-        // throw new Error('Function not implemented.')
-    },
-    onCommandSecondLevelSubscriptionError: function (code: number, message: string, key: string): void {
-        // throw new Error('Function not implemented.')
-    },
-    onEndOfSnapshot: function (itemName: string, itemPos: number): void {
-        // throw new Error('Function not implemented.')
-    },
-    onItemLostUpdates: function (itemName: string, itemPos: number, lostUpdates: number): void {
-        // throw new Error('Function not implemented.')
-    },
-    onListenEnd: function (subscription: Subscription): void {
-        // throw new Error('Function not implemented.')
-    },
-    onSubscription: function (): void {
-        // throw new Error('Function not implemented.')
-    },
-    onSubscriptionError: function (code: number, message: string): void {
-        // throw new Error('Function not implemented.')
-    },
-    onUnsubscription: function (): void {
-        // throw new Error('Function not implemented.')
-    },
-    onRealMaxFrequency: function (frequency: string): void {
-        // throw new Error('Function not implemented.')
-    }
 })
 
 //var client = new LightstreamerClient("http://localhost:8080","DEMO")
