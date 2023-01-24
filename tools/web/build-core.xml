@@ -36,6 +36,7 @@
       <arg value="rollup"/>
       <arg value="--config"/>
       <arg value="${rollup.config}"/>
+      <!-- output is saved in ${dist} -->
     </exec>
   </target>
 
