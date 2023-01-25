@@ -30,9 +30,10 @@
   <property name="types.d.ts.log" location="${dist}/../types.d.ts.log"/>
 
   <property name="wrapper" location="src/wrapper/web"/>
-  <property name="api.lib" location="${wrapper}/api.full.inc"/>
-  <property name="wrapper.lib" location="${wrapper}/wrapper.full.inc"/>
-  <property name="inc.base.dir" location="src/wrapper/js"/>
+  <property name="api.inc" location="${wrapper}/api.full.inc"/>
+  <property name="haxe.inc" location="${wrapper}/haxe.full.inc"/>
+  <property name="wrapper.inc" location="${wrapper}/wrapper.full.inc"/>
+  <property name="js.dir" location="src/wrapper/js"/>
 
   <target name="package" depends="types.d.ts" description="Build the library">
   </target>
@@ -96,18 +97,36 @@
       <!-- output lib is saved in ${haxe.orig.lib} -->
     </exec>
     <exec executable="haxe" failonerror="true">
-      <arg value="--run"/><arg value="tools.Patch"/>
+      <arg value="--run"/>
+      <arg value="tools.Patch"/>
       <arg value="${haxe.orig.lib}"/>
-      <arg value="${tools}/res/haxe.classes.full.json"/>
-      <arg value="${haxe.lib}"/>
-      <!-- output lib is saved in ${haxe.lib} -->
+      <!-- output lib is saved in ${haxe.orig.lib} -->
+    </exec>
+    <exec executable="node" failonerror="true">
+      <arg value="${tools.base.dir}/preprocess.js"/>
+      <arg value="${haxe.inc}"/>
+      <arg value="-b"/><arg value="${obj}"/>
+      <arg value="-o"/><arg value="${haxe.lib}"/>
     </exec>
   </target>
 
-  <target name="test" depends="preprocess" description="Run the tests">
-    <copy file="${obj.api.lib}" todir="${test}"/>
+  <target name="test" description="Run the tests">
     <exec executable="haxe" failonerror="true">
-        <arg value="test.web.hxml"/>
+      <arg value="test.web.hxml"/>
+    </exec>
+    <exec executable="node" failonerror="true">
+      <arg value="${tools.base.dir}/preprocess.js"/>
+      <arg value="${tools}/res/test.full.inc"/>
+      <arg value="-o"/><arg value="${test}/lightstreamer_haxe.js"/>
+      <arg value="-START_WEB_JSDOC_EXCLUDE"/>
+    </exec>
+    <exec executable="npx" failonerror="true">
+      <arg value="rollup"/>
+      <arg value="--config"/>
+      <arg value="${tools}/res/rollup.config.test.js"/>
+    </exec>
+    <exec executable="open">
+      <arg value="index.html"/>
     </exec>
   </target>
 
@@ -115,8 +134,8 @@
     <touch file="${obj.api.lib}" mkdirs="true"/>
     <exec executable="node" failonerror="true">
       <arg value="${tools.base.dir}/preprocess.js"/>
-      <arg value="${api.lib}"/>
-      <arg value="-b"/><arg value="${inc.base.dir}"/>
+      <arg value="${api.inc}"/>
+      <arg value="-b"/><arg value="${js.dir}"/>
       <arg value="-o"/><arg value="${obj.api.lib}"/>
       <arg value="-START_WEB_JSDOC_EXCLUDE"/>
       <arg value="-LS_MPN"/>
@@ -124,8 +143,8 @@
     <touch file="${obj.wrapper.lib}" mkdirs="true"/>
     <exec executable="node" failonerror="true">
       <arg value="${tools.base.dir}/preprocess.js"/>
-      <arg value="${wrapper.lib}"/>
-      <arg value="-b"/><arg value="${inc.base.dir}"/>
+      <arg value="${wrapper.inc}"/>
+      <arg value="-b"/><arg value="${js.dir}"/>
       <arg value="-o"/><arg value="${obj.wrapper.lib}"/>
       <arg value="-START_WEB_JSDOC_EXCLUDE"/>
       <arg value="-LS_MPN"/>
