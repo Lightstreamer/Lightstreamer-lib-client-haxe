@@ -7,11 +7,9 @@ build.common.hxml
 
 --library hxnodejs
 --library hxnodejs-ws
---library hxtsdgen
 
 -D shallow-expose
---js bin/node/lightstreamer-node_orig.js
---cmd haxe -p tools --run NodeGenerator
+--js bin/node/build/obj/ls_node_client_haxe_orig.js
 
 -D LS_NODE
 -D LS_HAS_COOKIES
