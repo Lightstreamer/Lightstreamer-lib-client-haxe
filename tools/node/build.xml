@@ -20,6 +20,7 @@
   <property name="package.json" location="${dist}/package.json"/>
   <property name="readme.md.template" location="${tools}/res/doc/README.md"/>
   <property name="readme.md" location="${dist}/README.md"/>
+  <property name="types.d.ts.log" location="${dist}/../types.d.ts.log"/>
 
   <property name="wrapper" location="src/wrapper/node"/>
   <property name="api.inc" location="${wrapper}/api.inc"/>
@@ -61,7 +62,27 @@
     </exec>
   </target>
 
-  <target name="package" depends="package_common,package_haxe" description="Build the library">
+  <target name="package" depends="types.d.ts" description="Build the library">
+  </target>
+
+  <target name="types.d.ts" depends="package_libs">
+     <exec executable="npx" failonerror="true" output="${types.d.ts.log}">
+      <arg value="jsdoc"/>
+      <arg value="-t"/>
+      <arg value="node_modules/tsd-jsdoc/dist"/>
+      <arg value="-d"/>
+      <arg value="${dist}"/>
+      <arg value="${dist}/lightstreamer-node.js"/>
+    </exec>
+    <exec executable="node" failonerror="true">
+      <arg value="${tools.base.dir}/fix-types-d-ts"/>
+      <arg value="${dist}"/>
+      <arg value="lightstreamer-client-node"/>
+    </exec>
+    <echo>Log of types.d.ts is saved in `${types.d.ts.log}`</echo>
+  </target>
+
+  <target name="package_libs" depends="package_common,package_haxe">
     <exec executable="npx" failonerror="true">
       <arg value="rollup"/>
       <arg value="--config"/>
