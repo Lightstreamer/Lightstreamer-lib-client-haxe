@@ -7,8 +7,6 @@ test.common.hxml
 --class-path src/mpn/web
 
 --js bin-test/web/lightstreamer_orig.js
---cmd npx rollup --config rollup.config.test.js
---cmd open index.html
 
 -D LS_WEB
 -D LS_MPN
