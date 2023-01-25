@@ -1,0 +1,45 @@
+{
+    "tags": {
+        "allowUnknownTags": true,
+        "dictionaries": ["jsdoc"]
+    },
+    
+    "source": {
+        "includePattern": ".+\\.js(doc)?$",
+        "excludePattern": "(^|\\/)_"
+    },
+    
+    "plugins": [
+        "plugins/markdown",
+        "@SEARCH_PLUGIN@/search"
+    ],
+    
+    "templates": {
+      "disableSort": false,
+      "collapse": true,
+      "weswit": {
+        "shortLibraryName": "Node.js Client @VERSION@",
+        "extendedLibraryName": "Lightstreamer Node.js Client @VERSION@ API Reference",
+        "summaryFile": "@SUMMARY.MD@",
+        "footerText": "Lightstreamer Node.js Client @VERSION@ API Reference",
+        "logo": {
+          "img": "@LOGO.IMG@",
+          "link": "https://www.lightstreamer.com"
+        }
+      },
+      "default": {
+            "outputSourceFiles": false,
+            "staticFiles": {
+                "include": [
+                    "@LOGO.IMG@",
+                    "@SEARCH_PLUGIN@/statics"
+                ]
+            }
+        }
+    },
+    
+    "opts": {
+        "encoding": "utf8",
+        "readme": "@SUMMARY.MD@"
+    }
+}
