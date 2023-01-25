@@ -4,6 +4,7 @@ package com.lightstreamer.client;
 @:pythonImport("lightstreamer.client", "ConnectionOptions")
 #end
 #if js @:native("ConnectionOptions") #end
+#if LS_NODE @:jsRequire("lightstreamer-client-node", "ConnectionOptions") #end
 extern class ConnectionOptions {
   #if !cs
   public function getContentLength(): Long;

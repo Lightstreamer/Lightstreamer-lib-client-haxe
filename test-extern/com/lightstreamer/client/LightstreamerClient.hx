@@ -8,6 +8,7 @@ import com.lightstreamer.client.mpn.*;
 @:pythonImport("lightstreamer.client", "LightstreamerClient")
 #end
 #if js @:native("LightstreamerClient") #end
+#if LS_NODE @:jsRequire("lightstreamer-client-node", "LightstreamerClient") #end
 extern class LightstreamerClient {
    public static final LIB_NAME: String;
    public static final LIB_VERSION: String;

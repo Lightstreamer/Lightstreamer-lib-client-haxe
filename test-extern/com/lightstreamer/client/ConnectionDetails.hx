@@ -4,6 +4,7 @@ package com.lightstreamer.client;
 @:pythonImport("lightstreamer.client", "ConnectionDetails")
 #end
 #if js @:native("ConnectionDetails") #end
+#if LS_NODE @:jsRequire("lightstreamer-client-node", "ConnectionDetails") #end
 extern class ConnectionDetails {
   #if !cs
   public function getAdapterSet(): Null<String>;

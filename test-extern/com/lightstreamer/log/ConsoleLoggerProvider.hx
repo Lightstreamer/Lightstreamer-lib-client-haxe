@@ -4,6 +4,7 @@ package com.lightstreamer.log;
 @:pythonImport("lightstreamer.client", "ConsoleLogLevel")
 #end
 #if js @:native("ConsoleLogLevel") #end
+#if LS_NODE @:jsRequire("lightstreamer-client-node", "ConsoleLogLevel") #end
 extern class ConsoleLogLevel {
   public static final TRACE: Int;
   public static final DEBUG: Int;
@@ -17,6 +18,7 @@ extern class ConsoleLogLevel {
 @:pythonImport("lightstreamer.client", "ConsoleLoggerProvider")
 #end
 #if js @:native("ConsoleLoggerProvider") #end
+#if LS_NODE @:jsRequire("lightstreamer-client-node", "ConsoleLoggerProvider") #end
 extern class ConsoleLoggerProvider implements LoggerProvider {
   public function new(level: Int);
   public function getLogger(category: String): Logger;

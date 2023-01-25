@@ -4,6 +4,7 @@ package com.lightstreamer.client;
 @:pythonImport("lightstreamer.client", "Subscription")
 #end
 #if js @:native("Subscription") #end
+#if LS_NODE @:jsRequire("lightstreamer-client-node","Subscription") #end
 extern class Subscription {
   #if js
   public function new(mode: String, items: NativeArray<String>, fields: NativeArray<String>);

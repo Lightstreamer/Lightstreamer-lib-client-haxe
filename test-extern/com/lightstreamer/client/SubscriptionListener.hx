@@ -4,6 +4,7 @@ package com.lightstreamer.client;
 @:pythonImport("lightstreamer.client", "SubscriptionListener")
 #end
 #if js @:native("SubscriptionListener") #end
+#if LS_NODE @:jsRequire("lightstreamer-client-node", "SubscriptionListener") #end
 extern interface SubscriptionListener {
   public function onSubscription(): Void;
   public function onSubscriptionError(code:Int, message:String): Void;
