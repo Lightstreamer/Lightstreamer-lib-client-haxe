@@ -8,8 +8,7 @@ test.common.hxml
 --library hxnodejs
 --library hxnodejs-ws
 
---js bin-test/node/lightstreamer-node.js
---cmd node bin-test/node/lightstreamer-node.js
+--js bin-test/node/lightstreamer_orig.js
 
 -D LS_NODE
 -D LS_HAS_COOKIES
