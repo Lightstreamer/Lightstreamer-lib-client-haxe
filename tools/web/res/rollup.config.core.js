@@ -3,7 +3,7 @@ import commonjs from '@rollup/plugin-commonjs'
 import { terser } from 'rollup-plugin-terser'
 import JsUtils from '../../JsUtils'
 import pkg from '../../../bin/web/build/dist/npm/package.json'
-import classes from './classes.core.json';
+import classes from '../../../src/wrapper/web/wrapper.export.core.json';
 
 const dist = 'bin/web/build/dist/npm'
 const [versionNum, buildNum] = JsUtils.parseSemVer(pkg.version)

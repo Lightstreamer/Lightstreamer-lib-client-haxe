@@ -1,7 +1,7 @@
 import { terser } from 'rollup-plugin-terser'
 import JsUtils from '../../JsUtils'
 import pkg from '../../../bin/node/build/dist/npm/package.json'
-import classes from './classes.json';
+import classes from '../../../src/wrapper/node/wrapper.export.json';
 
 const [versionNum, buildNum] = JsUtils.parseSemVer(pkg.version)
 
