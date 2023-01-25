@@ -1,4 +1,0 @@
-test.common.hxml
-
---cpp bin-test/cpp
---cmd ./bin-test/cpp/TestAll

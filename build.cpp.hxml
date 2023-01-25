@@ -1,4 +1,0 @@
-build.common.hxml
-
--D static_link
---cpp bin/cpp

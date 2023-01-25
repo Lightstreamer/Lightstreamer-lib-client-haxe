@@ -1,4 +1,0 @@
-build.common.hxml
-
--D no-compilation
---cpp bin/cpp
