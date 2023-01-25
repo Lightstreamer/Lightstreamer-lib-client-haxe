@@ -2,7 +2,7 @@ package com.lightstreamer.client;
 
 import com.lightstreamer.internal.NativeTypes;
 
-@:jsRequire("./ls_web_client_api", "ItemUpdate")
+#if js @:native("ItemUpdate") #end
 @:build(com.lightstreamer.internal.Macros.buildPythonImport("ls_python_client_api", "ItemUpdate"))
 #if cs @:using(ItemUpdate.ItemUpdateExtender) #end
 extern interface ItemUpdate {

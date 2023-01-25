@@ -2,7 +2,7 @@ package com.lightstreamer.client.mpn;
 
 import com.lightstreamer.internal.NativeTypes.Long;
 
-@:jsRequire("./ls_web_client_api", "MpnDeviceListener")
+#if js @:native("MpnDeviceListener") #end
 extern interface MpnDeviceListener {
   public function onListenStart(): Void;
   public function onListenEnd(): Void;

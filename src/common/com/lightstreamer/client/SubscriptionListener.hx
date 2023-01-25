@@ -1,6 +1,6 @@
 package com.lightstreamer.client;
 
-@:jsRequire("./ls_web_client_api", "SubscriptionListener")
+#if js @:native("SubscriptionListener") #end
 @:build(com.lightstreamer.internal.Macros.buildPythonImport("ls_python_client_api", "SubscriptionListener"))
 extern interface SubscriptionListener {
   function onClearSnapshot(itemName: Null<String>, itemPos: Int): Void;

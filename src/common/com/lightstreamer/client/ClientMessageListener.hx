@@ -1,6 +1,6 @@
 package com.lightstreamer.client;
 
-@:jsRequire("./ls_web_client_api", "ClientMessageListener")
+#if js @:native("ClientMessageListener") #end
 @:build(com.lightstreamer.internal.Macros.buildPythonImport("ls_python_client_api", "ClientMessageListener"))
 extern interface ClientMessageListener {
   public function onAbort(originalMessage: String, sentOnNetwork: Bool): Void;
