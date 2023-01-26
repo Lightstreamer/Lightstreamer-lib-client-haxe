@@ -8,6 +8,7 @@
 
   <property name="tools" location="tools/web"/>
   <property name="build" location="bin/web/build"/>
+  <property name="dist" location="${build}/dist/npm"/>
   <property name="docs" location="${build}/docs"/>
   <property name="jsdoc.logo" location="${tools}/../js/logo.png"/>
   <property name="jsdoc.template" location="${tools}/../js/templates/braintree"/>
@@ -19,6 +20,12 @@
   <property name="jsdoc.src" location="${build}/dist/npm/lightstreamer.js"/>
 
   <property file="${tools}/build.properties"/>
+
+  <target name="distribute" description="Publish the library to npmjs">
+    <exec executable="npm" dir="${dist}" failonerror="true">
+      <arg value="publish"/>
+    </exec>
+  </target>
 
   <target name="docs" description="Build the docs">
     <copy file="${jsdoc.config.tmpl}" tofile="${jsdoc.config}" overwrite="true">

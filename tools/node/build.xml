@@ -42,6 +42,12 @@
   Buildfile for the Nodejs client library
   </description>
 
+  <target name="distribute" description="Publish the library to npmjs">
+    <exec executable="npm" dir="${dist}" failonerror="true">
+      <arg value="publish"/>
+    </exec>
+  </target>
+
   <target name="docs" description="Build the docs">
     <copy file="${jsdoc.config.tmpl}" tofile="${jsdoc.config}" overwrite="true">
       <filterset>
