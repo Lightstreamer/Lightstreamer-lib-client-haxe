@@ -26,6 +26,7 @@ export default /*@__PURE__*/(function() {
    * inappropriate time or that the internal state of an object is incompatible 
    * with the call.
    * <BR>Use toString to extract details on the error occurred.
+   * @private
    */
   var IllegalStateException = function(message) {
 

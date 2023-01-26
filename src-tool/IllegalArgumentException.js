@@ -25,6 +25,7 @@ export default /*@__PURE__*/(function() {
    * @class Thrown to indicate that a method has been passed an illegal 
    * or inappropriate argument.
    * <BR>Use toString to extract details on the error occurred.
+   * @private
    */
   var IllegalArgumentException  = function(message) {
     
