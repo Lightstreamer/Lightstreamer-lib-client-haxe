@@ -71,7 +71,7 @@ var LightstreamerClient = function(serverAddress, adapterSet) {
  * on future requests.</p>
  *
  * @param {String} uri String representation of the URI from which the supplied
- * cookies were received. It can be null.
+ * cookies were received.
  *
  * @param {String[]} cookies An array of String representations of the various
  * cookies to be added. Each cookie should be represented in the text format
