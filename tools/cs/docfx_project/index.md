@@ -5,4 +5,4 @@
  
 ## [Api Reference](api/index.md)
 
-## [Changelog](articles/changelog.md)
+## [Changelog](https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe/blob/master/CHANGELOG.md)

@@ -12,7 +12,7 @@
     <icon>images\icon.png</icon>
     <readme>docs\readme.md</readme>
     <description>The Lightstreamer .Net Standard Client SDK allows to subscribe to real-time data pushed by a Lightstreamer server and to send any message to the server. The library offers automatic recovery from connection failures, automatic selection of the best available transport, and full decoupling of subscription and connection operations.</description>
-    <releaseNotes>See the full changelog https://sdk.lightstreamer.com/ls-dotnetstandard-client/@VERSION@/api/articles/changelog.html</releaseNotes>
+    <releaseNotes>See the full changelog https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe/blob/master/CHANGELOG.md</releaseNotes>
     <copyright>Copyright (c) Lightstreamer Srl.</copyright>
     <tags>Lightstreamer Realtime real-time Pub/Sub Messaging Publish Subscribe realtime comet HTTP Unity Xamarin Core websocket websockets streaming</tags>
     <dependencies>
