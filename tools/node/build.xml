@@ -131,6 +131,7 @@
       <arg value="${haxe.inc}"/>
       <arg value="-b"/><arg value="${obj}"/>
       <arg value="-o"/><arg value="${haxe.lib}"/>
+      <arg value="-START_NODE_JSDOC_EXCLUDE"/>
     </exec>
   </target>
 
