@@ -29,10 +29,10 @@
   <property name="readme.md" location="${dist}/README.md"/>
   <property name="types.d.ts.log" location="${dist}/../types.d.ts.log"/>
 
-  <property name="wrapper" location="src/wrapper/web"/>
-  <property name="api.inc" location="${wrapper}/api.full.inc"/>
-  <property name="haxe.inc" location="${wrapper}/haxe.full.inc"/>
-  <property name="wrapper.inc" location="${wrapper}/wrapper.full.inc"/>
+  <property name="wrapper" location="src/wrapper/web/full"/>
+  <property name="api.inc" location="${wrapper}/api.inc"/>
+  <property name="haxe.inc" location="${wrapper}/haxe.inc"/>
+  <property name="wrapper.inc" location="${wrapper}/wrapper.inc"/>
   <property name="js.dir" location="src/wrapper/js"/>
 
   <target name="package" depends="types.d.ts" description="Build the library">
@@ -107,6 +107,8 @@
       <arg value="${haxe.inc}"/>
       <arg value="-b"/><arg value="${obj}"/>
       <arg value="-o"/><arg value="${haxe.lib}"/>
+      <arg value="-START_WEB_JSDOC_EXCLUDE"/>
+      <arg value="-LS_MPN"/>
     </exec>
   </target>
 
@@ -119,6 +121,7 @@
       <arg value="${tools}/res/test.full.inc"/>
       <arg value="-o"/><arg value="${test}/lightstreamer_haxe.js"/>
       <arg value="-START_WEB_JSDOC_EXCLUDE"/>
+      <arg value="-LS_MPN"/>
     </exec>
     <exec executable="npx" failonerror="true">
       <arg value="rollup"/>

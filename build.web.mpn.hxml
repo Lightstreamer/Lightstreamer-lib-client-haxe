@@ -7,7 +7,7 @@ build.common.hxml
 --class-path src/mpn/web
 
 -D shallow-expose
---js bin/web/build/full/obj/ls_web_client_haxe_orig.js
+--js bin/web/build/mpn/obj/ls_web_client_haxe_orig.js
 
 -D LS_WEB
 -D LS_MPN

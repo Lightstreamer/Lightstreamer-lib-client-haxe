@@ -1,0 +1,20 @@
+[
+  "LightstreamerClient",
+  "Subscription",
+  "ConsoleLogLevel",
+  "ConsoleLoggerProvider",
+
+  "MpnDevice", 
+  "MpnSubscription", 
+  "SafariMpnBuilder", 
+  "FirebaseMpnBuilder",
+
+  "Logger", 
+  "LoggerProvider", 
+  "ClientListener", 
+  "ClientMessageListener", 
+  "ItemUpdate", 
+  "SubscriptionListener",
+  "MpnDeviceListener",
+  "MpnSubscriptionListener"
+]
