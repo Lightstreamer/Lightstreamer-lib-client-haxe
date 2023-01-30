@@ -1,4 +1,4 @@
-import {Subscription, LightstreamerClient, StatusWidget, ConsoleLoggerProvider, ConsoleLogLevel, MpnSubscription, MpnDevice, FirebaseMpnBuilder, SafariMpnBuilder} from 'lightstreamer-client-web'
+import {Subscription, LightstreamerClient, StatusWidget, ConsoleLoggerProvider, ConsoleLogLevel, MpnSubscription, MpnDevice, FirebaseMpnBuilder, SafariMpnBuilder} from 'lightstreamer-client-web/lightstreamer.esm'
 
 var loggerProvider = new ConsoleLoggerProvider(ConsoleLogLevel.INFO)
 var logger = loggerProvider.getLogger("test")

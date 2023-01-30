@@ -1,4 +1,4 @@
-var Ls = require('lightstreamer-client-web');
+var Ls = require('lightstreamer-client-web/lightstreamer.common');
 
 var sub = new Ls.Subscription("MERGE",["item1","item2","item3"],["stock_name","last_price"]);
 sub.setDataAdapter("QUOTE_ADAPTER");

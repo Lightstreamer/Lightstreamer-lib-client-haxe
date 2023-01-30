@@ -1,4 +1,4 @@
-import {Subscription, LightstreamerClient} from 'lightstreamer-client-web/lightstreamer-core.esm.js';
+import {Subscription, LightstreamerClient} from 'lightstreamer-client-web';
 
 var sub = new Subscription("MERGE",["item1","item2","item3"],["stock_name","last_price"]);
 sub.setDataAdapter("QUOTE_ADAPTER");
