@@ -28,7 +28,7 @@
     "url": "git+https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe.git"
   },
 
-  "module": "lightstreamer.esm.js",
-  "main": "lightstreamer.common.js",
+  "module": "lightstreamer-core.esm.js",
+  "main": "lightstreamer-core.common.js",
   "types": "types.d.ts"
 }
