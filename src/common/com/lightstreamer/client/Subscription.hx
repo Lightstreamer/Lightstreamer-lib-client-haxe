@@ -103,10 +103,10 @@ class LSSubscription {
   }
 
   public function addListener(listener: SubscriptionListener): Void {
-    eventDispatcher.addListenerAndFireOnListenStart(listener);
+    eventDispatcher.addListenerAndFireOnListenStart(listener #if js , this #end);
   }
   public function removeListener(listener: SubscriptionListener): Void {
-    eventDispatcher.removeListenerAndFireOnListenEnd(listener);
+    eventDispatcher.removeListenerAndFireOnListenEnd(listener #if js , this #end);
   }
   public function getListeners(): NativeList<SubscriptionListener> {
     return new NativeList(eventDispatcher.getListeners());

@@ -63,11 +63,11 @@ class LSLightstreamerClient {
   }
 
   public function addListener(listener: ClientListener): Void {
-    eventDispatcher.addListenerAndFireOnListenStart(listener);
+    eventDispatcher.addListenerAndFireOnListenStart(listener #if js , this #end);
   }
 
   public function removeListener(listener: ClientListener): Void {
-    eventDispatcher.removeListenerAndFireOnListenEnd(listener);
+    eventDispatcher.removeListenerAndFireOnListenEnd(listener #if js , this #end);
   }
 
   public function getListeners(): NativeList<ClientListener> {

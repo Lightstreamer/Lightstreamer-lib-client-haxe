@@ -9,8 +9,9 @@ extern interface SubscriptionListener {
   function onEndOfSnapshot(itemName: Null<String>, itemPos: Int): Void;
   function onItemLostUpdates(itemName: Null<String>, itemPos: Int, lostUpdates: Int): Void;
   function onItemUpdate(update: ItemUpdate): Void;
-  function onListenEnd(): Void;
-  function onListenStart(): Void;
+  // NB onListenStart and onListenEnd have the hidden parameter `sub` for the sake of the legacy web widgets
+  function onListenEnd(#if js sub: Subscription #end): Void;
+  function onListenStart(#if js sub: Subscription #end): Void;
   function onSubscription(): Void;
   function onSubscriptionError(code: Int, message: String): Void;
   function onUnsubscription(): Void;

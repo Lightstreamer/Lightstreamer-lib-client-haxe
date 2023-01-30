@@ -1127,8 +1127,8 @@ private class SubscriptionDelegateBase implements SubscriptionListener {
   public function onEndOfSnapshot(itemName: String, itemPos: Int): Void {}
   public function onItemLostUpdates(itemName: String, itemPos: Int, lostUpdates: Int): Void {}
   public function onItemUpdate(update: ItemUpdate): Void {}
-  public function onListenEnd(): Void {}
-  public function onListenStart(): Void {}
+  public function onListenEnd(#if js sub: Subscription #end): Void {}
+  public function onListenStart(#if js sub: Subscription #end): Void {}
   public function onSubscription(): Void {}
   public function onSubscriptionError(code: Int, message: String): Void {}
   public function onUnsubscription(): Void {}
