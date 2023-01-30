@@ -25,6 +25,9 @@ See the Docs for details.
 Added the new error code 70 to the interface method `ClientListener.onServerError`, to report that an unusable port was configured on the server address.
 Previously a similar case was treated as a request syntax error.
 
+Changed the default library exposed by the npm package *lightstreamer-client-web*. Now the default is the smaller "core" variant (previously it was the "full" variant, containing the Widgets and Mobile Push Notifications in addition to the core modules). Further a third variant has been added to the npm package, the "MPN" variant, which contains the Mobile Push Notifications support in addition to the core modules. 
+See the [npm page](https://www.npmjs.com/package/lightstreamer-client-web) of the package for the details.
+
 The class ConnectionSharing and the method `LightstreamerClient.enableSharing` have been removed and in general the whole sharing mechanism has been discontinued due to the increasing security restrictions enforced by the browsers.
 
 The logging facilities have been revised in order to expose the same API on all supported platforms.<br/>

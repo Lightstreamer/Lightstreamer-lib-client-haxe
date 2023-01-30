@@ -15,12 +15,14 @@ The package contains a variety of library formats to suit the needs of the major
 |           | **UMD**                                               | **CommonJS**                  | **ES Module**              |
 |-----------|-------------------------------------------------------|-------------------------------|----------------------------|
 | **Full**  | lightstreamer.js<br> lightstreamer.min.js             | lightstreamer.common.js       | lightstreamer.esm.js       |
-| **Core** | lightstreamer-core.js<br> lightstreamer-core.min.js | lightstreamer-core.common.js | lightstreamer-core.esm.js |
-|           |                                                       |                               |                            |
+| **Core**  | lightstreamer-core.js<br> lightstreamer-core.min.js   | lightstreamer-core.common.js  | lightstreamer-core.esm.js  |
+| **MPN**   | lightstreamer-mpn.js<br> lightstreamer-mpn.min.js     | lightstreamer-mpn.common.js   | lightstreamer-mpn.esm.js   |
 
 - **Full**: builds with all the modules in the SDK
 
-- **Core**: builds with only core modules (Widgets and Mobile Push Notifications are excluded)
+- **Core**: builds with only the core modules (Widgets and Mobile Push Notifications are excluded)
+
+- **MPN**: builds with the core modules and Mobile Push Notifications (Widgets are excluded)
 
 - **UMD**: UMD builds can be used directly in the browser via a `<script>` tag.
 
@@ -28,8 +30,7 @@ The package contains a variety of library formats to suit the needs of the major
 
 - **ES Module**: ES module builds are intended for use with modern bundlers like Webpack 2+ or Rollup.
 
-- **Development vs. Production Mode**: UMD libraries are provided in two variants: minified for production and un-minified for development. Since CommonJS and ES Module builds are
-intended for bundlers, they are provided only in un-minified form. You will be responsible for minifying the final bundle yourself.
+- **Development vs. Production Mode**: UMD libraries are provided in two variants: minified for production and un-minified for development. Since CommonJS and ES Module builds are intended for bundlers, they are provided only in un-minified form. You will be responsible for minifying the final bundle yourself.
 
 - **Web Worker Compatibility**: The _full_ library is not suitable to be deployed in a web worker because it uses some APIs that are not available in that environment. If you need the Client Web SDK in a web worker, you should use the _core_ version instead. For example, to import the UMD core variant, put at the beginning of the web worker an import statement like this: `importScripts('node_modules/lightstreamer-client-web/lightstreamer-core.js')`. 
 
