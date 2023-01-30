@@ -13,8 +13,8 @@ sub.setRequestedSnapshot("yes")
 assert(sub.getDataAdapter() == "QUOTE_ADAPTER")
 assert(sub.getRequestedSnapshot() == "yes")
 sub.addListener({
-    onListenStart: function() {
-      log("SubscriptionListener.onListenStart")
+    onListenStart: function(s) {
+      log("SubscriptionListener.onListenStart " + s.getDataAdapter())
     },
     onItemUpdate: function(obj) {
       log(obj.getValue("stock_name") + ": " + obj.getValue("last_price"))
@@ -25,8 +25,8 @@ sub.addListener({
 var client = new LightstreamerClient("http://push.lightstreamer.com","DEMO")  
 client.addListener(new StatusWidget("left", "0px", true))
 client.addListener({
-  onListenStart: function() {
-    log("ClientListener.onListenStart")
+  onListenStart: function(c) {
+    log("ClientListener.onListenStart " + c.getStatus())
   }
 })
 
