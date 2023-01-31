@@ -492,6 +492,24 @@ class TestClient extends utest.Test {
   }
   #end
 
+  #if LS_WEB
+  function _testOnServerKeepalive(async: utest.Async) {
+    if (!(_param == "WS-STREAMING" || _param == "HTTP-STREAMING")) {
+      pass();
+      async.completed();
+      return;
+    }
+    setTransport();
+    client.connectionOptions.setKeepaliveInterval(500);
+    listener._onServerKeepalive = () -> exps.signal("onServerKeepalive");
+    exps
+    .then(() -> client.connect())
+    .await("onServerKeepalive")
+    .then(() -> async.completed())
+    .verify();
+  }
+  #end
+
   function setTransport() {
     client.connectionOptions.setForcedTransport(_param);
     connectedString = "CONNECTED:" + _param;

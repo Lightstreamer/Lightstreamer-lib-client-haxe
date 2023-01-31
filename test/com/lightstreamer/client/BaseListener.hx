@@ -8,9 +8,10 @@ class BaseClientListener implements ClientListener {
   public function onServerError(code:Int, message:String) _onServerError(code, message);
   dynamic public function _onPropertyChange(property:String) {}
   public function onPropertyChange(property:String) _onPropertyChange(property);
-
-  public function onListenEnd() {}
-  public function onListenStart() {}
+  dynamic public function _onServerKeepalive() {}
+  public function onServerKeepalive() _onServerKeepalive();
+  public function onListenEnd(#if js client: LightstreamerClient #end) {}
+  public function onListenStart(#if js client: LightstreamerClient #end) {}
 }
 
 class BaseSubscriptionListener implements SubscriptionListener {
@@ -36,8 +37,8 @@ class BaseSubscriptionListener implements SubscriptionListener {
   dynamic public function _onCommandSecondLevelItemLostUpdates(lostUpdates:Int, key:String) {}
   public function onCommandSecondLevelItemLostUpdates(lostUpdates:Int, key:String) _onCommandSecondLevelItemLostUpdates(lostUpdates, key);
 
-  public function onListenEnd() {}
-  public function onListenStart() {}
+  public function onListenEnd(#if js sub: Subscription #end) {}
+  public function onListenStart(#if js sub: Subscription #end) {}
 }
 
 class BaseMessageListener implements ClientMessageListener {

@@ -11,4 +11,7 @@ extern interface ClientListener {
   public function onPropertyChange(property:String): Void;
   public function onListenEnd(): Void;
   public function onListenStart(): Void;
+  #if LS_WEB
+  public function onServerKeepalive(): Void;
+  #end
 }
