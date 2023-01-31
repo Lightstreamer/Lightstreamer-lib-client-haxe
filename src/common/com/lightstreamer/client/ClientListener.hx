@@ -9,4 +9,7 @@ extern interface ClientListener {
   public function onServerError(errorCode: Int, errorMessage: String): Void;
   public function onStatusChange(status: String): Void;
   public function onPropertyChange(property: String): Void;
+  #if LS_WEB
+  public function onServerKeepalive(): Void;
+  #end
 }

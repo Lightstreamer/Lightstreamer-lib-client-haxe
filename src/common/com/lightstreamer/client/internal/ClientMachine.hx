@@ -2142,6 +2142,9 @@ class ClientMachine {
   function evtPROBE() {
     traceEvent("PROBE");
     protocolLogger.logDebug("PROBE");
+    #if LS_WEB
+    clientEventDispatcher.onServerKeepalive();
+    #end
     if (state.inPushing()) {
       if (state.inStreaming()) {
         evtRestartKeepalive();
