@@ -27,6 +27,9 @@ class LSConnectionOptions {
   var httpExtraHeadersOnSessionCreationOnly: Bool = false;
   var serverInstanceAddressIgnored: Bool = false;
   var slowingEnabled: Bool = false;
+  #if js
+  var cookieHandlingRequired: Bool = false;
+  #end
   final client: LightstreamerClient;
   final lock: com.lightstreamer.internal.RLock;
   
@@ -194,6 +197,17 @@ class LSConnectionOptions {
     client.eventDispatcher.onPropertyChange("serverInstanceAddressIgnored");
   }
 
+  #if js
+  public function setCookieHandlingRequired(newValue: Bool) {
+    actionLogger.info('cookieHandlingRequired changed: $newValue');
+    this.cookieHandlingRequired = newValue;
+    client.eventDispatcher.onPropertyChange("cookieHandlingRequired");
+  }
+  public function isCookieHandlingRequired(): Bool {
+    return cookieHandlingRequired;
+  }
+  #end
+
   public function isSlowingEnabled(): Bool {
     return slowingEnabled;
   }
@@ -242,6 +256,9 @@ class LSConnectionOptions {
     map["HTTPExtraHeaders"] = httpExtraHeaders;
     #if LS_HAS_PROXY
     map["proxy"] = proxy;
+    #end
+    #if js
+    map["cookieHandlingRequired"] = cookieHandlingRequired;
     #end
     return map.toString();
   }

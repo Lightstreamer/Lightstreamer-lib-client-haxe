@@ -201,7 +201,7 @@ class LSLightstreamerClient {
     #elseif cs
     return new com.lightstreamer.internal.HttpClient(url, body, headers, onText, onError, onDone);
     #elseif js
-    return new com.lightstreamer.internal.HttpClient(url, body, headers, onText, onError, onDone);
+    return new com.lightstreamer.internal.HttpClient(url, body, headers, connectionOptions.isCookieHandlingRequired(), onText, onError, onDone);
     #elseif python
     var proxy = connectionOptions.getProxy();
     var trustManager = com.lightstreamer.internal.Globals.instance.getTrustManagerFactory();

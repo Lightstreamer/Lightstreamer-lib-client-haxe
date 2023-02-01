@@ -12,12 +12,15 @@ class HttpClient implements IHttpClient {
   
   public function new(url: String, body: String, 
     headers: Null<Map<String, String>>, 
+    withCredentials: Bool,
     onText: (HttpClient, String)->Void, 
     onError: (HttpClient, String)->Void, 
     onDone: HttpClient->Void) {
     streamLogger.logDebug('HTTP sending: $url $body headers($headers)');
     this.xhr = new XMLHttpRequest();
     xhr.open("POST", url);
+    // send croos-site credentials (e.g. cookies)
+    xhr.withCredentials = withCredentials;
     // set headers
     if (headers != null) {
       for (k => v in headers) {
