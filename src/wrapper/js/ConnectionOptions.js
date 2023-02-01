@@ -876,7 +876,7 @@ var ConnectionOptions = function(options) {
      * specified through {@link ConnectionOptions#setHttpExtraHeaders}.
      * If true, said headers will only be sent during the session creation process (and thus
      * will still be available to the Metadata Adapter notifyUser method) but will not
-     * be sent on following requests. On the contrary, when set to true, the specified extra
+     * be sent on following requests. On the contrary, when set to false, the specified extra
      * headers will be sent to the server on every request: as a consequence, if any 
      * extra header is actually specified, WebSockets will be disabled (as the current browser
      * client API does not support the setting of custom HTTP headers).
