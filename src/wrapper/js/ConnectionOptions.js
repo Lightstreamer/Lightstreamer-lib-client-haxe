@@ -812,12 +812,13 @@ var ConnectionOptions = function(options) {
     /**
      * Setter method that enables/disables the setting of extra HTTP headers to all the 
      * request performed to the Lightstreamer server by the client.
+    // #ifndef START_NODE_JSDOC_EXCLUDE
      * Note that when the value is set WebSockets are disabled
-   // #ifndef START_NODE_JSDOC_EXCLUDE
      * (as the current browser client API does not support the setting of custom HTTP headers)
-   // #endif
      * unless {@link ConnectionOptions#setHttpExtraHeadersOnSessionCreationOnly}
-     * is set to true. <BR> Also note that
+     * is set to true. 
+   // #endif
+     * <BR> Also note that
      * if the browser/environment does not have the possibility to send extra headers while 
      * some are specified through this method it will fail to connect.
      * Also note that the Content-Type header is reserved by the client library itself,
@@ -877,9 +878,13 @@ var ConnectionOptions = function(options) {
      * If true, said headers will only be sent during the session creation process (and thus
      * will still be available to the Metadata Adapter notifyUser method) but will not
      * be sent on following requests. On the contrary, when set to false, the specified extra
-     * headers will be sent to the server on every request: as a consequence, if any 
+     * headers will be sent to the server on every request
+    // #ifndef START_NODE_JSDOC_EXCLUDE
+     * : as a consequence, if any 
      * extra header is actually specified, WebSockets will be disabled (as the current browser
-     * client API does not support the setting of custom HTTP headers).
+     * client API does not support the setting of custom HTTP headers)
+    // #endif
+     * .
      * 
      * <p class="default-value"><b>Default value:</b> false.</p>
      * 
