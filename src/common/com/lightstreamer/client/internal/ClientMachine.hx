@@ -388,6 +388,10 @@ class ClientMachine {
           goto(state.s_m = s130);
           evtCreate();
           schedule_evtTransportTimeout(delayCounter.currentRetryDelay);
+        case BFC_none:
+          notifyStatus(DISCONNECTED);
+          goto(state.s_m = s100);
+          evtTerminate(TC_otherError("Unable to select a transport"));
       }
     }
   }
@@ -2801,6 +2805,11 @@ class ClientMachine {
     }
     var forward = true;
     switch state.s_du {
+    case s20:
+      disposeClient();
+      goto(state.s_du = s20);
+      forward = evtTerminate_NextRegion();
+      genAbortMessages();
     case s22:
       disposeSession();
       disposeClient();
@@ -3517,26 +3526,159 @@ class ClientMachine {
   }
 
   function getBestForCreating() {
+    var bfb = getBestForBinding();
+    switch bfb {
+    case BFB_none:
+      return BFC_none;
+    case _:
+    }
     var ft = options.forcedTransport;
-    if (!suspendedTransports.union(disabledTransports.toArray()).contains(WS_STREAMING) && (ft == null || ft == WS || ft == WS_STREAMING)) {
-      return BFC_ws;
-    } else {
+    var blackList = suspendedTransports.union(disabledTransports.toArray());
+    #if LS_WEB
+    // custom headers are not supported by browser WebSocket, so when there are custom headers but httpExtraHeadersOnSessionCreationOnly is false, the client is unable to connect
+    var headers = options.httpExtraHeaders;
+    var noHeaders = headers == null || headers.empty();
+    #end
+    switch ft {
+    case null | WS | WS_STREAMING:
+      #if LS_WEB
+      if (noHeaders) {
+      #end
+        if (!blackList.contains(WS_STREAMING)) {
+          return BFC_ws;
+        } else {
+          return BFC_http;
+        }
+      #if LS_WEB
+      } else {
+        return BFC_http;
+      }
+      #end
+    case _:
       return BFC_http;
     }
   }
 
   function getBestForBinding() {
     var ft = options.forcedTransport;
-    if (!disabledTransports.contains(WS_STREAMING) && (ft == null || ft == WS || ft == WS_STREAMING)) {
-      return BFB_ws_streaming;
-    } else if (!disabledTransports.contains(HTTP_STREAMING) && (ft == null || ft == HTTP || ft == HTTP_STREAMING)) {
-        return BFB_http_streaming;
-    } else if (!disabledTransports.contains(WS_POLLING) && (ft == null || ft == WS || ft == WS_POLLING)) {
-        return BFB_ws_polling;
-    } else if (ft == null || ft == HTTP || ft == HTTP_POLLING) {
-        return BFB_http_polling;
-    } else {
+    var blackList = disabledTransports;
+    #if LS_WEB
+    // custom headers are not supported by browser WebSocket, so when there are custom headers but httpExtraHeadersOnSessionCreationOnly is false, the client is unable to connect
+    var headers = options.httpExtraHeaders;
+    var noHeaders = headers == null || headers.empty();
+    var sendHeadersOnCreationOnly = options.httpExtraHeadersOnSessionCreationOnly;
+    #end
+    switch ft {
+    case null:
+      #if LS_WEB
+      if (noHeaders) {
+      #end
+        if (!blackList.contains(WS_STREAMING)) {
+          return BFB_ws_streaming;
+        } else if (!blackList.contains(HTTP_STREAMING)) {
+          return BFB_http_streaming;
+        } else if (!blackList.contains(WS_POLLING)) {
+          return BFB_ws_polling;
+        } else {
+          return BFB_http_polling;
+        }
+      #if LS_WEB
+      } else if (sendHeadersOnCreationOnly) {
+        if (!blackList.contains(WS_STREAMING)) {
+          return BFB_ws_streaming;
+        } else if (!blackList.contains(HTTP_STREAMING)) {
+          return BFB_http_streaming;
+        } else if (!blackList.contains(WS_POLLING)) {
+          return BFB_ws_polling;
+        } else {
+          return BFB_http_polling;
+        }
+      } else {
+        if (!blackList.contains(HTTP_STREAMING)) {
+          return BFB_http_streaming;
+        } else {
+          return BFB_http_polling;
+        }
+      }
+      #end
+    case WS:
+      #if LS_WEB
+      if (noHeaders) {
+      #end
+        if (!blackList.contains(WS_STREAMING)) {
+          return BFB_ws_streaming;
+        } else if (!blackList.contains(WS_POLLING)) {
+          return BFB_ws_polling;
+        } else {
+          return BFB_none;
+        }
+      #if LS_WEB
+      } else if (sendHeadersOnCreationOnly) {
+        if (!blackList.contains(WS_STREAMING)) {
+          return BFB_ws_streaming;
+        } else if (!blackList.contains(WS_POLLING)) {
+          return BFB_ws_polling;
+        } else {
+          return BFB_none;
+        }
+      } else {
         return BFB_none;
+      }
+      #end
+    case WS_STREAMING:
+      #if LS_WEB
+      if (noHeaders) {
+      #end
+        if (!blackList.contains(WS_STREAMING)) {
+          return BFB_ws_streaming;
+        } else {
+          return BFB_none;
+        }
+      #if LS_WEB
+      } else if (sendHeadersOnCreationOnly) {
+        if (!blackList.contains(WS_STREAMING)) {
+          return BFB_ws_streaming;
+        } else {
+          return BFB_none;
+        }
+      } else {
+        return BFB_none;
+      }
+      #end
+    case WS_POLLING:
+      #if LS_WEB
+      if (noHeaders) {
+      #end
+        if (!blackList.contains(WS_POLLING)) {
+          return BFB_ws_polling;
+        } else {
+          return BFB_none;
+        }
+      #if LS_WEB
+      } else if (sendHeadersOnCreationOnly) {
+        if (!blackList.contains(WS_POLLING)) {
+          return BFB_ws_polling;
+        } else {
+          return BFB_none;
+        }
+      } else {
+        return BFB_none;
+      }
+      #end
+    case HTTP:
+      if (!blackList.contains(HTTP_STREAMING)) {
+        return BFB_http_streaming;
+      } else {
+        return BFB_http_polling;
+      }
+    case HTTP_STREAMING:
+      if (!blackList.contains(HTTP_STREAMING)) {
+        return BFB_http_streaming;
+      } else {
+        return BFB_none;
+      }
+    case HTTP_POLLING:
+      return BFB_http_polling;
     }
   }
 
@@ -4476,7 +4618,7 @@ class ClientMachine {
 }
 
 private enum BestForCreatingEnum {
-  BFC_ws; BFC_http;
+  BFC_ws; BFC_http; BFC_none;
 }
 
 private enum BestForBindingEnum {
