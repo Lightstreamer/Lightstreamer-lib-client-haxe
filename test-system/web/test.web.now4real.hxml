@@ -1,0 +1,13 @@
+--cwd ../..
+
+--class-path test-core
+--class-path test-util
+--class-path test-extern
+--library deep_equal
+--library haxe-concurrent
+--main TestCore
+
+--js bin-test/web/test-now4real.js
+--cmd open test-system/web/test-now4real.html
+
+-D LS_WEB
