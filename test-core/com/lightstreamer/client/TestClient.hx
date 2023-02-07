@@ -438,8 +438,17 @@ class TestClient extends utest.Test {
       client.connectionOptions.setHttpExtraHeaders(["X-Header" => "header"]);
       listener._onStatusChange = status -> if (status == connectedString) exps.signal("connected");
       client.connect();
-    })
-    .await("connected")
+    });
+    #if LS_WEB
+    if (_param.startsWith("WS")) {
+      exps.then(() -> equals("DISCONNECTED", client.getStatus()));
+    } else {
+      exps.await("connected");
+    }
+    #else
+    exps.await("connected");
+    #end
+    exps
     .then(() -> {
       var hs = client.connectionOptions.getHttpExtraHeaders().toHaxe();
       equals("header", hs["X-Header"]);

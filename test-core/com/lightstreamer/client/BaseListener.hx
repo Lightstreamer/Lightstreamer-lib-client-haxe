@@ -8,6 +8,7 @@ class BaseClientListener implements ClientListener {
   public function onServerError(code:Int, message:String) _onServerError(code, message);
   dynamic public function _onPropertyChange(property:String) {}
   public function onPropertyChange(property:String) _onPropertyChange(property);
+  public function onServerKeepalive() {}
 
   public function onListenEnd() {}
   public function onListenStart() {}
