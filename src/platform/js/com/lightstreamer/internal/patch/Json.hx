@@ -1,5 +1,6 @@
 package com.lightstreamer.internal.patch;
 
+#if LS_JSON_PATCH
 import com.lightstreamer.internal.patch.JsonPatcher;
 
 abstract Json(Dynamic) {
@@ -17,3 +18,4 @@ abstract Json(Dynamic) {
 }
 
 typedef JsonPatch = Json;
+#end
