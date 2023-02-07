@@ -82,7 +82,7 @@ class TestWsClientNode extends utest.Test {
         async.completed(); 
       },
       function onError(c, error) { 
-        equals("Network error: Error - self signed certificate", error);
+        equals("Network error: Error - self-signed certificate", error);
         async.completed(); 
       });
   }
