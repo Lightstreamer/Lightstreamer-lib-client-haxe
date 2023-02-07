@@ -213,7 +213,7 @@ class LSLightstreamerClient {
   }
   
   function createReachabilityManager(host: String): IReachability {
-    return new com.lightstreamer.internal.DummyReachabilityManager();
+    return new com.lightstreamer.internal.ReachabilityManager();
   }
   
   function createTimer(id: String, delay: Millis, callback: ITimer->Void): ITimer {
