@@ -728,7 +728,7 @@ class MpnSubscriptionManager implements Encodable {
     req.LS_op("deactivate");
     req.PN_deviceId(m_client.fetch_mpn_deviceId().sure());
     req.PN_subscriptionId(m_subscription.getSubscriptionId().sure());
-    protocolLogger.info('Sending MPNSubscription deactivate: $req');
+    protocolLogger.logInfo('Sending MPNSubscription deactivate: $req');
     return req.getEncodedString();
   }
 
@@ -764,7 +764,7 @@ class MpnSubscriptionManager implements Encodable {
     if (state.s_ct == s73) {
       req.PN_trigger(m_currentTrigger ?? "");
     }
-    protocolLogger.info('Sending MPNSubscription configuration: $req');
+    protocolLogger.logInfo('Sending MPNSubscription configuration: $req');
     return req.getEncodedString();
   }
 

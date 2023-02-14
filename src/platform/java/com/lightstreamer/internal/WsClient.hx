@@ -124,7 +124,7 @@ class WsClient extends WebSocketListener implements Authenticator implements IWs
       return;
     }
     var msg = ex.getMessage();
-    streamLogger.logDebug('WS event: error($msg)', ex);
+    streamLogger.logDebugEx2('WS event: error($msg)', ex);
     onErrorCb(this, msg);
     webSocket.cancel();
   }

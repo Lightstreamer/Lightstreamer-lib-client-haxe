@@ -992,7 +992,7 @@ class MpnClientMachine extends ClientMachine {
       throw new IllegalArgumentException("Specify property 'fields' or 'fieldSchema'");
     }
     var sm = new MpnSubscriptionManager(Ctor1(mpnSubscription, coalescing, this));
-    actionLogger.info('MPN Subscription requested: subId: ${sm.m_subId} $mpnSubscription coalescing: $coalescing');
+    actionLogger.logInfo('MPN Subscription requested: subId: ${sm.m_subId} $mpnSubscription coalescing: $coalescing');
     sm.evtExtMpnSubscribe();
   }
 

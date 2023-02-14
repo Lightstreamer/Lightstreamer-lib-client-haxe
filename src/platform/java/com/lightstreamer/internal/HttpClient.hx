@@ -93,7 +93,7 @@ class HttpClient implements Callback implements Authenticator implements IHttpCl
     if (isDisposed()) {
       return;
     }
-    streamLogger.logDebug('HTTP event: error(${ex.getMessage()})', ex);
+    streamLogger.logDebugEx2('HTTP event: error(${ex.getMessage()})', ex);
     onError(this, ex.getMessage());
     call.cancel();
   }

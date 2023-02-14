@@ -485,7 +485,7 @@ class LSMpnSubscription {
       }
       // don't log timestamp: it's too verbose;
       if (property != "status_timestamp") {
-        mpnSubscriptionLogger.info('${madeByServer ? "Server " : ""}MPNSubscription $property changed: $propVal pnSubId: ${m_mpnSubId != null ? m_mpnSubId : "n.a."}');
+        mpnSubscriptionLogger.logInfo('${madeByServer ? "Server " : ""}MPNSubscription $property changed: $propVal pnSubId: ${m_mpnSubId != null ? m_mpnSubId : "n.a."}');
       }
     }
     eventDispatcher.onPropertyChanged(property);

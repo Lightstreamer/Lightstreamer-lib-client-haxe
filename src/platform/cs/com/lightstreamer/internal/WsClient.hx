@@ -72,7 +72,7 @@ class WsClient extends WsClientCs implements IWsClient {
     if (isDisposed()) {
       return;
     }
-    streamLogger.logDebug('WS event: error(${error.Message})', error);
+    streamLogger.logDebugEx2('WS event: error(${error.Message})', error);
     this.onError(this, error.Message);
   }
 }

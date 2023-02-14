@@ -49,7 +49,7 @@ function applyUpatesToCurrentFields(currentValues: Null<Map<Pos, Null<CurrFieldV
           try {
             newValues[f] = JsonVal(json.apply(patch));
           } catch(e) {
-            sessionLogger.logErrorEx(e.message, e);
+            sessionLogger.logErrorEx('${e.message}', e);
             throw new IllegalStateException('Cannot apply the JSON Patch to the field $f');
           }
         case StringVal(str):
@@ -58,13 +58,13 @@ function applyUpatesToCurrentFields(currentValues: Null<Map<Pos, Null<CurrFieldV
           try {
             json = new com.lightstreamer.internal.patch.Json(str);
           } catch(e) {
-            sessionLogger.logErrorEx(e.message, e);
+            sessionLogger.logErrorEx('${e.message}', e);
             throw new IllegalStateException('Cannot convert the field $f to JSON');
           }
           try {
             newValues[f] = JsonVal(json.sure().apply(patch));
           } catch(e) {
-            sessionLogger.logErrorEx(e.message, e);
+            sessionLogger.logErrorEx('${e.message}', e);
             throw new IllegalStateException('Cannot apply the JSON Patch to the field $f');
           }
         case null:

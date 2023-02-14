@@ -47,7 +47,7 @@ class HttpClient extends HttpClientCs implements IHttpClient {
     if (isDisposed()) {
       return;
     }
-    streamLogger.logDebug('HTTP event: error(${error.Message})', error);
+    streamLogger.logDebugEx2('HTTP event: error(${error.Message})', error);
     this.onError(this, error.Message);
   }
 

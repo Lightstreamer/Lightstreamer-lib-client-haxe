@@ -191,7 +191,7 @@ class ClientMachine {
   }
 
   function evtNetworkNotReachable(host: String) {
-    reachabilityLogger.logInfo(host + " is NOT reachable");
+    reachabilityLogger.logInfo('$host is NOT reachable');
     traceEvent("nr:network.not.reachable");
     if (state.s_nr == s1410) {
       goto(state.s_nr = s1411);
@@ -201,7 +201,7 @@ class ClientMachine {
   }
 
   function evtNetworkReachable(host: String) {
-    reachabilityLogger.logInfo(host + " is reachable");
+    reachabilityLogger.logInfo('$host is reachable');
     traceEvent("nr:network.reachable");
     if (state.s_nr == s1410) {
       goto(state.s_nr = s1412);
@@ -2240,7 +2240,7 @@ class ClientMachine {
 
   function evtU(subId: Int, itemIdx: Pos, values: Map<Pos, FieldValue>, rawValue: String) {
     traceEvent("U");
-    protocolLogger.logDebug(rawValue);
+    protocolLogger.logDebug('$rawValue');
     if (state.inPushing()) {
       if (isFreshData()) {
         doU(subId, itemIdx, values);
@@ -2577,9 +2577,9 @@ class ClientMachine {
         goto(state.s_rec = s1003);
         if (sessionLogger.isErrorEnabled()) {
           if (pauseMs > 0) {
-            sessionLogger.error('Retrying recovery in ${pauseMs}ms. Cause: ${retryCause}');
+            sessionLogger.logError('Retrying recovery in ${pauseMs}ms. Cause: ${retryCause}');
           } else {
-            sessionLogger.error('Retrying recovery. Cause: ${retryCause}');
+            sessionLogger.logError('Retrying recovery. Cause: ${retryCause}');
           }
         }
         schedule_evtRetryTimeout(pauseMs);
@@ -2753,9 +2753,9 @@ class ClientMachine {
     traceEvent("du:retry");
     if (sessionLogger.isErrorEnabled()) {
       if (timeout != null && timeout > 0) {
-        sessionLogger.error('Retrying connection in ${timeout}ms. Cause: ${asErrorMsg(retryCause)}');
+        sessionLogger.logError('Retrying connection in ${timeout}ms. Cause: ${asErrorMsg(retryCause)}');
       } else {
-        sessionLogger.error('Retrying connection. Cause: ${asErrorMsg(retryCause)}');
+        sessionLogger.logError('Retrying connection. Cause: ${asErrorMsg(retryCause)}');
       }
     }
     var forward = true;
@@ -2788,7 +2788,7 @@ class ClientMachine {
     if (sessionLogger.isInfoEnabled()) {
       switch terminationCause {
       case TC_api:
-        sessionLogger.info("Disconnected. Cause: Requested by user");
+        sessionLogger.logInfo("Disconnected. Cause: Requested by user");
       default:
         // see below
       }
@@ -2796,9 +2796,9 @@ class ClientMachine {
     if (sessionLogger.isErrorEnabled()) {
       switch terminationCause {
       case TC_standardError(var code, var msg):
-        sessionLogger.error('Disconnected. Cause: $code - $msg');
+        sessionLogger.logError('Disconnected. Cause: $code - $msg');
       case TC_otherError(var msg):
-        sessionLogger.error('Disconnected. Cause: $msg');
+        sessionLogger.logError('Disconnected. Cause: $msg');
       case TC_api:
         // see above
       }
@@ -3145,7 +3145,7 @@ class ClientMachine {
           try {
             evtMessage(line);
           } catch(e) {
-            sessionLogger.logErrorEx(e.message, e);
+            sessionLogger.logErrorEx('${e.message}', e);
             evtExtDisconnect(TC_standardError(61, e.message));
           }
         }));
@@ -3288,7 +3288,7 @@ class ClientMachine {
           try {
             evtMessage(line);
           } catch(e) {
-            sessionLogger.logErrorEx(e.message, e);
+            sessionLogger.logErrorEx('${e.message}', e);
             evtExtDisconnect(TC_standardError(61, e.message));
           }
         }));
@@ -3481,7 +3481,7 @@ class ClientMachine {
   function enableAllTransports() {
     if (sessionLogger.isInfoEnabled()) {
       if (disabledTransports.count() > 0 || suspendedTransports.count() > 0) {
-          sessionLogger.info("Transports enabled again.");
+          sessionLogger.logInfo("Transports enabled again.");
       }
     }
     disabledTransports = new Set();
@@ -4550,7 +4550,7 @@ class ClientMachine {
           "timeout" => Std.string(delayTimeout),
           "enqueueWhileDisconnected" => Std.string(enqueueWhileDisconnected)
         ];
-        actionLogger.info('Message sending requested: $map');
+        actionLogger.logInfo('Message sending requested: $map');
       }
       messageLogger.logWarn('Message ${sequence != null ? sequence : "UNORDERED_MESSAGES"} $message aborted');
       if (listener != null) {

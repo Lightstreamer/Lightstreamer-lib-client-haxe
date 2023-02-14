@@ -61,7 +61,7 @@ class WsClient implements IWsClient {
     ws.on(Error, error -> {
       if (isCanceled) return;
       var msg = 'Network error: ${error.name} - ${error.message}';
-      streamLogger.logDebug('WS event: error($msg)', error);
+      streamLogger.logDebugEx2('WS event: error($msg)', error);
       onError(this, msg);
       ws.terminate();
     });

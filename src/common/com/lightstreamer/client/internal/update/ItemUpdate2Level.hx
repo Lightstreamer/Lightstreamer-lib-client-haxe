@@ -162,7 +162,7 @@ class ItemUpdate2Level extends AbstractItemUpdate {
         var fieldName = getFieldNameOrNullFromIdx(fieldPos);
         iterator(fieldName, fieldPos, m_newValues[fieldPos].toString());
       } catch(e) {
-        actionLogger.logError("An exception was thrown while executing the Function passed to the forEachChangedField method", cast e);
+        actionLogger.logErrorEx("An exception was thrown while executing the Function passed to the forEachChangedField method", e);
       }
     }
   }
@@ -173,7 +173,7 @@ class ItemUpdate2Level extends AbstractItemUpdate {
         var fieldName = getFieldNameOrNullFromIdx(fieldPos);
         iterator(fieldName, fieldPos, fieldVal.toString());
       } catch(e) {
-        actionLogger.logError("An exception was thrown while executing the Function passed to the forEachField method", cast e);
+        actionLogger.logErrorEx("An exception was thrown while executing the Function passed to the forEachField method", e);
       }
     }
   }

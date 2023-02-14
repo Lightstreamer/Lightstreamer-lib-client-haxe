@@ -43,7 +43,7 @@ class LSConnectionOptions {
   }
   public function setContentLength(contentLength: Long): Void {
     var newValue = ContentLength.fromIntGt0(contentLength);
-    actionLogger.info('contentLength changed: $newValue');
+    actionLogger.logInfo('contentLength changed: $newValue');
     this.contentLength = newValue;
     client.eventDispatcher.onPropertyChange("contentLength");
   }
@@ -53,7 +53,7 @@ class LSConnectionOptions {
   }
   public function setFirstRetryMaxDelay(firstRetryMaxDelay: Long): Void {
     var newValue = Millis.fromIntGt0(firstRetryMaxDelay);
-    actionLogger.info('firstRetryMaxDelay changed: $newValue');
+    actionLogger.logInfo('firstRetryMaxDelay changed: $newValue');
     this.firstRetryMaxDelay = newValue;
     client.eventDispatcher.onPropertyChange("firstRetryMaxDelay");
   }
@@ -63,7 +63,7 @@ class LSConnectionOptions {
   }
   public function setForcedTransport(forcedTransport: Null<String>): Void {
     var newValue = TransportSelection.fromString(forcedTransport);
-    actionLogger.info('forcedTransport changed: $newValue');
+    actionLogger.logInfo('forcedTransport changed: $newValue');
     this.forcedTransport = newValue;
     client.eventDispatcher.onPropertyChange("forcedTransport");
     client.machine.evtExtSetForcedTransport();
@@ -73,7 +73,7 @@ class LSConnectionOptions {
     return httpExtraHeaders == null ? null : new NativeStringMap<String>(httpExtraHeaders);
   }
   public function setHttpExtraHeaders(httpExtraHeaders: Null<NativeStringMap<String>>): Void {
-    actionLogger.info('httpExtraHeaders changed: $httpExtraHeaders');
+    actionLogger.logInfo('httpExtraHeaders changed: $httpExtraHeaders');
     this.httpExtraHeaders = httpExtraHeaders == null ? null : httpExtraHeaders.toHaxe();
     client.eventDispatcher.onPropertyChange("httpExtraHeaders");
   }
@@ -83,7 +83,7 @@ class LSConnectionOptions {
   }
   public function setIdleTimeout(idleTimeout: Long): Void {
     var newValue = Millis.fromIntGtEq0(idleTimeout);
-    actionLogger.info('idleTimeout changed: $newValue');
+    actionLogger.logInfo('idleTimeout changed: $newValue');
     this.idleTimeout = newValue;
     client.eventDispatcher.onPropertyChange("idleTimeout");
   }
@@ -93,7 +93,7 @@ class LSConnectionOptions {
   }
   public function setKeepaliveInterval(keepaliveInterval: Long): Void {
     var newValue = Millis.fromIntGtEq0(keepaliveInterval);
-    actionLogger.info('keepaliveInterval changed: $newValue');
+    actionLogger.logInfo('keepaliveInterval changed: $newValue');
     this.keepaliveInterval = newValue;
     client.eventDispatcher.onPropertyChange("keepaliveInterval");
   }
@@ -103,7 +103,7 @@ class LSConnectionOptions {
   }
   public function setRequestedMaxBandwidth(maxBandwidth: String): Void {
     var newValue = RequestedMaxBandwidthTools.fromString(maxBandwidth);
-    actionLogger.info('requestedMaxBandwidth changed: ${newValue.toString()}');
+    actionLogger.logInfo('requestedMaxBandwidth changed: ${newValue.toString()}');
     this.requestedMaxBandwidth = newValue;
     client.eventDispatcher.onPropertyChange("requestedMaxBandwidth");
     client.machine.evtExtSetRequestedMaxBandwidth();
@@ -123,7 +123,7 @@ class LSConnectionOptions {
   }
   public function setPollingInterval(pollingInterval: Long): Void {
     var newValue = Millis.fromIntGtEq0(pollingInterval);
-    actionLogger.info('pollingInterval changed: $newValue');
+    actionLogger.logInfo('pollingInterval changed: $newValue');
     this.pollingInterval = newValue;
     client.eventDispatcher.onPropertyChange("pollingInterval");
   }
@@ -133,7 +133,7 @@ class LSConnectionOptions {
   }
   public function setReconnectTimeout(reconnectTimeout: Long): Void {
     var newValue = Millis.fromIntGt0(reconnectTimeout);
-    actionLogger.info('reconnectTimeout changed: $newValue');
+    actionLogger.logInfo('reconnectTimeout changed: $newValue');
     this.reconnectTimeout = newValue;
     client.eventDispatcher.onPropertyChange("reconnectTimeout");
   }
@@ -143,7 +143,7 @@ class LSConnectionOptions {
   }
   public function setRetryDelay(retryDelay: Long): Void {
     var newValue = Millis.fromIntGt0(retryDelay);
-    actionLogger.info('retryDelay changed: $newValue');
+    actionLogger.logInfo('retryDelay changed: $newValue');
     this.retryDelay = newValue;
     client.eventDispatcher.onPropertyChange("retryDelay");
   }
@@ -153,7 +153,7 @@ class LSConnectionOptions {
   }
   public function setReverseHeartbeatInterval(reverseHeartbeatInterval: Long): Void {
     var newValue = Millis.fromIntGtEq0(reverseHeartbeatInterval);
-    actionLogger.info('reverseHeartbeatInterval changed: $newValue');
+    actionLogger.logInfo('reverseHeartbeatInterval changed: $newValue');
     this.reverseHeartbeatInterval = newValue;
     client.eventDispatcher.onPropertyChange("reverseHeartbeatInterval");
     client.machine.evtExtSetReverseHeartbeatInterval();
@@ -164,7 +164,7 @@ class LSConnectionOptions {
   }
   public function setSessionRecoveryTimeout(sessionRecoveryTimeout: Long): Void {
     var newValue = Millis.fromIntGtEq0(sessionRecoveryTimeout);
-    actionLogger.info('sessionRecoveryTimeout changed: $newValue');
+    actionLogger.logInfo('sessionRecoveryTimeout changed: $newValue');
     this.sessionRecoveryTimeout = newValue;
     client.eventDispatcher.onPropertyChange("sessionRecoveryTimeout");
   }
@@ -174,7 +174,7 @@ class LSConnectionOptions {
   }
   public function setStalledTimeout(stalledTimeout: Long): Void {
     var newValue = Millis.fromIntGt0(stalledTimeout);
-    actionLogger.info('stalledTimeout changed: $newValue');
+    actionLogger.logInfo('stalledTimeout changed: $newValue');
     this.stalledTimeout = newValue;
     client.eventDispatcher.onPropertyChange("stalledTimeout");
   }
@@ -183,7 +183,7 @@ class LSConnectionOptions {
     return httpExtraHeadersOnSessionCreationOnly;
   }
   public function setHttpExtraHeadersOnSessionCreationOnly(httpExtraHeadersOnSessionCreationOnly: Bool): Void {
-    actionLogger.info('httpExtraHeadersOnSessionCreationOnly changed: $httpExtraHeadersOnSessionCreationOnly');
+    actionLogger.logInfo('httpExtraHeadersOnSessionCreationOnly changed: $httpExtraHeadersOnSessionCreationOnly');
     this.httpExtraHeadersOnSessionCreationOnly = httpExtraHeadersOnSessionCreationOnly;
     client.eventDispatcher.onPropertyChange("httpExtraHeadersOnSessionCreationOnly");
   }
@@ -192,14 +192,14 @@ class LSConnectionOptions {
     return serverInstanceAddressIgnored;
   }
   public function setServerInstanceAddressIgnored(serverInstanceAddressIgnored: Bool): Void {
-    actionLogger.info('serverInstanceAddressIgnored changed: $serverInstanceAddressIgnored');
+    actionLogger.logInfo('serverInstanceAddressIgnored changed: $serverInstanceAddressIgnored');
     this.serverInstanceAddressIgnored = serverInstanceAddressIgnored;
     client.eventDispatcher.onPropertyChange("serverInstanceAddressIgnored");
   }
 
   #if js
   public function setCookieHandlingRequired(newValue: Bool) {
-    actionLogger.info('cookieHandlingRequired changed: $newValue');
+    actionLogger.logInfo('cookieHandlingRequired changed: $newValue');
     this.cookieHandlingRequired = newValue;
     client.eventDispatcher.onPropertyChange("cookieHandlingRequired");
   }
@@ -212,7 +212,7 @@ class LSConnectionOptions {
     return slowingEnabled;
   }
   public function setSlowingEnabled(slowingEnabled: Bool): Void {
-    actionLogger.info('slowingEnabled changed: $slowingEnabled');
+    actionLogger.logInfo('slowingEnabled changed: $slowingEnabled');
     this.slowingEnabled = slowingEnabled;
     client.eventDispatcher.onPropertyChange("slowingEnabled");
   }
@@ -221,7 +221,7 @@ class LSConnectionOptions {
   var proxy: Null<Proxy>;
 
   public function setProxy(proxy: Null<Proxy>): Void {
-    actionLogger.info('proxy changed: $proxy');
+    actionLogger.logInfo('proxy changed: $proxy');
     #if cs
     com.lightstreamer.internal.Globals.instance.setProxy(proxy);
     #end

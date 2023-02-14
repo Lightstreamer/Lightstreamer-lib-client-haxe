@@ -452,7 +452,7 @@ class Key2Level implements ItemKey {
     if (internalLogger.isTraceEnabled()) {
       var subId = item.m_subId;
       var itemIdx = item.itemIdx;
-      internalLogger.trace('sub#key#$evt($subId:$itemIdx:$keyName) in $s_m');
+      internalLogger.logTrace('sub#key#$evt($subId:$itemIdx:$keyName) in $s_m');
     }
   }
 }
