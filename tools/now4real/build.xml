@@ -1,0 +1,23 @@
+<project name="Web client library" 
+  default="package" 
+  basedir="../..">
+
+  <description>
+  Buildfile for the Web client library
+  </description>
+
+  <property name="tools" location="tools/now4real"/>
+
+  <target name="package" description="Build the library">
+    <ant antfile="${tools}/build-log.xml" target="package" useNativeBasedir="true" inheritAll="false"/>
+    <ant antfile="${tools}/build-nolog.xml" target="package" useNativeBasedir="true" inheritAll="false"/>
+    <delete file="bin/now4real/build/now4real.zip"/>
+    <zip destfile="bin/now4real/build/now4real.zip"
+     basedir="bin/now4real/build/dist"/>
+  </target>
+
+  <target name="clean" description="Clean the project">
+    <ant antfile="${tools}/build-log.xml" target="clean" useNativeBasedir="true" inheritAll="false"/>
+    <ant antfile="${tools}/build-nolog.xml" target="clean" useNativeBasedir="true" inheritAll="false"/>
+  </target>
+</project>

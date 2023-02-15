@@ -6,25 +6,23 @@
   Buildfile for the Web client library
   </description>
 
-  <property name="tools" location="tools/web"/>
-  <property name="build" location="bin/web/build/now4real-nolog"/>
-  <property name="dist" location="bin/web/build/dist-now4real/nolog"/>
+  <property name="tools" location="tools/now4real"/>
+  <property name="build" location="bin/now4real/build/log"/>
+  <property name="dist" location="bin/now4real/build/dist/log"/>
   <property name="obj" location="${build}/obj"/>
   <property name="obj.api.lib" location="${obj}/ls_web_client_api.js"/>
   <property name="obj.wrapper.lib" location="${obj}/ls_web_client_wrapper.js"/>
-  <property name="test" location="bin-test/web"/>
+  <property name="test" location="bin-test/now4real"/>
   <property name="tools.base.dir" location="tools"/>
-  <property name="build.base.dir" location="bin/web/build"/>
-  <property file="${tools}/build.now4real.properties"/>
+  <property name="build.base.dir" location="bin/now4real/build"/>
+  <property file="${tools}/build.properties"/>
 
   <property name="haxe.orig.lib" location="${obj}/ls_web_client_haxe_orig.js"/>
   <property name="haxe.lib" location="${obj}/ls_web_client_haxe.js"/>
-  <property name="rollup.config" location="${tools}/res/rollup.config.now4real-nolog.js"/>
+  <property name="rollup.config" location="${tools}/res/rollup.config.log.js"/>
 
-  <property name="package.json.template" location="${tools}/res/package.now4real.json"/>
+  <property name="package.json.template" location="${tools}/res/package.json"/>
   <property name="package.json" location="${dist}/package.json"/>
-
-  <property name="logmap" location="${dist}/logmap.json"/>
 
   <property name="wrapper" location="src/wrapper/web/core"/>
   <property name="api.inc" location="${wrapper}/api.inc"/>
@@ -53,11 +51,10 @@
     <echo message="Version: ${version} build ${build.number}"/>
     <echo message="CID: ${cid}"/>
     <exec executable="haxe" failonerror="true">
-      <arg value="build.web.now4real-nolog.hxml"/>
+      <arg value="build.web.now4real-log.hxml"/>
       <arg value="-D"/><arg value="LS_VERSION=${version}"/>
       <arg value="-D"/><arg value="LS_BUILD=${build.number}"/>
       <arg value="-D"/><arg value="LS_CID=${cid}"/>
-      <arg value="-D"/><arg value="LS_STRIP_LOGS=${logmap}"/>
       <!-- output lib is saved in ${haxe.orig.lib} -->
     </exec>
     <exec executable="haxe" failonerror="true">

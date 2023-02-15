@@ -5,6 +5,6 @@ build.common.hxml
 --class-path src/platform/web
 
 -D shallow-expose
---js bin/web/build/now4real-nolog/obj/ls_web_client_haxe_orig.js
+--js bin/now4real/build/nolog/obj/ls_web_client_haxe_orig.js
 
 -D LS_WEB
