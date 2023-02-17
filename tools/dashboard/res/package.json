@@ -1,0 +1,34 @@
+{
+  "name": "lightstreamer-client-web",
+  "version": "@VERSION@+@BUILD@",
+  "description": "This package includes the resources needed to write a Lightstreamer client.",
+  "license": "Apache-2.0",
+  "keywords": [
+    "lightstreamer",
+    "push",
+    "realtime",
+    "real-time",
+    "websocket"
+  ],
+
+  "homepage": "http://www.lightstreamer.com",
+  
+  "bugs": {
+    "url" : "http://forum.lightstreamer.com/",
+    "email" : "support@lightstreamer.com"
+  },
+  
+  "author": {
+    "name" : "Lightstreamer Srl",
+    "email" : "support@lightstreamer.com"
+  },
+  
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe.git"
+  },
+
+  "module": "lightstreamer-core.esm.js",
+  "main": "lightstreamer-core.common.js",
+  "types": "types.d.ts"
+}

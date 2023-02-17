@@ -1,0 +1,16 @@
+build.common.hxml
+
+--class-path src/extern/js
+--class-path src/platform/js
+--class-path src/platform/web
+--class-path src/mpn/common
+--class-path src/mpn/web
+
+-D shallow-expose
+--js bin/dashboard/build/obj/ls_web_client_haxe_orig.js
+
+-D LS_WEB
+-D LS_MPN
+-D LS_JSON_PATCH
+-D LS_TLCP_DIFF
+-D LS_CREATE_REALM=/dashboard

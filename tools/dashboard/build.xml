@@ -1,0 +1,106 @@
+<project name="Web client library" 
+  default="package" 
+  basedir="../..">
+
+  <description>
+  Buildfile for the Web client library
+  </description>
+
+  <property name="tools" location="tools/dashboard"/>
+  <property name="build" location="bin/dashboard/build"/>
+  <property name="dist" location="bin/dashboard/build/dist"/>
+  <property name="obj" location="${build}/obj"/>
+  <property name="obj.api.lib" location="${obj}/ls_web_client_api.js"/>
+  <property name="obj.wrapper.lib" location="${obj}/ls_web_client_wrapper.js"/>
+  <property name="test" location="bin-test/dashboard"/>
+  <property name="tools.base.dir" location="tools"/>
+  <property name="build.base.dir" location="bin/dashboard/build"/>
+  <property file="${tools}/build.properties"/>
+
+  <property name="haxe.orig.lib" location="${obj}/ls_web_client_haxe_orig.js"/>
+  <property name="haxe.lib" location="${obj}/ls_web_client_haxe.js"/>
+  <property name="widgets.lib" location="bin/web/build/full/obj/lightstreamer-widgets.esm.js"/>
+  <property name="rollup.config" location="${tools}/res/rollup.config.js"/>
+
+  <property name="package.json.template" location="${tools}/res/package.json"/>
+  <property name="package.json" location="${dist}/package.json"/>
+
+  <property name="wrapper" location="src/wrapper/web/full"/>
+  <property name="api.inc" location="${wrapper}/api.inc"/>
+  <property name="haxe.inc" location="${wrapper}/haxe.inc"/>
+  <property name="wrapper.inc" location="${wrapper}/wrapper.inc"/>
+  <property name="js.dir" location="src/wrapper/js"/>
+
+  <target name="package" depends="package_haxe,package_common" description="Build the library">
+    <exec executable="npx" failonerror="true">
+      <arg value="rollup"/>
+      <arg value="--config"/>
+      <arg value="${rollup.config}"/>
+      <!-- output is saved in ${dist} -->
+    </exec>
+  </target>
+
+  <target name="package_common">
+    <!-- NB widgets.lib is built by tools/web/build.xml -->
+    <copy file="${widgets.lib}" todir="${obj}" overwrite="true"/>
+    <copy file="${package.json.template}" tofile="${package.json}" overwrite="true">
+      <filterset>
+        <filter token="VERSION" value="${version}"/>
+        <filter token="BUILD" value="${build.number}"/>
+      </filterset>
+    </copy>
+  </target>
+
+  <target name="package_haxe" depends="preprocess">
+    <echo message="Version: ${version} build ${build.number}"/>
+    <echo message="CID: ${cid}"/>
+    <exec executable="haxe" failonerror="true">
+      <arg value="build.dashboard.hxml"/>
+      <arg value="-D"/><arg value="LS_VERSION=${version}"/>
+      <arg value="-D"/><arg value="LS_BUILD=${build.number}"/>
+      <arg value="-D"/><arg value="LS_CID=${cid}"/>
+      <!-- output lib is saved in ${haxe.orig.lib} -->
+    </exec>
+    <exec executable="haxe" failonerror="true">
+      <arg value="--run"/>
+      <arg value="tools.Patch"/>
+      <arg value="${haxe.orig.lib}"/>
+      <!-- output lib is saved in ${haxe.orig.lib} -->
+    </exec>
+    <exec executable="node" failonerror="true">
+      <arg value="${tools.base.dir}/preprocess.js"/>
+      <arg value="${haxe.inc}"/>
+      <arg value="-b"/><arg value="${obj}"/>
+      <arg value="-o"/><arg value="${haxe.lib}"/>
+      <arg value="-START_WEB_JSDOC_EXCLUDE"/>
+      <arg value="-LS_MPN"/>
+    </exec>
+  </target>
+
+  <target name="preprocess">
+    <touch file="${obj.api.lib}" mkdirs="true"/>
+    <exec executable="node" failonerror="true">
+      <arg value="${tools.base.dir}/preprocess.js"/>
+      <arg value="${api.inc}"/>
+      <arg value="-b"/><arg value="${js.dir}"/>
+      <arg value="-o"/><arg value="${obj.api.lib}"/>
+      <arg value="-START_WEB_JSDOC_EXCLUDE"/>
+      <arg value="-LS_MPN"/>
+    </exec>
+    <touch file="${obj.wrapper.lib}" mkdirs="true"/>
+    <exec executable="node" failonerror="true">
+      <arg value="${tools.base.dir}/preprocess.js"/>
+      <arg value="${wrapper.inc}"/>
+      <arg value="-b"/><arg value="${js.dir}"/>
+      <arg value="-o"/><arg value="${obj.wrapper.lib}"/>
+      <arg value="-START_WEB_JSDOC_EXCLUDE"/>
+      <arg value="-LS_MPN"/>
+    </exec>
+  </target>
+
+  <target name="clean" description="Clean the project">
+    <delete dir="${build.base.dir}"/>
+    <delete dir="${test}"/>
+  </target>
+
+</project>
