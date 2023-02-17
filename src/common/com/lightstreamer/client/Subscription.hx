@@ -180,6 +180,9 @@ class LSSubscription {
     return bufferSize.toString();
   }
   public function setRequestedBufferSize(size: Null<String>): Void {
+    #if js
+    size = size == null ? size : Std.string(size);
+    #end
     checkActive();
     this.bufferSize = RequestedBufferSizeTools.fromString(size);
   }
@@ -188,6 +191,9 @@ class LSSubscription {
     return snapshot.toString();
   }
   public function setRequestedSnapshot(snapshot: Null<String>): Void {
+    #if js
+    snapshot = snapshot == null ? snapshot : Std.string(snapshot);
+    #end
     checkActive();
     var newValue = RequestedSnapshotTools.fromString(snapshot);
     switch mode {
@@ -205,6 +211,9 @@ class LSSubscription {
   }
   @:unsynchronized
   public function setRequestedMaxFrequency(freq: Null<String>): Void {
+    #if
+    freq = freq == null ? freq : Std.string(freq);
+    #end
     var _manager;
     lock.synchronized(() -> {
       var newValue = RequestedMaxFrequencyTools.fromString(freq);

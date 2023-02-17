@@ -242,6 +242,9 @@ class LSMpnSubscription {
     return bufferSize.toString();
   }
   public function setRequestedBufferSize(size: Null<String>): Void {
+    #if js
+    size = size == null ? size : Std.string(size);
+    #end
     checkActive();
     this.bufferSize = RequestedBufferSizeTools.fromString(size);
   }
@@ -250,6 +253,9 @@ class LSMpnSubscription {
     return requestedMaxFrequency.toString();
   }
   public function setRequestedMaxFrequency(freq: Null<String>): Void {
+    #if js
+    freq = freq == null ? freq : Std.string(freq);
+    #end
     checkActive();
     this.requestedMaxFrequency = MpnRequestedMaxFrequencyTools.fromString(freq);
   }
