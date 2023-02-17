@@ -27,3 +27,5 @@ final LS_LIB_NAME = "php_client";
 #elseif cpp
 final LS_LIB_NAME = "cpp_client";
 #end
+
+final LS_CREATE_REALM = getDefine("LS_CREATE_REALM", "");

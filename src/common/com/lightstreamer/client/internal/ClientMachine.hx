@@ -3337,7 +3337,7 @@ class ClientMachine {
 
     connectTs = TimerStamp.now();
     serverInstanceAddress = getServerAddress();
-    var url = Url.build(serverInstanceAddress, "/lightstreamer/create_session.txt?LS_protocol=" + TLCP_VERSION);
+    var url = Url.build(serverInstanceAddress, '/lightstreamer$LS_CREATE_REALM/create_session.txt?LS_protocol=' + TLCP_VERSION);
     http = sendHttpRequest(url, req, options.httpExtraHeaders);
   }
 
@@ -3421,7 +3421,7 @@ class ClientMachine {
 
     connectTs = TimerStamp.now();
     serverInstanceAddress = getServerAddress();
-    var url = Url.build(serverInstanceAddress, "/lightstreamer/create_session.txt?LS_protocol=" + TLCP_VERSION);
+    var url = Url.build(serverInstanceAddress, '/lightstreamer$LS_CREATE_REALM/create_session.txt?LS_protocol=' + TLCP_VERSION);
     http = sendHttpRequest(url, req, options.httpExtraHeaders);
   }
 
@@ -3544,11 +3544,15 @@ class ClientMachine {
       #if LS_WEB
       if (noHeaders) {
       #end
+        #if LS_CREATE_REALM
+        return BFC_http;
+        #else
         if (!blackList.contains(WS_STREAMING)) {
           return BFC_ws;
         } else {
           return BFC_http;
         }
+        #end
       #if LS_WEB
       } else {
         return BFC_http;
