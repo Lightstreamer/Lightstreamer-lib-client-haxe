@@ -1,6 +1,6 @@
 {
   "name": "lightstreamer-client-node",
-  "version": "@VERSION@",
+  "version": "@VERSION@+@BUILD@",
   "description": "This package includes the resources needed to write a Lightstreamer client.",
   "license": "Apache-2.0",
   "keywords": [

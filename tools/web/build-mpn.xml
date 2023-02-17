@@ -45,6 +45,7 @@
      <copy file="${package.json.template}" tofile="${package.json}" overwrite="true">
       <filterset>
         <filter token="VERSION" value="${version}"/>
+        <filter token="BUILD" value="${build.number}"/>
       </filterset>
     </copy>
     <copy file="${readme.md.template}" tofile="${readme.md}" overwrite="true">
