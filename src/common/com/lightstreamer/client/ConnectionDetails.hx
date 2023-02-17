@@ -6,11 +6,19 @@ import com.lightstreamer.internal.Types;
 import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
 
+private var DEFAULT_SERVER = #if LS_WEB
+js.Lib.typeof(js.Browser.window) != "object" ? null : 
+  ServerAddress.fromString(
+    js.Browser.location.protocol + "//" + js.Browser.location.hostname + (js.Browser.location.port != "" ? ":" + js.Browser.location.port : "") + "/");
+#else
+null;
+#end
+
 #if (js || python) @:expose @:native("LSConnectionDetails") #end
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 @:access(com.lightstreamer.client)
 class LSConnectionDetails {
-  var serverAddress: Null<ServerAddress>;
+  var serverAddress: Null<ServerAddress> = DEFAULT_SERVER;
   var adapterSet: Null<String>;
   var user: Null<String>;
   var password: Null<String>;
