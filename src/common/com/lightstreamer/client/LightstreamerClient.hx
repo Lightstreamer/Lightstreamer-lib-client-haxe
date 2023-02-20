@@ -155,7 +155,7 @@ class LSLightstreamerClient {
 
   public function findMpnSubscription(subscriptionId: String): Null<MpnSubscription> {
     var machine = cast(machine, com.lightstreamer.client.internal.MpnClientMachine);
-    machine.findMpnSubscription(subscriptionId);
+    return machine.findMpnSubscription(subscriptionId);
   }
 
   public function findMpnSubscriptionWrapper(subscriptionId: String): Null<Any> {
