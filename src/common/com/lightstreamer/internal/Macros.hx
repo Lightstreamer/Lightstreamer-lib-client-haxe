@@ -7,9 +7,19 @@ import haxe.macro.Expr;
 using haxe.macro.TypeTools;
 using Lambda;
 
+/**
+ * Synchronizes a class by adding a lock field and by wrapping the bodies of the methods in the expression `lock.synchronized`.
+ * 
+ * The synchronization is only applied to methods that are:
+ * 1) non-static and public, or
+ * 2) non-static and private but annotated with @:synchronized.
+ * 
+ * Annotating a method with @:unsynchronized prevents the synchronization.
+ */
 function synchronizeClass(): Array<Field> {
   var fields = Context.getBuildFields();
   var hasLock = false;
+  // search a field named `lock` in the class and its super classes
   if (fields.exists(f -> f.name == "lock" && f.kind.match(FVar(_,_)))) {
     hasLock = true;
   } else {
@@ -24,6 +34,7 @@ function synchronizeClass(): Array<Field> {
       clazz = superDesc != null ? superDesc.t.get() : null;
     }
   }
+  // add a lock if it doesn't exist yet
   if (!hasLock) {
     fields.push({
       name:  "lock",
@@ -32,8 +43,11 @@ function synchronizeClass(): Array<Field> {
       pos: Context.currentPos(),
     });
   }
-  // synchronize (1) public, non-static methods and (2) private, non-static, @:synchronized methods
-  // by wrapping the bodies in lock.synchronized
+  // single-thread targets don't need synchronization
+  if (!Context.defined("target.threaded")) {
+    return fields;
+  }
+  // wrap the eligible methods in `lock.synchronized`
   for (field in fields) {
     if (field.name == "new")
       continue;
