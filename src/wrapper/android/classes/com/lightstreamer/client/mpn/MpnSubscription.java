@@ -399,9 +399,7 @@ public class MpnSubscription {
      * @lifecycle This method can only be called if the MpnSubscription has been initialized 
      * with an "Item List".
 
-     * @return the "Item List" to be subscribed to through the server.
-     * 
-     * @throws IllegalStateException if the MpnSubscription was not initialized.
+     * @return the "Item List" to be subscribed to through the server, or null if the MpnSubscription was initialized with an "Item Group" or was not initialized at all.
      */
     @Nonnull
     public String[] getItems() {
@@ -437,9 +435,7 @@ public class MpnSubscription {
      * @lifecycle This method can only be called if the MpnSubscription has been initialized
      * using an "Item Group"
      * 
-     * @return the "Item Group" to be subscribed to through the server.
-     * 
-     * @throws IllegalStateException if the MpnSubscription was not initialized.
+     * @return the "Item Group" to be subscribed to through the server, or null if the MpnSubscription was initialized with an "Item List" or was not initialized at all.
      */
     @Nonnull
     public String getItemGroup() {
@@ -476,9 +472,7 @@ public class MpnSubscription {
      * @lifecycle  This method can only be called if the MpnSubscription has been initialized 
      * using a "Field List".
      * 
-     * @return the "Field List" to be subscribed to through the server.
-     * 
-     * @throws IllegalStateException if the MpnSubscription was not initialized.
+     * @return the "Field List" to be subscribed to through the server, or null if the MpnSubscription was initialized with a "Field Schema" or was not initialized at all.
      */
     @Nonnull
     public String[] getFields() {
@@ -515,9 +509,7 @@ public class MpnSubscription {
      * @lifecycle This method can only be called if the MpnSubscription has been initialized 
      * using a "Field Schema"
      * 
-     * @return the "Field Schema" to be subscribed to through the server.
-
-     * @throws IllegalStateException if the MpnSubscription was not initialized.
+     * @return the "Field Schema" to be subscribed to through the server, or null if the MpnSubscription was initialized with a "Field List" or was not initialized at all.
      */
     @Nonnull
     public String getFieldSchema() {

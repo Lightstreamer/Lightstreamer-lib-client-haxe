@@ -1415,8 +1415,7 @@ Note that all of the methods used to describe the subscription to the server can
     **lifecycle** This method can only be called if the Subscription has been initialized 
     with an "Item List".
 
-    :raises IllegalStateException: if the Subscription was initialized with an "Item Group" or was not initialized at all.
-    :return: the "Item List" to be subscribed to through the server.
+    :return: the "Item List" to be subscribed to through the server, or None if the Subscription was initialized with an "Item Group" or was not initialized at all.
     """
     return self.delegate.getItems()
 
@@ -1443,8 +1442,7 @@ Note that all of the methods used to describe the subscription to the server can
     **lifecycle** This method can only be called if the Subscription has been initialized
     using an "Item Group"
 
-    :raises IllegalStateException: if the Subscription was initialized with an "Item List" or was not initialized at all.
-    :return: the "Item Group" to be subscribed to through the server.
+    :return: the "Item Group" to be subscribed to through the server, or None if the Subscription was initialized with an "Item List" or was not initialized at all.
     """
     return self.delegate.getItemGroup()
 
@@ -1470,8 +1468,7 @@ Note that all of the methods used to describe the subscription to the server can
     **lifecycle**  This method can only be called if the Subscription has been initialized 
     using a "Field List".
 
-    :raises IllegalStateException: if the Subscription was initialized with a "Field Schema" or was not initialized at all.
-    :return: the "Field List" to be subscribed to through the server.
+    :return: the "Field List" to be subscribed to through the server, or None if the Subscription was initialized with a "Field Schema" or was not initialized at all.
     """
     return self.delegate.getFields()
 
@@ -1498,8 +1495,7 @@ Note that all of the methods used to describe the subscription to the server can
     **lifecycle** This method can only be called if the Subscription has been initialized 
     using a "Field Schema"
 
-    :raises IllegalStateException: if the Subscription was initialized with a "Field List" or was not initialized at all.
-    :return: the "Field Schema" to be subscribed to through the server.
+    :return: the "Field Schema" to be subscribed to through the server, or None if the Subscription was initialized with a "Field List" or was not initialized at all.
     """
     return self.delegate.getFieldSchema()
 
@@ -1752,9 +1748,8 @@ differences based on the Subscription status:
     **lifecycle** This method can only be called if the second-level of this Subscription 
     has been initialized using a "Field List"
 
-    :raises IllegalStateException: if the Subscription was initialized with a "Field Schema" or was not initialized at all.
     :raises IllegalStateException: if the Subscription mode is not COMMAND
-    :return: the list of fields to be subscribed to through the server.
+    :return: the list of fields to be subscribed to through the server, or None if the Subscription was initialized with a "Field Schema" or was not initialized at all.
 
     .. seealso:: :meth:`Subscription.setCommandSecondLevelFields`
     """
@@ -1804,9 +1799,8 @@ differences based on the Subscription status:
     **lifecycle** This method can only be called if the second-level of this Subscription has 
     been initialized using a "Field Schema".
 
-    :raises IllegalStateException: if the Subscription was initialized with a "Field List" or was not initialized at all.
     :raises IllegalStateException: if the Subscription mode is not COMMAND
-    :return: the "Field Schema" to be subscribed to through the server.
+    :return: the "Field Schema" to be subscribed to through the server, or None if the Subscription was initialized with a "Field List" or was not initialized at all.
 
     .. seealso:: :meth:`Subscription.setCommandSecondLevelFieldSchema`
     """

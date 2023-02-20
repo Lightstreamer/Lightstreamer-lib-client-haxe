@@ -170,10 +170,7 @@ Subscription.prototype = {
    * been initialized with an "Item List".
    * </p>
    * 
-   * @throws {IllegalStateException} if the Subscription was initialized
-   * with an "Item Group" or was not initialized at all.
-   * 
-   * @return {String[]} the "Item List" to be subscribed to through the server. 
+   * @return {String[]} the "Item List" to be subscribed to through the server, or null if the Subscription was initialized with an "Item Group" or was not initialized at all. 
    */
   getItems: function() {
     return this.delegate.getItems();
@@ -205,11 +202,8 @@ Subscription.prototype = {
    * <p class="lifecycle"><b>Lifecycle:</b> This method can only be called if the Subscription has
    * been initialized using an "Item Group"
    * </p>
-   *
-   * @throws {IllegalStateException} if the Subscription was initialized
-   * with an "Item List" or was not initialized at all.
    * 
-   * @return {String} the "Item Group" to be subscribed to through the server. 
+   * @return {String} the "Item Group" to be subscribed to through the server, or null if the Subscription was initialized with an "Item List" or was not initialized at all.
    */
   getItemGroup: function() {
     return this.delegate.getItemGroup();
@@ -245,10 +239,7 @@ Subscription.prototype = {
    * been initialized using a "Field List". 
    * </p>
    * 
-   * @throws {IllegalStateException} if the Subscription was initialized
-   * with a "Field Schema" or was not initialized at all.
-   * 
-   * @return {String[]} the "Field List" to be subscribed to through the server. 
+   * @return {String[]} the "Field List" to be subscribed to through the server, or null if the Subscription was initialized with a "Field Schema" or was not initialized at all.
    */
   getFields: function() {
     return this.delegate.getFields();
@@ -281,10 +272,7 @@ Subscription.prototype = {
    * been initialized using a "Field Schema" 
    * </p>
    * 
-   * @throws {IllegalStateException} if the Subscription was initialized
-   * with a "Field List" or was not initialized at all.
-   * 
-   * @return {String} the "Field Schema" to be subscribed to through the server. 
+   * @return {String} the "Field Schema" to be subscribed to through the server, or null if the Subscription was initialized with a "Field List" or was not initialized at all.
    */
   getFieldSchema: function() {
     return this.delegate.getFieldSchema();
@@ -608,10 +596,7 @@ Subscription.prototype = {
    * this Subscription has been initialized using a "Field List"  
    * </p>
    * 
-   * @throws {IllegalStateException} if the Subscription was initialized
-   * with a field schema or was not initialized at all.
-   * 
-   * @return {String[]} the list of fields to be subscribed to through the server. 
+   * @return {String[]} the list of fields to be subscribed to through the server, or null if the Subscription was initialized with a "Field Schema" or was not initialized at all.
    */
   getCommandSecondLevelFields: function() {
     return this.delegate.getCommandSecondLevelFields();
@@ -661,10 +646,7 @@ Subscription.prototype = {
    * this Subscription has been initialized using a "Field Schema".
    * </p>
    * 
-   * @throws {IllegalStateException} if the Subscription was initialized
-   * with a "Field List" or was not initialized at all.
-   * 
-   * @return {String} the "Field Schema" to be subscribed to through the server. 
+   * @return {String} the "Field Schema" to be subscribed to through the server, or null if the Subscription was initialized with a "Field List" or was not initialized at all.
    */
   getCommandSecondLevelFieldSchema: function() {
     return this.delegate.getCommandSecondLevelFieldSchema();

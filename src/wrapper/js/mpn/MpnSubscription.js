@@ -339,9 +339,7 @@ MpnSubscription.prototype = {
        * <p class="lifecycle"><b>Lifecycle:</b> This method can only be called if the MpnSubscription has been initialized
        * with an "Item List".</p>
 
-       * @return {String[]} the "Item List" to be subscribed to through the server.
-       *
-       * @throws IllegalStateException if the MpnSubscription was not initialized.
+       * @return {String[]} the "Item List" to be subscribed to through the server, or null if the MpnSubscription was initialized with an "Item Group" or was not initialized at all.
        */
       getItems: function() {
         return this.delegate.getItems();
@@ -376,9 +374,7 @@ MpnSubscription.prototype = {
        * <p class="lifecycle"><b>Lifecycle:</b> This method can only be called if the MpnSubscription has been initialized
        * using an "Item Group"</p>
        *
-       * @return {String} the "Item Group" to be subscribed to through the server.
-       *
-       * @throws IllegalStateException if the MpnSubscription was not initialized.
+       * @return {String} the "Item Group" to be subscribed to through the server, or null if the MpnSubscription was initialized with an "Item List" or was not initialized at all.
        */
       getItemGroup: function() {
         return this.delegate.getItemGroup();
@@ -414,9 +410,7 @@ MpnSubscription.prototype = {
        * <p class="lifecycle"><b>Lifecycle:</b>  This method can only be called if the MpnSubscription has been initialized
        * using a "Field List".</p>
        *
-       * @return {String[]} the "Field List" to be subscribed to through the server.
-       *
-       * @throws IllegalStateException if the MpnSubscription was not initialized.
+       * @return {String[]} the "Field List" to be subscribed to through the server, or null if the MpnSubscription was initialized with a "Field Schema" or was not initialized at all.
        */
       getFields: function() {
         return this.delegate.getFields();
@@ -452,9 +446,7 @@ MpnSubscription.prototype = {
        * <p class="lifecycle"><b>Lifecycle:</b> This method can only be called if the MpnSubscription has been initialized
        * using a "Field Schema"</p>
        *
-       * @return {String} the "Field Schema" to be subscribed to through the server.
-
-       * @throws IllegalStateException if the MpnSubscription was not initialized.
+       * @return {String} the "Field Schema" to be subscribed to through the server, or null if the MpnSubscription was initialized with a "Field List" or was not initialized at all.
        */
       getFieldSchema: function() {
         return this.delegate.getFieldSchema();
