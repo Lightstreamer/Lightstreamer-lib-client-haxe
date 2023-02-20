@@ -15,10 +15,6 @@ typedef TestCase = {
   timeout: Null<Int>
 }
 
-enum State {
-  Init; NoTest; FirstTest; TestPassed; TestFailed;
-}
-
 @:access(utest.Test)
 @:build(utils.Macros.synchronizeClass())
 class Runner {
@@ -28,7 +24,6 @@ class Runner {
   var globalPattern: EReg;
   public var numFailures(default, null) = 0;
   
-  var state = Init;
   var current: Int = 0;
   var currentTest: Test = null;
   var currentTimer: hx.concurrent.executor.Executor.TaskFuture<Void> = null;
@@ -58,7 +53,7 @@ class Runner {
   }
 
   public function evtRun() {
-    trace('evtRun: state=$state current=$current');
+    trace('evtRun: current=$current');
     if (testCases.length == 0) {
       gotoNoTest();
     } else {
@@ -67,48 +62,30 @@ class Runner {
   }
 
   public function evtCompleted(testIndex: Int) {
-    trace('evtCompleted: state=$state current=$current testIndex=$testIndex');
+    trace('evtCompleted: current=$current testIndex=$testIndex');
     if (testIndex != current) {
       return;
     }
-    gotoTestPassed();
+    gotoTestCompleted();
   }
 
   public function evtTimeout(testIndex: Int) {
-    trace('evtTimeout: state=$state current=$current testIndex=$testIndex');
+    trace('evtTimeout: current=$current testIndex=$testIndex');
     if (testIndex != current) {
       return;
     }
-    gotoTestFailed();
+    gotoTestCompleted();
   }
 
   function gotoNoTest() {
-    state = NoTest;
-    trace('goto: state=$state');
     printReport();
   }
 
   function gotoFirstTest() {
-    state = FirstTest;
-    trace('goto: state=$state');
     runCurrent();
   }
 
-  function gotoTestPassed() {
-    state = TestPassed;
-    trace('goto: state=$state');
-    teardownCurrent();
-    current += 1;
-    if (current < testCases.length) {
-      runCurrent();
-    } else {
-      printReport();
-    }
-  }
-
-  function gotoTestFailed() {
-    state = TestFailed;
-    trace('goto: state=$state');
+  function gotoTestCompleted() {
     teardownCurrent();
     current += 1;
     if (current < testCases.length) {
