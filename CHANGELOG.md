@@ -44,7 +44,7 @@ The following properties have been changed:
 - `Subscription.getItemGroup`
 - `Subscription.getFields`
 - `Subscription.getFieldSchema`
-- `Subscription.getCommandSeconLevelFields`
+- `Subscription.getCommandSecondLevelFields`
 - `Subscription.getCommandSecondLevelFieldSchema`
 
 Now they return null when the values are not available. 
@@ -116,7 +116,7 @@ The following properties have been changed:
 - `Subscription.getItemGroup`
 - `Subscription.getFields`
 - `Subscription.getFieldSchema`
-- `Subscription.getCommandSeconLevelFields`
+- `Subscription.getCommandSecondLevelFields`
 - `Subscription.getCommandSecondLevelFieldSchema`
 
 Now they return null when the values are not available. 
@@ -168,7 +168,7 @@ The following properties have been changed:
 - `Subscription.getItemGroup`
 - `Subscription.getFields`
 - `Subscription.getFieldSchema`
-- `Subscription.getCommandSeconLevelFields`
+- `Subscription.getCommandSecondLevelFields`
 - `Subscription.getCommandSecondLevelFieldSchema`
 
 Now they return null when the values are not available. 
@@ -252,7 +252,7 @@ The following properties have been changed:
 - `Subscription.getItemGroup`
 - `Subscription.getFields`
 - `Subscription.getFieldSchema`
-- `Subscription.getCommandSeconLevelFields`
+- `Subscription.getCommandSecondLevelFields`
 - `Subscription.getCommandSecondLevelFieldSchema`
 
 Now they return null when the values are not available. 
