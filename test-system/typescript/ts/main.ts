@@ -1,4 +1,4 @@
-import {Subscription, LightstreamerClient, ConsoleLoggerProvider, ConsoleLogLevel, MpnSubscription, MpnDevice, FirebaseMpnBuilder, SafariMpnBuilder} from 'lightstreamer-client-web'
+import {Subscription, LightstreamerClient, ConsoleLoggerProvider, ConsoleLogLevel, MpnSubscription, MpnDevice, FirebaseMpnBuilder, SafariMpnBuilder, StatusWidget} from 'lightstreamer-client-web/full'
 
 var loggerProvider = new ConsoleLoggerProvider(ConsoleLogLevel.INFO)
 var logger = loggerProvider.getLogger("test")
@@ -23,6 +23,8 @@ sub.addListener({
 
 //var client = new LightstreamerClient("http://localhost:8080","DEMO")
 var client = new LightstreamerClient("http://push.lightstreamer.com","DEMO")  
+
+client.addListener(new StatusWidget("left", "0px", true))
 
 client.connectionDetails.setUser("user")
 assert(client.connectionDetails.getUser() == "user")
