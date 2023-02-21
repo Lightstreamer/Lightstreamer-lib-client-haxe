@@ -28,6 +28,45 @@
     "url": "git+https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe.git"
   },
 
+  "exports": {
+    ".": {
+      "types": "./types.d.ts",
+      "require": "./lightstreamer-core.common.js",
+      "import": "./lightstreamer-core.esm.js",
+      "default": "./lightstreamer-core.esm.js"
+    },
+    "./core": {
+      "types": "./types.d.ts",
+      "require": "./lightstreamer-core.common.js",
+      "import": "./lightstreamer-core.esm.js",
+      "default": "./lightstreamer-core.esm.js"
+    },
+    "./mpn": {
+      "types": "./types.d.ts",
+      "require": "./lightstreamer-mpn.common.js",
+      "import": "./lightstreamer-mpn.esm.js",
+      "default": "./lightstreamer-mpn.esm.js"
+    },
+    "./full": {
+      "types": "./types.d.ts",
+      "require": "./lightstreamer.common.js",
+      "import": "./lightstreamer.esm.js",
+      "default": "./lightstreamer.esm.js"
+    },
+    "./lightstreamer-core.common": "./lightstreamer-core.common.js",
+    "./lightstreamer-core.esm": "./lightstreamer-core.esm.js",
+    "./lightstreamer-core": "./lightstreamer-core.js",
+    "./lightstreamer-core.min": "./lightstreamer-core.min.js",
+    "./lightstreamer-mpn.common": "./lightstreamer-mpn.common.js",
+    "./lightstreamer-mpn.esm": "./lightstreamer-mpn.esm.js",
+    "./lightstreamer-mpn": "./lightstreamer-mpn.js",
+    "./lightstreamer-mpn.min": "./lightstreamer-mpn.min.js",
+    "./lightstreamer.common": "./lightstreamer.common.js",
+    "./lightstreamer.esm": "./lightstreamer.esm.js",
+    "./lightstreamer": "./lightstreamer.js",
+    "./lightstreamer.min": "./lightstreamer.min.js"
+  },
+
   "module": "lightstreamer-core.esm.js",
   "main": "lightstreamer-core.common.js",
   "types": "types.d.ts"
