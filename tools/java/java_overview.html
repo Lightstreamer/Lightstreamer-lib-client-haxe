@@ -1,7 +1,86 @@
 <body>
+
+<h1>Summary</h1>
+<ol>
+  <li><a href="#introduction">Introduction</a></li>
+  <li><a href="#quickstart">Quickstart</a></li>
+  <li><a href="#logging">Logging</a></li>
+  <li><a href="#compatibility">Compatibility</a></li>
+  <li><a href="#documentation">Documentation</a></li>
+  <li><a href="#support">Support</a></li>
+  <li><a href="#license">License</a></li>
+  <li><a href="#all-packages-table">Packages</a></li>
+</ol>
+  
+<h2 id="introduction">Introduction</h2>
+
 This Java library enables any Java application to communicate bidirectionally with the Lightstreamer Server. The API allows to subscribe to real-time data pushed by the server and to send any message to the server.<br><br>
+
 The library exposes a fully asynchronous API. All the API calls that require any action from the library itself are queued for processing by a dedicated thread before being carried out. The same thread is also used to carry notifications for the appropriate listeners as provided by the custom code. Blocking operations and internal housekeeping are performed on different threads.<br><br>
+
 The library offers automatic recovery from connection failures, automatic selection of the best available transport, and full decoupling of subscription and connection operations. The subscriptions are always meant as subscriptions "to the LightstreamerClient", not "to the Server"; the LightstreamerClient is responsible of forwarding the subscriptions to the Server and re-forwarding all the subscriptions whenever the connection is broken and then reopened.<br><br>
-Start digging into the API from the {@link com.lightstreamer.client.LightstreamerClient}  object.
+
 The Java library can be available depending on Edition and License Type. To know what features are enabled by your license, please see the License tab of the Monitoring Dashboard (by default, available at /dashboard).
+
+<h2 id="quickstart">Quickstart</h2>
+ 
+To connect to a Lightstreamer Server, a {@link com.lightstreamer.client.LightstreamerClient}  object has to be created, configured, and instructed to connect to the Lightstreamer Server. 
+A minimal version of the code that creates a LightstreamerClient and connects to the Lightstreamer Server on <i>https://push.lightstreamer.com</i> will look like this:
+
+<pre><code>
+LightstreamerClient client = new LightstreamerClient("https://push.lightstreamer.com/","DEMO");
+client.connect();
+</code></pre>
+
+For each subscription to be subscribed to a Lightstreamer Server a {@link com.lightstreamer.client.Subscription} instance is needed.
+A simple Subscription containing three items and two fields to be subscribed in <i>MERGE</i> mode is easily created (see <a href="https://www.lightstreamer.com/docs/ls-server/latest/General%20Concepts.pdf">Lightstreamer General Concepts</a>):
+
+<pre><code>
+String[] items = { "item1","item2","item3" };
+String[] fields = { "stock_name","last_price" };
+Subscription sub = new Subscription("MERGE",items,fields);
+sub.setDataAdapter("QUOTE_ADAPTER");
+sub.setRequestedSnapshot("yes");
+client.subscribe(sub);
+</code></pre>
+
+Before sending the subscription to the server, usually at least one {@link com.lightstreamer.client.SubscriptionListener} is attached to the Subscription instance in order to consume the real-time updates. The following code shows the values of the fields <i>stock_name</i> and <i>last_price</i> each time a new update is received for the subscription:
+
+<pre><code>
+sub.addListener(new SubscriptionListener() {
+    public void onItemUpdate(ItemUpdate obj) {
+    	System.out.println(obj.getValue("stock_name") + ": " + obj.getValue("last_price"));
+    }
+    // other methods...
+});
+</code></pre>
+
+<h2 id="logging">Logging</h2>
+
+To enable the internal client logger, create an instance of {@link com.lightstreamer.log.LoggerProvider} and set it as the default provider of {@link com.lightstreamer.client.LightstreamerClient}.
+
+<pre><code>
+LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.DEBUG));
+</code></pre>
+
+<h2 id="compatibility">Compatibility</h2>
+
+The library is compatible with Lightstreamer Server since version 7.3.2.
+
+<h2 id="documentation">Documentation</h2>
+
+<ul>
+<li><a href="https://demos.lightstreamer.com/?p=lightstreamer&amp;t=client&amp;lclient=java_client&amp;sclientjava_client=android&amp;sclientjava_client=javase">Live demos</a></li>
+<li><a href="{@docRoot}/index.html">API Reference</a></li>
+<li><a href="https://lightstreamer.com/docs/ls-server/7.1.1/General%20Concepts.pdf">Lightstreamer General Concepts</a></li>
+</ul>
+
+<h2 id="support">Support</h2>
+
+For questions and support please use the <a href="https://forums.lightstreamer.com/">Official Forum</a>. The issue list of this page is <b>exclusively</b> for bug reports and feature requests.
+
+<h2 id="license">License</h2>
+
+<a href="https://opensource.org/licenses/Apache-2.0">Apache 2.0</a>
+
 </body>

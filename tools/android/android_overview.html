@@ -1,9 +1,138 @@
 <body>
+
+<h1>Summary</h1>
+<ol>
+  <li><a href="#introduction">Introduction</a></li>
+  <li><a href="#quickstart">Quickstart</a></li>
+  <li><a href="#mpn-quickstart">Mobile Push Notifications</a></li>
+  <li><a href="#logging">Logging</a></li>
+  <li><a href="#compatibility">Compatibility</a></li>
+  <li><a href="#documentation">Documentation</a></li>
+  <li><a href="#support">Support</a></li>
+  <li><a href="#license">License</a></li>
+  <li><a href="#all-packages-table">Packages</a></li>
+</ol>
+
+<h2 id="introduction">Introduction</h2>
+
 This Android library enables any Android application to communicate bidirectionally with the Lightstreamer Server. The API allows to subscribe to real-time data delivered directly by the server or routed via mobile push notifications, and to send any message to the server.<br><br>
 The library exposes a fully asynchronous API. All the API calls that require any action from the library itself are queued for processing by a dedicated thread before being carried out. The same thread is also used to carry notifications for the appropriate listeners as provided by the custom code. Blocking operations and internal housekeeping are performed on different threads.<br><br>
+
 The library offers automatic recovery from connection failures, automatic selection of the best available transport, and full decoupling of subscription and connection operations. The subscriptions are always meant as subscriptions "to the LightstreamerClient", not "to the Server"; the LightstreamerClient is responsible of forwarding the subscriptions to the Server and re-forwarding all the subscriptions whenever the connection is broken and then reopened.<br><br>
+
 The library also offers support for mobile push notifications (MPN). While real-time subscriptions deliver their updates via the client connection, MPN subscriptions deliver their updates via push notifications, even when the application is offline. They are handled by a special module of the Server, the MPN Module, that keeps them active at all times and continues pushing with no need for a client connection. However, push notifications are not real-time, they may be delayed by the service provider (FCM) and their delivery is not guaranteed.<br><br>
+
 The library needs Android 6.0 (API level 23) or greater.<br><br>
-Start digging into the API from the {@link com.lightstreamer.client.LightstreamerClient}  object.
-The Android library can be available depending on Edition and License Type. To know what features are enabled by your license, please see the License tab of the Monitoring Dashboard (by default, available at /dashboard).<br><br>
+
+The Android library can be available depending on Edition and License Type. To know what features are enabled by your license, please see the License tab of the Monitoring Dashboard (by default, available at /dashboard).
+
+<h2 id="quickstart">Quickstart</h2>
+ 
+To connect to a Lightstreamer Server, a {@link com.lightstreamer.client.LightstreamerClient}  object has to be created, configured, and instructed to connect to the Lightstreamer Server. 
+A minimal version of the code that creates a LightstreamerClient and connects to the Lightstreamer Server on <i>https://push.lightstreamer.com</i> will look like this:
+
+<pre><code>
+LightstreamerClient client = new LightstreamerClient("https://push.lightstreamer.com/","DEMO");
+client.connect();
+</code></pre>
+
+For each subscription to be subscribed to a Lightstreamer Server a {@link com.lightstreamer.client.Subscription} instance is needed.
+A simple Subscription containing three items and two fields to be subscribed in <i>MERGE</i> mode is easily created (see <a href="https://www.lightstreamer.com/docs/ls-server/latest/General%20Concepts.pdf">Lightstreamer General Concepts</a>):
+
+<pre><code>
+String[] items = { "item1","item2","item3" };
+String[] fields = { "stock_name","last_price" };
+Subscription sub = new Subscription("MERGE",items,fields);
+sub.setDataAdapter("QUOTE_ADAPTER");
+sub.setRequestedSnapshot("yes");
+client.subscribe(sub);
+</code></pre>
+
+Before sending the subscription to the server, usually at least one {@link com.lightstreamer.client.SubscriptionListener} is attached to the Subscription instance in order to consume the real-time updates. The following code shows the values of the fields <i>stock_name</i> and <i>last_price</i> each time a new update is received for the subscription:
+
+<pre><code>
+sub.addListener(new SubscriptionListener() {
+    public void onItemUpdate(ItemUpdate obj) {
+    	System.out.println(obj.getValue("stock_name") + ": " + obj.getValue("last_price"));
+    }
+    // other methods...
+});
+</code></pre>
+
+<h2 id="mpn-quickstart">Mobile Push Notifications Quickstart</h2>
+
+Mobile Push Notifications (MPN) are based on <a href="https://firebase.google.com/docs/cloud-messaging">Google's Firebase Cloud Messaging technology</a>.
+
+Before you can use MPN services, you need to
+<ul>
+  <li>create a Firebase project to connect to your Android app (read carefully the Firebase documentation about <a href="https://firebase.google.com/docs/cloud-messaging/android/client">Set up a Firebase Cloud Messaging client app on Android</a>);</li>
+  <li>configure the Lightstreamer MPN module (read carefully the section <i>5 Mobile and Web Push Notifications</i> in the <a href="https://lightstreamer.com/docs/ls-server/7.1.1/General%20Concepts.pdf">General Concepts guide</a>).</li>
+</ul>
+
+After you have a Firebase project, you can create a {@link com.lightstreamer.client.mpn.MpnDevice}, which represents a specific app running on a specific mobile device.
+
+<pre><code>
+FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener&lt;InstanceIdResult&gt;() {
+    public void onComplete(final Task&lt;InstanceIdResult&gt; task) {
+        if (task.isSuccessful()) {
+            MpnDevice device = new MpnDevice(context, task.getResult().getToken());
+            client.registerForMpn(device);
+        }
+    }
+});
+</code></pre>
+
+To receive notifications, you need to subscribe to a {@link com.lightstreamer.client.mpn.MpnSubscription}: it contains subscription details and the listener needed to monitor its status. Real-time data is routed via native push notifications.
+
+<pre><code>
+String[] items = { "item1","item2","item3" };
+String[] fields = { "stock_name","last_price" };
+MpnSubscription sub = new MpnSubscription("MERGE",items,fields);
+Map&lt;String, String&gt; data= new HashMap&lt;String, String&gt;();
+data.put("stock_name", "${stock_name}");
+data.put("last_price", "${last_price}");
+data.put("time", "${time}");
+data.put("item", stockSubscription.getItems()[0]);
+String format = new MpnBuilder().data(data).build();
+sub.setNotificationFormat(format);
+sub.setTriggerExpression("Double.parseDouble($[2])&gt;45.0");
+client.subscribe(sub, true);
+</code></pre>
+
+The notification format lets you specify how to format the notification message. It can contain a special syntax that lets you compose the message with the content of the subscription updates (see §5.4.1 of the <a href="https://lightstreamer.com/docs/ls-server/7.1.1/General%20Concepts.pdf">General Concepts guide</a>).
+<br><br>
+The optional  trigger expression  lets you specify  when to send  the notification message: it is a boolean expression, in Java language, that when evaluates to true triggers the sending of the notification (see §5.4.2 of the <a href="https://lightstreamer.com/docs/ls-server/7.1.1/General%20Concepts.pdf">General Concepts guide</a>). If not specified, a notification is sent each time the Data Adapter produces an update.
+<br><br>
+Finally, you need to configure a service that extends <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/messaging/FirebaseMessagingService">FirebaseMessagingService</a> in order to receive foreground/background notifications.<br>
+The steps are described in the Firebase documentation about <a href="https://firebase.google.com/docs/cloud-messaging/android/receive">Receive messages in an Android app</a>.
+As an example, you can see the class <a href="https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-android/blob/215951071175063d36b134c0222cefe3416fb58b/app/src/main/java/com/lightstreamer/demo/android/fcm/MyFirebaseMessagingService.java">MyFirebaseMessagingService</a> in the <a href="https://github.com/Lightstreamer/Lightstreamer-example-MPNStockList-client-android">Lightstreamer MPN StockList demo</a>.
+
+<h2 id="logging">Logging</h2>
+
+To enable the internal client logger, create an instance of {@link com.lightstreamer.log.LoggerProvider} and set it as the default provider of {@link com.lightstreamer.client.LightstreamerClient}.
+
+<pre><code>
+LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.DEBUG));
+</code></pre>
+
+<h2 id="compatibility">Compatibility</h2>
+
+The library is compatible with Lightstreamer Server since version 7.3.2.
+
+<h2 id="documentation">Documentation</h2>
+
+<ul>
+<li><a href="https://demos.lightstreamer.com/?p=lightstreamer&amp;t=client&amp;lclient=java_client&amp;sclientjava_client=android&amp;sclientjava_client=javase">Live demos</a></li>
+<li><a href="{@docRoot}/index.html">API Reference</a></li>
+<li><a href="https://lightstreamer.com/docs/ls-server/7.1.1/General%20Concepts.pdf">Lightstreamer General Concepts</a></li>
+</ul>
+
+<h2 id="support">Support</h2>
+
+For questions and support please use the <a href="https://forums.lightstreamer.com/">Official Forum</a>. The issue list of this page is <b>exclusively</b> for bug reports and feature requests.
+
+<h2 id="license">License</h2>
+
+<a href="https://opensource.org/licenses/Apache-2.0">Apache 2.0</a>
+
 </body>
