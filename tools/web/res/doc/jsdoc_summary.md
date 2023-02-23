@@ -118,6 +118,8 @@ The library requires Server 7.3.2.
 
 - [Changelog](https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe/blob/master/CHANGELOG.md)
 
+- [Web Client Guide](https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe/blob/master/docs/WebClientGuide.adoc)
+
 <h2 id="support">Support</h2>
 
 For questions and support please use the [Official Forum](https://forums.lightstreamer.com/). The issue list of this page is **exclusively** for bug reports and feature requests.
