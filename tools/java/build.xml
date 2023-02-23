@@ -37,7 +37,8 @@
   <property name="tools" location="tools/java"/>
   <property name="tools.ivy" location="${tools}/ivy.xml"/>
   <property name="tools.ivysettings" location="${tools}/ivysettings.xml"/>
-  <property name="tools.doc.overview" location="${tools}/java_overview.html"/>
+  <property name="doc.overview.template" location="${tools}/java_overview.html"/>
+  <property name="doc.overview" location="${build}/java_overview.html"/>
   <property file="${tools}/build.properties"/>
 
   <target name="prepare.dist" depends="resolve">
@@ -85,11 +86,16 @@
   </target>
 
   <target name="docs" description="Build the docs">
+    <copy file="${doc.overview.template}" tofile="${doc.overview}" overwrite="true">
+      <filterset>
+        <filter token="VERSION" value="${version}"/>
+      </filterset>
+    </copy>
     <javadoc destdir="${docs}"
       author="true"
       version="true"
       use="true"
-      overview="${tools.doc.overview}"
+      overview="${doc.overview}"
       doctitle="Lightstreamer Java Client SDK ${version} API Reference"
       windowtitle="Lightstreamer Java Client SDK ${version} API Reference">
       <packageset dir="${api.src}"/>

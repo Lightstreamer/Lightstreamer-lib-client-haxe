@@ -13,9 +13,6 @@ You can install the Lightstreamer Client SDK from `PyPI <https://pypi.org/projec
 
   python -m pip install lightstreamer-client-lib
 
-
-The sdk is supported on Python 3.7 and above.
-
 Quickstart
 **********
 
@@ -86,7 +83,9 @@ To enable the internal client logger, create a :class:`.LoggerProvider` and set 
 Compatibility
 *************
 
-Compatible with Lightstreamer Server since version 7.3.2.
+Python Client requires Python 3.7 or higher.
+
+The library is compatible with Lightstreamer Server since version 7.3.2.
 
 Documentation
 *************

@@ -1,6 +1,7 @@
 ## Summary
 
 - [Introduction](#introduction)
+- [Installing](#installing)
 - [Quickstart](#quickstart)
 - [Logging](#logging)
 - [Compatibility](#compatibility)
@@ -29,6 +30,16 @@ Note the following documentation convention:
 
 Function arguments qualified as `<optional>` can be omitted only if not followed by further arguments.
 In some cases, arguments that can be omitted (subject to the same restriction) may not be qualified as `<optional>`, but their optionality will be clear from the description.
+
+<h2 id="installing">Installing</h2>
+
+You can install the package [lightstreamer-client-web](https://www.npmjs.com/package/lightstreamer-client-web) using npm
+
+```
+npm install lightstreamer-client-web
+```
+
+The package contains a variety of library formats to suit the needs of the major development flavors. It supports module bundlers like Webpack, Rollup.js and Browserify; it is compatible with an AMD loader like Require.js, and it can be accessed through global variables. For further details see the [README](https://www.npmjs.com/package/lightstreamer-client-web).
 
 <h2 id="quickstart">Quickstart</h2>
 
@@ -104,6 +115,8 @@ The library requires Server 7.3.2.
 - [Live demos](http://demos.lightstreamer.com/?p=lightstreamer&t=client&a=javascriptclient)
 
 - [API Reference](index.html)
+
+- [Changelog](https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe/blob/master/CHANGELOG.md)
 
 <h2 id="support">Support</h2>
 

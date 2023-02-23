@@ -4,6 +4,10 @@ Lightstreamer Client SDK enables any .NET application to communicate bidirection
 
 The library offers automatic recovery from connection failures, automatic selection of the best available transport, and full decoupling of subscription and connection operations. It is responsible of forwarding the subscriptions to the Server and re-forwarding all the subscriptions whenever the connection is broken and then reopened.
 
+## Installing
+
+You can get the library from [nuget](https://www.nuget.org/packages/Lightstreamer.DotNetStandard.Client).
+
 ## Quickstart
 
 To connect to a Lightstreamer Server, a [LightstreamerClient](xref:com.lightstreamer.client.LightstreamerClient) object has to be created, configured, and instructed to connect to the Lightstreamer Server. 
@@ -100,6 +104,8 @@ LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.
 ```
 
 ## Compatibility ##
+
+.NET Client is compatible with .NET Standard 2.1 or higher.
 
 The library requires Server 7.3.2. 
 

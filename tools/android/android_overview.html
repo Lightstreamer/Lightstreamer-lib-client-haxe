@@ -3,6 +3,7 @@
 <h1>Summary</h1>
 <ol>
   <li><a href="#introduction">Introduction</a></li>
+  <li><a href="#installing">Installing</a></li>
   <li><a href="#quickstart">Quickstart</a></li>
   <li><a href="#mpn-quickstart">Mobile Push Notifications</a></li>
   <li><a href="#logging">Logging</a></li>
@@ -25,6 +26,26 @@ The library also offers support for mobile push notifications (MPN). While real-
 The library needs Android 6.0 (API level 23) or greater.<br><br>
 
 The Android library can be available depending on Edition and License Type. To know what features are enabled by your license, please see the License tab of the Monitoring Dashboard (by default, available at /dashboard).
+
+<h2 id="installing">Installing</h2>
+
+To add a dependency using Maven:
+
+<pre><code>
+&lt;dependency&gt;
+  &lt;groupId&gt;com.lightstreamer&lt;/groupId&gt;
+  &lt;artifactId&gt;ls-android-client&lt;/artifactId&gt;
+  &lt;version&gt;@VERSION@&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+To add a dependency using Gradle:
+
+<pre><code>
+dependencies {
+  implementation("com.lightstreamer:ls-android-client:@VERSION@")
+}
+</code></pre>
 
 <h2 id="quickstart">Quickstart</h2>
  
@@ -117,6 +138,8 @@ LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.
 
 <h2 id="compatibility">Compatibility</h2>
 
+Android Client requires Android 6.0 (API level 23) or greater.
+<br><br>
 The library is compatible with Lightstreamer Server since version 7.3.2.
 
 <h2 id="documentation">Documentation</h2>
@@ -124,6 +147,7 @@ The library is compatible with Lightstreamer Server since version 7.3.2.
 <ul>
 <li><a href="https://demos.lightstreamer.com/?p=lightstreamer&amp;t=client&amp;lclient=java_client&amp;sclientjava_client=android&amp;sclientjava_client=javase">Live demos</a></li>
 <li><a href="{@docRoot}/index.html">API Reference</a></li>
+<li><a href="https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe/blob/master/CHANGELOG.md">Changelog</a></li>
 <li><a href="https://lightstreamer.com/docs/ls-server/7.1.1/General%20Concepts.pdf">Lightstreamer General Concepts</a></li>
 </ul>
 
