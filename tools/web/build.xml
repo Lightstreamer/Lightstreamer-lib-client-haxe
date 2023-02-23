@@ -48,9 +48,15 @@
   </target>
 
   <target name="package" description="Build the library">
-    <ant antfile="${tools}/build-core.xml" target="package" useNativeBasedir="true" inheritAll="false"/>
-    <ant antfile="${tools}/build-mpn.xml" target="package" useNativeBasedir="true" inheritAll="false"/>
-    <ant antfile="${tools}/build-full.xml" target="package" useNativeBasedir="true" inheritAll="false"/>
+    <ant antfile="${tools}/build-core.xml" target="package" useNativeBasedir="true" inheritAll="false">
+      <property name="LS_STRIP_LOGS" value="false"/>
+    </ant>
+    <ant antfile="${tools}/build-mpn.xml" target="package" useNativeBasedir="true" inheritAll="false">
+      <property name="LS_STRIP_LOGS" value="false"/>
+    </ant>
+    <ant antfile="${tools}/build-full.xml" target="package" useNativeBasedir="true" inheritAll="false">
+      <property name="LS_STRIP_LOGS" value="false"/>
+    </ant>
   </target>
 
   <target name="clean" description="Clean the project">

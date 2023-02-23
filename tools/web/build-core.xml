@@ -1,4 +1,5 @@
-<project name="Web client library" 
+<project name="Web client library"
+  xmlns:if="ant:if" xmlns:unless="ant:unless"
   default="package" 
   basedir="../..">
 
@@ -63,6 +64,7 @@
       <arg value="-D"/><arg value="LS_VERSION=${version}"/>
       <arg value="-D"/><arg value="LS_BUILD=${build.number}"/>
       <arg value="-D"/><arg value="LS_CID=${cid}"/>
+      <arg line="-D LS_STRIP_LOGS=${dist}/logmap-core.json" if:true="${LS_STRIP_LOGS}"/>
       <!-- output lib is saved in ${haxe.orig.lib} -->
     </exec>
     <exec executable="haxe" failonerror="true">
