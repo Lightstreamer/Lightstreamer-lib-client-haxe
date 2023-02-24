@@ -1,0 +1,19 @@
+<project default="test">
+
+  <target name="test">
+    <exec executable="npx">
+      <arg value="tsc"/>
+    </exec>
+    <exec executable="npx">
+      <arg line="rollup -c"/>
+    </exec>
+    <exec executable="sh">
+      <arg value="-c"/>
+      <arg value="open test.html"/>
+    </exec>
+  </target>
+
+  <target name="clean">
+    <delete dir="dist"/>
+  </target>
+</project>

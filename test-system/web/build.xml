@@ -1,0 +1,20 @@
+<project default="test">
+
+  <target name="test">
+    <exec executable="haxe">
+      <arg value="test.web.core.hxml"/>
+    </exec>
+    <input>Press Return key to continue...</input>
+    <exec executable="haxe">
+      <arg value="test.web.mpn.hxml"/>
+    </exec>
+    <input>Press Return key to continue...</input>
+    <exec executable="haxe">
+      <arg value="test.web.full.hxml"/>
+    </exec>
+  </target>
+
+  <target name="clean">
+    <delete dir="../../bin-test/web"/>
+  </target>
+</project>

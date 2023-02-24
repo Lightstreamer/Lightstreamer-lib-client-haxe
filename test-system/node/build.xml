@@ -1,0 +1,12 @@
+<project default="test">
+
+  <target name="test">
+    <exec executable="haxe">
+      <arg value="test.node.hxml"/>
+    </exec>
+  </target>
+
+  <target name="clean">
+    <delete dir="../../bin-test/node"/>
+  </target>
+</project>

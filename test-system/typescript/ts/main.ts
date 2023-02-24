@@ -29,7 +29,7 @@ client.addListener(new StatusWidget("left", "0px", true))
 client.connectionDetails.setUser("user")
 assert(client.connectionDetails.getUser() == "user")
 
-client.connectionOptions.setHttpExtraHeaders({"Foo": "bar"})
+// client.connectionOptions.setHttpExtraHeaders({"Foo": "bar"})
 
 var device = new MpnDevice(`${Math.round(Math.random() * 100)}`, "com.example.myapp", "Google")
 assert(device.getPlatform() == "Google")

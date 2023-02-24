@@ -1,0 +1,12 @@
+<project default="test">
+
+  <target name="test">
+    <exec executable="haxe">
+      <arg value="test.now4real.hxml"/>
+    </exec>
+  </target>
+
+  <target name="clean">
+    <delete dir="../../bin-test/now4real"/>
+  </target>
+</project>
