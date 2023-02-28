@@ -1,5 +1,11 @@
 <project default="test-all">
 
+  <!-- 
+    Deletes the nuget cache in order to force dotnet to use the last built version of the Client lib in the folder `lib-client-haxe/bin/cs/dist` 
+    (make sure that this folder is listed in the output of the command `dotnet nuget list source`)
+  -->
+  <delete dir="${user.home}/.nuget/packages/lightstreamer.dotnetstandard.client"/>
+
   <target name="test-all" depends="test-core,test-cookies,test-proxy,test-cert">
   </target>
 
