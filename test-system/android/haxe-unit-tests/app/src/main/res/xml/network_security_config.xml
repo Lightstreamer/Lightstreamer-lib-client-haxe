@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <!--certificates src="@raw/server_certificate"/-->
+            <certificates src="@raw/proxy"/>
+            <certificates src="system"/>
+        </trust-anchors>
+    </base-config>
+    <!--domain-config>
+        <domain includeSubdomains="true">10.0.2.2</domain>
+        <trust-anchors>
+            <certificates src="@raw/proxy"/>
+        </trust-anchors>
+    </domain-config-->
+</network-security-config>
