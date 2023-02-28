@@ -57,6 +57,7 @@
   </target>
 
   <target name="distribute.local" depends="package,docs,prepare.dist" description="Publish the library to local .m2 folder">
+    <delete dir="${user.home}/.m2/repository/com/lightstreamer/ls-javase-client"/>
     <ivy:publish resolver="local-m2-publish" forcedeliver="true" overwrite="true" publishivy="false">
       <artifacts pattern="${dist}/[artifact](-[classifier]).[ext]"/>
     </ivy:publish>
