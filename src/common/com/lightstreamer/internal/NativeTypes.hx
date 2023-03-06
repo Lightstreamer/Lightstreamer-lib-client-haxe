@@ -26,7 +26,11 @@ abstract NativeException(NativeExceptionImpl) from NativeExceptionImpl {
 
   @:access(haxe.Exception.caught)
   inline public function details() {
+    #if cs
+    return this.ToString();
+    #else
     return haxe.Exception.caught(this).details();
+    #end
   }
 }
 
