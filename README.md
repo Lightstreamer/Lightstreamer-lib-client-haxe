@@ -100,7 +100,8 @@ The source files are hosted on Github.
 git clone https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe.git
 ```
 
-From now on all the commands need to be issued from the folder containing the cloned project.
+To build the supported targets, follow the instructions below. 
+All the commands need to be issued from the folder containing the cloned project.
 
 ### Haxe set up
 
@@ -125,7 +126,7 @@ You can check the installation with typing `haxe --version`. You should get an o
 
 ### Other tools set up
 
-In order to build the SDKs you need several other tools.
+In order to build the SDKs you need a few other tools.
 
 First enter the command
 

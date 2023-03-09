@@ -284,6 +284,8 @@ The system property `com.lightstreamer.client.session.thread`, which instructed 
 *Not compatible with code developed with the previous version.*<br/>
 *Made available on XXXXXXXXXX*
 
+Now the library requires *.Net Standard 2.1*. Previously it used to require *.Net Standard 2.0*.
+
 Improved the "delta delivery" mechanism, by adding the support for value differences, as per the extension introduced in Server version 7.3.0.
 Currently two "diff" formats are supported: JSON Patch and TLCP-diff.
 
@@ -292,8 +294,6 @@ See the Docs for details.
 
 Added the new error code 70 to the interface method `ClientListener.onServerError`, to report that an unusable port was configured on the server address.
 Previously a similar case was treated as a request syntax error.
-
-The library requires *.Net Standard 2.1*. Previously it used to require *.Net Standard 2.0*.
 
 The logging facilities have been revised in order to expose the same API on all supported platforms.<br/>
 They consist of:
