@@ -145,6 +145,9 @@ The signatures of the following methods have been changed:
 *Not compatible with code developed with the previous version.*<br/>
 *Made available on XXXXXXXXXX* 
 
+The "compact" variant of this library has been discontinued. 
+The last version available was 4.2.6.
+
 Improved the "delta delivery" mechanism, by adding the support for value differences, as per the extension introduced in Server version 7.3.0.
 Currently two "diff" formats are supported: JSON Patch and TLCP-diff.
 
