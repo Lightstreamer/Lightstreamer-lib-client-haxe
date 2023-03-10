@@ -11,10 +11,10 @@
 
 # Lightstreamer Web Client Changelog
 
-## XXXXXXXXXX
+## 9.0.0-beta.1
 *Compatible with Lightstreamer Server since 7.3.2*<br/>
 *Not compatible with code developed with the previous version.*<br/>
-*Made available on XXXXXXXXXX* 
+*Made available on 13 Mar 2023* 
 
 Improved the "delta delivery" mechanism, by adding the support for value differences, as per the extension introduced in Server version 7.3.0.
 Currently two "diff" formats are supported: JSON Patch and TLCP-diff.
@@ -84,10 +84,10 @@ The signatures of the following methods have been changed:
 
 # Lightstreamer Node.js Client Changelog
 
-## XXXXXXXXXX
+## 9.0.0-beta.1
 *Compatible with Lightstreamer Server since 7.3.2*<br/>
 *Not compatible with code developed with the previous version.*<br/>
-*Made available on XXXXXXXXXX* 
+*Made available on 13 Mar 2023* 
 
 Improved the "delta delivery" mechanism, by adding the support for value differences, as per the extension introduced in Server version 7.3.0.
 Currently two "diff" formats are supported: JSON Patch and TLCP-diff.
@@ -140,10 +140,10 @@ The signatures of the following methods have been changed:
 
 # Lightstreamer Android Client Changelog
 
-## XXXXXXXXXX
+## 5.0.0-beta.1
 *Compatible with Lightstreamer Server since 7.3.2*<br/>
 *Not compatible with code developed with the previous version.*<br/>
-*Made available on XXXXXXXXXX* 
+*Made available on 13 Mar 2023* 
 
 The "compact" variant of this library has been discontinued. 
 The last version available was 4.2.6.
@@ -227,10 +227,10 @@ The "compact" variant of the library is not available anymore.
 
 # Lightstreamer JavaSE Client Changelog
 
-## XXXXXXXXXX
+## 5.0.0-beta.1
 *Compatible with Lightstreamer Server since 7.3.2*<br/>
 *Not compatible with code developed with the previous version.*<br/>
-*Made available on XXXXXXXXXX* 
+*Made available on 13 Mar 2023* 
 
 Improved the "delta delivery" mechanism, by adding the support for value differences, as per the extension introduced in Server version 7.3.0.
 Currently two "diff" formats are supported: JSON Patch and TLCP-diff.
@@ -285,7 +285,7 @@ The system property `com.lightstreamer.client.session.thread`, which instructed 
 
 *Compatible with Lightstreamer Server since 7.3.2*<br/>
 *Not compatible with code developed with the previous version.*<br/>
-*Made available on XXXXXXXXXX*
+*Made available on 13 Mar 2023*
 
 Now the library requires *.Net Standard 2.1*. Previously it used to require *.Net Standard 2.0*.
 
