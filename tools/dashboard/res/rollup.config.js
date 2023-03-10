@@ -6,7 +6,6 @@ import pkg from '../../../bin/dashboard/build/dist/package.json'
 import classes from '../../../src/wrapper/web/full/wrapper.export.json'
 
 const dist = 'bin/dashboard/build/dist'
-const [versionNum, buildNum] = JsUtils.parseSemVer(pkg.version)
 
 export default [
   {
@@ -16,14 +15,14 @@ export default [
         name: 'lightstreamerExports',
         file: `${dist}/lightstreamer_dashboard.js`,
         format: 'iife',
-        banner: JsUtils.generateCopyright("Web", versionNum, buildNum, "UMD", classes) + "\n" + JsUtils.generateUmdHeader(classes),
+        banner: JsUtils.generateCopyright("Web", pkg.version, "UMD", classes) + "\n" + JsUtils.generateUmdHeader(classes),
         footer: JsUtils.generateUmdFooter('lightstreamerExports')
       },
       {
         name: 'lightstreamerExports',
         file: `${dist}/lightstreamer_dashboard.min.js`,
         format: 'iife',
-        banner: JsUtils.generateCopyright("Web", versionNum, buildNum, "UMD", classes) + "\n" + JsUtils.generateUmdHeader(classes),
+        banner: JsUtils.generateCopyright("Web", pkg.version, "UMD", classes) + "\n" + JsUtils.generateUmdHeader(classes),
         footer: JsUtils.generateUmdFooter('lightstreamerExports'),
         sourcemap: true,
         plugins: [

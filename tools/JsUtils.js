@@ -54,13 +54,13 @@ function generateUmdFooter(globalObject) {
 ` 
 }
 
-function generateCopyright(platform, versionNum, buildNum, format, classes) {
+function generateCopyright(platform, version, format, classes) {
   return `
 /**
  * @preserve
  * LIGHTSTREAMER - www.lightstreamer.com
  * Lightstreamer ${platform} Client
- * Version ${versionNum} build ${buildNum}
+ * Version ${version}
  * Copyright (c) Lightstreamer Srl. All Rights Reserved.
  * Contains: ${classes.reduce((acc, x, i) => i % 4 == 3 ? (acc + ',\n * ' + x) : (acc + ', ' + x))}
  * ${format}

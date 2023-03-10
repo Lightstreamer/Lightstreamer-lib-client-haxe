@@ -2,7 +2,6 @@ import virtual from '@rollup/plugin-virtual'
 import JsUtils from '../../JsUtils'
 import pkg from '../../../bin/web/build/dist/npm/package.json'
 
-const [versionNum, buildNum] = JsUtils.parseSemVer(pkg.version)
 const classes = ["Chart", "DynaGrid", "SimpleChartListener", "StaticGrid", "StatusWidget", "ChartListener", "DynaGridListener", "StaticGridListener"]
 
 export default [
@@ -13,13 +12,13 @@ export default [
         name: 'lightstreamerExports',
         file: 'bin/web/build/full/obj/lightstreamer-widgets.js',
         format: 'iife',
-        banner: JsUtils.generateCopyright("Web", versionNum, buildNum, "UMD", classes) + "\n" + JsUtils.generateUmdHeader(classes),
+        banner: JsUtils.generateCopyright("Web", pkg.version, "UMD", classes) + "\n" + JsUtils.generateUmdHeader(classes),
         footer: JsUtils.generateUmdFooter('lightstreamerExports')
       },
       {
         file: 'bin/web/build/full/obj/lightstreamer-widgets.esm.js',
         format: 'es',
-        banner: JsUtils.generateCopyright("Web", versionNum, buildNum, "ESM", classes)
+        banner: JsUtils.generateCopyright("Web", pkg.version, "ESM", classes)
       }
     ],
     plugins: [
