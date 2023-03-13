@@ -10,7 +10,7 @@ Further on the Web and Android platforms the API offers support for Web and Mobi
 
 ### Web
 
-You can install the package [lightstreamer-client-web](https://www.npmjs.com/package/lightstreamer-client-web) using npm
+You can install the package [lightstreamer-client-web](https://www.npmjs.com/package/lightstreamer-client-web/v/9.0.0-beta.1) using npm
 
 ```
 npm install lightstreamer-client-web
@@ -18,17 +18,17 @@ npm install lightstreamer-client-web
 
 The package contains a variety of library formats to suit the needs of the major development flavors. It supports module bundlers like Webpack, Rollup.js and Browserify; it is compatible with an AMD loader like Require.js, and it can be accessed through global variables. For further details see the [README](https://www.npmjs.com/package/lightstreamer-client-web).
 
-Check out the [API Reference](https://lightstreamer.com/api/ls-web-client/latest/) to learn more.
+Check out the [API Reference](https://lightstreamer.com/api/ls-web-client/9.0.0-beta.1/) to learn more.
 
 ### Node.js
 
-You can install the package [lightstreamer-client-node](https://www.npmjs.com/package/lightstreamer-client-node) using npm
+You can install the package [lightstreamer-client-node](https://www.npmjs.com/package/lightstreamer-client-node/v/9.0.0-beta.1) using npm
 
 ```
 npm install lightstreamer-client-node
 ```
 
-Check out the [API Reference](https://lightstreamer.com/api/ls-nodejs-client/latest/) to learn more.
+Check out the [API Reference](https://lightstreamer.com/api/ls-nodejs-client/9.0.0-beta.1/) to learn more.
 
 ### Android
 
@@ -50,7 +50,7 @@ dependencies {
 }
 ```
 
-Check out the [API Reference](https://lightstreamer.com/api/ls-android-client/latest/) to learn more.
+Check out the [API Reference](https://lightstreamer.com/api/ls-android-client/5.0.0-beta.1/) to learn more.
 
 ### JavaSE
  
@@ -72,23 +72,23 @@ dependencies {
 }
 ```
 
-Check out the [API Reference](https://lightstreamer.com/api/ls-javase-client/latest/) to learn more.
+Check out the [API Reference](https://lightstreamer.com/api/ls-javase-client/5.0.0-beta.1/) to learn more.
 
 ### .NET
 
-You can get the library from [nuget](https://www.nuget.org/packages/Lightstreamer.DotNetStandard.Client).
+You can get the library from [nuget](https://www.nuget.org/packages/Lightstreamer.DotNetStandard.Client/6.0.0-beta.1).
 
-Check out the [API Reference](https://lightstreamer.com/api/ls-dotnetstandard-client/latest/) to learn more.
+Check out the [API Reference](https://lightstreamer.com/api/ls-dotnetstandard-client/6.0.0-beta.1/) to learn more.
 
 ### Python
 
-You can get the library from [PyPI](https://pypi.org/project/lightstreamer-client-lib/):
+You can get the library from [PyPI](https://pypi.org/project/lightstreamer-client-lib/1.0.1):
 
 ```
 python -m pip install lightstreamer-client-lib
 ```
 
-Check out the [API Reference](https://lightstreamer.com/api/ls-python-client/latest/) to learn more.
+Check out the [API Reference](https://lightstreamer.com/api/ls-python-client/1.0.1/) to learn more.
 
 ## Building
 
