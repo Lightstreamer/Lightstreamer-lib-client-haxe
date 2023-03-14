@@ -3,7 +3,7 @@
 - [Web Client Changelog](#lightstreamer-web-client-changelog)
 - [Node.js Client Changelog](#lightstreamer-nodejs-client-changelog)
 - [Android Client Changelog](#lightstreamer-android-client-changelog)
-- [JavaSE Client Changelog](#lightstreamer-javase-client-changelog)
+- [Java SE Client Changelog](#lightstreamer-java-se-client-changelog)
 - [.NET Client Changelog](#lightstreamer-net-standard-client-changelog)
 - [Python Client Changelog](#lightstreamer-python-client-changelog)
 
@@ -225,7 +225,7 @@ The "compact" variant of the library is not available anymore.
 
 ---
 
-# Lightstreamer JavaSE Client Changelog
+# Lightstreamer Java SE Client Changelog
 
 ## 5.0.0-beta.1
 *Compatible with Lightstreamer Server since 7.3.2*<br/>
