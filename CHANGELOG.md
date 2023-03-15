@@ -16,6 +16,9 @@
 *Not compatible with code developed with the previous version.*<br/>
 *Made available on 14 Mar 2023* 
 
+Rewritten the whole Client SDK in the cross-platform programming language Haxe, which allows to share the core features with the other Client SDKs and at the same time to add functionalities specific to this platform.<br>
+The old library is still available [here](https://github.com/Lightstreamer/Lightstreamer-lib-client-javascript).
+
 Improved the "delta delivery" mechanism, by adding the support for value differences, as per the extension introduced in Server version 7.3.0.
 Currently two "diff" formats are supported: JSON Patch and TLCP-diff.
 
@@ -89,6 +92,9 @@ The signatures of the following methods have been changed:
 *Not compatible with code developed with the previous version.*<br/>
 *Made available on 14 Mar 2023* 
 
+Rewritten the whole Client SDK in the cross-platform programming language Haxe, which allows to share the core features with the other Client SDKs and at the same time to add functionalities specific to this platform.<br>
+The old library is still available [here](https://github.com/Lightstreamer/Lightstreamer-lib-client-javascript).
+
 Improved the "delta delivery" mechanism, by adding the support for value differences, as per the extension introduced in Server version 7.3.0.
 Currently two "diff" formats are supported: JSON Patch and TLCP-diff.
 
@@ -144,6 +150,9 @@ The signatures of the following methods have been changed:
 *Compatible with Lightstreamer Server since 7.3.2*<br/>
 *Not compatible with code developed with the previous version.*<br/>
 *Made available on 14 Mar 2023* 
+
+Rewritten the whole Client SDK in the cross-platform programming language Haxe, which allows to share the core features with the other Client SDKs and at the same time to add functionalities specific to this platform.<br>
+The old library is still available [here](https://github.com/Lightstreamer/Lightstreamer-lib-client-java).
 
 The "compact" variant of this library has been discontinued. 
 The last version available was 4.2.6.
@@ -232,6 +241,9 @@ The "compact" variant of the library is not available anymore.
 *Not compatible with code developed with the previous version.*<br/>
 *Made available on 14 Mar 2023* 
 
+Rewritten the whole Client SDK in the cross-platform programming language Haxe, which allows to share the core features with the other Client SDKs and at the same time to add functionalities specific to this platform.<br>
+The old library is still available [here](https://github.com/Lightstreamer/Lightstreamer-lib-client-java).
+
 Improved the "delta delivery" mechanism, by adding the support for value differences, as per the extension introduced in Server version 7.3.0.
 Currently two "diff" formats are supported: JSON Patch and TLCP-diff.
 
@@ -286,6 +298,9 @@ The system property `com.lightstreamer.client.session.thread`, which instructed 
 *Compatible with Lightstreamer Server since 7.3.2*<br/>
 *Not compatible with code developed with the previous version.*<br/>
 *Made available on 14 Mar 2023*
+
+Rewritten the whole Client SDK in the cross-platform programming language Haxe, which allows to share the core features with the other Client SDKs and at the same time to add functionalities specific to this platform.<br>
+The old library is still available [here](https://github.com/Lightstreamer/Lightstreamer-lib-client-dotnet).
 
 Now the library requires *.Net Standard 2.1*. Previously it used to require *.Net Standard 2.0*.
 
