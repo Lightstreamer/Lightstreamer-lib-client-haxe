@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>${ivy.pom.groupId}</groupId>
+  <artifactId>${ivy.pom.artifactId}</artifactId>
+  <packaging>${ivy.pom.packaging}</packaging>
+  <version>${ivy.pom.version}</version>
+  <name>Lightstreamer Java Client SDK</name>
+  <description>Lightstreamer Java Client SDK</description>
+  <url>https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe</url>
+  <licenses>
+    <license>
+      <name>The Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <name>support</name>
+      <email>support@lightstreamer.com</email>
+      <organization>Lightstreamer</organization>
+      <organizationUrl>https://www.lightstreamer.com</organizationUrl>
+    </developer>
+  </developers>
+  <scm>
+    <connection>
+      scm:git:https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe.git
+    </connection>
+    <developerConnection>
+      scm:git:https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe.git
+    </developerConnection>
+    <url>
+      https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe
+    </url>
+  </scm>
+</project>

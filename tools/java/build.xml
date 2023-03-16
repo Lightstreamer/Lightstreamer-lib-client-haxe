@@ -39,10 +39,12 @@
   <property name="tools.ivysettings" location="${tools}/ivysettings.xml"/>
   <property name="doc.overview.template" location="${tools}/java_overview.html"/>
   <property name="doc.overview" location="${build}/java_overview.html"/>
+  <property name="pom.template" location="${tools}/pom.template.xml"/>
+
   <property file="${tools}/build.properties"/>
 
   <target name="prepare.dist" depends="resolve">
-    <ivy:makepom ivyfile="${tools.ivy}" pomfile="${dist.pom}" conf="default">
+    <ivy:makepom ivyfile="${tools.ivy}" pomfile="${dist.pom}" conf="default" templatefile="${pom.template}">
       <mapping conf="default" scope="compile"/>
     </ivy:makepom>
     <copy file="${lib.jar}" tofile="${dist.lib}"/>

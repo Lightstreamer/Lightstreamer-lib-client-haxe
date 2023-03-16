@@ -6,9 +6,13 @@
 
   <include url="${ivy.default.settings.dir}/ivysettings-public.xml"/>
 
+  <signers>
+    <pgp name="gpg" keyId="${gpg.keyId}" password="${gpg.password}" secring="${gpg.secring}"/>
+  </signers>
+
   <resolvers>
 
-    <ibiblio name="nexus-central" root="https://oss.sonatype.org/service/local/staging/deploy/maven2/" m2compatible="true"/>
+    <ibiblio name="nexus-central" root="https://oss.sonatype.org/service/local/staging/deploy/maven2/" m2compatible="true" signer="gpg"/>
 
     <ibiblio name="nexus-snapshot" root="https://oss.sonatype.org/content/repositories/snapshots/" m2compatible="true"/>
 
