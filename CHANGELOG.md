@@ -149,7 +149,7 @@ The signatures of the following methods have been changed:
 ## 5.0.0-beta.1
 *Compatible with Lightstreamer Server since 7.3.2*<br/>
 *Not compatible with code developed with the previous version.*<br/>
-*Made available on 14 Mar 2023* 
+*Made available on 16 Mar 2023* 
 
 Rewritten the whole Client SDK in the cross-platform programming language Haxe, which allows to share the core features with the other Client SDKs and at the same time to add functionalities specific to this platform.<br>
 The old library is still available [here](https://github.com/Lightstreamer/Lightstreamer-lib-client-java).
@@ -239,7 +239,7 @@ The "compact" variant of the library is not available anymore.
 ## 5.0.0-beta.1
 *Compatible with Lightstreamer Server since 7.3.2*<br/>
 *Not compatible with code developed with the previous version.*<br/>
-*Made available on 14 Mar 2023* 
+*Made available on 16 Mar 2023* 
 
 Rewritten the whole Client SDK in the cross-platform programming language Haxe, which allows to share the core features with the other Client SDKs and at the same time to add functionalities specific to this platform.<br>
 The old library is still available [here](https://github.com/Lightstreamer/Lightstreamer-lib-client-java).
