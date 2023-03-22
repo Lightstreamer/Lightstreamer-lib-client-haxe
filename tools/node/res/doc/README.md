@@ -39,4 +39,4 @@ The library requires Server 7.3.2.
 
 - [API Reference](https://lightstreamer.com/api/ls-nodejs-client/@VERSION@)
 - [Demos](https://demos.lightstreamer.com/?p=lightstreamer&t=client&a=nodejsclient)
-- [Changelog](https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe/blob/master/CHANGELOG.md)
+- [Changelog](https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe/blob/main/CHANGELOG-Node.js.md)

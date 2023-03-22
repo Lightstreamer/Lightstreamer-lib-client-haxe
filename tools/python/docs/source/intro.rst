@@ -94,7 +94,7 @@ Documentation
 
 - :doc:`modules`
 
-- `Changelog <https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe/blob/master/CHANGELOG.md>`_
+- `Changelog <https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe/blob/main/CHANGELOG-Python.md>`_
 
 Support
 *******

@@ -81,7 +81,7 @@ The library requires Server 7.3.2.
 
 - [API Reference](index.html)
 
-- [Changelog](https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe/blob/master/CHANGELOG.md)
+- [Changelog](https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe/blob/main/CHANGELOG-Node.js.md)
 
 <h2 id="support">Support</h2>
 
