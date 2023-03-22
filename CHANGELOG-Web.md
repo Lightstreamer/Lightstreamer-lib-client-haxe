@@ -71,3 +71,8 @@ The signatures of the following methods have been changed:
 
 - `MpnDeviceListener.onListenStart` and `MpnDeviceListener.onListendEnd`: removed the parameter of type MpnDevice
 - `MpnSubscriptionListener.onListenStart` and `MpnSubscriptionListener.onListendEnd`: removed the parameter of type MpnSubscription
+
+
+# Previous Versions
+
+See the full [changelog](https://github.com/Lightstreamer/Lightstreamer-lib-client-javascript/blob/v8.2.0/CHANGELOG_Web.md).

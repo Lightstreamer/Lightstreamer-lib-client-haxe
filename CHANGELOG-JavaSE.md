@@ -52,3 +52,8 @@ The signatures of the following methods have been changed:
 - `SubscriptionListener.onListenStart` and `SubscriptionListener.onListendEnd`: removed the parameter of type Subscription
 
 The system property `com.lightstreamer.client.session.thread`, which instructed the library to use a dedicated thread for each LightstreamerClient instance, is not supported anymore.
+
+
+# Previous Versions
+
+See the full [changelog](https://github.com/Lightstreamer/Lightstreamer-lib-client-java/blob/master/CHANGELOG_Java.md).

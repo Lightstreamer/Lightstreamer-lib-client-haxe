@@ -85,3 +85,8 @@ The following classes have been moved:
 - MpnBuilder: from the package `com.lightstreamer.client.mpn.util` to the package `com.lightstreamer.client.mpn`
 
 The "compact" variant of the library is not available anymore.
+
+
+## Previous Versions
+
+See the full [changelog](https://github.com/Lightstreamer/Lightstreamer-lib-client-java/blob/master/CHANGELOG_Android.md).

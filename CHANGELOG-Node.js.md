@@ -54,3 +54,8 @@ The signatures of the following methods have been changed:
 
 - `ClientListener.onListenStart` and `ClientListener.onListendEnd`: removed the parameter of type LightstreamerClient
 - `SubscriptionListener.onListenStart` and `SubscriptionListener.onListendEnd`: removed the parameter of type Subscription
+
+
+# Previous Versions
+
+See the full [changelog](https://github.com/Lightstreamer/Lightstreamer-lib-client-javascript/blob/v8.2.0/CHANGELOG_Nodejs.md).

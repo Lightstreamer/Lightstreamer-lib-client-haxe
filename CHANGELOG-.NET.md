@@ -60,3 +60,8 @@ The inline documentation of the method `LightstreamerClient.addCookies` has been
 The lifecycle of the property `ConnectionOptions.Proxy` has been changed. Now it may be called only once before creating any LightstreamerClient instance.
 
 The lifecycle of the property `LightstreamerClient.TrustManagerFactory` has been changed. Now it may be called only once before creating any LightstreamerClient instance.
+
+
+## Previous Versions
+
+See the full [changelog](https://github.com/Lightstreamer/Lightstreamer-lib-client-dotnet/blob/master/CHANGELOG.md).
