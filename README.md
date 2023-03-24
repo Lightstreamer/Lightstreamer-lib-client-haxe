@@ -130,6 +130,8 @@ Then install the [Android toolkit](https://developer.android.com/studio).
 Once installed, get the *Android SDK Platform 11 (R) API Level 30* (if you have *Android Studio*, open the *SDK Manager* and go to the tab *SDK Platforms*).
 Finally make sure the environment variable `ANDROID_SDK` points to the Android home folder.
 
+Finally download [Bouncy Castle 1.72](https://www.bouncycastle.org/latest_releases.html) cryptographic libraries and copy the files `bcprov-jdk18on-172.jar` (the cryptography provider) and `bcpg-jdk18on-172.2.jar` (the GPG driver) to the folder `ANT_HOME/lib`. 
+
 In order to build the Android Client SDK run the commands
 
 ```
@@ -142,6 +144,8 @@ The generated library `ls-android-client.jar` is saved in the folder `bin/androi
 ### Java SE
 
 If not already installed, install [Ant Ivy 2.5.0+](https://ant.apache.org/ivy/history/2.5.1/install.html) (see the section named *Manually* and follow the instructions about Ant 1.6 or superior).
+
+Then download [Bouncy Castle 1.72](https://www.bouncycastle.org/latest_releases.html) cryptographic libraries and copy the files `bcprov-jdk18on-172.jar` (the cryptography provider) and `bcpg-jdk18on-172.2.jar` (the GPG driver) to the folder `ANT_HOME/lib`.
 
 In order to build the Java SE Client SDK run the commands
 
