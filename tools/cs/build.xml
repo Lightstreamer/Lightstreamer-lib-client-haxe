@@ -87,6 +87,7 @@ are in synch with those declared in the Visual Studio projects at
     <echo message="CID: ${cid}"/>
     <exec executable="haxe" failonerror="true">
       <arg value="build.cs.hxml"/>
+      <arg value="--no-traces"/>
       <arg value="-D"/><arg value="LS_VERSION=${version}"/>
       <arg value="-D"/><arg value="LS_BUILD=${build.number}"/>
       <arg value="-D"/><arg value="LS_CID=${cid}"/>
