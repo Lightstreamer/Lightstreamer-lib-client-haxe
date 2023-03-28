@@ -47,7 +47,7 @@ class LSMpnSubscription {
     if (mode is String) {
       this.mode = MpnSubscriptionMode.fromString(mode);
       this.madeByServer = false;
-      initItemsAndFields(items, fields);
+      initItemsAndFields(items is String ? [cast items] : items, fields);
     } else if (mode is Subscription) {
       var subscription: Subscription = cast mode;
       this.mode = MpnSubscriptionMode.fromString(subscription.getMode());
