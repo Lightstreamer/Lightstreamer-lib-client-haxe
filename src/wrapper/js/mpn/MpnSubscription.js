@@ -18,7 +18,7 @@
      * <li><code>MERGE</code></li>
      * <li><code>DISTINCT</code></li>
      * </ul>
-     * @param {String[]} items An array of items to be subscribed to through Lightstreamer Server. It is also possible specify the "Item List" or
+     * @param {String|String[]} items An array of items to be subscribed to through Lightstreamer Server. It is also possible specify the "Item List" or
      * "Item Group" later through {@link MpnSubscription#setItems} and {@link MpnSubscription#setItemGroup}.
      * @param {String[]} fields An array of fields for the items to be subscribed to through Lightstreamer Server. It is also possible to specify the "Field List" or
      * "Field Schema" later through {@link MpnSubscription#setFields} and {@link MpnSubscription#setFieldSchema}.
