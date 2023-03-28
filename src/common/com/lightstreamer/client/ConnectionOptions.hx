@@ -102,7 +102,7 @@ class LSConnectionOptions {
     return requestedMaxBandwidth.toString();
   }
   public function setRequestedMaxBandwidth(maxBandwidth: String): Void {
-    #if js
+    #if !static
     maxBandwidth = maxBandwidth == null ? maxBandwidth : Std.string(maxBandwidth);
     #end
     var newValue = RequestedMaxBandwidthTools.fromString(maxBandwidth);

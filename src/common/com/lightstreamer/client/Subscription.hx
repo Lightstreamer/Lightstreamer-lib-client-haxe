@@ -180,7 +180,7 @@ class LSSubscription {
     return bufferSize.toString();
   }
   public function setRequestedBufferSize(size: Null<String>): Void {
-    #if js
+    #if !static
     size = size == null ? size : Std.string(size);
     #end
     checkActive();
@@ -191,7 +191,7 @@ class LSSubscription {
     return snapshot.toString();
   }
   public function setRequestedSnapshot(snapshot: Null<String>): Void {
-    #if js
+    #if !static
     snapshot = snapshot == null ? snapshot : Std.string(snapshot);
     #end
     checkActive();
@@ -211,7 +211,7 @@ class LSSubscription {
   }
   @:unsynchronized
   public function setRequestedMaxFrequency(freq: Null<String>): Void {
-    #if
+    #if !static
     freq = freq == null ? freq : Std.string(freq);
     #end
     var _manager;
