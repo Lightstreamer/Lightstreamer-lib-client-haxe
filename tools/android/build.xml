@@ -1,4 +1,5 @@
 <project name="Android client library" 
+  xmlns:if="ant:if"
   xmlns:ivy="antlib:org.apache.ivy.ant" 
   default="package" 
   basedir="../..">
@@ -121,8 +122,9 @@
 
   <target name="test" description="Run the tests">
     <exec executable="haxe" failonerror="true">
-        <arg value="test.android.hxml"/>
-      </exec>
+      <arg value="test.android.hxml"/>
+      <arg value="-D" if:set="UTEST_PATTERN"/><arg value="UTEST_PATTERN=${UTEST_PATTERN}" if:set="UTEST_PATTERN"/>
+    </exec>
   </target>
 
   <target name="package_haxe" depends="package_api">

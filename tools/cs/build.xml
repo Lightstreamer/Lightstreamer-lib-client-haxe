@@ -1,4 +1,5 @@
 <project name=".Net client library" 
+  xmlns:if="ant:if"
   default="package" 
   basedir="../..">
 
@@ -29,12 +30,15 @@
     <copy file="${test.project}" todir="${test}"/>
     <exec executable="haxe">
       <arg value="test.cs.std.hxml"/>
+      <arg value="-D" if:set="UTEST_PATTERN"/><arg value="UTEST_PATTERN=${UTEST_PATTERN}" if:set="UTEST_PATTERN"/>
     </exec>
     <exec executable="haxe">
       <arg value="test.cs.proxy.hxml"/>
+      <arg value="-D" if:set="UTEST_PATTERN"/><arg value="UTEST_PATTERN=${UTEST_PATTERN}" if:set="UTEST_PATTERN"/>
     </exec>
     <exec executable="haxe">
       <arg value="test.cs.cert.hxml"/>
+      <arg value="-D" if:set="UTEST_PATTERN"/><arg value="UTEST_PATTERN=${UTEST_PATTERN}" if:set="UTEST_PATTERN"/>
     </exec>
   </target>
 

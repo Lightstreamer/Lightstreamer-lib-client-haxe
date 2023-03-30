@@ -1,4 +1,5 @@
 <project name="Nodejs client library" 
+  xmlns:if="ant:if"
   default="package" 
   basedir="../..">
 
@@ -140,6 +141,7 @@
   <target name="test" description="Run the tests">
     <exec executable="haxe" failonerror="true">
       <arg value="test.node.hxml"/>
+      <arg value="-D" if:set="UTEST_PATTERN"/><arg value="UTEST_PATTERN=${UTEST_PATTERN}" if:set="UTEST_PATTERN"/>
     </exec>
     <exec executable="node" failonerror="true">
       <arg value="${tools.base.dir}/preprocess.js"/>
