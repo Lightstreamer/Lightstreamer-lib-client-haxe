@@ -1,5 +1,7 @@
 package com.lightstreamer.client.internal;
 
+import haxe.io.Encoding;
+import haxe.io.Bytes;
 import com.lightstreamer.internal.NativeTypes.IllegalStateException;
 import com.lightstreamer.internal.NativeTypes.Long;
 import com.lightstreamer.internal.Types;
@@ -89,7 +91,7 @@ function parseUpdate(message: String): UpdateInfo {
     } else if (value.charAt(0) == "^") { // step D
       if (value.charAt(1) == "P") {
         #if LS_JSON_PATCH
-        var unquoted = value.substring(2).urlDecode();
+        var unquoted = value.substring(2).unquote();
         try {
           var patch = new com.lightstreamer.internal.patch.Json.JsonPatch(unquoted);
           values[nextFieldIndex] = jsonPatch(patch);
@@ -103,7 +105,7 @@ function parseUpdate(message: String): UpdateInfo {
         #end
       } else if (value.charAt(1) == "T") {
         #if LS_TLCP_DIFF
-        var unquoted = value.substring(2).urlDecode();
+        var unquoted = value.substring(2).unquote();
         var patch = new com.lightstreamer.internal.patch.Diff.DiffPatch(unquoted);
         values[nextFieldIndex] = diffPatch(patch);
         nextFieldIndex += 1;
@@ -118,7 +120,7 @@ function parseUpdate(message: String): UpdateInfo {
         }
       }
     } else { // step E
-      values[nextFieldIndex] = changed(value.urlDecode());
+      values[nextFieldIndex] = changed(value.unquote());
       nextFieldIndex += 1;
     }
     fieldStart = fieldEnd;
@@ -132,4 +134,61 @@ private function checkedIndexOf(s: String, needle: String, ?startIndex:Int): Int
     throw new IllegalStateException("string not found");
   }
   return i;
+}
+
+/**
+ * Converts a string containing sequences as {@code %<hex digit><hex digit>} into a new string 
+ * where such sequences are transformed in UTF-8 encoded characters. <br> 
+ * For example the string "a%C3%A8" is converted to "aè" because the sequence 'C3 A8' is 
+ * the UTF-8 encoding of the character 'è'.
+ */
+function unquote(s: String): String {
+  // to save space and time the input byte sequence is also used to store the converted byte sequence.
+  // this is possible because the length of the converted sequence is equal to or shorter than the original one.
+  var bb = Bytes.ofString(s, Encoding.UTF8);
+  var i = 0, j = 0;
+  while (i < bb.length) {
+    // assert i >= j;
+    if (bb.get(i) == "%".code) {
+      var firstHexDigit  = hexToNum(bb.get(i + 1));
+      var secondHexDigit = hexToNum(bb.get(i + 2));
+      bb.set(j++, (firstHexDigit << 4) + secondHexDigit); // i.e (firstHexDigit * 16) + secondHexDigit
+      i += 3;
+    } else {
+      bb.set(j++, bb.get(i++));
+    }
+  }
+  // j contains the length of the converted string
+  var ss = bb.getString(0, j, Encoding.UTF8);
+  return ss;
+}
+
+/**
+ * Converts an ASCII-encoded hex digit in its numeric value.
+ */
+private function hexToNum(ascii: Int): Int {
+  var hex = 0;
+  // NB ascii characters '0', 'A', 'a' have codes 30, 41 and 61
+  if ((hex = ascii - "a".code + 10) > 9) {
+    // NB (ascii - 'a' + 10 > 9) <=> (ascii >= 'a')
+    // and thus ascii is in the range 'a'..'f' because
+    // '0' and 'A' have codes smaller than 'a'
+    // assert 'a' <= ascii && ascii <= 'f';
+    // assert 10 <= hex && hex <= 15;
+  } else if ((hex = ascii - "A".code + 10) > 9) {
+    // NB (ascii - 'A' + 10 > 9) <=> (ascii >= 'A')
+    // and thus ascii is in the range 'A'..'F' because
+    // '0' has a code smaller than 'A' 
+    // and the range 'a'..'f' is excluded
+    // assert 'A' <= ascii && ascii <= 'F';
+    // assert 10 <= hex && hex <= 15;
+  } else {
+    // NB ascii is in the range '0'..'9'
+    // because the ranges 'a'..'f' and 'A'..'F' are excluded
+    hex =  ascii - "0".code;
+    // assert '0' <= ascii && ascii <= '9';
+    // assert 0 <= hex && hex <= 9;
+  }
+  // assert 0 <= hex && hex <= 15;
+  return hex;
 }

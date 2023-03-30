@@ -17,6 +17,7 @@ import com.lightstreamer.client.internal.ParseTools;
 
 using com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.internal.NullTools;
+using com.lightstreamer.client.internal.ParseTools;
 using StringTools;
 using Lambda;
 
@@ -481,14 +482,14 @@ class ClientMachine {
       }
       var prog = parseInt(args[2]);
       var errorCode = parseInt(args[3]);
-      var errorMsg = args[4].urlDecode();
+      var errorMsg = args[4].unquote();
       evtMSGFAIL(seq, prog, errorCode, errorMsg);
     } else if (line.startsWith("REQERR")) {
       // REQERR,<request id>,<code>,<message>
       var args = line.split(",");
       var reqId = parseInt(args[1]);
       var code = parseInt(args[2]);
-      var msg = args[3].urlDecode();
+      var msg = args[3].unquote();
       evtREQERR(reqId, code, msg);
     } else if (line.startsWith("PROG")) {
       // PROG,<prog>
@@ -551,19 +552,19 @@ class ClientMachine {
       // CONERR,<code>,<message>
       var args = line.split(",");
       var code = parseInt(args[1]);
-      var msg = args[2].urlDecode();
+      var msg = args[2].unquote();
       evtCONERR(code, msg);
     } else if (line.startsWith("END")) {
       // END,<code>,<message>
       var args = line.split(",");
       var code = parseInt(args[1]);
-      var msg = args[2].urlDecode();
+      var msg = args[2].unquote();
       evtEND(code, msg);
     } else if (line.startsWith("ERROR")) {
       // ERROR,<code>,<message>
       var args = line.split(",");
       var code = parseInt(args[1]);
-      var msg = args[2].urlDecode();
+      var msg = args[2].unquote();
       evtERROR(code, msg);
     } else if (line.startsWith("SYNC")) {
       // SYNC,<elapsed time [sec]>
@@ -591,13 +592,13 @@ class ClientMachine {
       var args = line.split(",");
       var reqId = parseInt(args[1]);
       var code = parseInt(args[2]);
-      var msg = args[3].urlDecode();
+      var msg = args[3].unquote();
       evtREQERR(reqId, code, msg);
     } else if (line.startsWith("ERROR")) {
       // ERROR,<code>,<message>
       var args = line.split(",");
       var code = parseInt(args[1]);
-      var msg = args[2].urlDecode();
+      var msg = args[2].unquote();
       evtERROR(code, msg);
     }
   }
