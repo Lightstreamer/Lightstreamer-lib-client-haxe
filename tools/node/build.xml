@@ -116,7 +116,7 @@
     <echo message="CID: ${cid}"/>
     <exec executable="haxe" failonerror="true">
       <arg value="build.node.hxml"/>
-      <arg value="--no-traces"/>
+      <arg line="-D no-traces"/>
       <arg value="-D"/><arg value="LS_VERSION=${version}"/>
       <arg value="-D"/><arg value="LS_BUILD=${build.number}"/>
       <arg value="-D"/><arg value="LS_CID=${cid}"/>
