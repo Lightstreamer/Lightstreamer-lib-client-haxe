@@ -313,6 +313,12 @@ class TestSendMessage extends utest.Test {
     .await("msg\r\nLS_reqId=1&LS_message=foo&LS_sequence=seq&LS_msg_prog=1")
     .then(() -> ws.onText("MSGFAIL,seq,1,-5,error"))
     .await("onDeny foo -5 error")
+    .then(() -> {
+      client._sendMessage("foo", "seq", msgListener);
+    })
+    .await("msg\r\nLS_reqId=2&LS_message=foo&LS_sequence=seq&LS_msg_prog=2")
+    .then(() -> ws.onText("MSGFAIL,seq,2,-5,http://via.placeholder.com/256/cbf1a2/61c73f?text=nick+242+I%C3%B1t%C3%ABrn%C3%A2ti%C3%B4n%C3%A0liz%C3%A6ti%C3%B8n%E2%98%83"))
+    .await("onDeny foo -5 http://via.placeholder.com/256/cbf1a2/61c73f?text=nick+242+Iñtërnâtiônàlizætiøn☃")
     .then(() -> async.completed())
     .verify();
   }

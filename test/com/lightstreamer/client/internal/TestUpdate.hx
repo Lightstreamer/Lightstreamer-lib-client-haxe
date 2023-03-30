@@ -1,7 +1,7 @@
 package com.lightstreamer.client.internal;
 
 import com.lightstreamer.client.BaseListener.BaseSubscriptionListener;
-import com.lightstreamer.client.internal.ParseTools.parseUpdate;
+import com.lightstreamer.client.internal.ParseTools;
 import com.lightstreamer.internal.Types.FieldValue;
 
 class TestUpdate extends utest.Test {
@@ -25,6 +25,15 @@ class TestUpdate extends utest.Test {
 
   function teardown() {
     client.disconnect();
+  }
+
+  function testUnquote() {
+    equals("", unquote(""));
+    equals("☺", unquote("☺")); // unicode code point U+263A
+    equals("☺", unquote("%E2%98%BA"));
+    equals("baràè", unquote("baràè"));
+    equals("baràè%", unquote("bar%c3%a0%C3%A8%25"));
+    equals("http://via.placeholder.com/256/cbf1a2/61c73f?text=nick+242+Iñtërnâtiônàlizætiøn☃", unquote("http://via.placeholder.com/256/cbf1a2/61c73f?text=nick+242+I%C3%B1t%C3%ABrn%C3%A2ti%C3%B4n%C3%A0liz%C3%A6ti%C3%B8n%E2%98%83"));
   }
 
   function testDecodingAlgorithm() {
