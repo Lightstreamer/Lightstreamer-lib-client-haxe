@@ -19,7 +19,7 @@ final LS_LIB_NAME = "android_client";
 #elseif java
 final LS_LIB_NAME = "javase_client";
 #elseif cs
-final LS_LIB_NAME = "dotnet_client";
+final LS_LIB_NAME = "dotnet_standard_client";
 #elseif python
 final LS_LIB_NAME = "python_client";
 #elseif php
