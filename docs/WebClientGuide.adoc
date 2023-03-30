@@ -404,14 +404,14 @@ A ready-made implementation of such interface is distributed with the library.
 The configuration of this logging facility should be different between development and
 production environments.
 
-The suggested approach is to use a https://lightstreamer.com/api/ls-web-client/latest/ConsoleLoggerAppender.html[ConsoleLoggerAppender] configured at INFO
+The suggested approach is to use a console logger configured at INFO
 level during development and at ERROR level
-or no appenders at all on production deployments.
+or no logger at all on production deployments.
 
 The log messages are also identified by a category.
 
 Most modern desktop browsers include (or can be extended with) a console showing the
-messages produced by such appender (for instance, look for the Developer
+messages produced by such logger (for instance, look for the Developer
 Tools). 
 
 [source, javascript]
