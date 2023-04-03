@@ -156,13 +156,10 @@ export default /*@__PURE__*/(function() {
    * @exports StatusWidget
    * @class This class is a simple implementation of the ClientListener interface, which will display a
    * small widget with details about the status of the connection. The widget contains the "S" logo
-   * and three tiny leds.
+   * and two tiny leds.
    * <ul>
    * <li>The left led indicates the transport in use: green if WS/WSS; yellow if HTTP/HTTPS.</li>
-   * <li>The center led indicates the mode in use: green if streaming; yellow if polling.</li>
-   * <li>The right led indicates where the physical connection is held: green if this LightstreamerClient
-   * is the master instance, holding the connection; yellow if this LightstreamerClient instance is a slave
-   * attached to the master Lightstreamer Client instance.</li>
+   * <li>The right led indicates the mode in use: green if streaming; yellow if polling.</li>
    * </ul>
    * By rolling over or clicking over the widget, a panel appears with full details.
    * <BR>Note that the widget is generated using some features not available
@@ -342,7 +339,6 @@ export default /*@__PURE__*/(function() {
 
     this.transportLed = new Led(widgetMainNode,1);
     this.streamingLed = new Led(widgetMainNode,2);
-    this.masterLed = new Led(widgetMainNode,3);
 
     this.dataStreamingServer = createDefaultElement("div");
     applyStyles(this.dataStreamingServer,{
@@ -491,11 +487,10 @@ export default /*@__PURE__*/(function() {
       /**
        * @private
        */
-      updateWidget: function(l1,l2,l3,text,title,sImage) {
+      updateWidget: function(l1,l2,text,title,sImage) {
 
         this.transportLed.changeColor(l1);
         this.streamingLed.changeColor(l2);
-        this.masterLed.changeColor(l3);
 
         this.statusText.innerHTML = text;
         this.dataStreamingServer.innerHTML = "<b>" + title + "</b>";
@@ -553,16 +548,13 @@ export default /*@__PURE__*/(function() {
           return;
         }
 
-        var isMaster = this.lsClient && ((this.lsClient.isMaster && this.lsClient.isMaster()) || (this.lsClient.connectionSharing && this.lsClient.connectionSharing.isMaster()));
-
-        var masterLed = isMaster ? GREEN_LED : YELLOW_LED;
-        var incipit =  isMaster ? DATA_STREAMING_SERVER :  DATA_STREAMING_SERVER+ATTACHED;
+        var incipit = DATA_STREAMING_SERVER;
 
         if (status == LightstreamerConstants.DISCONNECTED) {
           this.updateWidget(OFF_LED,OFF_LED,OFF_LED,"Disconnected",DATA_STREAMING_SERVER,this.greyImg);
           
         } else if (status == LightstreamerConstants.CONNECTING) {
-          this.updateWidget(OFF_LED,OFF_LED,masterLed,"Connecting...",incipit,this.greyImg);
+          this.updateWidget(OFF_LED,OFF_LED,"Connecting...",incipit,this.greyImg);
           this.startBlinking();
 
         } else if (status.indexOf(LightstreamerConstants.CONNECTED) == 0) {
@@ -571,31 +563,31 @@ export default /*@__PURE__*/(function() {
           var separator = this.lsClient && this.lsClient.connectionDetails.getServerAddress().indexOf("https") == 0 ? "S in " : " in ";
 
           if (status == LightstreamerConstants.CONNECTED + LightstreamerConstants.SENSE) {
-            this.updateWidget(YELLOW_LED, YELLOW_LED, masterLed, "Stream-sensing...",incipit,this.greyImg);
+            this.updateWidget(YELLOW_LED, YELLOW_LED, "Stream-sensing...",incipit,this.greyImg);
             this.startBlinking();
 
           } else if (status == LightstreamerConstants.CONNECTED + LightstreamerConstants.WS_STREAMING) {
-            this.updateWidget(GREEN_LED, GREEN_LED, masterLed, HEAD_STATUS+"WS"+separator+"streaming mode",incipit,this.greenImg);
+            this.updateWidget(GREEN_LED, GREEN_LED, HEAD_STATUS+"WS"+separator+"streaming mode",incipit,this.greenImg);
 
           } else if (status == LightstreamerConstants.CONNECTED + LightstreamerConstants.HTTP_STREAMING) {
-            this.updateWidget(YELLOW_LED, GREEN_LED, masterLed, HEAD_STATUS+"HTTP"+separator+"streaming mode",incipit,this.greenImg);
+            this.updateWidget(YELLOW_LED, GREEN_LED, HEAD_STATUS+"HTTP"+separator+"streaming mode",incipit,this.greenImg);
 
           } else if (status == LightstreamerConstants.CONNECTED + LightstreamerConstants.WS_POLLING) {
-            this.updateWidget(GREEN_LED, YELLOW_LED, masterLed, HEAD_STATUS+"WS"+separator+"polling mode",incipit,this.greenImg);
+            this.updateWidget(GREEN_LED, YELLOW_LED, HEAD_STATUS+"WS"+separator+"polling mode",incipit,this.greenImg);
 
           } else if (status == LightstreamerConstants.CONNECTED + LightstreamerConstants.HTTP_POLLING) {
-            this.updateWidget(YELLOW_LED, YELLOW_LED, masterLed, HEAD_STATUS+"HTTP"+separator+"polling mode",incipit,this.greenImg);
+            this.updateWidget(YELLOW_LED, YELLOW_LED, HEAD_STATUS+"HTTP"+separator+"polling mode",incipit,this.greenImg);
           }
 
         } else if (status == LightstreamerConstants.STALLED) {
-          this.updateWidget(OFF_LED,OFF_LED,masterLed,"Stalled",incipit,this.lgreenImg);
+          this.updateWidget(OFF_LED,OFF_LED,"Stalled",incipit,this.lgreenImg);
 
         } else if (status == LightstreamerConstants.TRYING_RECOVERY) {
-          this.updateWidget(OFF_LED,OFF_LED,masterLed,"Recovering...",incipit,this.lgreenImg);
+          this.updateWidget(OFF_LED,OFF_LED,"Recovering...",incipit,this.lgreenImg);
           this.startBlinking();
 
         } else {
-          this.updateWidget(OFF_LED,OFF_LED,masterLed,"Disconnected (will retry)",incipit,this.greyImg);
+          this.updateWidget(OFF_LED,OFF_LED,"Disconnected (will retry)",incipit,this.greyImg);
         }
 
       },
@@ -709,7 +701,7 @@ export default /*@__PURE__*/(function() {
     applyStyles(this.led,{
       "position": "absolute",
       "bottom": "3px",
-      "left": 5+11*(ledCount-1)+"px",
+      "left": 11+11*(ledCount-1)+"px",
       "width": "10px",
       "height": "3px",
       "borderRadius": "2px",
