@@ -1,5 +1,15 @@
 # Lightstreamer Node.js Client Changelog
 
+## 9.0.0-beta.2
+*Compatible with Lightstreamer Server since 7.3.2*<br/>
+*Not compatible with code developed with the previous version.*<br/>
+*Made available on XXXXXXXXXX 2023* 
+
+Rewritten the function to decode the percent encoded messages sent by the Server so that it has the same behavior on all the targets.
+
+Suppressed the unsolicited console outputs produced by the library.
+
+
 ## 9.0.0-beta.1
 *Compatible with Lightstreamer Server since 7.3.2*<br/>
 *Not compatible with code developed with the previous version.*<br/>
