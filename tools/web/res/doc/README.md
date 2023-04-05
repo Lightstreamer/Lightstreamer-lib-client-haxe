@@ -286,7 +286,7 @@ The library requires Server 7.3.2.
 
 ## Documentation ##
 
-- [Web Client Guide](https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe/blob/v@VERSION@-Web/docs/WebClientGuide.adoc)
+- [Web Client Guide](https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe/tree/Web-v@VERSION@/docs/WebClientGuide.adoc)
 - [API Reference](https://lightstreamer.com/api/ls-web-client/@VERSION@)
 - [Demos](https://demos.lightstreamer.com/?p=lightstreamer&t=client&a=javascriptclient )
 - [Changelog](https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe/blob/main/CHANGELOG-Web.md)
