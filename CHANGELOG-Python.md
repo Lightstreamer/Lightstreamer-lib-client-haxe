@@ -3,7 +3,7 @@
 ## 1.0.2
 _Compatible with Lightstreamer Server since 7.3.2._<br>
 _Compatible with code developed for the previous versions._<br>
-_Released on XXXXXXXXXX 2023._
+_Released on 5 Apr 2023._
 
 Rewritten the function to decode the percent encoded messages sent by the Server so that it has the same behavior on all the targets.
 
