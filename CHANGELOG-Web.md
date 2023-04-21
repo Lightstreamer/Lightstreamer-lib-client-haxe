@@ -1,5 +1,13 @@
 # Lightstreamer Web Client Changelog
 
+## 9.0.0-beta.3
+*Compatible with Lightstreamer Server since 7.3.2*<br/>
+*Not compatible with code developed with the previous version.*<br/>
+*Made available on 21 Apr 2023* 
+
+Fixed Typescript declarations.
+
+
 ## 9.0.0-beta.2
 *Compatible with Lightstreamer Server since 7.3.2*<br/>
 *Not compatible with code developed with the previous version.*<br/>
