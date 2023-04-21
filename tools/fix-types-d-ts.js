@@ -16,6 +16,8 @@ const types = fs.readFileSync(targetFile, 'utf8');
 const newTypes = new MagicString(types);
 fixClassDcl();
 fixListeners();
+addCallbackDcl();
+fixConsoleLoggerProviderDcl();
 addModuleDcl();
 fs.writeFileSync(targetFile, newTypes.toString());
 
@@ -75,6 +77,46 @@ function fixListeners() {
             assert(end || method, token);
             break;
         }
+    }
+}
+
+function addCallbackDcl() {
+    // tsd-jsdoc doesn't generate a few callback declarations: insert them manually
+    newTypes.append(`
+/**
+ * Callback for {@link Chart#setXLabels} and {@link ChartLine#setYLabels}.
+ * @param value - the value to be formatted before being print in a label. 
+ * @return the String to be set as content for the label.
+ */
+declare type LabelsFormatter = (value: number) => string;
+
+/**
+ * Callback for {@link Chart#setXAxis} and {@link Chart#addYAxis}.
+ * @param fieldValue - the field value to be parsed.
+ * @param key - the key associated with the given value
+ * @return a valid number to be plotted or null if the value has to be considered unchanged
+ */
+declare type CustomParserFunction = (fieldValue: string, key: string) => number;
+
+/**
+ * Callback for {@link VisualUpdate#forEachChangedField}.
+ * @param field - name of the involved changed field.
+ * @param value - the new value for the field. See {@link VisualUpdate#getChangedFieldValue} for details.
+ * Note that changes to the values made through {@link VisualUpdate#setCellValue} calls will not be reflected
+ * by the iterator, as they don't affect the model.
+ */
+declare type ChangedFieldCallback = (filed: string, value: string) => void;
+
+`);
+}
+
+function fixConsoleLoggerProviderDcl() {
+    // tsd-jsdoc duplicates the declaration of ConsoleLoggerProvider: delete one of them
+    var needle = `declare interface ConsoleLoggerProvider extends LoggerProvider {
+}`;
+    var i = types.indexOf(needle);
+    if (i != -1) {
+        newTypes.overwrite(i, i + needle.length, "");
     }
 }
 
