@@ -1,10 +1,7 @@
-build.common.hxml
+build.js.common.hxml
 
---class-path src/extern/js
---class-path src/platform/js
 --class-path src/platform/web
 
--D shallow-expose
 --js bin/web/build/core/obj/ls_web_client_haxe_orig.js
 
 -D LS_WEB

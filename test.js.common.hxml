@@ -1,0 +1,6 @@
+test.common.hxml
+
+--class-path src/extern/js
+--class-path src/platform/js
+
+--macro addMetadata("@:build(com.lightstreamer.internal.Macros.patchHaxeTimer())", "haxe.Timer")

@@ -1,14 +1,11 @@
-build.common.hxml
+build.js.common.hxml
 
---class-path src/extern/js
 --class-path src/extern/node
---class-path src/platform/js
 --class-path src/platform/node
 
 --library hxnodejs
 --library hxnodejs-ws
 
--D shallow-expose
 --js bin/node/build/obj/ls_node_client_haxe_orig.js
 
 -D LS_NODE
