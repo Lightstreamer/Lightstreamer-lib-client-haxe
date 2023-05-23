@@ -33,8 +33,8 @@ export default /*@__PURE__*/(function() {
   var NULL_CELL = "The given cell is null or undefined";
   var WRONG_GRID = "The cell does not belong to the Grid";
   var INVALID_ROOT = "The given root element is not valid";
-  var NO_ITEMS_TO_EXTRACT = "Cant extract schema from cells declared with the data-row property; use data-item instead.";
-  var MIX_ROW_ITEMS = "Cant mix data-item and data-row declarations on the same grid";
+  var NO_ITEMS_TO_EXTRACT = "Can't extract schema from cells declared with the data-row property; use data-item instead.";
+  var MIX_ROW_ITEMS = "Can't mix data-item and data-row declarations on the same grid";
   var NO_CELLS = "Please specify at least one cell";
   
   function swap(arr,a,b) {
