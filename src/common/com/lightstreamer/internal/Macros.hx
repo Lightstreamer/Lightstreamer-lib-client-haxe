@@ -1,6 +1,5 @@
 package com.lightstreamer.internal;
 
-#if macro
 import haxe.macro.Context;
 import haxe.macro.Type;
 import haxe.macro.Expr;
@@ -44,7 +43,7 @@ using Lambda;
  * 
  * Annotating a method with @:unsynchronized prevents the synchronization.
  */
-function synchronizeClass(): Array<Field> {
+macro function synchronizeClass(): Array<Field> {
   var fields = Context.getBuildFields();
   var hasLock = false;
   // search a field named `lock` in the class and its super classes
@@ -101,7 +100,7 @@ function synchronizeClass(): Array<Field> {
   return fields;
 }
 
-function buildEventDispatcher(): Array<Field> {
+macro function buildEventDispatcher(): Array<Field> {
   var fields: Array<Field> = Context.getBuildFields();
   var localType: Type = Context.getLocalType();
   var localClass: ClassType;
@@ -184,7 +183,7 @@ function buildEventDispatcher(): Array<Field> {
   return fields;
 }
 
-function buildPythonImport(typeModule: String, typeName: String): Array<Field> {
+macro function buildPythonImport(typeModule: String, typeName: String): Array<Field> {
   var isPython = Context.defined("python");
   if (isPython) {
     var pos = Context.currentPos();
@@ -197,4 +196,3 @@ function buildPythonImport(typeModule: String, typeName: String): Array<Field> {
   }
   return null;
 }
-#end
