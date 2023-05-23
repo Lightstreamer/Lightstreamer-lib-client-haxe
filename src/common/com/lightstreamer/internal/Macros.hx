@@ -11,6 +11,7 @@ using Lambda;
  * Patches the method `haxe.Timer.delay` by internally using `setTimeout` instead of `setInterval` in order to fix an issue of the latter when executed in a React Native environment (see `https://github.com/facebook/react-native/issues/37464`).
  * 
  * @see `com.lightstreamer.internal.JsTimer`
+ * @see `https://community.haxe.org/t/solved-how-to-make-math-random-deterministic` for a hint about how to patch Haxe standard library
  */
  macro function patchHaxeTimer(): Array<Field> {
   var fields = Context.getBuildFields();
