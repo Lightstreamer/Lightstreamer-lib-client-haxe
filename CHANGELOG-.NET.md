@@ -1,5 +1,10 @@
 # Lightstreamer .NET Standard Client Changelog
 
+## Unreleased
+
+Updated the library haxe-concurrent to version 5.1.3.
+
+
 ## 6.0.0-beta.2
 *Compatible with Lightstreamer Server since 7.3.2*<br/>
 *Not compatible with code developed with the previous version.*<br/>

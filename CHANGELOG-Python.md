@@ -1,5 +1,10 @@
 # Lightstreamer Python Client Changelog
 
+## Unreleased
+
+Updated the library haxe-concurrent to version 5.1.3.
+
+
 ## 1.0.2
 _Compatible with Lightstreamer Server since 7.3.2._<br>
 _Compatible with code developed for the previous versions._<br>

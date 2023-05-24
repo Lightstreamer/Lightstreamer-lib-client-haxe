@@ -1,5 +1,17 @@
 # Lightstreamer Web Client Changelog
 
+## 9.0.0-beta.4
+*Compatible with Lightstreamer Server since 7.3.2*<br/>
+*Not compatible with code developed with the previous version.*<br/>
+*Made available on 24 May 2023* 
+
+Patched the method `haxe.Timer.delay` so that it uses the function `setTimeout` instead of the function `setInterval`, which has an unexpected behavior when executed in a React Native application (see the issue https://github.com/facebook/react-native/issues/37464).
+
+Fixed the value of the default server address, that must be null when the library is used in a React Native application.
+
+Updated the library haxe-concurrent to version 5.1.3.
+
+
 ## 9.0.0-beta.3
 *Compatible with Lightstreamer Server since 7.3.2*<br/>
 *Not compatible with code developed with the previous version.*<br/>
