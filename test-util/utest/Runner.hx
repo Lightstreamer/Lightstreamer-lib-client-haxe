@@ -129,7 +129,13 @@ class Runner {
         Reflect.callMethod(test, body, []);
         evtCompleted(testIndex);
       }
+    #if java
+    } catch(jex: java.lang.Throwable) {
+      jex.printStackTrace();
+      var ex = new Exception(jex.getMessage(), null, jex);
+    #else
     } catch(ex) {
+    #end
       test.addException(ex);
       evtCompleted(testIndex);
     }
@@ -140,7 +146,7 @@ class Runner {
     var async = test._async;
     var isAsync = async != null;
     if (isAsync) {
-      currentTimer.cancel();
+      currentTimer?.cancel();
     }
     try {
       var teardown = Reflect.field(test, "teardown");
