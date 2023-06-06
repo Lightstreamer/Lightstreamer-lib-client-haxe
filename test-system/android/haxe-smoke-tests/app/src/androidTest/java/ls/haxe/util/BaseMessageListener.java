@@ -33,7 +33,7 @@ public class BaseMessageListener implements ClientMessageListener {
     }
 
     @Override
-    public void onProcessed(String arg0) {
+    public void onProcessed(String arg0, String arg1) {
         // TODO Auto-generated method stub
 
     }

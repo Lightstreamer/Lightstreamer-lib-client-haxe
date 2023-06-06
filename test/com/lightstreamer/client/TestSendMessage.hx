@@ -15,7 +15,7 @@ class TestSendMessage extends utest.Test {
     msgListener._onDeny = (msg, code, error) -> exps.signal('onDeny $msg $code $error');
     msgListener._onDiscarded = msg -> exps.signal('onDiscarded $msg');
     msgListener._onError = msg -> exps.signal('onError $msg');
-    msgListener._onProcessed = msg -> exps.signal('onProcessed $msg');
+    msgListener._onProcessed = (msg, resp) -> exps.signal('onProcessed $msg $resp');
   }
 
   function teardown() {
@@ -265,8 +265,8 @@ class TestSendMessage extends utest.Test {
       client._sendMessage("foo", "seq", msgListener);
     })
     .await("msg\r\nLS_reqId=1&LS_message=foo&LS_sequence=seq&LS_msg_prog=1")
-    .then(() -> ws.onText("MSGDONE,seq,1"))
-    .await("onProcessed foo")
+    .then(() -> ws.onText("MSGDONE,seq,1,result:ok"))
+    .await("onProcessed foo result:ok")
     .then(() -> async.completed())
     .verify();
   }
@@ -288,10 +288,10 @@ class TestSendMessage extends utest.Test {
     })
     .await("msg\r\nLS_reqId=1&LS_message=foo&LS_msg_prog=1")
     .await("msg\r\nLS_reqId=2&LS_message=bar&LS_msg_prog=2")
-    .then(() -> ws.onText("MSGDONE,*,1"))
-    .then(() -> ws.onText("MSGDONE,*,2"))
-    .await("onProcessed foo")
-    .await("onProcessed bar")
+    .then(() -> ws.onText("MSGDONE,*,1,"))
+    .then(() -> ws.onText("MSGDONE,*,2,"))
+    .await("onProcessed foo ")
+    .await("onProcessed bar ")
     .then(() -> async.completed())
     .verify();
   }

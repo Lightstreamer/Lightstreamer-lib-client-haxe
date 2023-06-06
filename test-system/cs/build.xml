@@ -10,13 +10,13 @@
   </target>
 
   <target name="test-core">
-    <exec executable="haxe" dir="core">
+    <exec executable="haxe" dir="core" failonerror="true">
       <arg value="test.cs.core.hxml"/>
     </exec>
   </target>
 
   <target name="test-cookies">
-    <exec executable="haxe" dir="cookies">
+    <exec executable="haxe" dir="cookies" failonerror="true">
       <arg value="test.cs.cookies.hxml"/>
     </exec>
   </target>
@@ -28,7 +28,7 @@
   </target>
 
   <target name="test-cert">
-    <exec executable="haxe" dir="cert">
+    <exec executable="haxe" dir="cert" failonerror="true">
       <arg value="test.cs.cert.hxml"/>
     </exec>
   </target>
