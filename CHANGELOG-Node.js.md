@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+Added a second argument to the listener `ClientMessageListener.onProcessed` carrying the response, from the Metadata Adapter of a Lightstreamer Server, to a message sent by the Client through the method `LightstreamerClient.sendMessage`.
+
 Updated the library haxe-concurrent to version 5.1.3.
 
 
