@@ -31,7 +31,7 @@ class TestProxyCs extends  utest.Test {
 
   function testProxyHttp(async: utest.Async) {
     new HttpClient(
-      "http://" + host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.4.0", 
+      "http://" + host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null,
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
@@ -48,7 +48,7 @@ class TestProxyCs extends  utest.Test {
   @:timeout(3000)
   function testProxyHttps(async: utest.Async) {
     new HttpClient(
-      "https://push.lightstreamer.com/lightstreamer/create_session.txt?LS_protocol=TLCP-2.4.0", 
+      "https://push.lightstreamer.com/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null,
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
