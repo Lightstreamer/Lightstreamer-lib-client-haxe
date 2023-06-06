@@ -59,6 +59,7 @@ namespace com.lightstreamer.client
         /// <summary>
         /// Event handler that is called by Lightstreamer when the related message has been processed by the Server with success. </summary>
         /// <param name="originalMessage"> the message to which this notification is related. </param>
-        void onProcessed(string originalMessage);
+        /// <param name="response"> the response from the Metadata Adapter. If not supplied (i.e. supplied as null), an empty message is received here. </param>
+        void onProcessed(string originalMessage, string response);
     }
 }

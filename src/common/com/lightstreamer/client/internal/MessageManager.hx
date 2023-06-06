@@ -96,18 +96,18 @@ class MessageManager implements Encodable {
     }
   }
 
-  public function evtMSGDONE() {
+  public function evtMSGDONE(response: String) {
     traceEvent("MSGDONE");
     switch s_m {
     case s10:
       finalize();
       goto(s13);
     case s11:
-      doMSGDONE();
+      doMSGDONE(response);
       finalize();
       goto(s13);
     case s12:
-      doMSGDONE();
+      doMSGDONE(response);
       finalize();
       goto(s13);
     default:
@@ -193,8 +193,8 @@ class MessageManager implements Encodable {
     return "msg\r\n" + encode(true);
   }
 
-  function doMSGDONE() {
-    fireOnProcessed();
+  function doMSGDONE(response: String) {
+    fireOnProcessed(response);
   }
 
   function doMSGFAIL(code: Int, msg: String) {
@@ -267,9 +267,9 @@ class MessageManager implements Encodable {
     return req.getEncodedString();
   }
 
-  function fireOnProcessed() {
+  function fireOnProcessed(response: String) {
     messageLogger.logInfo('Message $sequence:$prog processed');
-    eventDispatcher.onProcessed(txt);
+    eventDispatcher.onProcessed(txt, response);
   }
   
   function fireOnDiscarded() {

@@ -2,7 +2,7 @@ package com.lightstreamer.internal;
 
 import com.lightstreamer.internal.MacroTools.getDefine;
 
-final TLCP_VERSION = "TLCP-2.4.0";
+final TLCP_VERSION = "TLCP-2.5.0";
 final FULL_TLCP_VERSION = TLCP_VERSION + ".lightstreamer.com";
 
 final LS_LIB_VERSION = getDefine("LS_VERSION", "0.0") + " build " + getDefine("LS_BUILD", "0");

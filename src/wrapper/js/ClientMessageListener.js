@@ -87,8 +87,9 @@ ClientMessageListener.prototype = {
    *
    * @param {String} originalMessage the message to which this notification
    * is related.
+   * @param {String} response the response from the Metadata Adapter. If not supplied (i.e. supplied as null), an empty message is received here.
    */
-  onProcessed: function(originalMessage) {
+  onProcessed: function(originalMessage, response) {
     return;
   }
 };

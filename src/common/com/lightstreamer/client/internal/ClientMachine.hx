@@ -465,14 +465,16 @@ class ClientMachine {
         evtCONS(BWLimited(n));
       }
     } else if (line.startsWith("MSGDONE")) {
-      // MSGDONE,(*|<sequence>),<prog>
+      // MSGDONE,(*|<sequence>),<prog>,<response>
       var args = line.split(",");
       var seq = args[1];
       if (seq == "*") {
         seq = "UNORDERED_MESSAGES";
       }
       var prog = parseInt(args[2]);
-      evtMSGDONE(seq, prog);
+      var rawResp = args[3];
+      var resp = rawResp == "" ? "" : rawResp.unquote();
+      evtMSGDONE(seq, prog, resp);
     } else if (line.startsWith("MSGFAIL")) {
       // MSGFAIL,(*|<sequence>),<prog>,<code>,<message>
       var args = line.split(",");
@@ -2203,12 +2205,12 @@ class ClientMachine {
     return false;
   }
 
-  function evtMSGDONE(sequence: String, prog: Int) {
+  function evtMSGDONE(sequence: String, prog: Int, response: String) {
     traceEvent("MSGDONE");
-    protocolLogger.logDebug('MSGDONE $sequence $prog');
+    protocolLogger.logDebug('MSGDONE $sequence $prog $response');
     if (state.inPushing()) {
       if (isFreshData()) {
-        doMSGDONE(sequence, prog);
+        doMSGDONE(sequence, prog, response);
         if (state.inStreaming()) {
           evtRestartKeepalive();
         }
@@ -3796,12 +3798,12 @@ class ClientMachine {
     rec_serverProg = prog;
   }
 
-  function doMSGDONE(sequence: String, prog: Int) {
+  function doMSGDONE(sequence: String, prog: Int, response: String) {
     onFreshData();
     var messages = messageManagers.filter(msg -> msg.sequence == sequence && msg.prog == prog);
     assert(messages.length <= 1);
     for (msg in messages) {
-        msg.evtMSGDONE();
+        msg.evtMSGDONE(response);
     }
   }
 

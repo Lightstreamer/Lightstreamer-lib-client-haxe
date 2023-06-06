@@ -155,10 +155,11 @@ class ClientMessageListener:
  Only one event per message is fired on this listener.
  """
 
-  def onProcessed(self,msg):
+  def onProcessed(self,msg,response):
     """Event handler that is called by Lightstreamer when the related message has been processed by the Server with success.
 
    :param originalMessage: the message to which this notification is related.
+   :param response: the response from the Metadata Adapter. If not supplied (i.e. supplied as null), an empty message is received here.
    """
     pass
 
