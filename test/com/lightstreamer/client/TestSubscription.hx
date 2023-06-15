@@ -58,6 +58,11 @@ class TestSubscription extends utest.Test {
 
     raisesEx(() -> sub.setItems([]), IllegalArgumentException, "Item List is empty");
     raisesEx(() -> sub.setItems([""]), IllegalArgumentException, "Item List is invalid");
+
+    sub.setItems(["123i"]);
+    strictSame(["123i"], sub.getItems());
+
+    raisesEx(() -> sub.setItems(["123"]), IllegalArgumentException, "Item List is invalid");
   }
 
   function testItemGroup() {

@@ -332,7 +332,7 @@ abstract Items(Array<String>) to Array<String> {
 
   public static function allValidNames(names: Array<String>) {
     @:nullSafety(Off)
-    return !names.exists(item -> ~/^$| |^\d/.match(item));
+    return !names.exists(item -> ~/^$| |^\d+$/.match(item));
   }
 
   public static function fromArray(array: Null<Array<String>>): Null<Items> {
@@ -342,7 +342,7 @@ abstract Items(Array<String>) to Array<String> {
       case []:
         throw new IllegalArgumentException("Item List is empty");
       case a if (!allValidNames(a)):
-        // an item name is invalid when it is empty, contains spaces or starts with a digit
+        // an item name is invalid when it is empty, contains spaces or is a number
         throw new IllegalArgumentException("Item List is invalid");
       case a:
         return new Items(a);
