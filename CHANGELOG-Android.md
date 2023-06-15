@@ -4,6 +4,8 @@
 
 Added a second argument to the listener `ClientMessageListener.onProcessed` carrying the response, from the Metadata Adapter of a Lightstreamer Server, to a message sent by the Client through the method `LightstreamerClient.sendMessage`.
 
+Fixed the validation check of the setter `setItems` of the classes `Subscription` and `MpnSubscription` in order to accept item names that start with a digit but contain non-digit characters too.
+
 Updated the library haxe-concurrent to version 5.1.3.
 
 
