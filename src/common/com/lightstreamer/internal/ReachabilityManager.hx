@@ -8,14 +8,18 @@ class ReachabilityManager implements IReachability {
   public function new() {}
 
   public function startListening(onUpdate:ReachabilityStatus -> Void) {
-    js.Browser.window.ononline = () -> onUpdate(RSReachable);
-    js.Browser.window.onoffline = () -> onUpdate(RSNotReachable);
+    if (js.Browser.supported) {
+      js.Browser.window.ononline = () -> onUpdate(RSReachable);
+      js.Browser.window.onoffline = () -> onUpdate(RSNotReachable);
+    }
   }
 
   @:nullSafety(Off)
   public function stopListening() {
-    js.Browser.window.ononline = null;
-    js.Browser.window.onoffline = null;
+    if (js.Browser.supported) {
+      js.Browser.window.ononline = null;
+      js.Browser.window.onoffline = null;
+    }
   }
 }
 #else

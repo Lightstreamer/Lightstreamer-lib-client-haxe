@@ -1,8 +1,6 @@
 importScripts('../../node_modules/lightstreamer-client-web/lightstreamer-core.js')
 
-// var loggerProvider = new SimpleLoggerProvider();
-// loggerProvider.addLoggerAppender(new ConsoleAppender("DEBUG", "*"));
-// LightstreamerClient.setLoggerProvider(loggerProvider);
+LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.INFO));
 
 var sub = new Subscription("MERGE",["item1","item2","item3"],["stock_name","last_price"]);
 sub.setDataAdapter("QUOTE_ADAPTER");

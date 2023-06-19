@@ -7,7 +7,7 @@ import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
 
 private var DEFAULT_SERVER = #if LS_WEB
-js.Lib.typeof(js.Browser.window) != "object" || (js.Browser.location?.protocol != "http:" && js.Browser.location?.protocol != "https:") ? null : 
+!js.Browser.supported || (js.Browser.location?.protocol != "http:" && js.Browser.location?.protocol != "https:") ? null : 
   ServerAddress.fromString(
     js.Browser.location.protocol + "//" + js.Browser.location.hostname + (js.Browser.location.port != "" ? ":" + js.Browser.location.port : "") + "/");
 #else
