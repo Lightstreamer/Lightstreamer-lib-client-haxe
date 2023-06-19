@@ -1,3 +1,3 @@
-# run `ruby -run -e httpd . -p 80` from the project folder before launching the test
+# run a local web server from the project root before launching the test
 all:
-	open http://localhost/webworker/test.html
+	open http://localhost:3000/test-system/web-workers/test.html
