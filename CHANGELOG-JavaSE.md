@@ -1,6 +1,11 @@
 # Lightstreamer Java SE Client Changelog
 
-## Unreleased
+## 5.0.0-beta.3
+*Compatible with Lightstreamer Server since 7.3.2*<br/>
+*Not compatible with code developed with the previous version.*<br/>
+*Made available on 22 Jun 2023* 
+
+Fixed the validation check of the setter `setItems` of the class `Subscription` in order to accept item names that start with a digit but contain non-digit characters too.
 
 Updated the library haxe-concurrent to version 5.1.3.
 
