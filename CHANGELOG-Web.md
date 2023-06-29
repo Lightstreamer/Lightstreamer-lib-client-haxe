@@ -4,6 +4,12 @@
 
 Added a second argument to the listener `ClientMessageListener.onProcessed` carrying the response, from the Metadata Adapter of a Lightstreamer Server, to a message sent by the Client through the method `LightstreamerClient.sendMessage`.
 
+
+## 9.0.0-beta.6
+*Compatible with Lightstreamer Server since 7.3.2*<br/>
+*Not compatible with code developed with the previous version.*<br/>
+*Made available on 22 Jun 2023* 
+
 Fixed the validation check of the setter `setItems` of the classes `Subscription` and `MpnSubscription` in order to accept item names that start with a digit but contain non-digit characters too.
 
 
