@@ -62,6 +62,9 @@ class TestSubscription extends utest.Test {
     sub.setItems(["123i"]);
     strictSame(["123i"], sub.getItems());
 
+    sub.setItems(["123_456"]);
+    strictSame(["123_456"], sub.getItems());
+
     raisesEx(() -> sub.setItems(["123"]), IllegalArgumentException, "Item List is invalid");
   }
 
