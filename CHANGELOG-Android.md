@@ -1,6 +1,9 @@
 # Lightstreamer Android Client Changelog
 
-## Unreleased
+## 5.0.0
+*Compatible with Lightstreamer Server since 7.4.0*<br/>
+*Not compatible with code developed with the previous version.*<br/>
+*Made available on 4 Jul 2023* 
 
 Added a second argument to the listener `ClientMessageListener.onProcessed` carrying the response, from the Metadata Adapter of a Lightstreamer Server, to a message sent by the Client through the method `LightstreamerClient.sendMessage`.
 
