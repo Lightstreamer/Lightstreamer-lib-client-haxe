@@ -27,12 +27,15 @@ class ItemUpdateBase extends AbstractItemUpdate {
   #end
 
   public function new(itemIdx: Pos, sub: Subscription, newValues: Map<Pos, Null<CurrFieldVal>>, changedFields: Set<Pos>, isSnapshot: Bool#if LS_JSON_PATCH, jsonPatches: Map<Pos, com.lightstreamer.internal.patch.Json.JsonPatch>#end) {
-    var items = sub.getItems();
-    var fields = sub.getFields();
+    var items = sub.fetch_items();
+    var fields = sub.fetch_fields();
     this.m_itemIdx = itemIdx;
-    this.m_items = toMap(items != null ? items.toHaxe() : null);
+    this.m_items = toMap(items);
     this.m_nFields = sub.fetch_nFields().sure();
-    this.m_fields = toMap(fields != null ? fields.toHaxe() : null);
+    this.m_fields = toMap(fields);
+    if (fields != null && fields.length != m_nFields) {
+      subscriptionLogger.logError('Expected $m_nFields field names but got ${fields.length}: $fields');
+    }
     this.m_newValues = newValues.copy();
     this.m_changedFields = changedFields.copy();
     this.m_isSnapshot = isSnapshot;
@@ -173,7 +176,10 @@ class ItemUpdateBase extends AbstractItemUpdate {
     }
     var res = new Map<String, Null<String>>();
     for (fieldPos in m_changedFields) {
-      res[m_fields[fieldPos].sure()] = m_newValues[fieldPos].toString();
+      var fieldName = m_fields[fieldPos];
+      if (fieldName != null) {
+        res[fieldName] = m_newValues[fieldPos].toString();
+      } // else branch should never happen: see the check in the ctor
     }
     return new NativeStringMap(res);
   }

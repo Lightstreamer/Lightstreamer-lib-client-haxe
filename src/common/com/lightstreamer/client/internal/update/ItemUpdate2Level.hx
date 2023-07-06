@@ -34,14 +34,14 @@ class ItemUpdate2Level extends AbstractItemUpdate {
   #end
 
   public function new(itemIdx: Pos, sub: Subscription, newValues: Map<Pos, Null<CurrFieldVal>>, changedFields: Set<Pos>, isSnapshot: Bool#if LS_JSON_PATCH, jsonPatches: Map<Pos, JsonPatchTypeAsReturnedByGetPatch>#end) {
-    var items = sub.getItems();
-    var fields = sub.getFields();
-    var fields2 = sub.getCommandSecondLevelFields();
+    var items = sub.fetch_items();
+    var fields = sub.fetch_fields();
+    var fields2 = sub.fetch_fields2();
     this.m_itemIdx = itemIdx;
-    this.m_items = toMap(items != null ? items.toHaxe() : null);
+    this.m_items = toMap(items);
     this.m_nFields = sub.fetch_nFields().sure();
-    this.m_fields = toMap(fields != null ? fields.toHaxe() : null);
-    this.m_fields2 = toMap(fields2 != null ? fields2.toHaxe() : null);
+    this.m_fields = toMap(fields);
+    this.m_fields2 = toMap(fields2);
     this.m_newValues = newValues.copy();
     this.m_changedFields = changedFields.copy();
     this.m_isSnapshot = isSnapshot;
@@ -185,7 +185,10 @@ class ItemUpdate2Level extends AbstractItemUpdate {
     }
     var res = new Map<String, Null<String>>();
     for (fieldPos in m_changedFields) {
-      res[getFieldNameFromIdx(fieldPos)] = m_newValues[fieldPos].toString();
+      var fieldName = getFieldNameFromIdx(fieldPos);
+      if (fieldName != null) {
+        res[fieldName] = m_newValues[fieldPos].toString();
+      } // else branch should never happen
     }
     return new NativeStringMap(res);
   }
@@ -204,7 +207,10 @@ class ItemUpdate2Level extends AbstractItemUpdate {
     }
     var res = new Map<String, Null<String>>();
     for (f => v in m_newValues) {
-      res[getFieldNameFromIdx(f)] = v.toString();
+      var fieldName = getFieldNameFromIdx(f);
+      if (fieldName != null) {
+        res[fieldName] = v.toString();
+      } // else branch should never happen
     }
     return new NativeStringMap(res);
   }
@@ -245,13 +251,7 @@ class ItemUpdate2Level extends AbstractItemUpdate {
     return m_changedFields.contains(fieldPos);
   }
 
-  function getFieldNameFromIdx(fieldIdx: Pos): String {
-    assert(m_fields != null);
-    assert(m_fields2 != null);
-    return getFieldNameOrNullFromIdx(fieldIdx).sure();
-  }
-
-  function getFieldNameOrNullFromIdx(fieldIdx: Pos): Null<String> {
+  function getFieldNameFromIdx(fieldIdx: Pos): Null<String> {
     if (fieldIdx <= m_nFields) {
       return m_fields != null ? m_fields[fieldIdx] : null;
     } else {
@@ -274,7 +274,7 @@ class ItemUpdate2Level extends AbstractItemUpdate {
     var s = new StringBuf();
     s.add("[");
     for (i => val in m_newValues) {
-      var fieldName = getFieldNameOrNullFromIdx(i) ?? Std.string(i);
+      var fieldName = getFieldNameFromIdx(i) ?? Std.string(i);
       var fieldVal = Std.string(val);
       if (i > 1) {
         s.add(",");

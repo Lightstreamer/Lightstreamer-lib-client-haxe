@@ -479,6 +479,28 @@ class LSSubscription {
 
   @:synchronized
   @:allow(com.lightstreamer.client.internal.SubscriptionManager)
+  @:allow(com.lightstreamer.client.internal.update.ItemUpdateBase)
+  @:allow(com.lightstreamer.client.internal.update.ItemUpdate2Level)
+  function fetch_items(): Null<Array<String>> {
+    return items;
+  }
+
+  @:synchronized
+  @:allow(com.lightstreamer.client.internal.SubscriptionManager)
+  @:allow(com.lightstreamer.client.internal.update.ItemUpdateBase)
+  @:allow(com.lightstreamer.client.internal.update.ItemUpdate2Level)
+  function fetch_fields(): Null<Array<String>> {
+    return fields;
+  }
+
+  @:synchronized
+  @:allow(com.lightstreamer.client.internal.update.ItemUpdate2Level)
+  function fetch_fields2(): Null<Array<String>> {
+    return fields2;
+  }
+
+  @:synchronized
+  @:allow(com.lightstreamer.client.internal.SubscriptionManager)
   function fetch_mode(): SubscriptionMode {
     return mode;
   }
