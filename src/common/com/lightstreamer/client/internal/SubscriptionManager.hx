@@ -202,49 +202,63 @@ class SubscriptionManagerLiving implements SubscriptionManager {
     }
   }
 
+  function checkItems(expItems: Null<Int>, nItems: Int) {
+    return expItems != null ? expItems == nItems : true;
+  }
+
+  function checkFields(expFields: Null<Int>, nFields: Int) {
+    return expFields != null ? expFields == nFields : true;
+  }
+
+  function checkItemsAndFields(expItems: Null<Int>, expFields: Null<Int>, nItems: Int, nFields: Int) {
+    return checkItems(expItems, nItems) && checkFields(expFields, nFields);
+  }
+
   public function evtSUBOK(nItems: Int, nFields: Int) {
     traceEvent("SUBOK");
-    if (state.s_m == s2) {
-      doSUBOK(nItems, nFields);
-      notifyOnSubscription();
-      goto({
-        state.s_m = s4;
-        state.s_s = s10;
-        state.s_c = s20;
-      });
-      evtCheckFrequency();
-    } else if (state.s_m == s3) {
-      doSUBOK(nItems, nFields);
-      notifyOnSubscription();
-      goto({
-        state.s_m = s4;
-        state.s_s = s10;
-        state.s_c = s20;
-      });
-      evtCheckFrequency();
+    if (state.s_m == s2 || state.s_m == s3) {
+      var expItems = m_subscription.fetch_items()?.length;
+      var expFields = m_subscription.fetch_fields()?.length;
+      if (checkItemsAndFields(expItems, expFields, nItems, nFields)) {
+        doSUBOK(nItems, nFields);
+        notifyOnSubscription();
+        goto({
+          state.s_m = s4;
+          state.s_s = s10;
+          state.s_c = s20;
+        });
+        evtCheckFrequency();
+      } else {
+        doUnsubscribe();
+        doSetInactive();
+        notifyOnSubscriptionError_CountMismatch(expItems, expFields, nItems, nFields);
+        goto(state.s_m = s5);
+        genSendControl();
+      }
     }
   }
 
   public function evtSUBCMD(nItems: Int, nFields: Int, keyIdx: Int, cmdIdx: Int) {
     traceEvent("SUBCMD");
-    if (state.s_m == s2) {
-      doSUBCMD(nItems, nFields, cmdIdx, keyIdx);
-      notifyOnSubscription();
-      goto({
-        state.s_m = s4;
-        state.s_s = s10;
-        state.s_c = s20;
-      });
-      evtCheckFrequency();
-    } else if (state.s_m == s3) {
-      doSUBCMD(nItems, nFields, cmdIdx, keyIdx);
-      notifyOnSubscription();
-      goto({
-        state.s_m = s4;
-        state.s_s = s10;
-        state.s_c = s20;
-      });
-      evtCheckFrequency();
+    if (state.s_m == s2 || state.s_m == s3) {
+      var expItems = m_subscription.fetch_items()?.length;
+      var expFields = m_subscription.fetch_fields()?.length;
+      if (checkItemsAndFields(expItems, expFields, nItems, nFields)) {
+        doSUBCMD(nItems, nFields, cmdIdx, keyIdx);
+        notifyOnSubscription();
+        goto({
+          state.s_m = s4;
+          state.s_s = s10;
+          state.s_c = s20;
+        });
+        evtCheckFrequency();
+      } else {
+        doUnsubscribe();
+        doSetInactive();
+        notifyOnSubscriptionError_CountMismatch(expItems, expFields, nItems, nFields);
+        goto(state.s_m = s5);
+        genSendControl();
+      }
     }
   }
 
@@ -496,6 +510,14 @@ class SubscriptionManagerLiving implements SubscriptionManager {
 
   function notifyOnSubscriptionError(code: Int, msg: String) {
     m_subscription.fireOnSubscriptionError(subId, code, msg);
+  }
+
+  function notifyOnSubscriptionError_CountMismatch(expItems: Null<Int>, expFields: Null<Int>, nItems: Int, nFields: Int) {
+    if (!checkItems(expItems, nItems)) {
+      m_subscription.fireOnSubscriptionError(subId, 61, 'Expected $expItems items but got $nItems');
+    } else {
+      m_subscription.fireOnSubscriptionError(subId, 61, 'Expected $expFields fields but got $nFields');
+    }
   }
 
   function doConfigure() {
