@@ -110,6 +110,40 @@ class TestSubscribe_WS_Polling extends utest.Test {
     .verify();
   }
 
+  function testSUBOK_CountMismatch(async: utest.Async) {
+    exps
+    .then(() -> {
+      subListener._onSubscriptionError = (code, msg) -> exps.signal('onError $code $msg');
+      client.subscribe(sub);
+      client.connect();
+    })
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
+    .then(() -> {
+      http.onText("CONOK,sid,70000,5000,*");
+      http.onText("LOOP,0");
+    })
+    .await("http.dispose")
+    .await("ws.init http://server/lightstreamer")
+    .then(() -> ws.onOpen())
+    .await("wsok")
+    .then(() -> ws.onText("WSOK"))
+    .await("bind_session\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false")
+    .then(() -> {
+      ws.onText("CONOK,sid,70000,5000,*");
+      ws.onText("SUBOK,1,1,20");
+    })
+    .await(
+      "onError 61 Expected 2 fields but got 20", 
+      "control\r\nLS_reqId=2&LS_subId=1&LS_op=delete&LS_ack=false")
+    .then(() -> {
+      isFalse(sub.isSubscribed());
+      equals([], client.getSubscriptions().toHaxe());
+    })
+    .then(() -> async.completed())
+    .verify();
+  }
+
   function testSUBCMD(async: utest.Async) {
     exps
     .then(() -> {

@@ -97,6 +97,66 @@ class TestSubscribe_WS extends utest.Test {
     .verify();
   }
 
+  function testSUBOK_CountMismatch(async: utest.Async) {
+    exps
+    .then(() -> {
+      subListener._onSubscriptionError = (code, msg) -> exps.signal('onError $code $msg');
+      client.subscribe(sub);
+      client.connect();
+    })
+    .await("ws.init http://server/lightstreamer")
+    .then(() -> ws.onOpen())
+    .await("wsok")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .then(() -> {
+      ws.onText("WSOK");
+      ws.onText("CONOK,sid,70000,5000,*");
+    })
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false")
+    .then(() -> ws.onText("SUBOK,1,10,2"))
+    .await(
+      "onError 61 Expected 1 items but got 10", 
+      "control\r\nLS_reqId=2&LS_subId=1&LS_op=delete&LS_ack=false")
+    .then(() -> {
+      isFalse(sub.isSubscribed());
+      equals([], client.getSubscriptions().toHaxe());
+      client.subscribe(sub);
+    })
+    .await("control\r\nLS_reqId=3&LS_op=add&LS_subId=2&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false")
+    .then(() -> ws.onText("SUBOK,2,1,20"))
+    .await(
+      "onError 61 Expected 2 fields but got 20", 
+      "control\r\nLS_reqId=4&LS_subId=2&LS_op=delete&LS_ack=false")
+    .then(() -> {
+      isFalse(sub.isSubscribed());
+      equals([], client.getSubscriptions().toHaxe());
+      client.subscribe(sub);
+    })
+    .await("control\r\nLS_reqId=5&LS_op=add&LS_subId=3&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false")
+    .then(() -> ws.onText("REQOK,5"))
+    .then(() -> ws.onText("SUBOK,3,10,2"))
+    .await(
+      "onError 61 Expected 1 items but got 10", 
+      "control\r\nLS_reqId=6&LS_subId=3&LS_op=delete&LS_ack=false")
+    .then(() -> {
+      isFalse(sub.isSubscribed());
+      equals([], client.getSubscriptions().toHaxe());
+      client.subscribe(sub);
+    })
+    .await("control\r\nLS_reqId=7&LS_op=add&LS_subId=4&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false")
+    .then(() -> ws.onText("REQOK,7"))
+    .then(() -> ws.onText("SUBOK,4,1,20"))
+    .await(
+      "onError 61 Expected 2 fields but got 20", 
+      "control\r\nLS_reqId=8&LS_subId=4&LS_op=delete&LS_ack=false")
+    .then(() -> {
+      isFalse(sub.isSubscribed());
+      equals([], client.getSubscriptions().toHaxe());
+    })
+    .then(() -> async.completed())
+    .verify();
+  }
+
   function testSUBCMD(async: utest.Async) {
     exps
     .then(() -> {
@@ -121,6 +181,68 @@ class TestSubscribe_WS extends utest.Test {
       isTrue(sub.isSubscribed());
       equals(1, sub.getKeyPosition());
       equals(2, sub.getCommandPosition());
+    })
+    .then(() -> async.completed())
+    .verify();
+  }
+
+  function testSUBCMD_CountMismatch(async: utest.Async) {
+    exps
+    .then(() -> {
+      sub = new Subscription("COMMAND", ["item"], ["key", "command"]);
+      sub.addListener(subListener);
+      subListener._onSubscriptionError = (code, msg) -> exps.signal('onError $code $msg');
+      client.subscribe(sub);
+      client.connect();
+    })
+    .await("ws.init http://server/lightstreamer")
+    .then(() -> ws.onOpen())
+    .await("wsok")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .then(() -> {
+      ws.onText("WSOK");
+      ws.onText("CONOK,sid,70000,5000,*");
+    })
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=item&LS_schema=key%20command&LS_snapshot=true&LS_ack=false")
+    .then(() -> ws.onText("SUBCMD,1,10,2,1,2"))
+    .await(
+      "onError 61 Expected 1 items but got 10", 
+      "control\r\nLS_reqId=2&LS_subId=1&LS_op=delete&LS_ack=false")
+    .then(() -> {
+      isFalse(sub.isSubscribed());
+      equals([], client.getSubscriptions().toHaxe());
+      client.subscribe(sub);
+    })
+    .await("control\r\nLS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=item&LS_schema=key%20command&LS_snapshot=true&LS_ack=false")
+    .then(() -> ws.onText("SUBCMD,2,1,20,1,2"))
+    .await(
+      "onError 61 Expected 2 fields but got 20", 
+      "control\r\nLS_reqId=4&LS_subId=2&LS_op=delete&LS_ack=false")
+    .then(() -> {
+      isFalse(sub.isSubscribed());
+      equals([], client.getSubscriptions().toHaxe());
+      client.subscribe(sub);
+    })
+    .await("control\r\nLS_reqId=5&LS_op=add&LS_subId=3&LS_mode=COMMAND&LS_group=item&LS_schema=key%20command&LS_snapshot=true&LS_ack=false")
+    .then(() -> ws.onText("REQOK,5"))
+    .then(() -> ws.onText("SUBCMD,3,10,2,1,2"))
+    .await(
+      "onError 61 Expected 1 items but got 10", 
+      "control\r\nLS_reqId=6&LS_subId=3&LS_op=delete&LS_ack=false")
+    .then(() -> {
+      isFalse(sub.isSubscribed());
+      equals([], client.getSubscriptions().toHaxe());
+      client.subscribe(sub);
+    })
+    .await("control\r\nLS_reqId=7&LS_op=add&LS_subId=4&LS_mode=COMMAND&LS_group=item&LS_schema=key%20command&LS_snapshot=true&LS_ack=false")
+    .then(() -> ws.onText("REQOK,7"))
+    .then(() -> ws.onText("SUBCMD,4,1,20,1,2"))
+    .await(
+      "onError 61 Expected 2 fields but got 20", 
+      "control\r\nLS_reqId=8&LS_subId=4&LS_op=delete&LS_ack=false")
+    .then(() -> {
+      isFalse(sub.isSubscribed());
+      equals([], client.getSubscriptions().toHaxe());
     })
     .then(() -> async.completed())
     .verify();
