@@ -159,7 +159,7 @@ class ItemUpdate2Level extends AbstractItemUpdate {
   public function forEachChangedField(iterator: (fieldName: Null<String>, fieldPos: Int, value: Null<String>) -> Void): Void {
     for (fieldPos in m_changedFields) {
       try {
-        var fieldName = getFieldNameOrNullFromIdx(fieldPos);
+        var fieldName = getFieldNameFromIdx(fieldPos);
         iterator(fieldName, fieldPos, m_newValues[fieldPos].toString());
       } catch(e) {
         actionLogger.logErrorEx("An exception was thrown while executing the Function passed to the forEachChangedField method", e);
@@ -170,7 +170,7 @@ class ItemUpdate2Level extends AbstractItemUpdate {
   public function forEachField(iterator: (fieldName: Null<String>, fieldPos: Int, value: Null<String>) -> Void): Void {
     for (fieldPos => fieldVal in m_newValues) {
       try {
-        var fieldName = getFieldNameOrNullFromIdx(fieldPos);
+        var fieldName = getFieldNameFromIdx(fieldPos);
         iterator(fieldName, fieldPos, fieldVal.toString());
       } catch(e) {
         actionLogger.logErrorEx("An exception was thrown while executing the Function passed to the forEachField method", e);
