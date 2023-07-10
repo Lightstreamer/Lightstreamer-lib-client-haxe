@@ -3,9 +3,11 @@
 ## 9.0.0
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
 *Not compatible with code developed with the previous version.*<br/>
-*Made available on 4 Jul 2023* 
+*Made available on 10 Jul 2023* 
 
 Added a second argument to the listener `ClientMessageListener.onProcessed` carrying the response, from the Metadata Adapter of a Lightstreamer Server, to a message sent by the Client through the method `LightstreamerClient.sendMessage`.
+
+Added this check: when a `Subscription` is configured by means of an ItemList or a FieldList, the client checks that the number of items and fields returned by the server coincides with the number of elements in the ItemList and the FieldList, and if the numbers are different, the client deletes the subscription and fires the listener `SubscriptionListener.onSubscriptionError` with the error code 61.
 
 
 ## 9.0.0-beta.3
