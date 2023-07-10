@@ -157,6 +157,31 @@ class TestSubscribe_WS extends utest.Test {
     .verify();
   }
 
+  function testSUBOK_ItemGroupAndFieldSchema(async: utest.Async) {
+    exps
+    .then(() -> {
+      subListener._onSubscription = () -> exps.signal("onSubscription");
+      sub.setItemGroup("ig");
+      sub.setFieldSchema("fs");
+      client.subscribe(sub);
+      client.connect();
+    })
+    .await("ws.init http://server/lightstreamer")
+    .then(() -> ws.onOpen())
+    .await("wsok")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .then(() -> {
+      ws.onText("WSOK");
+      ws.onText("CONOK,sid,70000,5000,*");
+    })
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=ig&LS_schema=fs&LS_snapshot=false&LS_ack=false")
+    .then(() -> ws.onText("SUBOK,1,10,20"))
+    .await("onSubscription")
+    .then(() -> isTrue(sub.isSubscribed()))
+    .then(() -> async.completed())
+    .verify();
+  }
+
   function testSUBCMD(async: utest.Async) {
     exps
     .then(() -> {
