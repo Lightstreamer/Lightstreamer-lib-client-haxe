@@ -9,6 +9,8 @@ Added a second argument to the listener `ClientMessageListener.onProcessed` carr
 
 Added this check: when a `Subscription` is configured by means of an ItemList or a FieldList, the client checks that the number of items and fields returned by the server coincides with the number of elements in the ItemList and the FieldList, and if the numbers are different, the client deletes the subscription and fires the listener `SubscriptionListener.onSubscriptionError` with the error code 61.
 
+Changed the behavior of the method `ItemUpdate.forEachChangedField` when `ItemUpdate` refers to the first server update (possibly the snapshot): the iterator function passed to the method is invoked on every field, while previously it was invoked only on non-null fields. 
+
 
 ## 9.0.0-beta.6
 *Compatible with Lightstreamer Server since 7.3.2*<br/>

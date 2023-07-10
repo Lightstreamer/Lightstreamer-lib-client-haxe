@@ -208,8 +208,7 @@ ItemUpdate.prototype = {
     
     
     /**
-     * Receives an iterator function and invokes it once per each field 
-     * changed with the last server update. 
+     * Receives an iterator function and invokes it once per each field such that {@link ItemUpdate#isValueChanged} is true. 
      * <BR>Note that if the Subscription mode of the involved Subscription is 
      * COMMAND, then changed fields are meant as relative to the previous update 
      * for the same key. On such tables if a DELETE command is received, all the 
