@@ -107,7 +107,7 @@ LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.
 
 .NET Client is compatible with .NET Standard 2.1 or higher.
 
-The library requires Server 7.3.2. 
+The library requires Server 7.4.0. 
 
 ## Documentation
 

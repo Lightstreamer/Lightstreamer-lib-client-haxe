@@ -33,7 +33,7 @@ client.subscribe(sub);
 
 ## Compatibility ##
 
-The library requires Server 7.3.2.
+The library requires Server 7.4.0.
 
 ## Documentation ##
 

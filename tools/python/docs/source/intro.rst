@@ -85,7 +85,7 @@ Compatibility
 
 Python Client requires Python 3.7 or higher.
 
-The library is compatible with Lightstreamer Server since version 7.3.2.
+The library is compatible with Lightstreamer Server since version 7.4.0.
 
 Documentation
 *************
