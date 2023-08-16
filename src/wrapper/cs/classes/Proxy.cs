@@ -25,7 +25,7 @@ namespace com.lightstreamer.client
         /// <summary>
         /// This constructor will call <seealso cref="Proxy(string, string, int, string, string)"/>
         /// specifying null user and null password. </summary>
-        /// <param name="type"> the proxy type </param>
+        /// <param name="type"> the proxy type. Supported values are HTTP, SOCKS4 and SOCKS5. </param>
         /// <param name="host"> the proxy host </param>
         /// <param name="port"> the proxy port </param>
         public Proxy(string type, string host, int port)
@@ -36,7 +36,7 @@ namespace com.lightstreamer.client
         /// <summary>
         /// This constructor will call <seealso cref="Proxy(string, string, int, string, string)"/>
         /// specifying a null password. </summary>
-        /// <param name="type"> the proxy type </param>
+        /// <param name="type"> the proxy type. Supported values are HTTP, SOCKS4 and SOCKS5. </param>
         /// <param name="host"> the proxy host </param>
         /// <param name="port"> the proxy port </param>
         /// <param name="user"> the user name to be used to validate against the proxy </param>
@@ -51,7 +51,7 @@ namespace com.lightstreamer.client
         /// Once created the Proxy instance has to be passed to the <seealso cref="LightstreamerClient.connectionOptions"/>
         /// instance using the <seealso cref="ConnectionOptions.Proxy"/> method.
         /// </summary>
-        /// <param name="type"> the proxy type </param>
+        /// <param name="type"> the proxy type. Supported values are HTTP, SOCKS4 and SOCKS5. </param>
         /// <param name="host"> the proxy host </param>
         /// <param name="port"> the proxy port </param>
         /// <param name="user"> the user name to be used to validate against the proxy </param>

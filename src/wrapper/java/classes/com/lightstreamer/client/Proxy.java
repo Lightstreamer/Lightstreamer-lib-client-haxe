@@ -27,7 +27,7 @@ public class Proxy {
   /**
    * This constructor will call {@link #Proxy(String, String, int, String, String)}
    * specifying null user and null password.
-   * @param type the proxy type
+   * @param type the proxy type. Supported values are HTTP, SOCKS4 and SOCKS5.
    * @param host the proxy host
    * @param port the proxy port
    */
@@ -38,7 +38,7 @@ public class Proxy {
   /**
    * This constructor will call {@link #Proxy(String, String, int, String, String)}
    * specifying a null null password.
-   * @param type the proxy type
+   * @param type the proxy type. Supported values are HTTP, SOCKS4 and SOCKS5.
    * @param host the proxy host
    * @param port the proxy port
    * @param user the user name to be used to validate against the proxy
@@ -53,7 +53,7 @@ public class Proxy {
    * Once created the Proxy instance has to be passed to the {@link LightstreamerClient#connectionOptions}
    * instance using the {@link ConnectionOptions#setProxy(Proxy)} method.
    * 
-   * @param type the proxy type
+   * @param type the proxy type. Supported values are HTTP, SOCKS4 and SOCKS5.
    * @param host the proxy host
    * @param port the proxy port
    * @param user the user name to be used to validate against the proxy

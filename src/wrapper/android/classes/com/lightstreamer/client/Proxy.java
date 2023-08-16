@@ -27,7 +27,7 @@ public class Proxy {
   /**
    * This constructor will call {@link #Proxy(String, String, int, String, String)}
    * specifying null user and null password.
-   * @param type the proxy type
+   * @param type the proxy type. Supported values are HTTP, SOCKS4 and SOCKS5.
    * @param host the proxy host
    * @param port the proxy port
    */
@@ -38,7 +38,7 @@ public class Proxy {
   /**
    * This constructor will call {@link #Proxy(String, String, int, String, String)}
    * specifying a null null password.
-   * @param type the proxy type
+   * @param type the proxy type. Supported values are HTTP, SOCKS4 and SOCKS5.
    * @param host the proxy host
    * @param port the proxy port
    * @param user the user name to be used to validate against the proxy
@@ -58,7 +58,7 @@ public class Proxy {
    * it is necessary to replace the default java {@link java.net.Authenticator} with a custom one containing 
    * the necessary logic to authenticate the user against the proxy.  
    *
-   * @param type the proxy type
+   * @param type the proxy type. Supported values are HTTP, SOCKS4 and SOCKS5.
    * @param host the proxy host
    * @param port the proxy port
    * @param user the user name to be used to validate against the proxy
