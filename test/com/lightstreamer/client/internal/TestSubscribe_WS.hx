@@ -50,6 +50,26 @@ class TestSubscribe_WS extends utest.Test {
     .verify();
   }
 
+  function testSubscribeFieldWithPlus(async: utest.Async) {
+    exps
+    .then(() -> {
+      sub.setFields(["f1+f2"]);
+      client.subscribe(sub);
+      client.connect();
+    })
+    .await("ws.init http://server/lightstreamer")
+    .then(() -> ws.onOpen())
+    .await("wsok")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .then(() -> {
+      ws.onText("WSOK");
+      ws.onText("CONOK,sid,70000,5000,*");
+    })
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%2Bf2&LS_snapshot=false&LS_ack=false")
+    .then(() -> async.completed())
+    .verify();
+  }
+
   function testREQERR(async: utest.Async) {
     exps
     .then(() -> {
