@@ -26,6 +26,8 @@ class TestAll {
     runner.addCase(TestRequestBuilder);
     runner.addCase(TestAssocArray);
     runner.addCase(TestMyList);
+    runner.addCase(TestMyArray);
+    runner.addCase(TestOrderedIntMap);
     runner.addCase(TestRequest);
     #if js
     runner.addCase(TestStreamReader);
