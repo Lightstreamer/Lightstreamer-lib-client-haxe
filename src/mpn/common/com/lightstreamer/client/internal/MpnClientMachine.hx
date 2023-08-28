@@ -19,7 +19,7 @@ using com.lightstreamer.internal.ArrayTools;
 
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class MpnClientMachine extends ClientMachine {
-  final mpnSubscriptionManagers = new MyList<MpnSubscriptionManager>();
+  final mpnSubscriptionManagers = new MyArray<MpnSubscriptionManager>();
   var mpn_device: Null<MpnDevice>;
   var mpn_deviceId: Null<String>;
   var mpn_deviceToken: Null<String>;
@@ -617,6 +617,7 @@ class MpnClientMachine extends ClientMachine {
     for (sub in mpnSubscriptionManagers) {
       sub.evtREQOK(reqId);
     }
+    mpnSubscriptionManagers.compact();
   }
 
   override function doREQERR(reqId: Int, errorCode: Int, errorMsg: String) {
@@ -624,6 +625,7 @@ class MpnClientMachine extends ClientMachine {
     for (sub in mpnSubscriptionManagers) {
       sub.evtREQERR(reqId, errorCode, errorMsg);
     }
+    mpnSubscriptionManagers.compact();
   }
 
   override function genAbortSubscriptions() {
@@ -631,6 +633,7 @@ class MpnClientMachine extends ClientMachine {
     for (sub in mpnSubscriptionManagers) {
       sub.evtAbort();
     }
+    mpnSubscriptionManagers.compact();
   }
 
   override function getPendingControls() {
@@ -751,6 +754,7 @@ class MpnClientMachine extends ClientMachine {
     for (sm in mpnSubscriptionManagers) {
       sm.evtDeviceActive();
     }
+    mpnSubscriptionManagers.compact();
   }
 
   function genSubscribeSpecialItems() {
@@ -800,6 +804,7 @@ class MpnClientMachine extends ClientMachine {
         sm.evtMpnUpdate(update);
       }
     }
+    mpnSubscriptionManagers.compact();
   }
 
   function doAddToMpnSnapshot(mpnSubId: String) {
@@ -823,6 +828,7 @@ class MpnClientMachine extends ClientMachine {
     for (sm in mpnSubscriptionManagers) {
       sm.evtMpnEOS();
     }
+    mpnSubscriptionManagers.compact();
   }
 
   function genSendMpnUnsubscribeFilter() {
@@ -856,6 +862,7 @@ class MpnClientMachine extends ClientMachine {
         sm.evtMPNOK(mpnSubId);
       }
     }
+    mpnSubscriptionManagers.compact();
   }
 
   function doMPNDEL(mpnSubId: String) {
@@ -865,6 +872,7 @@ class MpnClientMachine extends ClientMachine {
         sm.evtMPNDEL();
       }
     }
+    mpnSubscriptionManagers.compact();
   }
 
   function doMPNCONF(mpnSubId: String) {

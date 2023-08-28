@@ -56,9 +56,9 @@ class ClientMachine {
   var disabledTransports: Set<TransportSelection> = new Set();
   // messages
   final sequenceMap: Map<String, Int> = [];
-  final messageManagers = new MyList<MessageManager>();
+  final messageManagers = new MyArray<MessageManager>();
   // subscriptions
-  final subscriptionManagers: AssocArray<SubscriptionManager> = new AssocArray();
+  final subscriptionManagers: OrderedIntMap<SubscriptionManager> = new OrderedIntMap();
   // request types
   var switchRequest: Null<SwitchRequest>;
   var constrainRequest: Null<ConstrainRequest>;
@@ -3918,18 +3918,24 @@ class ClientMachine {
     for (_ => sub in subscriptionManagers) {
       sub.evtREQOK(reqId);
     }
+    subscriptionManagers.compact();
+
     for (msg in messageManagers) {
       msg.evtREQOK(reqId);
     }
+    messageManagers.compact();
   }
 
   function doREQERR(reqId: Int, errorCode: Int, errorMsg: String) {
     for (_ => sub in subscriptionManagers) {
       sub.evtREQERR(reqId, errorCode, errorMsg);
     }
+    subscriptionManagers.compact();
+
     for (msg in messageManagers) {
       msg.evtREQERR(reqId, errorCode, errorMsg);
     }
+    messageManagers.compact();
   }
 
   function doSYNC(syncMs: TimerMillis) {
@@ -4269,6 +4275,7 @@ class ClientMachine {
     for (_ => sub in subscriptionManagers) {
       sub.evtExtAbort();
     }
+    subscriptionManagers.compact();
   }
 
   function genAckMessagesWS() {
@@ -4282,6 +4289,7 @@ class ClientMachine {
     for (msg in messageManagers) {
       msg.evtAbort();
     }
+    messageManagers.compact();
   }
 
   function resetSequenceMap() {
