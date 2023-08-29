@@ -10,7 +10,7 @@ import haxe.ds.ReadOnlyArray;
   OrderedIntMap allows mapping of Int keys to arbitrary values,
   and remembers the order in which key-values are inserted.
 
-  See `OrderedIntMapImpl` (the actual implementation) and `OrderedMap` for documentation details.
+  **NB** Since OrderedIntMap is based on `MyArray`, the elements are not actually removed from the map. They are only marked as deleted.  Therefore, you need to call the `compact` method occasionally to reclaim the space and optimize the map.
 **/
 @:forward
 @:native("OrderedIntMap")

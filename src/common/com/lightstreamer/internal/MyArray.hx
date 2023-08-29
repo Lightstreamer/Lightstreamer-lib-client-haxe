@@ -1,5 +1,10 @@
 package com.lightstreamer.internal;
 
+/**
+ An array implementation that supports appending and removing elements while iterating.
+
+ **NB** To enable removing items while iterating, the elements are not actually removed from the array. They are only marked as deleted. This means that the space they occupy is not freed up, and the array operations can become inefficient. Therefore, you need to call the `compact` method occasionally to reclaim the space and optimize the array.
+ */
 @:allow(com.lightstreamer.internal.MyArrayIterator)
 class MyArray<T> {
   var nRemoved = 0;
