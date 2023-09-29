@@ -1,7 +1,5 @@
 package com.lightstreamer.internal;
 
-import hx.concurrent.executor.Executor;
-
 private function createExecutor() {
   #if python
   // workaround for python: see issue https://github.com/HaxeFoundation/haxe/issues/10562
@@ -10,7 +8,7 @@ private function createExecutor() {
     Sys.println(out);
   };
   #end
-  return Executor.create();
+  return new Executor();
 }
 
 final userThread = createExecutor();

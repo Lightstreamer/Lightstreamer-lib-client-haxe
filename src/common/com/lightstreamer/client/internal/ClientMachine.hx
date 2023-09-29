@@ -4542,9 +4542,7 @@ class ClientMachine {
     var future = new NativeFuture(() -> {
       actionLogger.logInfo("Starting shutdown...");
       sessionThread.stop();
-      hx.concurrent.thread.Threads.await(() -> sessionThread.state == hx.concurrent.Service.ServiceState.STOPPED, -1);
       userThread.stop();
-      hx.concurrent.thread.Threads.await(() -> userThread.state == hx.concurrent.Service.ServiceState.STOPPED, -1);
       actionLogger.logInfo("Shutdown completed");
     });
     hx.concurrent.thread.Threads.spawn(future.run);

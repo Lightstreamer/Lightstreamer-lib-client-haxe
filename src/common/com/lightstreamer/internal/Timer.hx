@@ -1,10 +1,7 @@
 package com.lightstreamer.internal;
 
-import com.lightstreamer.internal.Threads;
 import com.lightstreamer.internal.NativeTypes.Long;
 import com.lightstreamer.internal.Types;
-import hx.concurrent.executor.Executor;
-import com.lightstreamer.internal.PlatformApi;
 
 abstract TimerMillis(Float) {
   public inline function new(millis: Float) {
@@ -64,22 +61,4 @@ abstract TimerStamp(Float) {
   }
 }
 
-class Timer implements ITimer {
-  final task: TaskFuture<Void>;
-
-  public function new(id: String, delay: Types.Millis, callback: ITimer->Void) {
-    task = sessionThread.submit(() -> callback(this), Schedule.ONCE(delay.toInt()));
-  }
-
-  inline public function cancel(): Void {
-    task.cancel();
-  }
-
-  inline public function isCanceled(): Bool {
-    return task.isStopped;
-  }
-
-  inline static public function stamp(): Float {
-    return haxe.Timer.stamp();
-  }
-}
+typedef Timer = TimerImpl;
