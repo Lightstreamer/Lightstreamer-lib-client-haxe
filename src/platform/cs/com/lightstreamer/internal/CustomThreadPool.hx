@@ -1,5 +1,6 @@
 package com.lightstreamer.internal;
 
+// source: https://learn.microsoft.com/en-us/archive/msdn-magazine/2005/february/net-matters-file-copy-progress-custom-thread-pools
 @:cs.using("System", "System.Threading", "System.Collections.Generic")
 @:classCode('
 private Semaphore _workWaiting;
