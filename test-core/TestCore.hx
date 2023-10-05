@@ -18,6 +18,7 @@ class TestCore {
   }
 
   public static function main() {
+    trace('***** Running lib ${LightstreamerClient.LIB_NAME} ${LightstreamerClient.LIB_VERSION} *****');
     var runner = new Runner();
     buildSuite(runner);
     runner.run();
