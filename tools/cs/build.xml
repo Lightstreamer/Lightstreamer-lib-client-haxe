@@ -54,6 +54,8 @@
       </filterset>
     </copy>
     <exec executable="nuget" dir="${tools.project}" failonerror="true">
+      <!-- the pack command is not supported by the new versions of nuget.exe unless you set the 'NUGET_ENABLE_LEGACY_CSPROJ_PACK' environment variable -->
+      <env key="NUGET_ENABLE_LEGACY_CSPROJ_PACK" value="true"/>
       <arg value="pack"/>
       <arg value="Lightstreamer.DotNetStandard.Client.csproj"/>
       <arg value="-OutputDirectory"/>
