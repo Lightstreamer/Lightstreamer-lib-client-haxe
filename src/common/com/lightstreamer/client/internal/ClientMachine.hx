@@ -4593,10 +4593,10 @@ class ClientMachine {
     if (subscription.isActive()) {
       throw new IllegalStateException("Cannot subscribe to an active Subscription");
     }
-    if (subscription.getItems() == null && subscription.getItemGroup() == null) {
+    if (subscription.fetchItems() == null && subscription.getItemGroup() == null) {
       throw new IllegalArgumentException("Specify property 'items' or 'itemGroup'");
     }
-    if (subscription.getFields() == null && subscription.getFieldSchema() == null) {
+    if (subscription.fetchFields() == null && subscription.getFieldSchema() == null) {
       throw new IllegalArgumentException("Specify property 'fields' or 'fieldSchema'");
     }
     var sm = new SubscriptionManagerLiving(subscription, this);

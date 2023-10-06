@@ -60,10 +60,8 @@ class ModeStrategyCommand2Level extends ModeStrategyCommand {
 
   @:nullSafety(Off)
   function doSUBCMD2Level(nItems: Int, nFields: Int, cmdIdx: Null<Pos>, keyIdx: Null<Pos>, currentFreq: Null<RequestedMaxFrequency>) {
-    var _items = subscription.getItems();
-    var items = _items != null ? _items.toHaxe() : null;
-    var _fields = subscription.getFields();
-    var fields = _fields != null ? _fields.toHaxe() : null;
+    var items = subscription.fetchItems();
+    var fields = subscription.fetchFields();
     assert(items != null ? nItems == items.length : true);
     assert(fields != null ? nFields == fields.length : true);
     assert(fields != null ? cmdIdx - 1 == fields.indexOf("command") : true);
