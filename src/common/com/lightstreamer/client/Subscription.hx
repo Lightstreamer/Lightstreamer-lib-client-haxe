@@ -134,7 +134,7 @@ class LSSubscription {
   public function getItems(): Null<NativeArray<String>> {
     return items == null ? null : new NativeArray(items);
   }
-  inline public function fetchItems(): Null<Array<String>> {
+  public function fetchItems(): Null<Array<String>> {
     return items;
   }
   public function setItems(items: Null<NativeArray<String>>): Void {
@@ -155,7 +155,7 @@ class LSSubscription {
   public function getFields(): Null<NativeArray<String>> {
     return fields == null ? null : new NativeArray(fields);
   }
-  inline public function fetchFields(): Null<Array<String>> {
+  public function fetchFields(): Null<Array<String>> {
     return fields;
   }
   public function setFields(fields: Null<NativeArray<String>>): Void {
