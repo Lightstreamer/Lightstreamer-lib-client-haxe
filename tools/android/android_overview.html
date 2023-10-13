@@ -23,8 +23,6 @@ The library offers automatic recovery from connection failures, automatic select
 
 The library also offers support for mobile push notifications (MPN). While real-time subscriptions deliver their updates via the client connection, MPN subscriptions deliver their updates via push notifications, even when the application is offline. They are handled by a special module of the Server, the MPN Module, that keeps them active at all times and continues pushing with no need for a client connection. However, push notifications are not real-time, they may be delayed by the service provider (FCM) and their delivery is not guaranteed.<br><br>
 
-The library needs Android 6.0 (API level 23) or greater.<br><br>
-
 The Android library can be available depending on Edition and License Type. To know what features are enabled by your license, please see the License tab of the Monitoring Dashboard (by default, available at /dashboard).
 
 <h2 id="installing">Installing</h2>
@@ -138,7 +136,7 @@ LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.
 
 <h2 id="compatibility">Compatibility</h2>
 
-Android Client requires Android 6.0 (API level 23) or greater.
+Android Client requires Android 8 (API level 26) or greater.
 <br><br>
 The library is compatible with Lightstreamer Server since version 7.4.0.
 
