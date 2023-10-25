@@ -72,6 +72,36 @@ class TestMpnClient extends utest.Test {
     }
   }
 
+  function testSubCtor() {
+    var sub = new Subscription("MERGE", ["i1"], ["f1"]);
+    sub.setDataAdapter("SUB");
+    sub.setRequestedBufferSize("100");
+    sub.setRequestedMaxFrequency("10");
+    var s = new MpnSubscription(sub);
+    equals("MERGE", s.getMode());
+    equals(["i1"], s.getItems());
+    equals(["f1"], s.getFields());
+    equals("SUB", s.getDataAdapter());
+    equals("100", s.getRequestedBufferSize());
+    equals("10", s.getRequestedMaxFrequency());
+
+    var mpnSub = new MpnSubscription("MERGE", ["i1"], ["f1"]);
+    mpnSub.setDataAdapter("SUB");
+    mpnSub.setRequestedBufferSize("200");
+    mpnSub.setRequestedMaxFrequency("20");
+    mpnSub.setNotificationFormat("{a: 1}");
+    mpnSub.setTriggerExpression("a > 0");
+    s = new MpnSubscription(mpnSub);
+    equals("MERGE", s.getMode());
+    equals(["i1"], s.getItems());
+    equals(["f1"], s.getFields());
+    equals("SUB", s.getDataAdapter());
+    equals("200", s.getRequestedBufferSize());
+    equals("20", s.getRequestedMaxFrequency());
+    equals("{a: 1}", s.getNotificationFormat());
+    equals("a > 0", s.getTriggerExpression());
+  }
+
   /**
    * Verifies that the client registers to the MPN module.
    */
