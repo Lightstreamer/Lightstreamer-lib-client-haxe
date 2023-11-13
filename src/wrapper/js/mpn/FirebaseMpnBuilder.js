@@ -8,7 +8,8 @@
      * @param [notificationFormat] A JSON structure representing a push notification format.
      *
      * @class Utility class that provides methods to build or parse the JSON structure used to represent the format of a push notification.<BR>
-     * It provides getters and setters for the fields of a push notification, following the format specified by Google's Firebase Cloud Messaging (FCM).
+     * It provides getters and setters for the fields of a push notification, 
+     * following the format specified by <a href="https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages">FCM REST API</a>.
      * This format is compatible with {@link MpnSubscription#setNotificationFormat}.
      *
      * @see MpnSubscription#setNotificationFormat
