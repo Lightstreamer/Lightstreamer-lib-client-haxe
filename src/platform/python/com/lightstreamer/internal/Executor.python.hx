@@ -12,7 +12,9 @@ class Executor {
       Asyncio.set_event_loop(loop);
       loop.run_forever();
       loop.close();
-    }});
+    },
+    daemon: true
+  });
     thread.start();
   }
 
