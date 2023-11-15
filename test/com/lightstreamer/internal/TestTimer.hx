@@ -6,9 +6,9 @@ class TestTimer extends utest.Test {
 
   @:timeout(700)
   function testTimer(async: utest.Async) {
-    var ts = Timer.stamp();
+    var ts = haxe.Timer.stamp();
     var timer = new Timer("id", new Types.Millis(500), tr -> {
-      var now = Timer.stamp();
+      var now = haxe.Timer.stamp();
       equals(false, tr.isCanceled());
       floatEquals(0.5, now - ts, 0.1);
       async.completed();

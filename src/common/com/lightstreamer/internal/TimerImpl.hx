@@ -18,8 +18,4 @@ class TimerImpl implements ITimer {
   inline public function isCanceled(): Bool {
     return task.isStopped;
   }
-
-  inline static public function stamp(): Float {
-    return haxe.Timer.stamp();
-  }
 }

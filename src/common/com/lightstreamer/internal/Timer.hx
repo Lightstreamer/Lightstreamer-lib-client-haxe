@@ -43,7 +43,7 @@ abstract TimerStamp(Float) {
   }
 
   public static inline function now() {
-    return new TimerStamp(Timer.stamp());
+    return new TimerStamp(haxe.Timer.stamp());
   }
 
   @:op(A + B)

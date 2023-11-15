@@ -21,8 +21,4 @@ class TimerImpl implements ITimer {
   inline public function isCanceled(): Bool {
     return disposed;
   }
-
-  inline static public function stamp(): Float {
-    return haxe.Timer.stamp();
-  }
 }
