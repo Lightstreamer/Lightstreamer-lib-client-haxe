@@ -128,7 +128,7 @@ If not already installed, install [Ant Ivy 2.5.0+](https://ant.apache.org/ivy/hi
 
 Then install the [Android toolkit](https://developer.android.com/studio). 
 Once installed, get the *Android SDK Platform 11 (R) API Level 30* (if you have *Android Studio*, open the *SDK Manager* and go to the tab *SDK Platforms*).
-Finally make sure the environment variable `ANDROID_SDK` points to the Android home folder.
+Finally make sure the environment variable `ANDROID_HOME` points to the Android home folder.
 
 Finally download [Bouncy Castle 1.72](https://www.bouncycastle.org/latest_releases.html) cryptographic libraries and copy the files `bcprov-jdk18on-172.jar` (the cryptography provider) and `bcpg-jdk18on-172.2.jar` (the GPG driver) to the folder `ANT_HOME/lib`. 
 

@@ -4,7 +4,7 @@ test.common.hxml
 --class-path src/mpn/android
 --class-path src/platform/java
 --class-path src/extern/android
---java-lib-extern %ANDROID_SDK%/platforms/android-30/android.jar
+--java-lib-extern %ANDROID_HOME%/platforms/android-30/android.jar
 --java-lib-extern bin/android/build/deps
 
 -D android

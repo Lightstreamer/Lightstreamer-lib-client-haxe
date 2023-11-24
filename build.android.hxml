@@ -5,7 +5,7 @@ build.common.hxml
 --class-path src/mpn/common
 --class-path src/mpn/android
 
---java-lib-extern %ANDROID_SDK%/platforms/android-30/android.jar
+--java-lib-extern %ANDROID_HOME%/platforms/android-30/android.jar
 --java-lib-extern bin/android/build/deps
 
 -D android

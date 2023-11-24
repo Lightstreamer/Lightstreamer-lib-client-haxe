@@ -109,7 +109,7 @@
       <packageset dir="${wrapper.src}"/>
       <classpath>
         <pathelement location="${haxe.lib.jar}"/>
-        <pathelement location="${env.ANDROID_SDK}/platforms/android-30/android.jar"/>
+        <pathelement location="${env.ANDROID_HOME}/platforms/android-30/android.jar"/>
         <fileset dir="${deps}">
           <include name="**/*.jar"/>
         </fileset>
@@ -157,7 +157,7 @@
       <classpath>
         <pathelement location="${api.lib.jar}"/>
         <pathelement location="${haxe.lib.jar}"/>
-        <pathelement location="${env.ANDROID_SDK}/platforms/android-30/android.jar"/>
+        <pathelement location="${env.ANDROID_HOME}/platforms/android-30/android.jar"/>
         <fileset dir="${deps}">
           <include name="**/*.jar"/>
         </fileset>
