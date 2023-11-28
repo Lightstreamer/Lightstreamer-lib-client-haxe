@@ -1,8 +1,22 @@
 package com.lightstreamer.internal;
 
-abstract RLock(hx.concurrent.lock.RLock) {
-  inline public function new() {
-    this = new hx.concurrent.lock.RLock();
+class RLock {
+  #if target.threaded
+  final lock = new sys.thread.Mutex();
+  #end
+
+  inline public function new() {}
+
+  inline public function acquire() {
+    #if target.threaded
+    lock.acquire();
+    #end
+  }
+
+  inline public function release() {
+    #if target.threaded
+    lock.release();
+    #end
   }
 
   public function synchronized<T>(func: ()->T): T {

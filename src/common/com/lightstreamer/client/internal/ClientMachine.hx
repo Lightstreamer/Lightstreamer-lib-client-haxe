@@ -4545,7 +4545,7 @@ class ClientMachine {
       userThread.stop();
       actionLogger.logInfo("Shutdown completed");
     });
-    hx.concurrent.thread.Threads.spawn(future.run);
+    sys.thread.Thread.create(future.run);
     return future;
   }
   #end

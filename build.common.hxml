@@ -1,6 +1,5 @@
 -D analyzer-optimize
 --macro nullSafety("com.lightstreamer")
 --class-path src/common
---library haxe-concurrent
 
 --macro include("com.lightstreamer")
