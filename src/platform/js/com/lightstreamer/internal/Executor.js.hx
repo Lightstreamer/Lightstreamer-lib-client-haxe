@@ -23,7 +23,7 @@ class TaskHandle {
     this.handle = handle;
   }
 
-  inline public function cancelled(): Bool {
+  inline public function isCanceled(): Bool {
     return handle == null;
   }
 

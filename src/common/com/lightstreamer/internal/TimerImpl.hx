@@ -2,10 +2,10 @@ package com.lightstreamer.internal;
 
 import com.lightstreamer.internal.Threads;
 import com.lightstreamer.internal.PlatformApi.ITimer;
-import hx.concurrent.executor.Executor.TaskFuture;
+import com.lightstreamer.internal.Executor.TaskHandle;
 
 class TimerImpl implements ITimer {
-  final task: TaskFuture<Void>;
+  final task: TaskHandle;
 
   public function new(id: String, delay: Types.Millis, callback: ITimer->Void) {
     task = sessionThread.schedule(() -> callback(this), delay);
@@ -16,6 +16,6 @@ class TimerImpl implements ITimer {
   }
 
   inline public function isCanceled(): Bool {
-    return task.isStopped;
+    return task.isCanceled();
   }
 }

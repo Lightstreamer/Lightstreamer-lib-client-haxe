@@ -18,16 +18,27 @@ class Executor {
     thread.start();
   }
 
-  inline public function submit(callback: ()->Void) {
+  inline public function submit(callback: ()->Void): Void {
     loop.call_soon_threadsafe(callback);
   }
 
-  inline public function schedule(callback: ()->Void, delay: Types.Millis) {
+  inline public function schedule(callback: ()->Void, delay: Types.Millis): TaskHandle {
     return loop.call_later_threadsafe(delay / 1000.0, callback);
   }
 
   public function stop() {
     loop.call_soon_threadsafe(loop.stop);
     thread.join();
+  }
+}
+
+abstract TaskHandle(Asyncio.Handle) from Asyncio.Handle {
+
+  inline public function cancel(): Void {
+    this.cancel();
+  }
+
+  inline public function isCanceled(): Bool {
+    return this.cancelled();
   }
 }
