@@ -148,6 +148,7 @@ public class TestExtra extends ConcurrentTestCase {
 		}
 		
 		InputStream ksIn = ClassLoader.getSystemResourceAsStream("localtest.me.pfx");
+		assert ksIn != null;
 	    KeyStore keyStore = java.security.KeyStore.getInstance("PKCS12");
 	    keyStore.load(ksIn, "secret".toCharArray());
 	    TrustManagerFactory tmf = javax.net.ssl.TrustManagerFactory.getInstance(javax.net.ssl.TrustManagerFactory.getDefaultAlgorithm());
