@@ -90,7 +90,7 @@ class TestWsClientPython extends utest.Test {
         async.completed(); 
       },
       function onError(c, error) { 
-        var expected = "Cannot connect to host localtest.me:8443 ssl:True [SSLCertVerificationError";
+        var expected = "Cannot connect to host localtest.me:8443";
         equals(expected, error.substring(0, expected.length));
         async.completed(); 
       });

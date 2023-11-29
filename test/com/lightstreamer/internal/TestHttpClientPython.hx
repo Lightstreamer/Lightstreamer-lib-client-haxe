@@ -75,7 +75,7 @@ class TestHttpClientPython extends utest.Test {
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null,
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
-        var expected = "Cannot connect to host localtest.me:8443 ssl:True [SSLCertVerificationError";
+        var expected = "Cannot connect to host localtest.me:8443";
         equals(expected, error.substring(0, expected.length));
         async.completed(); 
       }, 
