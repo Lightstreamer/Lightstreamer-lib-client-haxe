@@ -559,22 +559,10 @@ typedef NativeTrustManager = com.lightstreamer.internal.SSLContext;
 #end
 
 #if java
-private class RunnableImpl implements java.lang.Runnable {
-  final task: ()->Void;
-
-  public function new(task: ()->Void) {
-    this.task = task;
-  }
-
-	public function run() {
-    task();
-  }
-}
-
 @:forward(run)
-abstract NativeFuture(java.util.concurrent.FutureTask<Dynamic>) {
-  public function new(task: ()->Void) {
-    this = new java.util.concurrent.FutureTask<Dynamic>(new RunnableImpl(task), null);
+abstract NativeFuture(java.util.concurrent.FutureTask<Dynamic>) to java.util.concurrent.FutureTask<Dynamic> {
+  inline public function new(task: ()->Void) {
+    this = new java.util.concurrent.FutureTask<Dynamic>(cast task, null);
   }
 }
 #elseif cs

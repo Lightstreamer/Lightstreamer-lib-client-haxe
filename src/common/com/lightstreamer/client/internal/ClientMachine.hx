@@ -4545,7 +4545,12 @@ class ClientMachine {
       userThread.stop();
       actionLogger.logInfo("Shutdown completed");
     });
+    #if java
+    // workaround for issue https://github.com/HaxeFoundation/haxe/issues/11236
+    new java.lang.Thread(future).start();
+    #else
     sys.thread.Thread.create(future.run);
+    #end
     return future;
   }
   #end
