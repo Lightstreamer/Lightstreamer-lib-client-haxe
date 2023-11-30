@@ -1,5 +1,9 @@
 package ls.haxe;
 
+import android.content.res.AssetManager;
+
+import androidx.test.platform.app.InstrumentationRegistry;
+
 import java.io.InputStream;
 import java.net.HttpCookie;
 import java.net.URI;
@@ -133,7 +137,9 @@ public class TestExtra extends ConcurrentTestCase {
             client.connectionOptions.setPollingInterval(100);
         }
 
-        InputStream ksIn = ClassLoader.getSystemResourceAsStream("localtest.me.pfx");
+        AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
+        InputStream ksIn = assetManager.open("localtest.me.pfx");
+        assert ksIn != null;
         KeyStore keyStore = java.security.KeyStore.getInstance("PKCS12");
         keyStore.load(ksIn, "secret".toCharArray());
         TrustManagerFactory tmf = javax.net.ssl.TrustManagerFactory.getInstance(javax.net.ssl.TrustManagerFactory.getDefaultAlgorithm());
