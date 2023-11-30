@@ -26,7 +26,7 @@ class Runner {
   
   var current: Int = 0;
   var currentTest: Test = null;
-  var currentTimer: hx.concurrent.executor.Executor.TaskFuture<Void> = null;
+  var currentTimer: Executor.TaskHandle = null;
   final testCases: Array<TestCase> = [];
 
   final sem = new hx.concurrent.lock.Semaphore(0);

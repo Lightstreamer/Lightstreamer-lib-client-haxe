@@ -1,13 +1,12 @@
 package utest;
 
-import hx.concurrent.executor.Executor;
 import haxe.Exception;
 import deepequal.DeepEqual;
 import utils.Expectations;
 
 using Lambda;
 
-private final executor = Executor.create();
+private final executor = new Executor();
 
 @:rtti
 class Test {
@@ -149,6 +148,6 @@ class Test {
   }
 
   function delay(task: ()->Void, ms: Int) {
-    return executor.submit(task, Schedule.ONCE(ms));
+    return executor.schedule(task, ms);
   }
 }
