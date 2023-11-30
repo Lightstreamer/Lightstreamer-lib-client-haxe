@@ -1,5 +1,6 @@
 package com.lightstreamer.internal;
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -17,8 +18,13 @@ class Executor {
     exec.execute((cast callback: Runnable));
   }
 
-  inline public function schedule(callback: ()->Void, delay: Types.Millis): TaskHandle {
-    return exec.schedule((cast callback: Runnable), delay, TimeUnit.MILLISECONDS);
+  public function schedule(callback: ()->Void, delay: Types.Millis): TaskHandle {
+    // workaround for issue https://github.com/HaxeFoundation/haxe/issues/11236
+    if (callback is Runnable) {
+      return exec.schedule((cast callback: Runnable), delay, TimeUnit.MILLISECONDS);
+    } else {
+      return exec.schedule((cast callback: Callable<Dynamic>), delay, TimeUnit.MILLISECONDS);
+    }
   }
 
   public function stop() {
