@@ -17,8 +17,8 @@ classifiers = [
 ]
 keywords = ["lightstreamer", "push", "realtime", "real-time"]
 dependencies = [
-    "aiohttp >= 3.8.1",
-    "jsonpatch >= 1.32"
+    "aiohttp >= 3.8.6",
+    "jsonpatch >= 1.33"
 ]
 requires-python = ">=3.7"
 

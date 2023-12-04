@@ -16,7 +16,7 @@
     <copyright>Copyright (c) Lightstreamer Srl.</copyright>
     <tags>Lightstreamer Realtime real-time Pub/Sub Messaging Publish Subscribe realtime comet HTTP Unity Xamarin Core websocket websockets streaming</tags>
     <dependencies>
-        <dependency id="Microsoft.AspNetCore.JsonPatch" version="6.0.11" />
+        <dependency id="Microsoft.AspNetCore.JsonPatch" version="6.0.25" />
     </dependencies>
   </metadata>
   <files>

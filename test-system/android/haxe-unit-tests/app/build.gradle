@@ -31,10 +31,10 @@ dependencies {
     def home = System.properties['user.home']
     implementation files("${home}/git/lib-client-haxe/bin-test/android/TestAll.jar")
     implementation files("${home}/git/lib-client-haxe/bin/android/build/api/lib/ls-android-client-api.jar")
-    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
-    implementation 'com.squareup.okhttp3:okhttp-urlconnection:4.9.3'
-    implementation 'com.squareup.okhttp3:okhttp-tls:4.9.3'
-    implementation 'com.flipkart.zjsonpatch:zjsonpatch:0.4.12'
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection:4.12.0'
+    implementation 'com.squareup.okhttp3:okhttp-tls:4.12.0'
+    implementation 'com.flipkart.zjsonpatch:zjsonpatch:0.4.14'
     implementation 'com.google.android.gms:play-services-base:18.0.1'
 
     implementation 'androidx.appcompat:appcompat:1.4.0'
