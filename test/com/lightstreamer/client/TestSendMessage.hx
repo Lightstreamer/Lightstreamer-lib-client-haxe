@@ -1,6 +1,6 @@
 package com.lightstreamer.client;
 
-import com.lightstreamer.client.BaseListener.BaseMessageListener;
+import com.lightstreamer.client.BaseListener;
 
 class TestSendMessage extends utest.Test {
   var ws: MockWsClient;
@@ -119,6 +119,9 @@ class TestSendMessage extends utest.Test {
   }
 
   function testEnqueueWhileDisconnected_eq_false(async: utest.Async) {
+    var listener = new BaseClientListener();
+    listener._onStatusChange = (status) -> if (status == "CONNECTED:WS-STREAMING") exps.signal(status);
+    client.addListener(listener);
     exps
     .then(() -> {
       client._sendMessage("m1");
@@ -137,6 +140,7 @@ class TestSendMessage extends utest.Test {
     .await("ws.init http://server/lightstreamer")
     .await("wsok")
     .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .await("CONNECTED:WS-STREAMING")
     .then(() -> {
       client._sendMessage("m10");
       client._sendMessage("m20", msgListener);
@@ -168,13 +172,13 @@ class TestSendMessage extends utest.Test {
     .await("ws.init http://server/lightstreamer")
     .await("wsok")
     .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .await("msg\r\nLS_reqId=1&LS_message=m1&LS_outcome=false&LS_ack=false\r\nLS_reqId=2&LS_message=m2&LS_msg_prog=1\r\nLS_reqId=3&LS_message=m3&LS_outcome=false&LS_sequence=seq&LS_msg_prog=1\r\nLS_reqId=4&LS_message=m4&LS_sequence=seq&LS_msg_prog=2")
     .then(() -> {
       client._sendMessage("m10", true);
       client._sendMessage("m20", msgListener, true);
       client._sendMessage("m30", "seq", true);
       client._sendMessage("m40", "seq", msgListener, true);
     })
-    .await("msg\r\nLS_reqId=1&LS_message=m1&LS_outcome=false&LS_ack=false\r\nLS_reqId=2&LS_message=m2&LS_msg_prog=1\r\nLS_reqId=3&LS_message=m3&LS_outcome=false&LS_sequence=seq&LS_msg_prog=1\r\nLS_reqId=4&LS_message=m4&LS_sequence=seq&LS_msg_prog=2")
     .await("msg\r\nLS_reqId=5&LS_message=m10&LS_outcome=false&LS_ack=false")
     .await("msg\r\nLS_reqId=6&LS_message=m20&LS_msg_prog=2")
     .await("msg\r\nLS_reqId=7&LS_message=m30&LS_outcome=false&LS_sequence=seq&LS_msg_prog=3")
@@ -184,6 +188,9 @@ class TestSendMessage extends utest.Test {
   }
 
   function testSequence(async: utest.Async) {
+    var listener = new BaseClientListener();
+    listener._onStatusChange = (status) -> if (status == "CONNECTED:WS-STREAMING") exps.signal(status);
+    client.addListener(listener);
     exps
     .then(() -> {
       client.connect();
@@ -194,6 +201,7 @@ class TestSendMessage extends utest.Test {
     .await("ws.init http://server/lightstreamer")
     .await("wsok")
     .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .await("CONNECTED:WS-STREAMING")
     .then(() -> {
       client._sendMessage("foo", "seq1");
       client._sendMessage("bar", "seq2");
@@ -207,6 +215,9 @@ class TestSendMessage extends utest.Test {
   }
 
   function testProg(async: utest.Async) {
+    var listener = new BaseClientListener();
+    listener._onStatusChange = (status) -> if (status == "CONNECTED:WS-STREAMING") exps.signal(status);
+    client.addListener(listener);
     exps
     .then(() -> {
       client.connect();
@@ -217,6 +228,7 @@ class TestSendMessage extends utest.Test {
     .await("ws.init http://server/lightstreamer")
     .await("wsok")
     .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .await("CONNECTED:WS-STREAMING")
     .then(() -> {
       client._sendMessage("foo", "seq");
       client._sendMessage("zap");
@@ -230,6 +242,9 @@ class TestSendMessage extends utest.Test {
   }
 
   function testTimeout(async: utest.Async) {
+    var listener = new BaseClientListener();
+    listener._onStatusChange = (status) -> if (status == "CONNECTED:WS-STREAMING") exps.signal(status);
+    client.addListener(listener);
     exps
     .then(() -> {
       client.connect();
@@ -240,6 +255,7 @@ class TestSendMessage extends utest.Test {
     .await("ws.init http://server/lightstreamer")
     .await("wsok")
     .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .await("CONNECTED:WS-STREAMING")
     .then(() -> {
       client._sendMessage("foo", "seq", 100);
       client._sendMessage("zap", 100);
@@ -272,6 +288,9 @@ class TestSendMessage extends utest.Test {
   }
 
   function testMSGDONE_NoSequence(async: utest.Async) {
+    var listener = new BaseClientListener();
+    listener._onStatusChange = (status) -> if (status == "CONNECTED:WS-STREAMING") exps.signal(status);
+    client.addListener(listener);
     exps
     .then(() -> {
       client.connect();
@@ -282,6 +301,7 @@ class TestSendMessage extends utest.Test {
     .await("ws.init http://server/lightstreamer")
     .await("wsok")
     .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .await("CONNECTED:WS-STREAMING")
     .then(() -> {
       client._sendMessage("foo", msgListener);
       client._sendMessage("bar", msgListener);
@@ -324,6 +344,9 @@ class TestSendMessage extends utest.Test {
   }
 
   function testMSGFAIL_NoSequence(async: utest.Async) {
+    var listener = new BaseClientListener();
+    listener._onStatusChange = (status) -> if (status == "CONNECTED:WS-STREAMING") exps.signal(status);
+    client.addListener(listener);
     exps
     .then(() -> {
       client.connect();
@@ -334,6 +357,7 @@ class TestSendMessage extends utest.Test {
     .await("ws.init http://server/lightstreamer")
     .await("wsok")
     .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .await("CONNECTED:WS-STREAMING")
     .then(() -> {
       client._sendMessage("foo", msgListener);
       client._sendMessage("bar", msgListener);
@@ -349,6 +373,9 @@ class TestSendMessage extends utest.Test {
   }
 
   function testMSGFAIL_error39(async: utest.Async) {
+    var listener = new BaseClientListener();
+    listener._onStatusChange = (status) -> if (status == "CONNECTED:WS-STREAMING") exps.signal(status);
+    client.addListener(listener);
     exps
     .then(() -> {
       client.connect();
@@ -359,6 +386,7 @@ class TestSendMessage extends utest.Test {
     .await("ws.init http://server/lightstreamer")
     .await("wsok")
     .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .await("CONNECTED:WS-STREAMING")
     .then(() -> {
       client._sendMessage("foo1", "seq", msgListener);
       client._sendMessage("foo2", "seq", msgListener);
