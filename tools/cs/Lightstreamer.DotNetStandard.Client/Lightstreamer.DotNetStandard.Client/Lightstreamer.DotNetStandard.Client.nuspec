@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Lightstreamer.DotNetStandard.Client</id>
-    <version>6.1.0-a.1</version>
+    <version>6.1.0-a.10</version>
     <title>Lightstreamer .NET Standard Client SDK</title>
     <authors>support@lightstreamer.com</authors>
     <owners>support@lightstreamer.com</owners>
