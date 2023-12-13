@@ -47,7 +47,12 @@
      */
 var MpnSubscription = function() {
   var mode = arguments[0], items = arguments[1], fields = arguments[2];
-  this.delegate = new LSMpnSubscription(mode, items, fields, this);
+  if (typeof mode === 'string') {
+    this.delegate = new LSMpnSubscription(mode, items, fields, this);
+  } else {
+    var sub = mode.delegate;
+    this.delegate = new LSMpnSubscription(sub, null, null, this);
+  }
 };
 
 MpnSubscription.prototype = {

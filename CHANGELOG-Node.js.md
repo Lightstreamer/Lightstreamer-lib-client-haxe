@@ -90,4 +90,4 @@ The signatures of the following methods have been changed:
 
 # Previous Versions
 
-See the full [changelog](https://github.com/Lightstreamer/Lightstreamer-lib-client-javascript/blob/v8.2.0/CHANGELOG_Nodejs.md).
+See the full [changelog](https://github.com/Lightstreamer/Lightstreamer-lib-client-javascript/blob/master/CHANGELOG_Nodejs.md).

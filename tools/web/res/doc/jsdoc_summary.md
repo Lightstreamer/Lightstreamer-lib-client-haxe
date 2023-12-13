@@ -20,9 +20,7 @@ The library also offers support for Web Push Notifications on Apple platforms vi
 The library is distributed through the <a href="https://www.npmjs.com/package/lightstreamer-client-web" target="_top">npm service</a>. It supports module bundlers like Webpack, Rollup.js and Browserify; further it is compatible with an AMD loader like Require.js, and it can be accessed through global variables. 
 
 Depending on the chosen deployment architecture, on the browser in use, and on some configuration parameters, the Web Client Library will try to connect to the designated Lightstreamer Server in the best possible way.
-A <a href="https://docs.google.com/spreadsheets/d/1Lu-g-dmm_9gmrnf043wbjYRcoRC7fFAFCfUirIUpzXg/edit#gid=1" target="_top">Deployment Configuration Matrix</a> is available online, which summarizes the client-side combinations and the instructions on which settings to use to guarantee that an optimal connection is established. See the legend on the second tab to learn about the meaning of each column.
-
-More introductory notes are provided in the Web Client Guide document that can be found in the [Github project](https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe). Look for the relevant tag.
+In order to allow communication between application pages and Lightstreamer Server, suitable configuration on the Server is needed, to deal with the browser's CORS restrictions. This is achieved through the cross_domain_policy configuration block. By factory settings, no restrictions are posed.
 
 The JavaScript library can be available depending on Edition and License Type. To know what features are enabled by your license, please see the License tab of the Monitoring Dashboard (by default, available at /dashboard).
 

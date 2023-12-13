@@ -92,11 +92,18 @@
       <arg value="html"/>
       <arg value="SPHINXOPTS=-D release=${version}"/>
     </exec>
+    <exec executable="cmd" dir="${docs}" osfamily="windows">
+      <arg value="/c"/>
+      <arg value="rmdir"/>
+      <arg value="/Q"/>
+      <arg value="/S"/>
+      <arg value="build"/>
+    </exec>
     <exec executable="cmd" dir="${docs}" failonerror="true" osfamily="windows">
       <arg value="/c"/>
       <arg value="make.bat"/>
-      <arg value="clean"/>
       <arg value="html"/>
+      <env key="SPHINXOPTS" value="-D release=${version}"/>
     </exec>
     <copy todir="${docs.to}">
       <fileset dir="${docs.from}"/>

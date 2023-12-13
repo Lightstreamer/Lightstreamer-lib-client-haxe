@@ -421,7 +421,11 @@ abstract NativeList<T>(Array<T>) {
 #end
 
 #if js
-abstract NativeArray<T>(Array<T>) {
+// when the target is js, haxe arrays and javascript arrays are really the same type.
+// however, to differentiate them, I use JsArray for javascript arrays and Array for haxe arrays
+private typedef JsArray<T> = Array<T>;
+
+abstract NativeArray<T>(JsArray<T>) {
   @:from
   public static inline function fromHaxeArray<T>(a: Array<T>) {
     return new NativeArray(a);
@@ -437,7 +441,23 @@ abstract NativeArray<T>(Array<T>) {
   }
 
   public inline function toHaxe(): Array<T> {
-    return this.copy();
+    return copy(this);
+  }
+
+  /*
+  I cannot copy an external JsArray by means of JsArray.copy, because if
+  the array was created in a different context (e.g. another page,
+  frame etc.) all the tests like "x instanceof Array" would fail
+  (see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray#instanceof_vs._array.isarray)
+  */
+  function copy(a: JsArray<T>): Array<T> {
+    var b = [];
+    var i = 0, len = a.length;
+    while (i < len) {
+        b[i] = a[i];
+        i++;
+    }
+    return b;
   }
 }
 #elseif java
