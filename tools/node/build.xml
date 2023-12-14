@@ -15,7 +15,7 @@
 
   <property name="haxe.orig.lib" location="${obj}/ls_node_client_haxe_orig.js"/>
   <property name="haxe.lib" location="${obj}/ls_node_client_haxe.js"/>
-  <property name="rollup.config" location="${tools}/res/rollup.config.js"/>
+  <property name="rollup.config" location="${tools}/res/rollup.config.mjs"/>
 
   <property name="package.json.template" location="${tools}/res/package.json"/>
   <property name="package.json" location="${dist}/package.json"/>

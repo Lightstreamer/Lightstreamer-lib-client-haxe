@@ -1,15 +1,15 @@
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
-import { terser } from 'rollup-plugin-terser'
-import JsUtils from '../../JsUtils'
-import pkg from '../../../bin/now4real/build/dist/nolog/package.json'
-import classes from '../../../src/wrapper/web/core/wrapper.export.json';
+import terser from '@rollup/plugin-terser'
+import JsUtils from '../../JsUtils.mjs'
+import pkg from '../../../bin/now4real/build/dist/log/package.json' assert { type: 'json' };
+import classes from '../../../src/wrapper/web/core/wrapper.export.json' assert { type: 'json' };
 
-const dist = 'bin/now4real/build/dist/nolog'
+const dist = 'bin/now4real/build/dist/log'
 
 export default [
   {
-    input: 'bin/now4real/build/nolog/obj/ls_web_client_wrapper.js',
+    input: 'bin/now4real/build/log/obj/ls_web_client_wrapper.js',
     output: [ 
       {
         name: 'lightstreamerExports',

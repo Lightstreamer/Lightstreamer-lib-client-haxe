@@ -20,9 +20,9 @@
 
   <property name="haxe.orig.lib" location="${obj}/ls_web_client_haxe_orig.js"/>
   <property name="haxe.lib" location="${obj}/ls_web_client_haxe.js"/>
-  <property name="rollup.config" location="${tools}/res/rollup.config.full.js"/>
+  <property name="rollup.config" location="${tools}/res/rollup.config.full.mjs"/>
   
-  <property name="rollup.config.widgets" location="${tools}/res/rollup.config.widgets.js"/>
+  <property name="rollup.config.widgets" location="${tools}/res/rollup.config.widgets.mjs"/>
   <property name="widgets.lib" location="${obj}/lightstreamer-widgets.js"/>
   <property name="package.json.template" location="${tools}/res/package.json"/>
   <property name="package.json" location="${dist}/package.json"/>
@@ -131,7 +131,7 @@
     <exec executable="npx" failonerror="true">
       <arg value="rollup"/>
       <arg value="--config"/>
-      <arg value="${tools}/res/rollup.config.test.js"/>
+      <arg value="${tools}/res/rollup.config.test.mjs"/>
     </exec>
     <exec executable="open">
       <arg value="index.html"/>

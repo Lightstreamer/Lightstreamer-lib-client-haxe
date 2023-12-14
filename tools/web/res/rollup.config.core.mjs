@@ -1,26 +1,26 @@
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
-import { terser } from 'rollup-plugin-terser'
-import JsUtils from '../../JsUtils'
-import pkg from '../../../bin/web/build/dist/npm/package.json'
-import classes from '../../../src/wrapper/web/mpn/wrapper.export.json';
+import terser from '@rollup/plugin-terser'
+import JsUtils from '../../JsUtils.mjs'
+import pkg from '../../../bin/web/build/dist/npm/package.json' assert { type: 'json' };
+import classes from '../../../src/wrapper/web/core/wrapper.export.json' assert { type: 'json' };
 
 const dist = 'bin/web/build/dist/npm'
 
 export default [
   {
-    input: 'bin/web/build/mpn/obj/ls_web_client_wrapper.js',
+    input: 'bin/web/build/core/obj/ls_web_client_wrapper.js',
     output: [ 
       {
         name: 'lightstreamerExports',
-        file: `${dist}/lightstreamer-mpn.js`,
+        file: `${dist}/lightstreamer-core.js`,
         format: 'iife',
         banner: JsUtils.generateCopyright("Web", pkg.version, "UMD", classes) + "\n" + JsUtils.generateUmdHeader(classes),
         footer: JsUtils.generateUmdFooter('lightstreamerExports')
       },
       {
         name: 'lightstreamerExports',
-        file: `${dist}/lightstreamer-mpn.min.js`,
+        file: `${dist}/lightstreamer-core.min.js`,
         format: 'iife',
         banner: JsUtils.generateCopyright("Web", pkg.version, "UMD", classes) + "\n" + JsUtils.generateUmdHeader(classes),
         footer: JsUtils.generateUmdFooter('lightstreamerExports'),
@@ -30,12 +30,12 @@ export default [
         ]
       },
       {
-        file: `${dist}/lightstreamer-mpn.esm.js`,
+        file: `${dist}/lightstreamer-core.esm.js`,
         format: 'es',
         banner: JsUtils.generateCopyright("Web", pkg.version, "ESM", classes)
       },
       {
-        file: `${dist}/lightstreamer-mpn.common.js`,
+        file: `${dist}/lightstreamer-core.common.js`,
         format: 'cjs',
         banner: JsUtils.generateCopyright("Web", pkg.version, "CJS", classes)
       }
