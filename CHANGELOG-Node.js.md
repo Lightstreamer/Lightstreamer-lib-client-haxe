@@ -1,5 +1,13 @@
 # Lightstreamer Node.js Client Changelog
 
+## 9.1.0
+*Compatible with Lightstreamer Server since 7.4.0*<br/>
+*Compatible with code developed with the previous version.*<br/>
+*Made available on 19 Dec 2023*
+
+Improved the client's performance to handle more server updates per second.
+
+
 ## 9.0.0
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
 *Not compatible with code developed with the previous version.*<br/>
