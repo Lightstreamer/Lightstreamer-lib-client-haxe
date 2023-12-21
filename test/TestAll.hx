@@ -54,6 +54,7 @@ class TestAll {
     #end
     #if LS_MPN
     runner.addCase(com.lightstreamer.client.mpn.TestMpnSubscription);
+    runner.addCase(com.lightstreamer.client.mpn.TestMpnSubscribe);
     #if js
     runner.addCase(com.lightstreamer.client.mpn.TestMpnDeviceWeb);
     runner.addCase(com.lightstreamer.client.mpn.TestMpnBuilderFirebase);

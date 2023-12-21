@@ -115,6 +115,72 @@ public class TestMpn {
         client.disconnect();
     }
 
+    @Test(timeout=7000)
+    public void testEarlyDeletion() throws Throwable {
+        final SequencingMonitor lsMonitor = new SequencingMonitor();
+
+        client.connect();
+        client.registerForMpn(device);
+
+        /*
+         * NB the following trigger conditions are always false because
+         * the counter value is always bigger than zero.
+         */
+
+        String descriptor= new MpnBuilder()
+                .priority("NORMAL")
+                .title("my_title")
+                .body("my_body")
+                .icon("my_icon")
+                .build();
+
+        MpnSubscription sub1 = new MpnSubscription("MERGE");
+        sub1.setDataAdapter("COUNT");
+        sub1.setItems(new String[] {"count"});
+        sub1.setFieldSchema("count");
+        sub1.setNotificationFormat(descriptor);
+        sub1.setTriggerExpression("Integer.parseInt(${count}) < -1");
+
+        MpnSubscription sub2 = new MpnSubscription("MERGE");
+        sub2.setDataAdapter("COUNT");
+        sub2.setItems(new String[] {"count"});
+        sub2.setFieldSchema("count");
+        sub2.setNotificationFormat(descriptor);
+        sub2.setTriggerExpression("Integer.parseInt(${count}) < -2");
+
+        client.subscribe(sub1, false);
+        client.subscribe(sub2, false);
+
+        lsMonitor.awaitUntil(new Condition() {
+            public boolean test() {
+                return client.getMpnSubscriptions("SUBSCRIBED").size() == 2;
+            }
+        });
+
+        /* disconnect */
+
+        client.disconnect();
+
+        device.addListener(new StdoutMpnDeviceListener() {
+            @Override
+            public void onSubscriptionsUpdated() {
+                lsMonitor.signal("SIGNAL => onSubscriptionsUpdated");
+            }
+        });
+
+        /* reconnect */
+
+        client.connect();
+        client.unsubscribeMpnSubscriptions(null);
+
+        while (true) {
+            lsMonitor.await("SIGNAL => onSubscriptionsUpdated");
+            if (client.getMpnSubscriptions(null).size() == 0) {
+                break;
+            }
+        }
+    }
+
     /**
      * Verifies that the client registers to the MPN module.
      */
