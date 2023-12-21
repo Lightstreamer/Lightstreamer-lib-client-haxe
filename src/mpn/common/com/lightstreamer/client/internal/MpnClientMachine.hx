@@ -536,18 +536,46 @@ class MpnClientMachine extends ClientMachine {
         goto(state.s_mpn.sbs = s423);
         genSUBS_update(mpnSubId, update);
       }
-    } else if (state.s_mpn.sbs == s424 && command != "DELETE" && status != null && !exists(mpnSubId)) {
-      if (mpn_snapshotSet.count() == 0 || (mpn_snapshotSet.count() == 1 && mpn_snapshotSet.contains(mpnSubId))) {
-        doRemoveFromMpnSnapshot(mpnSubId);
-        doAddMpnSubscription(mpnSubId);
-        goto(state.s_mpn.sbs = s424);
-        genSUBS_update(mpnSubId, update);
-        notifyOnSubscriptionsUpdated();
-      } else if ((mpn_snapshotSet.count() == 1 && !mpn_snapshotSet.contains(mpnSubId)) || mpn_snapshotSet.count() > 1) {
-        doRemoveFromMpnSnapshot(mpnSubId);
-        doAddMpnSubscription(mpnSubId);
-        goto(state.s_mpn.sbs = s424);
-        genSUBS_update(mpnSubId, update);
+    } else if (state.s_mpn.sbs == s424 && !exists(mpnSubId)) {
+      if (command == "DELETE") {
+        if (mpn_snapshotSet.contains(mpnSubId)) {
+          if (mpn_snapshotSet.count() == 1) {
+            doRemoveFromMpnSnapshot(mpnSubId);
+            goto(state.s_mpn.sbs = s424);
+            notifyOnSubscriptionsUpdated();
+          } else {
+            doRemoveFromMpnSnapshot(mpnSubId);
+            goto(state.s_mpn.sbs = s424);
+          }
+        }
+      } else {
+        if (status != null) {
+          if (mpn_snapshotSet.contains(mpnSubId)) {
+            if (mpn_snapshotSet.count() == 1) {
+              doRemoveFromMpnSnapshot(mpnSubId);
+              doAddMpnSubscription(mpnSubId);
+              goto(state.s_mpn.sbs = s424);
+              genSUBS_update(mpnSubId, update);
+              notifyOnSubscriptionsUpdated();
+            } else {
+              doRemoveFromMpnSnapshot(mpnSubId);
+              doAddMpnSubscription(mpnSubId);
+              goto(state.s_mpn.sbs = s424);
+              genSUBS_update(mpnSubId, update);
+            }
+          } else {
+            if (mpn_snapshotSet.count() == 0) {
+              doAddMpnSubscription(mpnSubId);
+              goto(state.s_mpn.sbs = s424);
+              genSUBS_update(mpnSubId, update);
+              notifyOnSubscriptionsUpdated();
+            } else {
+              doAddMpnSubscription(mpnSubId);
+              goto(state.s_mpn.sbs = s424);
+              genSUBS_update(mpnSubId, update);
+            }
+          }
+        }
       }
     }
   }

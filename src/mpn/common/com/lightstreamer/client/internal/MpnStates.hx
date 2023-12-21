@@ -13,7 +13,7 @@ enum abstract State_mpn_tk(Int) {
 }
 
 enum abstract State_mpn_sbs(Int) {
-  var s420 = 420; var s421 = 421; var s422 = 422; var s423 = 423; var s424 = 424; var s425 = 425;
+  var s420 = 420; var s421 = 421; var s422 = 422; var s423 = 423; var s424 = 424;
 }
 
 enum abstract State_mpn_ft(Int) {
