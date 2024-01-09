@@ -1,5 +1,13 @@
 # Lightstreamer Web Client Changelog
 
+## 9.1.1
+*Compatible with Lightstreamer Server since 7.4.0*<br/>
+*Compatible with code developed with the previous version.*<br/>
+*Made available on XXXXXX*
+
+Fixed a bug that could prevent the `onSubscriptionsUpdated` event of `MpnDeviceListener` from firing when the `unsubscribeMpnSubscriptions` method of `LightstreamerClient` was invoked while registering an `MpnDevice`.
+
+
 ## 9.1.0
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
 *Compatible with code developed with the previous version.*<br/>
