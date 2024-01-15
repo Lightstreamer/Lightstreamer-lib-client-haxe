@@ -1,15 +1,33 @@
 package com.lightstreamer.internal;
 
+import com.lightstreamer.internal.WorkerTimer;
+
 typedef TimeoutHandle = Int;
 
 inline function setTimeout(callback: ()->Void, delay: Int): TimeoutHandle {
-  return js.Lib.global.setTimeout(callback, delay);
+  return WorkerTimer.setTimeout(callback, delay);
 }
 
 inline function clearTimeout(handle: TimeoutHandle) {
-  js.Lib.global.clearTimeout(handle);
+  WorkerTimer.clearTimeout(handle);
 }
 
-inline function setImmediate(callback: ()->Void): Void {
-  js.Lib.global.setTimeout(callback);
+function setImmediate(callback: ()->Void): Void {
+  queue.push(callback);
+  WorkerTimer.setTimeout(handleQueue, 0);
+}
+
+private final queue: Array<()->Void> = [];
+
+private function handleQueue() {
+  var task = queue.shift();
+  if (task == null) {
+    com.lightstreamer.log.LoggerTools.internalLogger.logError('Timer callback not found');
+    return;
+  }
+  try {
+    task();
+  } catch(e) {
+    com.lightstreamer.log.LoggerTools.internalLogger.logErrorEx('Timer callback failed', e);
+  }
 }

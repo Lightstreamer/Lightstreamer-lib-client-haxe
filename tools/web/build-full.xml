@@ -36,6 +36,8 @@
   <property name="wrapper.inc" location="${wrapper}/wrapper.inc"/>
   <property name="js.dir" location="src/wrapper/js"/>
 
+  <include file="${tools}/build-common.xml"/>
+
   <target name="package" depends="types.d.ts" description="Build the library">
   </target>
 
@@ -56,7 +58,7 @@
     <echo>Log of types.d.ts is saved in `${types.d.ts.log}`</echo>
   </target>
 
-  <target name="package_libs" depends="package_haxe,package_widgets">
+  <target name="package_libs" depends="package_haxe,package_widgets,common.package_worker_timers">
     <exec executable="npx" failonerror="true">
       <arg value="rollup"/>
       <arg value="--config"/>
@@ -116,7 +118,7 @@
     </exec>
   </target>
 
-  <target name="test" description="Run the tests">
+  <target name="test" depends="common.test.package_worker_timers" description="Run the tests">
     <exec executable="haxe" failonerror="true">
       <arg value="test.web.hxml"/>
       <arg value="-D" if:set="UTEST_PATTERN"/><arg value="UTEST_PATTERN=${UTEST_PATTERN}" if:set="UTEST_PATTERN"/>

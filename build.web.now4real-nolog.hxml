@@ -1,6 +1,4 @@
-build.js.common.hxml
-
---class-path src/platform/web
+build.web.common.hxml
 
 --js bin/now4real/build/nolog/obj/ls_web_client_haxe_orig.js
 

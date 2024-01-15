@@ -33,7 +33,9 @@
   <property name="wrapper.inc" location="${wrapper}/wrapper.inc"/>
   <property name="js.dir" location="src/wrapper/js"/>
 
-  <target name="package" depends="package_common,package_haxe" description="Build the library">
+  <include file="${tools}/build-common.xml"/>
+
+  <target name="package" depends="package_common,package_haxe,common.package_worker_timers" description="Build the library">
     <exec executable="npx" failonerror="true">
       <arg value="rollup"/>
       <arg value="--config"/>
@@ -84,7 +86,7 @@
     </exec>
   </target>
 
-  <target name="test" description="Run the tests">
+  <target name="test" depends="common.test.package_worker_timers" description="Run the tests">
     <exec executable="haxe" failonerror="true">
       <arg value="test.web.hxml"/>
       <arg value="-D" if:set="UTEST_PATTERN"/><arg value="UTEST_PATTERN=${UTEST_PATTERN}" if:set="UTEST_PATTERN"/>

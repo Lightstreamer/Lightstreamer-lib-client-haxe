@@ -22,6 +22,7 @@ class TestAll {
     runner.addCase(TestSubscription);
     runner.addCase(TestEventDispatcher);
     runner.addCase(TestTimer);
+    runner.addCase(TestExecutor);
     runner.addCase(TestUrl);
     runner.addCase(TestRequestBuilder);
     runner.addCase(TestMyArray);

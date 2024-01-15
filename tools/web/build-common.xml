@@ -1,0 +1,46 @@
+<project name="common"
+  xmlns:if="ant:if" xmlns:unless="ant:unless"
+  basedir="../..">
+
+  <property name="worker-timers.rollup.config" location="${tools}/res/rollup.config.worker-timers.mjs"/>
+  <property name="worker-timers.src" location="src-worker-timers/worker-timers.ts"/>
+  <property name="worker-timers.lib" location="${obj}/worker-timers.js"/>
+  <property name="test.worker-timers.lib" location="${test}/worker-timers.js"/>
+
+  <target name="package_worker_timers.check">
+    <condition property="package_worker_timers.run">
+      <not>
+        <available file="${worker-timers.lib}"/>
+      </not>
+    </condition>
+  </target>
+
+  <target name="package_worker_timers" depends="package_worker_timers.check" if="package_worker_timers.run">
+    <exec executable="npx" failonerror="true">
+      <arg value="rollup"/>
+      <arg value="--config"/>
+      <arg value="${worker-timers.rollup.config}"/>
+      <arg value="--configInput"/><arg value="${worker-timers.src}"/>
+      <arg value="--configOutputDir"/><arg value="${obj}"/>
+    </exec>
+  </target>
+
+  <target name="test.package_worker_timers.check">
+    <condition property="test.package_worker_timers.run">
+      <not>
+        <available file="${test.worker-timers.lib}"/>
+      </not>
+    </condition>
+  </target>
+
+  <target name="test.package_worker_timers" depends="test.package_worker_timers.check" if="test.package_worker_timers.run">
+    <exec executable="npx" failonerror="true">
+      <arg value="rollup"/>
+      <arg value="--config"/>
+      <arg value="${worker-timers.rollup.config}"/>
+      <arg value="--configInput"/><arg value="${worker-timers.src}"/>
+      <arg value="--configOutputDir"/><arg value="${test}"/>
+    </exec>
+  </target>
+
+</project>
