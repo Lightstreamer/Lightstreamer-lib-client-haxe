@@ -409,7 +409,7 @@ class TestClient extends utest.Test {
     setTransport();
     exps
     .then(() -> {
-      client.connectionOptions.setHttpExtraHeaders(["X-Header" => "header"]);
+      client.connectionOptions.setHttpExtraHeaders(["hello" => "header"]);
       listener._onStatusChange = status -> if (status == connectedString) exps.signal("connected");
       client.connect();
     });
