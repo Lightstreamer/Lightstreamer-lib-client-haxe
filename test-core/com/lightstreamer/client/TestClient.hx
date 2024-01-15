@@ -451,7 +451,7 @@ class TestClient extends utest.Test {
     setTransport();
     exps
     .then(() -> {
-      client.connectionOptions.setHttpExtraHeaders(["X-Header" => "header"]);
+      client.connectionOptions.setHttpExtraHeaders(["hello" => "header"]);
       listener._onStatusChange = status -> if (status == connectedString) exps.signal("connected");
       client.connect();
     });
@@ -467,7 +467,7 @@ class TestClient extends utest.Test {
     exps
     .then(() -> {
       var hs = client.connectionOptions.getHttpExtraHeaders().toHaxe();
-      equals("header", hs["X-Header"]);
+      equals("header", hs["hello"]);
     })
     .then(() -> async.completed())
     .verify();
