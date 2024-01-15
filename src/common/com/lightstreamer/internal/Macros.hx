@@ -7,34 +7,6 @@ using haxe.macro.TypeTools;
 using Lambda;
 
 /**
- * Patches the method `haxe.Timer.delay` by internally using `setTimeout` instead of `setInterval` in order to fix an issue of the latter when executed in a React Native environment (see `https://github.com/facebook/react-native/issues/37464`).
- * 
- * @see `com.lightstreamer.internal.JsTimer`
- * @see `https://community.haxe.org/t/solved-how-to-make-math-random-deterministic` for a hint about how to patch Haxe standard library
- */
- macro function patchHaxeTimer(): Array<Field> {
-  var fields = Context.getBuildFields();
-  for (field in fields) {
-    if (field.name == "delay") {
-      switch field.kind {
-      case FFun(fun):
-        var args = fun.args;
-        var f = macro $i{args[0].name};
-        var time_ms = macro $i{args[1].name};
-        fun.expr = macro {
-          var t = new com.lightstreamer.internal.JsTimer($time_ms);
-          t.run = $f;
-          return cast t;
-        }
-      default:
-        Context.fatalError("haxe.Timer.delay not found", Context.currentPos());
-      }
-    }
-  }
-  return fields;
-}
-
-/**
  * Synchronizes a class by adding a lock field and by wrapping the bodies of the methods in the expression `lock.synchronized`.
  * 
  * The synchronization is only applied to methods that are:
