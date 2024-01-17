@@ -4,17 +4,22 @@ import com.lightstreamer.internal.WorkerTimer;
 
 typedef TimeoutHandle = Int;
 
+// fall-back to standard setTimeout in environments not supporting web workers (e.g. react native)
+private final hasWorkers = js.Lib.typeof(js.html.Worker) != "undefined";
+private final _setTimeout: (callback: ()->Void, delay: Int) -> TimeoutHandle = hasWorkers ? WorkerTimer.setTimeout : cast js.Browser.window.setTimeout;
+private final _clearTimeout: (handle: TimeoutHandle) -> Void = hasWorkers ? WorkerTimer.clearTimeout : js.Browser.window.clearTimeout;
+
 inline function setTimeout(callback: ()->Void, delay: Int): TimeoutHandle {
-  return WorkerTimer.setTimeout(callback, delay);
+  return _setTimeout(callback, delay);
 }
 
 inline function clearTimeout(handle: TimeoutHandle) {
-  WorkerTimer.clearTimeout(handle);
+  _clearTimeout(handle);
 }
 
 function setImmediate(callback: ()->Void): Void {
   queue.push(callback);
-  WorkerTimer.setTimeout(handleQueue, 0);
+  _setTimeout(handleQueue, 0);
 }
 
 private final queue: Array<()->Void> = [];
