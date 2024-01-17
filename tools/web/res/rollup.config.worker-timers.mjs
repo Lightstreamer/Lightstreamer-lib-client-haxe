@@ -1,4 +1,5 @@
-import { nodeResolve } from '@rollup/plugin-node-resolve'
+import path from 'path';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 
 export default commandLineArgs => {
@@ -13,7 +14,7 @@ export default commandLineArgs => {
     },
     plugins: [
       nodeResolve(),
-      typescript()
+      typescript({ tsconfig: path.join(import.meta.dirname, 'jsconfig.json') })
     ]
   };
 };
