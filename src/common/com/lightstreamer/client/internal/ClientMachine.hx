@@ -4524,7 +4524,7 @@ class ClientMachine {
     if (serverAddress == null) {
       throw new IllegalStateException("Configure the server address before trying to connect");
     }
-    actionLogger.logInfo('Connection requested: details: $details options: $options');
+    actionLogger.logInfo('Connection requested: details: $details options: $options env: ${Globals.instance}');
     defaultServerAddress = new ServerAddress(serverAddress);
     evtExtConnect();
   }

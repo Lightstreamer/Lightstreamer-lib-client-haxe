@@ -40,4 +40,6 @@ class Globals {
   public function getTrustManagerFactory(): Null<RemoteCertificateValidationCallback> {
     return validationCallback;
   }
+
+  public function toString() return "{}";
 }
