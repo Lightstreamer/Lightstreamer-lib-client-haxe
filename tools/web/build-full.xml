@@ -45,9 +45,12 @@
      <exec executable="npx" failonerror="true" output="${types.d.ts.log}">
       <arg value="jsdoc"/>
       <arg value="-t"/>
+      <!-- the template to use for generating output -->
       <arg value="node_modules/tsd-jsdoc/dist"/>
       <arg value="-d"/>
+      <!-- the path to the output folder -->
       <arg value="${dist}"/>
+      <!-- the file to generate documentation for -->
       <arg value="${dist}/lightstreamer.js"/>
     </exec>
     <exec executable="node" failonerror="true">
