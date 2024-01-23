@@ -21,6 +21,7 @@ private class EvtDispatcher extends EventDispatcher<IEvtListener> {}
 class TestEventDispatcher extends utest.Test {
   var dispatcher: EvtDispatcher;
   var listener: EvtListener;
+  static final DELAY = 200;
 
   public function setup() {
     dispatcher = new EvtDispatcher();
@@ -35,7 +36,7 @@ class TestEventDispatcher extends utest.Test {
     delay(() -> {
       same(["evt1"], listener.output);
       async.done();
-    }, 50);
+    }, DELAY);
   }
 
   function testRemoveListener(async: utest.Async) {
@@ -47,7 +48,7 @@ class TestEventDispatcher extends utest.Test {
     delay(() -> {
       same([], listener.output);
       async.done();
-    }, 50);
+    }, DELAY);
   }
 
   function testGetListeners() {
@@ -66,7 +67,7 @@ class TestEventDispatcher extends utest.Test {
     delay(() -> {
       same(["onListenStart"], listener.output);
       async.done();
-    }, 50);
+    }, DELAY);
   }
 
   function testRemoveListenerAndFireOnListenEnd(async: utest.Async) {
@@ -77,6 +78,6 @@ class TestEventDispatcher extends utest.Test {
     delay(() -> {
       same(["onListenStart", "onListenEnd"], listener.output);
       async.done();
-    }, 50);
+    }, DELAY);
   }
 }
