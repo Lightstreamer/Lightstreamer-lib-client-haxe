@@ -7,6 +7,6 @@ test.js.common.hxml
 --js bin-test/web/lightstreamer_orig.js
 
 -D LS_WEB
--D LS_MPN
+#-D LS_MPN
 -D LS_JSON_PATCH
 -D LS_TLCP_DIFF

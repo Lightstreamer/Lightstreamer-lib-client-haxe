@@ -119,6 +119,7 @@
   <target name="test" description="Run the tests">
     <exec executable="haxe" failonerror="true">
       <arg value="test.web.hxml"/>
+      <arg line="-D LS_MPN"/>
       <arg value="-D" if:set="UTEST_PATTERN"/><arg value="UTEST_PATTERN=${UTEST_PATTERN}" if:set="UTEST_PATTERN"/>
     </exec>
     <exec executable="node" failonerror="true">
