@@ -128,8 +128,11 @@ public class ConnectionOptions {
    * but also because of number rounding.
    * 
    * @lifecycle If a connection to Lightstreamer Server is not currently active, null is returned;
-   * soon after the connection is established, the value becomes available, as notified
-   * by a call to {@link ClientListener#onPropertyChange} with argument "realMaxBandwidth".
+   * soon after the connection is established, the value will become available.
+   * 
+   * @notification A change to this setting will be notified through a call to 
+   * {@link ClientListener#onPropertyChange} with argument "realMaxBandwidth" on any 
+   * ClientListener listening to the related LightstreamerClient.
    * 
    * @return  A decimal number, which represents the maximum bandwidth applied by the Server for the
    * streaming or polling connection expressed in kbps (kilobits/sec), or the string "unlimited", or null.

@@ -234,8 +234,8 @@ var ConnectionDetails = function(details){
  * To know what features are enabled by your license, please see the License tab of the
  * Monitoring Dashboard (by default, available at /dashboard).</p>
    *
-   * <p class="lifecycle"><b>Lifecycle:</b> The method gives a meaningful answer only when
-   * a session is currently active.</p>
+   * <p class="lifecycle"><b>Lifecycle:</b> If a session is not currently active, null is returned;
+   * soon after a session is established, the value may become available.</p>
    * 
    * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
    * call to {@link ClientListener#onPropertyChange} with argument "serverInstanceAddress" on any 
@@ -243,7 +243,7 @@ var ConnectionDetails = function(details){
    * .</p>
    *
    * @return {String} address used to issue all requests related to the current
-   * session.
+   * session, or null.
    */
   getServerInstanceAddress: function() { 
    return this.delegate.getServerInstanceAddress();
@@ -268,8 +268,8 @@ var ConnectionDetails = function(details){
  * To know what features are enabled by your license, please see the License tab of the
  * Monitoring Dashboard (by default, available at /dashboard).</p>
    *
-   * <p class="lifecycle"><b>Lifecycle:</b> The method gives a meaningful answer only when
-   * a session is currently active.</p>
+   * <p class="lifecycle"><b>Lifecycle:</b> If a session is not currently active, null is returned;
+   * soon after a session is established, the value will become available.</p>
    * 
    * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
    * call to {@link ClientListener#onPropertyChange} with argument "serverSocketName" on any 
@@ -277,7 +277,7 @@ var ConnectionDetails = function(details){
    * .</p>
    *
    * @return {String} name configured for the Server instance which is managing the
-   * current session.
+   * current session, or null.
    */
   getServerSocketName: function() { 
    return this.delegate.getServerSocketName();
@@ -287,15 +287,15 @@ var ConnectionDetails = function(details){
    * Inquiry method that gets the ID associated by the server
    * to this client session.
    *
-   * <p class="lifecycle"><b>Lifecycle:</b> The method gives a meaningful answer only when
-   * a session is currently active.</p>
+   * <p class="lifecycle"><b>Lifecycle:</b> If a session is not currently active, null is returned;
+   * soon after a session is established, the value will become available.</p>
    *
    * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a
    * call to {@link ClientListener#onPropertyChange} with argument "sessionId" on any
    * {@link ClientListener}
    * .</p>
    *
-   * @return {String} ID assigned by the Server to this client session.
+   * @return {String} ID assigned by the Server to this client session, or null.
    */
   getSessionId: function() {
    return this.delegate.getSessionId();
@@ -311,8 +311,7 @@ var ConnectionDetails = function(details){
    * session may, in principle, expose a different IP address to the Server; these changes would not be reported.
    * 
    * <p class="lifecycle"><b>Lifecycle:</b> If a session is not currently active, null is returned;
-   * soon after a session is established, the value may become available; but it is possible
-   * that this information is not provided by the Server and that it will never be available.</p>
+   * soon after a session is established, the value may become available.</p>
    * 
    * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a call to 
    * {@link ClientListener#onPropertyChange} with argument "clientIp" on any 

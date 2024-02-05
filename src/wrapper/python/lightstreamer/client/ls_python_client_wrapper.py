@@ -152,13 +152,13 @@ class ConnectionDetails:
     def getSessionId(self):
       """Inquiry method that gets the ID associated by the server to this client session.
    
-   **lifecycle** The method gives a meaningful answer only when a session is currently active.
+   **lifecycle** If a session is not currently active, null is returned; soon after a session is established, the value will become available.
    
    **notification** A change to this setting will be notified through a call to 
    :meth:`.ClientListener.onPropertyChange` with argument "sessionId" on any 
    ClientListener listening to the related LightstreamerClient.
    
-   :return: ID assigned by the Server to this client session."""
+   :return: ID assigned by the Server to this client session, or None."""
       return self.delegate.getSessionId()
 
     def getServerInstanceAddress(self):
@@ -177,13 +177,13 @@ class ConnectionDetails:
    To know what features are enabled by your license, please see the License tab of the Monitoring Dashboard (by default,
    available at /dashboard).
    
-   **lifecycle** The method gives a meaningful answer only when a session is currently active.
+   **lifecycle** If a session is not currently active, null is returned; soon after a session is established, the value may become available.
    
    **notification** A change to this setting will be notified through a call to 
    :meth:`.ClientListener.onPropertyChange` with argument "serverInstanceAddress" on any 
    ClientListener listening to the related LightstreamerClient.
    
-   :return: address used to issue all requests related to the current session.
+   :return: address used to issue all requests related to the current session, or None.
    """
       return self.delegate.getServerInstanceAddress()
 
@@ -223,8 +223,7 @@ class ConnectionDetails:
    session may, in principle, expose a different IP address to the Server; these changes would not be reported.
    
    **lifecycle** If a session is not currently active, None is returned;
-   soon after a session is established, the value may become available; but it is possible
-   that this information is not provided by the Server and that it will never be available.
+   soon after a session is established, the value may become available.
    
    **notification** A change to this setting will be notified through a call to 
    :meth:`.ClientListener.onPropertyChange` with argument "clientIp" on any 
@@ -521,9 +520,11 @@ ClientListener listening to the related LightstreamerClient.
    or because bandwidth management is not supported (in this case it is always "unlimited"),
    but also because of number rounding.
    
-   **lifecycle** If a connection to Lightstreamer Server is not currently active, None is returned;
-   soon after the connection is established, the value becomes available, as notified
-   by a call to :meth:`.ClientListener.onPropertyChange` with argument "realMaxBandwidth".
+   **lifecycle** If a connection to Lightstreamer Server is not currently active, null is returned; soon after the connection is established, the value will become available.
+
+   **notification** A change to this setting will be notified through a call to 
+   :meth:`.ClientListener.onPropertyChange` with argument "realMaxBandwidth" on any 
+   ClientListener listening to the related LightstreamerClient.
    
    :return:  A decimal number, which represents the maximum bandwidth applied by the Server for the streaming or polling connection expressed in kbps (kilobits/sec), or the string "unlimited", or None.
    

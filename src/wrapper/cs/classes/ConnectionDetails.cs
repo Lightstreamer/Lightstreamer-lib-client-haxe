@@ -133,7 +133,7 @@ namespace com.lightstreamer.client
         /// To know what features are enabled by your license, please see the License tab of the Monitoring Dashboard (by default,
         /// available at /dashboard).<br/>
         /// <br/>
-        /// <b>Lifecycle:</b> The method gives a meaningful answer only when a session is currently active.<br/>
+        /// <b>Lifecycle:</b> If a session is not currently active, null is returned; soon after a session is established, the value may become available.<br/>
         /// <br/>
         /// <b>Related notifications:</b> A change to this setting will be notified through a call to 
         /// <seealso cref="ClientListener.onPropertyChange"/> with argument "serverInstanceAddress" on any 
@@ -185,8 +185,7 @@ namespace com.lightstreamer.client
         /// session may, in principle, expose a different IP address to the Server; these changes would not be reported.<br/>
         /// <br/>
         /// <b>Lifecycle:</b> If a session is not currently active, null is returned;
-        /// soon after a session is established, the value may become available; but it is possible
-        /// that this information is not provided by the Server and that it will never be available.<br/>
+        /// soon after a session is established, the value may become available.<br/>
         /// <br/>
         /// <b>Related notifications:</b> A change to this setting will be notified through a call to 
         /// <seealso cref="ClientListener.onPropertyChange"/> with argument "clientIp" on any 
@@ -203,7 +202,7 @@ namespace com.lightstreamer.client
         /// <value>
         /// Read-only property <c>SessionId</c> represents the ID associated by the server to this client session.<br/>
         /// <br/>
-        /// <b>Lifecycle:</b> The method gives a meaningful answer only when a session is currently active.<br/>
+        /// <b>Lifecycle:</b> If a session is not currently active, null is returned; soon after a session is established, the value will become available.<br/>
         /// <br/>
         /// <b>Related notifications:</b> A change to this setting will be notified through a call to 
         /// <seealso cref="ClientListener.onPropertyChange"/> with argument "sessionId" on any 

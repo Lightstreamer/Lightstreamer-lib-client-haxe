@@ -165,30 +165,29 @@ namespace com.lightstreamer.client
         /// <li>serverAddress</li>
         /// <li>user</li>
         /// <li>password</li>
+        /// <li>contentLength</li>
+        /// <li>requestedMaxBandwidth</li>
+        /// <li>reverseHeartbeatInterval</li>
+        /// <li>httpExtraHeaders</li>
+        /// <li>httpExtraHeadersOnSessionCreationOnly</li>
+        /// <li>forcedTransport</li>
+        /// <li>retryDelay</li>
+        /// <li>firstRetryMaxDelay</li>
+        /// <li>sessionRecoveryTimeout</li>
+        /// <li>stalledTimeout</li>
+        /// <li>reconnectTimeout</li>
+        /// <li>slowingEnabled</li>
+        /// <li>serverInstanceAddressIgnored</li>
+        /// <li>cookieHandlingRequired</li>
+        /// <li>proxy</li>
         /// <li>serverInstanceAddress</li>
         /// <li>serverSocketName</li>
         /// <li>clientIp</li>
         /// <li>sessionId</li>
-        /// <li>contentLength</li>
+        /// <li>realMaxBandwidth</li>
         /// <li>idleTimeout</li>
         /// <li>keepaliveInterval</li>
-        /// <li>requestedMaxBandwidth</li>
-        /// <li>realMaxBandwidth</li>
         /// <li>pollingInterval</li>
-        /// <li>reconnectTimeout</li>
-        /// <li>stalledTimeout</li>
-        /// <li>connectTimeout</li>
-        /// <li>currentConnectTimeout</li>
-        /// <li>retryDelay</li>
-        /// <li>firstRetryMaxDelay</li>
-        /// <li>slowingEnabled</li>
-        /// <li>forcedTransport</li>
-        /// <li>serverInstanceAddressIgnored</li>
-        /// <li>reverseHeartbeatInterval</li>
-        /// <li>earlyWSOpenEnabled</li>
-        /// <li>httpExtraHeaders</li>
-        /// <li>httpExtraHeadersOnSessionCreationOnly</li>
-        /// 
         /// </ul>
         /// </param>
         /// <c>LightstreamerClient.connectionDetails</c>

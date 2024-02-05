@@ -132,7 +132,7 @@ public interface MpnSubscriptionListener {
     
     /**
      * Event handler called each time the value of a property of {@link MpnSubscription} is changed.<BR>
-     * Properties can be modified by direct calls to their setter or by server sent events. A propery may be changed by a server sent event when the MPN subscription is
+     * Properties can be modified by direct calls to their setter or by server sent events. A property may be changed by a server sent event when the MPN subscription is
      * modified, or when two MPN subscriptions coalesce (see {@link com.lightstreamer.client.LightstreamerClient#subscribe(MpnSubscription, boolean)}).
      * 
      * @param propertyName The name of the changed property. It can be one of the following:<ul>
