@@ -103,11 +103,11 @@ class ClientMachine {
     disposeHTTP();
     disposeCtrl();
     
-    details.serverInstanceAddress = null;
-    details.serverSocketName = null;
-    details.clientIp = null;
-    details.sessionId = null;
-    options.realMaxBandwidth = null;
+    details.setServerInstanceAddress(null);
+    details.setSessionId(null);
+    details.setServerSocketName(null);
+    details.setClientIp(null);
+    options.setRealMaxBandwidth(null);
     
     lastKnownClientIp = null;
     
