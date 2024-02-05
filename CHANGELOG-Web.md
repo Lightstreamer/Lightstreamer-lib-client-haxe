@@ -2,10 +2,12 @@
 
 ## XXXXXX
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
-*Compatible with code developed with the previous version.*<br/>
+*May not be compatible with code developed with the previous version.*<br/>
 *Made available on XXXXXX*
 
 Fixed the problem caused by the throttling of the timers in background tabs by creating a web worker and setting the timers only there.
+
+Changed the behavior of the listener `ClientListener.onPropertyChange` to be called whenever the value of a property is changed by the server or by the user through a property setter.
 
 
 ## 9.1.0
