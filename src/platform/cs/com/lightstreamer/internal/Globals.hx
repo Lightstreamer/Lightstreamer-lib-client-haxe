@@ -41,5 +41,5 @@ class Globals {
     return validationCallback;
   }
 
-  public function toString() return "{}";
+  public function toString(): String return "{}";
 }
