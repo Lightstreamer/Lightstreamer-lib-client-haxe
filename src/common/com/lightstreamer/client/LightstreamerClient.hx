@@ -45,14 +45,14 @@ class LSLightstreamerClient {
   #end
 
   public function new(serverAddress: String, adapterSet: String 
-  #if LS_TEST , ?wsFactory: IWsClientFactory, ?httpFactory: IHttpClientFactory, ?ctrlFactory: IHttpClientFactory, ?timerFactory: ITimerFactory, ?randomGen: Millis->Millis, ?reachabilityFactory: IReachabilityFactory #end
+  #if LS_TEST , ?wsFactory: IWsClientFactory, ?httpFactory: IHttpClientFactory, ?ctrlFactory: IHttpClientFactory, ?timerFactory: ITimerFactory, ?randomGen: Millis->Millis, ?reachabilityFactory: IReachabilityFactory, ?pageLifecycleFactory: IPageLifecycleFactory #end
   ) {
     connectionDetails = new ConnectionDetails(@:nullSafety(Off) this);
     connectionOptions = new ConnectionOptions(@:nullSafety(Off) this);
     #if LS_TEST
-    machine = new #if LS_MPN com.lightstreamer.client.internal.MpnClientMachine #else ClientMachine #end(this, wsFactory ?? createWsClient, httpFactory ?? createHttpClient, ctrlFactory ?? createHttpClient, timerFactory ?? createTimer, randomGen ?? randomMillis, reachabilityFactory ?? createReachabilityManager);
+    machine = new #if LS_MPN com.lightstreamer.client.internal.MpnClientMachine #else ClientMachine #end(this, wsFactory ?? createWsClient, httpFactory ?? createHttpClient, ctrlFactory ?? createHttpClient, timerFactory ?? createTimer, randomGen ?? randomMillis, reachabilityFactory ?? createReachabilityManager, pageLifecycleFactory ?? createPageLifecycleFactory);
     #else
-    machine = new #if LS_MPN com.lightstreamer.client.internal.MpnClientMachine #else ClientMachine #end(this, createWsClient, createHttpClient, createHttpClient, createTimer, randomMillis, createReachabilityManager);
+    machine = new #if LS_MPN com.lightstreamer.client.internal.MpnClientMachine #else ClientMachine #end(this, createWsClient, createHttpClient, createHttpClient, createTimer, randomMillis, createReachabilityManager, createPageLifecycleFactory);
     #end
     if (serverAddress != null) {
       connectionDetails.setServerAddress(serverAddress);
@@ -222,5 +222,9 @@ class LSLightstreamerClient {
   
   function randomMillis(max: Millis): Millis {
     return new Millis(Std.random(max.toInt()));
+  }
+
+  function createPageLifecycleFactory(onEvent: PageState -> Void): IPageLifecycle {
+    return new com.lightstreamer.internal.PageLifecycle(onEvent);
   }
 }

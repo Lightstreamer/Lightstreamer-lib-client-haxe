@@ -34,6 +34,7 @@ class TestAll {
     #if LS_WEB
     runner.addCase(TestHttpClientWeb);
     runner.addCase(TestWsClientWeb);
+    runner.addCase(TestFreeze);
     #end
     #if LS_NODE
     runner.addCase(TestCookieHelperNode);

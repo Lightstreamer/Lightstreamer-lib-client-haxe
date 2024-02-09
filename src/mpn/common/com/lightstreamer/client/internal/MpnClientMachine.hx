@@ -47,8 +47,9 @@ class MpnClientMachine extends ClientMachine {
     ctrlFactory: IHttpClientFactory,
     timerFactory: ITimerFactory,
     randomGenerator: Millis->Millis,
-    reachabilityFactory: IReachabilityFactory) {
-    super(client, wsFactory, httpFactory, ctrlFactory, timerFactory, randomGenerator, reachabilityFactory);
+    reachabilityFactory: IReachabilityFactory,
+    pageLifecycleFactory: IPageLifecycleFactory) {
+    super(client, wsFactory, httpFactory, ctrlFactory, timerFactory, randomGenerator, reachabilityFactory, pageLifecycleFactory);
     mpnRegisterRequest = new MpnRegisterRequest(@:nullSafety(Off) this);
     mpnFilterUnsubscriptionRequest = new MpnFilterUnsubscriptionRequest(@:nullSafety(Off) this);
     mpnBadgeResetRequest = new MpnBadgeResetRequest(@:nullSafety(Off) this);

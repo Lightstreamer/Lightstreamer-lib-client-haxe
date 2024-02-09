@@ -73,6 +73,10 @@ class ClientMachine {
   // reachability
   final reachabilityFactory: IReachabilityFactory;
   var nr_reachabilityManager: Null<IReachability>;
+  // page lifecycle
+  final frz_pageLifecycleFactory: IPageLifecycleFactory;
+  var frz_pageLifecycle: Null<IPageLifecycle>;
+  static var frz_globalPageLifecycle: IPageLifecycle = PageLifecycle.newLoggingInstance();
   // recovery
   var rec_serverProg: Int = 0;
   var rec_clientProg: Int = 0;
@@ -137,7 +141,8 @@ class ClientMachine {
     ctrlFactory: IHttpClientFactory,
     timerFactory: ITimerFactory,
     randomGenerator: Millis->Millis,
-    reachabilityFactory: IReachabilityFactory) {
+    reachabilityFactory: IReachabilityFactory,
+    pageLifecycleFactory: IPageLifecycleFactory) {
     this.client = client;
     this.lock = client.lock;
     this.details = client.connectionDetails;
@@ -148,6 +153,7 @@ class ClientMachine {
     this.timerFactory = timerFactory;
     this.randomGenerator = randomGenerator;
     this.reachabilityFactory = reachabilityFactory;
+    this.frz_pageLifecycleFactory = pageLifecycleFactory;
     this.clientEventDispatcher = client.eventDispatcher;
     this.switchRequest = new SwitchRequest(this);
     this.constrainRequest = new ConstrainRequest(this);
@@ -160,11 +166,24 @@ class ClientMachine {
     traceEvent("connect");
     var forward = true;
     if (state.s_m == s100) {
-      cause = "api";
-      resetCurrentRetryDelay();
-      goto(state.s_m = s101);
-      forward = evtExtConnect_NextRegion();
-      evtSelectCreate();
+      if (frz_globalPageLifecycle.frozen) {
+        pageLogger.logWarn("connection requested while page is frozen");
+        cause = "page.frozen";
+        resetCurrentRetryDelay();
+        doInstallPageLifecycle();
+        goto(state.s_m = s117);
+        forward = evtExtConnect_NextRegion();
+        frz_pageLifecycle?.startListening();
+        evtRetry(page_frozen);
+      } else {
+        cause = "api";
+        resetCurrentRetryDelay();
+        doInstallPageLifecycle();
+        goto(state.s_m = s101);
+        forward = evtExtConnect_NextRegion();
+        frz_pageLifecycle?.startListening();
+        evtSelectCreate();
+      }
     }
     if (forward) {
       forward = evtExtConnect_NextRegion();
@@ -189,6 +208,148 @@ class ClientMachine {
         });
     }
     return false;
+  }
+
+  function doInstallPageLifecycle() {
+    frz_pageLifecycle = frz_pageLifecycleFactory(e -> switch e {
+      case Frozen: evtPageFrozen();
+      case Resumed: evtPageResumed();
+    });
+  }
+
+  function doUnistallPageLifecycle() {
+    frz_pageLifecycle?.stopListening();
+    frz_pageLifecycle = null;
+  }
+
+  function evtPageFrozen() {
+    traceEvent("page.frozen");
+    switch state.s_m {
+    case s120, s121, s122:
+      disposeWS();
+      notifyStatus(DISCONNECTED_WILL_RETRY);
+      cause = "page.frozen";
+      goto(state.s_m = s117);
+      cancel_evtTransportTimeout();
+      evtRetry(page_frozen);
+    case s130:
+      disposeHTTP();
+      notifyStatus(DISCONNECTED_WILL_RETRY);
+      cause = "page.frozen";
+      goto(state.s_m = s117);
+      cancel_evtTransportTimeout();
+      evtRetry(page_frozen);
+    case s140:
+      disposeHTTP();
+      notifyStatus(DISCONNECTED_WILL_RETRY);
+      cause = "page.frozen";
+      goto(state.s_m = s117);
+      cancel_evtTransportTimeout();
+      evtRetry(page_frozen);
+    case s150:
+      switch (state.s_tr) {
+      case s210:
+        sendDestroyWS("page.frozen");
+        closeWS();
+        notifyStatus(DISCONNECTED_WILL_RETRY);
+        cause = "page.frozen";
+        state.clear_w();
+        state.goto_m_from_session(s117);
+        exit_w();
+        evtEndSession();
+        evtRetry(page_frozen);
+      case s220:
+        disposeHTTP();
+        notifyStatus(DISCONNECTED_WILL_RETRY);
+        cause = "page.frozen";
+        state.goto_m_from_session(s117);
+        cancel_evtTransportTimeout();
+        evtEndSession();
+        evtRetry(page_frozen);
+      case s230:
+        disposeHTTP();
+        notifyStatus(DISCONNECTED_WILL_RETRY);
+        cause = "page.frozen";
+        state.goto_m_from_session(s117);
+        cancel_evtTransportTimeout();
+        evtEndSession();
+        evtRetry(page_frozen);
+      case s240:
+        if (state.s_ws?.m == s500) {
+          disposeWS();
+          notifyStatus(DISCONNECTED_WILL_RETRY);
+          cause = "page.frozen";
+          state.goto_m_from_ws(s117);
+          exit_ws_to_m();
+          evtRetry(page_frozen);
+        } else if (state.s_ws?.m == s501 || state.s_ws?.m == s502 || state.s_ws?.m == s503) {
+          sendDestroyWS("page.frozen");
+          closeWS();
+          notifyStatus(DISCONNECTED_WILL_RETRY);
+          cause = "page.frozen";
+          state.goto_m_from_ws(s117);
+          exit_ws_to_m();
+          evtRetry(page_frozen);
+        } 
+      case s250:
+        if (state.s_wp?.m == s600 || state.s_wp?.m == s601) {
+          disposeWS();
+          notifyStatus(DISCONNECTED_WILL_RETRY);
+          cause = "page.frozen";
+          state.goto_m_from_wp(s117);
+          exit_ws_to_m();
+          evtRetry(page_frozen);
+        } else if (state.s_wp?.m == s602) {
+          sendDestroyWS("page.frozen");
+          closeWS();
+          notifyStatus(DISCONNECTED_WILL_RETRY);
+          cause = "page.frozen";
+          state.goto_m_from_wp(s117);
+          exit_wp_to_m();
+          evtRetry(page_frozen);
+        }
+      case s260:
+        disposeHTTP();
+        notifyStatus(DISCONNECTED_WILL_RETRY);
+        cause = "page.frozen";
+        state.goto_m_from_rec(s117);
+        exit_rec_to_m();
+        evtRetry(page_frozen);
+      case s270:
+        if (state.s_h == s710) {
+          disposeHTTP();
+          notifyStatus(DISCONNECTED_WILL_RETRY);
+          cause = "page.frozen";
+          state.goto_m_from_hs(s117);
+          exit_hs_to_m();
+          evtRetry(page_frozen);
+        } else if (state.s_h == s720) {
+          disposeHTTP();
+          notifyStatus(DISCONNECTED_WILL_RETRY);
+          cause = "page.frozen";
+          state.goto_m_from_hp(s117);
+          exit_hp_to_m();
+          evtRetry(page_frozen);
+        }
+      default:
+        // ignore
+      }
+    case s110, s111, s112, s113, s114, s115, s116:
+      notifyStatus(DISCONNECTED_WILL_RETRY);
+      cause = "page.frozen";
+      goto(state.s_m = s117);
+      cancel_evtRetryTimeout();
+    default:
+      // ignore
+    }
+  }
+
+  function evtPageResumed() {
+    traceEvent("page.resumed");
+    if (state.s_m == s117) {
+      goto(state.s_m = s116);
+      evtSelectCreate();
+    }
   }
 
   function evtNetworkNotReachable(host: String) {
@@ -2810,23 +2971,27 @@ class ClientMachine {
     switch state.s_du {
     case s20:
       disposeClient();
+      doUnistallPageLifecycle();
       goto(state.s_du = s20);
       forward = evtTerminate_NextRegion();
       genAbortMessages();
     case s22:
       disposeSession();
       disposeClient();
+      doUnistallPageLifecycle();
       goto(state.s_du = s20);
       forward = evtTerminate_NextRegion();
       genAbortSubscriptions();
       genAbortMessages();
     case s23:
       disposeClient();
+      doUnistallPageLifecycle();
       goto(state.s_du = s20);
       forward = evtTerminate_NextRegion();
       genAbortMessages();
     case s21:
       disposeClient();
+      doUnistallPageLifecycle();
       goto(state.s_du = s20);
       forward = evtTerminate_NextRegion();
       genAbortMessages();
@@ -2848,9 +3013,7 @@ class ClientMachine {
       var rm = nr_reachabilityManager;
       nr_reachabilityManager = null;
       goto(state.s_nr = s1400);
-      if (rm != null) {
-        rm.stopListening();
-      }
+      rm?.stopListening();
     default:
       // ignore
     }
@@ -3271,12 +3434,12 @@ class ClientMachine {
     ws.sure().send("bind_session\r\n" + req.getEncodedString());
   }
 
-  function sendDestroyWS() {
+  function sendDestroyWS(cause = "api") {
     var req = new RequestBuilder();
     req.LS_reqId(generateFreshReqId());
     req.LS_op("destroy");
     req.LS_close_socket(true);
-    req.LS_cause("api");
+    req.LS_cause(cause);
     protocolLogger.logInfo('Sending session destroy: $req');
 
     ws.sure().send("control\r\n" + req.getEncodedString());
@@ -4658,6 +4821,7 @@ private enum RetryCause {
   http_timeout;
   recovery_timeout;
   prog_mismatch(expected: Int, actual: Int);
+  page_frozen;
 }
 
 private function asErrorMsg(cause: RetryCause) {
@@ -4682,6 +4846,8 @@ private function asErrorMsg(cause: RetryCause) {
       "sessionRecoveryTimeout expired";
     case prog_mismatch(expected, actual):
       'Recovery counter mismatch: expected $expected but found $actual';
+    case page_frozen:
+      "page frozen";
   };
 }
 

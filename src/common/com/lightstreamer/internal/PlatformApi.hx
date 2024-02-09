@@ -39,3 +39,15 @@ interface IReachability {
 }
 
 typedef IReachabilityFactory = (host: String) -> IReachability;
+
+interface IPageLifecycle {
+  var frozen(default, null): Bool;
+  function startListening(): Void;
+  function stopListening(): Void;
+}
+
+enum PageState {
+  Frozen; Resumed;
+}
+
+typedef IPageLifecycleFactory = (PageState -> Void) -> IPageLifecycle;
