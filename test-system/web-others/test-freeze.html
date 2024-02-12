@@ -1,0 +1,40 @@
+<!--
+     To run this test:
+
+    - open this file in a tab of Chrome browser
+    - add the tab to a tag group
+    - collapse the tab group (that causes a freeze event)
+    - expand the tab group (that causes a resume event)
+
+    Expected behavior:
+    
+    - when the freeze event is detected, the client disconnects and waits for the resume event
+    - when the resume event is detected, the client connects again
+-->
+<html>
+<head>
+    <title>Test Freeze</title>
+    <script src="../../node_modules/lightstreamer-client-web/lightstreamer.min.js"></script>
+    <script>
+    LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.WARN));
+
+    // client = new LightstreamerClient("http://push.lightstreamer.com","DEMO");
+    client = new LightstreamerClient("http://localhost:8080","TEST");
+    
+    client.addListener({
+        onStatusChange: function(status) {
+            console.log(status);
+        }
+    })
+    client.addListener(new StatusWidget("left", "0px", true));
+
+    client.connect();
+    </script>
+</head>  
+<body>
+    <br><br><br>
+    <button onclick="client.connect()">Connect</button>
+    <br><br>
+    <button onclick="client.disconnect()">Disconnect</button>
+</body>
+</html>

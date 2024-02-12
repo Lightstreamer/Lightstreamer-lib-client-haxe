@@ -1,0 +1,36 @@
+<!--
+    To run this test:
+
+    - open this file in a tab of Chrome browser
+    - put the tab is background
+    - wait for 5 minutes or more
+
+    Expected behavior:
+
+    - the client keeps sending one heartbeat every 30 seconds
+-->
+<html>
+<head>
+    <title>Test Background</title>
+    <script src="../../node_modules/lightstreamer-client-web/lightstreamer.min.js"></script>
+    <script>
+    LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.DEBUG));
+
+    // client = new LightstreamerClient("http://push.lightstreamer.com","DEMO");
+    client = new LightstreamerClient("http://localhost:8080","TEST");
+
+    client.addListener(new StatusWidget("left", "0px", true));
+    
+    client.connectionOptions.setKeepaliveInterval(30_000);
+    client.connectionOptions.setReverseHeartbeatInterval(30_000);
+
+    client.connect();
+    </script>
+</head>  
+<body>
+    <br><br><br>
+    <button onclick="client.connect()">Connect</button>
+    <br><br>
+    <button onclick="client.disconnect()">Disconnect</button>
+</body>
+</html>
