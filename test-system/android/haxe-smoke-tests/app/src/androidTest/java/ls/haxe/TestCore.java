@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import ls.haxe.util.BaseClientListener;
@@ -297,10 +298,15 @@ public class TestCore extends ConcurrentTestCase {
                             break;
                         case 3:
                             threadAssertEquals("40", bw);
+                            // request a bandwidth equal to 39: the request is accepted
+                            client.connectionOptions.setRequestedMaxBandwidth("39");
+                            break;
+                        case 4:
+                            threadAssertEquals("39", bw);
                             // request an unlimited bandwidth: the meta-data adapter cuts it to 40 (which is the configured limit)
                             client.connectionOptions.setRequestedMaxBandwidth("unlimited");
                             break;
-                        case 4:
+                        case 5:
                             threadAssertEquals("40", bw);
                             resume();
                             break;
@@ -332,6 +338,7 @@ public class TestCore extends ConcurrentTestCase {
 
     @Test
     public void testRoundTrip() throws Throwable {
+        AtomicBoolean sessionActive = new AtomicBoolean(true);
         threadAssertEquals("TEST", client.connectionDetails.getAdapterSet());
         threadAssertEquals("http://10.0.2.2:8080", client.connectionDetails.getServerAddress());
         threadAssertEquals(50000000L, client.connectionOptions.getContentLength());
@@ -349,6 +356,7 @@ public class TestCore extends ConcurrentTestCase {
             @Override
             public void onItemUpdate(ItemUpdate arg0) {
                 client.disconnect();
+                sessionActive.set(false);
                 resume();
             }
             @Override
@@ -366,13 +374,16 @@ public class TestCore extends ConcurrentTestCase {
             public void onPropertyChange(String prop) {
                 switch (prop) {
                     case "clientIp":
-                        threadAssertEquals("127.0.0.1", client.connectionDetails.getClientIp());
+                        threadAssertEquals(sessionActive.get() ? "127.0.0.1" : null, client.connectionDetails.getClientIp());
                         break;
                     case "serverSocketName":
-                        threadAssertEquals("Lightstreamer HTTP Server", client.connectionDetails.getServerSocketName());
+                        threadAssertEquals(sessionActive.get() ? "Lightstreamer HTTP Server" : null, client.connectionDetails.getServerSocketName());
                         break;
                     case "sessionId":
-                        threadAssertNotNull(client.connectionDetails.getSessionId());
+                        if (sessionActive.get())
+                            threadAssertNotNull(client.connectionDetails.getSessionId());
+                        else
+                            threadAssertNull(client.connectionDetails.getSessionId());
                         break;
                     case "keepaliveInterval":
                         threadAssertEquals(5000L, client.connectionOptions.getKeepaliveInterval());
@@ -384,7 +395,7 @@ public class TestCore extends ConcurrentTestCase {
                         threadAssertEquals(100L, client.connectionOptions.getPollingInterval());
                         break;
                     case "realMaxBandwidth":
-                        threadAssertEquals("40", client.connectionOptions.getRealMaxBandwidth());
+                        threadAssertEquals(sessionActive.get() ? "40" : null, client.connectionOptions.getRealMaxBandwidth());
                         break;
                 }
             }
