@@ -310,7 +310,7 @@ class LSConnectionOptions {
 
   @:synchronized
   @:allow(com.lightstreamer.internal.PlatformApi)
-  function getProxy() {
+  function getProxy(): Null<Proxy> {
     return this.proxy;
   }
   #end
