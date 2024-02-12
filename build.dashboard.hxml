@@ -1,6 +1,5 @@
-build.js.common.hxml
+build.web.common.hxml
 
---class-path src/platform/web
 --class-path src/mpn/common
 --class-path src/mpn/web
 

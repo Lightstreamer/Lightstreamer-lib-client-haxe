@@ -31,7 +31,9 @@
   <property name="wrapper.inc" location="${wrapper}/wrapper.inc"/>
   <property name="js.dir" location="src/wrapper/js"/>
 
-  <target name="package" depends="package_haxe,package_common" description="Build the library">
+  <include file="${tools}/../web/build-common.xml"/>
+
+  <target name="package" depends="package_haxe,package_common,common.package_worker_timers" description="Build the library">
     <exec executable="npx" failonerror="true">
       <arg value="rollup"/>
       <arg value="--config"/>
