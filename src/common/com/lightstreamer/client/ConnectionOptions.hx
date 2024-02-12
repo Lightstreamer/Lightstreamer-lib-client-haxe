@@ -308,7 +308,8 @@ class LSConnectionOptions {
     client.eventDispatcher.onPropertyChange("proxy");
   }
 
-  @:allow(com.lightstreamer.client.LightstreamerClient)
+  @:synchronized
+  @:allow(com.lightstreamer.internal.PlatformApi)
   function getProxy() {
     return this.proxy;
   }

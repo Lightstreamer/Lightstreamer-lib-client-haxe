@@ -22,7 +22,7 @@ class TestUpdate2Level extends utest.Test {
     subListener._onEndOfSnapshot = (name, pos) -> exps.signal('onEndOfSnapshot $name $pos');
     subListener._onCommandSecondLevelSubscriptionError = (code, message, key) -> exps.signal('on2LevelError $code $message $key');
     subListener._onClearSnapshot = (name, pos) -> exps.signal('onClearSnapshot $name $pos');
-    client = new LightstreamerClient("http://server", "TEST", ws.create);
+    client = new LightstreamerClient("http://server", "TEST", new TestFactory(this, ws));
     sub = new Subscription("COMMAND", ["i1", "i2"], ["f1", "f2", "key", "command"]);
     sub.setCommandSecondLevelFields(["f3", "f4"]);
     sub.setRequestedSnapshot("no");

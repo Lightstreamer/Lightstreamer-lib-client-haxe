@@ -19,7 +19,7 @@ class TestRecovery extends utest.Test {
     http = new MockHttpClient(this);
     ctrl = new MockHttpClient(this, "ctrl");
     scheduler = new MockScheduler(this);
-    client = new LightstreamerClient("http://server", "TEST", ws.create, http.create, ctrl.create, scheduler.create);
+    client = new LightstreamerClient("http://server", "TEST", new TestFactory(this, ws, http, ctrl, scheduler));
     listener = new BaseClientListener();
     msgListener = new BaseMessageListener();
     subListener = new BaseSubscriptionListener();

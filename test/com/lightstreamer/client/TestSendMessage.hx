@@ -9,7 +9,7 @@ class TestSendMessage extends utest.Test {
 
   function setup() {
     ws = new MockWsClient(this);
-    client = new LightstreamerClient("http://server", "TEST", ws.create);
+    client = new LightstreamerClient("http://server", "TEST", new TestFactory(this, ws));
     msgListener = new BaseMessageListener();
     msgListener._onAbort = (msg, sentOnNetwork) -> exps.signal('onAbort $msg');
     msgListener._onDeny = (msg, code, error) -> exps.signal('onDeny $msg $code $error');

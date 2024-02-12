@@ -1,5 +1,9 @@
 package com.lightstreamer.internal;
 
+import com.lightstreamer.client.ConnectionOptions;
+import com.lightstreamer.client.LightstreamerClient.LSLightstreamerClient;
+import com.lightstreamer.internal.Types.Millis;
+
 interface IHttpClient {
   function dispose(): Void;
   function isDisposed(): Bool;
@@ -51,3 +55,101 @@ enum PageState {
 }
 
 typedef IPageLifecycleFactory = (PageState -> Void) -> IPageLifecycle;
+
+interface IFactory {
+  public function createWsClient(url: String, headers: Null<Map<String, String>>, 
+    onOpen: IWsClient->Void,
+    onText: (IWsClient, String)->Void, 
+    onError: (IWsClient, String)->Void): IWsClient;
+  public function createHttpClient(url: String, body: String, headers: Null<Map<String, String>>,
+    onText: (IHttpClient, String)->Void, 
+    onError: (IHttpClient, String)->Void, 
+    onDone: IHttpClient->Void): IHttpClient;
+  public function createCtrlClient(url: String, body: String, headers: Null<Map<String, String>>,
+    onText: (IHttpClient, String)->Void, 
+    onError: (IHttpClient, String)->Void, 
+    onDone: IHttpClient->Void): IHttpClient;
+  public function createReachabilityManager(host: String): IReachability;  
+  public function createTimer(id: String, delay: Millis, callback: ITimer->Void): ITimer;
+  public function randomMillis(max: Millis): Millis;
+  public function createPageLifecycleFactory(onEvent: PageState -> Void): IPageLifecycle;
+}
+
+class Factory implements IFactory {
+	final connectionOptions: LSConnectionOptions;
+
+  public function new(client: LSLightstreamerClient) {
+    this.connectionOptions = client.connectionOptions;
+  }
+
+  public function createWsClient(url: String, headers: Null<Map<String, String>>, 
+    onOpen: IWsClient->Void,
+    onText: (IWsClient, String)->Void, 
+    onError: (IWsClient, String)->Void): IWsClient {
+    #if java
+    var proxy = connectionOptions.getProxy();
+    var trustManager = com.lightstreamer.internal.Globals.instance.getTrustManagerFactory();
+    return new com.lightstreamer.internal.WsClient(url, headers, proxy, trustManager, onOpen, onText, onError);
+    #elseif cs
+    var proxy = connectionOptions.getProxy();
+    var trustManager = com.lightstreamer.internal.Globals.instance.getTrustManagerFactory();
+    return new com.lightstreamer.internal.WsClient(url, headers, proxy, trustManager, onOpen, onText, onError);
+    #elseif (js && LS_WEB)
+    return new com.lightstreamer.internal.WsClient(url, onOpen, onText, onError);
+    #elseif js
+    return new com.lightstreamer.internal.WsClient(url, headers, onOpen, onText, onError);
+    #elseif python
+    var proxy = connectionOptions.getProxy();
+    var trustManager = com.lightstreamer.internal.Globals.instance.getTrustManagerFactory();
+    return new com.lightstreamer.internal.WsClient(url, headers, proxy, trustManager, onOpen, onText, onError);
+    #else
+    @:nullSafety(Off)
+    return null;
+    #end
+  }
+  
+  public function createHttpClient(url: String, body: String, headers: Null<Map<String, String>>,
+    onText: (IHttpClient, String)->Void, 
+    onError: (IHttpClient, String)->Void, 
+    onDone: IHttpClient->Void): IHttpClient {
+    #if java
+    var proxy = connectionOptions.getProxy();
+    var trustManager = com.lightstreamer.internal.Globals.instance.getTrustManagerFactory();
+    return new com.lightstreamer.internal.HttpClient(url, body, headers, proxy, trustManager, onText, onError, onDone);
+    #elseif cs
+    return new com.lightstreamer.internal.HttpClient(url, body, headers, onText, onError, onDone);
+    #elseif js
+    return new com.lightstreamer.internal.HttpClient(url, body, headers, connectionOptions.isCookieHandlingRequired(), onText, onError, onDone);
+    #elseif python
+    var proxy = connectionOptions.getProxy();
+    var trustManager = com.lightstreamer.internal.Globals.instance.getTrustManagerFactory();
+    return new com.lightstreamer.internal.HttpClient(url, body, headers, proxy, trustManager, onText, onError, onDone);
+    #else
+    @:nullSafety(Off)
+    return null;
+    #end
+  }
+
+  public function createCtrlClient(url: String, body: String, headers: Null<Map<String, String>>,
+    onText: (IHttpClient, String)->Void, 
+    onError: (IHttpClient, String)->Void, 
+    onDone: IHttpClient->Void): IHttpClient {
+    return createHttpClient(url, body, headers, onText, onError, onDone);
+  }
+  
+  public function createReachabilityManager(host: String): IReachability {
+    return new com.lightstreamer.internal.ReachabilityManager();
+  }
+  
+  public function createTimer(id: String, delay: Millis, callback: ITimer->Void): ITimer {
+    return new com.lightstreamer.internal.Timer(id, delay, callback);
+  }
+  
+  public function randomMillis(max: Millis): Millis {
+    return new Millis(Std.random(max.toInt()));
+  }
+
+  public function createPageLifecycleFactory(onEvent: PageState -> Void): IPageLifecycle {
+    return new com.lightstreamer.internal.PageLifecycle(onEvent);
+  }
+}

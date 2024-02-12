@@ -1,34 +1,7 @@
 package com.lightstreamer.client;
 
-import com.lightstreamer.log.LoggerTools.pageLogger;
-import js.Browser;
 import com.lightstreamer.client.internal.ClientMachine;
-import com.lightstreamer.internal.PlatformApi.PageState;
-import com.lightstreamer.internal.PlatformApi.IPageLifecycle;
 import com.lightstreamer.client.BaseListener.BaseClientListener;
-
-class MockPageLifecycle implements IPageLifecycle {
-  public var onEvent(default, null): PageState -> Void;
-  public var frozen(default, default): Bool = false;
-
-  public function create(onEvent: PageState->Void) {
-    this.onEvent = onEvent;
-    return this;
-  }
-  public function new() {}
-  public function startListening() {}
-  public function stopListening() {}
-  public function freeze() Browser.window.setTimeout(() -> {
-    pageLogger.warn('Frozen event detected');
-    frozen = true;
-    onEvent(Frozen);
-  });
-  public function resume() Browser.window.setTimeout(() -> {
-    pageLogger.warn('Resumed event detected');
-    frozen = false;
-    onEvent(Resumed);
-  });
-}
 
 class TestFreeze extends utest.Test {
   var ws: MockWsClient;
@@ -46,7 +19,7 @@ class TestFreeze extends utest.Test {
     ctrl = new MockHttpClient(this, "ctrl");
     scheduler = new MockScheduler(this);
     page = new MockPageLifecycle();
-    client = new LightstreamerClient("http://server", "TEST", ws.create, http.create, ctrl.create, scheduler.create, page.create);
+    client = new LightstreamerClient("http://server", "TEST", new TestFactory(this, ws, http, ctrl, scheduler, page));
     ClientMachine.frz_globalPageLifecycle = page;
     listener = new BaseClientListener();
     listener._onStatusChange = status -> exps.signal(status);

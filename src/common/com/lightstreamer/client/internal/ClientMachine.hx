@@ -134,26 +134,18 @@ class ClientMachine {
     cause = null;
   }
 
-  public function new(
-    client: LightstreamerClient,
-    wsFactory: IWsClientFactory,
-    httpFactory: IHttpClientFactory,
-    ctrlFactory: IHttpClientFactory,
-    timerFactory: ITimerFactory,
-    randomGenerator: Millis->Millis,
-    reachabilityFactory: IReachabilityFactory,
-    pageLifecycleFactory: IPageLifecycleFactory) {
+  public function new(client: LightstreamerClient, factory: IFactory) {
     this.client = client;
     this.lock = client.lock;
     this.details = client.connectionDetails;
     this.options = client.connectionOptions;
-    this.wsFactory = wsFactory;
-    this.httpFactory = httpFactory;
-    this.ctrlFactory = ctrlFactory;
-    this.timerFactory = timerFactory;
-    this.randomGenerator = randomGenerator;
-    this.reachabilityFactory = reachabilityFactory;
-    this.frz_pageLifecycleFactory = pageLifecycleFactory;
+    this.wsFactory = factory.createWsClient;
+    this.httpFactory = factory.createHttpClient;
+    this.ctrlFactory = factory.createCtrlClient;
+    this.timerFactory = factory.createTimer;
+    this.randomGenerator = factory.randomMillis;
+    this.reachabilityFactory = factory.createReachabilityManager;
+    this.frz_pageLifecycleFactory = factory.createPageLifecycleFactory;
     this.clientEventDispatcher = client.eventDispatcher;
     this.switchRequest = new SwitchRequest(this);
     this.constrainRequest = new ConstrainRequest(this);

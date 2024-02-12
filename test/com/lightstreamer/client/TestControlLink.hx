@@ -12,7 +12,7 @@ class TestControlLink extends utest.Test {
     http = new MockHttpClient(this);
     ctrl = new MockHttpClient(this, "ctrl");
     scheduler = new MockScheduler(this);
-    client = new LightstreamerClient("http://server", "TEST", ws.create, http.create, ctrl.create, scheduler.create);
+    client = new LightstreamerClient("http://server", "TEST", new TestFactory(this, ws, http, ctrl, scheduler));
   }
 
   function teardown() {
@@ -82,7 +82,7 @@ class TestControlLink extends utest.Test {
   function testCLinkPrefix(async: utest.Async) {
     exps
     .then(() -> {
-      client = new LightstreamerClient("http://server.com/TestPrefix", "TEST",  ws.create);
+      client = new LightstreamerClient("http://server.com/TestPrefix", "TEST",  new TestFactory(this, ws));
       client.connect();
     })
     .await("ws.init http://server.com/TestPrefix/lightstreamer")
