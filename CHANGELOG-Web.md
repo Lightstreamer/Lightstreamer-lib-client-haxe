@@ -5,7 +5,9 @@
 *May not be compatible with code developed with the previous version.*<br/>
 *Made available on XXXXXX*
 
-Fixed the problem caused by the throttling of the timers in background tabs by creating a web worker and setting the timers only there.
+Fixed the responsiveness issues caused by the [throttling of timers](https://developer.chrome.com/blog/timer-throttling-in-chrome-88) in background tabs by creating a web worker and setting the timers only there.
+
+Added event listeners for freeze and resume events to perform necessary cleanup according to the Page Lifecycle API [guidelines](https://developer.chrome.com/docs/web-platform/page-lifecycle-api).
 
 Changed the behavior of the listener `ClientListener.onPropertyChange` to be called whenever the value of a property is changed by the server or by the user through a property setter.
 
