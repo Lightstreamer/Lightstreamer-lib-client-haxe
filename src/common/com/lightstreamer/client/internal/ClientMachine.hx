@@ -515,7 +515,7 @@ class ClientMachine {
       default:
         // ignore
       }
-    case s110, s111, s112, s113, s114, s115, s116:
+    case s110, s111, s112, s113, s114, s115, s116, s117:
         notifyStatus(DISCONNECTED);
         notifyServerErrorIfCauseIsError(terminationCause);
         goto(state.s_m = s100);
