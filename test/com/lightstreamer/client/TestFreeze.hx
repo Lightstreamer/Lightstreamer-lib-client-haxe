@@ -1,5 +1,6 @@
 package com.lightstreamer.client;
 
+import com.lightstreamer.internal.PlatformApi.IPageLifecycle;
 import com.lightstreamer.client.internal.ClientMachine;
 import com.lightstreamer.client.BaseListener.BaseClientListener;
 
@@ -11,9 +12,11 @@ class TestFreeze extends utest.Test {
   var client: LightstreamerClient;
   var listener: BaseClientListener;
   var page: MockPageLifecycle;
+  var defaultPageHandler: IPageLifecycle;
 
   @:access(com.lightstreamer.client.internal.ClientMachine.frz_globalPageLifecycle)
   function setup() {
+    defaultPageHandler = ClientMachine.frz_globalPageLifecycle;
     ws = new MockWsClient(this);
     http = new MockHttpClient(this);
     ctrl = new MockHttpClient(this, "ctrl");
@@ -26,8 +29,10 @@ class TestFreeze extends utest.Test {
     client.addListener(listener);
   }
 
+  @:access(com.lightstreamer.client.internal.ClientMachine.frz_globalPageLifecycle)
   function teardown() {
     client.disconnect();
+    ClientMachine.frz_globalPageLifecycle = defaultPageHandler;
   }
 
   function testCreateWs(async: utest.Async) {
@@ -407,6 +412,39 @@ class TestFreeze extends utest.Test {
       ws.onText("CONOK,sid,70000,5000,*");
     })
     .await("CONNECTED:WS-STREAMING")
+    .then(() -> async.completed())
+    .verify();
+  }
+
+  function testDisconnectWhileFrozen(async: utest.Async) {
+    exps
+    .then(() -> {
+      client.connect();
+    })
+    .await("ws.init http://server/lightstreamer")
+    .await("CONNECTING")
+    .then(() -> ws.onOpen())
+    .await("wsok")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .then(() -> {
+      ws.onText("WSOK");
+      ws.onText("CONOK,sid,70000,5000,*");
+    })
+    .then(() -> {
+      page.freeze();
+    })
+    .await("CONNECTED:WS-STREAMING")
+    .await("control\r\nLS_reqId=1&LS_op=destroy&LS_close_socket=true&LS_cause=page.frozen")
+    .await("ws.dispose")
+    .await("DISCONNECTED:WILL-RETRY")
+    .then(() -> {
+      client.disconnect();
+    })
+    .await("DISCONNECTED")
+    // page resume is ignored
+    .then(() -> {
+      page.resume();
+    })
     .then(() -> async.completed())
     .verify();
   }
