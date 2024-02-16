@@ -1,9 +1,9 @@
 # Lightstreamer Web Client Changelog
 
-## XXXXXX
+## 9.2.0
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
 *May not be compatible with code developed with the previous version.*<br/>
-*Made available on XXXXXX*
+*Made available on 16 Feb 2024*
 
 Fixed the responsiveness issues caused by the [throttling of timers](https://developer.chrome.com/blog/timer-throttling-in-chrome-88) in background tabs by creating a web worker and setting the timers only there.
 
