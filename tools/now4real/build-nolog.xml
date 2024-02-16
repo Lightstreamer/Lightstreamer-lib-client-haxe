@@ -32,7 +32,34 @@
   <property name="wrapper.inc" location="${wrapper}/wrapper.inc"/>
   <property name="js.dir" location="src/wrapper/js"/>
 
-  <target name="package" depends="package_common,package_haxe" description="Build the library">
+  <include file="${tools}/../web/build-common.xml"/>
+
+  <property name="types.d.ts.log" location="${dist}/../types.d.ts.nolog.log"/>
+
+  <target name="package" depends="types.d.ts" description="Build the library">
+  </target>
+
+  <target name="types.d.ts" depends="package_libs">
+    <exec executable="npx" failonerror="true" output="${types.d.ts.log}">
+      <arg value="jsdoc"/>
+      <arg value="-t"/>
+      <!-- the template to use for generating output -->
+      <arg value="node_modules/tsd-jsdoc/dist"/>
+      <arg value="-d"/>
+      <!-- the path to the output folder -->
+      <arg value="${dist}"/>
+      <!-- the file to generate documentation for -->
+      <arg value="${dist}/lightstreamer.js"/>
+    </exec>
+    <exec executable="node" failonerror="true">
+      <arg value="${tools.base.dir}/fix-types-d-ts"/>
+      <arg value="${dist}"/>
+      <arg value="lightstreamer-client-web"/>
+    </exec>
+    <echo>Log of types.d.ts is saved in `${types.d.ts.log}`</echo>
+  </target>
+
+  <target name="package_libs" depends="package_common,package_haxe,common.package_worker_timers" description="Build the library">
     <exec executable="npx" failonerror="true">
       <arg value="rollup"/>
       <arg value="--config"/>

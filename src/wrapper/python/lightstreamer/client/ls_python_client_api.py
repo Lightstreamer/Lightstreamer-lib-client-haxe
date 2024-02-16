@@ -107,27 +107,29 @@ class ClientListener:
       * serverAddress
       * user
       * password
+      * contentLength
+      * requestedMaxBandwidth
+      * reverseHeartbeatInterval
+      * httpExtraHeaders
+      * httpExtraHeadersOnSessionCreationOnly
+      * forcedTransport
+      * retryDelay
+      * firstRetryMaxDelay
+      * sessionRecoveryTimeout
+      * stalledTimeout
+      * reconnectTimeout
+      * slowingEnabled
+      * serverInstanceAddressIgnored
+      * cookieHandlingRequired
+      * proxy
       * serverInstanceAddress
       * serverSocketName
       * clientIp
       * sessionId
-      * contentLength
+      * realMaxBandwidth
       * idleTimeout
       * keepaliveInterval
-      * requestedMaxBandwidth
-      * realMaxBandwidth
       * pollingInterval
-      * reconnectTimeout
-      * stalledTimeout
-      * retryDelay
-      * firstRetryMaxDelay
-      * slowingEnabled
-      * forcedTransport
-      * serverInstanceAddressIgnored
-      * reverseHeartbeatInterval
-      * earlyWSOpenEnabled
-      * httpExtraHeaders
-      * httpExtraHeadersOnSessionCreationOnly
    
   .. seealso:: :attr:`.LightstreamerClient.connectionDetails`
   .. seealso:: :attr:`.LightstreamerClient.connectionOptions`

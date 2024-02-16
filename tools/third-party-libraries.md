@@ -1,6 +1,7 @@
 # Web
 
 - https://github.com/dharmafly/jsonpatch.js v3.1.0
+- https://github.com/chrisguttandin/worker-timers v7.1.0
 
 # Node.js
 

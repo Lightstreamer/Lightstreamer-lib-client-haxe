@@ -214,6 +214,9 @@ class TestClient extends utest.Test {
     // request a bandwidth equal to 70.1: the meta-data adapter cuts it to 40 (which is the configured limit)
     .then(() -> client.connectionOptions.setRequestedMaxBandwidth("70.1"))
     .await("realMaxBandwidth=40")
+     // request a bandwidth equal to 39: the request is accepted
+     .then(() -> client.connectionOptions.setRequestedMaxBandwidth("39"))
+     .await("realMaxBandwidth=39")
     // request an unlimited bandwidth: the meta-data adapter cuts it to 40 (which is the configured limit)
     .then(() -> client.connectionOptions.setRequestedMaxBandwidth("unlimited"))
     .await("realMaxBandwidth=40")
@@ -253,30 +256,33 @@ class TestClient extends utest.Test {
     subListener._onRealMaxFrequency = (freq) -> exps.signal('onRealMaxFrequency $freq');
     listener._onPropertyChange = prop -> {
       switch prop {
-      case "clientIp":
-        equals("127.0.0.1", client.connectionDetails.getClientIp());
-      case "serverSocketName":
-          equals("Lightstreamer HTTP Server", client.connectionDetails.getServerSocketName());
-      case "sessionId":
-        notNull(client.connectionDetails.getSessionId());
-      case "keepaliveInterval":
-        equals(5000, client.connectionOptions.getKeepaliveInterval());
-      case "idleTimeout":
-        equals(0, client.connectionOptions.getIdleTimeout());
-      case "pollingInterval":
-          equals(100, client.connectionOptions.getPollingInterval());
-      case "realMaxBandwidth":
-        equals("40", client.connectionOptions.getRealMaxBandwidth());
+        case "sessionId":
+          exps.signal("sessionId: " + (client.connectionDetails.getSessionId() == null ? "null" : "not null"));
+        case "clientIp":
+          exps.signal("clientIp: " + client.connectionDetails.getClientIp());
+        case "serverSocketName":
+          exps.signal("serverSocketName: " + client.connectionDetails.getServerSocketName());
+        case "realMaxBandwidth":
+          exps.signal("realMaxBandwidth: " + client.connectionOptions.getRealMaxBandwidth());
       }
     };
     exps
     .then(() -> client.connect())
     .then(() -> client.subscribe(sub))
+    .await("sessionId: not null")
+    .await("serverSocketName: Lightstreamer HTTP Server")
+    .await("clientIp: 127.0.0.1")
+    .await("realMaxBandwidth: 40")
     .await("onSubscription")
     .await("onRealMaxFrequency unlimited")
     .await("onItemUpdate")
     .then(() -> client.unsubscribe(sub))
     .await("onUnsubscription")
+    .then(() -> client.disconnect())
+    .await("sessionId: null")
+    .await("serverSocketName: null")
+    .await("clientIp: null")
+    .await("realMaxBandwidth: null")
     .then(() -> async.completed())
     .verify();
   }

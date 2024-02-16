@@ -203,6 +203,9 @@ class TestClient extends utest.Test {
     // request a bandwidth equal to 70.1: the meta-data adapter cuts it to 40 (which is the configured limit)
     .then(() -> client.connectionOptions.setRequestedMaxBandwidth("70.1"))
     .await("realMaxBandwidth=40")
+    // request a bandwidth equal to 39: the request is accepted
+    .then(() -> client.connectionOptions.setRequestedMaxBandwidth("39"))
+    .await("realMaxBandwidth=39")
     // request an unlimited bandwidth: the meta-data adapter cuts it to 40 (which is the configured limit)
     .then(() -> client.connectionOptions.setRequestedMaxBandwidth("unlimited"))
     .await("realMaxBandwidth=40")
@@ -235,22 +238,31 @@ class TestClient extends utest.Test {
     listener._onPropertyChange = prop -> {
       switch prop {
       case "sessionId":
-        notNull(client.connectionDetails.getSessionId());
-      case "keepaliveInterval":
-        equals(5000, client.connectionOptions.getKeepaliveInterval());
+        exps.signal("sessionId: " + (client.connectionDetails.getSessionId() == null ? "null" : "not null"));
+      case "clientIp":
+        exps.signal("clientIp: " + client.connectionDetails.getClientIp());
       case "serverSocketName":
-        equals("Lightstreamer HTTP Server", client.connectionDetails.getServerSocketName());
+        exps.signal("serverSocketName: " + client.connectionDetails.getServerSocketName());
       case "realMaxBandwidth":
-        equals("40", client.connectionOptions.getRealMaxBandwidth());
+        exps.signal("realMaxBandwidth: " + client.connectionOptions.getRealMaxBandwidth());
       }
     };
     exps
     .then(() -> client.connect())
+    .await("sessionId: not null")
+    .await("serverSocketName: Lightstreamer HTTP Server")
+    .await("clientIp: 127.0.0.1")
+    .await("realMaxBandwidth: 40")
     .then(() -> client.subscribe(sub))
     .await("onSubscription")
     .await("onItemUpdate")
     .then(() -> client.unsubscribe(sub))
     .await("onUnsubscription")
+    .then(() -> client.disconnect())
+    .await("sessionId: null")
+    .await("serverSocketName: null")
+    .await("clientIp: null")
+    .await("realMaxBandwidth: null")
     .then(() -> async.completed())
     .verify();
   }

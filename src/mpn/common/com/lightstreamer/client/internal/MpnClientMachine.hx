@@ -40,15 +40,8 @@ class MpnClientMachine extends ClientMachine {
   final mpnFilterUnsubscriptionRequest: MpnRequests.MpnFilterUnsubscriptionRequest;
   final mpnBadgeResetRequest: MpnRequests.MpnBadgeResetRequest;
 
-  public function new(
-    client: LightstreamerClient,
-    wsFactory: IWsClientFactory,
-    httpFactory: IHttpClientFactory,
-    ctrlFactory: IHttpClientFactory,
-    timerFactory: ITimerFactory,
-    randomGenerator: Millis->Millis,
-    reachabilityFactory: IReachabilityFactory) {
-    super(client, wsFactory, httpFactory, ctrlFactory, timerFactory, randomGenerator, reachabilityFactory);
+  public function new(client: LightstreamerClient, factory: IFactory) {
+    super(client, factory);
     mpnRegisterRequest = new MpnRegisterRequest(@:nullSafety(Off) this);
     mpnFilterUnsubscriptionRequest = new MpnFilterUnsubscriptionRequest(@:nullSafety(Off) this);
     mpnBadgeResetRequest = new MpnBadgeResetRequest(@:nullSafety(Off) this);

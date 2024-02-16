@@ -22,6 +22,7 @@ class TestAll {
     runner.addCase(TestSubscription);
     runner.addCase(TestEventDispatcher);
     runner.addCase(TestTimer);
+    runner.addCase(TestExecutor);
     runner.addCase(TestUrl);
     runner.addCase(TestRequestBuilder);
     runner.addCase(TestMyArray);
@@ -33,6 +34,7 @@ class TestAll {
     #if LS_WEB
     runner.addCase(TestHttpClientWeb);
     runner.addCase(TestWsClientWeb);
+    runner.addCase(TestFreeze);
     #end
     #if LS_NODE
     runner.addCase(TestCookieHelperNode);

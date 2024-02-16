@@ -1,5 +1,6 @@
 test.js.common.hxml
 
+--class-path src/extern/web
 --class-path src/platform/web
 --class-path src/mpn/common
 --class-path src/mpn/web

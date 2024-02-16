@@ -43,6 +43,7 @@ public class TestExtra extends ConcurrentTestCase {
 	
 	@BeforeClass
 	public static void setUpClass() throws Exception {
+		System.out.println(LightstreamerClient.LIB_NAME + " " + LightstreamerClient.LIB_VERSION);
 		LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.ERROR));
 	}
 	

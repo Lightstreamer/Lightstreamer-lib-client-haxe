@@ -26,4 +26,6 @@ class Globals {
   public function clearTrustManager() {
     trustManagerFactory = null;
   }
+
+  public function toString() return "{}";
 }

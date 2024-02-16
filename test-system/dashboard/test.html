@@ -1,0 +1,36 @@
+<html>
+<head>
+    <script src="../../bin/dashboard/build/dist/lightstreamer_dashboard.min.js"></script>
+    <script>
+    LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.WARN));
+
+    client = new LightstreamerClient("http://push.lightstreamer.com","DEMO");
+    // client = new LightstreamerClient("http://localhost:8080","TEST");
+
+    var sub = new Subscription("MERGE",["item1","item2","item3"],["stock_name","last_price"])
+    sub.setDataAdapter("QUOTE_ADAPTER")
+    sub.setRequestedSnapshot("yes")
+    sub.addListener({
+        onItemUpdate: function(obj) {
+            console.log(obj.getValue("stock_name") + ": " + obj.getValue("last_price"))
+        }
+    });
+    
+    client.addListener({
+        onStatusChange: function(status) {
+            console.log(status);
+        }
+    })
+    client.addListener(new StatusWidget("left", "0px", true));
+    
+    client.subscribe(sub);
+    client.connect();
+    </script>
+</head>  
+<body>
+    <br><br><br>
+    <button onclick="client.connect()">Connect</button>
+    <br><br>
+    <button onclick="client.disconnect()">Disconnect</button>
+</body>
+</html>

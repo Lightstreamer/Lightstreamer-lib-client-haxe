@@ -1,0 +1,4 @@
+build.js.common.hxml
+
+--class-path src/extern/web
+--class-path src/platform/web

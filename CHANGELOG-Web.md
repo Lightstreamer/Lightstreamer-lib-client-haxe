@@ -1,5 +1,17 @@
 # Lightstreamer Web Client Changelog
 
+## XXXXXX
+*Compatible with Lightstreamer Server since 7.4.0*<br/>
+*May not be compatible with code developed with the previous version.*<br/>
+*Made available on XXXXXX*
+
+Fixed the responsiveness issues caused by the [throttling of timers](https://developer.chrome.com/blog/timer-throttling-in-chrome-88) in background tabs by creating a web worker and setting the timers only there.
+
+Added event listeners for freeze and resume events to perform necessary cleanup according to the Page Lifecycle API [guidelines](https://developer.chrome.com/docs/web-platform/page-lifecycle-api).
+
+Changed the behavior of the listener `ClientListener.onPropertyChange` to be called whenever the value of a property is changed by the server or by the user through a property setter.
+
+
 ## 9.1.1
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
 *Compatible with code developed with the previous version.*<br/>

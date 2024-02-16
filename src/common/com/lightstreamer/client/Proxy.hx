@@ -67,6 +67,14 @@ class LSProxy {
     return proxy2 != null && type == proxy2.type && host == proxy2.host && port == proxy2.port && user == proxy2.user && password == proxy2.password;
   }
 
+  public static function eq(a: Null<Proxy>, b: Null<Proxy>) {
+    return switch [a, b] {
+      case [null, null]: true;
+      case [null, _] | [_, null]: false;
+      case [a, b]: a.isEqualTo(b);
+    }
+  }
+
   public function toString() {
     return '$type ${user != null ? user + "@" : ""}$host:$port';
   }

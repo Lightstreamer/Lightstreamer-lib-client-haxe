@@ -13,7 +13,7 @@ class TestUpdate extends utest.Test {
 
   function setup() {
     ws = new MockWsClient(this);
-    client = new LightstreamerClient("http://server", "TEST", ws.create);
+    client = new LightstreamerClient("http://server", "TEST", new TestFactory(this, ws));
     subListener = new BaseSubscriptionListener();
     subListener._onItemUpdate = update -> {
       updates.push(update);

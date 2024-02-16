@@ -33,9 +33,9 @@ All the commands need to be issued from the folder containing the cloned project
 
 ### Haxe set up
 
-To set up a Haxe 4.3+ development environment, first you need to install the following tools:
+To set up a Haxe 4.3.3+ development environment, first you need to install the following tools:
 
-- [node.js 18+](https://nodejs.org) and npm CLI 9+ (which is bundled with node.js)
+- [node.js 20.11+](https://nodejs.org) and npm CLI 10.2.4+ (which is bundled with node.js)
 - [lix](https://github.com/lix-pm/lix.client), a package manager for Haxe.
 
 lix is installed through npm:
@@ -50,7 +50,7 @@ To install the right versions of Haxe dependencies and to fetch the project spec
 lix download
 ```
 
-You can check the installation with typing `haxe --version`. You should get an output like `4.3.0-rc.1+966864c`.
+You can check the installation with typing `haxe --version`. You should get an output like `4.3.3`.
 
 ### Other tools set up
 

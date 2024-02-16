@@ -44,15 +44,13 @@ class LSLightstreamerClient {
   }
   #end
 
-  public function new(serverAddress: String, adapterSet: String 
-  #if LS_TEST , ?wsFactory: IWsClientFactory, ?httpFactory: IHttpClientFactory, ?ctrlFactory: IHttpClientFactory, ?timerFactory: ITimerFactory, ?randomGen: Millis->Millis, ?reachabilityFactory: IReachabilityFactory #end
-  ) {
+  public function new(serverAddress: String, adapterSet: String #if LS_TEST ,?factory: IFactory #end) {
     connectionDetails = new ConnectionDetails(@:nullSafety(Off) this);
     connectionOptions = new ConnectionOptions(@:nullSafety(Off) this);
     #if LS_TEST
-    machine = new #if LS_MPN com.lightstreamer.client.internal.MpnClientMachine #else ClientMachine #end(this, wsFactory ?? createWsClient, httpFactory ?? createHttpClient, ctrlFactory ?? createHttpClient, timerFactory ?? createTimer, randomGen ?? randomMillis, reachabilityFactory ?? createReachabilityManager);
+    machine = new #if LS_MPN com.lightstreamer.client.internal.MpnClientMachine #else ClientMachine #end(this, factory ?? new Factory(this));
     #else
-    machine = new #if LS_MPN com.lightstreamer.client.internal.MpnClientMachine #else ClientMachine #end(this, createWsClient, createHttpClient, createHttpClient, createTimer, randomMillis, createReachabilityManager);
+    machine = new #if LS_MPN com.lightstreamer.client.internal.MpnClientMachine #else ClientMachine #end(this, new Factory(this));
     #end
     if (serverAddress != null) {
       connectionDetails.setServerAddress(serverAddress);
@@ -163,64 +161,4 @@ class LSLightstreamerClient {
     return sub?.wrapper;
   }
   #end
-
-  function createWsClient(url: String, headers: Null<Map<String, String>>, 
-    onOpen: IWsClient->Void,
-    onText: (IWsClient, String)->Void, 
-    onError: (IWsClient, String)->Void): IWsClient {
-    #if java
-    var proxy = connectionOptions.getProxy();
-    var trustManager = com.lightstreamer.internal.Globals.instance.getTrustManagerFactory();
-    return new com.lightstreamer.internal.WsClient(url, headers, proxy, trustManager, onOpen, onText, onError);
-    #elseif cs
-    var proxy = connectionOptions.getProxy();
-    var trustManager = com.lightstreamer.internal.Globals.instance.getTrustManagerFactory();
-    return new com.lightstreamer.internal.WsClient(url, headers, proxy, trustManager, onOpen, onText, onError);
-    #elseif (js && LS_WEB)
-    return new com.lightstreamer.internal.WsClient(url, onOpen, onText, onError);
-    #elseif js
-    return new com.lightstreamer.internal.WsClient(url, headers, onOpen, onText, onError);
-    #elseif python
-    var proxy = connectionOptions.getProxy();
-    var trustManager = com.lightstreamer.internal.Globals.instance.getTrustManagerFactory();
-    return new com.lightstreamer.internal.WsClient(url, headers, proxy, trustManager, onOpen, onText, onError);
-    #else
-    @:nullSafety(Off)
-    return null;
-    #end
-  }
-  
-  function createHttpClient(url: String, body: String, headers: Null<Map<String, String>>,
-    onText: (IHttpClient, String)->Void, 
-    onError: (IHttpClient, String)->Void, 
-    onDone: IHttpClient->Void): IHttpClient {
-    #if java
-    var proxy = connectionOptions.getProxy();
-    var trustManager = com.lightstreamer.internal.Globals.instance.getTrustManagerFactory();
-    return new com.lightstreamer.internal.HttpClient(url, body, headers, proxy, trustManager, onText, onError, onDone);
-    #elseif cs
-    return new com.lightstreamer.internal.HttpClient(url, body, headers, onText, onError, onDone);
-    #elseif js
-    return new com.lightstreamer.internal.HttpClient(url, body, headers, connectionOptions.isCookieHandlingRequired(), onText, onError, onDone);
-    #elseif python
-    var proxy = connectionOptions.getProxy();
-    var trustManager = com.lightstreamer.internal.Globals.instance.getTrustManagerFactory();
-    return new com.lightstreamer.internal.HttpClient(url, body, headers, proxy, trustManager, onText, onError, onDone);
-    #else
-    @:nullSafety(Off)
-    return null;
-    #end
-  }
-  
-  function createReachabilityManager(host: String): IReachability {
-    return new com.lightstreamer.internal.ReachabilityManager();
-  }
-  
-  function createTimer(id: String, delay: Millis, callback: ITimer->Void): ITimer {
-    return new com.lightstreamer.internal.Timer(id, delay, callback);
-  }
-  
-  function randomMillis(max: Millis): Millis {
-    return new Millis(Std.random(max.toInt()));
-  }
 }

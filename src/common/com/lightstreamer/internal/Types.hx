@@ -301,6 +301,14 @@ class RealMaxBandwidthTools {
       case BWUnmanaged: "unmanaged";
     }
   }
+
+  public static function eq(a: Null<RealMaxBandwidth>, b: Null<RealMaxBandwidth>) {
+    return switch [a, b] {
+      case [null, null]: true;
+      case [null, _] | [_, null]: false;
+      case [a, b]: a.equals(b);
+    }
+  }
 }
 
 enum abstract SubscriptionMode(String) to String {

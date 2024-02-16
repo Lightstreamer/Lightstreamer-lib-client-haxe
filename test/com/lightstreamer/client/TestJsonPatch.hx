@@ -10,7 +10,7 @@ class TestJsonPatch extends utest.Test {
 
   function setup() {
     ws = new MockWsClient(this);
-    client = new LightstreamerClient("http://server", "TEST", ws.create);
+    client = new LightstreamerClient("http://server", "TEST", new TestFactory(this, ws));
     subListener = new BaseSubscriptionListener();
     sub = new Subscription("MERGE", ["count"], ["count"]);
     sub.setRequestedSnapshot("yes");

@@ -19,7 +19,8 @@ public class TestDisconnectFuture extends ConcurrentTestCase {
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
-		LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.DEBUG));
+		System.out.println(LightstreamerClient.LIB_NAME + " " + LightstreamerClient.LIB_VERSION);
+		LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.ERROR));
 	}
 	
 	@Test

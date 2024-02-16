@@ -36,6 +36,8 @@
   <property name="wrapper.inc" location="${wrapper}/wrapper.inc"/>
   <property name="js.dir" location="src/wrapper/js"/>
 
+  <include file="${tools}/build-common.xml"/>
+
   <target name="package" depends="types.d.ts" description="Build the library">
   </target>
 
@@ -43,9 +45,12 @@
      <exec executable="npx" failonerror="true" output="${types.d.ts.log}">
       <arg value="jsdoc"/>
       <arg value="-t"/>
+      <!-- the template to use for generating output -->
       <arg value="node_modules/tsd-jsdoc/dist"/>
       <arg value="-d"/>
+      <!-- the path to the output folder -->
       <arg value="${dist}"/>
+      <!-- the file to generate documentation for -->
       <arg value="${dist}/lightstreamer.js"/>
     </exec>
     <exec executable="node" failonerror="true">
@@ -56,7 +61,7 @@
     <echo>Log of types.d.ts is saved in `${types.d.ts.log}`</echo>
   </target>
 
-  <target name="package_libs" depends="package_haxe,package_widgets">
+  <target name="package_libs" depends="package_haxe,package_widgets,common.package_worker_timers">
     <exec executable="npx" failonerror="true">
       <arg value="rollup"/>
       <arg value="--config"/>
@@ -116,7 +121,7 @@
     </exec>
   </target>
 
-  <target name="test" description="Run the tests">
+  <target name="test" depends="common.test.package_worker_timers" description="Run the tests">
     <exec executable="haxe" failonerror="true">
       <arg value="test.web.hxml"/>
       <arg line="-D LS_MPN"/>

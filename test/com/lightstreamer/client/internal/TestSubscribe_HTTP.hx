@@ -19,7 +19,7 @@ class TestSubscribe_HTTP extends utest.Test {
     ctrl = new MockHttpClient(this, "ctrl");
     scheduler = new MockScheduler(this);
     listener = new BaseClientListener();
-    client = new LightstreamerClient("http://server", "TEST", ws.create, http.create, ctrl.create, scheduler.create);
+    client = new LightstreamerClient("http://server", "TEST", new TestFactory(this, ws, http, ctrl, scheduler));
     client.connectionOptions.setForcedTransport("HTTP-STREAMING");
     client.addListener(listener);
     subListener = new BaseSubscriptionListener();

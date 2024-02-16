@@ -310,9 +310,11 @@ namespace com.lightstreamer.client
         /// the Server for the streaming or polling connection expressed in kbps (kilobits/sec), or
         /// the string "unlimited", or null.<br/>
         /// <br/>
-        /// <b>Lifecycle:</b> If a connection to Lightstreamer Server is not currently active, null is returned;
-        /// soon after the connection is established, the value becomes available, as notified
-        /// by a call to <seealso cref="ClientListener.onPropertyChange"/> with argument "realMaxBandwidth".
+        /// <b>Lifecycle:</b> If a connection to Lightstreamer Server is not currently active, null is returned; soon after the connection is established, the value will become available.<br/>
+        /// <br/>
+        /// <b>Related notifications:</b> A change to this setting will be notified through a call to 
+        /// <seealso cref="ClientListener.onPropertyChange"/> with argument "realMaxBandwidth" on any 
+        /// ClientListener listening to the related LightstreamerClient.
         /// </value>
         public virtual string RealMaxBandwidth
         {

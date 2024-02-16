@@ -226,9 +226,13 @@ var ConnectionOptions = function(options) {
      * or because bandwidth management is not supported (in this case it is always "unlimited"),
      * but also because of number rounding.
      * 
-     * <p class="lifecycle"><b>Lifecycle:</b>If a connection to Lightstreamer Server is not currently active, null is returned;
-     * soon after the connection is established, the value becomes available, as notified
-     * by a call to {@link ClientListener#onPropertyChange} with argument "realMaxBandwidth".</p>
+     * <p class="lifecycle"><b>Lifecycle:</b>IIf a connection to Lightstreamer Server is not currently active, null is returned;
+     * soon after the connection is established, the value will become available.</p>
+     * 
+     * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a call to 
+     * {@link ClientListener#onPropertyChange} with argument "realMaxBandwidth" on any 
+     * ClientListener listening to the related LightstreamerClient.
+     * </p>
      * 
      * @return {Number|String} A decimal number, which represents the maximum bandwidth applied by the Server for the
      * streaming or polling connection expressed in kbps (kilobits/sec), or the string "unlimited", or null.

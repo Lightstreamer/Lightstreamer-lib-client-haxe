@@ -27,4 +27,6 @@ class Globals {
   public function clearTrustManager() {
     sslContext = null;
   }
+
+  public function toString() return "{}";
 }

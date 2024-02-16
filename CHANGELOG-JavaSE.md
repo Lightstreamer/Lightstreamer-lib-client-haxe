@@ -1,5 +1,13 @@
 # Lightstreamer Java SE Client Changelog
 
+## XXXXXX
+*Compatible with Lightstreamer Server since 7.4.0*<br/>
+*May not be compatible with code developed with the previous version.*<br/>
+*Made available on XXXXXX*
+
+Changed the behavior of the listener `ClientListener.onPropertyChange` to be called whenever the value of a property is changed by the server or by the user through a property setter.
+
+
 ## 5.1.0
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
 *Compatible with code developed with the previous version.*<br/>

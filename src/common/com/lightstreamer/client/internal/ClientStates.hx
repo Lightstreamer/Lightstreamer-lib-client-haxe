@@ -5,7 +5,7 @@ using com.lightstreamer.log.LoggerTools;
 
 enum abstract State_m(Int) {
   var s100 = 100; var s101 = 101;
-  var s110 = 110; var s111 = 111; var s112 = 112; var s113 = 113; var s114 = 114; var s115 = 115; var s116 = 116;
+  var s110 = 110; var s111 = 111; var s112 = 112; var s113 = 113; var s114 = 114; var s115 = 115; var s116 = 116; var s117 = 117;
   var s120 = 120; var s121 = 121; var s122 = 122;
   var s130 = 130;
   var s140 = 140;
