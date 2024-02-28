@@ -21,7 +21,7 @@ function parseFloat(s: String) {
 }
 
 function parseLong(s: String): Long {
-  #if (js || python)
+  #if (js || python || cpp)
   return parseInt(s);
   #else
   return haxe.Int64.parseString(s);
