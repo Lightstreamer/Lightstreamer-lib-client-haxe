@@ -2,7 +2,6 @@ package com.lightstreamer.internal;
 
 import haxe.Constraints.IMap;
 import haxe.ds.IntMap;
-import haxe.ds.ReadOnlyArray;
 
 /**
   source: https://github.com/azrafe7/hxOrderedMap/blob/master/src/OrderedIntMap.hx
@@ -13,7 +12,6 @@ import haxe.ds.ReadOnlyArray;
   **NB** Since OrderedIntMap is based on `MyArray`, the elements are not actually removed from the map. They are only marked as deleted.  Therefore, you need to call the `compact` method occasionally to reclaim the space and optimize the map.
 **/
 @:forward
-@:native("OrderedIntMap")
 abstract OrderedIntMap<T>(OrderedIntMapImpl<T>) from OrderedIntMapImpl<T> {
 
   public inline function new() {
@@ -124,24 +122,6 @@ class OrderedIntMapImpl<T> implements IMap<Int, T> {
   }
 
   /**
-    See `OrderedMap.orderedKeys`
-  **/
-  public var orderedKeys(get, never):ReadOnlyArray<Int>;
-
-  inline function get_orderedKeys():ReadOnlyArray<Int> {
-    return cast this._orderedKeys;
-  }
-
-  /**
-    See `OrderedMap.innerMap`
-  **/
-  // public var innerMap(get, null):ReadOnlyMap<Int, T>;
-
-  // inline function get_innerMap():ReadOnlyMap<Int, T> {
-  //   return cast this._innerMap;
-  // }
-
-  /**
     See `OrderedMap.keysCopy`
   **/
   public inline function keysCopy():KeyType<Int> {
@@ -171,7 +151,6 @@ class OrderedIntMapImpl<T> implements IMap<Int, T> {
   }
 }
 
-@:native("OrderedIntMapIterator")
 private class OrderedIntMapIterator<V> {
 
   var map:OrderedIntMap<V>;
