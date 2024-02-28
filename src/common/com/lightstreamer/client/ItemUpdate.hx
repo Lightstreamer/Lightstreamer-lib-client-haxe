@@ -5,7 +5,8 @@ import com.lightstreamer.internal.NativeTypes;
 #if js @:native("ItemUpdate") #end
 @:build(com.lightstreamer.internal.Macros.buildPythonImport("ls_python_client_api", "ItemUpdate"))
 #if cs @:using(ItemUpdate.ItemUpdateExtender) #end
-extern interface ItemUpdate {
+#if cpp @:using(ItemUpdate.ItemUpdateExtender) #end
+#if !cpp extern #end interface ItemUpdate {
   #if !cs
   function getItemName(): Null<String>;
   function getItemPos(): Int;
@@ -17,10 +18,10 @@ extern interface ItemUpdate {
   #end
   #if static
     #if cpp
-    function getValue(fieldName: String): Null<String>;
-    function getValueWithFieldPos(fieldPos: Int): Null<String>;
-    function isValueChanged(fieldName: String): Bool;
-    function isValueChangedWithFieldPos(fieldPos: Int): Bool;
+    function getValueByName(fieldName: String): Null<String>;
+    function getValueByPos(fieldPos: Int): Null<String>;
+    function isValueChangedByName(fieldName: String): Bool;
+    function isValueChangedByPos(fieldPos: Int): Bool;
     #else
     overload function getValue(fieldName: String): Null<String>;
     overload function getValue(fieldPos: Int): Null<String>;
@@ -71,5 +72,14 @@ class ItemUpdateExtender {
   inline static function getChangedFieldsByPosition(update: ItemUpdate) return update.ChangedFieldsByPosition;
   inline static function getFields(update: ItemUpdate) return update.Fields;
   inline static function getFieldsByPosition(update: ItemUpdate) return update.FieldsByPosition;
+}
+#end
+
+#if cpp
+class ItemUpdateExtender {
+  static extern inline overload public function getValue(obj: ItemUpdate, fieldPos: Int) return obj.getValueByPos(fieldPos);
+  static extern inline overload public function getValue(obj: ItemUpdate, fieldName: String) return obj.getValueByName(fieldName);
+  static extern inline overload public function isValueChanged(obj: ItemUpdate, fieldPos: Int) return obj.isValueChangedByPos(fieldPos);
+  static extern inline overload public function isValueChanged(obj: ItemUpdate, fieldName: String) return obj.isValueChangedByName(fieldName);
 }
 #end

@@ -64,19 +64,19 @@ class ItemUpdate2Level extends AbstractItemUpdate {
 
   #if static
   #if cpp
-  public function getValueWithFieldPos(fieldPos: Int): Null<String> {
+  public function getValueByPos(fieldPos: Int): Null<String> {
     return getValuePos(fieldPos);
   }
 
-  public function getValue(fieldName: String): Null<String> {
+  public function getValueByName(fieldName: String): Null<String> {
     return getValueName(fieldName);
   }
 
-  public function isValueChangedWithFieldPos(fieldPos: Int): Bool {
+  public function isValueChangedByPos(fieldPos: Int): Bool {
     return isValueChangedPos(fieldPos);
   }
 
-  public function isValueChanged(fieldName: String): Bool {
+  public function isValueChangedByName(fieldName: String): Bool {
     return isValueChangedName(fieldName);
   }
   #else
