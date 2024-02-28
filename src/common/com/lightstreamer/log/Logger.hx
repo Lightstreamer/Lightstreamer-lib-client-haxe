@@ -5,7 +5,7 @@ import com.lightstreamer.internal.NativeTypes;
 #if !cs
 #if js @:native("Logger") #end
 @:build(com.lightstreamer.internal.Macros.buildPythonImport("ls_python_client_api", "Logger"))
-extern interface Logger {
+#if !cpp extern #end interface Logger {
   function fatal(line: String, ?exception: NativeException): Void;
   function error(line: String, ?exception: NativeException): Void;
   function warn(line: String, ?exception: NativeException): Void;
