@@ -4,12 +4,14 @@ import cpp.Star;
 import cpp.Reference;
 import cpp.ConstCharStar;
 import sys.thread.Thread;
+import lightstreamer.cpp.CppStringMap;
 import lightstreamer.hxpoco.HttpClientCpp;
 import com.lightstreamer.internal.PlatformApi.IHttpClient;
 import com.lightstreamer.log.LoggerTools;
 
 using com.lightstreamer.log.LoggerTools;
 
+@:unreflective
 class HttpClient implements IHttpClient {
   final _onText: (HttpClient, String)->Void;
   final _onError: (HttpClient, String)->Void;
@@ -26,7 +28,13 @@ class HttpClient implements IHttpClient {
     this._onText = _onText;
     this._onError = _onError;
     this._onDone = _onDone;
-    this._client = new HttpClientAdapter(url, body, headers, s -> onText(s), s -> onError(s), () -> onDone());
+    var hs = new CppStringMap();
+    if (headers != null) {
+      for (k => v in headers) {
+        hs.add(k, v);
+      }
+    }
+    this._client = new HttpClientAdapter(url, body, hs, s -> onText(s), s -> onError(s), () -> onDone());
     _client.start();
   }
 
@@ -81,12 +89,12 @@ class HttpClientAdapter extends HttpClientCpp {
   final _onDone: ()->Void;
 
   public function new(url: String, body: String, 
-    headers: Null<Map<String, String>>,
+    headers: CppStringMap,
     onText: String->Void, 
     onError: String->Void, 
     onDone: ()->Void) 
   {
-    super(url, body);
+    super(url, body, headers);
     this._onText = onText;
     this._onError = onError;
     this._onDone = onDone;
