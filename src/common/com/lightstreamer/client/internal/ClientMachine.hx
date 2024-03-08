@@ -4558,25 +4558,25 @@ class ClientMachine {
     var headers = getHeadersForRequestOtherThanCreate();
     ctrl_http = ctrlFactory(url, body, headers,
       function onText(client, line) {
-        lock.synchronized(() -> {
+        sessionThread.submit(() -> lock.synchronized(() -> {
           if (client.isDisposed())
             return;
           evtCtrlMessage(line);
-        });
+        }));
       },
       function onError(client, error) {
-        lock.synchronized(() -> {
+        sessionThread.submit(() -> lock.synchronized(() -> {
           if (client.isDisposed())
             return;
           evtCtrlError();
-        });
+        }));
       },
       function onDone(client) {
-        lock.synchronized(() -> {
+        sessionThread.submit(() -> lock.synchronized(() -> {
           if (client.isDisposed())
             return;
           evtCtrlDone();
-        });
+        }));
       });
   }
 
