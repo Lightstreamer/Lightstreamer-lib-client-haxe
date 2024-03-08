@@ -39,6 +39,7 @@ class LSLightstreamerClient {
   #end
 
   #if LS_HAS_TRUST_MANAGER
+  #if cpp @:unreflective #end
   public static function setTrustManagerFactory(factory: NativeTrustManager) {
     com.lightstreamer.internal.Globals.instance.setTrustManagerFactory(factory);
   }
