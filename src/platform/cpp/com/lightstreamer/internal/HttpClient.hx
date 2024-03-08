@@ -1,7 +1,6 @@
 package com.lightstreamer.internal;
 
 import cpp.Star;
-import cpp.Reference;
 import cpp.ConstCharStar;
 import sys.thread.Thread;
 import lightstreamer.cpp.CppStringMap;
@@ -52,7 +51,7 @@ class HttpClient implements IHttpClient {
     }
   }
 
-  inline public function isDisposed(): Bool {
+  public function isDisposed(): Bool {
     return _client != null ? _client.isDisposed() : true;
   }
 
@@ -101,7 +100,7 @@ class HttpClientAdapter extends HttpClientCpp {
   }
 
   override function submit() {
-    var that: Reference<HttpClientAdapter> = untyped __cpp__("*this");
+    var that: Star<HttpClientAdapter> = untyped __cpp__("this");
     // TODO use a thread pool?
     Thread.create(() -> that.run());
   }
