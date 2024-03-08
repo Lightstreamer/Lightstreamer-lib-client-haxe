@@ -1,6 +1,6 @@
 package com.lightstreamer.client;
 
-#if (java || cs || python)
+#if LS_HAS_PROXY
 import com.lightstreamer.internal.NativeTypes.IllegalArgumentException;
 
 enum abstract ProxyType(String) to String {
@@ -51,9 +51,9 @@ class LSProxy {
     this.user = user;
     this.password = password;
   }
-  #end
 
-  #if python
+  #else
+  
   public function new(type: String, host: String, port: Int, user: Null<String>, password: Null<String>) {
     this.type = ProxyType.fromString(type);
     this.host = host;

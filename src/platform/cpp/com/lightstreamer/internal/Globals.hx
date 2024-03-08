@@ -14,5 +14,9 @@ class Globals {
     HttpClientCpp.setSSLContext(ctx);
   }
 
+  public function clearTrustManager() {
+    HttpClientCpp.clearSSLContext();
+  }
+
   public function toString(): String return "{}";
 }

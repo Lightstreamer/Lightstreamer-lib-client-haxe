@@ -1,6 +1,8 @@
 package com.lightstreamer.hxpoco;
 
+import cpp.Reference;
 import cpp.ConstCharStar;
+import poco.net.ProxyConfig;
 import poco.net.Context.ContextPtr;
 import com.lightstreamer.cpp.CppStringMap;
 
@@ -10,7 +12,9 @@ import com.lightstreamer.cpp.CppStringMap;
 extern class HttpClientCpp {
   // public
   static function setSSLContext(ctx: ContextPtr): Void;
-  function new(host: ConstCharStar, body: ConstCharStar, headers: CppStringMap);
+  static function clearSSLContext(): Void;
+
+  function new(host: ConstCharStar, body: ConstCharStar, headers: CppStringMap, proxy: Reference<ProxyConfig>);
   function start(): Void;
   function dispose(): Void;
   function isDisposed(): Bool;

@@ -1,10 +1,13 @@
 package com.lightstreamer.internal;
 
 import cpp.Star;
+import cpp.Reference;
 import cpp.ConstCharStar;
 import sys.thread.Thread;
-import lightstreamer.cpp.CppStringMap;
-import lightstreamer.hxpoco.HttpClientCpp;
+import poco.net.ProxyConfig;
+import com.lightstreamer.cpp.CppStringMap;
+import com.lightstreamer.hxpoco.HttpClientCpp;
+import com.lightstreamer.client.Proxy.LSProxy as Proxy;
 import com.lightstreamer.internal.PlatformApi.IHttpClient;
 import com.lightstreamer.log.LoggerTools;
 
@@ -19,21 +22,37 @@ class HttpClient implements IHttpClient {
 
   public function new(url: String, body: String, 
     headers: Null<Map<String, String>>,
+    proxy: Null<Proxy>,
     _onText: (HttpClient, String)->Void, 
     _onError: (HttpClient, String)->Void, 
     _onDone: HttpClient->Void) 
   {
-    streamLogger.logDebug('HTTP sending: $url $body headers($headers)');
+    // TODO print trust manager
+    streamLogger.logDebug('HTTP sending: $url $body headers($headers) proxy($proxy)');
     this._onText = _onText;
     this._onError = _onError;
     this._onDone = _onDone;
+    // headers
     var hs = new CppStringMap();
     if (headers != null) {
       for (k => v in headers) {
         hs.add(k, v);
       }
     }
-    this._client = new HttpClientAdapter(url, body, hs, s -> onText(s), s -> onError(s), () -> onDone());
+    // proxy
+    var pc = new ProxyConfig();
+    if (proxy != null) {
+      pc.setHost(proxy.host);
+      pc.setPort(proxy.port);
+      if (proxy.user != null) {
+        pc.setUsername(proxy.user);
+      }
+      if (proxy.password != null){
+        pc.setPassword(proxy.password);
+      }
+    }
+    // connect
+    this._client = new HttpClientAdapter(url, body, hs, pc, s -> onText(s), s -> onError(s), () -> onDone());
     _client.start();
   }
 
@@ -89,11 +108,12 @@ class HttpClientAdapter extends HttpClientCpp {
 
   public function new(url: String, body: String, 
     headers: CppStringMap,
+    proxy: Reference<ProxyConfig>,
     onText: String->Void, 
     onError: String->Void, 
     onDone: ()->Void) 
   {
-    super(url, body, headers);
+    super(url, body, headers, proxy);
     this._onText = onText;
     this._onError = onError;
     this._onDone = onDone;
@@ -102,6 +122,7 @@ class HttpClientAdapter extends HttpClientCpp {
   override function submit() {
     var that: Star<HttpClientAdapter> = untyped __cpp__("this");
     // TODO use a thread pool?
+    @:nullSafety(Off)
     Thread.create(() -> that.run());
   }
 
