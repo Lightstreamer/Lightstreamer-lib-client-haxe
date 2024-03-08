@@ -576,6 +576,8 @@ typedef NativeTrustManager = java.javax.net.ssl.TrustManagerFactory;
 typedef NativeTrustManager = cs.system.net.security.RemoteCertificateValidationCallback;
 #elseif python
 typedef NativeTrustManager = com.lightstreamer.internal.SSLContext;
+#elseif cpp
+typedef NativeTrustManager = poco.net.Context.ContextPtr;
 #end
 
 #if java
