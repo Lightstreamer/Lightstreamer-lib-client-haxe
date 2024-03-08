@@ -1,4 +1,4 @@
-package lightstreamer.cpp;
+package com.lightstreamer.cpp;
 
 import cpp.StdString;
 import cpp.NativeString;

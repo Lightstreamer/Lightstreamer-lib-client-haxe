@@ -1,4 +1,4 @@
-package lightstreamer.cpp;
+package com.lightstreamer.cpp;
 
 @:include("unordered_map")
 @:native("std::unordered_map<std::string, std::string>")

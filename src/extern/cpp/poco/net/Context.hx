@@ -2,7 +2,7 @@ package poco.net;
 
 import cpp.Star;
 import cpp.Reference;
-import lightstreamer.cpp.CppString;
+import com.lightstreamer.cpp.CppString;
 
 @:include("Poco/Net/Context.h")
 @:native("Poco::Net::Context")

@@ -1,6 +1,6 @@
 package com.lightstreamer.internal;
 
-import lightstreamer.hxpoco.HttpClientCpp;
+import com.lightstreamer.hxpoco.HttpClientCpp;
 import com.lightstreamer.internal.NativeTypes.NativeTrustManager;
 
 @:unreflective

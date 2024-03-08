@@ -1,8 +1,8 @@
-package lightstreamer.hxpoco;
+package com.lightstreamer.hxpoco;
 
 import cpp.ConstCharStar;
 import poco.net.Context.ContextPtr;
-import lightstreamer.cpp.CppStringMap;
+import com.lightstreamer.cpp.CppStringMap;
 
 @:structAccess
 @:include("HxPoco.h")
