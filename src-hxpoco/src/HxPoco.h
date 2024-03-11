@@ -55,7 +55,7 @@ private:
   void wait();
   void sendRequestAndReadResponse();
 
-  inline static Poco::Net::Context::Ptr _sslCtx = new Poco::Net::Context(Poco::Net::Context::TLS_CLIENT_USE, "", "", "", Poco::Net::Context::VERIFY_RELAXED, 9, true, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
+  static Poco::Net::Context::Ptr _sslCtx;
 
   std::string _url;
   std::string _body;

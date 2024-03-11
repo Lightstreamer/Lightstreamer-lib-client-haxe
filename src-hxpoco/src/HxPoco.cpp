@@ -22,6 +22,8 @@ using Poco::Event;
 
 using Lightstreamer::HxPoco::HttpClientCpp;
 
+Poco::Net::Context::Ptr HttpClientCpp::_sslCtx = new Poco::Net::Context(Poco::Net::Context::TLS_CLIENT_USE, "", "", "", Poco::Net::Context::VERIFY_RELAXED, 9, true, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
+
 HttpClientCpp::HttpClientCpp(const char* url, const char* body, const std::unordered_map<std::string, std::string>& headers, const HTTPClientSession::ProxyConfig& proxy) : 
   _url(url),
   _body(body),
