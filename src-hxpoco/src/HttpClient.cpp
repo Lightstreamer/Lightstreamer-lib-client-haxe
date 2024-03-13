@@ -1,4 +1,4 @@
-#include <HxPoco.h>
+#include "Lightstreamer/HxPoco/HttpClient.h"
 
 #include <iostream>
 #include <sstream>
@@ -20,11 +20,11 @@ using Poco::Net::Context;
 using Poco::FastMutex;
 using Poco::Event;
 
-using Lightstreamer::HxPoco::HttpClientCpp;
+using Lightstreamer::HxPoco::HttpClient;
 
-Poco::Net::Context::Ptr HttpClientCpp::_sslCtx = new Poco::Net::Context(Poco::Net::Context::TLS_CLIENT_USE, "", "", "", Poco::Net::Context::VERIFY_RELAXED, 9, true, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
+Poco::Net::Context::Ptr HttpClient::_sslCtx = new Poco::Net::Context(Poco::Net::Context::TLS_CLIENT_USE, "", "", "", Poco::Net::Context::VERIFY_RELAXED, 9, true, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
 
-HttpClientCpp::HttpClientCpp(const char* url, const char* body, const std::unordered_map<std::string, std::string>& headers, const HTTPClientSession::ProxyConfig& proxy) : 
+HttpClient::HttpClient(const char* url, const char* body, const std::unordered_map<std::string, std::string>& headers, const HTTPClientSession::ProxyConfig& proxy) : 
   _url(url),
   _body(body),
   _headers(headers),
@@ -35,12 +35,12 @@ HttpClientCpp::HttpClientCpp(const char* url, const char* body, const std::unord
   _done(Event::EVENT_MANUALRESET)
 {}
 
-HttpClientCpp::~HttpClientCpp()
+HttpClient::~HttpClient()
 {
   dispose();
 }
 
-void HttpClientCpp::start()
+void HttpClient::start()
 {
   if (_disposed) {
     return;
@@ -65,7 +65,7 @@ void HttpClientCpp::start()
   }
 }
 
-void HttpClientCpp::run()
+void HttpClient::run()
 {
   try
   {
@@ -79,12 +79,12 @@ void HttpClientCpp::run()
   _done.set();
 }
 
-void HttpClientCpp::stop()
+void HttpClient::stop()
 {
   _stopped = true;
 }
 
-void HttpClientCpp::wait()
+void HttpClient::wait()
 {
   if (_running)
   {
@@ -93,7 +93,7 @@ void HttpClientCpp::wait()
   }
 }
 
-void HttpClientCpp::dispose() {
+void HttpClient::dispose() {
   if (_disposed.exchange(true)) {
     return;
   }
@@ -120,7 +120,7 @@ void HttpClientCpp::dispose() {
   }
 }
 
-void HttpClientCpp::sendRequestAndReadResponse() {
+void HttpClient::sendRequestAndReadResponse() {
   try 
   {
     URI url(_url);

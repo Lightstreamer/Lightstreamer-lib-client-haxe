@@ -7,8 +7,8 @@ import poco.net.Context.ContextPtr;
 import com.lightstreamer.cpp.CppStringMap;
 
 @:structAccess
-@:include("HxPoco.h")
-@:native("Lightstreamer::HxPoco::HttpClientCpp")
+@:include("Lightstreamer/HxPoco/HttpClient.h")
+@:native("Lightstreamer::HxPoco::HttpClient")
 extern class HttpClientCpp {
   // public
   static function setSSLContext(ctx: ContextPtr): Void;

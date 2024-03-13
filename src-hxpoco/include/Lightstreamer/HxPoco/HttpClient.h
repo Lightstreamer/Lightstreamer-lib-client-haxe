@@ -1,5 +1,5 @@
-#ifndef INCLUDED_HxPoco
-#define INCLUDED_HxPoco
+#ifndef INCLUDED_Lightstreamer_HxPoco_HttpClient
+#define INCLUDED_Lightstreamer_HxPoco_HttpClient
 
 #include <string>
 #include <atomic>
@@ -15,14 +15,14 @@
 namespace Lightstreamer {
 namespace HxPoco {
 
-class HttpClientCpp {
+class HttpClient {
 public:
-  HttpClientCpp(const char* url, const char* body, const std::unordered_map<std::string, std::string>& headers, const Poco::Net::HTTPClientSession::ProxyConfig& proxy);
-  virtual ~HttpClientCpp();
+  HttpClient(const char* url, const char* body, const std::unordered_map<std::string, std::string>& headers, const Poco::Net::HTTPClientSession::ProxyConfig& proxy);
+  virtual ~HttpClient();
 
-  HttpClientCpp() = delete;
-  HttpClientCpp(const HttpClientCpp&) = delete;
-  HttpClientCpp& operator = (const HttpClientCpp&) = delete;
+  HttpClient() = delete;
+  HttpClient(const HttpClient&) = delete;
+  HttpClient& operator = (const HttpClient&) = delete;
 
   void start();
   void dispose();
