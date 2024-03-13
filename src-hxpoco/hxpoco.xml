@@ -1,0 +1,53 @@
+<xml>
+  <set name="LS_HXPOCO" value="Lightstreamer/HxPoco" />
+
+  <mkdir name="${HXCPP_BUILD_DIR}include/${LS_HXPOCO}" />
+  <mkdir name="${HXCPP_BUILD_DIR}src/${LS_HXPOCO}" />
+
+  <copy from="include/Lightstreamer/HxPoco/HttpClient.h" to="${HXCPP_BUILD_DIR}include/${LS_HXPOCO}"/>
+  <copy from="src/HttpClient.cpp" to="${HXCPP_BUILD_DIR}src/${LS_HXPOCO}"/>
+
+  <copy from="include/Lightstreamer/HxPoco/CookieJar.h" to="${HXCPP_BUILD_DIR}include/${LS_HXPOCO}"/>
+  <copy from="src/CookieJar.cpp" to="${HXCPP_BUILD_DIR}src/${LS_HXPOCO}"/>
+
+  <copy from="include/Lightstreamer/HxPoco/Utils.h" to="${HXCPP_BUILD_DIR}include/${LS_HXPOCO}"/>
+  <copy from="src/Utils.cpp" to="${HXCPP_BUILD_DIR}src/${LS_HXPOCO}"/>
+
+  <files id="hxpoco">
+    <compilerflag value="-Iinclude"/>
+    <compilerflag value="-I/opt/homebrew/opt/openssl/include"/>
+    <compilerflag value="-I${POCO_BASE}/Foundation/include"/>
+    <compilerflag value="-I${POCO_BASE}/Crypto/include"/>
+    <compilerflag value="-I${POCO_BASE}/Net/include"/>
+    <compilerflag value="-I${POCO_BASE}/NetSSL_OpenSSL/include"/>
+    <file name="src/${LS_HXPOCO}/HttpClient.cpp">
+      <depend name="include/${LS_HXPOCO}/HttpClient.h"/>
+    </file>
+    <file name="src/${LS_HXPOCO}/CookieJar.cpp">
+      <depend name="include/${LS_HXPOCO}/CookieJar.h"/>
+    </file>
+    <file name="src/${LS_HXPOCO}/Utils.cpp">
+      <depend name="include/${LS_HXPOCO}/Utils.h"/>
+    </file>
+  </files>
+
+  <files id="haxe">
+    <compilerflag value="-I/opt/homebrew/opt/openssl/include"/>
+    <compilerflag value="-I${POCO_BASE}/Foundation/include"/>
+    <compilerflag value="-I${POCO_BASE}/Crypto/include"/>
+    <compilerflag value="-I${POCO_BASE}/Net/include"/>
+    <compilerflag value="-I${POCO_BASE}/NetSSL_OpenSSL/include"/>
+  </files>
+
+  <target id="haxe">
+    <files id="hxpoco"/>
+    <flag value='-L${POCO_BASE}/lib/Darwin/arm64'/>
+    <!-- <flag value='-lPocoFoundation'/> -->
+    <!-- <flag value='-lPocoNet'/> -->
+    <flag value='-lPocoFoundationd'/>
+    <flag value='-lPocoNetd'/>
+    <flag value='-lPocoNetSSLd'/>
+    <!-- <libpath name="${POCO_BASE}/lib/Darwin/arm64"/> -->
+    <!-- <lib base="libPocoFoundation"/> -->
+  </target>
+</xml>
