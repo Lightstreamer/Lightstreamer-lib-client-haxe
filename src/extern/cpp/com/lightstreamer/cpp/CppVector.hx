@@ -10,4 +10,5 @@ extern class CppVector<T> {
   function new();
   function size(): SizeT;
   function push_back(val: Reference<T>): Void;
+  function at(n: SizeT): Reference<T>;
 }
