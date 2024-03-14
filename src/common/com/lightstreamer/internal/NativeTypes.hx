@@ -568,6 +568,9 @@ typedef NativeCookieCollection = cs.system.net.CookieCollection;
 #elseif python
 typedef NativeURI = String;
 typedef NativeCookieCollection = com.lightstreamer.internal.SimpleCookie;
+#elseif cpp
+typedef NativeURI = poco.URI;
+typedef NativeCookieCollection = com.lightstreamer.cpp.CppVector<poco.net.HTTPCookie>;
 #end
 
 #if java

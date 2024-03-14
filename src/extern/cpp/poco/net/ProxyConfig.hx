@@ -15,15 +15,15 @@ extern class ProxyConfig {
   function new();
   
   inline function setHost(host: String) {
-    this.host = CppString.of(host);
+    this.host = host;
   }
   inline function setPort(port: UInt16) {
     this.port = port;
   }
   inline function setUsername(user: String) {
-    this.username = CppString.of(user);
+    this.username = user;
   }
   inline function setPassword(password: String) {
-    this.password = CppString.of(password);
+    this.password = password;
   }
 }
