@@ -13,6 +13,7 @@ extern class HttpClientCpp {
   // public
   static function setSSLContext(ctx: ContextPtr): Void;
   static function clearSSLContext(): Void;
+  static final _cookieJar: CookieJar;
 
   function new(host: ConstCharStar, body: ConstCharStar, headers: CppStringMap, proxy: Reference<ProxyConfig>);
   function start(): Void;

@@ -2,8 +2,8 @@ package com.lightstreamer.internal;
 
 import cpp.Star;
 import poco.net.Context;
-import com.lightstreamer.cpp.CppString;
 import com.lightstreamer.internal.Threads.sessionThread;
+import com.lightstreamer.internal.NativeTypes.NativeCookieCollection;
 
 // NB the callbacks are sent to another thread because the `dispose` method is not reentrant
 private class _HttpClient extends HttpClient {
@@ -29,6 +29,7 @@ class TestHttpClientCpp extends utest.Test {
   function teardown() {
     client.dispose();
     Globals.instance.clearTrustManager();
+    CookieHelper.instance.clearCookies();
   }
 
   function testPolling(async: utest.Async) {
@@ -99,6 +100,34 @@ class TestHttpClientCpp extends utest.Test {
       });
   }
 
+  function testCookies(async: utest.Async) {
+    var uri = new poco.URI(host);
+    equals(0, (LightstreamerClient.getCookies(uri).size() : Int));
+    
+    var cookie = new poco.net.HTTPCookie("X-Client", "client");
+    var cookies = new NativeCookieCollection();
+    cookies.push_back(cookie);
+    LightstreamerClient.addCookies(uri, cookies);
+
+    client = new _HttpClient(
+      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", 
+      function onText(c, line) null, 
+      function onError(c, error) { 
+        fail(error); 
+        async.completed(); 
+      }, 
+      function onDone(c) {
+        var cookies = LightstreamerClient.getCookies(uri);
+        equals(2, (cookies.size() : Int));
+        var c1: String = cookies.at(0).toString();
+        var c2: String = cookies.at(1).toString();
+        equals("X-Client=client; domain=localtest.me; path=/", c1);
+        equals("X-Server=server; domain=localtest.me; path=/", c2);
+        async.completed();
+      });
+  }
+
   function testHeaders(async: utest.Async) {
     client = new _HttpClient(
       host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
@@ -152,9 +181,9 @@ class TestHttpClientCpp extends utest.Test {
   }
 
   function testTrustManager(async: utest.Async) {
-    var privateKeyFile = CppString.of("test/localtest.me.key");
-    var certificateFile = CppString.of("test/localtest.me.crt");
-    var caLocation = CppString.of("test/localtest.me.crt");
+    var privateKeyFile = "test/localtest.me.key";
+    var certificateFile = "test/localtest.me.crt";
+    var caLocation = "test/localtest.me.crt";
     var pCtx: Star<Context> = new Context(Usage.TLS_CLIENT_USE, privateKeyFile, certificateFile, caLocation);
     var ctxPtr = new ContextPtr(pCtx);
 
