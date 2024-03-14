@@ -45,6 +45,16 @@ TEST(test_delete_cookies) {
   }
 }
 
+TEST(test_clear_cookies) {
+  CookieJar jar;
+  URI url("http://acme.com");
+  HTTPCookie c1("n1", "v1");
+  jar.setCookiesFromUrl(url, { c1 });
+  CHECK_EQUAL(1, jar.cookiesForUrl(url).size());
+  jar.clearAllCookies();
+  CHECK_EQUAL(0, jar.cookiesForUrl(url).size());
+}
+
 TEST(test_secure_cookies) {
   CookieJar jar;
   URI url1("http://acme.com");

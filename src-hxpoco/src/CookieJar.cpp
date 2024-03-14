@@ -190,6 +190,10 @@ bool CookieJar::setCookiesFromUrl(const Poco::URI& url, const std::vector<Poco::
   return added;
 }
 
+void CookieJar::clearAllCookies() {
+  allCookies.clear();
+}
+
 bool CookieJar::insertCookie(const Poco::Net::HTTPCookie& cookie)
 {
   Poco::Timestamp now;

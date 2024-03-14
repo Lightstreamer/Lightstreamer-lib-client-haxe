@@ -31,6 +31,7 @@ public:
 
   virtual std::vector<Poco::Net::HTTPCookie> cookiesForUrl(const Poco::URI& url) const;
   virtual bool setCookiesFromUrl(const Poco::URI& url, const std::vector<Poco::Net::HTTPCookie>& cookies);
+  virtual void clearAllCookies();
 
   virtual bool insertCookie(const Poco::Net::HTTPCookie& cookie);
   virtual bool updateCookie(const Poco::Net::HTTPCookie& cookie);

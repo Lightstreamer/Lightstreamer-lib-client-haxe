@@ -8,6 +8,7 @@
 #include "Poco/Net/HTTPRequest.h"
 #include "Poco/Net/HTTPResponse.h"
 #include "Poco/Net/HTMLForm.h"
+#include "Poco/Net/NameValueCollection.h"
 
 using Poco::URI;
 using Poco::Net::HTTPClientSession;
@@ -19,10 +20,17 @@ using Poco::Net::HTMLForm;
 using Poco::Net::Context;
 using Poco::FastMutex;
 using Poco::Event;
+using Poco::Net::NameValueCollection;
 
 using Lightstreamer::HxPoco::HttpClient;
+using Lightstreamer::HxPoco::CookieJar;
+
+// STATIC MEMBERS
 
 Poco::Net::Context::Ptr HttpClient::_sslCtx = new Poco::Net::Context(Poco::Net::Context::TLS_CLIENT_USE, "", "", "", Poco::Net::Context::VERIFY_RELAXED, 9, true, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
+CookieJar HttpClient::_cookieJar;
+
+// INSTANCE MEMBERS
 
 HttpClient::HttpClient(const char* url, const char* body, const std::unordered_map<std::string, std::string>& headers, const HTTPClientSession::ProxyConfig& proxy) : 
   _url(url),
@@ -141,6 +149,16 @@ void HttpClient::sendRequestAndReadResponse() {
 
     HTTPRequest request(HTTPRequest::HTTP_POST, path, HTTPMessage::HTTP_1_1);
 
+    // add cookies
+    auto inCookies = _cookieJar.cookiesForUrl(url);
+    if (!inCookies.empty()) {
+      NameValueCollection nvc;
+      for (const auto& c : inCookies) {
+        nvc.add(c.getName(), c.getValue());
+      }
+      request.setCookies(nvc);
+    }
+
     // add request headers
     for (const auto& h : _headers) {
       request.set(h.first, h.second);
@@ -157,6 +175,13 @@ void HttpClient::sendRequestAndReadResponse() {
 
     Poco::Net::HTTPResponse response;
     std::istream& rs = _session->receiveResponse(response);
+
+    // retrieve cookies
+    std::vector<Poco::Net::HTTPCookie> outCookies;
+    response.getCookies(outCookies);
+    if (!outCookies.empty()) {
+      _cookieJar.setCookiesFromUrl(url, outCookies);
+    }
     
     std::string line;
     while (!isStopped() && std::getline(rs, line)) {

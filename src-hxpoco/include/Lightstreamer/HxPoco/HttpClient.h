@@ -11,6 +11,7 @@
 #include "Poco/Mutex.h"
 #include "Poco/Net/HTTPClientSession.h"
 #include "Poco/Net/Context.h"
+#include "Lightstreamer/HxPoco/CookieJar.h"
 
 namespace Lightstreamer {
 namespace HxPoco {
@@ -37,6 +38,8 @@ public:
   static void clearSSLContext() {
     _sslCtx = new Poco::Net::Context(Poco::Net::Context::TLS_CLIENT_USE, "", "", "", Poco::Net::Context::VERIFY_RELAXED, 9, true, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
   }
+
+  static CookieJar _cookieJar;
 
 protected:
   virtual void onText(const char* line) {}
