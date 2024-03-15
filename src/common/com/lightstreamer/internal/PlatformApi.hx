@@ -124,6 +124,9 @@ class Factory implements IFactory {
     var proxy = connectionOptions.getProxy();
     var trustManager = com.lightstreamer.internal.Globals.instance.getTrustManagerFactory();
     return new com.lightstreamer.internal.HttpClient(url, body, headers, proxy, trustManager, onText, onError, onDone);
+    #elseif cpp
+    var proxy = connectionOptions.getProxy();
+    return new com.lightstreamer.internal.HttpClient(url, body, headers, proxy, onText, onError, onDone);
     #else
     @:nullSafety(Off)
     return null;
