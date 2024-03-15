@@ -128,6 +128,15 @@ void HttpClient::dispose() {
   }
 }
 
+std::istream &getLine(std::istream& is, std::string& line) {
+  auto& res = std::getline(is, line);
+  auto sz = line.size();
+  if (sz > 0 && line.back() == '\r') {
+    line.resize(sz - 1);
+  }
+  return res;
+}
+
 void HttpClient::sendRequestAndReadResponse() {
   try 
   {
@@ -184,7 +193,7 @@ void HttpClient::sendRequestAndReadResponse() {
     }
     
     std::string line;
-    while (!isStopped() && std::getline(rs, line)) {
+    while (!isStopped() && getLine(rs, line)) {
       onText(line.c_str());
     }
     onDone();
