@@ -67,10 +67,6 @@ class TestAll {
     runner.addCase(com.lightstreamer.client.mpn.TestMpnBuilderAndroid);
     #end
     #end
-    #if (!php && !cpp)
-    runner.addCase(TestClient);
-    runner.addCase(TestClientExtra);
-    #end
     runner.addCase(TestSubscribe_WS);
     runner.addCase(TestSubscribe_HTTP);
     runner.addCase(TestSubscribe_HTTP_Polling);
@@ -88,6 +84,8 @@ class TestAll {
     runner.addCase(TestDiff);
     runner.addCase(TestDiffPatch);
     #end
+    runner.addCase(TestClient);
+    runner.addCase(TestClientExtra);
   }
 
   public static function main() {

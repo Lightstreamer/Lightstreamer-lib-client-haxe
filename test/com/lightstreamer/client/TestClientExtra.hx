@@ -78,6 +78,14 @@ class TestClientExtra extends utest.Test {
       var cookies = new cs.system.net.CookieCollection();
       cookies.Add(cookie);
       LightstreamerClient.addCookies(uri, cookies);
+      #elseif cpp
+      var uri = new poco.URI(host);
+      equals(0, (LightstreamerClient.getCookies(uri).size() : Int));
+    
+      var cookie = new poco.net.HTTPCookie("X-Client", "client");
+      var cookies = new com.lightstreamer.cpp.CppVector<poco.net.HTTPCookie>();
+      cookies.push_back(cookie);
+      LightstreamerClient.addCookies(uri, cookies);
       #else
       fail("TODO");
       #end
@@ -111,6 +119,14 @@ class TestClientExtra extends utest.Test {
       var nCookies = [cookies[0].ToString(), cookies[1].ToString()];
       contains("X-Client=client", nCookies);
       contains("X-Server=server", nCookies);
+      #elseif cpp
+      var uri = new poco.URI(host);
+      var cookies = LightstreamerClient.getCookies(uri);
+      equals(2, (cookies.size() : Int));
+      var c1: String = cookies.at(0).toString();
+      var c2: String = cookies.at(1).toString();
+      equals("X-Client=client; domain=localtest.me; path=/", c1);
+      equals("X-Server=server; domain=localtest.me; path=/", c2);
       #else
       fail("TODO");
       #end
@@ -138,6 +154,13 @@ class TestClientExtra extends utest.Test {
       var tmf = java.javax.net.ssl.TrustManagerFactory.getInstance(java.javax.net.ssl.TrustManagerFactory.getDefaultAlgorithm());
       tmf.init(keyStore);
       LightstreamerClient.setTrustManagerFactory(tmf);
+      #elseif cpp
+      var privateKeyFile = "test/localtest.me.key";
+      var certificateFile = "test/localtest.me.crt";
+      var caLocation = "test/localtest.me.crt";
+      var pCtx: cpp.Star<poco.net.Context> = new poco.net.Context(poco.net.Context.Usage.TLS_CLIENT_USE, privateKeyFile, certificateFile, caLocation);
+      var ctxPtr = new poco.net.Context.ContextPtr(pCtx);
+      LightstreamerClient.setTrustManagerFactory(ctxPtr);
       #else
       fail("TODO");
       #end
