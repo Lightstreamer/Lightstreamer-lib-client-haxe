@@ -7,7 +7,7 @@
 #include "Poco/Net/HTTPSClientSession.h"
 #include "Poco/Net/HTTPRequest.h"
 #include "Poco/Net/HTTPResponse.h"
-#include "Poco/Net/HTMLForm.h"
+#include "Poco/CountingStream.h"
 #include "Poco/Net/NameValueCollection.h"
 
 using Poco::URI;
@@ -16,7 +16,6 @@ using Poco::Net::HTTPSClientSession;
 using Poco::Net::HTTPRequest;
 using Poco::Net::HTTPResponse;
 using Poco::Net::HTTPMessage;
-using Poco::Net::HTMLForm;
 using Poco::Net::Context;
 using Poco::FastMutex;
 using Poco::Event;
@@ -137,6 +136,12 @@ std::istream &getLine(std::istream& is, std::string& line) {
   return res;
 }
 
+std::streamsize HttpClient::computeContentLength() {
+  Poco::CountingOutputStream ostr;
+  ostr << _body;
+  return ostr.chars();
+}
+
 void HttpClient::sendRequestAndReadResponse() {
   try 
   {
@@ -173,14 +178,14 @@ void HttpClient::sendRequestAndReadResponse() {
       request.set(h.first, h.second);
     }
 
-    // add post parameters
-    HTMLForm form;
-    form.read(_body);
-    form.prepareSubmit(request);
+    // add other headers (the following code has been derived from HTMLForm::prepareSubmit)
+    request.setContentType("application/x-www-form-urlencoded");
+		request.setChunkedTransferEncoding(false);
+		request.setContentLength(computeContentLength());
     
     // send request: headers+parameters
     std::ostream& ros = _session->sendRequest(request);
-    form.write(ros);
+    ros << _body;
 
     Poco::Net::HTTPResponse response;
     std::istream& rs = _session->receiveResponse(response);

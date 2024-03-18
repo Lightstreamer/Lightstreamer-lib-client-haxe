@@ -57,6 +57,7 @@ private:
 	}
   void wait();
   void sendRequestAndReadResponse();
+  std::streamsize computeContentLength();
 
   static Poco::Net::Context::Ptr _sslCtx;
 
