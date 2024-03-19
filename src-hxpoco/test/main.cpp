@@ -2,10 +2,12 @@
 #include <thread>
 #include <chrono>   
 #include "Lightstreamer/HxPoco/CookieJar.h"
+#include "Lightstreamer/HxPoco/LineAssembler.h"
 
 using Poco::URI;
 using Poco::Net::HTTPCookie;
 using Lightstreamer::HxPoco::CookieJar;
+using Lightstreamer::HxPoco::LineAssembler;
 
 TEST(test_add_cookies) {
   CookieJar jar;
@@ -157,6 +159,52 @@ TEST(test_cookie_expiration_date) {
     CHECK_EQUAL(1, v.size());
     CHECK_EQUAL("n3", v.at(0).getName());
   }
+}
+
+LineAssembler::ByteBuf fromString(std::string_view s) {
+  return LineAssembler::ByteBuf(s.data(), s.size());
+}
+
+TEST(test_buffer) {
+  LineAssembler la;
+  LineAssembler::ByteBuf buf(0);
+  std::vector<std::string> v;
+  auto cb = [&v](std::string_view s) { v.push_back(std::string(s)); };
+
+  buf = fromString("a whole line\r\n");
+  la.readBytes(buf, cb);
+  CHECK_EQUAL("a whole line", v.back());
+
+  buf = fromString("another whole line\r\na partial");
+  la.readBytes(buf, cb);
+  CHECK_EQUAL("another whole line", v.back());
+
+  buf = fromString(" line\r\nanother");
+  la.readBytes(buf, cb);
+  CHECK_EQUAL("a partial line", v.back());
+
+  buf = fromString(" partial");
+  la.readBytes(buf, cb);
+
+  buf = fromString(" line\r\n");
+  la.readBytes(buf, cb);
+  CHECK_EQUAL("another partial line", v.back());
+
+  buf = fromString("a tricky line\r");
+  la.readBytes(buf, cb);
+
+  buf = fromString("\n");
+  la.readBytes(buf, cb);
+  CHECK_EQUAL("a tricky line", v.back());
+
+  buf = fromString("");
+  la.readBytes(buf, cb);
+
+  buf = fromString("\r\n");
+  la.readBytes(buf, cb);
+  CHECK_EQUAL("", v.back());
+
+  CHECK_EQUAL(6, v.size());
 }
 
 int main() {
