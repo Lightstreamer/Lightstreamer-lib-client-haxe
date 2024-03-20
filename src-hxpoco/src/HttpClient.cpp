@@ -10,6 +10,8 @@
 #include "Poco/CountingStream.h"
 #include "Poco/Net/NameValueCollection.h"
 
+namespace {
+
 using Poco::URI;
 using Poco::Net::HTTPClientSession;
 using Poco::Net::HTTPSClientSession;
@@ -23,6 +25,17 @@ using Poco::Net::NameValueCollection;
 
 using Lightstreamer::HxPoco::HttpClient;
 using Lightstreamer::HxPoco::CookieJar;
+
+std::istream &getLine(std::istream& is, std::string& line) {
+  auto& res = std::getline(is, line);
+  auto sz = line.size();
+  if (sz > 0 && line.back() == '\r') {
+    line.resize(sz - 1);
+  }
+  return res;
+}
+
+} // END unnamed namespace
 
 // STATIC MEMBERS
 
@@ -125,15 +138,6 @@ void HttpClient::dispose() {
   {
     poco_unexpected();
   }
-}
-
-std::istream &getLine(std::istream& is, std::string& line) {
-  auto& res = std::getline(is, line);
-  auto sz = line.size();
-  if (sz > 0 && line.back() == '\r') {
-    line.resize(sz - 1);
-  }
-  return res;
 }
 
 std::streamsize HttpClient::computeContentLength() {

@@ -1,5 +1,7 @@
 #include "Lightstreamer/HxPoco/LineAssembler.h"
 
+namespace {
+
 using Lightstreamer::HxPoco::LineAssembler;
 
 constexpr char LF = '\n';
@@ -76,6 +78,8 @@ inline std::string_view toLine(std::string_view s) {
 inline void reset(std::string& s) {
   s.resize(0);
 }
+
+} // END unnamed namespace
 
 /**
  * Reads the available bytes and extracts the contained lines. 

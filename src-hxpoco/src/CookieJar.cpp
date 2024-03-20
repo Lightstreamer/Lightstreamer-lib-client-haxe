@@ -8,6 +8,8 @@
 #include "Poco/Net/NetException.h"
 #include "Lightstreamer/HxPoco/Utils.h"
 
+namespace {
+
 using namespace Lightstreamer::HxPoco;
 
 bool isParentPath(const std::string& path, const std::string& reference)
@@ -102,6 +104,8 @@ void normalize(Poco::Net::HTTPCookie& cookie, const Poco::URI& url) {
     }
   }
 }
+
+} // END unnamed namespace
 
 /*!
   Returns the cookies to be added to when a request is sent to
