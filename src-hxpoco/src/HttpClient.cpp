@@ -9,6 +9,7 @@
 #include "Poco/Net/HTTPResponse.h"
 #include "Poco/CountingStream.h"
 #include "Poco/Net/NameValueCollection.h"
+#include "Lightstreamer/HxPoco/Network.h"
 
 namespace {
 
@@ -25,6 +26,7 @@ using Poco::Net::NameValueCollection;
 
 using Lightstreamer::HxPoco::HttpClient;
 using Lightstreamer::HxPoco::CookieJar;
+using Lightstreamer::HxPoco::Network;
 
 std::istream &getLine(std::istream& is, std::string& line) {
   auto& res = std::getline(is, line);
@@ -36,13 +38,6 @@ std::istream &getLine(std::istream& is, std::string& line) {
 }
 
 } // END unnamed namespace
-
-// STATIC MEMBERS
-
-Poco::Net::Context::Ptr HttpClient::_sslCtx = new Poco::Net::Context(Poco::Net::Context::TLS_CLIENT_USE, "", "", "", Poco::Net::Context::VERIFY_RELAXED, 9, true, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
-CookieJar HttpClient::_cookieJar;
-
-// INSTANCE MEMBERS
 
 HttpClient::HttpClient(const char* url, const char* body, const std::unordered_map<std::string, std::string>& headers, const HTTPClientSession::ProxyConfig& proxy) : 
   _url(url),
@@ -156,7 +151,7 @@ void HttpClient::sendRequestAndReadResponse() {
     auto path = url.getPathAndQuery();
 
     if (secure) {
-      Context::Ptr pContext = _sslCtx;
+      Context::Ptr pContext = Network::_sslCtx;
       _session = std::make_unique<HTTPSClientSession>(pContext);
     } else {
       _session = std::make_unique<HTTPClientSession>();
@@ -168,7 +163,7 @@ void HttpClient::sendRequestAndReadResponse() {
     HTTPRequest request(HTTPRequest::HTTP_POST, path, HTTPMessage::HTTP_1_1);
 
     // add cookies
-    auto inCookies = _cookieJar.cookiesForUrl(url);
+    auto inCookies = Network::_cookieJar.cookiesForUrl(url);
     if (!inCookies.empty()) {
       NameValueCollection nvc;
       for (const auto& c : inCookies) {
@@ -198,7 +193,7 @@ void HttpClient::sendRequestAndReadResponse() {
     std::vector<Poco::Net::HTTPCookie> outCookies;
     response.getCookies(outCookies);
     if (!outCookies.empty()) {
-      _cookieJar.setCookiesFromUrl(url, outCookies);
+      Network::_cookieJar.setCookiesFromUrl(url, outCookies);
     }
     
     std::string line;

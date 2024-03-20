@@ -6,6 +6,7 @@ import cpp.ConstCharStar;
 import sys.thread.Thread;
 import poco.net.ProxyConfig;
 import com.lightstreamer.cpp.CppStringMap;
+import com.lightstreamer.hxpoco.Network;
 import com.lightstreamer.hxpoco.HttpClientCpp;
 import com.lightstreamer.internal.NativeTypes;
 import com.lightstreamer.client.Proxy.LSProxy as Proxy;
@@ -22,23 +23,23 @@ class HttpClient implements IHttpClient {
   var _client: Null<Star<HttpClientAdapter>>;
 
   inline static public function setSSLContext(ctx: NativeTrustManager) {
-    HttpClientCpp.setSSLContext(ctx);
+    Network.setSSLContext(ctx);
   }
 
   inline static public function clearSSLContext() {
-    HttpClientCpp.clearSSLContext();
+    Network.clearSSLContext();
   }
 
   inline static public function setCookiesFromUrl(url: cpp.Reference<NativeURI>, cookies: cpp.Reference<NativeCookieCollection>) {
-    HttpClientCpp._cookieJar.setCookiesFromUrl(url, cookies);
+    Network._cookieJar.setCookiesFromUrl(url, cookies);
   }
 
   inline static public function cookiesForUrl(url: cpp.Reference<NativeURI>): NativeCookieCollection {
-    return HttpClientCpp._cookieJar.cookiesForUrl(url);
+    return Network._cookieJar.cookiesForUrl(url);
   }
 
   inline static public function clearAllCookies(): Void {
-    HttpClientCpp._cookieJar.clearAllCookies();
+    Network._cookieJar.clearAllCookies();
   }
 
   public function new(url: String, body: String, 

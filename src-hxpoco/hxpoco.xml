@@ -13,6 +13,8 @@
   <copy from="include/Lightstreamer/HxPoco/Utils.h" to="${HXCPP_BUILD_DIR}include/${LS_HXPOCO}"/>
   <copy from="src/Utils.cpp" to="${HXCPP_BUILD_DIR}src/${LS_HXPOCO}"/>
 
+  <copy from="include/Lightstreamer/HxPoco/Network.h" to="${HXCPP_BUILD_DIR}include/${LS_HXPOCO}"/>
+
   <files id="hxpoco">
     <compilerflag value="-Iinclude"/>
     <compilerflag value="-I/opt/homebrew/opt/openssl/include"/>

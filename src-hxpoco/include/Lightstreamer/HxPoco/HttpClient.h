@@ -31,16 +31,6 @@ public:
     return _disposed;
   }
 
-  static void setSSLContext(Poco::Net::Context::Ptr pCtx) {
-    _sslCtx = pCtx;
-  }
-
-  static void clearSSLContext() {
-    _sslCtx = new Poco::Net::Context(Poco::Net::Context::TLS_CLIENT_USE, "", "", "", Poco::Net::Context::VERIFY_RELAXED, 9, true, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
-  }
-
-  static CookieJar _cookieJar;
-
 protected:
   virtual void onText(const char* line) {}
   virtual void onError(const char* line) {}
@@ -58,8 +48,6 @@ private:
   void wait();
   void sendRequestAndReadResponse();
   std::streamsize computeContentLength();
-
-  static Poco::Net::Context::Ptr _sslCtx;
 
   std::string _url;
   std::string _body;
