@@ -15,6 +15,8 @@
 
   <copy from="include/Lightstreamer/HxPoco/Network.h" to="${HXCPP_BUILD_DIR}include/${LS_HXPOCO}"/>
 
+  <copy from="include/Lightstreamer/HxPoco/Activity.h" to="${HXCPP_BUILD_DIR}include/${LS_HXPOCO}"/>
+
   <files id="hxpoco">
     <compilerflag value="-Iinclude"/>
     <compilerflag value="-I/opt/homebrew/opt/openssl/include"/>
@@ -24,9 +26,12 @@
     <compilerflag value="-I${POCO_BASE}/NetSSL_OpenSSL/include"/>
     <file name="src/${LS_HXPOCO}/HttpClient.cpp">
       <depend name="include/${LS_HXPOCO}/HttpClient.h"/>
+      <depend name="include/${LS_HXPOCO}/Network.h"/>
+      <depend name="include/${LS_HXPOCO}/Activity.h"/>
     </file>
     <file name="src/${LS_HXPOCO}/CookieJar.cpp">
       <depend name="include/${LS_HXPOCO}/CookieJar.h"/>
+      <depend name="include/${LS_HXPOCO}/Utils.h"/>
     </file>
     <file name="src/${LS_HXPOCO}/Utils.cpp">
       <depend name="include/${LS_HXPOCO}/Utils.h"/>

@@ -44,68 +44,12 @@ HttpClient::HttpClient(const char* url, const char* body, const std::unordered_m
   _body(body),
   _headers(headers),
   _proxy(proxy),
-  _disposed(false),
-  _stopped(true),
-  _running(false),
-  _done(Event::EVENT_MANUALRESET)
+  _disposed(false)
 {}
 
 HttpClient::~HttpClient()
 {
   dispose();
-}
-
-void HttpClient::start()
-{
-  if (_disposed) {
-    return;
-  }
-
-  FastMutex::ScopedLock lock(_mutex);
-
-  if (!_running)
-  {
-    _done.reset();
-    _stopped = false;
-    _running = true;
-    try
-    {
-      submit();
-    }
-    catch (...)
-    {
-      _running = false;
-      throw;
-    }
-  }
-}
-
-void HttpClient::run()
-{
-  try
-  {
-    sendRequestAndReadResponse();
-  }
-  catch (...)
-  {
-    _done.set();
-    throw;
-  }
-  _done.set();
-}
-
-void HttpClient::stop()
-{
-  _stopped = true;
-}
-
-void HttpClient::wait()
-{
-  if (_running)
-  {
-    _done.wait();
-    _running = false;
-  }
 }
 
 void HttpClient::dispose() {
@@ -121,7 +65,7 @@ void HttpClient::dispose() {
   }
   catch(...)
   {
-    // there is nothing we cand do
+    // there is nothing we can do
   }
   
   try
@@ -141,7 +85,7 @@ std::streamsize HttpClient::computeContentLength() {
   return ostr.chars();
 }
 
-void HttpClient::sendRequestAndReadResponse() {
+void HttpClient::run() {
   try 
   {
     URI url(_url);

@@ -12,11 +12,12 @@
 #include "Poco/Net/HTTPClientSession.h"
 #include "Poco/Net/Context.h"
 #include "Lightstreamer/HxPoco/CookieJar.h"
+#include "Lightstreamer/HxPoco/Activity.h"
 
 namespace Lightstreamer {
 namespace HxPoco {
 
-class HttpClient {
+class HttpClient : public Activity {
 public:
   HttpClient(const char* url, const char* body, const std::unordered_map<std::string, std::string>& headers, const Poco::Net::HTTPClientSession::ProxyConfig& proxy);
   virtual ~HttpClient();
@@ -25,7 +26,9 @@ public:
   HttpClient(const HttpClient&) = delete;
   HttpClient& operator = (const HttpClient&) = delete;
 
-  void start();
+  void start() {
+    Activity::start();
+  }
   void dispose();
   bool isDisposed() const {
     return _disposed;
@@ -35,18 +38,9 @@ protected:
   virtual void onText(const char* line) {}
   virtual void onError(const char* line) {}
   virtual void onDone() {}
-  virtual void submit() {
-    run();
-  }
-  void run();
+  virtual void run() override;
 
 private:
-  void stop();
-  bool isStopped() const {
-		return _stopped;
-	}
-  void wait();
-  void sendRequestAndReadResponse();
   std::streamsize computeContentLength();
 
   std::string _url;
@@ -54,11 +48,7 @@ private:
   std::unordered_map<std::string, std::string> _headers;
   Poco::Net::HTTPClientSession::ProxyConfig _proxy;
   std::unique_ptr<Poco::Net::HTTPClientSession> _session;
-  std::atomic_bool    _disposed;
-  std::atomic<bool>   _stopped;
-  std::atomic<bool>   _running;
-  Poco::Event         _done;
-  Poco::FastMutex     _mutex;
+  std::atomic_bool _disposed;
 };
 
 }}

@@ -6,9 +6,7 @@ import cpp.ConstCharStar;
 import sys.thread.Thread;
 import poco.net.ProxyConfig;
 import com.lightstreamer.cpp.CppStringMap;
-import com.lightstreamer.hxpoco.Network;
 import com.lightstreamer.hxpoco.HttpClientCpp;
-import com.lightstreamer.internal.NativeTypes;
 import com.lightstreamer.client.Proxy.LSProxy as Proxy;
 import com.lightstreamer.internal.PlatformApi.IHttpClient;
 import com.lightstreamer.log.LoggerTools;
@@ -21,26 +19,6 @@ class HttpClient implements IHttpClient {
   final _onError: (HttpClient, String)->Void;
   final _onDone: HttpClient->Void;
   var _client: Null<Star<HttpClientAdapter>>;
-
-  inline static public function setSSLContext(ctx: NativeTrustManager) {
-    Network.setSSLContext(ctx);
-  }
-
-  inline static public function clearSSLContext() {
-    Network.clearSSLContext();
-  }
-
-  inline static public function setCookiesFromUrl(url: cpp.Reference<NativeURI>, cookies: cpp.Reference<NativeCookieCollection>) {
-    Network._cookieJar.setCookiesFromUrl(url, cookies);
-  }
-
-  inline static public function cookiesForUrl(url: cpp.Reference<NativeURI>): NativeCookieCollection {
-    return Network._cookieJar.cookiesForUrl(url);
-  }
-
-  inline static public function clearAllCookies(): Void {
-    Network._cookieJar.clearAllCookies();
-  }
 
   public function new(url: String, body: String, 
     headers: Null<Map<String, String>>,
@@ -145,7 +123,7 @@ class HttpClientAdapter extends HttpClientCpp {
     var that: Star<HttpClientAdapter> = untyped __cpp__("this");
     // TODO use a thread pool?
     @:nullSafety(Off)
-    Thread.create(() -> that.run());
+    Thread.create(() -> that.doSubmit());
   }
 
   override public function onText(line: ConstCharStar): Void {

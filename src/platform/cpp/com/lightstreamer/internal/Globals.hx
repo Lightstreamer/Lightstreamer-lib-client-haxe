@@ -1,5 +1,6 @@
 package com.lightstreamer.internal;
 
+import com.lightstreamer.hxpoco.Network;
 import com.lightstreamer.internal.NativeTypes.NativeTrustManager;
 
 @:unreflective
@@ -10,11 +11,11 @@ class Globals {
   function new() {}
 
   public function setTrustManagerFactory(ctx: NativeTrustManager) {
-    HttpClient.setSSLContext(ctx);
+    Network.setSSLContext(ctx);
   }
 
   public function clearTrustManager() {
-    HttpClient.clearSSLContext();
+    Network.clearSSLContext();
   }
 
   public function toString(): String return "{}";
