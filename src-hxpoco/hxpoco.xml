@@ -7,6 +7,9 @@
   <copy from="include/Lightstreamer/HxPoco/HttpClient.h" to="${HXCPP_BUILD_DIR}include/${LS_HXPOCO}"/>
   <copy from="src/HttpClient.cpp" to="${HXCPP_BUILD_DIR}src/${LS_HXPOCO}"/>
 
+  <copy from="include/Lightstreamer/HxPoco/WsClient.h" to="${HXCPP_BUILD_DIR}include/${LS_HXPOCO}"/>
+  <copy from="src/WsClient.cpp" to="${HXCPP_BUILD_DIR}src/${LS_HXPOCO}"/>
+
   <copy from="include/Lightstreamer/HxPoco/CookieJar.h" to="${HXCPP_BUILD_DIR}include/${LS_HXPOCO}"/>
   <copy from="src/CookieJar.cpp" to="${HXCPP_BUILD_DIR}src/${LS_HXPOCO}"/>
 
@@ -26,6 +29,11 @@
     <compilerflag value="-I${POCO_BASE}/NetSSL_OpenSSL/include"/>
     <file name="src/${LS_HXPOCO}/HttpClient.cpp">
       <depend name="include/${LS_HXPOCO}/HttpClient.h"/>
+      <depend name="include/${LS_HXPOCO}/Network.h"/>
+      <depend name="include/${LS_HXPOCO}/Activity.h"/>
+    </file>
+    <file name="src/${LS_HXPOCO}/WsClient.cpp">
+      <depend name="include/${LS_HXPOCO}/WsClient.h"/>
       <depend name="include/${LS_HXPOCO}/Network.h"/>
       <depend name="include/${LS_HXPOCO}/Activity.h"/>
     </file>

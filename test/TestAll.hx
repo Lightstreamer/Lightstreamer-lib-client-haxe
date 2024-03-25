@@ -54,6 +54,10 @@ class TestAll {
     runner.addCase(TestHttpClientPython);
     runner.addCase(TestWsClientPython);
     #end
+    #if cpp
+    runner.addCase(TestHttpClientCpp);
+    runner.addCase(TestWsClientCpp);
+    #end
     #if LS_MPN
     runner.addCase(com.lightstreamer.client.mpn.TestMpnSubscription);
     runner.addCase(com.lightstreamer.client.mpn.TestMpnSubscribe);
