@@ -11,7 +11,7 @@ int indexOf(const LineAssembler::ByteBuf& buf, int startIndex, int endIndex, cha
   auto itBegin = buf.begin() + startIndex;
   auto itEnd = buf.begin() + endIndex;
   auto it = std::find(itBegin, itEnd, c);
-  return it == itEnd ? -1 : it - itBegin;
+  return it == itEnd ? -1 : startIndex + (it - itBegin);
 }
 
 /**
