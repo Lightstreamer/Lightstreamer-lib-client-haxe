@@ -15,6 +15,7 @@ using com.lightstreamer.log.LoggerTools;
 
 @:unreflective
 class HttpClient implements IHttpClient {
+  final _lock = new RLock();
   final _onText: (HttpClient, String)->Void;
   final _onError: (HttpClient, String)->Void;
   final _onDone: HttpClient->Void;
@@ -61,17 +62,26 @@ class HttpClient implements IHttpClient {
    * Make sure to call it from a different thread than the one calling the `onText`, `onError`, and `onDone` callbacks.
    */
   public function dispose() {
-    streamLogger.logDebug("HTTP disposing");
-    if (_client != null) {
-      _client.dispose();
-      // manually release the memory acquired by the native objects
-      untyped __cpp__("delete {0}", _client);
-      _client = null;
+    _lock.acquire();
+    var c = _client;
+    _client = null;
+    _lock.release();
+
+    if (c == null) {
+      return;
     }
+    streamLogger.logDebug("HTTP disposing");
+    c.dispose();
+    // manually release the memory acquired by the native objects
+    untyped __cpp__("delete {0}", c);
   }
 
   public function isDisposed(): Bool {
-    return _client != null ? _client.isDisposed() : true;
+    _lock.acquire();
+    var c = _client;
+    _lock.release();
+    
+    return c != null ? c.isDisposed() : true;
   }
 
   function onText(line: String): Void {
