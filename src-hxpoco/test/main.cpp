@@ -165,7 +165,7 @@ LineAssembler::ByteBuf fromString(std::string_view s) {
   return LineAssembler::ByteBuf(s.data(), s.size());
 }
 
-TEST(test_buffer) {
+TEST(test_line_assembler) {
   LineAssembler la;
   LineAssembler::ByteBuf buf(0);
   std::vector<std::string> v;
@@ -205,6 +205,26 @@ TEST(test_buffer) {
   CHECK_EQUAL("", v.back());
 
   CHECK_EQUAL(6, v.size());
+}
+
+TEST(test_extract_lines_from_frames) {
+  LineAssembler la;
+  LineAssembler::ByteBuf buf(0);
+  std::vector<std::string> v;
+  auto cb = [&v](std::string_view s) { v.push_back(std::string(s)); };
+
+  buf = fromString("SERVNAME,Lightstreamer HTTP Server\r\nCLIENTIP,127.0.0.1\r\nCONS,40.0\r\nSUBOK");
+  la.readBytes(buf, cb);
+  CHECK_EQUAL(3, v.size());
+  CHECK_EQUAL("SERVNAME,Lightstreamer HTTP Server", v.at(0));
+  CHECK_EQUAL("CLIENTIP,127.0.0.1", v.at(1));
+  CHECK_EQUAL("CONS,40.0", v.at(2));
+
+  buf = fromString(",1,1,1\r\nCONF,1,unlimited,filtered\r\n");
+  la.readBytes(buf, cb);
+  CHECK_EQUAL(5, v.size());
+  CHECK_EQUAL("SUBOK,1,1,1", v.at(3));
+  CHECK_EQUAL("CONF,1,unlimited,filtered", v.at(4));
 }
 
 int main() {
