@@ -15,6 +15,7 @@ using com.lightstreamer.log.LoggerTools;
 
 @:unreflective
 class WsClient implements IWsClient {
+  final _lock = new RLock();
   final _onOpen: WsClient->Void;
   final _onText: (WsClient, String)->Void;
   final _onError: (WsClient, String)->Void;
@@ -57,10 +58,13 @@ class WsClient implements IWsClient {
   }
 
   public function send(txt: String): Void {
-    if (_client != null) {
-      // TODO avoid copying string
-      _client.send(txt);
-    }
+    _lock.synchronized(() -> {
+      if (_client != null) {
+        streamLogger.logDebug('WS sending: $txt');
+        // TODO avoid copying string
+        _client.send(txt);
+      }
+    });
   }
 
   /**
@@ -68,17 +72,21 @@ class WsClient implements IWsClient {
    * Make sure to call it from a different thread than the one calling the `onText`, `onError`, and `onDone` callbacks.
    */
   public function dispose() {
-    streamLogger.logDebug("WS disposing");
-    if (_client != null) {
-      _client.dispose();
-      // manually release the memory acquired by the native objects
-      untyped __cpp__("delete {0}", _client);
-      _client = null;
-    }
+    _lock.acquire();
+    var c = _client;
+    _client = null;
+    _lock.release();
+
+		if (c != null) {
+			streamLogger.logDebug("WS disposing");
+			c.dispose();
+			// manually release the memory acquired by the native objects
+			untyped __cpp__("delete {0}", c);
+		}
   }
 
   public function isDisposed(): Bool {
-    return _client != null ? _client.isDisposed() : true;
+    return _lock.synchronized(() -> _client != null ? _client.isDisposed() : true);
   }
 
   function onOpen(): Void {

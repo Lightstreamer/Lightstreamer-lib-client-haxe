@@ -67,21 +67,16 @@ class HttpClient implements IHttpClient {
     _client = null;
     _lock.release();
 
-    if (c == null) {
-      return;
+    if (c != null) {
+      streamLogger.logDebug("HTTP disposing");
+      c.dispose();
+      // manually release the memory acquired by the native objects
+      untyped __cpp__("delete {0}", c);
     }
-    streamLogger.logDebug("HTTP disposing");
-    c.dispose();
-    // manually release the memory acquired by the native objects
-    untyped __cpp__("delete {0}", c);
   }
 
   public function isDisposed(): Bool {
-    _lock.acquire();
-    var c = _client;
-    _lock.release();
-    
-    return c != null ? c.isDisposed() : true;
+    return _lock.synchronized(() -> _client != null ? _client.isDisposed() : true);
   }
 
   function onText(line: String): Void {
