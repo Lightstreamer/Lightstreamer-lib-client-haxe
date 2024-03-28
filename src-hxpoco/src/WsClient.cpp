@@ -7,6 +7,7 @@
 #include "Poco/Net/HTTPSClientSession.h"
 #include "Poco/Net/NameValueCollection.h"
 #include "Lightstreamer/HxPoco/Network.h"
+#include "Lightstreamer/HxPoco/LineAssembler.h"
 
 namespace {
 
@@ -20,6 +21,7 @@ using Poco::Net::HTTPResponse;
 using Poco::Net::NameValueCollection;
 
 using Lightstreamer::HxPoco::WsClient;
+using Lightstreamer::HxPoco::LineAssembler;
 
 inline bool isTextFrame(int flags) {
   return (flags & 0xf) == Poco::Net::WebSocket::FrameOpcodes::FRAME_OP_TEXT;
@@ -41,7 +43,7 @@ WsClient::~WsClient()
 }
 
 void WsClient::send(const std::string& txt) {
-  if (_ws) {
+  if (!_disposed) {
     _ws->sendFrame(txt.data(), txt.size());
   }
 }
@@ -55,7 +57,6 @@ void WsClient::dispose() {
   {
     if (_ws) {
       _ws->shutdown();
-      _ws = nullptr;
     }
   }
   catch(...)
@@ -102,6 +103,7 @@ void WsClient::run() {
       request.set(h.first, h.second);
     }
 
+    // open the websocket
     if (secure) {
       Context::Ptr pContext = Network::_sslCtx;
       HTTPSClientSession cs(pContext);
@@ -121,9 +123,15 @@ void WsClient::run() {
       Network::_cookieJar.setCookiesFromUrl(url, outCookies);
     }
 
+    LineAssembler lineAssembler;
+    Poco::Buffer<char> buf(1024);
+    auto lineConsumer = [this](std::string_view line) {
+      std::string _line(line);
+      onText(_line.c_str());
+    };
+
     onOpen();
     int flags, n;
-    Poco::Buffer<char> buf(1024);
     while (!isStopped()) {
       buf.resize(0);
       n = _ws->receiveFrame(buf, flags);
@@ -131,8 +139,7 @@ void WsClient::run() {
         break;
       }
       if (n > 0 && isTextFrame(flags)) {
-        std::string output(buf.begin(), buf.end());
-        onText(output.data());
+        lineAssembler.readBytes(buf, lineConsumer);
       }
     }
   }

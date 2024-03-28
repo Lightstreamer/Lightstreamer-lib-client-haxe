@@ -20,6 +20,9 @@
 
   <copy from="include/Lightstreamer/HxPoco/Activity.h" to="${HXCPP_BUILD_DIR}include/${LS_HXPOCO}"/>
 
+  <copy from="include/Lightstreamer/HxPoco/LineAssembler.h" to="${HXCPP_BUILD_DIR}include/${LS_HXPOCO}"/>
+  <copy from="src/LineAssembler.cpp" to="${HXCPP_BUILD_DIR}src/${LS_HXPOCO}"/>
+
   <files id="hxpoco">
     <compilerflag value="-Iinclude"/>
     <compilerflag value="-I/opt/homebrew/opt/openssl/include"/>
@@ -36,6 +39,7 @@
       <depend name="include/${LS_HXPOCO}/WsClient.h"/>
       <depend name="include/${LS_HXPOCO}/Network.h"/>
       <depend name="include/${LS_HXPOCO}/Activity.h"/>
+      <depend name="include/${LS_HXPOCO}/LineAssembler.h"/>
     </file>
     <file name="src/${LS_HXPOCO}/CookieJar.cpp">
       <depend name="include/${LS_HXPOCO}/CookieJar.h"/>
@@ -43,6 +47,9 @@
     </file>
     <file name="src/${LS_HXPOCO}/Utils.cpp">
       <depend name="include/${LS_HXPOCO}/Utils.h"/>
+    </file>
+    <file name="src/${LS_HXPOCO}/LineAssembler.cpp">
+      <depend name="include/${LS_HXPOCO}/LineAssembler.h"/>
     </file>
   </files>
 
