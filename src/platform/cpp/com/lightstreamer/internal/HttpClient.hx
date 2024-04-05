@@ -62,17 +62,19 @@ class HttpClient implements IHttpClient {
    * Make sure to call it from a different thread than the one calling the `onText`, `onError`, and `onDone` callbacks.
    */
   public function dispose() {
-    _lock.acquire();
+    _lock.synchronized(() -> {
+      if (_client != null) {
         var c = _client;
         _client = null;
-    _lock.release();
-
-    if (c != null) {
         streamLogger.logDebug("HTTP disposing");
+        // TODO use a thread pool?
+        Thread.create(() -> {
           c.dispose();
           // manually release the memory acquired by the native objects
           untyped __cpp__("delete {0}", c);
+        });
       }
+    });
   }
 
   public function isDisposed(): Bool {
