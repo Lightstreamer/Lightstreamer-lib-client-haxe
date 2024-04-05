@@ -63,16 +63,16 @@ class HttpClient implements IHttpClient {
    */
   public function dispose() {
     _lock.acquire();
-    var c = _client;
-    _client = null;
+        var c = _client;
+        _client = null;
     _lock.release();
 
     if (c != null) {
-      streamLogger.logDebug("HTTP disposing");
-      c.dispose();
-      // manually release the memory acquired by the native objects
-      untyped __cpp__("delete {0}", c);
-    }
+        streamLogger.logDebug("HTTP disposing");
+          c.dispose();
+          // manually release the memory acquired by the native objects
+          untyped __cpp__("delete {0}", c);
+      }
   }
 
   public function isDisposed(): Bool {
@@ -124,6 +124,14 @@ class HttpClientAdapter extends HttpClientCpp {
     this._onDone = onDone;
   }
 
+  override function gc_enter_blocking() {
+    cpp.vm.Gc.enterGCFreeZone();
+  }
+
+  override function gc_exit_blocking() {
+    cpp.vm.Gc.exitGCFreeZone();
+  }
+  
   override function submit() {
     var that: Star<HttpClientAdapter> = untyped __cpp__("this");
     // TODO use a thread pool?

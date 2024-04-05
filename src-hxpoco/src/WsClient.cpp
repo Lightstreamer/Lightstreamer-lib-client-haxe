@@ -44,7 +44,7 @@ WsClient::~WsClient()
 
 void WsClient::send(const std::string& txt) {
   if (!_disposed) {
-    _ws->sendFrame(txt.data(), txt.size());
+    doSendFrame(txt.data(), txt.size());
   }
 }
 
@@ -67,7 +67,7 @@ void WsClient::dispose() {
   try
   {
     stop();
-    wait();
+    doWait();
   }
   catch (...)
   {
@@ -110,10 +110,10 @@ void WsClient::run() {
       cs.setHost(host);
       cs.setPort(port);
       cs.setProxyConfig(_proxy);
-      _ws = std::make_unique<WebSocket>(cs, request, response);
+      _ws = std::unique_ptr<WebSocket>(doCreateWebSocket(cs, request, response));
     } else {
       HTTPClientSession cs(host, port, _proxy);
-      _ws = std::make_unique<WebSocket>(cs, request, response);
+      _ws = std::unique_ptr<WebSocket>(doCreateWebSocket(cs, request, response));
     }
 
     // retrieve cookies
@@ -134,7 +134,7 @@ void WsClient::run() {
     int flags, n;
     while (!isStopped()) {
       buf.resize(0);
-      n = _ws->receiveFrame(buf, flags);
+      n = doReceiveFrame(buf, flags);
       if (n == 0 && flags == 0) { // connection has been closed
         break;
       }
@@ -154,5 +154,51 @@ void WsClient::run() {
   catch(...)
   {
     onError("unknown exception");
+  }
+}
+
+Poco::Net::WebSocket* WsClient::doCreateWebSocket(Poco::Net::HTTPClientSession& cs, Poco::Net::HTTPRequest& request, Poco::Net::HTTPResponse& response) {
+  try {
+    gc_enter_blocking();
+    auto ws = new WebSocket(cs, request, response);
+    gc_exit_blocking();
+    return ws;
+  } catch(...) {
+    gc_exit_blocking();
+    throw;
+  }
+}
+
+int WsClient::doReceiveFrame(Poco::Buffer<char>& buffer, int& flags) {
+  try {
+    gc_enter_blocking();
+    int n = _ws->receiveFrame(buffer, flags);
+    gc_exit_blocking();
+    return n;
+  } catch(...) {
+    gc_exit_blocking();
+    throw;
+  }
+}
+
+void WsClient::doSendFrame(const void *buffer, int length) {
+  try {
+    gc_enter_blocking();
+    _ws->sendFrame(buffer, length);
+    gc_exit_blocking();
+  } catch(...) {
+    gc_exit_blocking();
+    throw;
+  }
+}
+
+void WsClient::doWait() {
+  try {
+    gc_enter_blocking();
+    wait();
+    gc_exit_blocking();
+  } catch(...) {
+    gc_exit_blocking();
+    throw;
   }
 }

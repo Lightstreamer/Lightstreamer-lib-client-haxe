@@ -35,6 +35,8 @@ public:
   }
 
 protected:
+  virtual void gc_enter_blocking() = 0;
+  virtual void gc_exit_blocking() = 0;
   virtual void onText(const char* line) {}
   virtual void onError(const char* line) {}
   virtual void onDone() {}
@@ -42,6 +44,11 @@ protected:
 
 private:
   std::streamsize computeContentLength();
+  std::istream& getLine(std::istream& is, std::string& line);
+  std::istream& doGetLine(std::istream& is, std::string& line);
+  std::ostream& doSendRequest(Poco::Net::HTTPRequest& request);
+  std::istream& doReceiveResponse(Poco::Net::HTTPResponse& response);
+  void doWait();
 
   std::string _url;
   std::string _body;

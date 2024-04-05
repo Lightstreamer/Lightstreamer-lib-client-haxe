@@ -30,12 +30,19 @@ public:
   WsClient& operator = (const WsClient&) = delete;
 
 protected:
+  virtual void gc_enter_blocking() = 0;
+  virtual void gc_exit_blocking() = 0;
   virtual void onOpen() {}
   virtual void onText(const char* line) {}
   virtual void onError(const char* line) {}
   virtual void run() override;
 
 private:
+  void doSendFrame(const void *buffer, int length);
+  Poco::Net::WebSocket* doCreateWebSocket(Poco::Net::HTTPClientSession& cs, Poco::Net::HTTPRequest& request, Poco::Net::HTTPResponse& response);
+  int doReceiveFrame(Poco::Buffer<char>& buffer, int& flags);
+  void doWait();
+
   std::string _url;
   std::string _subProtocol;
   std::unordered_map<std::string, std::string> _headers;

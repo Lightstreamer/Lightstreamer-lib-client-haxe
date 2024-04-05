@@ -15,6 +15,8 @@ extern class HttpClientCpp {
   function dispose(): Void;
   function isDisposed(): Bool;
   // protected
+  function gc_enter_blocking(): Void;
+  function gc_exit_blocking(): Void;
   function submit(): Void;
   function doSubmit(): Void;
   function onText(line: ConstCharStar): Void;

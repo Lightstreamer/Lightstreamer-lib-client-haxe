@@ -28,16 +28,16 @@ using Lightstreamer::HxPoco::HttpClient;
 using Lightstreamer::HxPoco::CookieJar;
 using Lightstreamer::HxPoco::Network;
 
-std::istream &getLine(std::istream& is, std::string& line) {
-  auto& res = std::getline(is, line);
+} // END unnamed namespace
+
+std::istream& HttpClient::getLine(std::istream& is, std::string& line) {
+  auto& res = doGetLine(is, line);
   auto sz = line.size();
   if (sz > 0 && line.back() == '\r') {
     line.resize(sz - 1);
   }
   return res;
 }
-
-} // END unnamed namespace
 
 HttpClient::HttpClient(const char* url, const char* body, const std::unordered_map<std::string, std::string>& headers, const HTTPClientSession::ProxyConfig& proxy) : 
   _url(url),
@@ -71,7 +71,7 @@ void HttpClient::dispose() {
   try
   {
     stop();
-    wait();
+    doWait();
   }
   catch (...)
   {
@@ -127,11 +127,11 @@ void HttpClient::run() {
 		request.setContentLength(computeContentLength());
     
     // send request: headers+parameters
-    std::ostream& ros = _session->sendRequest(request);
+    std::ostream& ros = doSendRequest(request);
     ros << _body;
 
     Poco::Net::HTTPResponse response;
-    std::istream& rs = _session->receiveResponse(response);
+    std::istream& rs = doReceiveResponse(response);
 
     // retrieve cookies
     std::vector<Poco::Net::HTTPCookie> outCookies;
@@ -157,5 +157,52 @@ void HttpClient::run() {
   catch(...)
   {
     onError("unknown exception");
+  }
+}
+
+std::ostream& HttpClient::doSendRequest(Poco::Net::HTTPRequest& request){
+  try {
+    gc_enter_blocking();
+    auto& ros = _session->sendRequest(request);
+    gc_exit_blocking();
+    return ros;
+  } catch(...) {
+    gc_exit_blocking();
+    throw;
+  }
+}
+
+std::istream& HttpClient::doReceiveResponse(Poco::Net::HTTPResponse& response) {
+  try {
+    gc_enter_blocking();
+    auto& rs = _session->receiveResponse(response);
+    gc_exit_blocking();
+    return rs;
+  } catch(...) {
+    gc_exit_blocking();
+    throw;
+  }
+}
+
+std::istream& HttpClient::doGetLine(std::istream& is, std::string& line) {
+  try {
+    gc_enter_blocking();
+    auto& res = std::getline(is, line);
+    gc_exit_blocking();
+    return res;
+  } catch(...) {
+    gc_exit_blocking();
+    throw;
+  }
+}
+
+void HttpClient::doWait() {
+  try {
+    gc_enter_blocking();
+    wait();
+    gc_exit_blocking();
+  } catch(...) {
+    gc_exit_blocking();
+    throw;
   }
 }

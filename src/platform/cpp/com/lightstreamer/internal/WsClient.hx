@@ -73,16 +73,16 @@ class WsClient implements IWsClient {
    */
   public function dispose() {
     _lock.acquire();
-    var c = _client;
-    _client = null;
+        var c = _client;
+        _client = null;
     _lock.release();
 
 		if (c != null) {
-			streamLogger.logDebug("WS disposing");
-			c.dispose();
-			// manually release the memory acquired by the native objects
-			untyped __cpp__("delete {0}", c);
-		}
+        streamLogger.logDebug("WS disposing");
+          c.dispose();
+          // manually release the memory acquired by the native objects
+          untyped __cpp__("delete {0}", c);
+      }
   }
 
   public function isDisposed(): Bool {
@@ -132,6 +132,14 @@ class WsClientAdapter extends WsClientCpp {
     this._onOpen = onOpen;
     this._onText = onText;
     this._onError = onError;
+  }
+
+  override function gc_enter_blocking() {
+    cpp.vm.Gc.enterGCFreeZone();
+  }
+
+  override function gc_exit_blocking() {
+    cpp.vm.Gc.exitGCFreeZone();
   }
 
   override function submit() {
