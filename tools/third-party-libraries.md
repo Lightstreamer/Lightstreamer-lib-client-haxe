@@ -23,3 +23,7 @@
 
 - https://github.com/aio-libs/aiohttp v3.8.6
 - https://github.com/stefankoegl/python-json-patch v1.33
+
+# C++
+
+- https://github.com/pocoproject/poco v1.13.3
