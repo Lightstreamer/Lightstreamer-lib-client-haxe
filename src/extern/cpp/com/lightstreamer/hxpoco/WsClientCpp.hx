@@ -15,7 +15,6 @@ extern class WsClientCpp {
   function connect(): Void;
   function send(txt: Reference<CppString>): Void;
   function dispose(): Void;
-  function isDisposed(): Bool;
   // protected
   function gc_enter_blocking(): Void;
   function gc_exit_blocking(): Void;

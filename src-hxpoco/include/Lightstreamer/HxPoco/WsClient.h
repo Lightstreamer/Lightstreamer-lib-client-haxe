@@ -5,6 +5,9 @@
 #include <unordered_map>
 #include "Poco/Net/HTTPClientSession.h"
 #include "Poco/Net/WebSocket.h"
+#include "Poco/Notification.h"
+#include "Poco/NotificationQueue.h"
+#include "Poco/AtomicFlag.h"
 #include "Lightstreamer/HxPoco/Activity.h"
 
 namespace Lightstreamer {
@@ -21,9 +24,6 @@ public:
   }
   void send(const std::string& txt);
   void dispose();
-  bool isDisposed() const {
-    return _disposed;
-  }
 
   WsClient() = delete;
   WsClient(const WsClient&) = delete;
@@ -38,17 +38,18 @@ protected:
   virtual void run() override;
 
 private:
-  void doSendFrame(const void *buffer, int length);
+  void doSendFrame(Poco::Net::WebSocket* ws, const void *buffer, int length);
+  void sendPendingFrames(Poco::Net::WebSocket* ws);
   Poco::Net::WebSocket* doCreateWebSocket(Poco::Net::HTTPClientSession& cs, Poco::Net::HTTPRequest& request, Poco::Net::HTTPResponse& response);
-  int doReceiveFrame(Poco::Buffer<char>& buffer, int& flags);
+  int doReceiveFrame(Poco::Net::WebSocket* ws, Poco::Buffer<char>& buffer, int& flags);
   void doWait();
 
   std::string _url;
   std::string _subProtocol;
   std::unordered_map<std::string, std::string> _headers;
   Poco::Net::HTTPClientSession::ProxyConfig _proxy;
-  std::unique_ptr<Poco::Net::WebSocket> _ws;
-  std::atomic_bool _disposed;
+  Poco::NotificationQueue _queue;
+  Poco::AtomicFlag _disposed;
 };
 
 }}

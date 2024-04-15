@@ -68,7 +68,7 @@ class WsClient implements IWsClient {
   }
 
   /**
-   * NB `dispose` method is not reentrant.
+   * **NB** `dispose` method is blocking.
    * Make sure to call it from a different thread than the one calling the `onText`, `onError`, and `onDone` callbacks.
    */
   public function dispose() {
@@ -88,7 +88,7 @@ class WsClient implements IWsClient {
   }
 
   public function isDisposed(): Bool {
-    return _lock.synchronized(() -> _client != null ? _client.isDisposed() : true);
+    return _lock.synchronized(() -> _client == null);
   }
 
   function onOpen(): Void {

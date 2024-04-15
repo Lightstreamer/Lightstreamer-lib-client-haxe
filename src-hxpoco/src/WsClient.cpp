@@ -9,6 +9,10 @@
 #include "Lightstreamer/HxPoco/Network.h"
 #include "Lightstreamer/HxPoco/LineAssembler.h"
 
+#ifndef LS_HXPOCO_WS_RECEIVE_TIMEOUT_MS
+#define LS_HXPOCO_WS_RECEIVE_TIMEOUT_MS 250
+#endif
+
 namespace {
 
 using Poco::URI;
@@ -27,14 +31,20 @@ inline bool isTextFrame(int flags) {
   return (flags & 0xf) == Poco::Net::WebSocket::FrameOpcodes::FRAME_OP_TEXT;
 }
 
+class WorkNotification : public Poco::Notification
+{
+public:
+  std::string _data;
+  WorkNotification(const std::string& data) : _data(data) {}
+};
+
 } // END unnamed namespace
 
 WsClient::WsClient(const char* url, const char* subProtocol, const std::unordered_map<std::string, std::string>& headers, const Poco::Net::HTTPClientSession::ProxyConfig& proxy) :
   _url(url),
   _subProtocol(subProtocol),
   _headers(headers),
-  _proxy(proxy),
-  _disposed(false)
+  _proxy(proxy)
 {}
 
 WsClient::~WsClient()
@@ -43,25 +53,12 @@ WsClient::~WsClient()
 }
 
 void WsClient::send(const std::string& txt) {
-  if (!_disposed) {
-    doSendFrame(txt.data(), txt.size());
-  }
+  _queue.enqueueNotification(new WorkNotification(txt));
 }
 
 void WsClient::dispose() {
-  if (_disposed.exchange(true)) {
+  if (_disposed) {
     return;
-  }
-
-  try
-  {
-    if (_ws) {
-      _ws->shutdown();
-    }
-  }
-  catch(...)
-  {
-    // there is nothing we can do
   }
 
   try
@@ -104,17 +101,19 @@ void WsClient::run() {
     }
 
     // open the websocket
+    std::unique_ptr<Poco::Net::WebSocket> ws;
     if (secure) {
       Context::Ptr pContext = Network::_sslCtx;
       HTTPSClientSession cs(pContext);
       cs.setHost(host);
       cs.setPort(port);
       cs.setProxyConfig(_proxy);
-      _ws = std::unique_ptr<WebSocket>(doCreateWebSocket(cs, request, response));
+      ws = std::unique_ptr<WebSocket>(doCreateWebSocket(cs, request, response));
     } else {
       HTTPClientSession cs(host, port, _proxy);
-      _ws = std::unique_ptr<WebSocket>(doCreateWebSocket(cs, request, response));
+      ws = std::unique_ptr<WebSocket>(doCreateWebSocket(cs, request, response));
     }
+    ws->setReceiveTimeout(LS_HXPOCO_WS_RECEIVE_TIMEOUT_MS * 1000);
 
     // retrieve cookies
     std::vector<Poco::Net::HTTPCookie> outCookies;
@@ -134,7 +133,12 @@ void WsClient::run() {
     int flags, n;
     while (!isStopped()) {
       buf.resize(0);
-      n = doReceiveFrame(buf, flags);
+      try {
+        n = doReceiveFrame(ws.get(), buf, flags);
+      } catch (const Poco::TimeoutException& ex)  {
+        sendPendingFrames(ws.get());
+        continue;
+      }
       if (n == 0 && flags == 0) { // connection has been closed
         break;
       }
@@ -142,6 +146,7 @@ void WsClient::run() {
         lineAssembler.readBytes(buf, lineConsumer);
       }
     }
+    ws->shutdown();
   }
   catch(const Poco::Exception& e)
   {
@@ -169,10 +174,10 @@ Poco::Net::WebSocket* WsClient::doCreateWebSocket(Poco::Net::HTTPClientSession& 
   }
 }
 
-int WsClient::doReceiveFrame(Poco::Buffer<char>& buffer, int& flags) {
+int WsClient::doReceiveFrame(WebSocket* ws, Poco::Buffer<char>& buffer, int& flags) {
   try {
     gc_enter_blocking();
-    int n = _ws->receiveFrame(buffer, flags);
+    int n = ws->receiveFrame(buffer, flags);
     gc_exit_blocking();
     return n;
   } catch(...) {
@@ -181,10 +186,10 @@ int WsClient::doReceiveFrame(Poco::Buffer<char>& buffer, int& flags) {
   }
 }
 
-void WsClient::doSendFrame(const void *buffer, int length) {
+void WsClient::doSendFrame(WebSocket* ws, const void *buffer, int length) {
   try {
     gc_enter_blocking();
-    _ws->sendFrame(buffer, length);
+    ws->sendFrame(buffer, length);
     gc_exit_blocking();
   } catch(...) {
     gc_exit_blocking();
@@ -200,5 +205,16 @@ void WsClient::doWait() {
   } catch(...) {
     gc_exit_blocking();
     throw;
+  }
+}
+
+void WsClient::sendPendingFrames(WebSocket* ws) {
+  Poco::AutoPtr<Poco::Notification> pNf(_queue.dequeueNotification());
+  while (pNf) {
+    WorkNotification *pWorkNf = dynamic_cast<WorkNotification *>(pNf.get());
+    if (pWorkNf) {
+      ws->sendFrame(pWorkNf->_data.data(), pWorkNf->_data.size());
+    }
+    pNf = _queue.dequeueNotification();
   }
 }
