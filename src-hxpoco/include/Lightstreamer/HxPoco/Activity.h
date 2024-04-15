@@ -48,7 +48,7 @@ protected:
     }
   }
 
-  /// The implementation of this method should call the `doSubmit` method on its own thread.
+  /// The method ought to initiate a dedicated thread tasked with executing the `doSubmit` method. 
   virtual void submit() = 0;
   /// The `run` method actually performs the activity. It is called by the `doSubmit` method.
   virtual void run() = 0;
