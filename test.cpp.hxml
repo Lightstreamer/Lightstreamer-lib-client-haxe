@@ -1,0 +1,22 @@
+test.common.hxml
+--class-path src/platform/cpp
+--class-path src/extern/cpp
+# --java-lib bin/java/build/deps
+# --java-lib bin/java/build/api/lib
+
+# -D no-debug
+--debug
+-D HXCPP_CPP17
+-D HXCPP_VERBOSE
+-D HXCPP_ARM64
+
+--cpp bin-test/cpp
+# --cmd bin-test/cpp/TestAll-debug
+
+--resource test/localtest.me.pfx@server_certificate
+
+-D LS_HAS_PROXY
+-D LS_HAS_COOKIES
+-D LS_HAS_TRUST_MANAGER
+# -D LS_JSON_PATCH
+# -D LS_TLCP_DIFF

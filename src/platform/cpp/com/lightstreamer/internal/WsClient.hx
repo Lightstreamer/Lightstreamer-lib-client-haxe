@@ -9,6 +9,7 @@ import poco.net.ProxyConfig;
 import com.lightstreamer.cpp.CppStringMap;
 import com.lightstreamer.hxpoco.WsClientCpp;
 import com.lightstreamer.client.Proxy.LSProxy as Proxy;
+import com.lightstreamer.internal.Threads.backgroundThread;
 import com.lightstreamer.log.LoggerTools;
 
 using com.lightstreamer.log.LoggerTools;
@@ -77,8 +78,7 @@ class WsClient implements IWsClient {
         var c = _client;
         _client = null;
         streamLogger.logDebug("WS disposing");
-        // TODO use a thread pool?
-        Thread.create(() -> {
+        backgroundThread.submit(() -> {
           c.dispose();
           // manually release the memory acquired by the native objects
           untyped __cpp__("delete {0}", c);

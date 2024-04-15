@@ -13,3 +13,8 @@ private function createExecutor() {
 
 final userThread = createExecutor();
 final sessionThread = createExecutor();
+#if cpp
+// since blocking operations are forbidden within the Lightstreamer Client API, methods that may block must be offloaded to dedicated threads.
+// `backgroundThread` is specifically reserved for executing methods that are expected to block only for a short time.
+final backgroundThread = createExecutor();
+#end

@@ -14,6 +14,9 @@ extern class WsClientCpp {
   function new(host: ConstCharStar, subProtocol: ConstCharStar, headers: CppStringMap, proxy: Reference<ProxyConfig>);
   function connect(): Void;
   function send(txt: Reference<CppString>): Void;
+  /** 
+   * **NB** may block
+   */
   function dispose(): Void;
   // protected
   function gc_enter_blocking(): Void;
