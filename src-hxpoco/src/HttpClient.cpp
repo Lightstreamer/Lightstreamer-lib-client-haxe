@@ -43,8 +43,7 @@ HttpClient::HttpClient(const char* url, const char* body, const std::unordered_m
   _url(url),
   _body(body),
   _headers(headers),
-  _proxy(proxy),
-  _disposed(false)
+  _proxy(proxy)
 {}
 
 HttpClient::~HttpClient()
@@ -53,7 +52,7 @@ HttpClient::~HttpClient()
 }
 
 void HttpClient::dispose() {
-  if (_disposed.exchange(true)) {
+  if (_disposed) {
     return;
   }
 

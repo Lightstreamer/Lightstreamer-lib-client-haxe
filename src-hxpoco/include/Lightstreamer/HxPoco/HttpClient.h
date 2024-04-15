@@ -11,6 +11,7 @@
 #include "Poco/Mutex.h"
 #include "Poco/Net/HTTPClientSession.h"
 #include "Poco/Net/Context.h"
+#include "Poco/AtomicFlag.h"
 #include "Lightstreamer/HxPoco/CookieJar.h"
 #include "Lightstreamer/HxPoco/Activity.h"
 
@@ -30,9 +31,6 @@ public:
     Activity::start();
   }
   void dispose();
-  bool isDisposed() const {
-    return _disposed;
-  }
 
 protected:
   virtual void gc_enter_blocking() = 0;
@@ -55,7 +53,7 @@ private:
   std::unordered_map<std::string, std::string> _headers;
   Poco::Net::HTTPClientSession::ProxyConfig _proxy;
   std::unique_ptr<Poco::Net::HTTPClientSession> _session;
-  std::atomic_bool _disposed;
+  Poco::AtomicFlag _disposed;
 };
 
 }}

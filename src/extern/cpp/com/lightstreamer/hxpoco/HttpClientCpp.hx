@@ -13,7 +13,6 @@ extern class HttpClientCpp {
   function new(host: ConstCharStar, body: ConstCharStar, headers: CppStringMap, proxy: Reference<ProxyConfig>);
   function start(): Void;
   function dispose(): Void;
-  function isDisposed(): Bool;
   // protected
   function gc_enter_blocking(): Void;
   function gc_exit_blocking(): Void;
