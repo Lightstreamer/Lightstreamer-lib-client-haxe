@@ -1,6 +1,7 @@
 #ifndef INCLUDED_Lightstreamer_HxPoco_LineAssembler
 #define INCLUDED_Lightstreamer_HxPoco_LineAssembler
 
+#include <functional>
 #include "Poco/Buffer.h"
 #include "Poco/Bugcheck.h"
 
