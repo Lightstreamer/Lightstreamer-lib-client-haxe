@@ -30,6 +30,18 @@ class TestHttpClientCpp extends utest.Test {
     client.dispose();
     Globals.instance.clearTrustManager();
     CookieHelper.instance.clearCookies();
+    clearCompletionListeners();
+  }
+
+  @:access(com.lightstreamer.internal.Executor)
+  function addCompletionListener(f) {
+    com.lightstreamer.internal.Threads.backgroundThread.exec.onCompletion(f);
+  }
+
+  @:access(com.lightstreamer.internal.Executor)
+  @:access(hx.concurrent.executor.Executor)
+  function clearCompletionListeners() {
+    com.lightstreamer.internal.Threads.backgroundThread.exec.completionListeners.clear();
   }
 
   function testPolling(async: utest.Async) {
@@ -201,5 +213,23 @@ class TestHttpClientCpp extends utest.Test {
         match(~/CONOK/, output[0]);
         async.completed();
       });
+  }
+
+  function testDispose(async: utest.Async) {
+    client = new _HttpClient(
+      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
+      "LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", 
+      function onText(c, line) {
+        if (c.isDisposed()) return;
+        match(~/CONOK/, line);
+        c.dispose();
+        addCompletionListener(r -> async.completed());
+      }, 
+      function onError(c, error) {
+        if (c.isDisposed()) return;
+        fail(error); 
+        async.completed(); 
+      }, 
+      function onDone(c) null);
   }
 }

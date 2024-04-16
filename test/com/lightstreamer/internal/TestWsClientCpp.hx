@@ -30,6 +30,18 @@ class TestWsClientCpp extends utest.Test {
     ws.dispose();
     CookieHelper.instance.clearCookies();
     Globals.instance.clearTrustManager();
+    clearCompletionListeners();
+  }
+
+  @:access(com.lightstreamer.internal.Executor)
+  function addCompletionListener(f) {
+    com.lightstreamer.internal.Threads.backgroundThread.exec.onCompletion(f);
+  }
+
+  @:access(com.lightstreamer.internal.Executor)
+  @:access(hx.concurrent.executor.Executor)
+  function clearCompletionListeners() {
+    com.lightstreamer.internal.Threads.backgroundThread.exec.completionListeners.clear();
   }
 
   function testPolling(async: utest.Async) {
@@ -204,6 +216,24 @@ class TestWsClientCpp extends utest.Test {
         async.completed();
       }, 
       function onError(c, error) {
+        fail(error); 
+        async.completed(); 
+      });
+  }
+
+  function testDispose(async: utest.Async) {
+    ws = new _WsClient(
+      host + "/lightstreamer", 
+      function onOpen(c) {
+        c.send("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg");
+      },
+      function onText(c, line) {
+        if (c.isDisposed()) return;
+        match(~/CONOK/, line);
+        c.dispose();
+        addCompletionListener(r -> async.completed());
+      }, 
+      function onError(c, error) { 
         fail(error); 
         async.completed(); 
       });
