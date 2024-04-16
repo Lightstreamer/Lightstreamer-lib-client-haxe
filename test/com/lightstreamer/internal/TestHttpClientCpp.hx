@@ -2,16 +2,11 @@ package com.lightstreamer.internal;
 
 import cpp.Star;
 import poco.net.Context;
-import com.lightstreamer.internal.Threads.sessionThread;
 import com.lightstreamer.internal.NativeTypes.NativeCookieCollection;
 
-// NB the callbacks are sent to another thread because the `dispose` method is not reentrant
 private class _HttpClient extends HttpClient {
   public function new(url, body, ?headers, ?proxy, _onText, _onError, _onDone) {
-    super(url, body, headers, proxy,
-      (c, s) -> sessionThread.submit(() -> _onText(c, s)),
-      (c, s) -> sessionThread.submit(() -> _onError(c, s)),
-      (c) -> sessionThread.submit(() -> _onDone(c)));
+    super(url, body, headers, proxy, _onText, _onError, _onDone);
   }
 }
 
