@@ -12,6 +12,7 @@ using com.lightstreamer.log.LoggerTools;
 
 class ClientEventDispatcher extends EventDispatcher<ClientListener> {}
 
+#if cpp @:build(HaxeCBridge.expose()) @HaxeCBridge.name("LightstreamerClient") #end
 #if (js || python) @:expose @:native("LSLightstreamerClient") #end
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class LSLightstreamerClient {
@@ -30,6 +31,7 @@ class LSLightstreamerClient {
   #if LS_HAS_COOKIES
   #if cpp
   @:unreflective
+  @:HaxeCBridge.ignore
   public static function addCookies(uri: cpp.Reference<NativeURI>, cookies: cpp.Reference<NativeCookieCollection>): Void
   #else
   public static function addCookies(uri: NativeURI, cookies: NativeCookieCollection): Void
@@ -40,6 +42,7 @@ class LSLightstreamerClient {
 
   #if cpp
   @:unreflective
+  @:HaxeCBridge.ignore
   public static function getCookies(uri: cpp.Reference<NativeURI>): NativeCookieCollection
   #else
   public static function getCookies(uri: Null<NativeURI>): NativeCookieCollection
@@ -51,7 +54,10 @@ class LSLightstreamerClient {
   #end
 
   #if LS_HAS_TRUST_MANAGER
-  #if cpp @:unreflective #end
+  #if cpp 
+  @:unreflective 
+  @:HaxeCBridge.ignore
+  #end
   public static function setTrustManagerFactory(factory: NativeTrustManager) {
     com.lightstreamer.internal.Globals.instance.setTrustManagerFactory(factory);
   }
@@ -73,17 +79,71 @@ class LSLightstreamerClient {
     }
   }
 
+  @:HaxeCBridge.ignore
   public function addListener(listener: ClientListener): Void {
     eventDispatcher.addListenerAndFireOnListenStart(listener #if js , this #end);
   }
 
+  @:HaxeCBridge.ignore
   public function removeListener(listener: ClientListener): Void {
     eventDispatcher.removeListenerAndFireOnListenEnd(listener #if js , this #end);
   }
 
+  @:HaxeCBridge.ignore
   public function getListeners(): NativeList<ClientListener> {
     return new NativeList(eventDispatcher.getListeners());
   }
+
+  #if cpp
+  final _listeners = new Array<Pair<cpp.Pointer<NativeClientListener>, ClientListenerAdapter>>();
+
+  @:unreflective
+  @HaxeCBridge.name("LightstreamerClient_addListener")
+  public function _addListener(l: cpp.Star<NativeClientListener>) {
+    var p = cpp.Pointer.fromStar(l);
+    for (l in _listeners) {
+      if (l._1 == p) {
+        return;
+      }
+    }
+    var la = new ClientListenerAdapter(p);
+    _listeners.push({ _1: p, _2: la });
+    addListener(la);
+  }
+
+  @:unreflective
+  @HaxeCBridge.name("LightstreamerClient_removeListener")
+  public function _removeListener(l: cpp.Star<NativeClientListener>) {
+    var p = cpp.Pointer.fromStar(l);
+    var j = -1;
+    for (i => l in _listeners) {
+      if (l._1 == p) {
+        j = i;
+        break;
+      }
+    }
+    if (j != -1) {
+      var la = _listeners[j]._2;
+      _listeners.splice(j, 1);
+      removeListener(la);
+    }
+  }
+
+  @:unsynchronized 
+  @:unreflective 
+  @HaxeCBridge.name("LightstreamerClient_getListeners")
+  public function _getListeners(): ClientListenerVector {
+    lock.acquire();
+    var res = new ClientListenerVector();
+    for (l in _listeners) {
+      var p: cpp.Pointer<NativeClientListener> = l._1;
+      var pp: cpp.Star<NativeClientListener> = p.ptr;
+      res.v.push(pp);
+    }
+    lock.release();
+    return res;
+  }
+  #end
 
   public function connect(): Void {
     machine.connect();
@@ -125,10 +185,12 @@ class LSLightstreamerClient {
     machine.unsubscribe(subscription);
   }
 
+  @:HaxeCBridge.ignore
   public function getSubscriptions(): NativeList<Subscription> {
     return new NativeList(machine.getSubscriptions());
   }
 
+  @:HaxeCBridge.ignore
   public function getSubscriptionWrappers(): NativeList<Any> {
     return new NativeList([for (sub in machine.getSubscriptions()) if (sub.wrapper != null) (sub.wrapper : Any)]);
   }
