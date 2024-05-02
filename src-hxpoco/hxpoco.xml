@@ -1,27 +1,5 @@
 <xml>
-  <set name="LS_HXPOCO" value="Lightstreamer/HxPoco" />
-
-  <mkdir name="${HXCPP_BUILD_DIR}include/${LS_HXPOCO}" />
-  <mkdir name="${HXCPP_BUILD_DIR}src/${LS_HXPOCO}" />
-
-  <copy from="include/Lightstreamer/HxPoco/HttpClient.h" to="${HXCPP_BUILD_DIR}include/${LS_HXPOCO}"/>
-  <copy from="src/HttpClient.cpp" to="${HXCPP_BUILD_DIR}src/${LS_HXPOCO}"/>
-
-  <copy from="include/Lightstreamer/HxPoco/WsClient.h" to="${HXCPP_BUILD_DIR}include/${LS_HXPOCO}"/>
-  <copy from="src/WsClient.cpp" to="${HXCPP_BUILD_DIR}src/${LS_HXPOCO}"/>
-
-  <copy from="include/Lightstreamer/HxPoco/CookieJar.h" to="${HXCPP_BUILD_DIR}include/${LS_HXPOCO}"/>
-  <copy from="src/CookieJar.cpp" to="${HXCPP_BUILD_DIR}src/${LS_HXPOCO}"/>
-
-  <copy from="include/Lightstreamer/HxPoco/Utils.h" to="${HXCPP_BUILD_DIR}include/${LS_HXPOCO}"/>
-  <copy from="src/Utils.cpp" to="${HXCPP_BUILD_DIR}src/${LS_HXPOCO}"/>
-
-  <copy from="include/Lightstreamer/HxPoco/Network.h" to="${HXCPP_BUILD_DIR}include/${LS_HXPOCO}"/>
-
-  <copy from="include/Lightstreamer/HxPoco/Activity.h" to="${HXCPP_BUILD_DIR}include/${LS_HXPOCO}"/>
-
-  <copy from="include/Lightstreamer/HxPoco/LineAssembler.h" to="${HXCPP_BUILD_DIR}include/${LS_HXPOCO}"/>
-  <copy from="src/LineAssembler.cpp" to="${HXCPP_BUILD_DIR}src/${LS_HXPOCO}"/>
+  <set name="HXPOCO_NS" value="Lightstreamer/HxPoco" />
 
   <files id="hxpoco">
     <compilerflag value="-Iinclude"/>
@@ -30,26 +8,26 @@
     <compilerflag value="-I${POCO_BASE}/Crypto/include"/>
     <compilerflag value="-I${POCO_BASE}/Net/include"/>
     <compilerflag value="-I${POCO_BASE}/NetSSL_OpenSSL/include"/>
-    <file name="src/${LS_HXPOCO}/HttpClient.cpp">
-      <depend name="include/${LS_HXPOCO}/HttpClient.h"/>
-      <depend name="include/${LS_HXPOCO}/Network.h"/>
-      <depend name="include/${LS_HXPOCO}/Activity.h"/>
+    <file name="src/${HXPOCO_NS}/HttpClient.cpp">
+      <depend name="include/${HXPOCO_NS}/HttpClient.h"/>
+      <depend name="include/${HXPOCO_NS}/Network.h"/>
+      <depend name="include/${HXPOCO_NS}/Activity.h"/>
     </file>
-    <file name="src/${LS_HXPOCO}/WsClient.cpp">
-      <depend name="include/${LS_HXPOCO}/WsClient.h"/>
-      <depend name="include/${LS_HXPOCO}/Network.h"/>
-      <depend name="include/${LS_HXPOCO}/Activity.h"/>
-      <depend name="include/${LS_HXPOCO}/LineAssembler.h"/>
+    <file name="src/${HXPOCO_NS}/WsClient.cpp">
+      <depend name="include/${HXPOCO_NS}/WsClient.h"/>
+      <depend name="include/${HXPOCO_NS}/Network.h"/>
+      <depend name="include/${HXPOCO_NS}/Activity.h"/>
+      <depend name="include/${HXPOCO_NS}/LineAssembler.h"/>
     </file>
-    <file name="src/${LS_HXPOCO}/CookieJar.cpp">
-      <depend name="include/${LS_HXPOCO}/CookieJar.h"/>
-      <depend name="include/${LS_HXPOCO}/Utils.h"/>
+    <file name="src/${HXPOCO_NS}/CookieJar.cpp">
+      <depend name="include/${HXPOCO_NS}/CookieJar.h"/>
+      <depend name="include/${HXPOCO_NS}/Utils.h"/>
     </file>
-    <file name="src/${LS_HXPOCO}/Utils.cpp">
-      <depend name="include/${LS_HXPOCO}/Utils.h"/>
+    <file name="src/${HXPOCO_NS}/Utils.cpp">
+      <depend name="include/${HXPOCO_NS}/Utils.h"/>
     </file>
-    <file name="src/${LS_HXPOCO}/LineAssembler.cpp">
-      <depend name="include/${LS_HXPOCO}/LineAssembler.h"/>
+    <file name="src/${HXPOCO_NS}/LineAssembler.cpp">
+      <depend name="include/${HXPOCO_NS}/LineAssembler.h"/>
     </file>
   </files>
 
