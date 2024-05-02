@@ -2,6 +2,7 @@ package com.lightstreamer.log;
 
 import com.lightstreamer.internal.NativeTypes;
 
+#if cpp @:build(HaxeCBridge.expose()) @HaxeCBridge.name("ConsoleLogLevel") #end
 #if (js || python) @:expose @:native("LSConsoleLogLevel") #end
 class LSConsoleLogLevel {
   public static final TRACE = 0;
@@ -14,6 +15,7 @@ class LSConsoleLogLevel {
   function new() {}
 }
 
+#if cpp @:build(HaxeCBridge.expose()) @HaxeCBridge.name("ConsoleLoggerProvider") #end
 #if (js || python) @:expose @:native("LSConsoleLoggerProvider") #end
 class LSConsoleLoggerProvider implements LoggerProvider {
   final level: Int;
