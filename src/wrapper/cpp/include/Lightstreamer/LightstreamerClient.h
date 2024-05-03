@@ -9,6 +9,8 @@ namespace Lightstreamer {
 class LightstreamerClient {
   HaxeObject _client;
 public:
+  static std::string libName();
+  static std::string libVersion();
   LightstreamerClient& operator=(const LightstreamerClient&) = delete;
   LightstreamerClient(const LightstreamerClient&) = delete;
   LightstreamerClient() = delete;
@@ -21,6 +23,14 @@ public:
   void connect();
   void disconnect();
 };
+
+std::string LightstreamerClient::libName() {
+  return LightstreamerClient_getLibName();
+}
+
+std::string LightstreamerClient::libVersion() {
+  return LightstreamerClient_getLibVersion();
+}
 
 LightstreamerClient::LightstreamerClient(const std::string& serverAddress, const std::string& adapterSet) {
   _client = LightstreamerClient_new(serverAddress.c_str(), adapterSet.c_str());

@@ -19,6 +19,18 @@ class LSLightstreamerClient {
   public static final LIB_NAME: String = LS_LIB_NAME;
   public static final LIB_VERSION: String = LS_LIB_VERSION;
 
+  #if cpp
+  @:unreflective
+  public static function getLibName(): com.lightstreamer.cpp.CppString {
+    return LIB_NAME;
+  }
+
+  @:unreflective
+  public static function getLibVersion(): com.lightstreamer.cpp.CppString {
+    return LIB_VERSION;
+  }
+  #end
+
   public final connectionDetails: ConnectionDetails;
   public final connectionOptions: ConnectionOptions;
   final eventDispatcher = new ClientEventDispatcher();

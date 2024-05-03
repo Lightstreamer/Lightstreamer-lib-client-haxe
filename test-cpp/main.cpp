@@ -42,6 +42,11 @@ struct Setup {
   static const long TIMEOUT = 3000;
 };
 
+TEST(testLibName) {
+  CHECK_EQUAL("cpp_client", LightstreamerClient::libName());
+  CHECK(!LightstreamerClient::libVersion().empty());
+}
+
 TEST_FIXTURE(Setup, testListeners) {
   CHECK_EQUAL(0, client.getListeners().size());
   client.addListener(listener);
