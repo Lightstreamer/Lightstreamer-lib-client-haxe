@@ -1,8 +1,8 @@
 package com.lightstreamer.client;
 
 #if js @:native("SubscriptionListener") #end
-@:build(com.lightstreamer.internal.Macros.buildPythonImport("ls_python_client_api", "SubscriptionListener"))
-#if !cpp extern #end interface SubscriptionListener {
+#if python @:build(com.lightstreamer.internal.Macros.buildPythonImport("ls_python_client_api", "SubscriptionListener")) #end
+#if cpp interface #else extern interface #end SubscriptionListener {
   function onClearSnapshot(itemName: Null<String>, itemPos: Int): Void;
   function onCommandSecondLevelItemLostUpdates(lostUpdates: Int, key: String): Void;
   function onCommandSecondLevelSubscriptionError(code: Int, message: String, key: String): Void;

@@ -207,6 +207,25 @@ class LSLightstreamerClient {
     return new NativeList([for (sub in machine.getSubscriptions()) if (sub.wrapper != null) (sub.wrapper : Any)]);
   }
 
+  #if cpp
+  @:unsynchronized
+  @:unreflective
+  @HaxeCBridge.name("LightstreamerClient_getSubscriptions")
+  // TODO 1 return a vector of vector of Subscription*
+  public function _getSubscriptions(): com.lightstreamer.cpp.CppPtrVector {
+    lock.acquire();
+    var res = new com.lightstreamer.cpp.CppPtrVector();
+    for (sub in machine.getSubscriptions()) {
+      if (sub.wrapper != null) {
+        @:nullSafety(Off)
+        res.push(sub.wrapper.ptr);
+      }
+    }
+    lock.release();
+    return res;
+  }
+  #end
+
   #if LS_MPN
   public function registerForMpn(mpnDevice: MpnDevice) {
     var machine = cast(machine, com.lightstreamer.client.internal.MpnClientMachine);

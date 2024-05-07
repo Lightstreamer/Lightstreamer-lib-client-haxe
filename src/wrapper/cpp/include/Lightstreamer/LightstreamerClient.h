@@ -2,6 +2,8 @@
 #define INCLUDED_Lightstreamer_LightstreamerClient
 
 #include "../Lightstreamer.h"
+#include "Lightstreamer/LoggerProvider.h"
+#include "Lightstreamer/Subscription.h"
 #include <string>
 
 namespace Lightstreamer {
@@ -22,6 +24,9 @@ public:
   std::string getStatus();
   void connect();
   void disconnect();
+  void subscribe(Subscription* subscription);
+  void unsubscribe(Subscription* subscription);
+  std::vector<Subscription*> getSubscriptions();
 };
 
 std::string LightstreamerClient::libName() {
@@ -67,6 +72,24 @@ void LightstreamerClient::connect() {
 
 void LightstreamerClient::disconnect() {
   LightstreamerClient_disconnect(_client);
+}
+
+void LightstreamerClient::subscribe(Subscription* subscription) {
+  LightstreamerClient_subscribe(_client, subscription->_delegate);
+}
+
+void LightstreamerClient::unsubscribe(Subscription* subscription) {
+  LightstreamerClient_unsubscribe(_client, subscription->_delegate);
+}
+
+std::vector<Subscription*> LightstreamerClient::getSubscriptions() {
+  auto xs = LightstreamerClient_getSubscriptions(_client);
+  std::vector<Subscription*> res;
+  // TODO 1 avoid cast
+  for (auto s : xs) {
+    res.push_back(static_cast<Subscription*>(s));
+  }
+  return res;
 }
 
 } // namespace Lightstreamer

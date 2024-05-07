@@ -5,7 +5,7 @@ import cpp.ConstCharStar;
 abstract CppString(_CppString) {
   @:from
   @:unreflective
-  static inline function of(s: String): CppString {
+  public static inline function of(s: String): CppString {
     return _CppString.of(s);
   }
 
