@@ -107,38 +107,18 @@ class LSLightstreamerClient {
   }
 
   #if cpp
-  final _listeners = new Array<Pair<cpp.Pointer<NativeClientListener>, ClientListenerAdapter>>();
+  final _listeners = new HxListeners<NativeClientListener, ClientListenerAdapter>();
 
   @:unreflective
   @HaxeCBridge.name("LightstreamerClient_addListener")
   public function _addListener(l: cpp.Star<NativeClientListener>) {
-    var p = cpp.Pointer.fromStar(l);
-    for (l in _listeners) {
-      if (l._1 == p) {
-        return;
-      }
-    }
-    var la = new ClientListenerAdapter(p);
-    _listeners.push({ _1: p, _2: la });
-    addListener(la);
+    _listeners.add(l, addListener);
   }
 
   @:unreflective
   @HaxeCBridge.name("LightstreamerClient_removeListener")
   public function _removeListener(l: cpp.Star<NativeClientListener>) {
-    var p = cpp.Pointer.fromStar(l);
-    var j = -1;
-    for (i => l in _listeners) {
-      if (l._1 == p) {
-        j = i;
-        break;
-      }
-    }
-    if (j != -1) {
-      var la = _listeners[j]._2;
-      _listeners.splice(j, 1);
-      removeListener(la);
-    }
+    _listeners.remove(l, removeListener);
   }
 
   @:unsynchronized 

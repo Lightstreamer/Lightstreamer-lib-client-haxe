@@ -141,39 +141,18 @@ class LSSubscription {
   }
 
   #if cpp
-  // TODO 1 extract a class
-  final _listeners = new Array<Pair<cpp.Pointer<NativeSubscriptionListener>, SubscriptionListenerAdapter>>();
+  final _listeners = new HxListeners<NativeSubscriptionListener, SubscriptionListenerAdapter>();
 
   @:unreflective
   @HaxeCBridge.name("Subscription_addListener")
   public function _addListener(l: cpp.Star<NativeSubscriptionListener>) {
-    var p = cpp.Pointer.fromStar(l);
-    for (l in _listeners) {
-      if (l._1 == p) {
-        return;
-      }
-    }
-    var la = new SubscriptionListenerAdapter(p);
-    _listeners.push({ _1: p, _2: la });
-    addListener(la);
+    _listeners.add(l, addListener);
   }
 
   @:unreflective
   @HaxeCBridge.name("Subscription_removeListener")
   public function _removeListener(l: cpp.Star<NativeSubscriptionListener>) {
-    var p = cpp.Pointer.fromStar(l);
-    var j = -1;
-    for (i => l in _listeners) {
-      if (l._1 == p) {
-        j = i;
-        break;
-      }
-    }
-    if (j != -1) {
-      var la = _listeners[j]._2;
-      _listeners.splice(j, 1);
-      removeListener(la);
-    }
+    _listeners.remove(l, removeListener);
   }
 
   @:unsynchronized 
