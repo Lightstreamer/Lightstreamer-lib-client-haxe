@@ -191,13 +191,11 @@ class LSLightstreamerClient {
   @:unsynchronized
   @:unreflective
   @HaxeCBridge.name("LightstreamerClient_getSubscriptions")
-  // TODO 1 return a vector of vector of Subscription*
-  public function _getSubscriptions(): com.lightstreamer.cpp.CppPtrVector {
+  public function _getSubscriptions(): SubscriptionVector {
     lock.acquire();
-    var res = new com.lightstreamer.cpp.CppPtrVector();
+    var res = new SubscriptionVector();
     for (sub in machine.getSubscriptions()) {
       if (sub.wrapper != null) {
-        @:nullSafety(Off)
         res.push(sub.wrapper.ptr);
       }
     }

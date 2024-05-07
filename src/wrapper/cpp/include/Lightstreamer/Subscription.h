@@ -2,7 +2,6 @@
 #define INCLUDED_Lightstreamer_Subscription
 
 #include "../Lightstreamer.h"
-#include <vector>
 
 namespace Lightstreamer {
 

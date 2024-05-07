@@ -4,7 +4,6 @@
 #include "../Lightstreamer.h"
 #include "Lightstreamer/LoggerProvider.h"
 #include "Lightstreamer/Subscription.h"
-#include <string>
 
 namespace Lightstreamer {
 
@@ -82,13 +81,7 @@ void LightstreamerClient::unsubscribe(Subscription* subscription) {
 }
 
 std::vector<Subscription*> LightstreamerClient::getSubscriptions() {
-  auto xs = LightstreamerClient_getSubscriptions(_client);
-  std::vector<Subscription*> res;
-  // TODO 1 avoid cast
-  for (auto s : xs) {
-    res.push_back(static_cast<Subscription*>(s));
-  }
-  return res;
+  return LightstreamerClient_getSubscriptions(_client);
 }
 
 } // namespace Lightstreamer

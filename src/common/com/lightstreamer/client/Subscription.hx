@@ -44,8 +44,7 @@ class LSSubscription {
   var m_internal: Bool = false; // special flag used to mark 2-level subscriptions
   var manager: Null<SubscriptionManagerLiving>;
   #if cpp
-  // TODO 1 make non-null
-  public final wrapper: Null<cpp.Pointer<cpp.Void>>;
+  public final wrapper: Null<cpp.Pointer<NativeSubscription>>;
   #else
   public final wrapper: Null<Any>;
   #end
@@ -81,7 +80,7 @@ class LSSubscription {
   @:unreflective
   @HaxeCBridge.name("Subscription_new")
   @:nullSafety(Off)
-  public static function create(mode: String, items: cpp.Star<com.lightstreamer.cpp.CppStringVector>, fields: cpp.Star<com.lightstreamer.cpp.CppStringVector>, wrapper: cpp.Star<cpp.Void> = null) {
+  public static function create(mode: String, items: cpp.Star<com.lightstreamer.cpp.CppStringVector>, fields: cpp.Star<com.lightstreamer.cpp.CppStringVector>, wrapper: cpp.Star<NativeSubscription> = null) {
     var _items = items.toHaxe();
     var _fields = fields.toHaxe();
     var _wrapper = wrapper == null ? null : cpp.Pointer.fromStar(wrapper);
@@ -90,7 +89,7 @@ class LSSubscription {
 
   @:unreflective
   @:HaxeCBridge.ignore
-  public function new(mode: String, items: NativeArray<String>, fields: NativeArray<String>, wrapper: Null<cpp.Pointer<cpp.Void>> = null) {
+  public function new(mode: String, items: NativeArray<String>, fields: NativeArray<String>, wrapper: Null<cpp.Pointer<NativeSubscription>> = null) {
     this.wrapper = wrapper;
     this.mode = SubscriptionMode.fromString(mode);
     initSnapshot();

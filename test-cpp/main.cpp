@@ -1,5 +1,7 @@
 #include "../Lightstreamer.h"
 #include "Lightstreamer/LightstreamerClient.h"
+#include "Lightstreamer/ClientListener.h"
+#include "Lightstreamer/SubscriptionListener.h"
 #include "Lightstreamer/ConsoleLoggerProvider.h"
 #include "utpp/utpp.h"
 #include "Poco/Semaphore.h"
