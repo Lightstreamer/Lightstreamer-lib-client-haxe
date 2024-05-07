@@ -150,7 +150,7 @@ class LSLightstreamerClient {
     for (l in _listeners) {
       var p: cpp.Pointer<NativeClientListener> = l._1;
       var pp: cpp.Star<NativeClientListener> = p.ptr;
-      res.v.push(pp);
+      res.push(pp);
     }
     lock.release();
     return res;

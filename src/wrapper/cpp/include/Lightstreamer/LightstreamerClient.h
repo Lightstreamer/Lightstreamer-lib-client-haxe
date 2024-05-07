@@ -55,8 +55,7 @@ void LightstreamerClient::removeListener(ClientListener* listener) {
 }
 
 std::vector<ClientListener*> LightstreamerClient::getListeners() {
-  auto ls = LightstreamerClient_getListeners(_client);
-  return ls.v;
+  return LightstreamerClient_getListeners(_client);
 }
 
 std::string LightstreamerClient::getStatus() {
