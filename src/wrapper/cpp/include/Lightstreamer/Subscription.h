@@ -19,6 +19,8 @@ public:
   std::vector<SubscriptionListener*> getListeners();
   bool isSubscribed();
   void setDataAdapter(const std::string& dataAdapter);
+  int getKeyPosition();
+  int getCommandPosition();
 };
 
 Subscription::Subscription(const std::string& mode, const std::vector<std::string>& items, const std::vector<std::string>& fields) {
@@ -47,6 +49,14 @@ bool Subscription::isSubscribed() {
 
 void Subscription::setDataAdapter(const std::string& dataAdapter) {
   Subscription_setDataAdapter(_delegate, dataAdapter.c_str());
+}
+
+int Subscription::getKeyPosition() {
+  return Subscription_getKeyPosition(_delegate);
+}
+
+int Subscription::getCommandPosition() {
+  return Subscription_getCommandPosition(_delegate);
 }
 
 } // namespace Lightstreamer

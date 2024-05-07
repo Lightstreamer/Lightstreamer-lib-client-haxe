@@ -6,6 +6,7 @@
 #include "utpp/utpp.h"
 #include "Poco/Semaphore.h"
 #include <iostream>
+#include <sstream>
 
 using Lightstreamer::LightstreamerClient;
 using Lightstreamer::Subscription;
@@ -27,6 +28,10 @@ public:
   std::function<void(void)> _onSubscription;
   void onSubscription() override {
     if (_onSubscription) _onSubscription();
+  }
+  std::function<void(int code, const std::string& msg)> _onSubscriptionError;
+  void onSubscriptionError(int code, const std::string& msg) override {
+    if (_onSubscriptionError) _onSubscriptionError(code, msg);
   }
 };
 
@@ -213,6 +218,36 @@ TEST_FIXTURE(Setup, testSubscribe) {
   sub.addListener(subListener);
   subListener->_onSubscription = [this, &sub] {
     EXPECT_TRUE(sub.isSubscribed());
+    resume();
+  };
+  client.subscribe(&sub);
+  client.connect();
+  wait(TIMEOUT);
+}
+
+TEST_FIXTURE(Setup, testSubscriptionError) {
+  Subscription sub("RAW", {"count"}, {"count"});
+  sub.setDataAdapter("COUNT");
+  sub.addListener(subListener);
+  subListener->_onSubscriptionError = [this, &sub](auto code, auto msg) {
+    std::stringstream ss;
+    ss << code << " " << msg;
+    EXPECT_EQ("24 Invalid mode for these items", ss.str());
+    resume();
+  };
+  client.subscribe(&sub);
+  client.connect();
+  wait(TIMEOUT);
+}
+
+TEST_FIXTURE(Setup, testSubscribeCommand){
+  Subscription sub("COMMAND", {"mult_table"}, {"key", "value1", "value2", "command"});
+  sub.setDataAdapter("MULT_TABLE");
+  sub.addListener(subListener);
+  subListener->_onSubscription = [this, &sub] {
+    EXPECT_TRUE(sub.isSubscribed());
+    EXPECT_EQ(1, sub.getKeyPosition());
+    EXPECT_EQ(4, sub.getCommandPosition());
     resume();
   };
   client.subscribe(&sub);
