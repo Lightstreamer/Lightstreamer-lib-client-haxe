@@ -23,39 +23,39 @@ public:
   int getCommandPosition();
 };
 
-Subscription::Subscription(const std::string& mode, const std::vector<std::string>& items, const std::vector<std::string>& fields) {
+inline Subscription::Subscription(const std::string& mode, const std::vector<std::string>& items, const std::vector<std::string>& fields) {
   _delegate = Subscription_new(mode.c_str(), &const_cast<std::vector<std::string>&>(items), &const_cast<std::vector<std::string>&>(fields), this);
 }
 
-Subscription::~Subscription() {
+inline Subscription::~Subscription() {
   Lightstreamer_releaseHaxeObject(_delegate);
 }
 
-void Subscription::addListener(SubscriptionListener* listener) {
+inline void Subscription::addListener(SubscriptionListener* listener) {
   Subscription_addListener(_delegate, listener);
 }
 
-void Subscription::removeListener(SubscriptionListener* listener) {
+inline void Subscription::removeListener(SubscriptionListener* listener) {
   Subscription_removeListener(_delegate, listener);
 }
 
-std::vector<SubscriptionListener*> Subscription::getListeners() {
+inline std::vector<SubscriptionListener*> Subscription::getListeners() {
   return Subscription_getListeners(_delegate);
 }
 
-bool Subscription::isSubscribed() {
+inline bool Subscription::isSubscribed() {
   return Subscription_isSubscribed(_delegate);
 }
 
-void Subscription::setDataAdapter(const std::string& dataAdapter) {
+inline void Subscription::setDataAdapter(const std::string& dataAdapter) {
   Subscription_setDataAdapter(_delegate, dataAdapter.c_str());
 }
 
-int Subscription::getKeyPosition() {
+inline int Subscription::getKeyPosition() {
   return Subscription_getKeyPosition(_delegate);
 }
 
-int Subscription::getCommandPosition() {
+inline int Subscription::getCommandPosition() {
   return Subscription_getCommandPosition(_delegate);
 }
 

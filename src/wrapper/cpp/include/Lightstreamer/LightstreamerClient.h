@@ -28,59 +28,59 @@ public:
   std::vector<Subscription*> getSubscriptions();
 };
 
-std::string LightstreamerClient::libName() {
+inline std::string LightstreamerClient::libName() {
   return LightstreamerClient_getLibName();
 }
 
-std::string LightstreamerClient::libVersion() {
+inline std::string LightstreamerClient::libVersion() {
   return LightstreamerClient_getLibVersion();
 }
 
-LightstreamerClient::LightstreamerClient(const std::string& serverAddress, const std::string& adapterSet) {
+inline LightstreamerClient::LightstreamerClient(const std::string& serverAddress, const std::string& adapterSet) {
   _client = LightstreamerClient_new(serverAddress.c_str(), adapterSet.c_str());
 }
 
-LightstreamerClient::~LightstreamerClient() {
+inline LightstreamerClient::~LightstreamerClient() {
   LightstreamerClient_disconnect(_client);
   Lightstreamer_releaseHaxeObject(_client);
 }
 
-void LightstreamerClient::addListener(ClientListener* listener) {
+inline void LightstreamerClient::addListener(ClientListener* listener) {
   LightstreamerClient_addListener(_client, listener);
 }
 
-void LightstreamerClient::removeListener(ClientListener* listener) {
+inline void LightstreamerClient::removeListener(ClientListener* listener) {
   LightstreamerClient_removeListener(_client, listener);
 }
 
-std::vector<ClientListener*> LightstreamerClient::getListeners() {
+inline std::vector<ClientListener*> LightstreamerClient::getListeners() {
   return LightstreamerClient_getListeners(_client);
 }
 
-std::string LightstreamerClient::getStatus() {
+inline std::string LightstreamerClient::getStatus() {
   HaxeString status = LightstreamerClient_getStatus(_client);
   std::string res(status);
   Lightstreamer_releaseHaxeString(status);
   return res;
 }
 
-void LightstreamerClient::connect() {
+inline void LightstreamerClient::connect() {
   LightstreamerClient_connect(_client);
 }
 
-void LightstreamerClient::disconnect() {
+inline void LightstreamerClient::disconnect() {
   LightstreamerClient_disconnect(_client);
 }
 
-void LightstreamerClient::subscribe(Subscription* subscription) {
+inline void LightstreamerClient::subscribe(Subscription* subscription) {
   LightstreamerClient_subscribe(_client, subscription->_delegate);
 }
 
-void LightstreamerClient::unsubscribe(Subscription* subscription) {
+inline void LightstreamerClient::unsubscribe(Subscription* subscription) {
   LightstreamerClient_unsubscribe(_client, subscription->_delegate);
 }
 
-std::vector<Subscription*> LightstreamerClient::getSubscriptions() {
+inline std::vector<Subscription*> LightstreamerClient::getSubscriptions() {
   return LightstreamerClient_getSubscriptions(_client);
 }
 
