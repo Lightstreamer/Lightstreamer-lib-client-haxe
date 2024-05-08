@@ -18,6 +18,7 @@ public:
   void removeListener(SubscriptionListener* listener);
   std::vector<SubscriptionListener*> getListeners();
   bool isSubscribed();
+  bool isActive();
   void setDataAdapter(const std::string& dataAdapter);
   void setCommandSecondLevelDataAdapter(const std::string& dataAdapter);
   void setCommandSecondLevelFields(const std::vector<std::string>& fields);
@@ -47,6 +48,10 @@ inline std::vector<SubscriptionListener*> Subscription::getListeners() {
 
 inline bool Subscription::isSubscribed() {
   return Subscription_isSubscribed(_delegate);
+}
+
+inline bool Subscription::isActive() {
+  return Subscription_isActive(_delegate);
 }
 
 inline void Subscription::setDataAdapter(const std::string& dataAdapter) {
