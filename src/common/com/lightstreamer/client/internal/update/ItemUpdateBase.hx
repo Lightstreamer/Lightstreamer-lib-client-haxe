@@ -44,33 +44,36 @@ class ItemUpdateBase extends AbstractItemUpdate {
     #end
   }
 
+  #if cpp override #end 
   public function getItemName(): Null<String> {
     return m_items != null ? m_items[m_itemIdx] : null;
   }
 
+  #if cpp override #end 
   public function getItemPos(): Int {
     return m_itemIdx;
   }
 
+  #if cpp override #end 
   public function isSnapshot(): Bool {
     return m_isSnapshot;
   }
 
   #if static
   #if cpp
-  public function getValueByPos(fieldPos: Int): Null<String> {
+  override public function getValueByPos(fieldPos: Int): Null<String> {
     return getValuePos(fieldPos);
   }
 
-  public function getValueByName(fieldName: String): Null<String> {
+  override public function getValueByName(fieldName: String): Null<String> {
     return getValueName(fieldName);
   }
 
-  public function isValueChangedByPos(fieldPos: Int): Bool {
+  override public function isValueChangedByPos(fieldPos: Int): Bool {
     return isValueChangedPos(fieldPos);
   }
 
-  public function isValueChangedByName(fieldName: String): Bool {
+  override public function isValueChangedByName(fieldName: String): Bool {
     return isValueChangedName(fieldName);
   }
   #else
@@ -170,6 +173,7 @@ class ItemUpdateBase extends AbstractItemUpdate {
   }
   #end
   #if (!js || LS_TEST)
+  #if cpp override #end 
   public function getChangedFields(): NativeStringMap<Null<String>> {
     if (m_fields == null) {
       throw new IllegalStateException(NO_FIELDS);
@@ -184,6 +188,7 @@ class ItemUpdateBase extends AbstractItemUpdate {
     return new NativeStringMap(res);
   }
 
+  #if cpp override #end 
   public function getChangedFieldsByPosition(): NativeIntMap<Null<String>> {
     var res = new Map<Int, Null<String>>();
     for (fieldPos in m_changedFields) {
@@ -192,6 +197,7 @@ class ItemUpdateBase extends AbstractItemUpdate {
     return new NativeIntMap(res);
   }
 
+  #if cpp override #end 
   public function getFields(): NativeStringMap<Null<String>> {
     if (m_fields == null) {
       throw new IllegalStateException(NO_FIELDS);
@@ -203,6 +209,7 @@ class ItemUpdateBase extends AbstractItemUpdate {
     return new NativeStringMap(res);
   }
 
+  #if cpp override #end 
   public function getFieldsByPosition(): NativeIntMap<Null<String>> {
     var map = [for (k => v in m_newValues) k => v.toString()];
     return new NativeIntMap(map);

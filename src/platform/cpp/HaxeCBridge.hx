@@ -28,19 +28,19 @@
 
 #if macro
 
-	// fast path for when code gen isn't required
-	// disable this to get auto-complete when editing this file
-	#if (display || display_details || target.name != cpp || cppia)
+// 	// fast path for when code gen isn't required
+// 	// disable this to get auto-complete when editing this file
+// 	#if (display || display_details || target.name != cpp || cppia)
 
-class HaxeCBridge {
-	public static function expose(?namespace: String)
-		return haxe.macro.Context.getBuildFields();
-	@:noCompletion
-	static macro function runUserMain()
-		return macro null;
-}
+// class HaxeCBridge {
+// 	public static function expose(?namespace: String)
+// 		return haxe.macro.Context.getBuildFields();
+// 	@:noCompletion
+// 	static macro function runUserMain()
+// 		return macro null;
+// }
 
-	#else
+// 	#else
 
 import HaxeCBridge.CodeTools.*;
 import haxe.ds.ReadOnlyArray;
@@ -217,7 +217,7 @@ class HaxeCBridge {
 		function convertFunction(f: ClassField, kind: FunctionInfoKind) {
 			var isConvertibleMethod = f.isPublic && !f.isExtern && switch f.kind {
 				case FVar(_), FMethod(MethMacro): false; // skip macro methods
-				case FMethod(_): true;
+				case FMethod(_): !f.meta.has(":HaxeCBridge.ignore");
 			}
 			if (!isConvertibleMethod) return;
 
@@ -349,6 +349,9 @@ class HaxeCBridge {
 			#ifndef HaxeCBridge_${namespace}_h
 			#define HaxeCBridge_${namespace}_h
 			')
+			+ '#include "Lightstreamer/ForwardDcl.h"\n'
+			// + '#include "Lightstreamer/ClientListener.h"\n'
+			// + '#include "Lightstreamer/SubscriptionListener.h"\n'
 			+ (if (includes.length > 0) includes.map(CPrinter.printInclude).join('\n') + '\n\n'; else '')
 			+ (if (ctx.macros.length > 0) ctx.macros.join('\n') + '\n' else '')
 
@@ -1104,28 +1107,34 @@ class CConverterContext {
 						}
 						nativeMetaValue != null ? nativeMetaValue : t.name;
 					}
-					// if the extern has @:include metas, copy the referenced header files so we can #include them locally
-					var includes = t.meta.extract(':include');
-					for (include in includes) {
-						switch include.params {
-							case null:
-							case [{expr: EConst(CString(includePath))}]:
-								// copy the referenced include into the compiler output directory and require this header
-								var filename = Path.withoutDirectory(includePath);
-								var absoluteIncludePath = Path.join([getAbsolutePosDirectory(t.pos), includePath]);
-								var targetDirectory = Compiler.getOutput();
-								var targetFilePath = Path.join([targetDirectory, filename]);
+					// // if the extern has @:include metas, copy the referenced header files so we can #include them locally
+					// var includes = t.meta.extract(':include');
+					// for (include in includes) {
+					// 	switch include.params {
+					// 		case null:
+					// 		case [{expr: EConst(CString(includePath))}]:
+					// 			// copy the referenced include into the compiler output directory and require this header
+					// 			var filename = Path.withoutDirectory(includePath);
+					// 			var absoluteIncludePath = Path.join([getAbsolutePosDirectory(t.pos), includePath]);
+					// 			var targetDirectory = Compiler.getOutput();
+					// 			var targetFilePath = Path.join([targetDirectory, filename]);
 
-								if (!FileSystem.exists(targetDirectory)) {
-									// creates intermediate directories if required
-									FileSystem.createDirectory(targetDirectory);
-								}
+					// 			if (!FileSystem.exists(targetDirectory)) {
+					// 				// creates intermediate directories if required
+					// 				FileSystem.createDirectory(targetDirectory);
+					// 			}
 
-								File.copy(absoluteIncludePath, targetFilePath);
-								requireHeader(filename, true);
-							default:
-						}
-					}
+					// 			trace("cwd", Sys.getCwd());
+					// 			trace("include path", includePath);
+					// 			trace("absolute source directory", getAbsolutePosDirectory(t.pos));
+					// 			trace("absolute include path", absoluteIncludePath);
+					// 			trace("target directory", targetDirectory);
+					// 			trace("target file path", targetFilePath);
+					// 			File.copy(absoluteIncludePath, targetFilePath);
+					// 			requireHeader(filename, true);
+					// 		default:
+					// 	}
+					// }
 					Ident(ident);
 				} else {
 					if (allowNonTrivial) {
@@ -1622,7 +1631,7 @@ class CodeTools {
 
 }
 
-	#end // (display || display_details || target.name != cpp)
+	// #end // (display || display_details || target.name != cpp)
 
 #elseif (cpp && !cppia)
 

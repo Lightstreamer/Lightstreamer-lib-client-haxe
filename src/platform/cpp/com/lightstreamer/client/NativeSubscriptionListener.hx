@@ -12,8 +12,7 @@ extern class NativeSubscriptionListener {
   function onCommandSecondLevelSubscriptionError(code: Int, message: Reference<CppString>, key: Reference<CppString>): Void;
   function onEndOfSnapshot(itemName: Reference<CppString>, itemPos: Int): Void;
   function onItemLostUpdates(itemName: Reference<CppString>, itemPos: Int, lostUpdates: Int): Void;
-  // TODO 1 onItemUpdate
-  // function onItemUpdate(update: ItemUpdate): Void;
+  function onItemUpdate(update: Reference<NativeItemUpdate>): Void;
   function onListenEnd(): Void;
   function onListenStart(): Void;
   function onSubscription(): Void;

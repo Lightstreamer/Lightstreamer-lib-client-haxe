@@ -3,10 +3,10 @@ package com.lightstreamer.client;
 import com.lightstreamer.internal.NativeTypes;
 
 #if js @:native("ItemUpdate") #end
-@:build(com.lightstreamer.internal.Macros.buildPythonImport("ls_python_client_api", "ItemUpdate"))
+#if python @:build(com.lightstreamer.internal.Macros.buildPythonImport("ls_python_client_api", "ItemUpdate")) #end
 #if cs @:using(ItemUpdate.ItemUpdateExtender) #end
 #if cpp @:using(ItemUpdate.ItemUpdateExtender) #end
-#if !cpp extern #end interface ItemUpdate {
+#if cpp interface #else extern interface #end ItemUpdate {
   #if !cs
   function getItemName(): Null<String>;
   function getItemPos(): Int;

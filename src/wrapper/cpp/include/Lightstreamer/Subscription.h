@@ -19,6 +19,8 @@ public:
   std::vector<SubscriptionListener*> getListeners();
   bool isSubscribed();
   void setDataAdapter(const std::string& dataAdapter);
+  void setCommandSecondLevelDataAdapter(const std::string& dataAdapter);
+  void setCommandSecondLevelFields(const std::vector<std::string>& fields);
   int getKeyPosition();
   int getCommandPosition();
 };
@@ -49,6 +51,14 @@ inline bool Subscription::isSubscribed() {
 
 inline void Subscription::setDataAdapter(const std::string& dataAdapter) {
   Subscription_setDataAdapter(_delegate, dataAdapter.c_str());
+}
+
+inline void Subscription::setCommandSecondLevelDataAdapter(const std::string& dataAdapter) {
+  Subscription_setCommandSecondLevelDataAdapter(_delegate, dataAdapter.c_str());
+}
+
+inline void Subscription::setCommandSecondLevelFields(const std::vector<std::string>& fields) {
+  Subscription_setCommandSecondLevelFields(_delegate, &fields);
 }
 
 inline int Subscription::getKeyPosition() {

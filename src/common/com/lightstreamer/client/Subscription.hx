@@ -351,6 +351,15 @@ class LSSubscription {
     this.schema2 = null;
   }
 
+  #if cpp
+  @:unreflective
+  @HaxeCBridge.name("Subscription_setCommandSecondLevelFields")
+  public function _setCommandSecondLevelFields(fields: cpp.ConstStar<com.lightstreamer.cpp.CppStringVector>) {
+    var _fields = fields == null ? null : fields.toHaxe();
+    setCommandSecondLevelFields(_fields);
+  }
+  #end
+
   public function getCommandSecondLevelFieldSchema(): Null<String> {
     return schema2;
   }

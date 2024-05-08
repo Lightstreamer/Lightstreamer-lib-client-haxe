@@ -1,7 +1,7 @@
 package com.lightstreamer.client;
 
 import cpp.Pointer;
-import com.lightstreamer.cpp.CppString;
+import cpp.RawPointer;
 import com.lightstreamer.client.SubscriptionListener;
 
 class SubscriptionListenerAdapter implements SubscriptionListener {
@@ -30,7 +30,10 @@ class SubscriptionListenerAdapter implements SubscriptionListener {
     _listener.ref.onItemLostUpdates(itemName, itemPos, lostUpdates);
   }
   public function onItemUpdate(update: ItemUpdate): Void {
-    // TODO 1
+    // hxObj is released by NativeItemUpdate's destructor
+    var hxObj: RawPointer<cpp.Void> = HaxeCBridge.retainHaxeObject(update);
+    var _update = new NativeItemUpdate(Pointer.fromRaw(hxObj).ptr);
+    _listener.ref.onItemUpdate(_update);
   }
   public function onListenEnd(): Void {
     _listener.ref.onListenEnd();
