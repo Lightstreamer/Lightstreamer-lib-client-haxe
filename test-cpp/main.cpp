@@ -3,13 +3,17 @@
 #include "Lightstreamer/ClientListener.h"
 #include "Lightstreamer/SubscriptionListener.h"
 #include "Lightstreamer/ConsoleLoggerProvider.h"
+#include "Lightstreamer/ItemUpdate.h"
 #include "utpp/utpp.h"
 #include "Poco/Semaphore.h"
 #include <iostream>
 #include <sstream>
+#include <chrono>
+#include <stdexcept>
 
 using Lightstreamer::LightstreamerClient;
 using Lightstreamer::Subscription;
+using Lightstreamer::ItemUpdate;
 
 class MyClientListener: public Lightstreamer::ClientListener {
 public:
@@ -33,6 +37,22 @@ public:
   void onSubscriptionError(int code, const std::string& msg) override {
     if (_onSubscriptionError) _onSubscriptionError(code, msg);
   }
+  std::function<void(ItemUpdate& update)> _onItemUpdate;
+  void onItemUpdate(ItemUpdate& update) override {
+    if (_onItemUpdate) _onItemUpdate(update);
+  }
+  std::function<void(void)> _onUnsubscription;
+  void onUnsubscription() override {
+    if (_onUnsubscription) _onUnsubscription();
+  }
+  std::function<void(const std::string&, int)> _onClearSnapshot;
+  void onClearSnapshot(const std::string& name, int pos) override {
+    if (_onClearSnapshot) _onClearSnapshot(name, pos);
+  }
+  std::function<void(const std::string&)> _onRealMaxFrequency;
+  void onRealMaxFrequency(const std::string& freq) override {
+    if (_onRealMaxFrequency) _onRealMaxFrequency(freq);
+  }
 };
 
 struct Setup {
@@ -49,8 +69,24 @@ struct Setup {
   void resume() {
     _sem.set();
   }
-  void wait(long ms) {
-    _sem.wait(ms);
+  void wait(long ms, int expectedResumes = 1) {
+    if (expectedResumes == 1) {
+      _sem.wait(ms);
+    } else {
+      using std::chrono::high_resolution_clock;
+      using std::chrono::duration_cast;
+      using std::chrono::milliseconds;
+
+      auto t0 = high_resolution_clock::now();
+      auto left = ms;
+      while (expectedResumes-- > 0) {
+        if (left <= 0) {
+          throw std::runtime_error("Timeout");
+        }
+        _sem.wait(left);
+        left = ms - duration_cast<milliseconds>(high_resolution_clock::now() - t0).count();
+      }
+    }
   }
   std::string transport = "WS-STREAMING";
   Poco::Semaphore _sem;
@@ -253,6 +289,101 @@ TEST_FIXTURE(Setup, testSubscribeCommand){
   client.subscribe(&sub);
   client.connect();
   wait(TIMEOUT);
+}
+
+TEST_FIXTURE(Setup, testSubscribeCommand2Level){
+  Subscription sub("COMMAND", {"two_level_command_count"}, {"key", "command"});
+  sub.setDataAdapter("TWO_LEVEL_COMMAND");
+  sub.setCommandSecondLevelDataAdapter("COUNT");
+	sub.setCommandSecondLevelFields({"count"});
+  sub.addListener(subListener);
+  subListener->_onSubscription = [this, &sub] {
+    EXPECT_TRUE(sub.isSubscribed());
+    EXPECT_EQ(1, sub.getKeyPosition());
+    EXPECT_EQ(2, sub.getCommandPosition());
+  };
+  subListener->_onItemUpdate = [this](auto& update) {
+    auto val = update.getValue("count");
+    auto key = update.getValue("key");
+    auto cmd = update.getValue("command");
+    if (!val.empty() && key == "count" && cmd == "UPDATE") {
+      resume();
+    }
+  };
+  client.subscribe(&sub);
+  client.connect();
+  wait(TIMEOUT);
+}
+
+TEST_FIXTURE(Setup, testUnsubscribe) {
+  Subscription sub("MERGE", {"count"}, {"count"});
+  sub.setDataAdapter("COUNT");
+  sub.addListener(subListener);
+  subListener->_onSubscription = [this, &sub] {
+    EXPECT_TRUE(sub.isSubscribed());
+    client.unsubscribe(&sub);
+  };
+  subListener->_onUnsubscription = [this, &sub] {
+    EXPECT_FALSE(sub.isSubscribed());
+		EXPECT_FALSE(sub.isActive());
+    resume();
+  };
+  client.subscribe(&sub);
+  client.connect();
+  wait(TIMEOUT);
+}
+
+TEST_FIXTURE(Setup, testSubscribeNonAscii) {
+  Subscription sub("MERGE", {"strange:àìùòlè"}, {"value🌐-", "value&+=\r\n%"});
+  sub.setDataAdapter("STRANGE_NAMES");
+  sub.addListener(subListener);
+  subListener->_onSubscription = [this, &sub] {
+    EXPECT_TRUE(sub.isSubscribed());
+    resume();
+  };
+  client.subscribe(&sub);
+  client.connect();
+  wait(TIMEOUT);
+}
+
+// TODO testBandwidth
+
+TEST_FIXTURE(Setup, testClearSnapshot) {
+  Subscription sub("DISTINCT", {"clear_snapshot"}, {"dummy"});
+  sub.setDataAdapter("CLEAR_SNAPSHOT");
+  sub.addListener(subListener);
+  subListener->_onClearSnapshot = [this, &sub] (auto& name, auto pos) {
+    EXPECT_EQ("clear_snapshot", name);
+		EXPECT_EQ(1, pos);
+    resume();
+  };
+  client.subscribe(&sub);
+  client.connect();
+  wait(TIMEOUT);
+}
+
+TEST_FIXTURE(Setup, testRoundTrip) {
+  // TODO to be completed
+  Subscription sub("MERGE", {"count"}, {"count"});
+  sub.setDataAdapter("COUNT");
+  sub.addListener(subListener);
+  subListener->_onSubscription = [this, &sub] {
+    resume();
+  };
+  subListener->_onItemUpdate = [this](auto& update) {
+    client.disconnect();
+    resume();
+  };
+  subListener->_onUnsubscription = [this, &sub] {
+    resume();
+  };
+  subListener->_onRealMaxFrequency = [this](auto& freq) {
+    EXPECT_EQ("unlimited", freq);
+    resume();
+  };
+  client.subscribe(&sub);
+  client.connect();
+  wait(TIMEOUT, 4);
 }
 
 int main(int argc, char** argv) {
