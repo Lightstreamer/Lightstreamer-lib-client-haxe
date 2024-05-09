@@ -28,10 +28,17 @@
 
 #if macro
 
+/* $Lightstreamer$
+The code below appears to be only a means to speed up auto-completion.
+Unfortunately it doesn't work.
+See these issues
+- https://github.com/haxiomic/haxe-c-bridge/issues/49
+- https://github.com/haxiomic/haxe-c-bridge/issues/51
+*/
 // 	// fast path for when code gen isn't required
 // 	// disable this to get auto-complete when editing this file
 // 	#if (display || display_details || target.name != cpp || cppia)
-
+//
 // class HaxeCBridge {
 // 	public static function expose(?namespace: String)
 // 		return haxe.macro.Context.getBuildFields();
@@ -39,7 +46,7 @@
 // 	static macro function runUserMain()
 // 		return macro null;
 // }
-
+//
 // 	#else
 
 import HaxeCBridge.CodeTools.*;
@@ -217,7 +224,7 @@ class HaxeCBridge {
 		function convertFunction(f: ClassField, kind: FunctionInfoKind) {
 			var isConvertibleMethod = f.isPublic && !f.isExtern && switch f.kind {
 				case FVar(_), FMethod(MethMacro): false; // skip macro methods
-				case FMethod(_): !f.meta.has(":HaxeCBridge.ignore");
+				case FMethod(_): true;
 			}
 			if (!isConvertibleMethod) return;
 
@@ -349,9 +356,10 @@ class HaxeCBridge {
 			#ifndef HaxeCBridge_${namespace}_h
 			#define HaxeCBridge_${namespace}_h
 			')
+			/* $Lightstreamer$
+			This is a pretty crude means to include the headers needed by the generated bridge, but I haven't find a better way...
+			*/
 			+ '#include "Lightstreamer/ForwardDcl.h"\n'
-			// + '#include "Lightstreamer/ClientListener.h"\n'
-			// + '#include "Lightstreamer/SubscriptionListener.h"\n'
 			+ (if (includes.length > 0) includes.map(CPrinter.printInclude).join('\n') + '\n\n'; else '')
 			+ (if (ctx.macros.length > 0) ctx.macros.join('\n') + '\n' else '')
 
@@ -1107,6 +1115,10 @@ class CConverterContext {
 						}
 						nativeMetaValue != null ? nativeMetaValue : t.name;
 					}
+					/* $Lightstreamer$
+					The code below should track the headers of the extern classes but it doesn't work as I would expect.
+					Therefore, I prefer to explicitly include only the headers that I need (see the patch above).
+					*/
 					// // if the extern has @:include metas, copy the referenced header files so we can #include them locally
 					// var includes = t.meta.extract(':include');
 					// for (include in includes) {
@@ -1118,12 +1130,12 @@ class CConverterContext {
 					// 			var absoluteIncludePath = Path.join([getAbsolutePosDirectory(t.pos), includePath]);
 					// 			var targetDirectory = Compiler.getOutput();
 					// 			var targetFilePath = Path.join([targetDirectory, filename]);
-
+					// 
 					// 			if (!FileSystem.exists(targetDirectory)) {
 					// 				// creates intermediate directories if required
 					// 				FileSystem.createDirectory(targetDirectory);
 					// 			}
-
+					//
 					// 			trace("cwd", Sys.getCwd());
 					// 			trace("include path", includePath);
 					// 			trace("absolute source directory", getAbsolutePosDirectory(t.pos));
@@ -1630,7 +1642,7 @@ class CodeTools {
 	}
 
 }
-
+	/* $Lightstreamer$ */
 	// #end // (display || display_details || target.name != cpp)
 
 #elseif (cpp && !cppia)
