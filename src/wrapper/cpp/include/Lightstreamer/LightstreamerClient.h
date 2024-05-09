@@ -10,79 +10,63 @@ namespace Lightstreamer {
 class LightstreamerClient {
   HaxeObject _client;
 public:
-  static std::string libName();
-  static std::string libVersion();
-  LightstreamerClient& operator=(const LightstreamerClient&) = delete;
-  LightstreamerClient(const LightstreamerClient&) = delete;
   LightstreamerClient() = delete;
-  LightstreamerClient(const std::string& serverAddress, const std::string& adapterSet);
-  ~LightstreamerClient();
-  void addListener(ClientListener* listener);
-  void removeListener(ClientListener* listener);
-  std::vector<ClientListener*> getListeners();
-  std::string getStatus();
-  void connect();
-  void disconnect();
-  void subscribe(Subscription* subscription);
-  void unsubscribe(Subscription* subscription);
-  std::vector<Subscription*> getSubscriptions();
+  LightstreamerClient(const LightstreamerClient&) = delete;
+  LightstreamerClient& operator=(const LightstreamerClient&) = delete;
+
+  static std::string libName() {
+    return LightstreamerClient_getLibName();
+  }
+
+  static std::string libVersion() {
+    return LightstreamerClient_getLibVersion();
+  }
+
+  LightstreamerClient(const std::string& serverAddress, const std::string& adapterSet) {
+    _client = LightstreamerClient_new(&serverAddress, &adapterSet);
+  }
+
+  ~LightstreamerClient() {
+    LightstreamerClient_disconnect(_client);
+    Lightstreamer_releaseHaxeObject(_client);
+  }
+
+  void addListener(ClientListener* listener) {
+    LightstreamerClient_addListener(_client, listener);
+  }
+
+  void removeListener(ClientListener* listener) {
+    LightstreamerClient_removeListener(_client, listener);
+  }
+
+  std::vector<ClientListener*> getListeners() {
+    return LightstreamerClient_getListeners(_client);
+  }
+
+  std::string getStatus() {
+    return LightstreamerClient_getStatus(_client);
+  }
+
+  void connect() {
+    LightstreamerClient_connect(_client);
+  }
+
+  void disconnect() {
+    LightstreamerClient_disconnect(_client);
+  }
+
+  void subscribe(Subscription* subscription) {
+    LightstreamerClient_subscribe(_client, subscription->_delegate);
+  }
+
+  void unsubscribe(Subscription* subscription) {
+    LightstreamerClient_unsubscribe(_client, subscription->_delegate);
+  }
+
+  std::vector<Subscription*> getSubscriptions() {
+    return LightstreamerClient_getSubscriptions(_client);
+  }
 };
-
-inline std::string LightstreamerClient::libName() {
-  return LightstreamerClient_getLibName();
-}
-
-inline std::string LightstreamerClient::libVersion() {
-  return LightstreamerClient_getLibVersion();
-}
-
-inline LightstreamerClient::LightstreamerClient(const std::string& serverAddress, const std::string& adapterSet) {
-  _client = LightstreamerClient_new(serverAddress.c_str(), adapterSet.c_str());
-}
-
-inline LightstreamerClient::~LightstreamerClient() {
-  LightstreamerClient_disconnect(_client);
-  Lightstreamer_releaseHaxeObject(_client);
-}
-
-inline void LightstreamerClient::addListener(ClientListener* listener) {
-  LightstreamerClient_addListener(_client, listener);
-}
-
-inline void LightstreamerClient::removeListener(ClientListener* listener) {
-  LightstreamerClient_removeListener(_client, listener);
-}
-
-inline std::vector<ClientListener*> LightstreamerClient::getListeners() {
-  return LightstreamerClient_getListeners(_client);
-}
-
-inline std::string LightstreamerClient::getStatus() {
-  HaxeString status = LightstreamerClient_getStatus(_client);
-  std::string res(status);
-  Lightstreamer_releaseHaxeString(status);
-  return res;
-}
-
-inline void LightstreamerClient::connect() {
-  LightstreamerClient_connect(_client);
-}
-
-inline void LightstreamerClient::disconnect() {
-  LightstreamerClient_disconnect(_client);
-}
-
-inline void LightstreamerClient::subscribe(Subscription* subscription) {
-  LightstreamerClient_subscribe(_client, subscription->_delegate);
-}
-
-inline void LightstreamerClient::unsubscribe(Subscription* subscription) {
-  LightstreamerClient_unsubscribe(_client, subscription->_delegate);
-}
-
-inline std::vector<Subscription*> LightstreamerClient::getSubscriptions() {
-  return LightstreamerClient_getSubscriptions(_client);
-}
 
 } // namespace Lightstreamer
 
