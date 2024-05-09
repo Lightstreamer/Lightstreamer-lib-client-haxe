@@ -16,6 +16,12 @@ private enum SubscriptionState {
 
 private class SubscriptionEventDispatcher extends EventDispatcher<SubscriptionListener> {}
 
+#if cpp
+private typedef NativeWrapper = cpp.Pointer<NativeSubscription>;
+#else
+private typedef NativeWrapper = Any;
+#end
+
 #if (js || python) @:expose @:native("LSSubscription") #end
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class LSSubscription {
@@ -42,48 +48,37 @@ class LSSubscription {
   var nFields: Null<Int>;
   var m_internal: Bool = false; // special flag used to mark 2-level subscriptions
   var manager: Null<SubscriptionManagerLiving>;
-  #if cpp
-  public final wrapper: Null<cpp.Pointer<NativeSubscription>>;
-  #else
-  public final wrapper: Null<Any>;
-  #end
+  public final wrapper: Null<NativeWrapper>;
 
   #if js
-  public function new(mode: String, items: NativeArray<String>, fields: NativeArray<String>, wrapper: Any = null) {
+  public function new(mode: String, items: NativeArray<String>, fields: NativeArray<String>, wrapper: NativeWrapper = null) {
     this.wrapper = wrapper;
     this.mode = SubscriptionMode.fromString(mode);
     initSnapshot();
     initItemsAndFields(items is String ? [cast items] : items, fields);
   }
   #elseif (java || cs)
-  overload public function new(mode: String, items: NativeArray<String>, fields: NativeArray<String>, wrapper: Any = null) {
+  overload public function new(mode: String, items: NativeArray<String>, fields: NativeArray<String>, wrapper: NativeWrapper = null) {
     this.wrapper = wrapper;
     this.mode = SubscriptionMode.fromString(mode);
     initSnapshot();
     initItemsAndFields(items, fields);
   }
 
-  overload public function new(mode: String, wrapper: Any = null) {
+  overload public function new(mode: String, wrapper: NativeWrapper = null) {
     this.wrapper = wrapper;
     this.mode = SubscriptionMode.fromString(mode);
     initSnapshot();
   }
 
-  overload public function new(mode: String, item: String, fields: NativeArray<String>, wrapper: Any = null) {
+  overload public function new(mode: String, item: String, fields: NativeArray<String>, wrapper: NativeWrapper = null) {
     this.wrapper = wrapper;
     this.mode = SubscriptionMode.fromString(mode);
     initSnapshot();
     initItemsAndFields([item], fields);
   }
-  #elseif cpp
-  public function new(mode: String, items: NativeArray<String>, fields: NativeArray<String>, wrapper: Null<cpp.Pointer<NativeSubscription>> = null) {
-    this.wrapper = wrapper;
-    this.mode = SubscriptionMode.fromString(mode);
-    initSnapshot();
-    initItemsAndFields(items, fields);
-  }
   #else
-  public function new(mode: String, items: NativeArray<String>, fields: NativeArray<String>, wrapper: Any = null) {
+  public function new(mode: String, items: NativeArray<String>, fields: NativeArray<String>, wrapper: Null<NativeWrapper> = null) {
     this.wrapper = wrapper;
     this.mode = SubscriptionMode.fromString(mode);
     initSnapshot();
