@@ -16,7 +16,6 @@ private enum SubscriptionState {
 
 private class SubscriptionEventDispatcher extends EventDispatcher<SubscriptionListener> {}
 
-#if cpp @:build(HaxeCBridge.expose()) @HaxeCBridge.name("Subscription") #end
 #if (js || python) @:expose @:native("LSSubscription") #end
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class LSSubscription {
@@ -77,18 +76,6 @@ class LSSubscription {
     initItemsAndFields([item], fields);
   }
   #elseif cpp
-  @:unreflective
-  @HaxeCBridge.name("Subscription_new")
-  @:nullSafety(Off)
-  public static function create(mode: String, items: cpp.Star<com.lightstreamer.cpp.CppStringVector>, fields: cpp.Star<com.lightstreamer.cpp.CppStringVector>, wrapper: cpp.Star<NativeSubscription> = null) {
-    var _items = items.toHaxe();
-    var _fields = fields.toHaxe();
-    var _wrapper = wrapper == null ? null : cpp.Pointer.fromStar(wrapper);
-    return new Subscription(mode, _items, _fields, _wrapper);
-  }
-
-  @:unreflective
-  @:HaxeCBridge.ignore
   public function new(mode: String, items: NativeArray<String>, fields: NativeArray<String>, wrapper: Null<cpp.Pointer<NativeSubscription>> = null) {
     this.wrapper = wrapper;
     this.mode = SubscriptionMode.fromString(mode);
@@ -126,15 +113,12 @@ class LSSubscription {
     }
   }
 
-  @:HaxeCBridge.ignore
   public function addListener(listener: SubscriptionListener): Void {
     eventDispatcher.addListenerAndFireOnListenStart(listener #if js , this #end);
   }
-  @:HaxeCBridge.ignore
   public function removeListener(listener: SubscriptionListener): Void {
     eventDispatcher.removeListenerAndFireOnListenEnd(listener #if js , this #end);
   }
-  @:HaxeCBridge.ignore
   public function getListeners(): NativeList<SubscriptionListener> {
     return new NativeList(eventDispatcher.getListeners());
   }
@@ -158,15 +142,12 @@ class LSSubscription {
     return mode;
   }
 
-  @:HaxeCBridge.ignore
   public function getItems(): Null<NativeArray<String>> {
     return items == null ? null : new NativeArray(items);
   }
-  @:HaxeCBridge.ignore
   public function fetchItems(): Null<Array<String>> {
     return items;
   }
-  @:HaxeCBridge.ignore
   public function setItems(items: Null<NativeArray<String>>): Void {
     checkActive();
     this.items = Items.fromArray(items == null ? null : items.toHaxe());
@@ -182,15 +163,12 @@ class LSSubscription {
     this.items = null;
   }
 
-  @:HaxeCBridge.ignore
   public function getFields(): Null<NativeArray<String>> {
     return fields == null ? null : new NativeArray(fields);
   }
-  @:HaxeCBridge.ignore
   public function fetchFields(): Null<Array<String>> {
     return fields;
   }
-  @:HaxeCBridge.ignore
   public function setFields(fields: Null<NativeArray<String>>): Void {
     checkActive();
     var newValue = Fields.fromArray(fields == null ? null : fields.toHaxe());
@@ -307,11 +285,9 @@ class LSSubscription {
     this.dataAdapter2 = Name.fromString(dataAdapter);
   }
 
-  @:HaxeCBridge.ignore
   public function getCommandSecondLevelFields(): Null<NativeArray<String>> {
     return fields2 == null ? null : new NativeArray(fields2);
   }
-  @:HaxeCBridge.ignore
   public function setCommandSecondLevelFields(fields: Null<NativeArray<String>>) {
     checkActive();
     checkCommand();
@@ -754,42 +730,4 @@ class LSSubscription {
     map["secondLevelDataAdapter"] = dataAdapter2;
     return map.toString();
   }
-
-  #if cpp
-  final _listeners = new HxListeners<NativeSubscriptionListener, SubscriptionListenerAdapter>();
-
-  @:unreflective
-  @HaxeCBridge.name("Subscription_addListener")
-  public function _addListener(l: cpp.Star<NativeSubscriptionListener>) {
-    _listeners.add(l, addListener);
-  }
-
-  @:unreflective
-  @HaxeCBridge.name("Subscription_removeListener")
-  public function _removeListener(l: cpp.Star<NativeSubscriptionListener>) {
-    _listeners.remove(l, removeListener);
-  }
-
-  @:unsynchronized 
-  @:unreflective 
-  @HaxeCBridge.name("Subscription_getListeners")
-  public function _getListeners(): SubscriptionListenerVector {
-    lock.acquire();
-    var res = new SubscriptionListenerVector();
-    for (l in _listeners) {
-      var p: cpp.Pointer<NativeSubscriptionListener> = l._1;
-      var pp: cpp.Star<NativeSubscriptionListener> = p.ptr;
-      res.push(pp);
-    }
-    lock.release();
-    return res;
-  }
-
-  @:unreflective
-  @HaxeCBridge.name("Subscription_setCommandSecondLevelFields")
-  public function _setCommandSecondLevelFields(fields: cpp.ConstStar<com.lightstreamer.cpp.CppStringVector>) {
-    var _fields = fields == null ? null : fields.toHaxe();
-    setCommandSecondLevelFields(_fields);
-  }
-  #end
 }

@@ -12,24 +12,11 @@ using com.lightstreamer.log.LoggerTools;
 
 class ClientEventDispatcher extends EventDispatcher<ClientListener> {}
 
-#if cpp @:build(HaxeCBridge.expose()) @HaxeCBridge.name("LightstreamerClient") #end
 #if (js || python) @:expose @:native("LSLightstreamerClient") #end
 @:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class LSLightstreamerClient {
   public static final LIB_NAME: String = LS_LIB_NAME;
   public static final LIB_VERSION: String = LS_LIB_VERSION;
-
-  #if cpp
-  @:unreflective
-  public static function getLibName(): com.lightstreamer.cpp.CppString {
-    return LIB_NAME;
-  }
-
-  @:unreflective
-  public static function getLibVersion(): com.lightstreamer.cpp.CppString {
-    return LIB_VERSION;
-  }
-  #end
 
   public final connectionDetails: ConnectionDetails;
   public final connectionOptions: ConnectionOptions;
@@ -43,7 +30,6 @@ class LSLightstreamerClient {
   #if LS_HAS_COOKIES
   #if cpp
   @:unreflective
-  @:HaxeCBridge.ignore
   public static function addCookies(uri: cpp.Reference<NativeURI>, cookies: cpp.Reference<NativeCookieCollection>): Void
   #else
   public static function addCookies(uri: NativeURI, cookies: NativeCookieCollection): Void
@@ -54,7 +40,6 @@ class LSLightstreamerClient {
 
   #if cpp
   @:unreflective
-  @:HaxeCBridge.ignore
   public static function getCookies(uri: cpp.Reference<NativeURI>): NativeCookieCollection
   #else
   public static function getCookies(uri: Null<NativeURI>): NativeCookieCollection
@@ -68,7 +53,6 @@ class LSLightstreamerClient {
   #if LS_HAS_TRUST_MANAGER
   #if cpp 
   @:unreflective 
-  @:HaxeCBridge.ignore
   #end
   public static function setTrustManagerFactory(factory: NativeTrustManager) {
     com.lightstreamer.internal.Globals.instance.setTrustManagerFactory(factory);
@@ -91,51 +75,17 @@ class LSLightstreamerClient {
     }
   }
 
-  @:HaxeCBridge.ignore
   public function addListener(listener: ClientListener): Void {
     eventDispatcher.addListenerAndFireOnListenStart(listener #if js , this #end);
   }
 
-  @:HaxeCBridge.ignore
   public function removeListener(listener: ClientListener): Void {
     eventDispatcher.removeListenerAndFireOnListenEnd(listener #if js , this #end);
   }
 
-  @:HaxeCBridge.ignore
   public function getListeners(): NativeList<ClientListener> {
     return new NativeList(eventDispatcher.getListeners());
   }
-
-  #if cpp
-  final _listeners = new HxListeners<NativeClientListener, ClientListenerAdapter>();
-
-  @:unreflective
-  @HaxeCBridge.name("LightstreamerClient_addListener")
-  public function _addListener(l: cpp.Star<NativeClientListener>) {
-    _listeners.add(l, addListener);
-  }
-
-  @:unreflective
-  @HaxeCBridge.name("LightstreamerClient_removeListener")
-  public function _removeListener(l: cpp.Star<NativeClientListener>) {
-    _listeners.remove(l, removeListener);
-  }
-
-  @:unsynchronized 
-  @:unreflective 
-  @HaxeCBridge.name("LightstreamerClient_getListeners")
-  public function _getListeners(): ClientListenerVector {
-    lock.acquire();
-    var res = new ClientListenerVector();
-    for (l in _listeners) {
-      var p: cpp.Pointer<NativeClientListener> = l._1;
-      var pp: cpp.Star<NativeClientListener> = p.ptr;
-      res.push(pp);
-    }
-    lock.release();
-    return res;
-  }
-  #end
 
   public function connect(): Void {
     machine.connect();
@@ -177,32 +127,13 @@ class LSLightstreamerClient {
     machine.unsubscribe(subscription);
   }
 
-  @:HaxeCBridge.ignore
   public function getSubscriptions(): NativeList<Subscription> {
     return new NativeList(machine.getSubscriptions());
   }
 
-  @:HaxeCBridge.ignore
   public function getSubscriptionWrappers(): NativeList<Any> {
     return new NativeList([for (sub in machine.getSubscriptions()) if (sub.wrapper != null) (sub.wrapper : Any)]);
   }
-
-  #if cpp
-  @:unsynchronized
-  @:unreflective
-  @HaxeCBridge.name("LightstreamerClient_getSubscriptions")
-  public function _getSubscriptions(): SubscriptionVector {
-    lock.acquire();
-    var res = new SubscriptionVector();
-    for (sub in machine.getSubscriptions()) {
-      if (sub.wrapper != null) {
-        res.push(sub.wrapper.ptr);
-      }
-    }
-    lock.release();
-    return res;
-  }
-  #end
 
   #if LS_MPN
   public function registerForMpn(mpnDevice: MpnDevice) {
