@@ -325,7 +325,7 @@ public class Subscription {
     * using an "Item Group"
     * @return the "Item Group" to be subscribed to through the server, or null if the Subscription was initialized with an "Item List" or was not initialized at all.
     */
-  @Nonnull 
+  @Nullable 
   public String getItemGroup() {
     return delegate.getItemGroup();
   }
@@ -387,7 +387,7 @@ public class Subscription {
     * using a "Field Schema"
     * @return the "Field Schema" to be subscribed to through the server, or null if the Subscription was initialized with a "Field List" or was not initialized at all.
     */
-  @Nonnull 
+  @Nullable 
   public String getFieldSchema() {
     return delegate.getFieldSchema();
   }
@@ -705,7 +705,7 @@ public class Subscription {
     * @return the list of fields to be subscribed to through the server, or null if the Subscription was initialized with a "Field Schema" or was not initialized at all.
     * @see Subscription#setCommandSecondLevelFields(String[])
     */
-  @Nonnull 
+  @Nullable 
   public String[] getCommandSecondLevelFields() {
     return delegate.getCommandSecondLevelFields();
   }
@@ -761,7 +761,7 @@ public class Subscription {
     * @return the "Field Schema" to be subscribed to through the server, or null if the Subscription was initialized with a "Field List" or was not initialized at all.
     * @see Subscription#setCommandSecondLevelFieldSchema(String)
     */
-  @Nonnull 
+  @Nullable 
   public String getCommandSecondLevelFieldSchema() {
     return delegate.getCommandSecondLevelFieldSchema();
   }
