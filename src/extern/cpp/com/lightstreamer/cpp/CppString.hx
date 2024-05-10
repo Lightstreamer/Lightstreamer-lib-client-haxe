@@ -2,6 +2,7 @@ package com.lightstreamer.cpp;
 
 import cpp.ConstCharStar;
 
+@:forward
 abstract CppString(_CppString) {
   @:from
   @:unreflective
@@ -22,6 +23,8 @@ abstract CppString(_CppString) {
 private extern class _CppString {
   function new();
   function c_str(): ConstCharStar;
+  @:native("empty")
+  function isEmpty(): Bool;
   
   static inline function of(s: String): CppString {
     return untyped __cpp__("std::string({0}.c_str())", s);

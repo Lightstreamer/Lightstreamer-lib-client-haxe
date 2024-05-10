@@ -41,27 +41,81 @@ public:
     return Subscription_isSubscribed(_delegate);
   }
 
-  // std::string getDataAdapter();
+  std::string getDataAdapter() {
+    return Subscription_getDataAdapter(_delegate);
+  }
+
   void setDataAdapter(const std::string& dataAdapter) {
     Subscription_setDataAdapter(_delegate, &dataAdapter);
   }
-  // std::string getMode();
-  // std::vector<std::string> getItems();
-  // void setItems(const std::vector<std::string>& items);
-  // std::string getItemGroup();
-  // void setItemGroup(const std::string& group);
-  // std::vector<std::string> getFields();
-  // void setFields(const std::vector<std::string>& fields);
-  // std::string getFieldSchema();
-  // void setFieldSchema(const std::string& schema);
-  // std::string getRequestedBufferSize();
-  // void setRequestedBufferSize(const std::string& size);
-  // std::string getRequestedSnapshot();
-  // void setRequestedSnapshot(const std::string& required);
-  // std::string getRequestedMaxFrequency();
-  // void setRequestedMaxFrequency(const std::string& frequency);
-  // std::string getSelector();
-  // void setSelector(const std::string& selector);
+
+  std::string getMode() {
+    return Subscription_getMode(_delegate);
+  }
+
+  std::vector<std::string> getItems() {
+    return Subscription_getItems(_delegate);
+  }
+
+  void setItems(const std::vector<std::string>& items) {
+    Subscription_setItems(_delegate, &items);
+  }
+
+  std::string getItemGroup() {
+    return Subscription_getItemGroup(_delegate);
+  }
+
+  void setItemGroup(const std::string& group) {
+    Subscription_setItemGroup(_delegate, &group);
+  }
+
+  std::vector<std::string> getFields() {
+    return Subscription_getFields(_delegate);
+  }
+
+  void setFields(const std::vector<std::string>& fields) {
+    Subscription_setFields(_delegate, &fields);
+  }
+
+  std::string getFieldSchema() {
+    return Subscription_getFieldSchema(_delegate);
+  }
+
+  void setFieldSchema(const std::string& schema) {
+    Subscription_setFieldSchema(_delegate, &schema);
+  }
+
+  std::string getRequestedBufferSize() {
+    return Subscription_getRequestedBufferSize(_delegate);
+  }
+
+  void setRequestedBufferSize(const std::string& size) {
+    Subscription_setRequestedBufferSize(_delegate, &size);
+  }
+
+  std::string getRequestedSnapshot() {
+    return Subscription_getRequestedSnapshot(_delegate);
+  }
+
+  void setRequestedSnapshot(const std::string& snapshot) {
+    Subscription_setRequestedSnapshot(_delegate, &snapshot);
+  }
+
+  std::string getRequestedMaxFrequency() {
+    return Subscription_getRequestedMaxFrequency(_delegate);
+  }
+
+  void setRequestedMaxFrequency(const std::string& frequency) {
+    Subscription_setRequestedMaxFrequency(_delegate, &frequency);
+  }
+
+  std::string getSelector() {
+    return Subscription_getSelector(_delegate);
+  }
+
+  void setSelector(const std::string& selector) {
+    Subscription_setSelector(_delegate, &selector);
+  }
   
   int getCommandPosition() {
     return Subscription_getCommandPosition(_delegate);
@@ -71,20 +125,29 @@ public:
     return Subscription_getKeyPosition(_delegate);
   }
 
-  // std::string getCommandSecondLevelAdapter();
+  std::string getCommandSecondLevelDataAdapter() {
+    return Subscription_getCommandSecondLevelAdapter(_delegate);
+  }
   
   void setCommandSecondLevelDataAdapter(const std::string& dataAdapter) {
     Subscription_setCommandSecondLevelDataAdapter(_delegate, &dataAdapter);
   }
 
-  // std::vector<std::string> getCommandSecondLevelFields();
+  std::vector<std::string> getCommandSecondLevelFields() {
+    return Subscription_getCommandSecondLevelFields(_delegate);
+  }
 
   void setCommandSecondLevelFields(const std::vector<std::string>& fields) {
     Subscription_setCommandSecondLevelFields(_delegate, &fields);
   }
 
-  // std::string getCommandSecondLevelFieldSchema();
-  // void setCommandSecondLevelFieldSchema(const std::string& schema);
+  std::string getCommandSecondLevelFieldSchema() {
+    return Subscription_getCommandSecondLevelFieldSchema(_delegate);
+  }
+
+  void setCommandSecondLevelFieldSchema(const std::string& schema) {
+    Subscription_setCommandSecondLevelFieldSchema(_delegate, &schema);
+  }
 };
 
 } // namespace Lightstreamer

@@ -11,7 +11,6 @@ import com.lightstreamer.client.Subscription.LSSubscription;
 @:build(HaxeCBridge.expose()) @HaxeCBridge.name("Subscription")
 @:publicFields
 @:access(com.lightstreamer.client)
-@:nullSafety(Off)
 class HxSubscription {
 
   /*
@@ -22,9 +21,10 @@ class HxSubscription {
   private final _listeners = new HxListeners<NativeSubscriptionListener, SubscriptionListenerAdapter>();
 
   @HaxeCBridge.name("Subscription_new")
+  @:nullSafety(Off)
   static function create(mode: ConstStar<CppString>, items: ConstStar<CppStringVector>, fields: ConstStar<CppStringVector>, wrapper: Star<NativeSubscription> = null) {
-    var _items = items.toHaxe();
-    var _fields = fields.toHaxe();
+    var _items: NativeArray<String> = items.isEmpty() ? null : items;
+    var _fields: NativeArray<String> = fields.isEmpty() ? null : fields;
     var _wrapper = wrapper == null ? null : cpp.Pointer.fromStar(wrapper);
     return new HxSubscription(mode, _items, _fields, _wrapper);
   }
@@ -68,8 +68,93 @@ class HxSubscription {
     return _sub.isSubscribed();
   }
 
+  function getDataAdapter(): CppString {
+    return _sub.getDataAdapter() ?? "";
+  }
+
   function setDataAdapter(val: ConstStar<CppString>) {
-    _sub.setDataAdapter(val);
+    @:nullSafety(Off)
+    _sub.setDataAdapter(val.isEmpty() ? null : val);
+  }
+
+  function getMode(): CppString {
+    return _sub.getMode();
+  }
+
+  function getItems(): CppStringVector {
+    var xs = _sub.getItems();
+    var res: CppStringVector = xs == null ? new CppStringVector() : xs;
+    return res;
+  }
+
+  function setItems(items: ConstStar<CppStringVector>) {
+    @:nullSafety(Off)
+    _sub.setItems(items.isEmpty() ? null : items);
+  }
+
+  function getItemGroup(): CppString {
+    return _sub.getItemGroup() ?? "";
+  }
+
+  function setItemGroup(group: ConstStar<CppString>) {
+    @:nullSafety(Off)
+    _sub.setItemGroup(group.isEmpty() ? null : group);
+  }
+
+  function getFields(): CppStringVector {
+    var xs = _sub.getFields();
+    var res: CppStringVector = xs == null ? new CppStringVector() : xs;
+    return res;
+  }
+
+  function setFields(fields: ConstStar<CppStringVector>) {
+    @:nullSafety(Off)
+    _sub.setFields(fields.isEmpty() ? null : fields);
+  }
+
+  function getFieldSchema(): CppString {
+    return _sub.getFieldSchema() ?? "";
+  }
+
+  function setFieldSchema(schema: ConstStar<CppString>) {
+    @:nullSafety(Off)
+    _sub.setFieldSchema(schema.isEmpty() ? null : schema);
+  }
+
+  function getRequestedBufferSize(): CppString {
+    return _sub.getRequestedBufferSize() ?? "";
+  }
+
+  function setRequestedBufferSize(buff: ConstStar<CppString>) {
+    @:nullSafety(Off)
+    _sub.setRequestedBufferSize(buff.isEmpty() ? null : buff);
+  }
+
+  function getRequestedSnapshot(): CppString {
+    return _sub.getRequestedSnapshot() ?? "";
+  }
+
+  function setRequestedSnapshot(snap: ConstStar<CppString>) {
+    @:nullSafety(Off)
+    _sub.setRequestedSnapshot(snap.isEmpty() ? null : snap);
+  }
+
+  function getRequestedMaxFrequency(): CppString {
+    return _sub.getRequestedMaxFrequency() ?? "";
+  }
+
+  function setRequestedMaxFrequency(freq: ConstStar<CppString>) {
+    @:nullSafety(Off)
+    _sub.setRequestedMaxFrequency(freq.isEmpty() ? null : freq);
+  }
+
+  function getSelector(): CppString {
+    return _sub.getSelector() ?? "";
+  }
+
+  function setSelector(sel: ConstStar<CppString>) {
+    @:nullSafety(Off)
+    _sub.setSelector(sel.isEmpty() ? null : sel);
   }
 
   function getCommandPosition() {
@@ -80,12 +165,32 @@ class HxSubscription {
     return _sub.getKeyPosition();
   }
 
-  function setCommandSecondLevelDataAdapter(val: ConstStar<CppString>) {
-    _sub.setCommandSecondLevelDataAdapter(val);
+  function getCommandSecondLevelAdapter(): CppString {
+    return _sub.getCommandSecondLevelDataAdapter() ?? "";
+  }
+
+  function setCommandSecondLevelDataAdapter(adapter: ConstStar<CppString>) {
+    @:nullSafety(Off)
+    _sub.setCommandSecondLevelDataAdapter(adapter.isEmpty() ? null : adapter);
+  }
+
+  function getCommandSecondLevelFields(): CppStringVector {
+    var xs = _sub.getCommandSecondLevelFields();
+    var res: CppStringVector = xs == null ? new CppStringVector() : xs;
+    return res;
   }
 
   function setCommandSecondLevelFields(fields: ConstStar<CppStringVector>) {
-    var _fields = fields == null ? null : fields.toHaxe();
-    _sub.setCommandSecondLevelFields(_fields);
+    @:nullSafety(Off)
+    _sub.setCommandSecondLevelFields(fields.isEmpty() ? null : fields);
+  }
+
+  function getCommandSecondLevelFieldSchema(): CppString {
+    return _sub.getCommandSecondLevelFieldSchema() ?? "";
+  }
+
+  function setCommandSecondLevelFieldSchema(schema: ConstStar<CppString>) {
+    @:nullSafety(Off)
+    _sub.setCommandSecondLevelFieldSchema(schema.isEmpty() ? null : schema);
   }
 }

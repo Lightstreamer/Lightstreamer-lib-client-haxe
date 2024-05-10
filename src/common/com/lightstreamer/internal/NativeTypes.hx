@@ -545,6 +545,7 @@ abstract NativeArray<T>(php.NativeArray) {
   }
 }
 #elseif cpp
+@:forward(iterator)
 abstract NativeArray<T>(Array<T>) from Array<T> to Array<T> {
   public inline function new(a: Array<T>) {
     this = a;
