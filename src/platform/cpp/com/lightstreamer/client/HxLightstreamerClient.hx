@@ -9,7 +9,6 @@ import com.lightstreamer.client.LightstreamerClient;
 @:build(HaxeCBridge.expose()) @HaxeCBridge.name("LightstreamerClient")
 @:publicFields
 @:access(com.lightstreamer.client)
-@:nullSafety(Off)
 class HxLightstreamerClient {
 
   /*
@@ -33,6 +32,7 @@ class HxLightstreamerClient {
 
   @HaxeCBridge.name("LightstreamerClient_new")
   static function create(serverAddress: ConstStar<CppString>, adapterSet: ConstStar<CppString>) {
+    @:nullSafety(Off)
     return new HxLightstreamerClient(serverAddress, adapterSet);
   }
 
