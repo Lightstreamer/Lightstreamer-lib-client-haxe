@@ -248,6 +248,117 @@ TEST_FIXTURE(Setup, testSubscriptionListeners) {
   EXPECT_EQ(subListener, ls.at(0));
 }
 
+TEST_FIXTURE(Setup, testSubscriptionAccessors) {
+  // TODO test ctor
+  Subscription sub("DISTINCT", {}, {});
+
+  EXPECT_FALSE(sub.isActive());
+  EXPECT_FALSE(sub.isSubscribed());
+
+  EXPECT_EQ("", sub.getDataAdapter());
+  sub.setDataAdapter("DEMO");
+  EXPECT_EQ("DEMO", sub.getDataAdapter());
+  sub.setDataAdapter("");
+  EXPECT_EQ("", sub.getDataAdapter());
+
+  EXPECT_EQ("DISTINCT", sub.getMode());
+
+  EXPECT_EQ(0, sub.getItems().size());
+  sub.setItems({"i1", "i2"});
+  auto items = sub.getItems();
+  EXPECT_EQ(2, items.size());
+  EXPECT_EQ("i1", items.at(0));
+  EXPECT_EQ("i2", items.at(1));
+  sub.setItems({});
+  EXPECT_EQ(0, sub.getItems().size());
+
+  EXPECT_EQ("", sub.getItemGroup());
+  sub.setItemGroup("grp");
+  EXPECT_EQ("grp", sub.getItemGroup());
+  sub.setItemGroup("");
+  EXPECT_EQ("", sub.getItemGroup());
+
+  EXPECT_EQ(0, sub.getFields().size());
+  sub.setFields({"f1", "f2"});
+  auto fields = sub.getFields();
+  EXPECT_EQ(2, fields.size());
+  EXPECT_EQ("f1", fields.at(0));
+  EXPECT_EQ("f2", fields.at(1));
+  sub.setFields({});
+  EXPECT_EQ(0, sub.getFields().size());
+
+  EXPECT_EQ("", sub.getFieldSchema());
+  sub.setFieldSchema("scm");
+  EXPECT_EQ("scm", sub.getFieldSchema());
+  sub.setFieldSchema("");
+  EXPECT_EQ("", sub.getFieldSchema());
+
+  EXPECT_EQ("", sub.getRequestedBufferSize());
+  sub.setRequestedBufferSize("unlimited");
+  EXPECT_EQ("unlimited", sub.getRequestedBufferSize());
+  sub.setRequestedBufferSize("123");
+  EXPECT_EQ("123", sub.getRequestedBufferSize());
+  sub.setRequestedBufferSize("");
+  EXPECT_EQ("", sub.getRequestedBufferSize());
+  // TODO test invalid arg
+
+  EXPECT_EQ("yes", sub.getRequestedSnapshot());
+  sub.setRequestedSnapshot("no");
+  EXPECT_EQ("no", sub.getRequestedSnapshot());
+  sub.setRequestedSnapshot("yes");
+  EXPECT_EQ("yes", sub.getRequestedSnapshot());
+  sub.setRequestedSnapshot("123");
+  EXPECT_EQ("123", sub.getRequestedSnapshot());
+  sub.setRequestedSnapshot("");
+  EXPECT_EQ("", sub.getRequestedSnapshot());
+  // TODO test invalid arg
+
+  EXPECT_EQ("", sub.getRequestedMaxFrequency());
+  sub.setRequestedMaxFrequency("unlimited");
+  EXPECT_EQ("unlimited", sub.getRequestedMaxFrequency());
+  sub.setRequestedMaxFrequency("unfiltered");
+  EXPECT_EQ("unfiltered", sub.getRequestedMaxFrequency());
+  sub.setRequestedMaxFrequency("123.45");
+  EXPECT_EQ("123.45", sub.getRequestedMaxFrequency());
+  sub.setRequestedMaxFrequency("");
+  EXPECT_EQ("", sub.getRequestedMaxFrequency());
+  // TODO test invalid arg
+
+  EXPECT_EQ("", sub.getSelector());
+  sub.setSelector("sel");
+  EXPECT_EQ("sel", sub.getSelector());
+  sub.setSelector("");
+  EXPECT_EQ("", sub.getSelector());
+}
+
+TEST_FIXTURE(Setup, testSubscriptionAccessorsInCommandMode) {
+  Subscription sub("COMMAND", {}, {});
+
+  // TODO test getCommandPosition
+  // TODO test getKeyPosition
+
+  EXPECT_EQ("", sub.getCommandSecondLevelDataAdapter());
+  sub.setCommandSecondLevelDataAdapter("DEMO2");
+  EXPECT_EQ("DEMO2", sub.getCommandSecondLevelDataAdapter());
+  sub.setCommandSecondLevelDataAdapter("");
+  EXPECT_EQ("", sub.getCommandSecondLevelDataAdapter());
+
+  EXPECT_EQ(0, sub.getCommandSecondLevelFields().size());
+  sub.setCommandSecondLevelFields({"f1", "f2"});
+  auto fields = sub.getCommandSecondLevelFields();
+  EXPECT_EQ(2, fields.size());
+  EXPECT_EQ("f1", fields.at(0));
+  EXPECT_EQ("f2", fields.at(1));
+  sub.setCommandSecondLevelFields({});
+  EXPECT_EQ(0, sub.getCommandSecondLevelFields().size());
+
+  EXPECT_EQ("", sub.getCommandSecondLevelFieldSchema());
+  sub.setCommandSecondLevelFieldSchema("scm");
+  EXPECT_EQ("scm", sub.getCommandSecondLevelFieldSchema());
+  sub.setCommandSecondLevelFieldSchema("");
+  EXPECT_EQ("", sub.getCommandSecondLevelFieldSchema());
+}
+
 TEST_FIXTURE(Setup, testSubscribe) {
   Subscription sub("MERGE", {"count"}, {"count"});
   sub.setDataAdapter("COUNT");
