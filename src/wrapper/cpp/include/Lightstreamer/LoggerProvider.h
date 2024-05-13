@@ -8,7 +8,7 @@ namespace Lightstreamer {
 
 class LoggerProvider {
 public:
-  virtual ~LoggerProvider() = default;
+  virtual ~LoggerProvider() {};
   virtual Logger* getLogger(const std::string& category) = 0;
 };
 

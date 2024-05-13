@@ -7,7 +7,7 @@ namespace Lightstreamer {
 
 class Logger {
 public:
-  virtual ~Logger() = default;
+  virtual ~Logger() {};
   virtual void error(const std::string& line) = 0;
   virtual void warn(const std::string& line) = 0;
   virtual void info(const std::string& line) = 0;
