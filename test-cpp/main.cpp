@@ -56,6 +56,10 @@ public:
   void onRealMaxFrequency(const std::string& freq) override {
     if (_onRealMaxFrequency) _onRealMaxFrequency(freq);
   }
+  std::function<void(const std::string&, int)> _onEndOfSnapshot;
+  void onEndOfSnapshot(const std::string& name, int pos) override {
+    if (_onEndOfSnapshot) _onEndOfSnapshot(name, pos);
+  }
 };
 
 struct Setup {
@@ -531,6 +535,65 @@ TEST_FIXTURE(Setup, testRoundTrip) {
   client.connect();
   wait(TIMEOUT, 4);
 }
+
+TEST_FIXTURE(Setup, testEndOfSnapshot) {
+  Subscription sub("DISTINCT", {"end_of_snapshot"}, {"value"});
+  sub.setRequestedSnapshot("yes");
+  sub.setDataAdapter("END_OF_SNAPSHOT");
+  sub.addListener(subListener);
+  subListener->_onEndOfSnapshot = [this](auto& name, auto pos) {
+    EXPECT_EQ("end_of_snapshot", name);
+    EXPECT_EQ(1, pos);
+    resume();
+  };
+  client.subscribe(&sub);
+  client.connect();
+  wait(TIMEOUT);
+}
+
+// TODO testOverflow
+
+TEST_FIXTURE(Setup, testFrequency) {
+  Subscription sub("MERGE", {"count"}, {"count"});
+  sub.setDataAdapter("COUNT");
+  sub.addListener(subListener);
+  subListener->_onRealMaxFrequency = [this](auto& freq) {
+    EXPECT_EQ("unlimited", freq);
+    resume();
+  };
+  client.subscribe(&sub);
+  client.connect();
+  wait(TIMEOUT);
+}
+
+TEST_FIXTURE(Setup, testChangeFrequency) {
+  std::atomic_int cnt(0);
+  Subscription sub("MERGE", {"count"}, {"count"});
+  sub.setDataAdapter("COUNT");
+  sub.addListener(subListener);
+  subListener->_onRealMaxFrequency = [&](auto& freq) {
+    switch (++cnt) {
+    case 1:
+      EXPECT_EQ("unlimited", freq);
+      sub.setRequestedMaxFrequency("2.5");
+      break;
+    case 2:
+      EXPECT_EQ("2.5", freq);
+      sub.setRequestedMaxFrequency("unlimited");
+      break;
+    case 3:
+      EXPECT_EQ("unlimited", freq);
+      resume();
+      break;
+    }
+  };
+  sub.setRequestedMaxFrequency("unlimited");
+  client.subscribe(&sub);
+  client.connect();
+  wait(TIMEOUT);
+}
+
+// TODO testHeaders
 
 int main(int argc, char** argv) {
   Lightstreamer_initializeHaxeThread([](const char* info) {
