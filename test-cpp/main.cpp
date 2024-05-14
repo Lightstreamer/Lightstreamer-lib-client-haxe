@@ -4,16 +4,19 @@
 #include "Lightstreamer/SubscriptionListener.h"
 #include "Lightstreamer/ConsoleLoggerProvider.h"
 #include "Lightstreamer/ItemUpdate.h"
+#include "Lightstreamer/LightstreamerError.h"
 #include "utpp/utpp.h"
 #include "Poco/Semaphore.h"
 #include <iostream>
 #include <sstream>
 #include <chrono>
 #include <stdexcept>
+#include <cstdlib>
 
 using Lightstreamer::LightstreamerClient;
 using Lightstreamer::Subscription;
 using Lightstreamer::ItemUpdate;
+using Lightstreamer::LightstreamerError;
 
 class MyClientListener: public Lightstreamer::ClientListener {
 public:
@@ -249,7 +252,6 @@ TEST_FIXTURE(Setup, testSubscriptionListeners) {
 }
 
 TEST_FIXTURE(Setup, testSubscriptionAccessors) {
-  // TODO test ctor
   Subscription sub("DISTINCT", {}, {});
 
   EXPECT_FALSE(sub.isActive());
@@ -300,7 +302,6 @@ TEST_FIXTURE(Setup, testSubscriptionAccessors) {
   EXPECT_EQ("123", sub.getRequestedBufferSize());
   sub.setRequestedBufferSize("");
   EXPECT_EQ("", sub.getRequestedBufferSize());
-  // TODO test invalid arg
 
   EXPECT_EQ("yes", sub.getRequestedSnapshot());
   sub.setRequestedSnapshot("no");
@@ -311,7 +312,6 @@ TEST_FIXTURE(Setup, testSubscriptionAccessors) {
   EXPECT_EQ("123", sub.getRequestedSnapshot());
   sub.setRequestedSnapshot("");
   EXPECT_EQ("", sub.getRequestedSnapshot());
-  // TODO test invalid arg
 
   EXPECT_EQ("", sub.getRequestedMaxFrequency());
   sub.setRequestedMaxFrequency("unlimited");
@@ -322,7 +322,6 @@ TEST_FIXTURE(Setup, testSubscriptionAccessors) {
   EXPECT_EQ("123.45", sub.getRequestedMaxFrequency());
   sub.setRequestedMaxFrequency("");
   EXPECT_EQ("", sub.getRequestedMaxFrequency());
-  // TODO test invalid arg
 
   EXPECT_EQ("", sub.getSelector());
   sub.setSelector("sel");
@@ -331,11 +330,47 @@ TEST_FIXTURE(Setup, testSubscriptionAccessors) {
   EXPECT_EQ("", sub.getSelector());
 }
 
+TEST_FIXTURE(Setup, testSubscriptionCtor) {
+  // invalid mode
+  EXPECT_THROW(Subscription("XYZ", {}, {}), std::runtime_error);
+  // no fields
+  EXPECT_THROW(Subscription("MERGE", {"i1"}, {}), std::runtime_error);
+  // no items
+  EXPECT_THROW(Subscription("MERGE", {}, {"f1"}), std::runtime_error);
+}
+
+TEST_FIXTURE(Setup, testSubscriptionSetterValidators) {
+  Subscription sub("DISTINCT", {"i1"}, {"f1"});
+  
+  EXPECT_THROW(sub.setItems({""}), std::runtime_error);
+  EXPECT_THROW(sub.setFields({""}), std::runtime_error);
+  EXPECT_THROW(sub.setRequestedBufferSize("xyz"), std::runtime_error);
+  EXPECT_THROW(sub.setRequestedSnapshot("xyz"), std::runtime_error);
+  EXPECT_THROW(sub.setRequestedMaxFrequency("xyz"), std::runtime_error);
+  EXPECT_THROW(sub.getCommandPosition(), std::runtime_error);
+  EXPECT_THROW(sub.getKeyPosition(), std::runtime_error);
+  EXPECT_THROW(sub.setCommandSecondLevelDataAdapter("xyz"), std::runtime_error);
+  EXPECT_THROW(sub.setCommandSecondLevelFields({"xyz"}), std::runtime_error);
+  EXPECT_THROW(sub.setCommandSecondLevelFieldSchema("xyz"), std::runtime_error);
+
+  client.subscribe(&sub);
+  // can't change the properties when the subscription is active
+  EXPECT_THROW(sub.setDataAdapter("xyz"), std::runtime_error);
+  EXPECT_THROW(sub.setItems({"i1"}), std::runtime_error);
+  EXPECT_THROW(sub.setItemGroup("i1"), std::runtime_error);
+  EXPECT_THROW(sub.setFields({"f1"}), std::runtime_error);
+  EXPECT_THROW(sub.setFieldSchema("f1"), std::runtime_error);
+  EXPECT_THROW(sub.setRequestedBufferSize("123"), std::runtime_error);
+  EXPECT_THROW(sub.setRequestedSnapshot("123"), std::runtime_error);
+  EXPECT_THROW(sub.setRequestedMaxFrequency("unfiltered"), std::runtime_error);
+  EXPECT_THROW(sub.setSelector("xyz"), std::runtime_error);
+}
+
 TEST_FIXTURE(Setup, testSubscriptionAccessorsInCommandMode) {
   Subscription sub("COMMAND", {}, {});
 
-  // TODO test getCommandPosition
-  // TODO test getKeyPosition
+  EXPECT_THROW(sub.getCommandPosition(), std::runtime_error);
+  EXPECT_THROW(sub.getKeyPosition(), std::runtime_error);
 
   EXPECT_EQ("", sub.getCommandSecondLevelDataAdapter());
   sub.setCommandSecondLevelDataAdapter("DEMO2");
@@ -499,8 +534,9 @@ TEST_FIXTURE(Setup, testRoundTrip) {
 
 int main(int argc, char** argv) {
   Lightstreamer_initializeHaxeThread([](const char* info) {
-    std::cerr << "Haxe exception: " << info << "\n";
-	  Lightstreamer_stopHaxeThreadIfRunning(false);
+    std::cout << "UNCAUGHT HAXE EXCEPTION: " << info << "\n";
+    std::cout << "TERMINATING THE PROCESS...\n";
+    exit(255);
   });
 
   HaxeObject log = ConsoleLoggerProvider_new(10);
