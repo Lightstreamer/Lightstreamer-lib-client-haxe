@@ -427,6 +427,11 @@ class HaxeCBridge {
 	}
 
 	static function generateImplementation(ctx: CConverterContext, namespace: String) {
+		/* $Lightstreamer$
+		 * Included these headers:
+		 * - haxe/Exception.h
+		 * - Lightstreamer/LightstreamerError.h
+		 */
 		return code('
 			/**
 			 * HaxeCBridge Function Binding Implementation
@@ -437,6 +442,8 @@ class HaxeCBridge {
 			#include <hx/Thread.h>
 			#include <hx/StdLibs.h>
 			#include <hx/GC.h>
+			#include <haxe/Exception.h>
+			#include <Lightstreamer/LightstreamerError.h>
 			#include <HaxeCBridge.h>
 			#include <assert.h>
 			#include <queue>
@@ -740,6 +747,13 @@ class HaxeCBridge {
 					{
 						name: 'lock',
 						type: Ident('HxSemaphore')
+					},
+					/* $Lightstreamer$
+					 * Added an error variable to store the messages of uncaught exceptions.
+					 */
+					{
+						name: "error",
+						type: Ident("std::string")
 					}
 				].concat(
 					hasReturnValue ? [{
@@ -763,6 +777,11 @@ class HaxeCBridge {
 						}
 					')
 					+ CPrinter.printDeclaration(fnDataDeclaration) + ';\n'
+					/* $Lightstreamer$
+					 * This block captures any uncaught exception within the Haxe thread and stores its message in the `error` variable.
+					 * Upon completion of the function, it checks the `error` variable in the original calling thread.
+					 * If `error` is not empty, indicating an exception occurred, it rethrows the captured exception for further handling.
+					 */
 					+ code('
 						struct Callback {
 							static void run(void* p) {
@@ -775,8 +794,8 @@ class HaxeCBridge {
 									}
 									$fnDataName->lock.Set();
 								} catch(Dynamic runtimeException) {
+									$fnDataName->error = ::haxe::Exception_obj::caught(runtimeException)->details().c_str();
 									$fnDataName->lock.Set();
-									throw runtimeException;
 								}
 							}
 						};
@@ -790,6 +809,8 @@ class HaxeCBridge {
 						// queue a callback to execute ${haxeFunction.field.name}() on the main thread and wait until execution completes
 						HaxeCBridgeInternal::runInMainThread(Callback::run, &$fnDataName);
 						$fnDataName.lock.Wait();
+						if (!$fnDataName.error.empty())
+							throw Lightstreamer::LightstreamerError($fnDataName.error);
 					')
 					+ if (hasReturnValue) code('
 						return $fnDataName.ret;
