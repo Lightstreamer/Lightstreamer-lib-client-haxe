@@ -332,6 +332,7 @@ abstract NativeStringMap<V>(Map<String, V>) from Map<String, V> to Map<String, V
   }
 }
 
+@:forward(iterator, keyValueIterator)
 abstract NativeIntMap<V>(Map<Int, V>) to Map<Int, V> {
   public inline function new(a: Map<Int, V>) {
     this = a;

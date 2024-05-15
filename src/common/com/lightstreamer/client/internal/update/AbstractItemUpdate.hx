@@ -3,7 +3,6 @@ package com.lightstreamer.client.internal.update;
 import com.lightstreamer.internal.NativeTypes.NativeIntMap;
 import com.lightstreamer.internal.NativeTypes.NativeStringMap;
 
-#if cpp @:build(HaxeCBridge.expose()) @HaxeCBridge.name("ItemUpdate") #end
 abstract class AbstractItemUpdate implements ItemUpdate {
   #if cs
   abstract function getItemName(): Null<String>;
@@ -29,17 +28,5 @@ abstract class AbstractItemUpdate implements ItemUpdate {
   inline function get_ChangedFieldsByPosition() return getChangedFieldsByPosition();
   inline function get_Fields() return getFields();
   inline function get_FieldsByPosition() return getFieldsByPosition();
-  #elseif cpp
-  public function getItemName(): Null<String> throw new haxe.exceptions.NotImplementedException();
-  public function getItemPos(): Int throw new haxe.exceptions.NotImplementedException();
-  public function isSnapshot(): Bool throw new haxe.exceptions.NotImplementedException();
-  public function getValueByName(fieldName: String): Null<String> throw new haxe.exceptions.NotImplementedException();
-  public function getValueByPos(fieldPos: Int): Null<String> throw new haxe.exceptions.NotImplementedException();
-  public function isValueChangedByName(fieldName: String): Bool throw new haxe.exceptions.NotImplementedException();
-  public function isValueChangedByPos(fieldPos: Int): Bool throw new haxe.exceptions.NotImplementedException();
-  public function getChangedFields(): NativeStringMap<Null<String>> throw new haxe.exceptions.NotImplementedException();
-  public function getChangedFieldsByPosition(): NativeIntMap<Null<String>> throw new haxe.exceptions.NotImplementedException();
-  public function getFields(): NativeStringMap<Null<String>> throw new haxe.exceptions.NotImplementedException();
-  public function getFieldsByPosition(): NativeIntMap<Null<String>> throw new haxe.exceptions.NotImplementedException();
   #end
 }

@@ -360,6 +360,7 @@ class HaxeCBridge {
 			This is a pretty crude means to include the headers needed by the generated bridge, but I haven't find a better way...
 			*/
 			+ '#include "Lightstreamer/ForwardDcl.h"\n'
+			+ '#include <map>\n'
 			+ (if (includes.length > 0) includes.map(CPrinter.printInclude).join('\n') + '\n\n'; else '')
 			+ (if (ctx.macros.length > 0) ctx.macros.join('\n') + '\n' else '')
 
@@ -428,7 +429,7 @@ class HaxeCBridge {
 
 	static function generateImplementation(ctx: CConverterContext, namespace: String) {
 		/* $Lightstreamer$
-		 * Included these headers:
+		 * `__HaxeCBridgeBindings__.cpp` needs these additional headers:
 		 * - haxe/Exception.h
 		 * - Lightstreamer/LightstreamerError.h
 		 */
@@ -749,7 +750,7 @@ class HaxeCBridge {
 						type: Ident('HxSemaphore')
 					},
 					/* $Lightstreamer$
-					 * Added an error variable to store the messages of uncaught exceptions.
+					 * Add an error variable to store the messages of uncaught exceptions.
 					 */
 					{
 						name: "error",
