@@ -193,4 +193,36 @@ class HxSubscription {
     @:nullSafety(Off)
     _sub.setCommandSecondLevelFieldSchema(schema.isEmpty() ? null : schema);
   }
+
+  function getValueSS(@:nullSafety(Off) itemName: ConstStar<CppString>, @:nullSafety(Off) fieldName: ConstStar<CppString>): CppString {
+    return _sub.getValueNameName(itemName, fieldName) ?? "";
+  }
+
+  function getValueII(itemPos: Int, fieldPos: Int): CppString {
+    return _sub.getValuePosPos(itemPos, fieldPos) ?? "";
+  }
+
+  function getValueSI(@:nullSafety(Off) itemName: ConstStar<CppString>, fieldPos: Int): CppString {
+    return _sub.getValueNamePos(itemName, fieldPos) ?? "";
+  }
+
+  function getValueIS(itemPos: Int, @:nullSafety(Off) fieldName: ConstStar<CppString>): CppString {
+    return _sub.getValuePosName(itemPos, fieldName) ?? "";
+  }
+
+  function getCommandValueSS(@:nullSafety(Off) itemName: ConstStar<CppString>, @:nullSafety(Off) keyValue: ConstStar<CppString>, @:nullSafety(Off) fieldName: ConstStar<CppString>): CppString {
+    return _sub.getCommandValueNameName(itemName, keyValue, fieldName) ?? "";
+  }
+
+  function getCommandValueII(itemPos: Int, @:nullSafety(Off) keyValue: ConstStar<CppString>, fieldPos: Int): CppString {
+    return _sub.getCommandValuePosPos(itemPos, keyValue, fieldPos) ?? "";
+  }
+
+  function getCommandValueSI(@:nullSafety(Off) itemName: ConstStar<CppString>, @:nullSafety(Off) keyValue: ConstStar<CppString>, fieldPos: Int): CppString {
+    return _sub.getCommandValueNamePos(itemName, keyValue, fieldPos) ?? "";
+  }
+
+  function getCommandValueIS(itemPos: Int, @:nullSafety(Off) keyValue: ConstStar<CppString>,  @:nullSafety(Off) fieldName: ConstStar<CppString>): CppString {
+    return _sub.getCommandValuePosName(itemPos, keyValue, fieldName) ?? "";
+  }
 }

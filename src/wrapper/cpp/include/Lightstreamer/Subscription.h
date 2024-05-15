@@ -148,6 +148,38 @@ public:
   void setCommandSecondLevelFieldSchema(const std::string& schema) {
     Subscription_setCommandSecondLevelFieldSchema(_delegate, &schema);
   }
+
+  std::string getValue(const std::string& itemName, const std::string& fieldName) {
+    return Subscription_getValueSS(_delegate, &itemName, &fieldName);
+  }
+
+  std::string getValue(int itemPos, int fieldPos) {
+    return Subscription_getValueII(_delegate, itemPos, fieldPos);
+  }
+
+  std::string getValue(const std::string& itemName, int fieldPos) {
+    return Subscription_getValueSI(_delegate, &itemName, fieldPos);
+  }
+
+  std::string getValue(int itemPos, const std::string& fieldName) {
+    return Subscription_getValueIS(_delegate, itemPos, &fieldName);
+  }
+
+  std::string getCommandValue(const std::string& itemName, const std::string& keyValue, const std::string& fieldName) {
+    return Subscription_getCommandValueSS(_delegate, &itemName, &keyValue, &fieldName);
+  }
+
+  std::string getCommandValue(int itemPos, const std::string& keyValue, int fieldPos) {
+    return Subscription_getCommandValueII(_delegate, itemPos, &keyValue, fieldPos);
+  }
+
+  std::string getCommandValue(const std::string& itemName, const std::string& keyValue, int fieldPos) {
+    return Subscription_getCommandValueSI(_delegate, &itemName, &keyValue, fieldPos);
+  }
+
+  std::string getCommandValue(int itemPos, const std::string& keyValue, const std::string& fieldName) {
+    return Subscription_getCommandValueIS(_delegate, itemPos, &keyValue, &fieldName);
+  }
 };
 
 } // namespace Lightstreamer
