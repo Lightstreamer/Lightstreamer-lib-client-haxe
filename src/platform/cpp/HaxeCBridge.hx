@@ -381,11 +381,14 @@ class HaxeCBridge {
 			+ (if (ctx.supportTypeDeclarations.length > 0) ctx.supportTypeDeclarations.map(d -> CPrinter.printDeclaration(d, true)).join(';\n') + ';\n\n'; else '')
 			+ (if (ctx.typeDeclarations.length > 0) ctx.typeDeclarations.map(d -> CPrinter.printDeclaration(d, true)).join(';\n') + ';\n'; else '')
 
+			/* $Lightstreamer$
+			 * Disable C linkage.
+			 */
 			+ code('
 
-			#ifdef __cplusplus
-			extern "C" {
-			#endif
+			//#ifdef __cplusplus
+			//extern "C" {
+			//#endif
 
 				/**
 				 * Initializes a haxe thread that executes the haxe main() function remains alive indefinitely until told to stop.
@@ -417,9 +420,9 @@ class HaxeCBridge {
 		+ indent(1, ctx.functionDeclarations.map(fn -> CPrinter.printDeclaration(fn, true, prefix)).join(';\n\n') + ';\n\n')
 
 		+ code('
-			#ifdef __cplusplus
-			}
-			#endif
+			//#ifdef __cplusplus
+			//}
+			//#endif
 
 			#undef API_PREFIX
 
