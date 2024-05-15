@@ -2,7 +2,7 @@
 #define INCLUDED_Lightstreamer_HxPoco_WsClient
 
 #include <string>
-#include <unordered_map>
+#include <map>
 #include "Poco/Net/HTTPClientSession.h"
 #include "Poco/Net/WebSocket.h"
 #include "Poco/Notification.h"
@@ -16,7 +16,7 @@ namespace HxPoco {
 class WsClient : public Activity
 {
 public:
-  WsClient(const char* url, const char* subProtocol, const std::unordered_map<std::string, std::string>& headers, const Poco::Net::HTTPClientSession::ProxyConfig& proxy);
+  WsClient(const char* url, const char* subProtocol, const std::map<std::string, std::string>& headers, const Poco::Net::HTTPClientSession::ProxyConfig& proxy);
   virtual ~WsClient();
 
   void connect() {
@@ -46,7 +46,7 @@ private:
 
   std::string _url;
   std::string _subProtocol;
-  std::unordered_map<std::string, std::string> _headers;
+  std::map<std::string, std::string> _headers;
   Poco::Net::HTTPClientSession::ProxyConfig _proxy;
   Poco::NotificationQueue _queue;
   Poco::AtomicFlag _disposed;

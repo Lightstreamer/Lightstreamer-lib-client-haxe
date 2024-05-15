@@ -40,7 +40,7 @@ public:
 
 } // END unnamed namespace
 
-WsClient::WsClient(const char* url, const char* subProtocol, const std::unordered_map<std::string, std::string>& headers, const Poco::Net::HTTPClientSession::ProxyConfig& proxy) :
+WsClient::WsClient(const char* url, const char* subProtocol, const std::map<std::string, std::string>& headers, const Poco::Net::HTTPClientSession::ProxyConfig& proxy) :
   _url(url),
   _subProtocol(subProtocol),
   _headers(headers),

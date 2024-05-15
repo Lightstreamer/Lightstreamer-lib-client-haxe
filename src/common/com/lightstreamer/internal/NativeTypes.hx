@@ -321,6 +321,7 @@ abstract NativeIntMap<V>(php.NativeIndexedArray<V>) {
   }
 }
 #elseif cpp
+@:forward(iterator, keyValueIterator)
 abstract NativeStringMap<V>(Map<String, V>) from Map<String, V> to Map<String, V> {
   public inline function new(a: Map<String, V>) {
     this = a;

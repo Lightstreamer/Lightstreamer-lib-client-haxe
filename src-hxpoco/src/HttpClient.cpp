@@ -39,7 +39,7 @@ std::istream& HttpClient::getLine(std::istream& is, std::string& line) {
   return res;
 }
 
-HttpClient::HttpClient(const char* url, const char* body, const std::unordered_map<std::string, std::string>& headers, const HTTPClientSession::ProxyConfig& proxy) : 
+HttpClient::HttpClient(const char* url, const char* body, const std::map<std::string, std::string>& headers, const HTTPClientSession::ProxyConfig& proxy) : 
   _url(url),
   _body(body),
   _headers(headers),
