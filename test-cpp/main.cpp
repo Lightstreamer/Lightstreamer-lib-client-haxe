@@ -564,6 +564,11 @@ TEST_FIXTURE(Setup, testItemUpdate) {
       EXPECT_TRUE(u.isValueChanged("value"));
       EXPECT_TRUE(u.isValueChanged(1));
 
+      EXPECT_EQ("msg2", sub.getValue("cpp_value", "value"));
+      EXPECT_EQ("msg2", sub.getValue(1, 1));
+      EXPECT_EQ("msg2", sub.getValue("cpp_value", 1));
+      EXPECT_EQ("msg2", sub.getValue(1, "value"));
+
       {
         auto fs = u.getChangedFields();
         EXPECT_EQ(1, fs.size());
@@ -638,10 +643,18 @@ TEST_FIXTURE(Setup, testSubscribeCommand2Level){
     EXPECT_EQ(1, sub.getKeyPosition());
     EXPECT_EQ(2, sub.getCommandPosition());
   };
-  subListener->_onItemUpdate = [this](auto& update) {
+  subListener->_onItemUpdate = [&](auto& update) { 
     auto val = update.getValue("count");
     auto key = update.getValue("key");
     auto cmd = update.getValue("command");
+
+    if (cmd == "ADD") {
+      EXPECT_EQ("ADD", sub.getCommandValue("two_level_command_count", "count", "command"));
+      EXPECT_EQ("ADD", sub.getCommandValue(1, "count", 2));
+      EXPECT_EQ("ADD", sub.getCommandValue("two_level_command_count", "count", 2));
+      EXPECT_EQ("ADD", sub.getCommandValue(1, "count", "command"));
+    }
+
     if (!val.empty() && key == "count" && cmd == "UPDATE") {
       resume();
     }
