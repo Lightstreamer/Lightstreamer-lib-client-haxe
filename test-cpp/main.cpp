@@ -9,6 +9,7 @@
 #include "Poco/Semaphore.h"
 #include <iostream>
 #include <sstream>
+#include <thread>
 #include <chrono>
 #include <stdexcept>
 #include <cstdlib>
@@ -72,6 +73,9 @@ struct Setup {
   ~Setup() {
     client.removeListener(listener);
     client.disconnect();
+  }
+  void sleep(int ms) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(ms));
   }
   void resume() {
     _sem.set();
@@ -409,6 +413,188 @@ TEST_FIXTURE(Setup, testSubscribe) {
   client.subscribe(&sub);
   client.connect();
   wait(TIMEOUT);
+}
+
+TEST_FIXTURE(Setup, testItemUpdate) {
+  std::atomic_int cnt(1);
+  Subscription sub("DISTINCT", {"cpp_value"}, {"value"});
+  sub.setDataAdapter("CPP_ADAPTER");
+  sub.setRequestedSnapshot("yes");
+  sub.setRequestedMaxFrequency("unfiltered");
+  sub.addListener(subListener);
+  subListener->_onItemUpdate = [&](auto& u) {
+    switch (cnt++) {
+    case 1:
+      EXPECT_EQ("cpp_value", u.getItemName());
+      EXPECT_EQ(1, u.getItemPos());
+      EXPECT_EQ("", u.getValue("value"));
+      EXPECT_EQ("", u.getValue(1));
+      EXPECT_TRUE(u.isNull("value"));
+      EXPECT_TRUE(u.isNull(1));
+      EXPECT_TRUE(u.isSnapshot());
+      EXPECT_TRUE(u.isValueChanged("value"));
+      EXPECT_TRUE(u.isValueChanged(1));
+
+      EXPECT_THROW(u.getValue("xyz"), std::runtime_error);
+      EXPECT_THROW(u.getValue(2), std::runtime_error);
+
+      {
+        auto fs = u.getChangedFields();
+        EXPECT_EQ(1, fs.size());
+        EXPECT_EQ("", fs.at("value"));
+      }
+      {
+        auto fs = u.getChangedFieldsByPosition();
+        EXPECT_EQ(1, fs.size());
+        EXPECT_EQ("", fs.at(1));
+      }
+      {
+        auto fs = u.getFields();
+        EXPECT_EQ(1, fs.size());
+        EXPECT_EQ("", fs.at("value"));
+      }
+      {
+        auto fs = u.getFieldsByPosition();
+        EXPECT_EQ(1, fs.size());
+        EXPECT_EQ("", fs.at(1));
+      }
+      break;
+    case 2:
+      EXPECT_EQ("cpp_value", u.getItemName());
+      EXPECT_EQ(1, u.getItemPos());
+      EXPECT_EQ("", u.getValue("value"));
+      EXPECT_EQ("", u.getValue(1));
+      EXPECT_FALSE(u.isNull("value"));
+      EXPECT_FALSE(u.isNull(1));
+      EXPECT_FALSE(u.isSnapshot());
+      EXPECT_TRUE(u.isValueChanged("value"));
+      EXPECT_TRUE(u.isValueChanged(1));
+
+      {
+        auto fs = u.getChangedFields();
+        EXPECT_EQ(1, fs.size());
+        EXPECT_EQ("", fs.at("value"));
+      }
+      {
+        auto fs = u.getChangedFieldsByPosition();
+        EXPECT_EQ(1, fs.size());
+        EXPECT_EQ("", fs.at(1));
+      }
+      {
+        auto fs = u.getFields();
+        EXPECT_EQ(1, fs.size());
+        EXPECT_EQ("", fs.at("value"));
+      }
+      {
+        auto fs = u.getFieldsByPosition();
+        EXPECT_EQ(1, fs.size());
+        EXPECT_EQ("", fs.at(1));
+      }
+      break;
+    case 3:
+      EXPECT_EQ("cpp_value", u.getItemName());
+      EXPECT_EQ(1, u.getItemPos());
+      EXPECT_EQ("msg1", u.getValue("value"));
+      EXPECT_EQ("msg1", u.getValue(1));
+      EXPECT_FALSE(u.isNull("value"));
+      EXPECT_FALSE(u.isNull(1));
+      EXPECT_FALSE(u.isSnapshot());
+      EXPECT_TRUE(u.isValueChanged("value"));
+      EXPECT_TRUE(u.isValueChanged(1));
+
+      {
+        auto fs = u.getChangedFields();
+        EXPECT_EQ(1, fs.size());
+        EXPECT_EQ("msg1", fs.at("value"));
+      }
+      {
+        auto fs = u.getChangedFieldsByPosition();
+        EXPECT_EQ(1, fs.size());
+        EXPECT_EQ("msg1", fs.at(1));
+      }
+      {
+        auto fs = u.getFields();
+        EXPECT_EQ(1, fs.size());
+        EXPECT_EQ("msg1", fs.at("value"));
+      }
+      {
+        auto fs = u.getFieldsByPosition();
+        EXPECT_EQ(1, fs.size());
+        EXPECT_EQ("msg1", fs.at(1));
+      }
+      break;
+    case 4:
+      EXPECT_EQ("cpp_value", u.getItemName());
+      EXPECT_EQ(1, u.getItemPos());
+      EXPECT_EQ("msg1", u.getValue("value"));
+      EXPECT_EQ("msg1", u.getValue(1));
+      EXPECT_FALSE(u.isNull("value"));
+      EXPECT_FALSE(u.isNull(1));
+      EXPECT_FALSE(u.isSnapshot());
+      EXPECT_FALSE(u.isValueChanged("value"));
+      EXPECT_FALSE(u.isValueChanged(1));
+
+      {
+        auto fs = u.getChangedFields();
+        EXPECT_EQ(0, fs.size());
+      }
+      {
+        auto fs = u.getChangedFieldsByPosition();
+        EXPECT_EQ(0, fs.size());
+      }
+      {
+        auto fs = u.getFields();
+        EXPECT_EQ(1, fs.size());
+        EXPECT_EQ("msg1", fs.at("value"));
+      }
+      {
+        auto fs = u.getFieldsByPosition();
+        EXPECT_EQ(1, fs.size());
+        EXPECT_EQ("msg1", fs.at(1));
+      }
+      break;
+    case 5:
+      EXPECT_EQ("cpp_value", u.getItemName());
+      EXPECT_EQ(1, u.getItemPos());
+      EXPECT_EQ("msg2", u.getValue("value"));
+      EXPECT_EQ("msg2", u.getValue(1));
+      EXPECT_FALSE(u.isNull("value"));
+      EXPECT_FALSE(u.isNull(1));
+      EXPECT_FALSE(u.isSnapshot());
+      EXPECT_TRUE(u.isValueChanged("value"));
+      EXPECT_TRUE(u.isValueChanged(1));
+
+      {
+        auto fs = u.getChangedFields();
+        EXPECT_EQ(1, fs.size());
+        EXPECT_EQ("msg2", fs.at("value"));
+      }
+      {
+        auto fs = u.getChangedFieldsByPosition();
+        EXPECT_EQ(1, fs.size());
+        EXPECT_EQ("msg2", fs.at(1));
+      }
+      {
+        auto fs = u.getFields();
+        EXPECT_EQ(1, fs.size());
+        EXPECT_EQ("msg2", fs.at("value"));
+      }
+      {
+        auto fs = u.getFieldsByPosition();
+        EXPECT_EQ(1, fs.size());
+        EXPECT_EQ("msg2", fs.at(1));
+      }
+
+      resume();
+      break;
+    }
+  };
+  client.subscribe(&sub);
+  client.connect();
+  wait(TIMEOUT);
+
+  client.unsubscribe(&sub);
+  sleep(500); // allow time to complete the unsubscription request and enable CPP_ADAPTER to unsubscribe from the item
 }
 
 TEST_FIXTURE(Setup, testSubscriptionError) {
