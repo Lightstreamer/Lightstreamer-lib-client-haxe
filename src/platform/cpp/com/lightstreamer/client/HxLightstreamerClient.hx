@@ -1,5 +1,7 @@
 package com.lightstreamer.client;
 
+import cpp.Star;
+import cpp.Pointer;
 import cpp.ConstStar;
 import com.lightstreamer.cpp.CppString;
 import com.lightstreamer.log.LoggerProvider;
@@ -96,5 +98,14 @@ class HxLightstreamerClient {
       }
     }
     return res;
+  }
+
+  function sendMessage(@:nullSafety(Off) message: ConstStar<CppString>, sequence: ConstStar<CppString>, delayTimeout: Int, listener: Star<NativeClientMessageListener>, enqueueWhileDisconnected: Bool) {
+    _client.sendMessage(
+      message, 
+      @:nullSafety(Off) (sequence.isEmpty() ? null : sequence), 
+      delayTimeout, 
+      listener == null ? null : new ClientMessageListenerAdapter(Pointer.fromStar(listener)), 
+      enqueueWhileDisconnected);
   }
 }

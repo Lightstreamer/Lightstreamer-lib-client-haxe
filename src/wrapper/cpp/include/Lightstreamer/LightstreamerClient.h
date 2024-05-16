@@ -66,6 +66,10 @@ public:
   std::vector<Subscription*> getSubscriptions() {
     return LightstreamerClient_getSubscriptions(_client);
   }
+
+  void sendMessage(const std::string& message, const std::string& sequence = "", int delayTimeout = -1, ClientMessageListener* listener = nullptr, bool enqueueWhileDisconnected = false) {
+    LightstreamerClient_sendMessage(_client, &message, &sequence, delayTimeout, listener, enqueueWhileDisconnected);
+  }
 };
 
 } // namespace Lightstreamer
