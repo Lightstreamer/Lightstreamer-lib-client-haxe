@@ -42,6 +42,10 @@ class HxLightstreamerClient {
     _client = new LSLightstreamerClient(serverAddress, adapterSet);
   }
 
+  function getConnectionDetails() {
+    return new HxConnectionDetails(_client.connectionDetails);
+  }
+
   function addListener(l: cpp.Star<NativeClientListener>) {
     _client.lock.synchronized(() -> 
       _listeners.add(l, _client.addListener)

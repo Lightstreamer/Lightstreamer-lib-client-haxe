@@ -4,6 +4,7 @@
 #include "../Lightstreamer.h"
 #include "Lightstreamer/LoggerProvider.h"
 #include "Lightstreamer/Subscription.h"
+#include "Lightstreamer/ConnectionDetails.h"
 
 namespace Lightstreamer {
 
@@ -13,6 +14,8 @@ public:
   LightstreamerClient() = delete;
   LightstreamerClient(const LightstreamerClient&) = delete;
   LightstreamerClient& operator=(const LightstreamerClient&) = delete;
+
+  ConnectionDetails connectionDetails;
 
   static std::string libName() {
     return LightstreamerClient_getLibName();
@@ -24,6 +27,7 @@ public:
 
   LightstreamerClient(const std::string& serverAddress, const std::string& adapterSet) {
     _client = LightstreamerClient_new(&serverAddress, &adapterSet);
+    connectionDetails.initDelegate(_client);
   }
 
   ~LightstreamerClient() {
