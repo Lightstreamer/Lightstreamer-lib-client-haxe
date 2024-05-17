@@ -172,6 +172,10 @@ TEST_FIXTURE(Setup, testConnect) {
   listener->_onStatusChange = [this](auto status) {
     if (status == "CONNECTED:" + transport) {
       EXPECT_EQ("CONNECTED:" + transport, client.getStatus());
+      EXPECT_EQ("", client.connectionDetails.getServerInstanceAddress());
+      EXPECT_EQ("Lightstreamer HTTP Server", client.connectionDetails.getServerSocketName());
+      EXPECT_EQ("127.0.0.1", client.connectionDetails.getClientIp());
+      EXPECT_FALSE(client.connectionDetails.getSessionId().empty());
       resume();
     }
   };
@@ -920,6 +924,34 @@ TEST_FIXTURE(Setup, testChangeFrequency) {
 }
 
 // TODO testHeaders
+
+TEST_FIXTURE(Setup, testConnectionDetails) {
+  EXPECT_EQ("TEST", client.connectionDetails.getAdapterSet());
+  client.connectionDetails.setAdapterSet("AS");
+  EXPECT_EQ("AS", client.connectionDetails.getAdapterSet());
+  client.connectionDetails.setAdapterSet("");
+  EXPECT_EQ("", client.connectionDetails.getAdapterSet());
+
+  EXPECT_EQ("http://127.0.0.1:8080", client.connectionDetails.getServerAddress());
+  client.connectionDetails.setServerAddress("https://example.com");
+  EXPECT_EQ("https://example.com", client.connectionDetails.getServerAddress());
+  client.connectionDetails.setServerAddress("");
+  EXPECT_EQ("", client.connectionDetails.getServerAddress());
+  EXPECT_THROW(client.connectionDetails.setServerAddress(",,,"), std::runtime_error);
+
+  EXPECT_EQ("", client.connectionDetails.getUser());
+  client.connectionDetails.setUser("usr");
+  EXPECT_EQ("usr", client.connectionDetails.getUser());
+  client.connectionDetails.setUser("");
+  EXPECT_EQ("", client.connectionDetails.getUser());
+
+  client.connectionDetails.setPassword("pwd");
+
+  EXPECT_EQ("", client.connectionDetails.getServerInstanceAddress());
+  EXPECT_EQ("", client.connectionDetails.getServerSocketName());
+  EXPECT_EQ("", client.connectionDetails.getClientIp());
+  EXPECT_EQ("", client.connectionDetails.getSessionId());
+}
 
 int main(int argc, char** argv) {
   Lightstreamer_initializeHaxeThread([](const char* info) {
