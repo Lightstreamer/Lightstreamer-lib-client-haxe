@@ -6,6 +6,7 @@
 #include "Lightstreamer/ItemUpdate.h"
 #include "Lightstreamer/LightstreamerError.h"
 #include "Lightstreamer/ClientMessageListener.h"
+#include "Lightstreamer/Proxy.h"
 #include "utpp/utpp.h"
 #include "Poco/Semaphore.h"
 #include <iostream>
@@ -19,6 +20,7 @@ using Lightstreamer::LightstreamerClient;
 using Lightstreamer::Subscription;
 using Lightstreamer::ItemUpdate;
 using Lightstreamer::LightstreamerError;
+using Lightstreamer::Proxy;
 
 class MyClientListener: public Lightstreamer::ClientListener {
 public:
@@ -924,6 +926,75 @@ TEST_FIXTURE(Setup, testChangeFrequency) {
 }
 
 // TODO testHeaders
+
+TEST_FIXTURE(Setup, testConnectionOptions) {
+  client.connectionOptions.setContentLength(123456);
+  EXPECT_EQ(123456, client.connectionOptions.getContentLength());
+
+  client.connectionOptions.setFirstRetryMaxDelay(123456);
+  EXPECT_EQ(123456, client.connectionOptions.getFirstRetryMaxDelay());
+
+  client.connectionOptions.setForcedTransport("WS");
+  EXPECT_EQ("WS", client.connectionOptions.getForcedTransport());
+  client.connectionOptions.setForcedTransport("");
+  EXPECT_EQ("", client.connectionOptions.getForcedTransport());
+  EXPECT_THROW(client.connectionOptions.setForcedTransport("xyz"), std::runtime_error);
+
+  auto hs = client.connectionOptions.getHttpExtraHeaders();
+  EXPECT_EQ(0, hs.size());
+  client.connectionOptions.setHttpExtraHeaders({{"h1", "v1"}, {"h2", "v2"}});
+  hs = client.connectionOptions.getHttpExtraHeaders();
+  EXPECT_EQ(2, hs.size());
+  EXPECT_EQ("v1", hs.at("h1"));
+  EXPECT_EQ("v2", hs.at("h2"));
+
+  client.connectionOptions.setIdleTimeout(123456);
+  EXPECT_EQ(123456, client.connectionOptions.getIdleTimeout());
+
+  client.connectionOptions.setKeepaliveInterval(123456);
+  EXPECT_EQ(123456, client.connectionOptions.getKeepaliveInterval());
+
+  client.connectionOptions.setRequestedMaxBandwidth("123.456");
+  EXPECT_EQ("123.456", client.connectionOptions.getRequestedMaxBandwidth());
+  client.connectionOptions.setRequestedMaxBandwidth("unlimited");
+  EXPECT_EQ("unlimited", client.connectionOptions.getRequestedMaxBandwidth());
+  EXPECT_THROW(client.connectionOptions.setRequestedMaxBandwidth(""), std::runtime_error);
+
+  EXPECT_EQ("", client.connectionOptions.getRealMaxBandwidth());
+
+  client.connectionOptions.setPollingInterval(123456);
+  EXPECT_EQ(123456, client.connectionOptions.getPollingInterval());
+
+  client.connectionOptions.setReconnectTimeout(123456);
+  EXPECT_EQ(123456, client.connectionOptions.getReconnectTimeout());
+
+  client.connectionOptions.setRetryDelay(123456);
+  EXPECT_EQ(123456, client.connectionOptions.getRetryDelay());
+
+  client.connectionOptions.setReverseHeartbeatInterval(123456);
+  EXPECT_EQ(123456, client.connectionOptions.getReverseHeartbeatInterval());
+
+  client.connectionOptions.setStalledTimeout(123456);
+  EXPECT_EQ(123456, client.connectionOptions.getStalledTimeout());
+
+  client.connectionOptions.setSessionRecoveryTimeout(123456);
+  EXPECT_EQ(123456, client.connectionOptions.getSessionRecoveryTimeout());
+
+  client.connectionOptions.setHttpExtraHeadersOnSessionCreationOnly(true);
+  EXPECT_EQ(true, client.connectionOptions.isHttpExtraHeadersOnSessionCreationOnly());
+
+  client.connectionOptions.setServerInstanceAddressIgnored(true);
+  EXPECT_EQ(true, client.connectionOptions.isServerInstanceAddressIgnored());
+
+  client.connectionOptions.setSlowingEnabled(true);
+  EXPECT_EQ(true, client.connectionOptions.isSlowingEnabled());
+
+  client.connectionOptions.setProxy(Proxy("HTTP", "http://proxy.com", 8090, "usr", "pwd"));
+  // an empty host results in the proxy being removed
+  client.connectionOptions.setProxy(Proxy("HTTP", "", 0));
+  // invalid proxy type
+  EXPECT_THROW(client.connectionOptions.setProxy(Proxy("ftp", "http://proxy.com", 8090)), std::runtime_error);
+}
 
 TEST_FIXTURE(Setup, testConnectionDetails) {
   EXPECT_EQ("TEST", client.connectionDetails.getAdapterSet());
