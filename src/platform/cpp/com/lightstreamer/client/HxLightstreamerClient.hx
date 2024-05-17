@@ -42,7 +42,11 @@ class HxLightstreamerClient {
     _client = new LSLightstreamerClient(serverAddress, adapterSet);
   }
 
-  function getConnectionDetails() {
+  function getConnectionOptions(): HxConnectionOptions {
+    return new HxConnectionOptions(_client.connectionOptions);
+  }
+
+  function getConnectionDetails(): HxConnectionDetails {
     return new HxConnectionDetails(_client.connectionDetails);
   }
 

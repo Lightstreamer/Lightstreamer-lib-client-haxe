@@ -15,6 +15,20 @@ abstract CppStringMap(_CppStringMap) from _CppStringMap {
     }
     return res;
   }
+
+  @:to
+  @:unreflective
+  function to(): NativeStringMap<String> {
+    var res = new Map<String, String>();
+    untyped __cpp__("auto it = {0}.begin()", this);
+    while (untyped __cpp__("it != {0}.end()", this)) {
+      var k: CppConstStringRef = untyped __cpp__("it->first");
+      var v: CppConstStringRef = untyped __cpp__("it->second");
+      res[k] = v;
+      untyped __cpp__("it++");
+    }
+    return res;
+  }
 }
 
 @:structAccess

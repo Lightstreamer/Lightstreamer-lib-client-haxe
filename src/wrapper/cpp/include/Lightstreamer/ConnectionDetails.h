@@ -6,7 +6,7 @@
 namespace Lightstreamer {
 
 class ConnectionDetails {
-  HaxeObject _delegate;
+  HaxeObject _delegate = nullptr;
 
   void initDelegate(HaxeObject client) {
     _delegate = LightstreamerClient_getConnectionDetails(client);

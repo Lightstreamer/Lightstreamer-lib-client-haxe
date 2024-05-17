@@ -9,6 +9,7 @@ namespace Lightstreamer {
   class SubscriptionListener;
   class ClientListener;
   class ClientMessageListener;
+  class Proxy;
 }
 
 #endif

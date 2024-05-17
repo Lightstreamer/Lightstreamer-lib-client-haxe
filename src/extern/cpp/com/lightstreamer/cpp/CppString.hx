@@ -12,7 +12,7 @@ abstract CppString(_CppString) {
 
   @:to
   @:unreflective
-  function to(): String {
+  inline function to(): String {
     return this.c_str().toString();
   }
 }
