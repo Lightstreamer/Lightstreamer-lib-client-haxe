@@ -1119,6 +1119,30 @@ TEST_FIXTURE(Setup, testConnectionDetails) {
   EXPECT_EQ("", client.connectionDetails.getSessionId());
 }
 
+TEST_FIXTURE(Setup, testCookies) {
+  Poco::URI host("http://localtest.me:8080");
+  client.connectionDetails.setServerAddress(host.toString());
+  EXPECT_EQ(0, LightstreamerClient::getCookies(host).size());
+
+  Poco::Net::HTTPCookie cookie("X-Client", "client");
+  std::vector<Poco::Net::HTTPCookie> _cookies{cookie};
+  LightstreamerClient::addCookies(host, _cookies);
+
+  listener->_onStatusChange = [this](auto status) {
+    if (status == "CONNECTED:" + transport) {
+      resume();
+    }
+  };
+  client.addListener(listener);
+  client.connect();
+  wait(TIMEOUT);
+
+  auto cookies = LightstreamerClient::getCookies(host);
+  EXPECT_EQ(2, cookies.size());
+  EXPECT_EQ("X-Client=client; domain=localtest.me; path=/", cookies.at(0).toString());
+  EXPECT_EQ("X-Server=server; domain=localtest.me; path=/", cookies.at(1).toString());
+}
+
 int main(int argc, char** argv) {
   Lightstreamer_initializeHaxeThread([](const char* info) {
     std::cout << "UNCAUGHT HAXE EXCEPTION: " << info << "\n";
@@ -1167,6 +1191,7 @@ int main(int argc, char** argv) {
   runner.add(new testHeaders());
   runner.add(new testConnectionOptions());
   runner.add(new testConnectionDetails());
+  runner.add(new testCookies());
 
   return runner.start(argc > 1 ? argv[1]: "");
 }

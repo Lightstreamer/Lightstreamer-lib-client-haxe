@@ -83,7 +83,7 @@ class TestClientExtra extends utest.Test {
       equals(0, (LightstreamerClient.getCookies(uri).size() : Int));
     
       var cookie = new poco.net.HTTPCookie("X-Client", "client");
-      var cookies = new com.lightstreamer.cpp.CppVector<poco.net.HTTPCookie>();
+      var cookies = new com.lightstreamer.internal.NativeTypes.NativeCookieCollection();
       cookies.push_back(cookie);
       LightstreamerClient.addCookies(uri, cookies);
       #else
