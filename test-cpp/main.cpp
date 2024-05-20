@@ -1134,8 +1134,8 @@ TEST_FIXTURE(Setup, testProxy) {
 }
 
 TEST_FIXTURE(Setup, testCookies) {
-  LightstreamerClient_clearCookies();
-  
+  LightstreamerClient_clearAllCookies();
+
   Poco::URI host("http://localtest.me:8080");
   client.connectionDetails.setServerAddress(host.toString());
   EXPECT_EQ(0, LightstreamerClient::getCookies(host).size());

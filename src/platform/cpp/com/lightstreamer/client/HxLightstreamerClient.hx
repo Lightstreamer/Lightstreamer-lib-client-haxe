@@ -43,7 +43,7 @@ class HxLightstreamerClient {
     return LSLightstreamerClient.getCookies(uri);
   }
 
-  static function clearCookies() {
+  static function clearAllCookies() {
     com.lightstreamer.internal.CookieHelper.instance.clearCookies();
   }
 
