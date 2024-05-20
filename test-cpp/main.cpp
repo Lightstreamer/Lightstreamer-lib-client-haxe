@@ -727,7 +727,6 @@ TEST_FIXTURE(Setup, testSubscribeNonAscii) {
 
 TEST_FIXTURE(Setup, testBandwidth) {
   std::atomic_int cnt(0);
-  client.addListener(listener);
   listener->_onPropertyChange = [&](auto& prop) {
     if (prop == "realMaxBandwidth") {
       auto bw = client.connectionOptions.getRealMaxBandwidth();
@@ -760,6 +759,7 @@ TEST_FIXTURE(Setup, testBandwidth) {
       }
     }
   };
+  client.addListener(listener);
   EXPECT_EQ("unlimited", client.connectionOptions.getRequestedMaxBandwidth());
 	client.connect();
 	wait(TIMEOUT);
@@ -806,7 +806,6 @@ TEST_FIXTURE(Setup, testRoundTrip) {
     EXPECT_EQ("unlimited", freq);
     resume();
   };
-  client.addListener(listener);
   listener->_onPropertyChange = [&](auto& prop) {
     if (prop == "clientIp") {
       EXPECT_EQ(sessionActive ? "127.0.0.1" : "", client.connectionDetails.getClientIp());
@@ -827,6 +826,7 @@ TEST_FIXTURE(Setup, testRoundTrip) {
       EXPECT_EQ(sessionActive ? "40" : "", client.connectionOptions.getRealMaxBandwidth());
     }
   };
+  client.addListener(listener);
   client.subscribe(&sub);
   client.connect();
   wait(TIMEOUT, 4);
