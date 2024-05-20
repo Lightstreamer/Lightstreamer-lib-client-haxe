@@ -6,8 +6,7 @@ import cpp.ConstStar;
 import com.lightstreamer.cpp.CppString;
 import com.lightstreamer.log.LoggerProvider;
 import com.lightstreamer.client.LightstreamerClient;
-import com.lightstreamer.internal.NativeTypes.NativeURI;
-import com.lightstreamer.internal.NativeTypes.NativeCookieCollection;
+import com.lightstreamer.internal.NativeTypes;
 
 @:unreflective
 @:build(HaxeCBridge.expose()) @HaxeCBridge.name("LightstreamerClient")
@@ -45,6 +44,10 @@ class HxLightstreamerClient {
 
   static function clearAllCookies() {
     com.lightstreamer.internal.CookieHelper.instance.clearCookies();
+  }
+
+  static function setTrustManagerFactory(factory: NativeTrustManager) {
+    LSLightstreamerClient.setTrustManagerFactory(factory);
   }
 
   @HaxeCBridge.name("LightstreamerClient_new")

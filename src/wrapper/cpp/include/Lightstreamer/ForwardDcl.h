@@ -3,6 +3,7 @@
 
 #include "Poco/URI.h"
 #include "Poco/Net/HTTPCookie.h"
+#include "Poco/Net/Context.h"
 #include <string>
 #include <vector>
 

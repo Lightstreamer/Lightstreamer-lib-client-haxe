@@ -21,7 +21,6 @@ public:
   }
 
   // TODO cpp setLoggerProvider
-  // TODO cpp setTrustManagerFactory
 
   static void addCookies(Poco::URI& uri, std::vector<Poco::Net::HTTPCookie>& cookies){
     LightstreamerClient_addCookies(&uri, &cookies);
@@ -29,6 +28,10 @@ public:
 
   static std::vector<Poco::Net::HTTPCookie> getCookies(Poco::URI& uri) {
     return LightstreamerClient_getCookies(&uri);
+  }
+
+  static void setTrustManagerFactory(Poco::Net::Context::Ptr factory) {
+    LightstreamerClient_setTrustManagerFactory(factory);
   }
 
   ConnectionOptions connectionOptions;
