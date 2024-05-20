@@ -171,7 +171,7 @@ TEST_FIXTURE(Setup, testListeners) {
 }
 
 TEST_FIXTURE(Setup, testConnect) {
-  listener->_onStatusChange = [this](auto status) {
+  listener->_onStatusChange = [this](auto& status) {
     if (status == "CONNECTED:" + transport) {
       EXPECT_EQ("CONNECTED:" + transport, client.getStatus());
       EXPECT_EQ("", client.connectionDetails.getServerInstanceAddress());
@@ -189,7 +189,7 @@ TEST_FIXTURE(Setup, testConnect) {
 TEST_FIXTURE(Setup, testOnlineServer) {
   client.connectionDetails.setServerAddress("https://push.lightstreamer.com");
   client.connectionDetails.setAdapterSet("DEMO");
-  listener->_onStatusChange = [this](auto status) {
+  listener->_onStatusChange = [this](auto& status) {
     if (status == "CONNECTED:" + transport) {
       EXPECT_EQ("CONNECTED:" + transport, client.getStatus());
       resume();
@@ -214,7 +214,7 @@ TEST_FIXTURE(Setup, testError) {
 }
 
 TEST_FIXTURE(Setup, testDisconnect) {
-  listener->_onStatusChange = [this](auto status) {
+  listener->_onStatusChange = [this](auto& status) {
     if (status == "CONNECTED:" + transport) {
 			client.disconnect();
 		} else if (status == "DISCONNECTED") {
@@ -1012,7 +1012,7 @@ TEST_FIXTURE(Setup, testChangeFrequency) {
 
 TEST_FIXTURE(Setup, testHeaders) {
   client.connectionOptions.setHttpExtraHeaders({{"X-Header", "header"}});
-  listener->_onStatusChange = [this](auto status) {
+  listener->_onStatusChange = [this](auto& status) {
     if (status == "CONNECTED:" + transport) {
       resume();
     }
@@ -1120,6 +1120,8 @@ TEST_FIXTURE(Setup, testConnectionDetails) {
 }
 
 TEST_FIXTURE(Setup, testCookies) {
+  LightstreamerClient_clearCookies();
+  
   Poco::URI host("http://localtest.me:8080");
   client.connectionDetails.setServerAddress(host.toString());
   EXPECT_EQ(0, LightstreamerClient::getCookies(host).size());
@@ -1128,7 +1130,7 @@ TEST_FIXTURE(Setup, testCookies) {
   std::vector<Poco::Net::HTTPCookie> _cookies{cookie};
   LightstreamerClient::addCookies(host, _cookies);
 
-  listener->_onStatusChange = [this](auto status) {
+  listener->_onStatusChange = [this](auto& status) {
     if (status == "CONNECTED:" + transport) {
       resume();
     }

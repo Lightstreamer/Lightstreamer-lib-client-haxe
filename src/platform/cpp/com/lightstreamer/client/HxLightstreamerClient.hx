@@ -43,6 +43,10 @@ class HxLightstreamerClient {
     return LSLightstreamerClient.getCookies(uri);
   }
 
+  static function clearCookies() {
+    com.lightstreamer.internal.CookieHelper.instance.clearCookies();
+  }
+
   @HaxeCBridge.name("LightstreamerClient_new")
   static function create(serverAddress: ConstStar<CppString>, adapterSet: ConstStar<CppString>) {
     @:nullSafety(Off)
