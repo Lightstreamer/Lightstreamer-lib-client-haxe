@@ -1119,6 +1119,20 @@ TEST_FIXTURE(Setup, testConnectionDetails) {
   EXPECT_EQ("", client.connectionDetails.getSessionId());
 }
 
+TEST_FIXTURE(Setup, testProxy) {
+  client.connectionDetails.setServerAddress("http://localtest.me:8080");
+  client.connectionOptions.setProxy(Proxy("HTTP", "localtest.me", 8079, "myuser", "mypassword"));
+
+  listener->_onStatusChange = [this](auto& status) {
+    if (status == "CONNECTED:" + transport) {
+      resume();
+    }
+  };
+  client.addListener(listener);
+  client.connect();
+  wait(TIMEOUT);
+}
+
 TEST_FIXTURE(Setup, testCookies) {
   LightstreamerClient_clearCookies();
   
@@ -1193,6 +1207,7 @@ int main(int argc, char** argv) {
   runner.add(new testHeaders());
   runner.add(new testConnectionOptions());
   runner.add(new testConnectionDetails());
+  runner.add(new testProxy());
   runner.add(new testCookies());
 
   return runner.start(argc > 1 ? argv[1]: "");
