@@ -97,7 +97,7 @@ struct Test {
   std::string name;
   std::string filename;
   int line;
-  Poco::Semaphore _sem{0, 1};
+  Poco::Semaphore _sem{0, std::numeric_limits<int>::max()}; // simulate an unbound semaphore
   std::string _param1;
 
   Test() = delete;
