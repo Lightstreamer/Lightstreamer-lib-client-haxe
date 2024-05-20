@@ -12,13 +12,6 @@ namespace Lightstreamer {
 class LightstreamerClient {
   HaxeObject _client;
 public:
-  LightstreamerClient() = delete;
-  LightstreamerClient(const LightstreamerClient&) = delete;
-  LightstreamerClient& operator=(const LightstreamerClient&) = delete;
-
-  ConnectionOptions connectionOptions;
-  ConnectionDetails connectionDetails;
-
   static std::string libName() {
     return LightstreamerClient_getLibName();
   }
@@ -26,6 +19,24 @@ public:
   static std::string libVersion() {
     return LightstreamerClient_getLibVersion();
   }
+
+  // TODO cpp setLoggerProvider
+  // TODO cpp setTrustManagerFactory
+
+  static void addCookies(Poco::URI& uri, std::vector<Poco::Net::HTTPCookie>& cookies){
+    LightstreamerClient_addCookies(&uri, &cookies);
+  }
+
+  static std::vector<Poco::Net::HTTPCookie> getCookies(Poco::URI& uri) {
+    return LightstreamerClient_getCookies(&uri);
+  }
+
+  ConnectionOptions connectionOptions;
+  ConnectionDetails connectionDetails;
+
+  LightstreamerClient() = delete;
+  LightstreamerClient(const LightstreamerClient&) = delete;
+  LightstreamerClient& operator=(const LightstreamerClient&) = delete;
 
   LightstreamerClient(const std::string& serverAddress, const std::string& adapterSet) {
     _client = LightstreamerClient_new(&serverAddress, &adapterSet);
@@ -50,16 +61,16 @@ public:
     return LightstreamerClient_getListeners(_client);
   }
 
-  std::string getStatus() {
-    return LightstreamerClient_getStatus(_client);
-  }
-
   void connect() {
     LightstreamerClient_connect(_client);
   }
 
   void disconnect() {
     LightstreamerClient_disconnect(_client);
+  }
+
+  std::string getStatus() {
+    return LightstreamerClient_getStatus(_client);
   }
 
   void subscribe(Subscription* subscription) {

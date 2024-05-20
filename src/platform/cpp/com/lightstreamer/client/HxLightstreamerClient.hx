@@ -6,6 +6,8 @@ import cpp.ConstStar;
 import com.lightstreamer.cpp.CppString;
 import com.lightstreamer.log.LoggerProvider;
 import com.lightstreamer.client.LightstreamerClient;
+import com.lightstreamer.internal.NativeTypes.NativeURI;
+import com.lightstreamer.internal.NativeTypes.NativeCookieCollection;
 
 @:unreflective
 @:build(HaxeCBridge.expose()) @HaxeCBridge.name("LightstreamerClient")
@@ -30,6 +32,15 @@ class HxLightstreamerClient {
 
   static function setLoggerProvider(provider: LoggerProvider) {
     LSLightstreamerClient.setLoggerProvider(provider);
+  }
+
+  static function addCookies(uri: Star<NativeURI>, cookies: Star<NativeCookieCollection>) {
+    @:nullSafety(Off)
+    LSLightstreamerClient.addCookies(uri, cookies);
+  }
+
+  static function getCookies(@:nullSafety(Off) uri: Star<NativeURI>): NativeCookieCollection {
+    return LSLightstreamerClient.getCookies(uri);
   }
 
   @HaxeCBridge.name("LightstreamerClient_new")

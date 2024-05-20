@@ -573,7 +573,7 @@ typedef NativeURI = String;
 typedef NativeCookieCollection = com.lightstreamer.internal.SimpleCookie;
 #elseif cpp
 typedef NativeURI = poco.URI;
-typedef NativeCookieCollection = com.lightstreamer.cpp.CppVector<poco.net.HTTPCookie>;
+typedef NativeCookieCollection = com.lightstreamer.client.CookieVector;
 #end
 
 #if java
