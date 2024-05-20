@@ -1159,6 +1159,24 @@ TEST_FIXTURE(Setup, testCookies) {
   EXPECT_EQ("X-Server=server; domain=localtest.me; path=/", cookies.at(1).toString());
 }
 
+TEST_FIXTURE(Setup, testTrustManager) {
+  client.connectionDetails.setServerAddress("https://localtest.me:8443");
+  auto privateKeyFile = "../test/localtest.me.key";
+  auto certificateFile = "../test/localtest.me.crt";
+  auto caLocation = "../test/localtest.me.crt";
+  Poco::Net::Context::Ptr pContext = new Poco::Net::Context(Poco::Net::Context::TLS_CLIENT_USE, privateKeyFile, certificateFile, caLocation);
+  LightstreamerClient::setTrustManagerFactory(pContext);
+
+  listener->_onStatusChange = [this](auto& status) {
+    if (status == "CONNECTED:" + transport) {
+      resume();
+    }
+  };
+  client.addListener(listener);
+  client.connect();
+  wait(TIMEOUT);
+}
+
 int main(int argc, char** argv) {
   Lightstreamer_initializeHaxeThread([](const char* info) {
     std::cout << "UNCAUGHT HAXE EXCEPTION: " << info << "\n";
@@ -1209,6 +1227,7 @@ int main(int argc, char** argv) {
   runner.add(new testConnectionDetails());
   runner.add(new testProxy());
   runner.add(new testCookies());
+  runner.add(new testTrustManager());
 
   return runner.start(argc > 1 ? argv[1]: "");
 }

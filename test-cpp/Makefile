@@ -2,7 +2,7 @@ CXX = g++
 CXXFLAGS = -g -std=c++17
 CPPFLAGS = -I../bin/cpp/include -I${POCO_BASE}/Foundation/include -I${POCO_BASE}/Net/include -I/opt/homebrew/opt/openssl/include -I../../utpp/include
 LDFLAGS = -L${POCO_BASE}/lib/Darwin/arm64
-LDLIBS = -lPocoFoundationd -lPocoNetd lightstreamer_client.dylib
+LDLIBS = -lPocoFoundationd -lPocoNetd -lPocoNetSSLd lightstreamer_client.dylib
 SRCS = main.cpp
 
 build:
