@@ -33,6 +33,10 @@ public:
   void onServerError(int code, const std::string& msg) override {
     if (_onServerError) _onServerError(code, msg);
   }
+  std::function<void(const std::string&)> _onPropertyChange;
+  void onPropertyChange(const std::string& prop) override {
+    if (_onPropertyChange) _onPropertyChange(prop);
+  }
 };
 
 class MySubscriptionListener: public Lightstreamer::SubscriptionListener {
@@ -64,6 +68,10 @@ public:
   std::function<void(const std::string&, int)> _onEndOfSnapshot;
   void onEndOfSnapshot(const std::string& name, int pos) override {
     if (_onEndOfSnapshot) _onEndOfSnapshot(name, pos);
+  }
+  std::function<void(const std::string&, int, int)> _onItemLostUpdates;
+  void onItemLostUpdates(const std::string& name, int pos, int lost) override {
+    if (_onItemLostUpdates) _onItemLostUpdates(name, pos, lost);
   }
 };
 
@@ -122,6 +130,7 @@ struct Setup: public utest::Test {
   }
 
   void tear_down() override {
+    client.removeListener(listener);
     client.disconnect();
   }
 };
@@ -178,9 +187,9 @@ TEST_FIXTURE(Setup, testConnect) {
 }
 
 TEST_FIXTURE(Setup, testOnlineServer) {
-  // TODO listener leaks (use setServerAddress/setAdapterSet on fixture's client)
-  LightstreamerClient client = LightstreamerClient("https://push.lightstreamer.com", "DEMO");
-  listener->_onStatusChange = [this, &client](auto status) {
+  client.connectionDetails.setServerAddress("https://push.lightstreamer.com");
+  client.connectionDetails.setAdapterSet("DEMO");
+  listener->_onStatusChange = [this](auto status) {
     if (status == "CONNECTED:" + transport) {
       EXPECT_EQ("CONNECTED:" + transport, client.getStatus());
       resume();
@@ -192,9 +201,8 @@ TEST_FIXTURE(Setup, testOnlineServer) {
 }
 
 TEST_FIXTURE(Setup, testError) {
-  // TODO listener leaks (use setAdapterSet on fixture's client)
-  LightstreamerClient client = LightstreamerClient("http://127.0.0.1:8080", "XXX");
-  listener->_onServerError = [this, &client](auto code, auto msg) {
+  client.connectionDetails.setAdapterSet("XXX");
+  listener->_onServerError = [this](auto code, auto msg) {
     std::stringstream ss;
     ss << code << " " << msg;
     EXPECT_EQ("2 Requested Adapter Set not available", ss.str());
@@ -717,7 +725,45 @@ TEST_FIXTURE(Setup, testSubscribeNonAscii) {
   wait(TIMEOUT);
 }
 
-// TODO testBandwidth
+TEST_FIXTURE(Setup, testBandwidth) {
+  std::atomic_int cnt(0);
+  client.addListener(listener);
+  listener->_onPropertyChange = [&](auto& prop) {
+    if (prop == "realMaxBandwidth") {
+      auto bw = client.connectionOptions.getRealMaxBandwidth();
+      switch (++cnt) {
+      case 1:
+        // after the connection, the server sends the default bandwidth
+        EXPECT_EQ("40", bw);
+        // request a bandwidth equal to 20.1: the request is accepted
+        client.connectionOptions.setRequestedMaxBandwidth("20.1");
+        break;
+      case 2:
+        EXPECT_EQ("20.1", bw);
+        // request a bandwidth equal to 70.1: the meta-data adapter cuts it to 40 (which is the configured limit)
+        client.connectionOptions.setRequestedMaxBandwidth("70.1");
+        break;
+      case 3:
+        EXPECT_EQ("40", bw);
+        // request a bandwidth equal to 39: the request is accepted
+        client.connectionOptions.setRequestedMaxBandwidth("39");
+        break;
+      case 4:
+        EXPECT_EQ("39", bw);
+        // request an unlimited bandwidth: the meta-data adapter cuts it to 40 (which is the configured limit)
+        client.connectionOptions.setRequestedMaxBandwidth("unlimited");
+        break;
+      case 5:
+        EXPECT_EQ("40", bw);
+        resume();
+        break;
+      }
+    }
+  };
+  EXPECT_EQ("unlimited", client.connectionOptions.getRequestedMaxBandwidth());
+	client.connect();
+	wait(TIMEOUT);
+}
 
 TEST_FIXTURE(Setup, testClearSnapshot) {
   Subscription sub("DISTINCT", {"clear_snapshot"}, {"dummy"});
@@ -734,15 +780,23 @@ TEST_FIXTURE(Setup, testClearSnapshot) {
 }
 
 TEST_FIXTURE(Setup, testRoundTrip) {
-  // TODO to be completed
+  std::atomic_bool sessionActive(true);
+  EXPECT_EQ("TEST", client.connectionDetails.getAdapterSet());
+  EXPECT_EQ("http://127.0.0.1:8080", client.connectionDetails.getServerAddress());
+  EXPECT_EQ(50000000L, client.connectionOptions.getContentLength());
+  EXPECT_EQ(4000L, client.connectionOptions.getRetryDelay());
+  EXPECT_EQ(15000L, client.connectionOptions.getSessionRecoveryTimeout());
   Subscription sub("MERGE", {"count"}, {"count"});
   sub.setDataAdapter("COUNT");
+  EXPECT_EQ("COUNT", sub.getDataAdapter());
+	EXPECT_EQ("MERGE", sub.getMode());
   sub.addListener(subListener);
   subListener->_onSubscription = [this, &sub] {
     resume();
   };
-  subListener->_onItemUpdate = [this](auto& update) {
+  subListener->_onItemUpdate = [&](auto& update) {
     client.disconnect();
+    sessionActive = false;
     resume();
   };
   subListener->_onUnsubscription = [this, &sub] {
@@ -751,6 +805,27 @@ TEST_FIXTURE(Setup, testRoundTrip) {
   subListener->_onRealMaxFrequency = [this](auto& freq) {
     EXPECT_EQ("unlimited", freq);
     resume();
+  };
+  client.addListener(listener);
+  listener->_onPropertyChange = [&](auto& prop) {
+    if (prop == "clientIp") {
+      EXPECT_EQ(sessionActive ? "127.0.0.1" : "", client.connectionDetails.getClientIp());
+    } else if (prop == "serverSocketName") {
+      EXPECT_EQ(sessionActive ? "Lightstreamer HTTP Server" : "", client.connectionDetails.getServerSocketName());
+    } else if (prop == "sessionId") {
+      if (sessionActive)
+        EXPECT_FALSE(client.connectionDetails.getSessionId().empty());
+      else
+        EXPECT_TRUE(client.connectionDetails.getSessionId().empty());
+    } else if (prop == "keepaliveInterval") {
+      EXPECT_EQ(5000L, client.connectionOptions.getKeepaliveInterval());
+    } else if (prop == "idleTimeout") {
+      EXPECT_EQ(0L, client.connectionOptions.getIdleTimeout());
+    } else if (prop == "pollingInterval") {
+      EXPECT_EQ(100L, client.connectionOptions.getPollingInterval());
+    } else if (prop == "realMaxBandwidth") {
+      EXPECT_EQ(sessionActive ? "40" : "", client.connectionOptions.getRealMaxBandwidth());
+    }
   };
   client.subscribe(&sub);
   client.connect();
@@ -874,7 +949,26 @@ TEST_FIXTURE(Setup, testEndOfSnapshot) {
   wait(TIMEOUT);
 }
 
-// TODO testOverflow
+TEST_FIXTURE(Setup, testOverflow) {
+  Subscription sub("MERGE", {"overflow"}, {"value"});
+  sub.setRequestedSnapshot("yes");
+	sub.setDataAdapter("OVERFLOW");
+  sub.setRequestedMaxFrequency("unfiltered");
+  sub.addListener(subListener);
+  subListener->_onItemLostUpdates = [&](auto& name, auto pos, auto lost) {
+    EXPECT_EQ("overflow", name);
+	  EXPECT_EQ(1, pos);
+	  client.unsubscribe(&sub);
+  };
+  subListener->_onUnsubscription = [&] {
+    resume();
+  };
+  client.subscribe(&sub);
+	// NB the bandwidth must not be too low otherwise the server can't write the response
+  client.connectionOptions.setRequestedMaxBandwidth("10");
+  client.connect();
+  wait(TIMEOUT);
+}
 
 TEST_FIXTURE(Setup, testFrequency) {
   Subscription sub("MERGE", {"count"}, {"count"});
@@ -916,7 +1010,17 @@ TEST_FIXTURE(Setup, testChangeFrequency) {
   wait(TIMEOUT);
 }
 
-// TODO testHeaders
+TEST_FIXTURE(Setup, testHeaders) {
+  client.connectionOptions.setHttpExtraHeaders({{"X-Header", "header"}});
+  listener->_onStatusChange = [this](auto status) {
+    if (status == "CONNECTED:" + transport) {
+      resume();
+    }
+  };
+  client.addListener(listener);
+  client.connect();
+  wait(TIMEOUT);
+}
 
 TEST_FIXTURE(Setup, testConnectionOptions) {
   client.connectionOptions.setContentLength(123456);
@@ -1045,6 +1149,7 @@ int main(int argc, char** argv) {
   runner.add(new testSubscribeCommand2Level());
   runner.add(new testUnsubscribe());
   runner.add(new testSubscribeNonAscii());
+  runner.add(new testBandwidth());
   runner.add(new testClearSnapshot());
   runner.add(new testRoundTrip());
   runner.add(new testLongMessage());
@@ -1056,8 +1161,10 @@ int main(int argc, char** argv) {
   runner.add(new testMessageError());
   runner.add(new testMessageAbort());
   runner.add(new testEndOfSnapshot());
+  runner.add(new testOverflow());
   runner.add(new testFrequency());
   runner.add(new testChangeFrequency());
+  runner.add(new testHeaders());
   runner.add(new testConnectionOptions());
   runner.add(new testConnectionDetails());
 
