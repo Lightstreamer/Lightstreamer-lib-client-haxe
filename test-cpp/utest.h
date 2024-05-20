@@ -45,10 +45,12 @@ void name::run()
 namespace utest {
 
 struct Reporter {
+  int n_run = 0;
   std::vector<std::string> _errors;
   std::vector<std::string> _failures;
 
   void onTestStart(const std::string& test, const std::string& filename, int line) {
+    n_run++;
     std::stringstream ss;
     ss << "\n********** '" << test << "' (" << filename << ":" << line << ") **********\n";
     std::cout << ss.str() << "\n";
@@ -68,10 +70,12 @@ struct Reporter {
     std::cout << ">>>>>>>>>> " << ss.str() << "\n";
   }
 
-  void onCompletion(int n_run) {
+  void onCompletion() {
     int n_errors = _errors.size();
     int n_failures = _failures.size();
-    if (n_errors + n_failures == 0) {
+    if (n_run == 0) {
+      std::cout << "\nFAIL: no test to run\n";
+    } else if (n_errors + n_failures == 0) {
       std::cout << "\nSUCCESS: " << n_run << " tests passed\n";
     } else {
       std::cout << "\n***** TEST RESULTS *****\n";
@@ -87,7 +91,7 @@ struct Reporter {
   }
 
   int exit_code() {
-    return _errors.size() + _failures.size();
+    return n_run > 0 ? _errors.size() + _failures.size() : 1;
   }
 };
 
@@ -230,7 +234,6 @@ struct Runner {
   }
 
   int start(const std::string& pattern = "") {
-    int n_tests = 0;
     std::regex _pattern;
     if (pattern != "") {
       _pattern = ".*" + pattern + ".*";
@@ -239,10 +242,9 @@ struct Runner {
     for (auto tt : _tests) {
       if (no_regex || std::regex_match(tt->name, _pattern)) {
         tt->start();
-        n_tests++;
       }
     }
-    _reporter.onCompletion(n_tests);
+    _reporter.onCompletion();
     return _reporter.exit_code();
   }
 };
