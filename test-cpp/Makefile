@@ -8,7 +8,7 @@ SRCS = main.cpp
 build:
 	mkdir -p bin
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) $(LDLIBS) $(SRCS) -o bin/main
-	bin/main $(TEST_PATTERN)
+	bin/main $(UTEST_PATTERN)
 
 build-all: haxe build
 

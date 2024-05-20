@@ -7,7 +7,7 @@
 #include "Lightstreamer/LightstreamerError.h"
 #include "Lightstreamer/ClientMessageListener.h"
 #include "Lightstreamer/Proxy.h"
-#include "utpp/utpp.h"
+#include "utest.h"
 #include "Poco/Semaphore.h"
 #include <iostream>
 #include <sstream>
@@ -16,6 +16,7 @@
 #include <stdexcept>
 #include <cstdlib>
 
+using utest::runner;
 using Lightstreamer::LightstreamerClient;
 using Lightstreamer::Subscription;
 using Lightstreamer::ItemUpdate;
@@ -90,49 +91,39 @@ public:
   }
 };
 
-struct Setup {
-  Setup() : 
-    client("http://127.0.0.1:8080", "TEST"), 
-    listener(new MyClientListener()),
-    subListener(new MySubscriptionListener()),
-    _sem(0, 1) 
-  {}
-  ~Setup() {
-    client.removeListener(listener);
-    client.disconnect();
-  }
-  void sleep(int ms) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(ms));
-  }
-  void resume() {
-    _sem.set();
-  }
-  void wait(long ms, int expectedResumes = 1) {
-    if (expectedResumes == 1) {
-      _sem.wait(ms);
-    } else {
-      using std::chrono::high_resolution_clock;
-      using std::chrono::duration_cast;
-      using std::chrono::milliseconds;
+bool ends_with(const std::string& value, const std::string& ending)
+{
+  if (ending.size() > value.size()) 
+    return false;
+  return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
+}
 
-      auto t0 = high_resolution_clock::now();
-      auto left = ms;
-      while (expectedResumes-- > 0) {
-        if (left <= 0) {
-          throw std::runtime_error("Timeout");
-        }
-        _sem.wait(left);
-        left = ms - duration_cast<milliseconds>(high_resolution_clock::now() - t0).count();
-      }
+constexpr long TIMEOUT = 3000;
+
+struct Setup: public utest::Test {
+  LightstreamerClient client{"http://127.0.0.1:8080", "TEST"};
+  // TODO listener can leak if not added to client
+  MyClientListener* listener{new MyClientListener()};
+  MySubscriptionListener* subListener{new MySubscriptionListener()};
+  std::string transport{"WS-STREAMING"};
+
+  Setup(const std::string& name, const std::string& filename, int line, const std::string& param1)
+    : utest::Test(name, filename, line, param1) {}
+
+  void setup() override {
+    if (!_param1.empty()) {
+      transport = _param1;
+      client.connectionOptions.setForcedTransport(transport);
+      if (ends_with(transport, "POLLING")) {
+			  client.connectionOptions.setIdleTimeout(0);
+			  client.connectionOptions.setPollingInterval(100);
+		  }
     }
   }
-  std::string transport = "WS-STREAMING";
-  Poco::Semaphore _sem;
-  LightstreamerClient client;
-  // TODO listener can leak if not added to client
-  MyClientListener* listener;
-  MySubscriptionListener* subListener;
-  static const long TIMEOUT = 3000;
+
+  void tear_down() override {
+    client.disconnect();
+  }
 };
 
 TEST(testLibName) {
@@ -1035,8 +1026,40 @@ int main(int argc, char** argv) {
   // HaxeObject log = ConsoleLoggerProvider_new(40);
   LightstreamerClient_setLoggerProvider(log);
 
-  if (argc > 1) {
-    UnitTest::TestPattern = argv[1];
-  }
-  return UnitTest::RunAllTests ();
+  runner.add(new testLibName());
+  runner.add(new testListeners());
+  runner.add(new testConnect());
+  runner.add(new testOnlineServer());
+  runner.add(new testError());
+  runner.add(new testDisconnect());
+  runner.add(new testGetSubscriptions());
+  runner.add(new testSubscriptionListeners());
+  runner.add(new testSubscriptionAccessors());
+  runner.add(new testSubscriptionCtor());
+  runner.add(new testSubscriptionSetterValidators());
+  runner.add(new testSubscriptionAccessorsInCommandMode());
+  runner.add(new testSubscribe());
+  runner.add(new testItemUpdate());
+  runner.add(new testSubscriptionError());
+  runner.add(new testSubscribeCommand());
+  runner.add(new testSubscribeCommand2Level());
+  runner.add(new testUnsubscribe());
+  runner.add(new testSubscribeNonAscii());
+  runner.add(new testClearSnapshot());
+  runner.add(new testRoundTrip());
+  runner.add(new testLongMessage());
+  runner.add(new testMessage());
+  runner.add(new testMessageWithReturnValue());
+  runner.add(new testMessageWithSpecialChars());
+  runner.add(new testUnorderedMessage());
+  runner.add(new testMessageDeny());
+  runner.add(new testMessageError());
+  runner.add(new testMessageAbort());
+  runner.add(new testEndOfSnapshot());
+  runner.add(new testFrequency());
+  runner.add(new testChangeFrequency());
+  runner.add(new testConnectionOptions());
+  runner.add(new testConnectionDetails());
+
+  return runner.start(argc > 1 ? argv[1]: "");
 }
