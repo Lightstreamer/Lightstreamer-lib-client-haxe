@@ -39,11 +39,10 @@ public:
   ConnectionOptions connectionOptions;
   ConnectionDetails connectionDetails;
 
-  LightstreamerClient() = delete;
   LightstreamerClient(const LightstreamerClient&) = delete;
   LightstreamerClient& operator=(const LightstreamerClient&) = delete;
 
-  LightstreamerClient(const std::string& serverAddress, const std::string& adapterSet) {
+  explicit LightstreamerClient(const std::string& serverAddress = "", const std::string& adapterSet = "") {
     _client = LightstreamerClient_new(&serverAddress, &adapterSet);
     connectionOptions.initDelegate(_client);
     connectionDetails.initDelegate(_client);

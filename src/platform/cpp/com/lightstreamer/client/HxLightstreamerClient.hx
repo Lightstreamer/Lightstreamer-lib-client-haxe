@@ -55,7 +55,10 @@ class HxLightstreamerClient {
   @HaxeCBridge.name("LightstreamerClient_new")
   static function create(serverAddress: ConstStar<CppString>, adapterSet: ConstStar<CppString>) {
     @:nullSafety(Off)
-    return new HxLightstreamerClient(serverAddress, adapterSet);
+    return new HxLightstreamerClient(
+      serverAddress.isEmpty() ? null : serverAddress, 
+      adapterSet.isEmpty() ? null : adapterSet
+    );
   }
 
   private function new(serverAddress: String, adapterSet: String) {

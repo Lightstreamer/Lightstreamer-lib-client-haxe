@@ -112,7 +112,7 @@ bool ends_with(const std::string& value, const std::string& ending)
 constexpr long TIMEOUT = 3000;
 
 struct Setup: public utest::Test {
-  LightstreamerClient client{"http://127.0.0.1:8080", "TEST"};
+  LightstreamerClient client;
   // TODO listener can leak if not added to client
   MyClientListener* listener{new MyClientListener()};
   MySubscriptionListener* subListener{new MySubscriptionListener()};
@@ -122,6 +122,8 @@ struct Setup: public utest::Test {
     : utest::Test(name, filename, line, param1) {}
 
   void setup() override {
+    client.connectionDetails.setServerAddress("http://127.0.0.1:8080");
+    client.connectionDetails.setAdapterSet("TEST");
     if (!_param1.empty()) {
       transport = _param1;
       client.connectionOptions.setForcedTransport(transport);
