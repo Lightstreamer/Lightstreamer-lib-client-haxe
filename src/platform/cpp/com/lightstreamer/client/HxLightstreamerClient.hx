@@ -22,6 +22,10 @@ class HxLightstreamerClient {
   private final _client: LSLightstreamerClient;
   private final _listeners = new HxListeners<NativeClientListener, ClientListenerAdapter>();
 
+  static function GC() {
+    cpp.vm.Gc.run(true);
+  }
+
   static function getLibName(): CppString {
     return LSLightstreamerClient.LIB_NAME;
   }

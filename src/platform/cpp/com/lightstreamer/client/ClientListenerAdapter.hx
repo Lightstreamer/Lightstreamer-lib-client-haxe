@@ -3,11 +3,16 @@ package com.lightstreamer.client;
 import cpp.Pointer;
 import com.lightstreamer.client.ClientListener;
 
-class ClientListenerAdapter implements ClientListener {
+class ClientListenerAdapter implements ClientListener extends cpp.Finalizable {
   final _listener: Pointer<NativeClientListener>;
 
   public function new(listener: Pointer<NativeClientListener>) {
+    super();
     _listener = listener;
+  }
+
+  override function finalize() {
+    _listener.destroy();
   }
 
   public function onListenEnd(): Void {

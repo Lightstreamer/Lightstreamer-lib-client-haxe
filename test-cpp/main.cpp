@@ -1262,6 +1262,47 @@ TEST(testSetLoggerProvider) {
   client.connectionDetails.setUser("you see me again");
 }
 
+struct GCClientListener: public Lightstreamer::ClientListener {
+  inline static std::atomic_int cnt{0};
+  ~GCClientListener() {
+    cnt++;
+  }
+};
+
+struct GCSubListener: public Lightstreamer::SubscriptionListener {
+  inline static std::atomic_int cnt{0};
+  ~GCSubListener() {
+    cnt++;
+  }
+};
+
+struct GCMsgListener: public Lightstreamer::ClientMessageListener {
+  inline static std::atomic_int cnt{0};
+  ~GCMsgListener() {
+    cnt++;
+  }
+};
+
+TEST_FIXTURE(Setup, testGC) {
+  Subscription sub("RAW", {}, {});
+  for (int i = 0; i < 100; i++) {
+    auto cl = new GCClientListener();
+    client.addListener(cl);
+    client.removeListener(cl);
+
+    auto sl = new GCSubListener();
+    sub.addListener(sl);
+    sub.removeListener(sl);
+
+    client.sendMessage("test", "seq", -1, new GCMsgListener());
+  }
+  
+  LightstreamerClient_GC();
+  EXPECT_TRUE(GCClientListener::cnt > 50);
+  EXPECT_TRUE(GCSubListener::cnt > 50);
+  EXPECT_TRUE(GCMsgListener::cnt > 50);
+}
+
 int main(int argc, char** argv) {
   Lightstreamer_initializeHaxeThread([](const char* info) {
     std::cout << "UNCAUGHT HAXE EXCEPTION: " << info << "\n";
@@ -1272,6 +1313,7 @@ int main(int argc, char** argv) {
   g_loggerProvider = new ConsoleLoggerProvider(ConsoleLogLevel::DEBUG);
   LightstreamerClient::setLoggerProvider(g_loggerProvider);
   
+  runner.add(new testGC());
   runner.add(new testLibName());
   runner.add(new testListeners());
   runner.add(new testGetSubscriptions());

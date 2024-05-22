@@ -2,12 +2,17 @@ package com.lightstreamer.client;
 
 import cpp.Pointer;
 
-class ClientMessageListenerAdapter implements ClientMessageListener {
+class ClientMessageListenerAdapter implements ClientMessageListener extends cpp.Finalizable {
   final _listener: Pointer<NativeClientMessageListener>;
 
   public function new(listener: Pointer<NativeClientMessageListener>) {
+    super();
 		this._listener = listener;
 	}
+
+  override function finalize() {
+    _listener.destroy();
+  }
 
 	public function onAbort(originalMessage: String, sentOnNetwork: Bool) {
     _listener.ref.onAbort(originalMessage, sentOnNetwork);

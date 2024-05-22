@@ -4,11 +4,16 @@ import cpp.Pointer;
 import cpp.RawPointer;
 import com.lightstreamer.client.SubscriptionListener;
 
-class SubscriptionListenerAdapter implements SubscriptionListener {
+class SubscriptionListenerAdapter implements SubscriptionListener extends cpp.Finalizable {
   final _listener: Pointer<NativeSubscriptionListener>;
 
   public function new(listener: Pointer<NativeSubscriptionListener>) {
+    super();
     _listener = listener;
+  }
+
+  override function finalize() {
+    _listener.destroy();
   }
 
   public function onClearSnapshot(itemName: Null<String>, itemPos: Int): Void {
