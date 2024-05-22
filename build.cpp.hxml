@@ -6,7 +6,7 @@ build.common.hxml
 
 # -D no-debug
 --debug
---no-traces
+-D no-traces
 -D HXCPP_CPP17
 -D HXCPP_VERBOSE
 -D HXCPP_ARM64
