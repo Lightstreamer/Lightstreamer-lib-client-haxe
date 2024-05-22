@@ -7,6 +7,7 @@
 #include "Lightstreamer/LightstreamerError.h"
 #include "Lightstreamer/ClientMessageListener.h"
 #include "Lightstreamer/Proxy.h"
+#include "Lightstreamer/ConsoleLoggerProvider.h"
 #include "utest.h"
 #include "Poco/Semaphore.h"
 #include <iostream>
@@ -22,6 +23,8 @@ using Lightstreamer::Subscription;
 using Lightstreamer::ItemUpdate;
 using Lightstreamer::LightstreamerError;
 using Lightstreamer::Proxy;
+using Lightstreamer::ConsoleLoggerProvider;
+using Lightstreamer::ConsoleLogLevel;
 
 class MyClientListener: public Lightstreamer::ClientListener {
 public:
@@ -1177,6 +1180,75 @@ TEST_FIXTURE(Setup, testTrustManager) {
   wait(TIMEOUT);
 }
 
+TEST(testLogger) {
+  {
+    ConsoleLoggerProvider provider(ConsoleLogLevel::TRACE);
+    auto log = provider.getLogger("foo");
+    EXPECT_EQ(log, provider.getLogger("foo"));
+    EXPECT_NE(log, provider.getLogger("bar"));
+  }
+  {
+    ConsoleLoggerProvider provider(ConsoleLogLevel::TRACE);
+    auto log = provider.getLogger("foo");
+    EXPECT_TRUE(log->isTraceEnabled());
+    EXPECT_TRUE(log->isDebugEnabled());
+    EXPECT_TRUE(log->isInfoEnabled());
+    EXPECT_TRUE(log->isWarnEnabled());
+    EXPECT_TRUE(log->isErrorEnabled());
+    EXPECT_TRUE(log->isFatalEnabled());
+  }
+  {
+    ConsoleLoggerProvider provider(ConsoleLogLevel::DEBUG);
+    auto log = provider.getLogger("foo");
+    EXPECT_FALSE(log->isTraceEnabled());
+    EXPECT_TRUE(log->isDebugEnabled());
+    EXPECT_TRUE(log->isInfoEnabled());
+    EXPECT_TRUE(log->isWarnEnabled());
+    EXPECT_TRUE(log->isErrorEnabled());
+    EXPECT_TRUE(log->isFatalEnabled());
+  }
+  {
+    ConsoleLoggerProvider provider(ConsoleLogLevel::INFO);
+    auto log = provider.getLogger("foo");
+    EXPECT_FALSE(log->isTraceEnabled());
+    EXPECT_FALSE(log->isDebugEnabled());
+    EXPECT_TRUE(log->isInfoEnabled());
+    EXPECT_TRUE(log->isWarnEnabled());
+    EXPECT_TRUE(log->isErrorEnabled());
+    EXPECT_TRUE(log->isFatalEnabled());
+  }
+  {
+    ConsoleLoggerProvider provider(ConsoleLogLevel::WARN);
+    auto log = provider.getLogger("foo");
+    EXPECT_FALSE(log->isTraceEnabled());
+    EXPECT_FALSE(log->isDebugEnabled());
+    EXPECT_FALSE(log->isInfoEnabled());
+    EXPECT_TRUE(log->isWarnEnabled());
+    EXPECT_TRUE(log->isErrorEnabled());
+    EXPECT_TRUE(log->isFatalEnabled());
+  }
+  {
+    ConsoleLoggerProvider provider(ConsoleLogLevel::ERROR);
+    auto log = provider.getLogger("foo");
+    EXPECT_FALSE(log->isTraceEnabled());
+    EXPECT_FALSE(log->isDebugEnabled());
+    EXPECT_FALSE(log->isInfoEnabled());
+    EXPECT_FALSE(log->isWarnEnabled());
+    EXPECT_TRUE(log->isErrorEnabled());
+    EXPECT_TRUE(log->isFatalEnabled());
+  }
+  {
+    ConsoleLoggerProvider provider(ConsoleLogLevel::FATAL);
+    auto log = provider.getLogger("foo");
+    EXPECT_FALSE(log->isTraceEnabled());
+    EXPECT_FALSE(log->isDebugEnabled());
+    EXPECT_FALSE(log->isInfoEnabled());
+    EXPECT_FALSE(log->isWarnEnabled());
+    EXPECT_FALSE(log->isErrorEnabled());
+    EXPECT_TRUE(log->isFatalEnabled());
+  }
+}
+
 int main(int argc, char** argv) {
   Lightstreamer_initializeHaxeThread([](const char* info) {
     std::cout << "UNCAUGHT HAXE EXCEPTION: " << info << "\n";
@@ -1184,9 +1256,7 @@ int main(int argc, char** argv) {
     exit(255);
   });
 
-  HaxeObject log = ConsoleLoggerProvider_new(10);
-  // HaxeObject log = ConsoleLoggerProvider_new(40);
-  LightstreamerClient_setLoggerProvider(log);
+  LightstreamerClient::setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel::DEBUG));
 
   runner.add(new testLibName());
   runner.add(new testListeners());
@@ -1228,6 +1298,7 @@ int main(int argc, char** argv) {
   runner.add(new testProxy());
   runner.add(new testCookies());
   runner.add(new testTrustManager());
+  runner.add(new testLogger());
 
   return runner.start(argc > 1 ? argv[1]: "");
 }
