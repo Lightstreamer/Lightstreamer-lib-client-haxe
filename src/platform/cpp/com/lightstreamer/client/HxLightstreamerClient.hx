@@ -4,7 +4,8 @@ import cpp.Star;
 import cpp.Pointer;
 import cpp.ConstStar;
 import com.lightstreamer.cpp.CppString;
-import com.lightstreamer.log.LoggerProvider;
+import com.lightstreamer.log.NativeLoggerProvider;
+import com.lightstreamer.log.LoggerProviderAdapter;
 import com.lightstreamer.client.LightstreamerClient;
 import com.lightstreamer.internal.NativeTypes;
 
@@ -29,8 +30,9 @@ class HxLightstreamerClient {
     return LSLightstreamerClient.LIB_VERSION;
   }
 
-  static function setLoggerProvider(provider: LoggerProvider) {
-    LSLightstreamerClient.setLoggerProvider(provider);
+  static function setLoggerProvider(provider: Star<NativeLoggerProvider>) {
+    var _provider = new LoggerProviderAdapter(Pointer.fromStar(provider));
+    LSLightstreamerClient.setLoggerProvider(_provider);
   }
 
   static function addCookies(uri: Star<NativeURI>, cookies: Star<NativeCookieCollection>) {

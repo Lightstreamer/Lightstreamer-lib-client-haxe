@@ -13,6 +13,7 @@ namespace Lightstreamer {
   class ClientListener;
   class ClientMessageListener;
   class Proxy;
+  class LoggerProvider;
 }
 
 #endif

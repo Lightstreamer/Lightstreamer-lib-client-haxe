@@ -20,7 +20,9 @@ public:
     return LightstreamerClient_getLibVersion();
   }
 
-  // TODO cpp setLoggerProvider
+  static void setLoggerProvider(LoggerProvider* provider) {
+    LightstreamerClient_setLoggerProvider(provider);
+  }
 
   static void addCookies(Poco::URI& uri, std::vector<Poco::Net::HTTPCookie>& cookies){
     LightstreamerClient_addCookies(&uri, &cookies);
