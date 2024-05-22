@@ -31,7 +31,7 @@ class HxLightstreamerClient {
   }
 
   static function setLoggerProvider(provider: Star<NativeLoggerProvider>) {
-    var _provider = new LoggerProviderAdapter(Pointer.fromStar(provider));
+    var _provider = provider == null ? null : new LoggerProviderAdapter(Pointer.fromStar(provider));
     LSLightstreamerClient.setLoggerProvider(_provider);
   }
 

@@ -1251,6 +1251,17 @@ TEST(testLogger) {
   }
 }
 
+ConsoleLoggerProvider* g_loggerProvider;
+
+TEST(testSetLoggerProvider) {
+  LightstreamerClient client;
+  client.connectionDetails.setUser("you see me");
+  LightstreamerClient::setLoggerProvider(nullptr);
+  client.connectionDetails.setUser("you don't see me");
+  LightstreamerClient::setLoggerProvider(g_loggerProvider);
+  client.connectionDetails.setUser("you see me again");
+}
+
 int main(int argc, char** argv) {
   Lightstreamer_initializeHaxeThread([](const char* info) {
     std::cout << "UNCAUGHT HAXE EXCEPTION: " << info << "\n";
@@ -1258,8 +1269,9 @@ int main(int argc, char** argv) {
     exit(255);
   });
 
-  LightstreamerClient::setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel::DEBUG));
-
+  g_loggerProvider = new ConsoleLoggerProvider(ConsoleLogLevel::DEBUG);
+  LightstreamerClient::setLoggerProvider(g_loggerProvider);
+  
   runner.add(new testLibName());
   runner.add(new testListeners());
   runner.add(new testGetSubscriptions());
@@ -1271,6 +1283,7 @@ int main(int argc, char** argv) {
   runner.add(new testConnectionOptions());
   runner.add(new testConnectionDetails());
   runner.add(new testLogger());
+  runner.add(new testSetLoggerProvider());
 
   for (auto& transport : { "WS-STREAMING", "HTTP-STREAMING", "HTTP-POLLING", "WS-POLLING" }) {
     runner.add(new testConnect(transport));

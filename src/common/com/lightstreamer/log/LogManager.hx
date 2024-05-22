@@ -20,7 +20,7 @@ class LogManager {
     });
   }
 
-  public static function setLoggerProvider(provider: LoggerProvider): Void {
+  public static function setLoggerProvider(provider: Null<LoggerProvider>): Void {
     lock.synchronized(() -> {
       currentLoggerProvider = provider;
       for (category => proxy in logInstances) {

@@ -23,7 +23,7 @@ class LSLightstreamerClient {
   final eventDispatcher = new ClientEventDispatcher();
   final machine: ClientMachine;
 
-  public static function setLoggerProvider(provider: com.lightstreamer.log.LoggerProvider): Void {
+  public static function setLoggerProvider(provider: Null<com.lightstreamer.log.LoggerProvider>): Void {
     com.lightstreamer.log.LogManager.setLoggerProvider(provider);
   }
 
