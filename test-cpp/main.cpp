@@ -1263,44 +1263,77 @@ TEST(testSetLoggerProvider) {
 }
 
 struct GCClientListener: public Lightstreamer::ClientListener {
-  inline static std::atomic_int cnt{0};
+  std::shared_ptr<std::atomic_int> cnt;
+  GCClientListener(std::shared_ptr<std::atomic_int> cnt) : cnt(cnt) {}
   ~GCClientListener() {
-    cnt++;
+    (*cnt)++;
   }
 };
 
 struct GCSubListener: public Lightstreamer::SubscriptionListener {
-  inline static std::atomic_int cnt{0};
+  std::shared_ptr<std::atomic_int> cnt;
+  GCSubListener(std::shared_ptr<std::atomic_int> cnt) : cnt(cnt) {}
   ~GCSubListener() {
-    cnt++;
+    (*cnt)++;
   }
 };
 
 struct GCMsgListener: public Lightstreamer::ClientMessageListener {
-  inline static std::atomic_int cnt{0};
+  std::shared_ptr<std::atomic_int> cnt;
+  GCMsgListener(std::shared_ptr<std::atomic_int> cnt) : cnt(cnt) {}
   ~GCMsgListener() {
-    cnt++;
+    (*cnt)++;
   }
 };
 
-TEST_FIXTURE(Setup, testGC) {
+TEST(testGC_removeListeners) {
+  std::shared_ptr<std::atomic_int> nCltLs = std::make_shared<std::atomic_int>(0);
+  std::shared_ptr<std::atomic_int> nSubLs = std::make_shared<std::atomic_int>(0);
+  std::shared_ptr<std::atomic_int> nMsgLs = std::make_shared<std::atomic_int>(0);
+
+  LightstreamerClient client;
   Subscription sub("RAW", {}, {});
   for (int i = 0; i < 100; i++) {
-    auto cl = new GCClientListener();
+    auto cl = new GCClientListener(nCltLs);
     client.addListener(cl);
     client.removeListener(cl);
 
-    auto sl = new GCSubListener();
+    auto sl = new GCSubListener(nSubLs);
     sub.addListener(sl);
     sub.removeListener(sl);
 
-    client.sendMessage("test", "seq", -1, new GCMsgListener());
+    client.sendMessage("test", "seq", -1, new GCMsgListener(nMsgLs));
   }
   
   LightstreamerClient_GC();
-  EXPECT_TRUE(GCClientListener::cnt > 50);
-  EXPECT_TRUE(GCSubListener::cnt > 50);
-  EXPECT_TRUE(GCMsgListener::cnt > 50);
+  EXPECT_TRUE(*nCltLs > 50);
+  EXPECT_TRUE(*nSubLs > 50);
+  EXPECT_TRUE(*nMsgLs > 50);
+}
+
+TEST(testGC_destructors) {
+  std::shared_ptr<std::atomic_int> nCltLs = std::make_shared<std::atomic_int>(0);
+  std::shared_ptr<std::atomic_int> nSubLs = std::make_shared<std::atomic_int>(0);
+  std::shared_ptr<std::atomic_int> nMsgLs = std::make_shared<std::atomic_int>(0);
+
+  {
+    LightstreamerClient client;
+    Subscription sub("RAW", {}, {});
+    for (int i = 0; i < 100; i++) {
+      auto cl = new GCClientListener(nCltLs);
+      client.addListener(cl);
+
+      auto sl = new GCSubListener(nSubLs);
+      sub.addListener(sl);
+
+      client.sendMessage("test", "seq", -1, new GCMsgListener(nMsgLs), true);
+    }
+  }
+  
+  LightstreamerClient_GC();
+  EXPECT_TRUE(*nCltLs > 50);
+  EXPECT_TRUE(*nSubLs > 50);
+  EXPECT_TRUE(*nMsgLs > 50);
 }
 
 int main(int argc, char** argv) {
@@ -1313,7 +1346,8 @@ int main(int argc, char** argv) {
   g_loggerProvider = new ConsoleLoggerProvider(ConsoleLogLevel::DEBUG);
   LightstreamerClient::setLoggerProvider(g_loggerProvider);
   
-  runner.add(new testGC());
+  runner.add(new testGC_removeListeners());
+  runner.add(new testGC_destructors());
   runner.add(new testLibName());
   runner.add(new testListeners());
   runner.add(new testGetSubscriptions());
