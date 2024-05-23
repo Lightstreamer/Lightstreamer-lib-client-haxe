@@ -839,13 +839,13 @@ TEST_FIXTURE(Setup, testRoundTrip) {
 
 TEST_FIXTURE(Setup, testLongMessage) {
   std::string msg = "{\"n\":\"MESSAGE_SEND\",\"c\":{\"u\":\"GEiIxthxD-1gf5Tk5O1NTw\",\"s\":\"S29120e92e162c244T2004863\",\"p\":\"localhost:3000/html/widget-responsive.html\",\"t\":\"2017-08-08T10:20:05.665Z\"},\"d\":\"{\\\"p\\\":\\\"🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐🌐\\\"}\"}";
-  MyMessageListener msgListener;
-  msgListener._onProcessed = [&](auto& _msg, auto& resp) {
+  MyMessageListener* msgListener = new MyMessageListener();
+  msgListener->_onProcessed = [&](auto& _msg, auto& resp) {
     EXPECT_EQ(msg, _msg);
     resume();
   };
   client.connect();
-	client.sendMessage(msg, "test_seq", -1, &msgListener, false);
+	client.sendMessage(msg, "test_seq", -1, msgListener, false);
   wait(TIMEOUT);
 }
 
@@ -855,87 +855,87 @@ TEST_FIXTURE(Setup, testMessage) {
   // no outcome expected
   client.sendMessage("test message (sequence)", "test_seq", 0, nullptr, true);
 	// no outcome expected
-  MyMessageListener l1;
-  l1._onProcessed = [&](auto& msg, auto& resp) {
+  MyMessageListener* l1 = new MyMessageListener();
+  l1->_onProcessed = [&](auto& msg, auto& resp) {
     EXPECT_EQ("onProcessed test message (listener)", "onProcessed " + msg);
 		resume();
   };
-  client.sendMessage("test message (listener)", "", -1, &l1, true);
-  MyMessageListener l2;
-  l2._onProcessed = [&](auto& msg, auto& resp) {
+  client.sendMessage("test message (listener)", "", -1, l1, true);
+  MyMessageListener* l2 = new MyMessageListener();
+  l2->_onProcessed = [&](auto& msg, auto& resp) {
     EXPECT_EQ("onProcessed test message (sequence+listener)", "onProcessed " + msg);
 		resume();
   };
-  client.sendMessage("test message (sequence+listener)", "test_seq", -1, &l2, true);
+  client.sendMessage("test message (sequence+listener)", "test_seq", -1, l2, true);
   wait(TIMEOUT, 2);
 }
 
 TEST_FIXTURE(Setup, testMessageWithReturnValue) {
-  MyMessageListener msgListener;
-  msgListener._onProcessed = [&](auto& msg, auto& resp) {
+  MyMessageListener* msgListener = new MyMessageListener();
+  msgListener->_onProcessed = [&](auto& msg, auto& resp) {
     EXPECT_EQ("give me a result", msg);
     EXPECT_EQ("result:ok", resp);
     resume();
   };
   client.connect();
-	client.sendMessage("give me a result", "", -1, &msgListener, false);
+	client.sendMessage("give me a result", "", -1, msgListener, false);
   wait(TIMEOUT);
 }
 
 TEST_FIXTURE(Setup, testMessageWithSpecialChars) {
-  MyMessageListener msgListener;
-  msgListener._onProcessed = [&](auto& msg, auto& resp) {
+  MyMessageListener* msgListener = new MyMessageListener();
+  msgListener->_onProcessed = [&](auto& msg, auto& resp) {
     EXPECT_EQ("hello +&=%\r\n", msg);
     resume();
   };
   client.connect();
-	client.sendMessage("hello +&=%\r\n", "", -1, &msgListener, false);
+	client.sendMessage("hello +&=%\r\n", "", -1, msgListener, false);
   wait(TIMEOUT);
 }
 
 TEST_FIXTURE(Setup, testUnorderedMessage) {
-  MyMessageListener msgListener;
-  msgListener._onProcessed = [&](auto& msg, auto& resp) {
+  MyMessageListener* msgListener = new MyMessageListener();
+  msgListener->_onProcessed = [&](auto& msg, auto& resp) {
     EXPECT_EQ("test message", msg);
     resume();
   };
   client.connect();
-	client.sendMessage("test message", "UNORDERED_MESSAGES", -1, &msgListener, false);
+	client.sendMessage("test message", "UNORDERED_MESSAGES", -1, msgListener, false);
   wait(TIMEOUT);
 }
 
 TEST_FIXTURE(Setup, testMessageDeny) {
-  MyMessageListener msgListener;
-  msgListener._onDeny = [&](auto& msg, auto code, auto& error) {
+  MyMessageListener* msgListener= new MyMessageListener();
+  msgListener->_onDeny = [&](auto& msg, auto code, auto& error) {
     EXPECT_EQ("throw me an error", msg);
     EXPECT_EQ(-123, code);
     EXPECT_EQ("test error", error);
     resume();
   };
   client.connect();
-	client.sendMessage("throw me an error", "test_seq", -1, &msgListener, false);
+	client.sendMessage("throw me an error", "test_seq", -1, msgListener, false);
   wait(TIMEOUT);
 }
 
 TEST_FIXTURE(Setup, testMessageError) {
-  MyMessageListener msgListener;
-  msgListener._onError = [&](auto& msg) {
+  MyMessageListener* msgListener = new MyMessageListener();
+  msgListener->_onError = [&](auto& msg) {
     EXPECT_EQ("throw me a NPE", msg);
     resume();
   };
   client.connect();
-	client.sendMessage("throw me a NPE", "test_seq", -1, &msgListener, false);
+	client.sendMessage("throw me a NPE", "test_seq", -1, msgListener, false);
   wait(TIMEOUT);
 }
 
 TEST_FIXTURE(Setup, testMessageAbort) {
-  MyMessageListener msgListener;
-  msgListener._onAbort = [&](auto& msg, auto sent) {
+  MyMessageListener* msgListener = new MyMessageListener();
+  msgListener->_onAbort = [&](auto& msg, auto sent) {
     EXPECT_EQ("test abort", msg);
     EXPECT_FALSE(sent);
     resume();
   };
-	client.sendMessage("test abort", "", -1, &msgListener, false);
+	client.sendMessage("test abort", "", -1, msgListener, false);
   wait(TIMEOUT);
 }
 
@@ -1329,7 +1329,7 @@ TEST(testGC_destructors) {
       client.sendMessage("test", "seq", -1, new GCMsgListener(nMsgLs), true);
     }
   }
-  
+
   LightstreamerClient_GC();
   EXPECT_TRUE(*nCltLs > 50);
   EXPECT_TRUE(*nSubLs > 50);
