@@ -20,6 +20,10 @@ public:
 
   ConnectionOptions() {}
 
+  ~ConnectionOptions() {
+    Lightstreamer_releaseHaxeObject(_delegate);
+  }
+
   long getContentLength() {
     return ConnectionOptions_getContentLength(_delegate);
   }

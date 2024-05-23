@@ -19,6 +19,10 @@ public:
 
   ConnectionDetails() {}
 
+  ~ConnectionDetails() {
+    Lightstreamer_releaseHaxeObject(_delegate);
+  }
+
   std::string getAdapterSet() {
     return ConnectionDetails_getAdapterSet(_delegate);
   }
