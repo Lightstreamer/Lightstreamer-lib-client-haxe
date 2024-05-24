@@ -322,7 +322,7 @@ public class ConnectionOptions {
    *  <li>"WS": the Stream-Sense algorithm is enabled as in the null case but the client will only use WebSocket 
    *  based connections. If a connection over WebSocket is not possible because of the environment the client 
    *  will not connect at all.</li>
-   *  <li>"HTTP": the Stream-Sense algorithm is enabled as in the null case but the client will only use HTTP based +
+   *  <li>"HTTP": the Stream-Sense algorithm is enabled as in the null case but the client will only use HTTP based 
    *  connections. If a connection over HTTP is not possible because of the environment the client will not 
    *  connect at all.</li>
    *  <li>"WS-STREAMING": the Stream-Sense algorithm is disabled and the client will only connect on Streaming over 
@@ -447,7 +447,7 @@ public class ConnectionOptions {
   /**
    * Setter method that sets the maximum bandwidth expressed in kilobits/s that can be consumed for the data coming from 
    * Lightstreamer Server. A limit on bandwidth may already be posed by the Metadata Adapter, but the client can 
-   * furtherly restrict this limit. The limit applies to the bytes received in each streaming or polling connection.
+   * further restrict this limit. The limit applies to the bytes received in each streaming or polling connection.
    * 
    * @general_edition_note Bandwidth Control is an optional feature, available depending on Edition and License Type.
    * To know what features are enabled by your license, please see the License tab of the Monitoring Dashboard (by default,

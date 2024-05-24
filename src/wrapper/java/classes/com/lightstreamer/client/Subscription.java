@@ -534,7 +534,7 @@ public class Subscription {
     * (see {@link Subscription#setCommandSecondLevelFields(String[])} and {@link Subscription#setCommandSecondLevelFieldSchema(String)})
     * , the specified frequency limit applies to both first-level and second-level items. <BR>
     * Note that frequency limits on the items can also be set on the
-    * server side and this request can only be issued in order to furtherly
+    * server side and this request can only be issued in order to further
     * reduce the frequency, not to rise it beyond these limits. <BR>
     * This method can also be used to request unfiltered dispatching
     * for the items in the Subscription. However, unfiltered dispatching

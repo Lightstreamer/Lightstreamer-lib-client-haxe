@@ -11,7 +11,7 @@ public class ConsoleLoggerProvider implements LoggerProvider {
   final LSConsoleLoggerProvider delegate;
 
   /**
-    Creates an instace of the concrete system console logger.
+    Creates an instance of the concrete system console logger.
      
     @param level The desired logging level. See {@link ConsoleLogLevel}.
   */

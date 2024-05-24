@@ -20,7 +20,7 @@ import javax.annotation.Nonnull;
  */
 public interface LoggerProvider {
     /** 
-     * Request for a Logger instance that will be used for logging occuring on the given 
+     * Request for a Logger instance that will be used for logging occurring on the given 
      * category. It is suggested, but not mandatory, that subsequent calls to this method
      * related to the same category return the same Logger instance.
      * 
