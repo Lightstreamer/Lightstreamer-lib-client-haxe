@@ -50,6 +50,8 @@ private:
   Poco::Net::HTTPClientSession::ProxyConfig _proxy;
   Poco::NotificationQueue _queue;
   Poco::AtomicFlag _disposed;
+  std::unique_ptr<Poco::Net::WebSocket> _ws;
+  std::unique_ptr<Poco::Net::HTTPClientSession> _cs; // websocket handshaker
 };
 
 }}

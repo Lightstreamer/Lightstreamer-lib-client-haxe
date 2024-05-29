@@ -61,6 +61,16 @@ void WsClient::dispose() {
     return;
   }
 
+  try {
+    if (_ws) {
+      _ws->shutdown();
+    } else if (_cs) {
+      _cs->abort();
+    }
+  } catch(...) {
+    // there is nothing we can do
+  }
+
   try
   {
     stop();
@@ -101,19 +111,18 @@ void WsClient::run() {
     }
 
     // open the websocket
-    std::unique_ptr<Poco::Net::WebSocket> ws;
     if (secure) {
       Context::Ptr pContext = Network::_sslCtx;
-      HTTPSClientSession cs(pContext);
-      cs.setHost(host);
-      cs.setPort(port);
-      cs.setProxyConfig(_proxy);
-      ws = std::unique_ptr<WebSocket>(doCreateWebSocket(cs, request, response));
+      _cs = std::make_unique<HTTPSClientSession>(pContext);
+      _cs->setHost(host);
+      _cs->setPort(port);
+      _cs->setProxyConfig(_proxy);
+      _ws = std::unique_ptr<WebSocket>(doCreateWebSocket(*_cs, request, response));
     } else {
-      HTTPClientSession cs(host, port, _proxy);
-      ws = std::unique_ptr<WebSocket>(doCreateWebSocket(cs, request, response));
+      _cs = std::make_unique<HTTPClientSession>(host, port, _proxy);
+      _ws = std::unique_ptr<WebSocket>(doCreateWebSocket(*_cs, request, response));
     }
-    ws->setReceiveTimeout(LS_HXPOCO_WS_RECEIVE_TIMEOUT_MS * 1000);
+    _ws->setReceiveTimeout(LS_HXPOCO_WS_RECEIVE_TIMEOUT_MS * 1000);
 
     // retrieve cookies
     std::vector<Poco::Net::HTTPCookie> outCookies;
@@ -134,9 +143,9 @@ void WsClient::run() {
     while (!isStopped()) {
       buf.resize(0);
       try {
-        n = doReceiveFrame(ws.get(), buf, flags);
+        n = doReceiveFrame(_ws.get(), buf, flags);
       } catch (const Poco::TimeoutException& ex)  {
-        sendPendingFrames(ws.get());
+        sendPendingFrames(_ws.get());
         continue;
       }
       if (n == 0 && flags == 0) { // connection has been closed
@@ -146,7 +155,7 @@ void WsClient::run() {
         lineAssembler.readBytes(buf, lineConsumer);
       }
     }
-    ws->shutdown();
+    _ws->shutdown();
   }
   catch(const Poco::Exception& e)
   {
