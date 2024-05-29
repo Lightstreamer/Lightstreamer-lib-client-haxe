@@ -4,12 +4,14 @@
 
   <files id="hxpoco">
     <compilerflag value="-Og"/>
+
     <compilerflag value="-Iinclude"/>
     <compilerflag value="-I/opt/homebrew/opt/openssl/include"/>
     <compilerflag value="-I${POCO_BASE}/Foundation/include"/>
     <compilerflag value="-I${POCO_BASE}/Crypto/include"/>
     <compilerflag value="-I${POCO_BASE}/Net/include"/>
     <compilerflag value="-I${POCO_BASE}/NetSSL_OpenSSL/include"/>
+
     <file name="src/${HXPOCO_NS}/HttpClient.cpp">
       <depend name="include/${HXPOCO_NS}/HttpClient.h"/>
       <depend name="include/${HXPOCO_NS}/Network.h"/>
@@ -35,6 +37,7 @@
 
   <files id="ls-wrappers">
     <compilerflag value="-Og"/>
+
     <compilerflag value="-Iinclude"/>
     <compilerflag value="-I${POCO_BASE}/Foundation/include"/>
     
@@ -45,6 +48,7 @@
 
   <files id="haxe">
     <compilerflag value="-Og"/>
+    
     <compilerflag value="-I/opt/homebrew/opt/openssl/include"/>
     <compilerflag value="-I${POCO_BASE}/Foundation/include"/>
     <compilerflag value="-I${POCO_BASE}/Crypto/include"/>
