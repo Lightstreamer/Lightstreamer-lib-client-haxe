@@ -1,7 +1,9 @@
 <xml>
+  <set name="LS_NS" value="Lightstreamer" />
   <set name="HXPOCO_NS" value="Lightstreamer/HxPoco" />
 
   <files id="hxpoco">
+    <compilerflag value="-Og"/>
     <compilerflag value="-Iinclude"/>
     <compilerflag value="-I/opt/homebrew/opt/openssl/include"/>
     <compilerflag value="-I${POCO_BASE}/Foundation/include"/>
@@ -31,7 +33,18 @@
     </file>
   </files>
 
+  <files id="ls-wrappers">
+    <compilerflag value="-Og"/>
+    <compilerflag value="-Iinclude"/>
+    <compilerflag value="-I${POCO_BASE}/Foundation/include"/>
+    
+    <file name="src/${LS_NS}/ConsoleLoggerProvider.cpp">
+      <depend name="include/${LS_NS}/ConsoleLoggerProvider.h"/>
+    </file>
+  </files>
+
   <files id="haxe">
+    <compilerflag value="-Og"/>
     <compilerflag value="-I/opt/homebrew/opt/openssl/include"/>
     <compilerflag value="-I${POCO_BASE}/Foundation/include"/>
     <compilerflag value="-I${POCO_BASE}/Crypto/include"/>
@@ -41,6 +54,7 @@
 
   <target id="haxe">
     <files id="hxpoco"/>
+    <files id="ls-wrappers"/>
     <flag value='-L${POCO_BASE}/lib/Darwin/arm64'/>
     <!-- <flag value='-lPocoFoundation'/> -->
     <!-- <flag value='-lPocoNet'/> -->
