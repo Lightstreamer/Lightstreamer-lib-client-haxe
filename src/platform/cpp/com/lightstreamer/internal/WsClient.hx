@@ -148,7 +148,13 @@ class WsClientAdapter extends WsClientCpp {
     var that: Star<WsClientAdapter> = untyped __cpp__("this");
     // TODO use a thread pool?
     @:nullSafety(Off)
-    Thread.create(() -> that.doSubmit());
+    Thread.create(() -> 
+      try {
+        that.doSubmit();
+      } catch(ex) {
+        streamLogger.logErrorEx("Uncaught exception in WsClient.hx", ex);
+      }
+    );
   }
 
   override public function onOpen(): Void {

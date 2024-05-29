@@ -138,7 +138,13 @@ class HttpClientAdapter extends HttpClientCpp {
     var that: Star<HttpClientAdapter> = untyped __cpp__("this");
     // TODO use a thread pool?
     @:nullSafety(Off)
-    Thread.create(() -> that.doSubmit());
+    Thread.create(() -> 
+      try {
+        that.doSubmit();
+      } catch(ex) {
+        streamLogger.logErrorEx("Uncaught exception in HttpClient.hx", ex);
+      }
+    );
   }
 
   override public function onText(line: ConstCharStar): Void {
