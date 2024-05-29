@@ -1,10 +1,7 @@
 test.common.hxml
 --class-path src/platform/cpp
 --class-path src/extern/cpp
-# --java-lib bin/java/build/deps
-# --java-lib bin/java/build/api/lib
 
-# -D no-debug
 --debug
 -D HXCPP_CPP17
 -D HXCPP_VERBOSE
