@@ -1,0 +1,80 @@
+<project name="C++ client library" 
+  xmlns:if="ant:if"
+  default="package" 
+  basedir="../..">
+
+  <description>
+  Buildfile for the C++ client library
+  </description>
+
+  <property name="build" location="bin/cpp"/>
+  <property name="test" location="bin-test/cpp"/>
+  <property name="tools" location="tools/cpp"/>
+
+  <property name="wrapper.src" location="src/wrapper/cpp"/>
+
+  <property file="${tools}/build.properties"/>
+
+  <target name="package" depends="package_haxe">
+  </target>
+
+  <target name="package_haxe" depends="copy_modules">
+    <echo message="Version: ${version} build ${build.number}"/>
+    <echo message="CID: ${cid}"/>
+    <exec executable="haxe" failonerror="true">
+      <arg value="build.cpp.hxml"/>
+      <arg line="-D no-traces"/>
+      <arg value="-D"/><arg value="LS_VERSION=${version}"/>
+      <arg value="-D"/><arg value="LS_BUILD=${build.number}"/>
+      <arg value="-D"/><arg value="LS_CID=${cid}"/>
+      <!-- output lib is saved in ${build} -->
+    </exec>
+  </target>
+
+  <target name="copy_modules">
+    <copy todir="${build}/include" verbose="true">
+      <fileset dir="${wrapper.src}/Base/include"/>
+    </copy>
+    <copy todir="${build}/src/Lightstreamer" verbose="true">
+      <fileset dir="${wrapper.src}/Base/src"/>
+    </copy>
+    <copy todir="${build}/include" verbose="true">
+      <fileset dir="${wrapper.src}/HxPoco/include"/>
+    </copy>
+    <copy todir="${build}/src/Lightstreamer/HxPoco" verbose="true">
+      <fileset dir="${wrapper.src}/HxPoco/src"/>
+    </copy>
+  </target>
+
+  <target name="test" description="Run the tests" depends="build_test">
+    <exec executable="${test}/TestAll-debug" failonerror="true"/>
+  </target>
+
+  <target name="build_test" depends="copy_modules_for_tests">
+    <exec executable="haxe" failonerror="true">
+      <arg value="test.cpp.hxml"/>
+      <arg value="com.lightstreamer.internal.BuildConfig"/>
+      <arg value="-D" if:set="UTEST_PATTERN"/><arg value="UTEST_PATTERN=${UTEST_PATTERN}" if:set="UTEST_PATTERN"/>
+    </exec>
+  </target>
+
+  <target name="copy_modules_for_tests">
+    <copy todir="${test}/include" verbose="true">
+      <fileset dir="${wrapper.src}/Base/include"/>
+    </copy>
+    <copy todir="${test}/src/Lightstreamer" verbose="true">
+      <fileset dir="${wrapper.src}/Base/src"/>
+    </copy>
+    <copy todir="${test}/include" verbose="true">
+      <fileset dir="${wrapper.src}/HxPoco/include"/>
+    </copy>
+    <copy todir="${test}/src/Lightstreamer/HxPoco" verbose="true">
+      <fileset dir="${wrapper.src}/HxPoco/src"/>
+    </copy>
+  </target>
+
+  <target name="clean" description="Clean the project">
+    <delete dir="${build}"/>
+    <delete dir="${test}"/>
+  </target>
+</project>
