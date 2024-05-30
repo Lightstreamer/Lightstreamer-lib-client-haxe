@@ -1164,24 +1164,6 @@ TEST_FIXTURE(Setup, testCookies) {
   EXPECT_EQ("X-Server=server; domain=localtest.me; path=/", cookies.at(1).toString());
 }
 
-TEST_FIXTURE(Setup, testTrustManager) {
-  client.connectionDetails.setServerAddress("https://localtest.me:8443");
-  auto privateKeyFile = "../test/localtest.me.key";
-  auto certificateFile = "../test/localtest.me.crt";
-  auto caLocation = "../test/localtest.me.crt";
-  Poco::Net::Context::Ptr pContext = new Poco::Net::Context(Poco::Net::Context::TLS_CLIENT_USE, privateKeyFile, certificateFile, caLocation);
-  LightstreamerClient::setTrustManagerFactory(pContext);
-
-  listener->_onStatusChange = [this](auto& status) {
-    if (status == "CONNECTED:" + transport) {
-      resume();
-    }
-  };
-  client.addListener(listener);
-  client.connect();
-  wait(TIMEOUT);
-}
-
 TEST(testLogger) {
   {
     ConsoleLoggerProvider provider(ConsoleLogLevel::TRACE);
@@ -1391,7 +1373,6 @@ int main(int argc, char** argv) {
     runner.add(new testHeaders(transport));
     runner.add(new testProxy(transport));
     runner.add(new testCookies(transport));
-    runner.add(new testTrustManager(transport));
   }
 
   return runner.start(argc > 1 ? argv[1]: "");

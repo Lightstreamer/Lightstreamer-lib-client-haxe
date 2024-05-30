@@ -1,4 +1,4 @@
-#include <utpp/utpp.h>
+#include "utest.h"
 #include <thread>
 #include <chrono>   
 #include "Lightstreamer/HxPoco/CookieJar.h"
@@ -19,13 +19,13 @@ TEST(test_add_cookies) {
   jar.setCookiesFromUrl(url2, { c2 });
   {
     auto v = jar.cookiesForUrl(url1);
-    CHECK_EQUAL(1, v.size());
-    CHECK_EQUAL("n1=v1; domain=acme.com; path=/", v.at(0).toString());
+    EXPECT_EQ(1, v.size());
+    EXPECT_EQ("n1=v1; domain=acme.com; path=/", v.at(0).toString());
   }
   {
     auto v = jar.cookiesForUrl(url2);
-    CHECK_EQUAL(1, v.size());
-    CHECK_EQUAL("n2=v2; domain=foo.bar; path=/", v.at(0).toString());
+    EXPECT_EQ(1, v.size());
+    EXPECT_EQ("n2=v2; domain=foo.bar; path=/", v.at(0).toString());
   }
 }
 
@@ -36,14 +36,14 @@ TEST(test_delete_cookies) {
   jar.setCookiesFromUrl(url, { c1 });
   {
     auto v = jar.cookiesForUrl(url);
-    CHECK_EQUAL(1, v.size());
-    CHECK_EQUAL("n1=v1; domain=acme.com; path=/", v.at(0).toString());
+    EXPECT_EQ(1, v.size());
+    EXPECT_EQ("n1=v1; domain=acme.com; path=/", v.at(0).toString());
   }
   {
     c1.setMaxAge(0); // a cookie is deleted by setting its age to 0
     jar.setCookiesFromUrl(url, { c1 });
     auto v = jar.cookiesForUrl(url);
-    CHECK_EQUAL(0, v.size());
+    EXPECT_EQ(0, v.size());
   }
 }
 
@@ -52,9 +52,9 @@ TEST(test_clear_cookies) {
   URI url("http://acme.com");
   HTTPCookie c1("n1", "v1");
   jar.setCookiesFromUrl(url, { c1 });
-  CHECK_EQUAL(1, jar.cookiesForUrl(url).size());
+  EXPECT_EQ(1, jar.cookiesForUrl(url).size());
   jar.clearAllCookies();
-  CHECK_EQUAL(0, jar.cookiesForUrl(url).size());
+  EXPECT_EQ(0, jar.cookiesForUrl(url).size());
 }
 
 TEST(test_secure_cookies) {
@@ -68,14 +68,14 @@ TEST(test_secure_cookies) {
   jar.setCookiesFromUrl(url1, { c1, c2 });
   {
     auto v = jar.cookiesForUrl(url1);
-    CHECK_EQUAL(1, v.size());
-    CHECK_EQUAL("n1=v1; domain=acme.com; path=/", v.at(0).toString());
+    EXPECT_EQ(1, v.size());
+    EXPECT_EQ("n1=v1; domain=acme.com; path=/", v.at(0).toString());
   }
   {
     auto v = jar.cookiesForUrl(url2);
-    CHECK_EQUAL(2, v.size());
-    CHECK_EQUAL("n1=v1; domain=acme.com; path=/", v.at(0).toString());
-    CHECK_EQUAL("n2=v2; domain=acme.com; path=/; secure", v.at(1).toString());
+    EXPECT_EQ(2, v.size());
+    EXPECT_EQ("n1=v1; domain=acme.com; path=/", v.at(0).toString());
+    EXPECT_EQ("n2=v2; domain=acme.com; path=/; secure", v.at(1).toString());
   }
 }
 
@@ -91,20 +91,20 @@ TEST(test_cookie_domain) {
   jar.setCookiesFromUrl(url2, { c1, c2 });
   {
     auto v = jar.cookiesForUrl(url1);
-    CHECK_EQUAL(1, v.size());
-    CHECK_EQUAL("n1=v1; domain=.acme.com; path=/", v.at(0).toString());
+    EXPECT_EQ(1, v.size());
+    EXPECT_EQ("n1=v1; domain=.acme.com; path=/", v.at(0).toString());
   }
   {
     auto v = jar.cookiesForUrl(url2);
-    CHECK_EQUAL(2, v.size());
-    CHECK_EQUAL("n1=v1; domain=.acme.com; path=/", v.at(0).toString());
-    CHECK_EQUAL("n2=v2; domain=.sub.acme.com; path=/", v.at(1).toString());
+    EXPECT_EQ(2, v.size());
+    EXPECT_EQ("n1=v1; domain=.acme.com; path=/", v.at(0).toString());
+    EXPECT_EQ("n2=v2; domain=.sub.acme.com; path=/", v.at(1).toString());
   }
   {
     auto v = jar.cookiesForUrl(url3);
-    CHECK_EQUAL(2, v.size());
-    CHECK_EQUAL("n1=v1; domain=.acme.com; path=/", v.at(0).toString());
-    CHECK_EQUAL("n2=v2; domain=.sub.acme.com; path=/", v.at(1).toString());
+    EXPECT_EQ(2, v.size());
+    EXPECT_EQ("n1=v1; domain=.acme.com; path=/", v.at(0).toString());
+    EXPECT_EQ("n2=v2; domain=.sub.acme.com; path=/", v.at(1).toString());
   }
 }
 
@@ -120,20 +120,20 @@ TEST(test_cookie_path) {
   jar.setCookiesFromUrl(url2, { c1, c2 });
   {
     auto v = jar.cookiesForUrl(url1);
-    CHECK_EQUAL(1, v.size());
-    CHECK_EQUAL("n1=v1; domain=acme.com; path=/", v.at(0).toString());
+    EXPECT_EQ(1, v.size());
+    EXPECT_EQ("n1=v1; domain=acme.com; path=/", v.at(0).toString());
   }
   {
     auto v = jar.cookiesForUrl(url2);
-    CHECK_EQUAL(2, v.size());
-    CHECK_EQUAL("n2=v2; domain=acme.com; path=/foo", v.at(0).toString());
-    CHECK_EQUAL("n1=v1; domain=acme.com; path=/", v.at(1).toString());
+    EXPECT_EQ(2, v.size());
+    EXPECT_EQ("n2=v2; domain=acme.com; path=/foo", v.at(0).toString());
+    EXPECT_EQ("n1=v1; domain=acme.com; path=/", v.at(1).toString());
   }
   {
     auto v = jar.cookiesForUrl(url3);
-    CHECK_EQUAL(2, v.size());
-    CHECK_EQUAL("n2=v2; domain=acme.com; path=/foo", v.at(0).toString());
-    CHECK_EQUAL("n1=v1; domain=acme.com; path=/", v.at(1).toString());
+    EXPECT_EQ(2, v.size());
+    EXPECT_EQ("n2=v2; domain=acme.com; path=/foo", v.at(0).toString());
+    EXPECT_EQ("n1=v1; domain=acme.com; path=/", v.at(1).toString());
   }
 }
 
@@ -149,15 +149,15 @@ TEST(test_cookie_expiration_date) {
   jar.setCookiesFromUrl(url, { c1, c2, c3 });
   {
     auto v = jar.cookiesForUrl(url);
-    CHECK_EQUAL(2, v.size());
-    CHECK_EQUAL("n2", v.at(0).getName());
-    CHECK_EQUAL("n3", v.at(1).getName());
+    EXPECT_EQ(2, v.size());
+    EXPECT_EQ("n2", v.at(0).getName());
+    EXPECT_EQ("n3", v.at(1).getName());
   }
   {
     std::this_thread::sleep_for (std::chrono::seconds(1));
     auto v = jar.cookiesForUrl(url);
-    CHECK_EQUAL(1, v.size());
-    CHECK_EQUAL("n3", v.at(0).getName());
+    EXPECT_EQ(1, v.size());
+    EXPECT_EQ("n3", v.at(0).getName());
   }
 }
 
@@ -173,38 +173,38 @@ TEST(test_line_assembler) {
 
   buf = fromString("a whole line\r\n");
   la.readBytes(buf, cb);
-  CHECK_EQUAL("a whole line", v.back());
+  EXPECT_EQ("a whole line", v.back());
 
   buf = fromString("another whole line\r\na partial");
   la.readBytes(buf, cb);
-  CHECK_EQUAL("another whole line", v.back());
+  EXPECT_EQ("another whole line", v.back());
 
   buf = fromString(" line\r\nanother");
   la.readBytes(buf, cb);
-  CHECK_EQUAL("a partial line", v.back());
+  EXPECT_EQ("a partial line", v.back());
 
   buf = fromString(" partial");
   la.readBytes(buf, cb);
 
   buf = fromString(" line\r\n");
   la.readBytes(buf, cb);
-  CHECK_EQUAL("another partial line", v.back());
+  EXPECT_EQ("another partial line", v.back());
 
   buf = fromString("a tricky line\r");
   la.readBytes(buf, cb);
 
   buf = fromString("\n");
   la.readBytes(buf, cb);
-  CHECK_EQUAL("a tricky line", v.back());
+  EXPECT_EQ("a tricky line", v.back());
 
   buf = fromString("");
   la.readBytes(buf, cb);
 
   buf = fromString("\r\n");
   la.readBytes(buf, cb);
-  CHECK_EQUAL("", v.back());
+  EXPECT_EQ("", v.back());
 
-  CHECK_EQUAL(6, v.size());
+  EXPECT_EQ(6, v.size());
 }
 
 TEST(test_extract_lines_from_frames) {
@@ -215,18 +215,30 @@ TEST(test_extract_lines_from_frames) {
 
   buf = fromString("SERVNAME,Lightstreamer HTTP Server\r\nCLIENTIP,127.0.0.1\r\nCONS,40.0\r\nSUBOK");
   la.readBytes(buf, cb);
-  CHECK_EQUAL(3, v.size());
-  CHECK_EQUAL("SERVNAME,Lightstreamer HTTP Server", v.at(0));
-  CHECK_EQUAL("CLIENTIP,127.0.0.1", v.at(1));
-  CHECK_EQUAL("CONS,40.0", v.at(2));
+  EXPECT_EQ(3, v.size());
+  EXPECT_EQ("SERVNAME,Lightstreamer HTTP Server", v.at(0));
+  EXPECT_EQ("CLIENTIP,127.0.0.1", v.at(1));
+  EXPECT_EQ("CONS,40.0", v.at(2));
 
   buf = fromString(",1,1,1\r\nCONF,1,unlimited,filtered\r\n");
   la.readBytes(buf, cb);
-  CHECK_EQUAL(5, v.size());
-  CHECK_EQUAL("SUBOK,1,1,1", v.at(3));
-  CHECK_EQUAL("CONF,1,unlimited,filtered", v.at(4));
+  EXPECT_EQ(5, v.size());
+  EXPECT_EQ("SUBOK,1,1,1", v.at(3));
+  EXPECT_EQ("CONF,1,unlimited,filtered", v.at(4));
 }
 
-int main() {
-  return UnitTest::RunAllTests();
+int main(int argc, char** argv) {
+  using utest::runner;
+
+  runner.add(new test_add_cookies());
+  runner.add(new test_delete_cookies());
+  runner.add(new test_clear_cookies());
+  runner.add(new test_secure_cookies());
+  runner.add(new test_cookie_domain());
+  runner.add(new test_cookie_path());
+  runner.add(new test_cookie_expiration_date());
+  runner.add(new test_line_assembler());
+  runner.add(new test_extract_lines_from_frames());
+
+  return runner.start(argc > 1 ? argv[1]: "");
 }
