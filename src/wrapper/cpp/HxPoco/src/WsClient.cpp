@@ -47,10 +47,7 @@ WsClient::WsClient(const char* url, const char* subProtocol, const std::map<std:
   _proxy(proxy)
 {}
 
-WsClient::~WsClient()
-{
-  dispose();
-}
+WsClient::~WsClient() {}
 
 void WsClient::send(const std::string& txt) {
   _queue.enqueueNotification(new WorkNotification(txt));

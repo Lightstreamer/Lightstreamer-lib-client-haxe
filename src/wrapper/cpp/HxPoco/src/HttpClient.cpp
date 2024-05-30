@@ -46,10 +46,7 @@ HttpClient::HttpClient(const char* url, const char* body, const std::map<std::st
   _proxy(proxy)
 {}
 
-HttpClient::~HttpClient()
-{
-  dispose();
-}
+HttpClient::~HttpClient() {}
 
 void HttpClient::dispose() {
   try
