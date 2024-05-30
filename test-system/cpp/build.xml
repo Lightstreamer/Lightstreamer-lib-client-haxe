@@ -50,7 +50,9 @@
       <arg line="${CXXFLAGS} ${CPPFLAGS} ${LDFLAGS} ${LDLIBS}"/>
       <arg line="${test.src}/${target}.cpp -o ${test.src}/bin/${target}"/>
     </exec>
-    <exec executable="${test.src}/bin/${target}" dir="${test.src}/bin" failonerror="true"/>
+    <exec executable="${test.src}/bin/${target}" dir="${test.src}/bin" failonerror="true">
+      <arg value="${UTEST_PATTERN}"/>
+    </exec>
   </target>
 
   <target name="haxe">
