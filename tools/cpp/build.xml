@@ -10,6 +10,7 @@
   <property name="build" location="bin/cpp"/>
   <property name="test" location="bin-test/cpp"/>
   <property name="tools" location="tools/cpp"/>
+  <property name="docs" location="${build}/docs"/>
 
   <property name="wrapper.src" location="src/wrapper/cpp"/>
 
@@ -44,6 +45,14 @@
     <copy todir="${build}/src/Lightstreamer/HxPoco" verbose="true">
       <fileset dir="${wrapper.src}/HxPoco/src"/>
     </copy>
+  </target>
+
+  <target name="docs" description="Build the docs">
+    <mkdir dir="${docs}"/>
+    <exec executable="doxygen" dir="${tools}" failonerror="true">
+      <env key="LS_VERSION" value="${version}"/>
+      <env key="LS_OUTPUT"  value="${docs}/api"/>
+    </exec>
   </target>
 
   <target name="test" description="Run the tests" depends="build_test">
