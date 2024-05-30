@@ -34,7 +34,7 @@ class LightstreamerClient {
   HaxeObject _client;
 public:
   // TODO doc
-  static void initialize(void (*exceptionCallback)(const char *exceptionInfo)) {
+  static void initialize(void (*exceptionCallback)(const char *exceptionInfo) = nullptr) {
     Lightstreamer_initializeHaxeThread(exceptionCallback);
   }
   // TODO doc
