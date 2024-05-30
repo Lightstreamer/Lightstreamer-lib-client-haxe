@@ -33,6 +33,14 @@ namespace Lightstreamer {
 class LightstreamerClient {
   HaxeObject _client;
 public:
+  // TODO doc
+  static void initialize(void (*exceptionCallback)(const char *exceptionInfo)) {
+    Lightstreamer_initializeHaxeThread(exceptionCallback);
+  }
+  // TODO doc
+  static void stop() {
+    Lightstreamer_stopHaxeThreadIfRunning(true);
+  }
   /**
    * The name of the library.
    */

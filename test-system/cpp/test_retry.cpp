@@ -1,4 +1,3 @@
-#include "../Lightstreamer.h"
 #include "Lightstreamer/LightstreamerClient.h"
 #include "Lightstreamer/ConsoleLoggerProvider.h"
 #include "utest.h"
@@ -15,7 +14,7 @@ TEST(testRetryDelay) {
 }
 
 int main(int argc, char** argv) {
-  Lightstreamer_initializeHaxeThread([](const char* info) {
+  LightstreamerClient::initialize([](const char* info) {
     std::cout << "UNCAUGHT HAXE EXCEPTION: " << info << "\n";
     std::cout << "TERMINATING THE PROCESS...\n";
     exit(255);

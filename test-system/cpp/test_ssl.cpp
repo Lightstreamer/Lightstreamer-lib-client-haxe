@@ -1,4 +1,3 @@
-#include "../Lightstreamer.h"
 #include "Lightstreamer/LightstreamerClient.h"
 #include "Lightstreamer/ClientListener.h"
 #include "Lightstreamer/SubscriptionListener.h"
@@ -98,7 +97,7 @@ TEST_FIXTURE(Setup, testTrustManager) {
 }
 
 int main(int argc, char** argv) {
-  Lightstreamer_initializeHaxeThread([](const char* info) {
+  LightstreamerClient::initialize([](const char* info) {
     std::cout << "UNCAUGHT HAXE EXCEPTION: " << info << "\n";
     std::cout << "TERMINATING THE PROCESS...\n";
     exit(255);
