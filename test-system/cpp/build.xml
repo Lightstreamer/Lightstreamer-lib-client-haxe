@@ -3,12 +3,13 @@
   basedir="../..">
 
   <property environment="env"/>
+  <property name="UTEST_PATTERN" value=""/>
 
   <property name="wrapper.src" location="src/wrapper/cpp"/>
   <property name="test.src" location="test-system/cpp"/>
   
   <property name="CXX" value="g++"/>
-  <property name="CXXFLAGS" value="-g -Og -std=c++17 -Wall -Wextra -pedantic"/>
+  <property name="CXXFLAGS" value="-g -Og -std=c++17 -Wall -Wextra -pedantic -Wno-unused-parameter"/>
   <property name="CPPFLAGS" value="-Ibin/cpp/include -I${env.POCO_BASE}/Foundation/include -I${env.POCO_BASE}/Net/include -I/opt/homebrew/opt/openssl/include"/>
   <property name="LDFLAGS" value="-L${env.POCO_BASE}/lib/Darwin/arm64"/>
   <property name="LDLIBS" value="-lPocoFoundationd -lPocoNetd -lPocoNetSSLd ${test.src}/bin/lightstreamer_client.dylib"/>
