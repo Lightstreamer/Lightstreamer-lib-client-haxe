@@ -57,10 +57,6 @@ void WsClient::send(const std::string& txt) {
 }
 
 void WsClient::dispose() {
-  if (_disposed) {
-    return;
-  }
-
   try {
     if (_ws) {
       _ws->shutdown();

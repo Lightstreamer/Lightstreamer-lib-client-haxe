@@ -52,10 +52,6 @@ HttpClient::~HttpClient()
 }
 
 void HttpClient::dispose() {
-  if (_disposed) {
-    return;
-  }
-
   try
   {
     if (_session) {

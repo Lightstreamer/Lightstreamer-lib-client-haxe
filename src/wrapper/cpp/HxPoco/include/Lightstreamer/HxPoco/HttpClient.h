@@ -53,7 +53,6 @@ private:
   std::map<std::string, std::string> _headers;
   Poco::Net::HTTPClientSession::ProxyConfig _proxy;
   std::unique_ptr<Poco::Net::HTTPClientSession> _session;
-  Poco::AtomicFlag _disposed;
 };
 
 }}
