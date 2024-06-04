@@ -3,15 +3,9 @@ build.common.hxml
 --class-path src/extern/cpp
 --library haxe-concurrent
 
---debug
 -D HXCPP_CPP17
 -D HXCPP_VERBOSE
--D HXCPP_ARM64
--D HAXE_OUTPUT_FILE=lightstreamer_client
 -D HaxeCBridge.name=Lightstreamer
--D dll_link
-
---cpp bin/cpp
 
 -D LS_HAS_PROXY
 -D LS_HAS_COOKIES

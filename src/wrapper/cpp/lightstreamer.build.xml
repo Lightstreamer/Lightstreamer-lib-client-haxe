@@ -2,15 +2,28 @@
   <set name="LS_NS" value="Lightstreamer" />
   <set name="HXPOCO_NS" value="Lightstreamer/HxPoco" />
 
-  <files id="hxpoco">
-    <compilerflag value="-Og"/>
+  <files id="haxe">
+    <compilerflag value="${CXXFLAG_0}"/>
+    <compilerflag value="${CXXFLAG_1}"/>
+    <compilerflag value="${CXXFLAG_2}"/>
+    <compilerflag value="${CXXFLAG_3}"/>
+    <compilerflag value="${CXXFLAG_4}"/>
+    <compilerflag value="${CXXFLAG_5}"/>
+    <compilerflag value="${CXXFLAG_6}"/>
+    <compilerflag value="${CXXFLAG_7}"/>
+    <compilerflag value="${CXXFLAG_8}"/>
+    <compilerflag value="${CXXFLAG_9}"/>
 
-    <compilerflag value="-Iinclude"/>
-    <compilerflag value="-I/opt/homebrew/opt/openssl/include"/>
-    <compilerflag value="-I${POCO_BASE}/Foundation/include"/>
-    <compilerflag value="-I${POCO_BASE}/Crypto/include"/>
-    <compilerflag value="-I${POCO_BASE}/Net/include"/>
-    <compilerflag value="-I${POCO_BASE}/NetSSL_OpenSSL/include"/>
+    <compilerflag value="${CPPFLAG_0}"/>
+    <compilerflag value="${CPPFLAG_1}"/>
+    <compilerflag value="${CPPFLAG_2}"/>
+    <compilerflag value="${CPPFLAG_3}"/>
+    <compilerflag value="${CPPFLAG_4}"/>
+    <compilerflag value="${CPPFLAG_5}"/>
+    <compilerflag value="${CPPFLAG_6}"/>
+    <compilerflag value="${CPPFLAG_7}"/>
+    <compilerflag value="${CPPFLAG_8}"/>
+    <compilerflag value="${CPPFLAG_9}"/>
 
     <file name="src/${HXPOCO_NS}/HttpClient.cpp">
       <depend name="include/${HXPOCO_NS}/HttpClient.h"/>
@@ -33,39 +46,33 @@
     <file name="src/${HXPOCO_NS}/LineAssembler.cpp">
       <depend name="include/${HXPOCO_NS}/LineAssembler.h"/>
     </file>
-  </files>
 
-  <files id="ls-wrappers">
-    <compilerflag value="-Og"/>
-
-    <compilerflag value="-Iinclude"/>
-    <compilerflag value="-I${POCO_BASE}/Foundation/include"/>
-    
     <file name="src/${LS_NS}/ConsoleLoggerProvider.cpp">
       <depend name="include/${LS_NS}/ConsoleLoggerProvider.h"/>
     </file>
   </files>
 
-  <files id="haxe">
-    <compilerflag value="-Og"/>
-    
-    <compilerflag value="-I/opt/homebrew/opt/openssl/include"/>
-    <compilerflag value="-I${POCO_BASE}/Foundation/include"/>
-    <compilerflag value="-I${POCO_BASE}/Crypto/include"/>
-    <compilerflag value="-I${POCO_BASE}/Net/include"/>
-    <compilerflag value="-I${POCO_BASE}/NetSSL_OpenSSL/include"/>
-  </files>
-
   <target id="haxe">
-    <files id="hxpoco"/>
-    <files id="ls-wrappers"/>
-    <flag value='-L${POCO_BASE}/lib/Darwin/arm64'/>
-    <!-- <flag value='-lPocoFoundation'/> -->
-    <!-- <flag value='-lPocoNet'/> -->
-    <flag value='-lPocoFoundationd'/>
-    <flag value='-lPocoNetd'/>
-    <flag value='-lPocoNetSSLd'/>
-    <!-- <libpath name="${POCO_BASE}/lib/Darwin/arm64"/> -->
-    <!-- <lib base="libPocoFoundation"/> -->
+    <flag value="${LDFLAG_0}"/>
+    <flag value="${LDFLAG_1}"/>
+    <flag value="${LDFLAG_2}"/>
+    <flag value="${LDFLAG_3}"/>
+    <flag value="${LDFLAG_4}"/>
+    <flag value="${LDFLAG_5}"/>
+    <flag value="${LDFLAG_6}"/>
+    <flag value="${LDFLAG_7}"/>
+    <flag value="${LDFLAG_8}"/>
+    <flag value="${LDFLAG_9}"/>
+
+    <flag value="${LDLIB_0}"/>
+    <flag value="${LDLIB_1}"/>
+    <flag value="${LDLIB_2}"/>
+    <flag value="${LDLIB_3}"/>
+    <flag value="${LDLIB_4}"/>
+    <flag value="${LDLIB_5}"/>
+    <flag value="${LDLIB_6}"/>
+    <flag value="${LDLIB_7}"/>
+    <flag value="${LDLIB_8}"/>
+    <flag value="${LDLIB_9}"/>
   </target>
 </xml>

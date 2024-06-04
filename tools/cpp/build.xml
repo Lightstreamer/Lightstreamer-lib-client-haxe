@@ -7,11 +7,19 @@
   Buildfile for the C++ client library
   </description>
 
-  <property name="build" location="bin/cpp"/>
-  <property name="test" location="bin-test/cpp"/>
   <property name="tools" location="tools/cpp"/>
-  <property name="docs" location="${build}/docs"/>
 
+  <!-- if the property is undefined, the debug configuration is the default -->
+  <property name="build.settings" location="${tools}/res/build.debug.hxml"/>
+
+  <!-- read the output folder from the build settings -->
+  <exec executable="haxe" failonerror="true" outputproperty="hxml.output">
+    <arg line="-p ${tools}/res --run ReadHxml ${build.settings}"/>
+  </exec>
+
+  <property name="build" location="${hxml.output}"/>
+  <property name="test" location="bin-test/cpp"/>
+  <property name="docs" location="${build}/docs"/>
   <property name="wrapper.src" location="src/wrapper/cpp"/>
 
   <property file="${tools}/build.properties"/>
@@ -24,6 +32,7 @@
     <echo message="CID: ${cid}"/>
     <exec executable="haxe" failonerror="true">
       <arg value="build.cpp.hxml"/>
+      <arg value="${build.settings}"/>
       <arg line="-D no-traces"/>
       <arg value="-D"/><arg value="LS_VERSION=${version}"/>
       <arg value="-D"/><arg value="LS_BUILD=${build.number}"/>
@@ -85,7 +94,7 @@
   </target>
 
   <target name="clean" description="Clean the project">
-    <delete dir="${build}"/>
+    <delete dir="bin/cpp"/>
     <delete dir="${test}"/>
   </target>
 </project>
