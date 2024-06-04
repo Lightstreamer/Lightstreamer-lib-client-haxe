@@ -19,7 +19,7 @@
 
   <property name="build" location="${hxml.output}"/>
   <property name="test" location="bin-test/cpp"/>
-  <property name="docs" location="${build}/docs"/>
+  <property name="docs" location="bin/cpp/docs"/>
   <property name="wrapper.src" location="src/wrapper/cpp"/>
 
   <property file="${tools}/build.properties"/>
