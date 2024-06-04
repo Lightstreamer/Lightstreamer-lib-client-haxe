@@ -33,6 +33,7 @@
   </target>
 
   <target name="copy_modules">
+    <copy file="src/wrapper/cpp/lightstreamer.build.xml" todir="${build}" verbose="true"/>
     <copy todir="${build}/include" verbose="true">
       <fileset dir="${wrapper.src}/Base/include"/>
     </copy>
@@ -68,6 +69,7 @@
   </target>
 
   <target name="copy_modules_for_tests">
+    <copy file="src/wrapper/cpp/lightstreamer.build.xml" todir="${test}" verbose="true"/>
     <copy todir="${test}/include" verbose="true">
       <fileset dir="${wrapper.src}/Base/include"/>
     </copy>

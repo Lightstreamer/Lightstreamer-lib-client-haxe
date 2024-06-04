@@ -1,5 +1,6 @@
 package com.lightstreamer.internal;
 
 @:keep
-@:buildXml("<include name='../../src/wrapper/cpp/wrapper.xml'/>") // path is relative to folder bin/cpp
+// the path is relative to the output folder specified by the haxe flag --cpp
+@:buildXml("<include name='lightstreamer.build.xml'/>")
 class BuildConfig {}
