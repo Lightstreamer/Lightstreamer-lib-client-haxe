@@ -1,0 +1,34 @@
+BIN = bin/debug
+LS_BASE = ../../bin/cpp/debug
+LS_LIB = $(BIN)/lightstreamer_clientd.dylib
+
+CXX = g++
+CXXFLAGS = -g -Og -std=c++17 -Wall -Wextra -pedantic -Wno-unused-parameter
+CPPFLAGS = -I$(LS_BASE)/include -I$(POCO_BASE)/Foundation/include -I$(POCO_BASE)/Net/include -I/opt/homebrew/opt/openssl/include
+LDFLAGS  = -L$(POCO_BASE)/lib/Darwin/arm64
+LDLIBS   = -lPocoFoundationd -lPocoNetd -lPocoNetSSLd $(LS_LIB)
+
+test: test_ssl, test_main
+
+test_main: $(LS_LIB)
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) $(LDLIBS) $@.cpp -o $(BIN)/$@
+	cd $(BIN) && ./$@
+
+test_ssl: $(LS_LIB)
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) $(LDLIBS) $@.cpp -o $(BIN)/$@
+	cd $(BIN) && ./$@
+
+test_retry: $(LS_LIB)
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) $(LDLIBS) $@.cpp -o $(BIN)/$@
+	cd $(BIN) && ./$@
+
+test_demo: $(LS_LIB)
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) $(LDLIBS) $@.cpp -o $(BIN)/$@
+	cd $(BIN) && ./$@
+
+$(LS_LIB): $(LS_BASE)/lightstreamer_clientd.dylib
+	mkdir -p $(@D)
+	cp $< $@
+
+clean:
+	rm -rf bin

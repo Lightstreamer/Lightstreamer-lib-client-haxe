@@ -1,0 +1,19 @@
+LS_BASE = ../../src/wrapper/cpp
+BIN = bin/hxpoco
+
+CXX = g++
+CXXFLAGS = -g -Og -std=c++17 -Wall -Wextra -pedantic -Wno-unused-parameter
+CPPFLAGS = -I$(LS_BASE)/HxPoco/include -I$(POCO_BASE)/Foundation/include -I$(POCO_BASE)/Net/include -I/opt/homebrew/opt/openssl/include
+LDFLAGS = -L$(POCO_BASE)/lib/Darwin/arm64
+LDLIBS = -lPocoFoundationd -lPocoNetd
+SRCS = $(LS_BASE)/HxPoco/src/CookieJar.cpp $(LS_BASE)/HxPoco/src/Utils.cpp $(LS_BASE)/HxPoco/src/LineAssembler.cpp
+
+test: test_hxpoco
+
+test_hxpoco:
+	mkdir -p $(BIN)
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) $(LDLIBS) $(SRCS) $@.cpp -o $(BIN)/$@
+	cd $(BIN) && ./$@
+
+clean:
+	rm -rf bin

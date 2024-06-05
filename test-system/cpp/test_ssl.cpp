@@ -80,9 +80,9 @@ struct Setup: public utest::Test {
 
 TEST_FIXTURE(Setup, testTrustManager) {
   client.connectionDetails.setServerAddress("https://localtest.me:8443");
-  auto privateKeyFile = "../../../test/localtest.me.key";
-  auto certificateFile = "../../../test/localtest.me.crt";
-  auto caLocation = "../../../test/localtest.me.crt";
+  auto privateKeyFile = "../../../../test/localtest.me.key";
+  auto certificateFile = "../../../../test/localtest.me.crt";
+  auto caLocation = "../../../../test/localtest.me.crt";
   Poco::Net::Context::Ptr pContext = new Poco::Net::Context(Poco::Net::Context::TLS_CLIENT_USE, privateKeyFile, certificateFile, caLocation);
   LightstreamerClient::setTrustManagerFactory(pContext);
 
