@@ -121,7 +121,7 @@ struct Setup: public utest::Test {
     : utest::Test(name, filename, line, param1) {}
 
   void setup() override {
-    client.connectionDetails.setServerAddress("http://127.0.0.1:8080");
+    client.connectionDetails.setServerAddress("http://localtest.me:8080");
     client.connectionDetails.setAdapterSet("TEST");
     if (!_param1.empty()) {
       transport = _param1;

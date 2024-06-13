@@ -60,7 +60,7 @@ struct Setup: public utest::Test {
     : utest::Test(name, filename, line, param1) {}
 
   void setup() override {
-    client.connectionDetails.setServerAddress("http://127.0.0.1:8080");
+    client.connectionDetails.setServerAddress("https://localtest.me:8443");
     client.connectionDetails.setAdapterSet("TEST");
     if (!_param1.empty()) {
       transport = _param1;
@@ -79,10 +79,9 @@ struct Setup: public utest::Test {
 };
 
 TEST_FIXTURE(Setup, testTrustManager) {
-  client.connectionDetails.setServerAddress("https://localtest.me:8443");
-  auto privateKeyFile = "../../../../test/localtest.me.key";
-  auto certificateFile = "../../../../test/localtest.me.crt";
-  auto caLocation = "../../../../test/localtest.me.crt";
+  auto privateKeyFile = "../../test/localtest.me.key";
+  auto certificateFile = "../../test/localtest.me.crt";
+  auto caLocation = "../../test/localtest.me.crt";
   Poco::Net::Context::Ptr pContext = new Poco::Net::Context(Poco::Net::Context::TLS_CLIENT_USE, privateKeyFile, certificateFile, caLocation);
   LightstreamerClient::setTrustManagerFactory(pContext);
 
