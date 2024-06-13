@@ -12,7 +12,12 @@
   </condition>
 
   <condition property="onlinux">
-    <os family="unix"/>
+    <and>
+      <os family="unix"/>
+      <not>
+        <os family="mac"/>
+      </not>
+    </and>
   </condition>
 
   <condition property="onwindows">
@@ -84,7 +89,10 @@
   </target>
 
   <target name="test" description="Run the tests" depends="build_test">
-    <exec executable="${test}/TestAll-debug" failonerror="true"/>
+    <exec executable="${test}/TestAll-debug" failonerror="true" if:set="onlinux"/>
+    <exec executable="${test}/TestAll-debug" failonerror="true" if:set="onmac">
+      <env key="DYLD_LIBRARY_PATH" path="/usr/local/lib"/>
+    </exec>
   </target>
 
   <target name="build_test" depends="copy_modules_for_tests">

@@ -4,19 +4,16 @@
 
 -D CXXFLAG_0=-Og
 
--D CPPFLAG_0=-I/opt/homebrew/opt/openssl/include
--D CPPFLAG_1=-I%POCO_BASE%/Foundation/include
--D CPPFLAG_2=-I%POCO_BASE%/Net/include
--D CPPFLAG_3=-I%POCO_BASE%/NetSSL_OpenSSL/include
--D CPPFLAG_4=-I%POCO_BASE%/Crypto/include
+-D CPPFLAG_0=-I/usr/local/include
+-D CPPFLAG_1=-I/opt/homebrew/opt/openssl/include
 
--D LDFLAG_0=-L%POCO_BASE%/lib/Darwin/arm64
+-D LDFLAG_0=-L/usr/local/lib
 
 -D LDLIB_0=-lPocoFoundationd
 -D LDLIB_1=-lPocoNetd
 -D LDLIB_2=-lPocoNetSSLd
 
---cpp bin/cpp/debug
--D HAXE_OUTPUT_FILE=lightstreamer_clientd
+--cpp bin/cpp/mac/debug
+-D HAXE_OUTPUT_FILE=liblightstreamer_clientd
 
 -D dll_link
