@@ -74,5 +74,7 @@
     <lib name="${LDLIB_7}" if="LDLIB_7"/>
     <lib name="${LDLIB_8}" if="LDLIB_8"/>
     <lib name="${LDLIB_9}" if="LDLIB_9"/>
+
+    <ext value="${LDLIB_EXT}" if="LDLIB_EXT"/>
   </target>
 </xml>
