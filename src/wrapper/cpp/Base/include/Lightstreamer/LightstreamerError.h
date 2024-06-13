@@ -1,6 +1,7 @@
 #ifndef INCLUDED_Lightstreamer_LightstreamerError
 #define INCLUDED_Lightstreamer_LightstreamerError
 
+#include <stdexcept>
 #include <string>
 
 namespace Lightstreamer {
@@ -13,7 +14,7 @@ public:
   /**
    * Constructs a LightstreamerError object carrying the given message.
    */
-  LightstreamerError(const std::string& message) : runtime_error(message) {}
+  LightstreamerError(const std::string& message) : std::runtime_error(message) {}
 };
 
 } // namespace Lightstreamer
