@@ -1,32 +1,30 @@
 BIN = bin/static-debug
-LS_BASE = ../../bin/cpp/static-debug
+LS_BASE = ../../bin/cpp/mac/static-debug
 
 CXX = g++
 CXXFLAGS = -g -Og -std=c++17 -Wall -Wextra -pedantic -Wno-unused-parameter
-CPPFLAGS = -I$(LS_BASE)/include -I$(POCO_BASE)/Foundation/include -I$(POCO_BASE)/Net/include -I/opt/homebrew/opt/openssl/include
+CPPFLAGS = -I$(LS_BASE)/include -I/opt/homebrew/opt/openssl/include
 LDFLAGS = 
-LDLIBS = $(LS_BASE)/lightstreamer_clientd.a
+LDLIBS = $(LS_BASE)/liblightstreamer_clientd.a
 
 test: test_ssl, test_main
 
 test_main:
-	mkdir -p $(BIN)
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) $(LDLIBS) $@.cpp -o $(BIN)/$@
-	cd $(BIN) && ./$@
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -o $(BIN)/$@ $@.cpp $(LDFLAGS) $(LDLIBS)
+	$(BIN)/$@
 
 test_ssl:
-	mkdir -p $(BIN)
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) $(LDLIBS) $@.cpp -o $(BIN)/$@
-	cd $(BIN) && ./$@
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -o $(BIN)/$@ $@.cpp $(LDFLAGS) $(LDLIBS)
+	$(BIN)/$@
 
 test_retry: $(LS_LIB)
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) $(LDLIBS) $@.cpp -o $(BIN)/$@
-	cd $(BIN) && ./$@
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -o $(BIN)/$@ $@.cpp $(LDFLAGS) $(LDLIBS)
+	$(BIN)/$@
 
 test_demo:
-	mkdir -p $(BIN)
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) $(LDLIBS) $@.cpp -o $(BIN)/$@
-	cd $(BIN) && ./$@
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -o $(BIN)/$@ $@.cpp $(LDFLAGS) $(LDLIBS)
+	$(BIN)/$@
 
 clean:
-	rm -rf bin
+	rm -rf $(BIN)
+	mkdir -p $(BIN)
