@@ -3,28 +3,6 @@
   <set name="HXPOCO_NS" value="Lightstreamer/HxPoco" />
 
   <files id="haxe">
-    <compilerflag value="${CXXFLAG_0}" if="CXXFLAG_0"/>
-    <compilerflag value="${CXXFLAG_1}" if="CXXFLAG_1"/>
-    <compilerflag value="${CXXFLAG_2}" if="CXXFLAG_2"/>
-    <compilerflag value="${CXXFLAG_3}" if="CXXFLAG_3"/>
-    <compilerflag value="${CXXFLAG_4}" if="CXXFLAG_4"/>
-    <compilerflag value="${CXXFLAG_5}" if="CXXFLAG_5"/>
-    <compilerflag value="${CXXFLAG_6}" if="CXXFLAG_6"/>
-    <compilerflag value="${CXXFLAG_7}" if="CXXFLAG_7"/>
-    <compilerflag value="${CXXFLAG_8}" if="CXXFLAG_8"/>
-    <compilerflag value="${CXXFLAG_9}" if="CXXFLAG_9"/>
-
-    <compilerflag value="${CPPFLAG_0}" if="CPPFLAG_0"/>
-    <compilerflag value="${CPPFLAG_1}" if="CPPFLAG_1"/>
-    <compilerflag value="${CPPFLAG_2}" if="CPPFLAG_2"/>
-    <compilerflag value="${CPPFLAG_3}" if="CPPFLAG_3"/>
-    <compilerflag value="${CPPFLAG_4}" if="CPPFLAG_4"/>
-    <compilerflag value="${CPPFLAG_5}" if="CPPFLAG_5"/>
-    <compilerflag value="${CPPFLAG_6}" if="CPPFLAG_6"/>
-    <compilerflag value="${CPPFLAG_7}" if="CPPFLAG_7"/>
-    <compilerflag value="${CPPFLAG_8}" if="CPPFLAG_8"/>
-    <compilerflag value="${CPPFLAG_9}" if="CPPFLAG_9"/>
-
     <file name="src/${HXPOCO_NS}/HttpClient.cpp">
       <depend name="include/${HXPOCO_NS}/HttpClient.h"/>
       <depend name="include/${HXPOCO_NS}/Network.h"/>
@@ -50,6 +28,28 @@
     <file name="src/${LS_NS}/ConsoleLoggerProvider.cpp">
       <depend name="include/${LS_NS}/ConsoleLoggerProvider.h"/>
     </file>
+
+    <compilerflag value="${CXXFLAG_0}" if="CXXFLAG_0"/>
+    <compilerflag value="${CXXFLAG_1}" if="CXXFLAG_1"/>
+    <compilerflag value="${CXXFLAG_2}" if="CXXFLAG_2"/>
+    <compilerflag value="${CXXFLAG_3}" if="CXXFLAG_3"/>
+    <compilerflag value="${CXXFLAG_4}" if="CXXFLAG_4"/>
+    <compilerflag value="${CXXFLAG_5}" if="CXXFLAG_5"/>
+    <compilerflag value="${CXXFLAG_6}" if="CXXFLAG_6"/>
+    <compilerflag value="${CXXFLAG_7}" if="CXXFLAG_7"/>
+    <compilerflag value="${CXXFLAG_8}" if="CXXFLAG_8"/>
+    <compilerflag value="${CXXFLAG_9}" if="CXXFLAG_9"/>
+
+    <compilerflag value="${CPPFLAG_0}" if="CPPFLAG_0"/>
+    <compilerflag value="${CPPFLAG_1}" if="CPPFLAG_1"/>
+    <compilerflag value="${CPPFLAG_2}" if="CPPFLAG_2"/>
+    <compilerflag value="${CPPFLAG_3}" if="CPPFLAG_3"/>
+    <compilerflag value="${CPPFLAG_4}" if="CPPFLAG_4"/>
+    <compilerflag value="${CPPFLAG_5}" if="CPPFLAG_5"/>
+    <compilerflag value="${CPPFLAG_6}" if="CPPFLAG_6"/>
+    <compilerflag value="${CPPFLAG_7}" if="CPPFLAG_7"/>
+    <compilerflag value="${CPPFLAG_8}" if="CPPFLAG_8"/>
+    <compilerflag value="${CPPFLAG_9}" if="CPPFLAG_9"/>
   </files>
 
   <target id="haxe">
@@ -64,15 +64,15 @@
     <flag value="${LDFLAG_8}" if="LDFLAG_8"/>
     <flag value="${LDFLAG_9}" if="LDFLAG_9"/>
 
-    <flag value="${LDLIB_0}" if="LDLIB_0"/>
-    <flag value="${LDLIB_1}" if="LDLIB_1"/>
-    <flag value="${LDLIB_2}" if="LDLIB_2"/>
-    <flag value="${LDLIB_3}" if="LDLIB_3"/>
-    <flag value="${LDLIB_4}" if="LDLIB_4"/>
-    <flag value="${LDLIB_5}" if="LDLIB_5"/>
-    <flag value="${LDLIB_6}" if="LDLIB_6"/>
-    <flag value="${LDLIB_7}" if="LDLIB_7"/>
-    <flag value="${LDLIB_8}" if="LDLIB_8"/>
-    <flag value="${LDLIB_9}" if="LDLIB_9"/>
+    <lib name="${LDLIB_0}" if="LDLIB_0"/>
+    <lib name="${LDLIB_1}" if="LDLIB_1"/>
+    <lib name="${LDLIB_2}" if="LDLIB_2"/>
+    <lib name="${LDLIB_3}" if="LDLIB_3"/>
+    <lib name="${LDLIB_4}" if="LDLIB_4"/>
+    <lib name="${LDLIB_5}" if="LDLIB_5"/>
+    <lib name="${LDLIB_6}" if="LDLIB_6"/>
+    <lib name="${LDLIB_7}" if="LDLIB_7"/>
+    <lib name="${LDLIB_8}" if="LDLIB_8"/>
+    <lib name="${LDLIB_9}" if="LDLIB_9"/>
   </target>
 </xml>

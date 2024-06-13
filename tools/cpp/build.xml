@@ -7,10 +7,24 @@
   Buildfile for the C++ client library
   </description>
 
+  <condition property="onmac">
+    <os family="mac"/>
+  </condition>
+
+  <condition property="onlinux">
+    <os family="unix"/>
+  </condition>
+
+  <condition property="onwindows">
+    <os family="windows"/>
+  </condition>
+
   <property name="tools" location="tools/cpp"/>
 
   <!-- if the property is undefined, the debug configuration is the default -->
-  <property name="build.settings" location="${tools}/res/build.debug.hxml"/>
+  <property name="build.settings" location="${tools}/res/build.mac.debug.hxml" if:set="onmac"/>
+  <property name="build.settings" location="${tools}/res/build.linux.debug.hxml" if:set="onlinux"/>
+  <property name="build.settings" location="${tools}/res/build.win.debug.hxml" if:set="onwindows"/>
 
   <!-- read the output folder from the build settings -->
   <exec executable="haxe" failonerror="true" outputproperty="hxml.output">
@@ -24,7 +38,7 @@
 
   <property file="${tools}/build.properties"/>
 
-  <target name="package" depends="package_haxe">
+  <target name="package" depends="package_haxe" description="Build the library">
   </target>
 
   <target name="package_haxe" depends="copy_modules">
