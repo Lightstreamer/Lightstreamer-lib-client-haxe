@@ -1,0 +1,20 @@
+--debug
+
+-D HXCPP_ARM64
+
+-D CXXFLAG_0=-Og
+
+-D LDLIB_0=/usr/local/lib/libPocoNetSSLd.a
+-D LDLIB_1=/usr/local/lib/libPocoCryptod.a
+-D LDLIB_2=/usr/local/lib/libPocoNetd.a
+-D LDLIB_3=/usr/local/lib/libPocoUtild.a
+-D LDLIB_4=/usr/local/lib/libPocoXMLd.a
+-D LDLIB_5=/usr/local/lib/libPocoJSONd.a
+-D LDLIB_6=/usr/local/lib/libPocoFoundationd.a
+-D LDLIB_7=/usr/lib/aarch64-linux-gnu/libcrypto.a
+-D LDLIB_8=/usr/lib/aarch64-linux-gnu/libssl.a
+
+--cpp bin/cpp/linux/static-debug
+-D HAXE_OUTPUT_FILE=liblightstreamer_clientd
+
+-D static_link
