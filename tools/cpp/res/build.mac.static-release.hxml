@@ -1,0 +1,19 @@
+-D HXCPP_ARM64
+
+-D CPPFLAG_0=-I/usr/local/include
+-D CPPFLAG_1=-I/opt/homebrew/opt/openssl/include
+
+-D LDLIB_0=/usr/local/lib/libPocoNetSSL.a
+-D LDLIB_1=/usr/local/lib/libPocoCrypto.a
+-D LDLIB_2=/usr/local/lib/libPocoNet.a
+-D LDLIB_3=/usr/local/lib/libPocoUtil.a
+-D LDLIB_4=/usr/local/lib/libPocoXML.a
+-D LDLIB_5=/usr/local/lib/libPocoJSON.a
+-D LDLIB_6=/usr/local/lib/libPocoFoundation.a
+-D LDLIB_7=/opt/homebrew/opt/openssl/lib/libcrypto.a
+-D LDLIB_8=/opt/homebrew/opt/openssl/lib/libssl.a
+
+--cpp bin/cpp/mac/static-release
+-D HAXE_OUTPUT_FILE=liblightstreamer_client
+
+-D static_link
