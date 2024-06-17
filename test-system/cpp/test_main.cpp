@@ -786,7 +786,7 @@ TEST_FIXTURE(Setup, testClearSnapshot) {
 TEST_FIXTURE(Setup, testRoundTrip) {
   std::atomic_bool sessionActive(true);
   EXPECT_EQ("TEST", client.connectionDetails.getAdapterSet());
-  EXPECT_EQ("http://127.0.0.1:8080", client.connectionDetails.getServerAddress());
+  EXPECT_EQ("http://localtest.me:8080", client.connectionDetails.getServerAddress());
   EXPECT_EQ(50000000L, client.connectionOptions.getContentLength());
   EXPECT_EQ(4000L, client.connectionOptions.getRetryDelay());
   EXPECT_EQ(15000L, client.connectionOptions.getSessionRecoveryTimeout());
@@ -1102,7 +1102,7 @@ TEST_FIXTURE(Setup, testConnectionDetails) {
   client.connectionDetails.setAdapterSet("");
   EXPECT_EQ("", client.connectionDetails.getAdapterSet());
 
-  EXPECT_EQ("http://127.0.0.1:8080", client.connectionDetails.getServerAddress());
+  EXPECT_EQ("http://localtest.me:8080", client.connectionDetails.getServerAddress());
   client.connectionDetails.setServerAddress("https://example.com");
   EXPECT_EQ("https://example.com", client.connectionDetails.getServerAddress());
   client.connectionDetails.setServerAddress("");
