@@ -36,7 +36,12 @@
   <property name="test.settings" location="${tools}/res/test.win.hxml" if:set="onwindows"/>
 
   <!-- read the output folder from the build settings -->
-  <exec executable="haxe" failonerror="true" outputproperty="hxml.output">
+  <exec executable="haxe" failonerror="true" outputproperty="hxml.output" osfamily="unix">
+    <arg line="-p ${tools}/res --run ReadHxml ${build.settings}"/>
+  </exec>
+  <exec executable="cmd" failonerror="true" outputproperty="hxml.output" osfamily="windows">
+    <arg value="/C"/>
+    <arg value="haxe"/>
     <arg line="-p ${tools}/res --run ReadHxml ${build.settings}"/>
   </exec>
 
@@ -53,10 +58,22 @@
   <target name="package_haxe" depends="copy_modules">
     <echo message="Version: ${version} build ${build.number}"/>
     <echo message="CID: ${cid}"/>
-    <exec executable="haxe" failonerror="true">
+    <exec executable="haxe" failonerror="true" osfamily="unix">
       <arg value="build.cpp.hxml"/>
       <arg value="${build.settings}"/>
       <arg line="-D no-traces"/>
+      <arg value="-D"/><arg value="LS_VERSION=${version}"/>
+      <arg value="-D"/><arg value="LS_BUILD=${build.number}"/>
+      <arg value="-D"/><arg value="LS_CID=${cid}"/>
+      <!-- output lib is saved in ${build} -->
+    </exec>
+    <exec executable="cmd" failonerror="true" osfamily="windows">
+      <arg value="/C"/>
+      <arg value="haxe"/>
+      <arg value="build.cpp.hxml"/>
+      <arg value="${build.settings}"/>
+      <arg line="-D no-traces"/>
+      <!-- <arg line="-D NO_AUTO_MSVC"/> -->
       <arg value="-D"/><arg value="LS_VERSION=${version}"/>
       <arg value="-D"/><arg value="LS_BUILD=${build.number}"/>
       <arg value="-D"/><arg value="LS_CID=${cid}"/>

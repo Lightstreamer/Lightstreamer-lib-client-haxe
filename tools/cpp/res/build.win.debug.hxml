@@ -1,0 +1,20 @@
+--debug
+
+# -D HXCPP_ARM64
+
+-D CXXFLAG_0=/Y-
+-D CXXFLAG_1=/std:c++17
+
+-D CPPFLAG_0=-I%POCO_BASE%/openssl/build/include
+-D CPPFLAG_1=-IC:/Program Files (x86)/Poco/include
+
+# -D LDFLAG_0=-L/usr/local/lib
+
+# -D LDLIB_0=-lPocoFoundationd
+# -D LDLIB_1=-lPocoNetd
+# -D LDLIB_2=-lPocoNetSSLd
+
+--cpp bin/cpp/win/debug
+-D HAXE_OUTPUT_FILE=liblightstreamer_clientd
+
+-D dll_link
