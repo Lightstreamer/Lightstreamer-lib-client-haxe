@@ -1,7 +1,7 @@
 --debug
 
 -D NO_PRECOMPILED_HEADERS
--D ABI=/MDd
+-D ABI=/MTd
 
 -D CXXFLAG_0=/std:c++17
 -D CXXFLAG_1=/DWIN32_LEAN_AND_MEAN
@@ -14,8 +14,10 @@
 
 -D LDLIB_0=libcrypto.lib
 -D LDLIB_1=libssl.lib
+-D LDLIB_2=advapi32.lib
+-D LDLIB_3=iphlpapi.lib
 
---cpp bin/cpp/win/debug
+--cpp bin/cpp/win/static-debug
 -D HAXE_OUTPUT_FILE=lightstreamer_clientd
 
--D dll_link
+-D static_link

@@ -30,6 +30,13 @@
   <property name="build.settings" location="${tools}/res/build.mac.debug.hxml" if:set="onmac"/>
   <property name="build.settings" location="${tools}/res/build.linux.debug.hxml" if:set="onlinux"/>
   <property name="build.settings" location="${tools}/res/build.win.debug.hxml" if:set="onwindows"/>
+  <fail message="FILE NOT FOUND: ${build.settings}">
+    <condition>
+      <not>
+        <available file="${build.settings}"/>
+      </not>
+    </condition>
+  </fail>
 
   <property name="test.settings" location="${tools}/res/test.mac.hxml" if:set="onmac"/>
   <property name="test.settings" location="${tools}/res/test.linux.hxml" if:set="onlinux"/>
@@ -56,6 +63,7 @@
   </target>
 
   <target name="package_haxe" depends="copy_modules">
+    <echo message="Build settings: ${build.settings}"/>
     <echo message="Version: ${version} build ${build.number}"/>
     <echo message="CID: ${cid}"/>
     <exec executable="haxe" failonerror="true" osfamily="unix">
