@@ -56,12 +56,12 @@ public:
 ConsoleLogger::ConsoleLogger(ConsoleLogLevel level, const std::string& category) :
   _level(level),
   _category(category),
-  _traceEnabled(level <= ConsoleLogLevel::TRACE),
-  _debugEnabled(level <= ConsoleLogLevel::DEBUG),
-  _infoEnabled (level <= ConsoleLogLevel::INFO),
-  _warnEnabled (level <= ConsoleLogLevel::WARN),
-  _errorEnabled(level <= ConsoleLogLevel::ERROR),
-  _fatalEnabled(level <= ConsoleLogLevel::FATAL)
+  _traceEnabled(level <= ConsoleLogLevel::Trace),
+  _debugEnabled(level <= ConsoleLogLevel::Debug),
+  _infoEnabled (level <= ConsoleLogLevel::Info),
+  _warnEnabled (level <= ConsoleLogLevel::Warn),
+  _errorEnabled(level <= ConsoleLogLevel::Error),
+  _fatalEnabled(level <= ConsoleLogLevel::Fatal)
   {}
 
 void ConsoleLogger::print(const char* level, const std::string& line) {

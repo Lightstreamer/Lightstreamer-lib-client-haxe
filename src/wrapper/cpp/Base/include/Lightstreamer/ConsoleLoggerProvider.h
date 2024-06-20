@@ -7,8 +7,12 @@
 
 /** @file */
 
-// TODO cpp add conditional macro for visibility
+// TODO cpp use HXCPP_EXTERN_CLASS_ATTRIBUTES?
+#ifdef _MSC_VER
+#define LS_PUBLIC_API
+#else
 #define LS_PUBLIC_API __attribute__((visibility("default")))
+#endif
 
 namespace Lightstreamer {
 
@@ -21,37 +25,37 @@ enum class ConsoleLogLevel {
    
     This level enables all logging.
    */
-  TRACE = 0,
+  Trace = 0,
   /**
     Debug logging level.
      
     This level enables all logging except tracing.
    */
-  DEBUG = 10,
+  Debug = 10,
   /**
     Info logging level.
      
     This level enables logging for information, warnings, errors and fatal errors.
    */
-  INFO = 20,
+  Info = 20,
   /**
     Warn logging level.
      
     This level enables logging for warnings, errors and fatal errors.
    */
-  WARN = 30,
+  Warn = 30,
   /**
     Error logging level.
      
     This level enables logging for errors and fatal errors.
    */
-  ERROR = 40,
+  Error = 40,
   /**
     Fatal logging level.
      
     This level enables logging for fatal errors only.
    */
-  FATAL = 50
+  Fatal = 50
 };
 
 /**
