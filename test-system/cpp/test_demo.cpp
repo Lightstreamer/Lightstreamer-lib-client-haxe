@@ -18,7 +18,7 @@ int main() {
     std::cout << "TERMINATING THE PROCESS...\n";
     exit(255);
   });
-  LightstreamerClient::setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel::WARN));
+  LightstreamerClient::setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel::Warn));
 
   LightstreamerClient client("https://push.lightstreamer.com/","DEMO");
   client.connect();

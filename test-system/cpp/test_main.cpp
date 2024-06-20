@@ -1165,13 +1165,13 @@ TEST_FIXTURE(Setup, testCookies) {
 
 TEST(testLogger) {
   {
-    ConsoleLoggerProvider provider(ConsoleLogLevel::TRACE);
+    ConsoleLoggerProvider provider(ConsoleLogLevel::Trace);
     auto log = provider.getLogger("foo");
     EXPECT_EQ(log, provider.getLogger("foo"));
     EXPECT_NE(log, provider.getLogger("bar"));
   }
   {
-    ConsoleLoggerProvider provider(ConsoleLogLevel::TRACE);
+    ConsoleLoggerProvider provider(ConsoleLogLevel::Trace);
     auto log = provider.getLogger("foo");
     EXPECT_TRUE(log->isTraceEnabled());
     EXPECT_TRUE(log->isDebugEnabled());
@@ -1181,7 +1181,7 @@ TEST(testLogger) {
     EXPECT_TRUE(log->isFatalEnabled());
   }
   {
-    ConsoleLoggerProvider provider(ConsoleLogLevel::DEBUG);
+    ConsoleLoggerProvider provider(ConsoleLogLevel::Debug);
     auto log = provider.getLogger("foo");
     EXPECT_FALSE(log->isTraceEnabled());
     EXPECT_TRUE(log->isDebugEnabled());
@@ -1191,7 +1191,7 @@ TEST(testLogger) {
     EXPECT_TRUE(log->isFatalEnabled());
   }
   {
-    ConsoleLoggerProvider provider(ConsoleLogLevel::INFO);
+    ConsoleLoggerProvider provider(ConsoleLogLevel::Info);
     auto log = provider.getLogger("foo");
     EXPECT_FALSE(log->isTraceEnabled());
     EXPECT_FALSE(log->isDebugEnabled());
@@ -1201,7 +1201,7 @@ TEST(testLogger) {
     EXPECT_TRUE(log->isFatalEnabled());
   }
   {
-    ConsoleLoggerProvider provider(ConsoleLogLevel::WARN);
+    ConsoleLoggerProvider provider(ConsoleLogLevel::Warn);
     auto log = provider.getLogger("foo");
     EXPECT_FALSE(log->isTraceEnabled());
     EXPECT_FALSE(log->isDebugEnabled());
@@ -1211,7 +1211,7 @@ TEST(testLogger) {
     EXPECT_TRUE(log->isFatalEnabled());
   }
   {
-    ConsoleLoggerProvider provider(ConsoleLogLevel::ERROR);
+    ConsoleLoggerProvider provider(ConsoleLogLevel::Error);
     auto log = provider.getLogger("foo");
     EXPECT_FALSE(log->isTraceEnabled());
     EXPECT_FALSE(log->isDebugEnabled());
@@ -1221,7 +1221,7 @@ TEST(testLogger) {
     EXPECT_TRUE(log->isFatalEnabled());
   }
   {
-    ConsoleLoggerProvider provider(ConsoleLogLevel::FATAL);
+    ConsoleLoggerProvider provider(ConsoleLogLevel::Fatal);
     auto log = provider.getLogger("foo");
     EXPECT_FALSE(log->isTraceEnabled());
     EXPECT_FALSE(log->isDebugEnabled());
@@ -1324,7 +1324,7 @@ int main(int argc, char** argv) {
     exit(255);
   });
 
-  g_loggerProvider = new ConsoleLoggerProvider(ConsoleLogLevel::DEBUG);
+  g_loggerProvider = new ConsoleLoggerProvider(ConsoleLogLevel::Debug);
   LightstreamerClient::setLoggerProvider(g_loggerProvider);
   
   runner.add(new testGC_removeListeners());

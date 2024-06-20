@@ -19,7 +19,7 @@ int main(int argc, char** argv) {
     std::cout << "TERMINATING THE PROCESS...\n";
     exit(255);
   });
-  LightstreamerClient::setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel::WARN));
+  LightstreamerClient::setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel::Warn));
 
   runner.add(new testRetryDelay());
   return runner.start(argc > 1 ? argv[1]: "");
