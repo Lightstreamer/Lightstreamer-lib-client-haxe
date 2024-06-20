@@ -7,7 +7,7 @@ CPPFLAGS = -I$(LS_BASE)/include
 LDFLAGS = 
 LDLIBS = $(LS_BASE)/liblightstreamer_client.a
 
-test: test_ssl, test_main
+test: test_ssl test_main
 
 test_main:
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -o $(BIN)/$@ $@.cpp $(LDFLAGS) $(LDLIBS)

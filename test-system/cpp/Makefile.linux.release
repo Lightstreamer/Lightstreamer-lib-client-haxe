@@ -8,7 +8,7 @@ LDFLAGS  = -L$(LS_BASE)
 LDLIBS   = -lPocoFoundation -lPocoNet -lPocoNetSSL -llightstreamer_client
 LD_LIB_PATH = $(LS_BASE)
 
-test: test_ssl, test_main
+test: test_ssl test_main
 
 test_main:
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -o $(BIN)/$@ $@.cpp $(LDFLAGS) $(LDLIBS) 
