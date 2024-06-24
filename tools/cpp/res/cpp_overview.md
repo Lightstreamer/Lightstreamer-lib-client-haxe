@@ -14,7 +14,7 @@ The C++ library can be available depending on Edition and License Type. To know 
 
 ## Installing
 
-TODO
+Comprehensive guidelines for building and installation can be found [here](https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe#building).
 
 ## Quickstart
 
@@ -68,7 +68,7 @@ public:
 
 int main() {
   LightstreamerClient::initialize();
-  LightstreamerClient::setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel::WARN));
+  LightstreamerClient::setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel::Warn));
 
   LightstreamerClient client("https://push.lightstreamer.com/","DEMO");
   client.connect();
@@ -89,7 +89,20 @@ int main() {
 To enable the internal client logger, create an instance of {@link Lightstreamer::LoggerProvider} and set it as the default provider of {@link Lightstreamer::LightstreamerClient}.
 
 ```cpp
-LightstreamerClient::setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel::DEBUG));
+LightstreamerClient::setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel::Debug));
+```
+
+## Self-Signed certificates
+
+To use a self-signed certificate, you typically need to create an instance of [Poco::Net::Context](https://docs.pocoproject.org/current/Poco.Net.Context.html) and configure it with your certificate and private key. Here's a general outline of the steps you might follow:
+
+```cpp
+auto privateKeyFile = "path/to/cert.pem"; // Certificate file
+auto certificateFile = "path/to/key.pem"; // Private key file
+auto caLocation = "path/to/ca.pem"; // CA file or path (can be empty if self-signed)
+Poco::Net::Context::Ptr pContext = new Poco::Net::Context(Poco::Net::Context::TLS_CLIENT_USE, privateKeyFile, certificateFile, caLocation);
+
+LightstreamerClient::setTrustManagerFactory(pContext);
 ```
 
 ## Compatibility
@@ -98,7 +111,8 @@ The library is compatible with Lightstreamer Server since version 7.4.0.
 
 ## Documentation
 
-TODO
+- [API Reference](#mainpage)
+- [Changelog](https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe/blob/main/CHANGELOG-C++.md)
 
 ## Support
 

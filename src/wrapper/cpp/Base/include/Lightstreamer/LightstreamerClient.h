@@ -33,11 +33,30 @@ namespace Lightstreamer {
 class LightstreamerClient {
   HaxeObject _client;
 public:
-  // TODO doc
-  static void initialize(void (*exceptionCallback)(const char *exceptionInfo) = nullptr) {
-    Lightstreamer_initializeHaxeThread(exceptionCallback);
+  /**
+	 * Initializes a thread that executes the Lightstreamer functions. The thread remains alive indefinitely until told to stop.
+	 * 
+	 * This must be first before calling any Lightstreamer functions (otherwise those calls will hang waiting for a response from the Lightstreamer thread).
+	 * 
+	 * @param unhandledExceptionCallback a callback to execute if an unhandled exception occurs on the Lightstreamer thread. The Lightstreamer thread will continue processing events after an unhandled exception and you may want to stop it after receiving this callback. Use `nullptr` for no callback
+	 * @returns `nullptr` if the thread initializes successfully or a null-terminated C string if an error occurs during initialization
+   * @see LightstreamerClient#stop()
+	 */
+  static const char* initialize(void (*unhandledExceptionCallback)(const char *exceptionInfo) = nullptr) {
+    return Lightstreamer_initializeHaxeThread(unhandledExceptionCallback);
   }
-  // TODO doc
+  /**
+	 * Stops the Lightstreamer thread, blocking until the thread has completed. Once ended, it cannot be restarted (this is because static variable state will be retained from the last run).
+	 *
+	 * Other threads spawned from the Lightstreamer thread may still be running (you must arrange to stop these yourself for safe app shutdown).
+	 *
+	 * It can be safely called any number of times – if the Lightstreamer thread is not running this function will just return.
+	 * 
+	 * After executing no more calls to Lightstreamer functions can be made (as these will hang waiting for a response from the Lightstreamer thread).
+	 * 
+	 * **Thread-safety**: Can be called safely called on any thread. If called on the Lightstreamer thread it will trigger the thread to stop but it cannot then block until stopped.
+   * @see LightstreamerClient#initialize()
+	 */
   static void stop() {
     Lightstreamer_stopHaxeThreadIfRunning(true);
   }
@@ -135,7 +154,7 @@ public:
    * 
    * @lifecycle May be called only once before creating any LightstreamerClient instance.
    * 
-   * @param factory an instance of Poco::Net::Context::Ptr.
+   * @param factory an instance of [Poco::Net::Context::Ptr](https://docs.pocoproject.org/current/Poco.Net.Context.html).
    */
   static void setTrustManagerFactory(Poco::Net::Context::Ptr factory) {
     LightstreamerClient_setTrustManagerFactory(factory);
@@ -190,8 +209,9 @@ public:
     Lightstreamer_releaseHaxeObject(_client);
   }
   /**
-   * Adds a listener that will receive events from the LightstreamerClient instance. <BR> 
-   * The same listener **cannot** be added to several different LightstreamerClient instances.
+   * Adds a listener that will receive events from the LightstreamerClient instance.
+   * 
+   * @warning A listener is exclusive to a single LightstreamerClient instance and cannot be shared with other instances.
    *
    * @lifecycle A listener can be added at any time. A call to add a listener already 
    * present will be ignored.
@@ -206,6 +226,9 @@ public:
   }
   /**
    * Removes a listener from the LightstreamerClient instance so that it will not receive events anymore.
+   * 
+   * @warning Once removed, a listener becomes unusable and should not be employed further. 
+   * The internal garbage collector will subsequently release the allocated memory.
    * 
    * @lifecycle a listener can be removed at any time.
    * 
@@ -406,6 +429,8 @@ public:
    * @param enqueueWhileDisconnected if this flag is set to true, and the client is in a disconnected status when
    * the provided message is handled, then the message is not aborted right away but is queued waiting for a new
    * session. Note that the message can still be aborted later when a new session is established.
+   * 
+   * @warning A listener is exclusive to a single method invocation and should not be employed further. Following the listener's activation, the internal garbage collector will release the allocated memory.
    */
   void sendMessage(const std::string& message, const std::string& sequence = "", int delayTimeout = -1, ClientMessageListener* listener = nullptr, bool enqueueWhileDisconnected = false) {
     LightstreamerClient_sendMessage(_client, &message, &sequence, delayTimeout, listener, enqueueWhileDisconnected);

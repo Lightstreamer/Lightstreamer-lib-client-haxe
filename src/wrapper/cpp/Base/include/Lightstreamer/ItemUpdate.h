@@ -63,32 +63,38 @@ public:
     return ItemUpdate_getItemPos(_delegate);
   }
   /**
-   * Returns the current value for the specified field
+   * Returns the current value for the specified field.
    * @param fieldName The field name as specified within the "Field List".
    * @throws LightstreamerError if the specified field is not part of the Subscription.
-   * @return The value of the specified field; it can be null in the following cases:<BR>
+   * @return The value of the specified field; it can be the empty string in the following cases:<BR>
    * <ul>
    *  <li>a null value has been received from the Server, as null is a possible value for a field;</li>
    *  <li>no value has been received for the field yet;</li>
    *  <li>the item is subscribed to with the COMMAND mode and a DELETE command is received 
    *  (only the fields used to carry key and command information are valued).</li>
+   *  <li>the value is indeed an empty string. 
+   *      <br>**To differentiate between a truly empty string and a null or absent value, refer to ItemUpdate#isNull().**</li>
    * </ul>
+   * @see ItemUpdate#isNull()
    * @see Subscription#setFields()
    */
   std::string getValue(const std::string& fieldName) {
     return ItemUpdate_getValueByName(_delegate, &fieldName);
   }
   /**
-   * Returns the current value for the specified field
+   * Returns the current value for the specified field.
    * @param fieldPos The 1-based position of the field within the "Field List" or "Field Schema".
    * @throws LightstreamerError if the specified field is not part of the Subscription.
-   * @return The value of the specified field; it can be null in the following cases:<BR>
+   * @return The value of the specified field; it can be the empty string in the following cases:<BR>
    * <ul>
    *  <li>a null value has been received from the Server, as null is a possible value for a field;</li>
    *  <li>no value has been received for the field yet;</li>
    *  <li>the item is subscribed to with the COMMAND mode and a DELETE command is received 
    *  (only the fields used to carry key and command information are valued).</li>
+   *  <li>the value is indeed an empty string. 
+   *      <br>**To differentiate between a truly empty string and a null or absent value, refer to ItemUpdate#isNull(int).**</li>
    * </ul>
+   * @see ItemUpdate#isNull(int)
    * @see Subscription#setFieldSchema()
    * @see Subscription#setFields()
    */
@@ -96,13 +102,33 @@ public:
     return ItemUpdate_getValueByPos(_delegate, fieldPos);
   }
   /**
-   * TODO doc isNull 
+   * Returns whether the current value received from the Server for the specified field is null.
+   * @param fieldName The field name as specified within the "Field List".
+   * @throws LightstreamerError if the specified field is not part of the Subscription.
+   * @return true in the following cases:<BR>
+   * <ul>
+   *  <li>a null value has been received from the Server, as null is a possible value for a field;</li>
+   *  <li>no value has been received for the field yet;</li>
+   *  <li>the item is subscribed to with the COMMAND mode and a DELETE command is received 
+   *  (only the fields used to carry key and command information are valued).</li>
+   * </ul>
+   * @see ItemUpdate#getValue()
    */
   bool isNull(const std::string& fieldName) {
     return ItemUpdate_isNullByName(_delegate, &fieldName);
   }
   /**
-   * TODO doc isNull 
+   * Returns whether the current value received from the Server for the specified field is null.
+   * @param fieldPos The 1-based position of the field within the "Field List" or "Field Schema".
+   * @throws LightstreamerError if the specified field is not part of the Subscription.
+   * @return true in the following cases:<BR>
+   * <ul>
+   *  <li>a null value has been received from the Server, as null is a possible value for a field;</li>
+   *  <li>no value has been received for the field yet;</li>
+   *  <li>the item is subscribed to with the COMMAND mode and a DELETE command is received 
+   *  (only the fields used to carry key and command information are valued).</li>
+   * </ul>
+   * @see ItemUpdate#getValue(int)
    */
   bool isNull(int fieldPos) {
     return ItemUpdate_isNullByPos(_delegate, fieldPos);
@@ -190,7 +216,7 @@ public:
    * The related field name is used as key for the values in the map. 
    * Note that if the Subscription mode of the involved Subscription is COMMAND, then changed fields 
    * are meant as relative to the previous update for the same key. On such tables if a DELETE command 
-   * is received, all the fields, excluding the key field, will be present as changed, with null value. 
+   * is received, all the fields, excluding the key field, will be present as changed, with the empty string as value. 
    * All of this is also true on tables that have the two-level behavior enabled, but in case of 
    * DELETE commands second-level fields will not be iterated.
    * 
@@ -209,7 +235,7 @@ public:
    * The 1-based field position within the field schema or field list is used as key for the values in the map. 
    * Note that if the Subscription mode of the involved Subscription is COMMAND, then changed fields 
    * are meant as relative to the previous update for the same key. On such tables if a DELETE command 
-   * is received, all the fields, excluding the key field, will be present as changed, with null value. 
+   * is received, all the fields, excluding the key field, will be present as changed, with the empty string as value. 
    * All of this is also true on tables that have the two-level behavior enabled, but in case of 
    * DELETE commands second-level fields will not be iterated.
    * 

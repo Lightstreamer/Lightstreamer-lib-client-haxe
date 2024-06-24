@@ -97,8 +97,9 @@ public:
     Lightstreamer_releaseHaxeObject(_delegate);
   }
   /**
-    * Adds a listener that will receive events from the Subscription instance. <BR> 
-    * The same listener **cannot** be added to several different Subscription instances.
+    * Adds a listener that will receive events from the Subscription instance.
+    * 
+    * @warning A listener is exclusive to a single Subscription instance and cannot be shared with other instances.
     *
     * @lifecycle A listener can be added at any time. A call to add a listener already 
     * present will be ignored.
@@ -114,6 +115,9 @@ public:
   /**
     * Removes a listener from the Subscription instance so that it will not receive 
     * events anymore.
+    * 
+    * @warning Once removed, a listener becomes unusable and should not be employed further. 
+    * The internal garbage collector will subsequently release the allocated memory.
     * 
     * @lifecycle a listener can be removed at any time.
     * 
