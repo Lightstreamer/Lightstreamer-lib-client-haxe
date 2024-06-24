@@ -29,7 +29,6 @@ class WsClient implements IWsClient {
     _onText: (WsClient, String)->Void, 
     _onError: (WsClient, String)->Void)
   {
-    // TODO print trust manager
     streamLogger.logDebug('WS connecting: $url headers($headers) proxy($proxy)');
     this._onOpen = _onOpen;
     this._onText = _onText;
@@ -62,7 +61,6 @@ class WsClient implements IWsClient {
     _lock.synchronized(() -> {
       if (_client != null) {
         streamLogger.logDebug('WS sending: $txt');
-        // TODO avoid copying string
         _client.send(txt);
       }
     });

@@ -73,7 +73,6 @@ private class ConsoleLogger extends AbstractLogger {
     var msg = '$pyTime|$level|$category|$pyThread|$line';
     #elseif cpp
     var now = Date.now().toString();
-    // TODO get thread id from hx-concurrent?
     var trd = untyped __cpp__("{0}->handle", sys.thread.Thread.current());
     var msg = '$now|$level|$category|$trd|$line';
     #else

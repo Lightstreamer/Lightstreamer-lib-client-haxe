@@ -29,7 +29,6 @@ class HttpClient implements IHttpClient {
     _onError: (HttpClient, String)->Void, 
     _onDone: HttpClient->Void) 
   {
-    // TODO print trust manager
     streamLogger.logDebug('HTTP sending: $url $body headers($headers) proxy($proxy)');
     this._onText = _onText;
     this._onError = _onError;
