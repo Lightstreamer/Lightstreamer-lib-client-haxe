@@ -17,6 +17,7 @@ Further on the Web and Android platforms the API offers support for Web and Mobi
 |**Java SE**|[Get the lib](https://central.sonatype.com/artifact/com.lightstreamer/ls-javase-client/5.1.0)<br>[Changelog](CHANGELOG-JavaSE.md)<br>[Quickstart](https://sdk.lightstreamer.com/ls-javase-client/5.1.0/api/index.html#quickstart)<br>[API Reference](https://sdk.lightstreamer.com/ls-javase-client/5.1.0/api/index.html)<br>[Building](#java-se)|
 |**.NET**|[Get the lib](https://www.nuget.org/packages/Lightstreamer.DotNetStandard.Client/6.1.0)<br>[Changelog](CHANGELOG-.NET.md)<br>[Quickstart](https://sdk.lightstreamer.com/ls-dotnetstandard-client/6.1.0/api/articles/intro.html#quickstart)<br>[API Reference](https://sdk.lightstreamer.com/ls-dotnetstandard-client/6.1.0/api/api/index.html)<br>[Building](#net)|
 |**Python**|[Get the lib](https://pypi.org/project/lightstreamer-client-lib/2.1.0/)<br>[Changelog](CHANGELOG-Python.md)<br>[Quickstart](https://sdk.lightstreamer.com/ls-python-client/2.1.0/api/intro.html#quickstart)<br>[API Reference](https://sdk.lightstreamer.com/ls-python-client/2.1.0/api/modules.html)<br>[Building](#python)|
+|**C++**|[Changelog](CHANGELOG-C++.md)<br>[Quickstart](https://sdk.lightstreamer.com/ls-cpp-client/1.0.0-alpha.1/api/index.html)<br>[API Reference](https://sdk.lightstreamer.com/ls-cpp-client/1.0.0-alpha.1/api/annotated.html)<br>[Building](#cpp)|
 
 ## Building
 
@@ -24,7 +25,7 @@ The Lightstreamer Client SDKs are written in [Haxe](https://haxe.org), an open-s
 
 The source files are hosted on Github.
 
-```
+```sh
 git clone https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe.git
 ```
 
@@ -33,7 +34,7 @@ All the commands need to be issued from the folder containing the cloned project
 
 ### Haxe set up
 
-To set up a Haxe 4.3.3+ development environment, first you need to install the following tools:
+To set up a Haxe 4.3.4+ development environment, first you need to install the following tools:
 
 - [node.js 20.11+](https://nodejs.org) and npm CLI 10.2.4+ (which is bundled with node.js)
 - [lix](https://github.com/lix-pm/lix.client), a package manager for Haxe.
@@ -50,7 +51,7 @@ To install the right versions of Haxe dependencies and to fetch the project spec
 lix download
 ```
 
-You can check the installation with typing `haxe --version`. You should get an output like `4.3.3`.
+You can check the installation with typing `haxe --version`. You should get an output like `4.3.4`.
 
 ### Other tools set up
 
@@ -181,6 +182,109 @@ ant
 ```
 
 The generated package is saved in the folder `bin/python/build/lib`.
+
+### <a name="cpp"></a> C++
+
+**Initial Project Setup**
+
+If you're setting up the project for the first time, execute the command:
+
+```
+haxelib run hxcpp
+```
+
+Should you be prompted to rebuild the hxcpp tool, please respond with "yes".
+
+**Building POCO**
+
+Lightstreamer Client SDK depends on POCO, a collection of cross-platform open-source libraries which simplify the development of portable applications in C++.
+
+Compiling POCO involves a few steps, and the process can vary depending on your operating system. 
+
+Here's a general guide to help you compile POCO:
+
+- **Download the Source Code**: Obtain the POCO C++ Libraries source code from the official repository:
+
+```sh
+git clone -b poco-1.13.3-release https://github.com/pocoproject/poco.git
+```
+
+- **Prepare the Build Environment**: Ensure you have [CMake](https://cmake.org) installed, as it is the recommended way to build POCO. You will need CMake release 3.5 or later.
+
+- **Install OpenSSL**: See the section [External Dependencies](https://docs.pocoproject.org/current/00200-GettingStarted.html) for the installation instructions.
+
+- **Generate Build Files**: Create a build directory within the POCO source tree and generate the build files using CMake. In CMake-Gui select (at least) these modules: Encodings, XML, JSON, Util, Net, NetSSL_OpenSSL and Crypto.
+
+```sh
+cd poco
+mkdir poco-build
+cmake -H. -Bpoco-build
+cmake-gui poco-build
+```
+
+- **Compile the Libraries**:
+
+```sh
+cmake --build poco-build
+```
+
+This will build the POCO libraries and any additional tools included in the source tree.
+
+- **Install (Optional)**: If you want to install the libraries on your system, you can use the install target with CMake:
+
+```sh
+sudo cmake --build poco-build --target install
+```
+
+Remember to check the [documentation](https://docs.pocoproject.org/current/00200-GettingStarted.html) for any platform-specific instructions or additional details that might be relevant to your setup.
+
+**Building the Lightstreamer Client SDK**
+
+Navigate to the `tools/cpp` directory and run the following command to build the SDK:
+
+```
+ant -e -Dbuild.settings=<hxml-file>
+```
+
+Replace `<hxml-file>` with the path to your configuration file. You can find a selection of pre-defined configuration files for common systems within the `tools/cpp/res` directory. These files are sorted by operating system and specify whether you're building a debug or release version, and whether you're compiling a dynamic or static library. Omitting the `build.settings` flag defaults to constructing a dynamic debug library for your current operating system.
+
+**Example for macOS**
+
+To compile a dynamic library with debug symbols for macOS, use:
+
+```
+ant -e -Dbuild.settings=tools/cpp/res/build.mac.debug.hxml
+```
+
+The resulting library will be placed in the `bin/cpp` directory, under an OS-specific subfolder. For example, the command above will produce `lightstreamer_clientd.dylib` in `bin/cpp/mac/debug`.
+
+**HXML files**
+
+Haxe HXML files are configuration files used in Haxe development projects. By grouping compiler arguments together, they make it easier to maintain and manage build configurations.
+
+HXML files contain two primary types of arguments:
+
+- [Haxe Flags](https://haxe.org/manual/compiler-usage.html): These are utilized by the Haxe compiler to direct the conversion of Haxe code into C++ code. They are essential for defining the structure and behavior of the generated C++ output.
+
+- [Hxcpp Flags](https://haxe.org/manual/target-cpp-defines.html): These are specific to the hxcpp tool, which is responsible for the actual compilation of the C++ code. Within these flags, some are directly interpreted by hxcpp to manage the compilation process, while others are passed on to the underlying C++ compiler (such as clang, gcc, or msvc) that hxcpp invokes to compile the generated C++ files.
+
+For our purposes, the most important flags are those pertaining to the C++ compiler and linker. 
+
+These flags are organized into four distinct groups of symbols:
+
+- `CXXFLAG_<num>`: These are compiler flags for C++. They dictate various compiler settings and optimizations.
+
+- `CPPFLAG_<num>`: Preprocessor flags for C++. They typically inform the preprocessor about the locations of header files.
+
+- `LDFLAG_<num>`: Linker flags. Commonly used to define the library search paths during the linking stage.
+
+- `LDLIB_<num>`: Additional linker flags. These are used to specify the actual libraries to be linked with the Lightstreamer Client SDK.
+
+Here, `<num>` represents a single digit ranging from 0 to 9. 
+
+Keep in mind that each symbol must define a single flag. For instance `CXXFLAG_0=-x` is an appropriate definition, whereas `CXXFLAG_0=-x -y` may confuse the compiler and therefore must be avoided.
+
+The syntax for these flags varies based on the build tools being used. For practical examples, refer to the build configurations located in `tools/cpp/res`.
 
 ## Support
 
