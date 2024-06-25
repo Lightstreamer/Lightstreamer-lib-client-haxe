@@ -52,7 +52,7 @@ class TestTrustManager extends utest.Test {
       var myCert: Dynamic = cs.system.security.cryptography.x509certificates.X509Certificate.CreateFromCertFile("test/localtest.me.crt");
       LightstreamerClient.TrustManagerFactory = (sender, cert, chain, sslPolicyErrors) -> myCert.Equals(cert);
       #else
-      fail("TODO");
+      fail("to be implemented");
       #end
       listener._onStatusChange = status -> if (status == connectedString) exps.signal("connected");
       client.connect();

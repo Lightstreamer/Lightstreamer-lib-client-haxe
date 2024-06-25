@@ -87,7 +87,7 @@ class TestClientExtra extends utest.Test {
       cookies.push_back(cookie);
       LightstreamerClient.addCookies(uri, cookies);
       #else
-      fail("TODO");
+      fail("to be implemented");
       #end
 
       listener._onStatusChange = status -> if (status == connectedString) exps.signal("connected");
@@ -128,7 +128,7 @@ class TestClientExtra extends utest.Test {
       equals("X-Client=client; domain=localtest.me; path=/", c1);
       equals("X-Server=server; domain=localtest.me; path=/", c2);
       #else
-      fail("TODO");
+      fail("to be implemented");
       #end
     })
     .then(() -> async.completed())
@@ -162,7 +162,7 @@ class TestClientExtra extends utest.Test {
       var ctxPtr = new poco.net.Context.ContextPtr(pCtx);
       LightstreamerClient.setTrustManagerFactory(ctxPtr);
       #else
-      fail("TODO");
+      fail("to be implemented");
       #end
       listener._onStatusChange = status -> if (status == connectedString) exps.signal("connected");
       client.connect();

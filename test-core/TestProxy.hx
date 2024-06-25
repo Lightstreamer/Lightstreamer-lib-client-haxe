@@ -65,7 +65,7 @@ class TestProxy extends utest.Test {
     isTrue(p1.GetHashCode() == p3.GetHashCode());
     isFalse(p1.GetHashCode() == p2.GetHashCode());
     #else
-    fail("TODO");
+    fail("to be implemented");
     #end
     async.completed();
   }

@@ -66,7 +66,7 @@ class TestCookies extends utest.Test {
       cookies.Add(cookie);
       LightstreamerClient.addCookies(uri, cookies);
       #else
-      fail("TODO");
+      fail("to be implemented");
       #end
 
       listener._onStatusChange = status -> if (status == connectedString) exps.signal("connected");
@@ -99,7 +99,7 @@ class TestCookies extends utest.Test {
       contains("X-Client=client", nCookies);
       contains("X-Server=server", nCookies);
       #else
-      fail("TODO");
+      fail("to be implemented");
       #end
     })
     .then(() -> async.completed())
