@@ -3,8 +3,7 @@
 -D NO_PRECOMPILED_HEADERS
 -D ABI=/MTd
 
--D CXXFLAG_0=/std:c++17
--D CXXFLAG_1=/DWIN32_LEAN_AND_MEAN
+-D CXXFLAG_0=/DWIN32_LEAN_AND_MEAN
 
 -D CPPFLAG_0=-IC:\Program Files (x86)\Poco\include
 -D CPPFLAG_1=-I%POCO_BASE%\openssl\build\include
