@@ -18,6 +18,14 @@ Comprehensive guidelines for building and installation can be found [here](https
 
 ## Quickstart
 
+To ensure the proper functioning of the Client SDK, it is essential to @link Lightstreamer::LightstreamerClient::initialize() initialize @endlink the library first. Failing to do so may result in function calls directed to the client hanging indefinitely. This initialization process activates several service threads that will continue to run until explicitly @link Lightstreamer::LightstreamerClient::stop() terminated @endlink.
+
+```cpp
+LightstreamerClient::initialize([](const char* info) {
+  std::cout << "Uncaught exception: " << info << "\n";
+});
+```
+
 To connect to a Lightstreamer Server, a {@link Lightstreamer::LightstreamerClient}  object has to be created, configured, and instructed to connect to the Lightstreamer Server. 
 A minimal version of the code that creates a LightstreamerClient and connects to the Lightstreamer Server on `%https://push.lightstreamer.com` will look like this:
 
@@ -67,7 +75,9 @@ public:
 };
 
 int main() {
-  LightstreamerClient::initialize();
+  LightstreamerClient::initialize([](const char* info) {
+    std::cout << "Uncaught exception: " << info << "\n";
+  });
   LightstreamerClient::setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel::Warn));
 
   LightstreamerClient client("https://push.lightstreamer.com/","DEMO");
