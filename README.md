@@ -53,6 +53,12 @@ lix download
 
 You can check the installation with typing `haxe --version`. You should get an output like `4.3.4`.
 
+**WARNING** It has been observed that lix may occasionally not work as expected. Should you experience any anomalies, the following steps are recommended:
+
+1. Uninstall lix from your system: `npm uninstall -g lix`
+2. Manually install [Haxe](https://haxe.org/download/)
+3. Install the project dependencies by executing `haxelib install --always tools/deps.hxml` within the project directory
+
 ### Other tools set up
 
 In order to build the SDKs you need a few other tools.
