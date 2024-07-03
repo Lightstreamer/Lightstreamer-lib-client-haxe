@@ -1,0 +1,3 @@
+# @install: lix --silent download "haxelib:/colyseus-websocket#1.0.14" into colyseus-websocket/1.0.14/haxelib
+-cp ${HAXE_LIBCACHE}/colyseus-websocket/1.0.14/haxelib/src
+-D colyseus-websocket=1.0.14

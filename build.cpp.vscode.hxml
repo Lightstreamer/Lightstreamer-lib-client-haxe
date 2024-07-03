@@ -2,6 +2,7 @@ build.common.hxml
 --class-path src/platform/cpp
 --class-path src/extern/cpp
 --library haxe-concurrent
+--library colyseus-websocket
 
 --debug
 -D HXCPP_CPP17
