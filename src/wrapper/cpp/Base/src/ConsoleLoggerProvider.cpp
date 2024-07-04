@@ -1,8 +1,6 @@
 #include "Lightstreamer/ConsoleLoggerProvider.h"
-#include "Poco/LocalDateTime.h"
-#include "Poco/DateTimeFormat.h"
-#include "Poco/DateTimeFormatter.h"
-#include "Poco/Thread.h"
+#include <ctime>
+#include <iomanip>
 #include <iostream>
 #include <sstream>
 
@@ -65,9 +63,10 @@ ConsoleLogger::ConsoleLogger(ConsoleLogLevel level, const std::string& category)
   {}
 
 void ConsoleLogger::print(const char* level, const std::string& line) {
-  std::string now = Poco::DateTimeFormatter::format(Poco::LocalDateTime(), Poco::DateTimeFormat::SORTABLE_FORMAT);
+  std::time_t t = std::time(nullptr);
+  std::tm tm = *std::localtime(&t);
   std::stringstream ss;
-  ss << now << "|" << level << "|" << _category << "|" << Poco::Thread::currentOsTid() << "|" << line;
+  ss << std::put_time(&tm, "%F %T") << "|" << level << "|" << _category << "|" << line;
   std::cout << ss.str() << std::endl;
 }
 

@@ -111,6 +111,7 @@ public:
   static void setLoggerProvider(LoggerProvider* provider) {
     LightstreamerClient_setLoggerProvider(provider);
   }
+  #ifdef LS_HAS_COOKIES
   /**
    * Static method that can be used to share cookies between connections to the Server
    * (performed by this library) and connections to other sites that are performed
@@ -149,6 +150,8 @@ public:
   static std::vector<Poco::Net::HTTPCookie> getCookies(Poco::URI& uri) {
     return LightstreamerClient_getCookies(&uri);
   }
+  #endif
+  #ifdef LS_HAS_TRUST_MANAGER
   /**
    * Provides a mean to control the way TLS certificates are evaluated, with the possibility to accept untrusted ones.
    * 
@@ -159,6 +162,7 @@ public:
   static void setTrustManagerFactory(Poco::Net::Context::Ptr factory) {
     LightstreamerClient_setTrustManagerFactory(factory);
   }
+  #endif
   /**
    * Data object that contains options and policies for the connection to 
    * the server. This instance is set up by the LightstreamerClient object at 

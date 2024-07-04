@@ -39,6 +39,7 @@ class HxLightstreamerClient {
     LSLightstreamerClient.setLoggerProvider(_provider);
   }
 
+  #if LS_HAS_COOKIES
   static function addCookies(uri: Star<NativeURI>, cookies: Star<NativeCookieCollection>) {
     @:nullSafety(Off)
     LSLightstreamerClient.addCookies(uri, cookies);
@@ -51,10 +52,13 @@ class HxLightstreamerClient {
   static function clearAllCookies() {
     com.lightstreamer.internal.CookieHelper.instance.clearCookies();
   }
+  #end
 
+  #if LS_HAS_TRUST_MANAGER
   static function setTrustManagerFactory(factory: NativeTrustManager) {
     LSLightstreamerClient.setTrustManagerFactory(factory);
   }
+  #end
 
   @HaxeCBridge.name("LightstreamerClient_new")
   static function create(serverAddress: ConstStar<CppString>, adapterSet: ConstStar<CppString>) {

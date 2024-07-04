@@ -9,7 +9,7 @@ build.common.hxml
 -D HaxeCBridge.name=Lightstreamer
 
 -D LS_HAS_PROXY
--D LS_HAS_COOKIES
--D LS_HAS_TRUST_MANAGER
+# -D LS_HAS_COOKIES
+# -D LS_HAS_TRUST_MANAGER
 # -D LS_JSON_PATCH
 # -D LS_TLCP_DIFF

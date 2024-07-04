@@ -1,30 +1,7 @@
 <xml>
   <set name="LS_NS" value="Lightstreamer" />
-  <set name="HXPOCO_NS" value="Lightstreamer/HxPoco" />
 
   <files id="haxe">
-    <file name="src/${HXPOCO_NS}/HttpClient.cpp">
-      <depend name="include/${HXPOCO_NS}/HttpClient.h"/>
-      <depend name="include/${HXPOCO_NS}/Network.h"/>
-      <depend name="include/${HXPOCO_NS}/Activity.h"/>
-    </file>
-    <file name="src/${HXPOCO_NS}/WsClient.cpp">
-      <depend name="include/${HXPOCO_NS}/WsClient.h"/>
-      <depend name="include/${HXPOCO_NS}/Network.h"/>
-      <depend name="include/${HXPOCO_NS}/Activity.h"/>
-      <depend name="include/${HXPOCO_NS}/LineAssembler.h"/>
-    </file>
-    <file name="src/${HXPOCO_NS}/CookieJar.cpp">
-      <depend name="include/${HXPOCO_NS}/CookieJar.h"/>
-      <depend name="include/${HXPOCO_NS}/Utils.h"/>
-    </file>
-    <file name="src/${HXPOCO_NS}/Utils.cpp">
-      <depend name="include/${HXPOCO_NS}/Utils.h"/>
-    </file>
-    <file name="src/${HXPOCO_NS}/LineAssembler.cpp">
-      <depend name="include/${HXPOCO_NS}/LineAssembler.h"/>
-    </file>
-
     <file name="src/${LS_NS}/ConsoleLoggerProvider.cpp">
       <depend name="include/${LS_NS}/ConsoleLoggerProvider.h"/>
     </file>

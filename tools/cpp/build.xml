@@ -97,12 +97,6 @@
     <copy todir="${build}/src/Lightstreamer" verbose="true">
       <fileset dir="${wrapper.src}/Base/src"/>
     </copy>
-    <copy todir="${build}/include" verbose="true">
-      <fileset dir="${wrapper.src}/HxPoco/include"/>
-    </copy>
-    <copy todir="${build}/src/Lightstreamer/HxPoco" verbose="true">
-      <fileset dir="${wrapper.src}/HxPoco/src"/>
-    </copy>
   </target>
 
   <target name="docs" description="Build the docs">
@@ -136,12 +130,6 @@
     </copy>
     <copy todir="${test}/src/Lightstreamer" verbose="true">
       <fileset dir="${wrapper.src}/Base/src"/>
-    </copy>
-    <copy todir="${test}/include" verbose="true">
-      <fileset dir="${wrapper.src}/HxPoco/include"/>
-    </copy>
-    <copy todir="${test}/src/Lightstreamer/HxPoco" verbose="true">
-      <fileset dir="${wrapper.src}/HxPoco/src"/>
     </copy>
   </target>
 

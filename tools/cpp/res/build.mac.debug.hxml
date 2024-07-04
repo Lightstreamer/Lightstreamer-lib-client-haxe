@@ -4,15 +4,6 @@
 
 -D CXXFLAG_0=-Og
 
--D CPPFLAG_0=-I/usr/local/include
--D CPPFLAG_1=-I/opt/homebrew/opt/openssl/include
-
--D LDFLAG_0=-L/usr/local/lib
-
--D LDLIB_0=-lPocoFoundationd
--D LDLIB_1=-lPocoNetd
--D LDLIB_2=-lPocoNetSSLd
-
 --cpp bin/cpp/mac/debug
 -D HAXE_OUTPUT_FILE=liblightstreamer_clientd
 

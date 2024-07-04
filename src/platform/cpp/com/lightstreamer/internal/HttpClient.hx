@@ -1,26 +1,17 @@
 package com.lightstreamer.internal;
 
-import cpp.Star;
-import cpp.Reference;
-import cpp.ConstCharStar;
+import haxe.atomic.AtomicBool;
+import sys.Http;
 import sys.thread.Thread;
-import poco.net.ProxyConfig;
-import com.lightstreamer.cpp.CppStringMap;
-import com.lightstreamer.hxpoco.HttpClientCpp;
 import com.lightstreamer.client.Proxy.LSProxy as Proxy;
 import com.lightstreamer.internal.PlatformApi.IHttpClient;
-import com.lightstreamer.internal.Threads.backgroundThread;
 import com.lightstreamer.log.LoggerTools;
 
 using com.lightstreamer.log.LoggerTools;
 
-@:unreflective
 class HttpClient implements IHttpClient {
-  final _lock = new RLock();
-  final _onText: (HttpClient, String)->Void;
-  final _onError: (HttpClient, String)->Void;
-  final _onDone: HttpClient->Void;
-  var _client: Null<Star<HttpClientAdapter>>;
+  final _thread: Thread;
+  final _disposed = new AtomicBool(false);
 
   public function new(url: String, body: String, 
     headers: Null<Map<String, String>>,
@@ -30,131 +21,244 @@ class HttpClient implements IHttpClient {
     _onDone: HttpClient->Void) 
   {
     streamLogger.logDebug('HTTP sending: $url $body headers($headers) proxy($proxy)');
-    this._onText = _onText;
-    this._onError = _onError;
-    this._onDone = _onDone;
-    // headers
-    var hs = new CppStringMap();
-    if (headers != null) {
-      for (k => v in headers) {
-        hs.add(k, v);
+    _thread = Thread.create(() -> {
+			var req = new AsyncHttp(url);
+			req.onData = line -> {
+        if (isDisposed()) {
+          return;
+        }
+        streamLogger.logDebug('HTTP event: text($line)');
+        _onText(this, line);
       }
-    }
-    // proxy
-    var pc = new ProxyConfig();
-    if (proxy != null) {
-      pc.setHost(proxy.host);
-      pc.setPort(proxy.port);
-      if (proxy.user != null) {
-        pc.setUsername(proxy.user);
+			req.onError = error -> {
+        if (isDisposed()) {
+          return;
+        }
+        streamLogger.logDebug('HTTP event: error($error)');
+        _onError(this, error);
       }
-      if (proxy.password != null){
-        pc.setPassword(proxy.password);
+      req.onDone = () -> {
+        if (isDisposed()) {
+          return;
+        }
+        streamLogger.logDebug("HTTP event: complete");
+        _onDone(this);
       }
-    }
-    // connect
-    this._client = new HttpClientAdapter(url, body, hs, pc, s -> onText(s), s -> onError(s), () -> onDone());
-    _client.start();
+			req.setPostData(body);
+			req.request(true);
+		});
   }
 
-  /**
-   * **NB** `dispose` method is blocking.
-   * Make sure to call it from a different thread than the one calling the `onText`, `onError`, and `onDone` callbacks.
-   */
-  public function dispose() {
-    _lock.synchronized(() -> {
-      if (_client != null) {
-        var c = _client;
-        _client = null;
-        streamLogger.logDebug("HTTP disposing");
-        backgroundThread.submit(() -> {
-          c.dispose();
-          // manually release the memory acquired by the native objects
-          untyped __cpp__("delete {0}", c);
-        });
-      }
-    });
+  public function dispose(): Void {
+    if (!_disposed.load()) {
+      streamLogger.logDebug("HTTP disposing");
+      _disposed.store(true);
+      _thread.sendMessage("close");
+    }
   }
 
   public function isDisposed(): Bool {
-    return _lock.synchronized(() -> _client == null);
-  }
-
-  function onText(line: String): Void {
-    if (isDisposed()) {
-      return;
-    }
-    streamLogger.logDebug('HTTP event: text($line)');
-    this._onText(this, line);
-  }
-
-  function onError(error: String): Void {
-    if (isDisposed()) {
-      return;
-    }
-    streamLogger.logDebug('HTTP event: error($error)');
-    this._onError(this, error);
-  }
-
-  function onDone(): Void {
-    if (isDisposed()) {
-      return;
-    }
-    streamLogger.logDebug("HTTP event: complete");
-    this._onDone(this);
+    return _disposed.load();
   }
 }
 
-@:nativeGen
-@:structAccess
-class HttpClientAdapter extends HttpClientCpp {
-  final _onText: String->Void;
-  final _onError: String->Void;
-  final _onDone: ()->Void;
+private class AsyncHttp extends Http {
+  public dynamic function onDone() {}
 
-  public function new(url: String, body: String, 
-    headers: CppStringMap,
-    proxy: Reference<ProxyConfig>,
-    onText: String->Void, 
-    onError: String->Void, 
-    onDone: ()->Void) 
-  {
-    super(url, body, headers, proxy);
-    this._onText = onText;
-    this._onError = onError;
-    this._onDone = onDone;
-  }
+  override function success(data: haxe.io.Bytes) {
+    onDone();
+	}
 
-  override function gc_enter_blocking() {
-    cpp.vm.Gc.enterGCFreeZone();
-  }
+  @:nullSafety(Off)
+  override function readHttpResponse(api:haxe.io.Output, sock:sys.net.Socket) {
+		// READ the HTTP header (until \r\n\r\n)
+		var b = new haxe.io.BytesBuffer();
+		var k = 4;
+		var s = haxe.io.Bytes.alloc(4);
+		sock.setTimeout(cnxTimeout);
+		while (true) {
+			var p = 0;
+			while (p != k) {
+				try {
+					p += sock.input.readBytes(s, p, k - p);
+				}
+				catch (e:haxe.io.Eof) { }
+			}
+			b.addBytes(s, 0, k);
+			switch (k) {
+				case 1:
+					var c = s.get(0);
+					if (c == 10)
+						break;
+					if (c == 13)
+						k = 3;
+					else
+						k = 4;
+				case 2:
+					var c = s.get(1);
+					if (c == 10) {
+						if (s.get(0) == 13)
+							break;
+						k = 4;
+					} else if (c == 13)
+						k = 3;
+					else
+						k = 4;
+				case 3:
+					var c = s.get(2);
+					if (c == 10) {
+						if (s.get(1) != 13)
+							k = 4;
+						else if (s.get(0) != 10)
+							k = 2;
+						else
+							break;
+					} else if (c == 13) {
+						if (s.get(1) != 10 || s.get(0) != 13)
+							k = 1;
+						else
+							k = 3;
+					} else
+						k = 4;
+				case 4:
+					var c = s.get(3);
+					if (c == 10) {
+						if (s.get(2) != 13)
+							continue;
+						else if (s.get(1) != 10 || s.get(0) != 13)
+							k = 2;
+						else
+							break;
+					} else if (c == 13) {
+						if (s.get(2) != 10 || s.get(1) != 13)
+							k = 3;
+						else
+							k = 1;
+					}
+			}
+		}
+		#if neko
+		var headers = neko.Lib.stringReference(b.getBytes()).split("\r\n");
+		#else
+		var headers = b.getBytes().toString().split("\r\n");
+		#end
+		var response = headers.shift();
+		var rp = response.split(" ");
+		var status = Std.parseInt(rp[1]);
+		if (status == 0 || status == null)
+			throw "Response status error";
 
-  override function gc_exit_blocking() {
-    cpp.vm.Gc.exitGCFreeZone();
-  }
-  
-  override function submit() {
-    var that: Star<HttpClientAdapter> = untyped __cpp__("this");
-    // TODO use a thread pool?
-    @:nullSafety(Off)
-    Thread.create(() -> 
-      try {
-        that.doSubmit();
-      } catch(ex) {
-        streamLogger.logErrorEx("Uncaught exception in HttpClient.hx", ex);
+		// remove the two lasts \r\n\r\n
+		headers.pop();
+		headers.pop();
+		responseHeaders = new haxe.ds.StringMap();
+		var size = null;
+		var chunked = false;
+		for (hline in headers) {
+			var a = hline.split(": ");
+			var hname = a.shift();
+			var hval = if (a.length == 1) a[0] else a.join(": ");
+			hval = StringTools.ltrim(StringTools.rtrim(hval));
+
+			{
+				var previousValue = responseHeaders.get(hname);
+				if (previousValue != null) {
+					if (responseHeadersSameKey == null) {
+						responseHeadersSameKey = new haxe.ds.Map<String, Array<String>>();
+					}
+					var array = responseHeadersSameKey.get(hname);
+					if (array == null) {
+						array = new Array<String>();
+						array.push(previousValue);
+						responseHeadersSameKey.set(hname, array);
+					}
+					array.push(hval);
+				}
+			}
+			responseHeaders.set(hname, hval);
+			switch (hname.toLowerCase()) {
+				case "content-length":
+					size = Std.parseInt(hval);
+				case "transfer-encoding":
+					chunked = (hval.toLowerCase() == "chunked");
+			}
+		}
+
+		onStatus(status);
+
+		var chunk_re = ~/^([0-9A-Fa-f]+)[ ]*\r\n/m;
+		chunk_size = null;
+		chunk_buf = null;
+
+		var bufsize = 1024;
+		var buf = haxe.io.Bytes.alloc(bufsize);
+		if (chunked) {
+			// try {
+			// 	while (true) {
+			// 		var len = sock.input.readBytes(buf, 0, bufsize);
+			// 		if (!readChunk(chunk_re, api, buf, len))
+			// 			break;
+			// 	}
+			// } catch (e:haxe.io.Eof) {
+			// 	throw "Transfer aborted";
+			// }
+
+      // BEGIN PATCH
+      throw new haxe.Exception("Chunked encoding not supported");
+      // END PATCH
+		} else if (size == null) {
+			// if (!noShutdown)
+			// 	sock.shutdown(false, true);
+			// try {
+			// 	while (true) {
+			// 		var len = sock.input.readBytes(buf, 0, bufsize);
+			// 		if (len == 0)
+			// 			break;
+			// 		api.writeBytes(buf, 0, len);
+			// 	}
+			// } catch (e:haxe.io.Eof) {}
+
+      // BEGIN PATCH
+      throw new haxe.Exception("Unlimited length not supported");
+      // END PATCH
+		} else {
+			// api.prepare(size);
+			// try {
+			// 	while (size > 0) {
+			// 		var len = sock.input.readBytes(buf, 0, if (size > bufsize) bufsize else size);
+			// 		api.writeBytes(buf, 0, len);
+			// 		size -= len;
+			// 	}
+			// } catch (e:haxe.io.Eof) {
+			// 	throw "Transfer aborted";
+			// }
+
+      // BEGIN PATCH
+      sock.setTimeout(0.1); // throws an Error.Blocked when the read timeout expires but no data is available
+      while (true) {
+        try {
+          var s = sock.input.readLine();
+          onData(s);
+        } catch(ex: haxe.io.Error) {
+          if (ex != haxe.io.Error.Blocked) {
+            throw ex; 
+          }
+          var m = Thread.readMessage(false);
+          if (m != null && m == "close") {
+            // forced closing
+            break;
+          }
+        } catch(ex: haxe.io.Eof) {
+          // all data has been read
+          break;
+        }
       }
-    );
-  }
-
-  override public function onText(line: ConstCharStar): Void {
-    this._onText(line);
-  }
-
-  override public function onError(error: ConstCharStar): Void {
-    this._onError(error);
-  }
-
-  override public function onDone(): Void {
-    this._onDone();
-  }
+      // END PATCH
+		}
+		if (chunked && (chunk_size != null || chunk_buf != null))
+			throw "Invalid chunk";
+		if (status < 200 || status >= 400)
+			throw "Http Error #" + status;
+		api.close();
+	}
 }

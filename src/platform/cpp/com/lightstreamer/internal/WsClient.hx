@@ -1,26 +1,18 @@
 package com.lightstreamer.internal;
 
-import com.lightstreamer.internal.PlatformApi.IWsClient;
-import cpp.Star;
-import cpp.Reference;
-import cpp.ConstCharStar;
+import haxe.net.WebSocket;
+import haxe.atomic.AtomicBool;
+import sys.Http;
 import sys.thread.Thread;
-import poco.net.ProxyConfig;
-import com.lightstreamer.cpp.CppStringMap;
-import com.lightstreamer.hxpoco.WsClientCpp;
 import com.lightstreamer.client.Proxy.LSProxy as Proxy;
-import com.lightstreamer.internal.Threads.backgroundThread;
+import com.lightstreamer.internal.PlatformApi.IWsClient;
 import com.lightstreamer.log.LoggerTools;
 
 using com.lightstreamer.log.LoggerTools;
 
-@:unreflective
 class WsClient implements IWsClient {
-  final _lock = new RLock();
-  final _onOpen: WsClient->Void;
-  final _onText: (WsClient, String)->Void;
-  final _onError: (WsClient, String)->Void;
-  var _client: Null<Star<WsClientAdapter>>;
+  final _thread: Thread;
+  final _disposed = new AtomicBool(false);
 
   public function new(url: String, 
     headers: Null<Map<String, String>>,
@@ -30,140 +22,82 @@ class WsClient implements IWsClient {
     _onError: (WsClient, String)->Void)
   {
     streamLogger.logDebug('WS connecting: $url headers($headers) proxy($proxy)');
-    this._onOpen = _onOpen;
-    this._onText = _onText;
-    this._onError = _onError;
-    // headers
-    var hs = new CppStringMap();
-    if (headers != null) {
-      for (k => v in headers) {
-        hs.add(k, v);
-      }
-    }
-    // proxy
-    var pc = new ProxyConfig();
-    if (proxy != null) {
-      pc.setHost(proxy.host);
-      pc.setPort(proxy.port);
-      if (proxy.user != null) {
-        pc.setUsername(proxy.user);
-      }
-      if (proxy.password != null){
-        pc.setPassword(proxy.password);
-      }
-    }
-    // connect
-    this._client = new WsClientAdapter(url, Constants.FULL_TLCP_VERSION, hs, pc, () -> onOpen(), s -> onText(s), s -> onError(s));
-    _client.connect();
-  }
-
-  public function send(txt: String): Void {
-    _lock.synchronized(() -> {
-      if (_client != null) {
-        streamLogger.logDebug('WS sending: $txt');
-        _client.send(txt);
+    _thread = Thread.create(() -> {
+      try {
+        url = ~/^http/.replace(url, "ws");
+        var ws = WebSocket.create(url, [Constants.FULL_TLCP_VERSION], false);
+        ws.onopen = () -> {
+          if (isDisposed()) {
+            return;
+          }
+          streamLogger.logDebug('WS event: open');
+          _onOpen(this);
+        }
+        ws.onmessageString = text -> {
+          if (isDisposed()) {
+            return;
+          }
+          for (line in text.split("\r\n")) {
+            if (isDisposed()) {
+              return;
+            }
+            if (line == "") continue;
+            streamLogger.logDebug('WS event: text($line)');
+            _onText(this, line);
+          }
+        }
+        ws.onerror = error -> {
+          if (isDisposed()) {
+            return;
+          }
+          streamLogger.logDebug('WS event: error($error)');
+          _onError(this, error);
+        }
+        while (!_disposed.load()) {
+          ws.process();
+          var m: Null<OpCode> = Thread.readMessage(false);
+          if (m != null) {
+            switch (m) {
+            case WsSend(msg):
+              ws.sendString(msg);
+            case WsClose:
+              break;
+            }
+          }
+          Sys.sleep(0.1);
+        }
+        ws.close();
+      } catch(ex) {
+        if (isDisposed()) {
+          return;
+        }
+        streamLogger.logErrorEx('WS event: error(${ex.message})', ex);
+        _onError(this, ex.message);
       }
     });
   }
 
-  /**
-   * **NB** `dispose` method is blocking.
-   * Make sure to call it from a different thread than the one calling the `onText`, `onError`, and `onDone` callbacks.
-   */
-  public function dispose() {
-    _lock.synchronized(() -> {
-      if (_client != null) {
-        var c = _client;
-        _client = null;
-        streamLogger.logDebug("WS disposing");
-        backgroundThread.submit(() -> {
-          c.dispose();
-          // manually release the memory acquired by the native objects
-          untyped __cpp__("delete {0}", c);
-        });
-      }
-    });
+  public function dispose(): Void {
+    if (!_disposed.load()) {
+      streamLogger.logDebug("WS disposing");
+      _disposed.store(true);
+      _thread.sendMessage(WsClose);
+    }
   }
 
   public function isDisposed(): Bool {
-    return _lock.synchronized(() -> _client == null);
+    return _disposed.load();
   }
 
-  function onOpen(): Void {
-    if (isDisposed()) {
-      return;
+  public function send(txt: String): Void {
+    if (!_disposed.load()) {
+      streamLogger.logDebug('WS sending: $txt');
+      _thread.sendMessage(WsSend(txt));
     }
-    streamLogger.logDebug('WS event: open');
-    this._onOpen(this);
-  }
-
-  function onText(line: String): Void {
-    if (isDisposed()) {
-      return;
-    }
-    streamLogger.logDebug('WS event: text($line)');
-    this._onText(this, line);
-  }
-
-  function onError(error: String): Void {
-    if (isDisposed()) {
-      return;
-    }
-    streamLogger.logDebug('WS event: error($error)');
-    this._onError(this, error);
   }
 }
 
-@:nativeGen
-@:structAccess
-class WsClientAdapter extends WsClientCpp {
-  final _onOpen: ()->Void;
-  final _onText: String->Void;
-  final _onError: String->Void;
-
-  public function new(url: String, subProtocol: String, 
-    headers: CppStringMap,
-    proxy: Reference<ProxyConfig>,
-    onOpen: ()->Void,
-    onText: String->Void, 
-    onError: String->Void) 
-  {
-    super(url, subProtocol, headers, proxy);
-    this._onOpen = onOpen;
-    this._onText = onText;
-    this._onError = onError;
-  }
-
-  override function gc_enter_blocking() {
-    cpp.vm.Gc.enterGCFreeZone();
-  }
-
-  override function gc_exit_blocking() {
-    cpp.vm.Gc.exitGCFreeZone();
-  }
-
-  override function submit() {
-    var that: Star<WsClientAdapter> = untyped __cpp__("this");
-    // TODO use a thread pool?
-    @:nullSafety(Off)
-    Thread.create(() -> 
-      try {
-        that.doSubmit();
-      } catch(ex) {
-        streamLogger.logErrorEx("Uncaught exception in WsClient.hx", ex);
-      }
-    );
-  }
-
-  override public function onOpen(): Void {
-    this._onOpen();
-  }
-
-  override public function onText(line: ConstCharStar): Void {
-    this._onText(line);
-  }
-
-  override public function onError(error: ConstCharStar): Void {
-    this._onError(error);
-  }
+private enum OpCode {
+  WsSend(msg: String);
+  WsClose;
 }

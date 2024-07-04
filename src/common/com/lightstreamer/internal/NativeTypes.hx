@@ -572,8 +572,7 @@ typedef NativeCookieCollection = cs.system.net.CookieCollection;
 typedef NativeURI = String;
 typedef NativeCookieCollection = com.lightstreamer.internal.SimpleCookie;
 #elseif cpp
-typedef NativeURI = poco.URI;
-typedef NativeCookieCollection = com.lightstreamer.client.CookieVector;
+
 #end
 
 #if java
@@ -583,7 +582,7 @@ typedef NativeTrustManager = cs.system.net.security.RemoteCertificateValidationC
 #elseif python
 typedef NativeTrustManager = com.lightstreamer.internal.SSLContext;
 #elseif cpp
-typedef NativeTrustManager = poco.net.Context.ContextPtr;
+
 #end
 
 #if java

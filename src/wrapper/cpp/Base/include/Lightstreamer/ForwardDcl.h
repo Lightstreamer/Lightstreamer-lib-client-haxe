@@ -1,9 +1,6 @@
 #ifndef INCLUDED_Lightstreamer_ForwardDcl
 #define INCLUDED_Lightstreamer_ForwardDcl
 
-#include "Poco/URI.h"
-#include "Poco/Net/HTTPCookie.h"
-#include "Poco/Net/Context.h"
 #include <string>
 #include <vector>
 
