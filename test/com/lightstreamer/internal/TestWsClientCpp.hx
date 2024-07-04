@@ -1,8 +1,6 @@
 package com.lightstreamer.internal;
 
 import cpp.Star;
-import poco.net.Context;
-import com.lightstreamer.internal.NativeTypes.NativeCookieCollection;
 
 private class _WsClient extends WsClient {
   public function new(url, ?headers, ?proxy, _onOpen, _onText, _onError) {
@@ -23,20 +21,12 @@ class TestWsClientCpp extends utest.Test {
 
   function teardown() {
     ws.dispose();
+    #if LS_HAS_COOKIES
     CookieHelper.instance.clearCookies();
+    #end
+    #if LS_HAS_TRUST_MANAGER
     Globals.instance.clearTrustManager();
-    clearCompletionListeners();
-  }
-
-  @:access(com.lightstreamer.internal.Executor)
-  function addCompletionListener(f) {
-    com.lightstreamer.internal.Threads.backgroundThread.exec.onCompletion(f);
-  }
-
-  @:access(com.lightstreamer.internal.Executor)
-  @:access(hx.concurrent.executor.Executor)
-  function clearCompletionListeners() {
-    com.lightstreamer.internal.Threads.backgroundThread.exec.completionListeners.clear();
+    #end
   }
 
   function testPolling(async: utest.Async) {
@@ -109,6 +99,7 @@ class TestWsClientCpp extends utest.Test {
       });
   }
 
+  #if LS_HAS_COOKIES
   function testCookies(async: utest.Async) {
     var uri = new poco.URI(host);
     equals(0, (LightstreamerClient.getCookies(uri).size() : Int));
@@ -136,6 +127,7 @@ class TestWsClientCpp extends utest.Test {
         async.completed(); 
       });
   }
+  #end
 
   function testHeaders(async: utest.Async) {
     ws = new _WsClient(
@@ -192,6 +184,7 @@ class TestWsClientCpp extends utest.Test {
       });
   }
 
+  #if LS_HAS_TRUST_MANAGER
   function testTrustManager(async: utest.Async) {
     var privateKeyFile = "test/localtest.me.key";
     var certificateFile = "test/localtest.me.crt";
@@ -215,22 +208,5 @@ class TestWsClientCpp extends utest.Test {
         async.completed(); 
       });
   }
-
-  function testDispose(async: utest.Async) {
-    ws = new _WsClient(
-      host + "/lightstreamer", 
-      function onOpen(c) {
-        c.send("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg");
-      },
-      function onText(c, line) {
-        if (c.isDisposed()) return;
-        match(~/CONOK/, line);
-        c.dispose();
-        addCompletionListener(r -> async.completed());
-      }, 
-      function onError(c, error) { 
-        fail(error); 
-        async.completed(); 
-      });
-  }
+  #end
 }

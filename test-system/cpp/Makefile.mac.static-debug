@@ -3,8 +3,8 @@ LS_BASE = ../../bin/cpp/mac/static-debug
 
 CXX = g++
 CXXFLAGS = -g -Og -std=c++17 -Wall -Wextra -pedantic -Wno-unused-parameter
-CPPFLAGS = -I$(LS_BASE)/include -I/opt/homebrew/opt/openssl/include
-LDFLAGS = 
+CPPFLAGS = -I$(LS_BASE)/include
+LDFLAGS = -framework CoreFoundation -framework Security
 LDLIBS = $(LS_BASE)/liblightstreamer_clientd.a
 
 test: test_ssl test_main

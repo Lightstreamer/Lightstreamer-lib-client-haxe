@@ -1,8 +1,6 @@
 package com.lightstreamer.internal;
 
 import cpp.Star;
-import poco.net.Context;
-import com.lightstreamer.internal.NativeTypes.NativeCookieCollection;
 
 private class _HttpClient extends HttpClient {
   public function new(url, body, ?headers, ?proxy, _onText, _onError, _onDone) {
@@ -23,20 +21,12 @@ class TestHttpClientCpp extends utest.Test {
 
   function teardown() {
     client.dispose();
-    Globals.instance.clearTrustManager();
+    #if LS_HAS_COOKIES
     CookieHelper.instance.clearCookies();
-    clearCompletionListeners();
-  }
-
-  @:access(com.lightstreamer.internal.Executor)
-  function addCompletionListener(f) {
-    com.lightstreamer.internal.Threads.backgroundThread.exec.onCompletion(f);
-  }
-
-  @:access(com.lightstreamer.internal.Executor)
-  @:access(hx.concurrent.executor.Executor)
-  function clearCompletionListeners() {
-    com.lightstreamer.internal.Threads.backgroundThread.exec.completionListeners.clear();
+    #end
+    #if LS_HAS_TRUST_MANAGER
+    Globals.instance.clearTrustManager();
+    #end
   }
 
   function testPolling(async: utest.Async) {
@@ -107,6 +97,7 @@ class TestHttpClientCpp extends utest.Test {
       });
   }
 
+  #if LS_HAS_COOKIES
   function testCookies(async: utest.Async) {
     var uri = new poco.URI(host);
     equals(0, (LightstreamerClient.getCookies(uri).size() : Int));
@@ -134,6 +125,7 @@ class TestHttpClientCpp extends utest.Test {
         async.completed();
       });
   }
+  #end
 
   function testHeaders(async: utest.Async) {
     client = new _HttpClient(
@@ -187,6 +179,7 @@ class TestHttpClientCpp extends utest.Test {
       });
   }
 
+  #if LS_HAS_TRUST_MANAGER
   function testTrustManager(async: utest.Async) {
     var privateKeyFile = "test/localtest.me.key";
     var certificateFile = "test/localtest.me.crt";
@@ -209,22 +202,5 @@ class TestHttpClientCpp extends utest.Test {
         async.completed();
       });
   }
-
-  function testDispose(async: utest.Async) {
-    client = new _HttpClient(
-      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
-      "LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", 
-      function onText(c, line) {
-        if (c.isDisposed()) return;
-        match(~/CONOK/, line);
-        c.dispose();
-        addCompletionListener(r -> async.completed());
-      }, 
-      function onError(c, error) {
-        if (c.isDisposed()) return;
-        fail(error); 
-        async.completed(); 
-      }, 
-      function onDone(c) null);
-  }
+  #end
 }

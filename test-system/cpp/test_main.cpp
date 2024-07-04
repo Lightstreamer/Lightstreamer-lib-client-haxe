@@ -8,7 +8,6 @@
 #include "Lightstreamer/Proxy.h"
 #include "Lightstreamer/ConsoleLoggerProvider.h"
 #include "utest.h"
-#include "Poco/Semaphore.h"
 #include <iostream>
 #include <sstream>
 #include <thread>
@@ -640,7 +639,7 @@ TEST_FIXTURE(Setup, testSubscriptionError) {
   Subscription sub("RAW", {"count"}, {"count"});
   sub.setDataAdapter("COUNT");
   sub.addListener(subListener);
-  subListener->_onSubscriptionError = [this, &sub](auto code, auto msg) {
+  subListener->_onSubscriptionError = [this](auto code, auto msg) {
     std::stringstream ss;
     ss << code << " " << msg;
     EXPECT_EQ("24 Invalid mode for these items", ss.str());
@@ -773,7 +772,7 @@ TEST_FIXTURE(Setup, testClearSnapshot) {
   Subscription sub("DISTINCT", {"clear_snapshot"}, {"dummy"});
   sub.setDataAdapter("CLEAR_SNAPSHOT");
   sub.addListener(subListener);
-  subListener->_onClearSnapshot = [this, &sub] (auto& name, auto pos) {
+  subListener->_onClearSnapshot = [this] (auto& name, auto pos) {
     EXPECT_EQ("clear_snapshot", name);
 		EXPECT_EQ(1, pos);
     resume();
@@ -795,7 +794,7 @@ TEST_FIXTURE(Setup, testRoundTrip) {
   EXPECT_EQ("COUNT", sub.getDataAdapter());
 	EXPECT_EQ("MERGE", sub.getMode());
   sub.addListener(subListener);
-  subListener->_onSubscription = [this, &sub] {
+  subListener->_onSubscription = [this] {
     resume();
   };
   subListener->_onItemUpdate = [&](auto& update) {
@@ -803,7 +802,7 @@ TEST_FIXTURE(Setup, testRoundTrip) {
     sessionActive = false;
     resume();
   };
-  subListener->_onUnsubscription = [this, &sub] {
+  subListener->_onUnsubscription = [this] {
     resume();
   };
   subListener->_onRealMaxFrequency = [this](auto& freq) {
@@ -1137,6 +1136,7 @@ TEST_FIXTURE(Setup, testProxy) {
   wait(TIMEOUT);
 }
 
+#ifdef LS_HAS_COOKIES
 TEST_FIXTURE(Setup, testCookies) {
   LightstreamerClient_clearAllCookies();
 
@@ -1162,6 +1162,7 @@ TEST_FIXTURE(Setup, testCookies) {
   EXPECT_EQ("X-Client=client; domain=localtest.me; path=/", cookies.at(0).toString());
   EXPECT_EQ("X-Server=server; domain=localtest.me; path=/", cookies.at(1).toString());
 }
+#endif
 
 TEST(testLogger) {
   {
@@ -1371,7 +1372,9 @@ int main(int argc, char** argv) {
     runner.add(new testChangeFrequency(transport));
     runner.add(new testHeaders(transport));
     runner.add(new testProxy(transport));
+    #ifdef LS_HAS_COOKIES
     runner.add(new testCookies(transport));
+    #endif
   }
 
   return runner.start(argc > 1 ? argv[1]: "");

@@ -1,7 +1,7 @@
 #ifndef INCLUDED_utest
 #define INCLUDED_utest
 
-#include "Poco/Semaphore.h"
+#include "Semaphore.h"
 #include <vector>
 #include <sstream>
 #include <iostream>
@@ -101,7 +101,7 @@ struct Test {
   std::string name;
   std::string filename;
   int line;
-  Poco::Semaphore _sem{0, std::numeric_limits<int>::max()}; // simulate an unbound semaphore
+  Semaphore _sem;
   std::string _param1;
 
   Test() = delete;
