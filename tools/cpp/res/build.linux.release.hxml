@@ -1,9 +1,5 @@
 -D HXCPP_ARM64
 
--D LDLIB_0=-lPocoFoundation
--D LDLIB_1=-lPocoNet
--D LDLIB_2=-lPocoNetSSL
-
 --cpp bin/cpp/linux/release
 -D HAXE_OUTPUT_FILE=liblightstreamer_client
 -D LDLIB_EXT=.so

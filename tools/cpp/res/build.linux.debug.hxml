@@ -4,10 +4,6 @@
 
 -D CXXFLAG_0=-Og
 
--D LDLIB_0=-lPocoFoundationd
--D LDLIB_1=-lPocoNetd
--D LDLIB_2=-lPocoNetSSLd
-
 --cpp bin/cpp/linux/debug
 -D HAXE_OUTPUT_FILE=liblightstreamer_clientd
 -D LDLIB_EXT=.so

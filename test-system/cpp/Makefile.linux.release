@@ -5,7 +5,7 @@ CXX = g++
 CXXFLAGS = -g -Og -std=c++17 -Wall -Wextra -pedantic -Wno-unused-parameter
 CPPFLAGS = -I$(LS_BASE)/include
 LDFLAGS  = -L$(LS_BASE)
-LDLIBS   = -lPocoFoundation -lPocoNet -lPocoNetSSL -llightstreamer_client
+LDLIBS   = -llightstreamer_client
 LD_LIB_PATH = $(LS_BASE)
 
 test: test_ssl test_main
