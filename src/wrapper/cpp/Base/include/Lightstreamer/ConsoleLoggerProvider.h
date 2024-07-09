@@ -7,11 +7,20 @@
 
 /** @file */
 
-// TODO cpp use HXCPP_EXTERN_CLASS_ATTRIBUTES?
 #ifdef _MSC_VER
-#define LS_PUBLIC_API
+  #if defined(HXCPP_DLL_IMPORT)
+     #define LIGHTSTREAMER_PUBLIC_API __declspec(dllimport)
+  #elif defined (HXCPP_DLL_EXPORT)
+     #define LIGHTSTREAMER_PUBLIC_API __declspec(dllexport)
+  #else
+     #define LIGHTSTREAMER_PUBLIC_API
+  #endif
 #else
-#define LS_PUBLIC_API __attribute__((visibility("default")))
+  #if defined(HXCPP_DLL_EXPORT)
+     #define LIGHTSTREAMER_PUBLIC_API __attribute__((visibility("default")))
+  #else
+     #define LIGHTSTREAMER_PUBLIC_API
+  #endif
 #endif
 
 namespace Lightstreamer {
@@ -63,7 +72,7 @@ enum class ConsoleLogLevel {
  
   To be used, an instance of this class has to be passed to the library through the {@link LightstreamerClient#setLoggerProvider()}.
  */
-class LS_PUBLIC_API ConsoleLoggerProvider: public LoggerProvider {
+class ConsoleLoggerProvider: public LoggerProvider {
   ConsoleLogLevel _level;
   std::map<std::string, std::unique_ptr<Logger>> _loggers;
 public:
@@ -74,7 +83,7 @@ public:
   */
   ConsoleLoggerProvider(ConsoleLogLevel level) : _level(level) {}
 
-  Logger* getLogger(const std::string& category) override;
+  LIGHTSTREAMER_PUBLIC_API Logger* getLogger(const std::string& category) override;
 };
 
 } // namespace Lightstreamer
