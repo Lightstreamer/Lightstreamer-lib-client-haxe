@@ -112,6 +112,7 @@
     <exec executable="${test}/TestAll-debug" failonerror="true" if:set="onmac">
       <env key="DYLD_LIBRARY_PATH" path="/usr/local/lib"/>
     </exec>
+    <exec executable="${test}/TestAll-debug" failonerror="true" if:set="onwindows"/>
   </target>
 
   <target name="build_test" depends="copy_modules_for_tests">

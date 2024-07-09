@@ -1,0 +1,9 @@
+-D NO_PRECOMPILED_HEADERS
+-D windows
+
+-D ABI=/MD
+
+--cpp bin/cpp/win/release
+-D HAXE_OUTPUT_FILE=lightstreamer_client
+
+-D dll_link

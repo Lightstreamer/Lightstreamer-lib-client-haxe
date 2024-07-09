@@ -1,18 +1,9 @@
 --debug
 
 -D NO_PRECOMPILED_HEADERS
+-D windows
+
 -D ABI=/MDd
-
--D CXXFLAG_0=/DWIN32_LEAN_AND_MEAN
-
--D CPPFLAG_0=-IC:\Program Files (x86)\Poco\include
--D CPPFLAG_1=-I%POCO_BASE%\openssl\build\include
-
--D LDFLAG_0=-LIBPATH:C:\Program Files (x86)\Poco\lib
--D LDFLAG_1=-LIBPATH:%POCO_BASE%\openssl\build\win64\bin\release
-
--D LDLIB_0=libcrypto.lib
--D LDLIB_1=libssl.lib
 
 --cpp bin/cpp/win/debug
 -D HAXE_OUTPUT_FILE=lightstreamer_clientd

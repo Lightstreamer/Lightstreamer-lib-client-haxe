@@ -1,16 +1,14 @@
---debug
-
 -D NO_PRECOMPILED_HEADERS
 -D windows
 
--D ABI=/MTd
+-D ABI=/MT
 
 -D LDLIB_0=advapi32.lib
 -D LDLIB_1=ws2_32.lib
 -D LDLIB_2=crypt32.lib
 -D LDLIB_3=user32.lib 
 
---cpp bin/cpp/win/static-debug
--D HAXE_OUTPUT_FILE=lightstreamer_clientd
+--cpp bin/cpp/win/static-release
+-D HAXE_OUTPUT_FILE=lightstreamer_client
 
 -D static_link
