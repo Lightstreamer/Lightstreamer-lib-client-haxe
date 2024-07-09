@@ -9,3 +9,4 @@
 --library hxjava:4.2.0
 --library hxnodejs-ws:5.2.3
 --library hxnodejs:12.1.0
+--library colyseus-websocket:1.0.14
