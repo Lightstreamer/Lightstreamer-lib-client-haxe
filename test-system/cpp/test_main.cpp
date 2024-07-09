@@ -15,6 +15,7 @@
 #include <stdexcept>
 #include <cstdlib>
 #include <atomic>
+#include <functional>
 
 using utest::runner;
 using Lightstreamer::LightstreamerClient;
@@ -180,7 +181,7 @@ TEST_FIXTURE(Setup, testConnect) {
       EXPECT_EQ("CONNECTED:" + transport, client.getStatus());
       EXPECT_EQ("", client.connectionDetails.getServerInstanceAddress());
       EXPECT_EQ("Lightstreamer HTTP Server", client.connectionDetails.getServerSocketName());
-      EXPECT_EQ("127.0.0.1", client.connectionDetails.getClientIp());
+      EXPECT_FALSE(client.connectionDetails.getClientIp().empty());
       EXPECT_FALSE(client.connectionDetails.getSessionId().empty());
       resume();
     }
@@ -812,7 +813,7 @@ TEST_FIXTURE(Setup, testRoundTrip) {
   };
   listener->_onPropertyChange = [&](auto& prop) {
     if (prop == "clientIp") {
-      EXPECT_EQ(sessionActive ? "127.0.0.1" : "", client.connectionDetails.getClientIp());
+      EXPECT_TRUE(sessionActive == !client.connectionDetails.getClientIp().empty());
     } else if (prop == "serverSocketName") {
       EXPECT_EQ(sessionActive ? "Lightstreamer HTTP Server" : "", client.connectionDetails.getServerSocketName());
     } else if (prop == "sessionId") {

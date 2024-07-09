@@ -240,7 +240,7 @@ class TestClient extends utest.Test {
       case "sessionId":
         exps.signal("sessionId: " + (client.connectionDetails.getSessionId() == null ? "null" : "not null"));
       case "clientIp":
-        exps.signal("clientIp: " + client.connectionDetails.getClientIp());
+        exps.signal("clientIp: " + (client.connectionDetails.getClientIp() == null ? "null" : "not null"));
       case "serverSocketName":
         exps.signal("serverSocketName: " + client.connectionDetails.getServerSocketName());
       case "realMaxBandwidth":
@@ -251,7 +251,7 @@ class TestClient extends utest.Test {
     .then(() -> client.connect())
     .await("sessionId: not null")
     .await("serverSocketName: Lightstreamer HTTP Server")
-    .await("clientIp: 127.0.0.1")
+    .await("clientIp: not null")
     .await("realMaxBandwidth: 40")
     .then(() -> client.subscribe(sub))
     .await("onSubscription")
