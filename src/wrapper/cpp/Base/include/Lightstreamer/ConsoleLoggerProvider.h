@@ -9,18 +9,20 @@
 
 #ifdef _MSC_VER
   #if defined(HXCPP_DLL_IMPORT)
-     #define LIGHTSTREAMER_PUBLIC_API __declspec(dllimport)
+    #define LIGHTSTREAMER_WIN_API __declspec(dllimport)
   #elif defined (HXCPP_DLL_EXPORT)
-     #define LIGHTSTREAMER_PUBLIC_API __declspec(dllexport)
+    #define LIGHTSTREAMER_WIN_API __declspec(dllexport)
   #else
-     #define LIGHTSTREAMER_PUBLIC_API
+    #define LIGHTSTREAMER_WIN_API
   #endif
+  #define LIGHTSTREAMER_NIX_API
 #else
   #if defined(HXCPP_DLL_EXPORT)
-     #define LIGHTSTREAMER_PUBLIC_API __attribute__((visibility("default")))
+    #define LIGHTSTREAMER_NIX_API __attribute__((visibility("default")))
   #else
-     #define LIGHTSTREAMER_PUBLIC_API
+    #define LIGHTSTREAMER_NIX_API
   #endif
+  #define LIGHTSTREAMER_WIN_API
 #endif
 
 namespace Lightstreamer {
@@ -72,7 +74,7 @@ enum class ConsoleLogLevel {
  
   To be used, an instance of this class has to be passed to the library through the {@link LightstreamerClient#setLoggerProvider()}.
  */
-class ConsoleLoggerProvider: public LoggerProvider {
+class LIGHTSTREAMER_NIX_API ConsoleLoggerProvider: public LoggerProvider {
   ConsoleLogLevel _level;
   std::map<std::string, std::unique_ptr<Logger>> _loggers;
 public:
@@ -83,7 +85,7 @@ public:
   */
   ConsoleLoggerProvider(ConsoleLogLevel level) : _level(level) {}
 
-  LIGHTSTREAMER_PUBLIC_API Logger* getLogger(const std::string& category) override;
+  LIGHTSTREAMER_WIN_API Logger* getLogger(const std::string& category) override;
 };
 
 } // namespace Lightstreamer
