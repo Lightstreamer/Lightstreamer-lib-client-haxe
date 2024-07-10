@@ -4,7 +4,6 @@ import haxe.net.WebSocket;
 import haxe.atomic.AtomicBool;
 import sys.Http;
 import sys.thread.Thread;
-import com.lightstreamer.client.Proxy.LSProxy as Proxy;
 import com.lightstreamer.internal.PlatformApi.IWsClient;
 import com.lightstreamer.log.LoggerTools;
 
@@ -16,16 +15,15 @@ class WsClient implements IWsClient {
 
   public function new(url: String, 
     headers: Null<Map<String, String>>,
-    proxy: Null<Proxy>,
     _onOpen: WsClient->Void,
     _onText: (WsClient, String)->Void, 
     _onError: (WsClient, String)->Void)
   {
-    streamLogger.logDebug('WS connecting: $url headers($headers) proxy($proxy)');
+    streamLogger.logDebug('WS connecting: $url headers($headers)');
     _thread = Thread.create(() -> {
       try {
         url = ~/^http/.replace(url, "ws");
-        var ws = WebSocket.create(url, [Constants.FULL_TLCP_VERSION], false);
+        var ws = new SysWebsocket(url, [Constants.FULL_TLCP_VERSION], false, headers);
         ws.onopen = () -> {
           if (isDisposed()) {
             return;
