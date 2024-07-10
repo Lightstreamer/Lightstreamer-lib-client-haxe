@@ -1,7 +1,3 @@
 -D HXCPP_ARM64
 
 -D CXXFLAG_0=-Og
-
--D LDLIB_0=-lPocoFoundationd
--D LDLIB_1=-lPocoNetd
--D LDLIB_2=-lPocoNetSSLd
