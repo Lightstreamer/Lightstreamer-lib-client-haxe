@@ -103,8 +103,7 @@ class Factory implements IFactory {
     var trustManager = com.lightstreamer.internal.Globals.instance.getTrustManagerFactory();
     return new com.lightstreamer.internal.WsClient(url, headers, proxy, trustManager, onOpen, onText, onError);
     #elseif cpp
-    var proxy = connectionOptions.getProxy();
-    return new com.lightstreamer.internal.WsClient(url, headers, proxy, onOpen, onText, onError);
+    return new com.lightstreamer.internal.WsClient(url, headers, onOpen, onText, onError);
     #else
     @:nullSafety(Off)
     return null;
@@ -128,8 +127,7 @@ class Factory implements IFactory {
     var trustManager = com.lightstreamer.internal.Globals.instance.getTrustManagerFactory();
     return new com.lightstreamer.internal.HttpClient(url, body, headers, proxy, trustManager, onText, onError, onDone);
     #elseif cpp
-    var proxy = connectionOptions.getProxy();
-    return new com.lightstreamer.internal.HttpClient(url, body, headers, proxy, onText, onError, onDone);
+    return new com.lightstreamer.internal.HttpClient(url, body, headers, onText, onError, onDone);
     #else
     @:nullSafety(Off)
     return null;

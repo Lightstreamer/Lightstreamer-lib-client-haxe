@@ -3,8 +3,8 @@ package com.lightstreamer.internal;
 import cpp.Star;
 
 private class _WsClient extends WsClient {
-  public function new(url, ?headers, ?proxy, _onOpen, _onText, _onError) {
-    super(url, headers, proxy, _onOpen, _onText, _onError);
+  public function new(url, ?headers, _onOpen, _onText, _onError) {
+    super(url, headers, _onOpen, _onText, _onError);
   }
 }
 
@@ -147,6 +147,7 @@ class TestWsClientCpp extends utest.Test {
       });
   }
 
+  #if LS_HAS_PROXY
   function testProxy(async: utest.Async) {
     ws = new _WsClient(
       host + "/lightstreamer", 
@@ -183,6 +184,7 @@ class TestWsClientCpp extends utest.Test {
         async.completed(); 
       });
   }
+  #end
 
   #if LS_HAS_TRUST_MANAGER
   function testTrustManager(async: utest.Async) {

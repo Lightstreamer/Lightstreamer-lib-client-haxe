@@ -2,7 +2,6 @@ package com.lightstreamer.internal;
 
 import haxe.atomic.AtomicBool;
 import sys.thread.Thread;
-import com.lightstreamer.client.Proxy.LSProxy as Proxy;
 import com.lightstreamer.internal.PlatformApi.IHttpClient;
 import com.lightstreamer.log.LoggerTools;
 
@@ -14,12 +13,11 @@ class HttpClient implements IHttpClient {
 
   public function new(url: String, body: String, 
     headers: Null<Map<String, String>>,
-    proxy: Null<Proxy>,
     _onText: (HttpClient, String)->Void, 
     _onError: (HttpClient, String)->Void, 
     _onDone: HttpClient->Void) 
   {
-    streamLogger.logDebug('HTTP sending: $url $body headers($headers) proxy($proxy)');
+    streamLogger.logDebug('HTTP sending: $url $body headers($headers)');
     _thread = Thread.create(() -> {
 			var req = new SysHttp(url);
 			req.onData = line -> {

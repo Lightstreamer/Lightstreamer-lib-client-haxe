@@ -154,6 +154,7 @@ class HxConnectionOptions {
     _delegate.setSessionRecoveryTimeout(sessionRecoveryTimeout);
   }
 
+  #if LS_HAS_PROXY
   function setProxy(@:nullSafety(Off) proxy: ConstStar<NativeProxy>) {
     if (proxy.host.isEmpty()) {
       _delegate.setProxy(null);
@@ -161,4 +162,5 @@ class HxConnectionOptions {
       _delegate.setProxy(proxy);
     }
   }
+  #end
 }

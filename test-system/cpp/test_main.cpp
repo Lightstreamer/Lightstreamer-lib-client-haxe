@@ -1089,11 +1089,13 @@ TEST_FIXTURE(Setup, testConnectionOptions) {
   client.connectionOptions.setSlowingEnabled(true);
   EXPECT_EQ(true, client.connectionOptions.isSlowingEnabled());
 
+  #ifdef LS_HAS_PROXY
   client.connectionOptions.setProxy(Proxy("HTTP", "http://proxy.com", 8090, "usr", "pwd"));
   // an empty host results in the proxy being removed
   client.connectionOptions.setProxy(Proxy("HTTP", "", 0));
   // invalid proxy type
   EXPECT_THROW(client.connectionOptions.setProxy(Proxy("ftp", "http://proxy.com", 8090)), std::runtime_error);
+  #endif
 }
 
 TEST_FIXTURE(Setup, testConnectionDetails) {
@@ -1124,6 +1126,7 @@ TEST_FIXTURE(Setup, testConnectionDetails) {
   EXPECT_EQ("", client.connectionDetails.getSessionId());
 }
 
+#ifdef LS_HAS_PROXY
 TEST_FIXTURE(Setup, testProxy) {
   client.connectionDetails.setServerAddress("http://localtest.me:8080");
   client.connectionOptions.setProxy(Proxy("HTTP", "localtest.me", 8079, "myuser", "mypassword"));
@@ -1137,6 +1140,7 @@ TEST_FIXTURE(Setup, testProxy) {
   client.connect();
   wait(TIMEOUT);
 }
+#endif
 
 #ifdef LS_HAS_COOKIES
 TEST_FIXTURE(Setup, testCookies) {
@@ -1373,7 +1377,9 @@ int main(int argc, char** argv) {
     runner.add(new testFrequency(transport));
     runner.add(new testChangeFrequency(transport));
     runner.add(new testHeaders(transport));
+    #ifdef LS_HAS_PROXY
     runner.add(new testProxy(transport));
+    #endif
     #ifdef LS_HAS_COOKIES
     runner.add(new testCookies(transport));
     #endif

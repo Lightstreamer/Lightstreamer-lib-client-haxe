@@ -733,6 +733,7 @@ public:
   void setSessionRecoveryTimeout(long sessionRecoveryTimeout) {
     ConnectionOptions_setSessionRecoveryTimeout(_delegate, sessionRecoveryTimeout);
   }
+  #ifdef LS_HAS_PROXY
   /**
    * Setter method that configures the coordinates to a proxy server to be used to connect to the Lightstreamer Server. 
    * 
@@ -751,6 +752,7 @@ public:
   void setProxy(const Proxy& proxy) {
     ConnectionOptions_setProxy(_delegate, &proxy);
   }
+  #endif
 };
 
 } // namespace Lightstreamer

@@ -1,5 +1,6 @@
 package com.lightstreamer.client;
 
+#if LS_HAS_PROXY
 import com.lightstreamer.cpp.CppString;
 import com.lightstreamer.client.Proxy.LSProxy;
 
@@ -27,3 +28,4 @@ private extern class _NativeProxy {
   var user: CppString;
   var password: CppString;
 }
+#end

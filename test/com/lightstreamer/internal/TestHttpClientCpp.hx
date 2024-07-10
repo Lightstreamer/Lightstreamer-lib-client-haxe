@@ -3,8 +3,8 @@ package com.lightstreamer.internal;
 import cpp.Star;
 
 private class _HttpClient extends HttpClient {
-  public function new(url, body, ?headers, ?proxy, _onText, _onError, _onDone) {
-    super(url, body, headers, proxy, _onText, _onError, _onDone);
+  public function new(url, body, ?headers, _onText, _onError, _onDone) {
+    super(url, body, headers, _onText, _onError, _onDone);
   }
 }
 
@@ -144,6 +144,7 @@ class TestHttpClientCpp extends utest.Test {
       });
   }
 
+  #if LS_HAS_PROXY
   function testProxy(async: utest.Async) {
     client = new _HttpClient(
       host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
@@ -178,6 +179,7 @@ class TestHttpClientCpp extends utest.Test {
         async.completed(); 
       });
   }
+  #end
 
   #if LS_HAS_TRUST_MANAGER
   function testTrustManager(async: utest.Async) {

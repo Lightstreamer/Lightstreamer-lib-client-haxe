@@ -4,6 +4,24 @@ import sys.Http;
 import sys.thread.Thread;
 
 class SysHttp extends Http {
+
+	/** 
+	 * **WARNING** proxy is broken: it doesn't work over https and doesn't support authentication
+	 * 
+	 * see https://github.com/HaxeFoundation/haxe/issues/6204 and https://github.com/HaxeFoundation/haxe/issues/8434
+	 */
+	static public function setProxy(host: String, port: Int, user: Null<String>, password: Null<String>) {
+		var proxy: {port:Int, host:String, ?auth:{user:String, ?pass:String}} = { host: host, port: port };
+		if (user != null) {
+			proxy.auth = { user: user };
+			if (password != null) {
+				proxy.auth.pass = password;
+			}
+		}
+		@:nullSafety(Off)
+		Http.PROXY = proxy;
+	}
+
   public dynamic function onDone() {}
 
   override function success(data: haxe.io.Bytes) {
