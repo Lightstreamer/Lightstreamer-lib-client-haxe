@@ -3,6 +3,7 @@ build.common.hxml
 --class-path src/extern/cpp
 --library haxe-concurrent
 --library colyseus-websocket
+--library hxWebSockets
 
 --debug
 -D HXCPP_CPP17

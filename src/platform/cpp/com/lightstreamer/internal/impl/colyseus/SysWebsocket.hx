@@ -1,4 +1,4 @@
-package com.lightstreamer.internal;
+package com.lightstreamer.internal.impl.colyseus;
 
 import haxe.io.Bytes;
 import haxe.ds.StringMap;

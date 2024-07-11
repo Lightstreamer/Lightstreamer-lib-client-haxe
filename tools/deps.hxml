@@ -10,3 +10,4 @@
 --library hxnodejs-ws:5.2.3
 --library hxnodejs:12.1.0
 --library colyseus-websocket:1.0.14
+--library hxWebSockets:git:https://github.com/ianharrigan/hxWebSockets#6c178965f5fcdffe7366c2d3b22f4651d1a772cf

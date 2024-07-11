@@ -2,6 +2,7 @@ test.common.hxml
 --class-path src/platform/cpp
 --class-path src/extern/cpp
 --library colyseus-websocket
+--library hxWebSockets
 
 --debug
 -D HXCPP_CPP17
