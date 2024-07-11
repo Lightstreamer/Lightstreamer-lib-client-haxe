@@ -9,7 +9,7 @@ using com.lightstreamer.log.LoggerTools;
 
 class WsClient implements IWsClient {
   final _disposed = new AtomicBool(false);
-  final _ws: SysWebsocket;
+  final _ws: LsWebsocket;
 
   public function new(url: String, 
     headers: Null<Map<String, String>>,
@@ -19,7 +19,7 @@ class WsClient implements IWsClient {
   {
     streamLogger.logDebug('WS connecting: $url headers($headers)');
     url = ~/^http/.replace(url, "ws");
-    _ws = new SysWebsocket(url, Constants.FULL_TLCP_VERSION, headers);
+    _ws = new LsWebsocket(url, Constants.FULL_TLCP_VERSION, headers);
     _ws.onopen = () -> {
       if (isDisposed()) {
         return;

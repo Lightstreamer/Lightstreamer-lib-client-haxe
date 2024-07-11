@@ -2,7 +2,7 @@ package com.lightstreamer.internal.impl.hxws;
 
 import hx.ws.WebSocket;
 
-class SysWebsocket extends WebSocket {
+class LsWebsocket extends WebSocket {
   public function new(url: String, protocol: String, headers: Null<Map<String, String>>) {
     super(url, false);
     additionalHeaders.set("Sec-WebSocket-Protocol", protocol);

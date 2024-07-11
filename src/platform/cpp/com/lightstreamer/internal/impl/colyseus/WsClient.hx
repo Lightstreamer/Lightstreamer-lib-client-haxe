@@ -23,7 +23,7 @@ class WsClient implements IWsClient {
     _thread = Thread.create(() -> {
       try {
         url = ~/^http/.replace(url, "ws");
-        var ws = new SysWebsocket(url, [Constants.FULL_TLCP_VERSION], false, headers);
+        var ws = new LsWebsocket(url, [Constants.FULL_TLCP_VERSION], false, headers);
         ws.onopen = () -> {
           if (isDisposed()) {
             return;
