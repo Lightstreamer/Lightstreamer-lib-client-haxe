@@ -20,6 +20,45 @@ class LsWebsocket extends WebSocketGeneric {
     initialize(uri, protocols, origin, debug);
   }
 
+  // adapted from WebSocketGeneric.initialize
+  override function initialize(uri:String, protocols:Array<String> = null, origin:String = null, debug:Bool = true) {
+    if (origin == null) origin = "http://127.0.0.1/";
+    this.protocols = protocols;
+    this.origin = origin;
+    this.key = Base64.encode(Crypto.getSecureRandomBytes(16));
+    this.debug = debug;
+    var reg = ~/^(\w+?):\/\/([\w\.-]+)(:(\d+))?(\/.*)?$/;
+    //var reg = ~/^(\w+?):/;
+    if (!reg.match(uri)) throw 'Uri not matching websocket uri "${uri}"';
+    scheme = reg.matched(1);
+    switch (scheme) {
+        case "ws": secure = false;
+        case "wss": secure = true;
+        default: throw 'Scheme "${scheme}" is not a valid websocket scheme';
+    }
+    host = reg.matched(2);
+    port = (reg.matched(4) != null) ? Std.parseInt(reg.matched(4)) : (secure ? 443 : 80);
+    path = reg.matched(5);
+    if (path == null) path = '/';
+    //trace('$scheme, $host, $port, $path');
+
+    // BEGIN PATCH
+    // socket = Socket2.create(host, port, secure, debug);
+    
+    socket = new LsSocket(host, port, debug).initialize(secure);
+    // END PATCH
+    
+    state = State.Handshake;
+    socket.onconnect = function() {
+        _debug('socket connected');
+        writeBytes(prepareClientHandshake(path, host, port, key, origin));
+        //this.onopen();
+    };
+    commonInitialize();
+
+    return this;
+  }
+
   // adapted from WebSocketGeneric.prepareClientHandshake
   override function prepareClientHandshake(url:String, host:String, port:Int, key:String, origin:String):Bytes {
     var lines = [];
@@ -37,10 +76,12 @@ class LsWebsocket extends WebSocketGeneric {
     lines.push('Origin: ${origin}');
     lines.push('User-Agent: Mozilla/5.0');
 
+    // BEGIN PATCH
     for (k => v in _additionalHeaders) {
       lines.push('$k: $v');
     }
+    // END PATCH
 
     return Utf8Encoder.encode(lines.join("\r\n") + "\r\n\r\n");
-}
+  }
 }

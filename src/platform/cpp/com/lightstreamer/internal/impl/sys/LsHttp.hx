@@ -24,6 +24,7 @@ class LsHttp extends Http {
 
   public dynamic function onDone() {}
 
+	// **NB** the behavior of HttpBase.success has been changed
   override function success(data: haxe.io.Bytes) {
     onDone();
 	}
@@ -153,6 +154,7 @@ class LsHttp extends Http {
 		var bufsize = 1024;
 		var buf = haxe.io.Bytes.alloc(bufsize);
 		if (chunked) {
+			// BEGIN PATCH
 			// try {
 			// 	while (true) {
 			// 		var len = sock.input.readBytes(buf, 0, bufsize);
@@ -163,10 +165,10 @@ class LsHttp extends Http {
 			// 	throw "Transfer aborted";
 			// }
 
-      // BEGIN PATCH
       throw new haxe.Exception("Chunked encoding not supported");
       // END PATCH
 		} else if (size == null) {
+			// BEGIN PATCH
 			// if (!noShutdown)
 			// 	sock.shutdown(false, true);
 			// try {
@@ -178,10 +180,10 @@ class LsHttp extends Http {
 			// 	}
 			// } catch (e:haxe.io.Eof) {}
 
-      // BEGIN PATCH
       throw new haxe.Exception("Unlimited length not supported");
       // END PATCH
 		} else {
+			// BEGIN PATCH
 			// api.prepare(size);
 			// try {
 			// 	while (size > 0) {
@@ -193,7 +195,6 @@ class LsHttp extends Http {
 			// 	throw "Transfer aborted";
 			// }
 
-      // BEGIN PATCH
       sock.setTimeout(0.1); // throws an Error.Blocked when the read timeout expires but no data is available
       while (true) {
         try {
