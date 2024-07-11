@@ -1,9 +1,9 @@
-package com.lightstreamer.internal;
+package com.lightstreamer.internal.impl.sys;
 
 import sys.Http;
 import sys.thread.Thread;
 
-class SysHttp extends Http {
+class LsHttp extends Http {
 
 	/** 
 	 * **WARNING** proxy is broken: it doesn't work over https and doesn't support authentication
@@ -28,6 +28,7 @@ class SysHttp extends Http {
     onDone();
 	}
 
+	// adapted from Http.readHttpResponse
   @:nullSafety(Off)
   override function readHttpResponse(api:haxe.io.Output, sock:sys.net.Socket) {
 		// READ the HTTP header (until \r\n\r\n)

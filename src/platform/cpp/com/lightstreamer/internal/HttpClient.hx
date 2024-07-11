@@ -2,6 +2,7 @@ package com.lightstreamer.internal;
 
 import haxe.atomic.AtomicBool;
 import sys.thread.Thread;
+import com.lightstreamer.internal.impl.sys.LsHttp;
 import com.lightstreamer.internal.PlatformApi.IHttpClient;
 import com.lightstreamer.log.LoggerTools;
 
@@ -19,7 +20,7 @@ class HttpClient implements IHttpClient {
   {
     streamLogger.logDebug('HTTP sending: $url $body headers($headers)');
     _thread = Thread.create(() -> {
-			var req = new SysHttp(url);
+			var req = new LsHttp(url);
 			req.onData = line -> {
         if (isDisposed()) {
           return;
