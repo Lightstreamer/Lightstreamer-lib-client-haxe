@@ -186,10 +186,8 @@ class TestHttpClientCpp extends utest.Test {
     var privateKeyFile = "test/localtest.me.key";
     var certificateFile = "test/localtest.me.crt";
     var caLocation = "test/localtest.me.crt";
-    var pCtx: Star<Context> = new Context(Usage.TLS_CLIENT_USE, privateKeyFile, certificateFile, caLocation);
-    var ctxPtr = new ContextPtr(pCtx);
 
-    LightstreamerClient.setTrustManagerFactory(ctxPtr);
+    LightstreamerClient.setTrustManagerFactory(caLocation, certificateFile, privateKeyFile, "", true);
     client = new _HttpClient(
       secHost + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", 

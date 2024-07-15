@@ -55,8 +55,15 @@ class HxLightstreamerClient {
   #end
 
   #if LS_HAS_TRUST_MANAGER
-  static function setTrustManagerFactory(factory: NativeTrustManager) {
-    LSLightstreamerClient.setTrustManagerFactory(factory);
+  static function setTrustManagerFactory(caFile: ConstStar<CppString>, certificateFile: ConstStar<CppString>, privateKeyFile: ConstStar<CppString>, password: ConstStar<CppString>, verifyCert: Bool) {
+    @:nullSafety(Off)
+    LSLightstreamerClient.setTrustManagerFactory(
+      caFile.isEmpty() ? null : caFile,
+      certificateFile.isEmpty() ? null : certificateFile,
+      privateKeyFile.isEmpty() ? null : privateKeyFile, 
+      password.isEmpty() ? null : password, 
+      verifyCert
+    );
   }
   #end
 

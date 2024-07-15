@@ -8,7 +8,6 @@
 #include "Lightstreamer/Proxy.h"
 #include "Lightstreamer/ConsoleLoggerProvider.h"
 #include "utest.h"
-#include "Poco/Semaphore.h"
 #include <iostream>
 #include <sstream>
 #include <thread>
@@ -82,8 +81,7 @@ TEST_FIXTURE(Setup, testTrustManager) {
   auto privateKeyFile = "../../test/localtest.me.key";
   auto certificateFile = "../../test/localtest.me.crt";
   auto caLocation = "../../test/localtest.me.crt";
-  Poco::Net::Context::Ptr pContext = new Poco::Net::Context(Poco::Net::Context::TLS_CLIENT_USE, privateKeyFile, certificateFile, caLocation);
-  LightstreamerClient::setTrustManagerFactory(pContext);
+  LightstreamerClient::setTrustManagerFactory(caLocation, certificateFile, privateKeyFile);
 
   listener->_onStatusChange = [this](auto& status) {
     if (status == "CONNECTED:" + transport) {

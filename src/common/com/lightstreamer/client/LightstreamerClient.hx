@@ -54,8 +54,8 @@ class LSLightstreamerClient {
   #if cpp 
   @:unreflective 
   #end
-  public static function setTrustManagerFactory(factory: NativeTrustManager) {
-    com.lightstreamer.internal.Globals.instance.setTrustManagerFactory(factory);
+  public static function setTrustManagerFactory(caFile: String, certificateFile: String, privateKeyFile: String, password: String, verifyCert: Bool) {
+    com.lightstreamer.internal.Globals.instance.setTrustManagerFactory(caFile, certificateFile, privateKeyFile, password, verifyCert);
   }
   #end
 

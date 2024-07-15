@@ -191,10 +191,8 @@ class TestWsClientCpp extends utest.Test {
     var privateKeyFile = "test/localtest.me.key";
     var certificateFile = "test/localtest.me.crt";
     var caLocation = "test/localtest.me.crt";
-    var pCtx: Star<Context> = new Context(Usage.TLS_CLIENT_USE, privateKeyFile, certificateFile, caLocation);
-    var ctxPtr = new ContextPtr(pCtx);
 
-    LightstreamerClient.setTrustManagerFactory(ctxPtr);
+    LightstreamerClient.setTrustManagerFactory(caLocation, certificateFile, privateKeyFile, "", true);
     ws = new _WsClient(
       secHost + "/lightstreamer",
       function onOpen(c) {

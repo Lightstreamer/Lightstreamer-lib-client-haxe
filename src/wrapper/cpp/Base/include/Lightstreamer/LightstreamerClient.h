@@ -151,18 +151,20 @@ public:
     return LightstreamerClient_getCookies(&uri);
   }
   #endif
-  #ifdef LS_HAS_TRUST_MANAGER
   /**
    * Provides a mean to control the way TLS certificates are evaluated, with the possibility to accept untrusted ones.
    * 
    * @lifecycle May be called only once before creating any LightstreamerClient instance.
    * 
-   * @param factory an instance of [Poco::Net::Context::Ptr](https://docs.pocoproject.org/current/Poco.Net.Context.html).
+   * @param caFile the path to the file containing the CA/root certificates. Can be empty if the default certificates are used or `verifyCert` is false.
+   * @param certificateFile the path to the certificate file (in PEM format). Can be empty if `verifyCert` is false.
+   * @param privateKeyFile the path to the private key file used for encryption. Can be empty if no private key file is used or `verifyCert` is false.
+   * @param password password for decrypting the private key. Can be emtpy if the private key is not used or the private key is not encrypted or `verifyCert` is false.
+   * @param verifyCert If false, the server certificate is not verified.
    */
-  static void setTrustManagerFactory(Poco::Net::Context::Ptr factory) {
-    LightstreamerClient_setTrustManagerFactory(factory);
+  static void setTrustManagerFactory(const std::string& caFile, const std::string& certificateFile, const std::string& privateKeyFile = "", const std::string& password = "", bool verifyCert = true) {
+    LightstreamerClient_setTrustManagerFactory(&caFile, &certificateFile, &privateKeyFile, &password, verifyCert);
   }
-  #endif
   /**
    * Data object that contains options and policies for the connection to 
    * the server. This instance is set up by the LightstreamerClient object at 

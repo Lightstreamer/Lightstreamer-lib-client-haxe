@@ -14,7 +14,12 @@ class LsSocket extends SocketSys {
     #if python
                 this.impl = new python.net.SslSocket();
     #else
-      this.impl = new sys.ssl.Socket();
+      // BEGIN PATCH
+      // this.impl = new sys.ssl.Socket();
+
+      var ctx = com.lightstreamer.internal.Globals.instance.getTrustManagerFactory();
+      this.impl = ctx.createSocket();
+      // END PATCH
     #end
         #else
             throw 'Not supporting secure sockets';
