@@ -14,6 +14,7 @@
 #include <chrono>
 #include <stdexcept>
 #include <cstdlib>
+#include <functional>
 
 using utest::runner;
 using Lightstreamer::LightstreamerClient;
