@@ -55,6 +55,8 @@ class TestAll {
     runner.addCase(TestWsClientPython);
     #end
     #if cpp
+    runner.addCase(TestCookie);
+    runner.addCase(TestCookieJar);
     runner.addCase(TestHttpClientCpp);
     runner.addCase(TestWsClientCpp);
     #end

@@ -3,7 +3,7 @@ package com.lightstreamer.internal;
 // import com.lightstreamer.hxpoco.Network;
 // import com.lightstreamer.internal.NativeTypes;
 
-@:unreflective
+// @:unreflective
 class CookieHelper {
   public static final instance = new CookieHelper();
 
