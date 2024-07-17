@@ -1331,7 +1331,7 @@ int main(int argc, char** argv) {
     exit(255);
   });
 
-  g_loggerProvider = new ConsoleLoggerProvider(ConsoleLogLevel::Debug);
+  g_loggerProvider = new ConsoleLoggerProvider(ConsoleLogLevel::Error);
   LightstreamerClient::setLoggerProvider(g_loggerProvider);
   
   runner.add(new testGC_removeListeners());

@@ -101,7 +101,7 @@ int main(int argc, char** argv) {
     exit(255);
   });
 
-  LightstreamerClient::setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel::Debug));
+  LightstreamerClient::setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel::Error));
   
   for (auto& transport : { "WS-STREAMING", "HTTP-STREAMING", "HTTP-POLLING", "WS-POLLING" }) {
     runner.add(new testTrustManager(transport));
