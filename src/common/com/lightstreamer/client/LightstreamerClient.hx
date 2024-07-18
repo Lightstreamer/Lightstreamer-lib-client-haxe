@@ -51,12 +51,15 @@ class LSLightstreamerClient {
   #end
 
   #if LS_HAS_TRUST_MANAGER
-  #if cpp 
-  @:unreflective 
-  #end
+  #if cpp
   public static function setTrustManagerFactory(caFile: String, certificateFile: String, privateKeyFile: String, password: String, verifyCert: Bool) {
     com.lightstreamer.internal.Globals.instance.setTrustManagerFactory(caFile, certificateFile, privateKeyFile, password, verifyCert);
   }
+  #else
+  public static function setTrustManagerFactory(factory: NativeTrustManager) {
+    com.lightstreamer.internal.Globals.instance.setTrustManagerFactory(factory);
+  }
+  #end
   #end
 
   public function new(serverAddress: String, adapterSet: String #if LS_TEST ,?factory: IFactory #end) {
