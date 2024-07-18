@@ -9,17 +9,17 @@ typedef Long = Int;
 #end
 
 #if js
-typedef NativeExceptionImpl = js.lib.Error
+typedef NativeExceptionImpl = js.lib.Error;
 #elseif java
-typedef NativeExceptionImpl = java.lang.Throwable
+typedef NativeExceptionImpl = java.lang.Throwable;
 #elseif cs
-typedef NativeExceptionImpl = cs.system.Exception
+typedef NativeExceptionImpl = cs.system.Exception;
 #elseif python
-typedef NativeExceptionImpl = python.Exceptions.BaseException
+typedef NativeExceptionImpl = python.Exceptions.BaseException;
 #elseif php
-typedef NativeExceptionImpl = php.Throwable
+typedef NativeExceptionImpl = php.Throwable;
 #elseif cpp
-typedef NativeExceptionImpl = Any
+typedef NativeExceptionImpl = Any;
 #end
 
 abstract NativeException(NativeExceptionImpl) from NativeExceptionImpl {
@@ -35,11 +35,11 @@ abstract NativeException(NativeExceptionImpl) from NativeExceptionImpl {
 }
 
 #if java
-typedef IllegalArgumentException = java.lang.IllegalArgumentException
-typedef IllegalStateException = java.lang.IllegalStateException
+typedef IllegalArgumentException = java.lang.IllegalArgumentException;
+typedef IllegalStateException = java.lang.IllegalStateException;
 #elseif cs
-typedef IllegalArgumentException = cs.system.ArgumentException
-typedef IllegalStateException = cs.system.InvalidOperationException
+typedef IllegalArgumentException = cs.system.ArgumentException;
+typedef IllegalStateException = cs.system.InvalidOperationException;
 #else
 class IllegalArgumentException extends haxe.Exception {}
 class IllegalStateException extends haxe.Exception {}
