@@ -32,6 +32,42 @@ class TestCookieJar extends utest.Test {
     }
   }
 
+  function testAddTwice() {
+    var jar = new CookieJar();
+    var url = new Url("http://acme.com");
+    var c1 = new Cookie({name:"n1", value:"v1"});
+    jar.setCookiesFromUrl(url, [ c1 ]);
+    {
+      var v = jar.cookiesForUrl(url);
+      equals(1, v.size());
+      equals("n1=v1; domain=acme.com; path=/", v.at(0).toString());
+    }
+    var c2 = new Cookie({name:"n1", value:"v2"});
+    jar.setCookiesFromUrl(url, [ c2 ]);
+    {
+      var v = jar.cookiesForUrl(url);
+      equals(1, v.size());
+      equals("n1=v2; domain=acme.com; path=/", v.at(0).toString());
+    }
+  }
+
+  function testAddSameNameDifferentPaths() {
+    var jar = new CookieJar();
+    var url = new Url("http://acme.com");
+    var c1 = new Cookie({name:"n1", value:"v1", path:"/"});
+    var c2 = new Cookie({name:"n1", value:"v2", path:"/foo"});
+    var c3 = new Cookie({name:"n1", value:"v3", path:"/foo/bar"});
+    jar.setCookiesFromUrl(url, [ c1, c2, c3 ]);
+    {
+      var v = jar.cookiesForUrl(new Url("http://acme.com/foo/bar"));
+      equals(3, v.size());
+      // NB cookies are returned according to the length of their paths
+      equals("n1=v3; domain=acme.com; path=/foo/bar", v.at(0).toString());
+      equals("n1=v2; domain=acme.com; path=/foo", v.at(1).toString());
+      equals("n1=v1; domain=acme.com; path=/", v.at(2).toString());
+    }
+  }
+
   function testDeleteCookies() {
     var jar = new CookieJar();
     var url = new Url("http://acme.com");

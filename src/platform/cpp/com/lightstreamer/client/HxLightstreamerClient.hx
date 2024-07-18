@@ -4,6 +4,7 @@ import cpp.Star;
 import cpp.Pointer;
 import cpp.ConstStar;
 import com.lightstreamer.cpp.CppString;
+import com.lightstreamer.cpp.CppStringVector;
 import com.lightstreamer.log.NativeLoggerProvider;
 import com.lightstreamer.log.LoggerProviderAdapter;
 import com.lightstreamer.client.LightstreamerClient;
@@ -40,13 +41,14 @@ class HxLightstreamerClient {
   }
 
   #if LS_HAS_COOKIES
-  static function addCookies(uri: Star<NativeURI>, cookies: Star<NativeCookieCollection>) {
-    @:nullSafety(Off)
+  static function addCookies(@:nullSafety(Off) uri: ConstStar<CppString>, @:nullSafety(Off) cookies: ConstStar<CppStringVector>) {
+    var cookies: NativeArray<String> = cookies;
     LSLightstreamerClient.addCookies(uri, cookies);
   }
 
-  static function getCookies(@:nullSafety(Off) uri: Star<NativeURI>): NativeCookieCollection {
-    return LSLightstreamerClient.getCookies(uri);
+  static function getCookies(@:nullSafety(Off) uri: ConstStar<CppString>): CppStringVector {
+    var cookies: NativeArray<String> = LSLightstreamerClient.getCookies(uri);
+    return cookies;
   }
 
   static function clearAllCookies() {

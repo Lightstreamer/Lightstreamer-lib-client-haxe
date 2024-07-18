@@ -84,4 +84,71 @@ class LsWebsocket extends WebSocketGeneric {
 
     return Utf8Encoder.encode(lines.join("\r\n") + "\r\n\r\n");
   }
+
+  var responseHeaders: haxe.ds.StringMap<String>;
+  var responseHeadersSameKey: Map<String, Array<String>>;
+
+  /**
+		Returns an array of values for a single response header or returns
+		null if no such header exists.
+		This method can be useful when you need to get a multiple headers with
+		the same name (e.g. `Set-Cookie`), that are unreachable via the
+		`responseHeaders` variable.
+	**/
+  // adapted from sys.Http.getResponseHeaderValues
+  public function getResponseHeaderValues(key:String): Null<Array<String>> {
+		var key = key.toLowerCase(); // header names are stored in lower case
+
+		var array = responseHeadersSameKey?.get(key); // responseHeadersSameKey may be not initialized
+		if (array == null) {
+			var singleValue = responseHeaders.get(key);
+			return (singleValue == null) ? null : [ singleValue ];
+		} else {
+			return array;
+		}
+	}
+
+  // adapted from WebSocketGeneric.validateServerHandshakeHeader
+  override function validateServerHandshakeHeader():Void {
+    _debug('HTTP request: \n$httpHeader');
+
+    var requestLines = httpHeader.split('\r\n');
+    requestLines.pop();
+    requestLines.pop();
+
+    var firstLine = requestLines.shift();
+    var regexp = ~/^HTTP\/1.1 ([0-9]+) ?(.*)$/;
+    if (!regexp.match(firstLine)) throw 'First line of HTTP response is invalid: "$firstLine"';
+    var statusCode:String = regexp.matched(1);
+    if (statusCode != "101") throw 'Status code differed from 101 indicates that handshake has not succeeded. Actual status code: ${statusCode}.';
+
+    // BEGIN PATCH
+    // adapted from sys.Http.readHttpResponse
+    var headers = requestLines;
+    responseHeaders = new haxe.ds.StringMap();
+		for (hline in headers) {
+			var a = hline.split(": ");
+			var hname = a.shift().toLowerCase();
+			var hval = if (a.length == 1) a[0] else a.join(": ");
+			hval = StringTools.ltrim(StringTools.rtrim(hval));
+
+			{
+				var previousValue = responseHeaders.get(hname);
+				if (previousValue != null) {
+					if (responseHeadersSameKey == null) {
+						responseHeadersSameKey = new haxe.ds.Map<String, Array<String>>();
+					}
+					var array = responseHeadersSameKey.get(hname);
+					if (array == null) {
+						array = new Array<String>();
+						array.push(previousValue);
+						responseHeadersSameKey.set(hname, array);
+					}
+					array.push(hval);
+				}
+			}
+			responseHeaders.set(hname, hval);
+		}
+    // END PATCH
+  }
 }

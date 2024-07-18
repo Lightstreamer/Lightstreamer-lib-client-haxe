@@ -28,22 +28,12 @@ class LSLightstreamerClient {
   }
 
   #if LS_HAS_COOKIES
-  #if cpp
-  @:unreflective
-  public static function addCookies(uri: cpp.Reference<NativeURI>, cookies: cpp.Reference<NativeCookieCollection>): Void
-  #else
   public static function addCookies(uri: NativeURI, cookies: NativeCookieCollection): Void
-  #end
   {
     com.lightstreamer.internal.CookieHelper.instance.addCookies(uri, cookies);
   }
 
-  #if cpp
-  @:unreflective
-  public static function getCookies(uri: cpp.Reference<NativeURI>): NativeCookieCollection
-  #else
-  public static function getCookies(uri: Null<NativeURI>): NativeCookieCollection
-  #end
+  public static function getCookies(uri: #if cpp NativeURI #else Null<NativeURI> #end): NativeCookieCollection
   {
     #if cs @:nullSafety(Off) #end
     return com.lightstreamer.internal.CookieHelper.instance.getCookies(uri);

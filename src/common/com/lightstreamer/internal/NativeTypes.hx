@@ -572,7 +572,11 @@ typedef NativeCookieCollection = cs.system.net.CookieCollection;
 typedef NativeURI = String;
 typedef NativeCookieCollection = com.lightstreamer.internal.SimpleCookie;
 #elseif cpp
-
+// WARNING these are not true native types because the native types are std::string and std::vector
+// but I included them here for uniformity with the other targets.
+// the correct declarations are in LightstreamerClient.h in src/wrapper/cpp
+typedef NativeURI = String;
+typedef NativeCookieCollection = Array<String>;
 #end
 
 #if java

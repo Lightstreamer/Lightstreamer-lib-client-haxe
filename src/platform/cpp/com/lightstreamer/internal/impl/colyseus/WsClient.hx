@@ -22,12 +22,27 @@ class WsClient implements IWsClient {
     streamLogger.logDebug('WS connecting: $url headers($headers)');
     _thread = Thread.create(() -> {
       try {
-        url = ~/^http/.replace(url, "ws");
+         // extract the cookies from the cookie jar and set the Cookie header
+        var cookies = CookieHelper.instance.getCookieHeader(url);
+        if (cookies.length > 0) {
+          if (headers == null) {
+            headers = [];
+          }
+          headers["Cookie"] = cookies;
+        }
+        //
+        url = ~/^http/.replace(url, "ws"); // colyseus websocket requires ws or wss as scheme
         var ws = new LsWebsocket(url, [Constants.FULL_TLCP_VERSION], false, headers);
         ws.onopen = () -> {
           if (isDisposed()) {
             return;
           }
+          // extract the cookies from the Set-Cookie headers and add them to the cookie jar
+          var hs = ws.getResponseHeaderValues("Set-Cookie");
+          if (hs != null) {
+            CookieHelper.instance.addCookies(url, hs);
+          }
+          //
           streamLogger.logDebug('WS event: open');
           _onOpen(this);
         }

@@ -28,6 +28,22 @@ class LsHttp extends Http {
 
   public dynamic function onDone() {}
 
+	override public function getResponseHeaderValues(key:String): Null<Array<String>> {
+		var key = key.toLowerCase(); // header names are stored in lower case
+
+		// BEGIN PATCH
+		// var array = responseHeadersSameKey.get(key);
+
+		var array = responseHeadersSameKey?.get(key); // responseHeadersSameKey may be not initialized
+		// END PATCH
+		if (array == null) {
+			var singleValue = responseHeaders.get(key);
+			return (singleValue == null) ? null : [ singleValue ];
+		} else {
+			return array;
+		}
+	}
+
 	// **NB** the behavior of HttpBase.success has been changed
   override function success(data: haxe.io.Bytes) {
     onDone();
@@ -293,7 +309,11 @@ class LsHttp extends Http {
 		var chunked = false;
 		for (hline in headers) {
 			var a = hline.split(": ");
-			var hname = a.shift();
+			// BEGIN PATCH
+			// var hname = a.shift();
+
+			var hname = a.shift().toLowerCase();
+			// END PATCH
 			var hval = if (a.length == 1) a[0] else a.join(": ");
 			hval = StringTools.ltrim(StringTools.rtrim(hval));
 
@@ -313,7 +333,11 @@ class LsHttp extends Http {
 				}
 			}
 			responseHeaders.set(hname, hval);
-			switch (hname.toLowerCase()) {
+			// BEGIN PATCH
+			// switch (hname.toLowerCase()) {
+
+			switch (hname) {
+			// END PATCH
 				case "content-length":
 					size = Std.parseInt(hval);
 				case "transfer-encoding":

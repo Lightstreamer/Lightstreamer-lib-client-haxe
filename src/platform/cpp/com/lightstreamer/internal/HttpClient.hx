@@ -42,6 +42,13 @@ class HttpClient implements IHttpClient {
         streamLogger.logDebug("HTTP event: complete");
         _onDone(this);
       }
+      req.onStatus = _ -> {
+        // extract the cookies from the Set-Cookie headers and add them to the cookie jar
+        var hs = req.getResponseHeaderValues("Set-Cookie");
+        if (hs != null) {
+          CookieHelper.instance.addCookies(url, hs);
+        }
+      }
 			// set additional headers
 			req.setHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
 			if (headers != null) {
@@ -49,6 +56,11 @@ class HttpClient implements IHttpClient {
 					req.setHeader(k, v);
 				}
 			}
+      // extract the cookies from the cookie jar and set the Cookie header
+      var cookies = CookieHelper.instance.getCookieHeader(url);
+      if (cookies.length > 0) {
+        req.setHeader("Cookie", cookies);
+      }
 			//
 			req.setPostData(body);
 			req.request(true);

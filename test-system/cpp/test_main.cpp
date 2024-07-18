@@ -113,7 +113,6 @@ constexpr long TIMEOUT = 3000;
 
 struct Setup: public utest::Test {
   LightstreamerClient client;
-  // TODO listener can leak if not added to client
   MyClientListener* listener{new MyClientListener()};
   MySubscriptionListener* subListener{new MySubscriptionListener()};
   std::string transport{"WS-STREAMING"};
@@ -1142,17 +1141,15 @@ TEST_FIXTURE(Setup, testProxy) {
 }
 #endif
 
-#ifdef LS_HAS_COOKIES
 TEST_FIXTURE(Setup, testCookies) {
   LightstreamerClient_clearAllCookies();
 
-  Poco::URI host("http://localtest.me:8080");
-  client.connectionDetails.setServerAddress(host.toString());
+  std::string host("http://localtest.me:8080");
+  client.connectionDetails.setServerAddress(host);
   EXPECT_EQ(0, LightstreamerClient::getCookies(host).size());
 
-  Poco::Net::HTTPCookie cookie("X-Client", "client");
-  std::vector<Poco::Net::HTTPCookie> _cookies{cookie};
-  LightstreamerClient::addCookies(host, _cookies);
+  std::string cookie("X-Client=client");
+  LightstreamerClient::addCookies(host, { cookie });
 
   listener->_onStatusChange = [this](auto& status) {
     if (status == "CONNECTED:" + transport) {
@@ -1165,10 +1162,9 @@ TEST_FIXTURE(Setup, testCookies) {
 
   auto cookies = LightstreamerClient::getCookies(host);
   EXPECT_EQ(2, cookies.size());
-  EXPECT_EQ("X-Client=client; domain=localtest.me; path=/", cookies.at(0).toString());
-  EXPECT_EQ("X-Server=server; domain=localtest.me; path=/", cookies.at(1).toString());
+  EXPECT_EQ("X-Client=client; domain=localtest.me; path=/", cookies.at(0));
+  EXPECT_EQ("X-Server=server; domain=localtest.me; path=/", cookies.at(1));
 }
-#endif
 
 TEST(testLogger) {
   {
@@ -1380,9 +1376,7 @@ int main(int argc, char** argv) {
     #ifdef LS_HAS_PROXY
     runner.add(new testProxy(transport));
     #endif
-    #ifdef LS_HAS_COOKIES
     runner.add(new testCookies(transport));
-    #endif
   }
 
   return runner.start(argc > 1 ? argv[1]: "");

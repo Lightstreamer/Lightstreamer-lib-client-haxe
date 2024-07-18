@@ -52,7 +52,6 @@ constexpr long TIMEOUT = 3000;
 
 struct Setup: public utest::Test {
   LightstreamerClient client;
-  // TODO listener can leak if not added to client
   MyClientListener* listener{new MyClientListener()};
   std::string transport{"WS-STREAMING"};
 

@@ -111,7 +111,6 @@ public:
   static void setLoggerProvider(LoggerProvider* provider) {
     LightstreamerClient_setLoggerProvider(provider);
   }
-  #ifdef LS_HAS_COOKIES
   /**
    * Static method that can be used to share cookies between connections to the Server
    * (performed by this library) and connections to other sites that are performed
@@ -131,7 +130,7 @@ public:
    * 
    * @see #getCookies
    */
-  static void addCookies(Poco::URI& uri, std::vector<Poco::Net::HTTPCookie>& cookies){
+  static void addCookies(const std::string& uri, const std::vector<std::string>& cookies){
     LightstreamerClient_addCookies(&uri, &cookies);
   }
   /**  
@@ -147,10 +146,9 @@ public:
    * @return a list of the Poco::Net::HTTPCookie cookies that can
    * be sent in a HTTP request for the specified URI.
    */
-  static std::vector<Poco::Net::HTTPCookie> getCookies(Poco::URI& uri) {
+  static std::vector<std::string> getCookies(const std::string& uri) {
     return LightstreamerClient_getCookies(&uri);
   }
-  #endif
   /**
    * Provides a mean to control the way TLS certificates are evaluated, with the possibility to accept untrusted ones.
    * 

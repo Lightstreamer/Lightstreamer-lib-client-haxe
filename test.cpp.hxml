@@ -4,6 +4,8 @@ test.common.hxml
 --library colyseus-websocket
 --library hxWebSockets
 
+-w -WDeprecatedEnumAbstract
+
 --debug
 -D HXCPP_CPP17
 -D HXCPP_VERBOSE
@@ -14,7 +16,7 @@ test.common.hxml
 --resource test/localtest.me.pfx@server_certificate
 
 # -D LS_HAS_PROXY
-# -D LS_HAS_COOKIES
+-D LS_HAS_COOKIES
 -D LS_HAS_TRUST_MANAGER
 # -D LS_JSON_PATCH
 # -D LS_TLCP_DIFF

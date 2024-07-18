@@ -35,6 +35,16 @@ class Cookie {
     return hs.map(parseSetCookie).filter(c -> c != null);
   }
 
+  /**
+   * Formats a list of cookies according to the Cookie header specification.
+   * 
+   * See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cookie
+   */
+  static function toCookie(cookies: Array<Cookie>): String {
+    // name=value; name2=value2; name3=value3
+    return cookies.map(c -> '${c.name}=${c.value}').join("; ");
+  }
+
   function new(c: CookieBuilder) {
     this.name = c.name;
     this.value = c.value;

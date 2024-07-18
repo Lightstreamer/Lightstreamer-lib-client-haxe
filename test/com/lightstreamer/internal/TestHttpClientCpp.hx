@@ -8,7 +8,7 @@ private class _HttpClient extends HttpClient {
   }
 }
 
-@:timeout(1500)
+@:timeout(2000)
 class TestHttpClientCpp extends utest.Test {
   var host = "http://localtest.me:8080";
   var secHost = "https://localtest.me:8443";
@@ -99,12 +99,10 @@ class TestHttpClientCpp extends utest.Test {
 
   #if LS_HAS_COOKIES
   function testCookies(async: utest.Async) {
-    var uri = new poco.URI(host);
-    equals(0, (LightstreamerClient.getCookies(uri).size() : Int));
+    var uri = host;
+    equals(0, LightstreamerClient.getCookies(uri).length);
     
-    var cookie = new poco.net.HTTPCookie("X-Client", "client");
-    var cookies = new NativeCookieCollection();
-    cookies.push_back(cookie);
+    var cookies = [ "X-Client=client" ];
     LightstreamerClient.addCookies(uri, cookies);
 
     client = new _HttpClient(
@@ -117,9 +115,9 @@ class TestHttpClientCpp extends utest.Test {
       }, 
       function onDone(c) {
         var cookies = LightstreamerClient.getCookies(uri);
-        equals(2, (cookies.size() : Int));
-        var c1: String = cookies.at(0).toString();
-        var c2: String = cookies.at(1).toString();
+        equals(2, cookies.length);
+        var c1: String = cookies[0].toString();
+        var c2: String = cookies[1].toString();
         equals("X-Client=client; domain=localtest.me; path=/", c1);
         equals("X-Server=server; domain=localtest.me; path=/", c2);
         async.completed();

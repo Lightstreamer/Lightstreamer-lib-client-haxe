@@ -5,18 +5,13 @@ build.common.hxml
 --library colyseus-websocket
 --library hxWebSockets
 
---debug
--D HXCPP_CPP17
--D HXCPP_VERBOSE
--D HXCPP_ARM64
--D HAXE_OUTPUT_FILE=lightstreamer_client
 -D HaxeCBridge.name=Lightstreamer
 -D dll_link
 
 --cpp bin/cpp
 
 # -D LS_HAS_PROXY
-# -D LS_HAS_COOKIES
+-D LS_HAS_COOKIES
 -D LS_HAS_TRUST_MANAGER
 # -D LS_JSON_PATCH
 # -D LS_TLCP_DIFF

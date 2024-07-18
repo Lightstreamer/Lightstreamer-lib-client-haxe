@@ -1,23 +1,34 @@
 package com.lightstreamer.internal;
 
-// import com.lightstreamer.hxpoco.Network;
-// import com.lightstreamer.internal.NativeTypes;
+import com.lightstreamer.internal.NativeTypes.NativeURI;
+import com.lightstreamer.internal.NativeTypes.NativeCookieCollection;
 
-// @:unreflective
+@:build(com.lightstreamer.internal.Macros.synchronizeClass())
 class CookieHelper {
   public static final instance = new CookieHelper();
 
+  final jar = new CookieJar();
+
   function new() {}
 
-  // inline public function addCookies(url: cpp.Reference<NativeURI>, cookies: cpp.Reference<NativeCookieCollection>): Void {
-  //   Network._cookieJar.setCookiesFromUrl(url, cookies);
-  // }
+  public function addCookies(url: NativeURI, setCookies: NativeCookieCollection): Void {
+    var url = new Url(url);
+    var cookies = Cookie.fromSetCookies(setCookies);
+    jar.setCookiesFromUrl(url, cookies);
+  }
 
-  // inline public function getCookies(url: cpp.Reference<NativeURI>): NativeCookieCollection {
-  //   return Network._cookieJar.cookiesForUrl(url);
-  // }
+  public function getCookieHeader(url: NativeURI): String {
+    var url = new Url(url);
+    var cookies = jar.cookiesForUrl(url);
+    return Cookie.toCookie(cookies);
+  }
 
-  // inline public function clearCookies(): Void {
-  //   Network._cookieJar.clearAllCookies();
-  // }
+  public function getCookies(url: NativeURI): NativeCookieCollection {
+    var url = new Url(url);
+    return jar.cookiesForUrl(url).map(c -> c.toString());
+  }
+
+  public function clearCookies(): Void {
+    jar.clearAllCookies();
+  }
 }
