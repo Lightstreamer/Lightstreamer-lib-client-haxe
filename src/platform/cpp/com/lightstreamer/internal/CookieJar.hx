@@ -20,92 +20,6 @@ class CookieJar {
 
   public function new() {}
 
-  function isParentPath(path: String, reference: String) {
-    if ((path.empty() && reference == "/") || path.startsWith(reference))
-    {
-      // The cookie-path and the request-path are identical.
-      if (path.size() == reference.size())
-        return true;
-      // The cookie-path is a prefix of the request-path, and the last
-      // character of the cookie-path is %x2F ("/").
-      if (reference.endsWith("/"))
-        return true;
-      // The cookie-path is a prefix of the request-path, and the first
-      // character of the request-path that is not included in the cookie-
-      // path is a %x2F ("/") character.
-      if (path.at(reference.size()) == '/')
-        return true;
-    }
-    return false;
-  }
-
-  function isParentDomain(domain: String, reference: String)
-  {
-    if (!reference.startsWith("."))
-      return domain == reference;
-
-    return domain.endsWith(reference) || domain == reference.mid(1);
-  }
-
-  function qIsEffectiveTLD(domain: String)
-  {
-      // provide minimal checking by not accepting cookies on real TLDs
-      return !domain.contains(".");
-  }
-
-  function validateCookie(cookie: Cookie, url: Url) {
-    var cookieDomain = cookie.domain;
-    var domain = cookieDomain;
-    var host = url.hostname;
-    if (!isParentDomain(domain, host) && !isParentDomain(host, domain))
-      return false; // not accepted
-  
-    if (domain.startsWith("."))
-      domain = domain.mid(1);
-  
-    // We shouldn't reject if:
-    // "[...] the domain-attribute is identical to the canonicalized request-host"
-    // https://tools.ietf.org/html/rfc6265#section-5.3 step 5
-    if (host == domain)
-      return true;
-    // the check for effective TLDs makes the "embedded dot" rule from RFC 2109 section 4.3.2
-    // redundant; the "leading dot" rule has been relaxed anyway, see QNetworkCookie::normalize()
-    // we remove the leading dot for this check if it's present
-    // Normally defined in qtldurl_p.h, but uses fall-back in this file when topleveldomain isn't
-    // configured:
-    return !qIsEffectiveTLD(domain);
-  }
-
-  function normalize(cookie: Cookie, url: Url): Cookie {
-    var cookie = cookie.clone();
-
-    if (cookie.path.empty())
-    {
-      var pathAndFileName = url.pathname;
-      var defaultPath = pathAndFileName.left(pathAndFileName.lastIndexOf('/') + 1);
-      if (defaultPath.empty())
-        defaultPath = '/';
-      cookie.path = defaultPath;
-    }
-  
-    if (cookie.domain.empty())
-    {
-      cookie.domain = url.hostname;
-    }
-    else
-    {
-      var protocol = getIPFamily(cookie.domain);
-      if (protocol != IPv4 && protocol != IPv6 && !cookie.domain.startsWith(".")) {
-        // Ensure the domain starts with a dot if its field was not empty
-        // in the HTTP header. There are some servers that forget the
-        // leading dot and this is actually forbidden according to RFC 2109,
-        // but all browsers accept it anyway so we do that as well.
-        cookie.domain = "." + cookie.domain;
-      }
-    }
-    return cookie.build();
-  }
-
   /**
     Returns the cookies to be added to when a request is sent to
     \a url. This function is called by the default
@@ -193,6 +107,92 @@ class CookieJar {
 
   public function clearAllCookies() {
     allCookies.splice(0, allCookies.length);
+  }
+
+  function isParentPath(path: String, reference: String) {
+    if ((path.empty() && reference == "/") || path.startsWith(reference))
+    {
+      // The cookie-path and the request-path are identical.
+      if (path.size() == reference.size())
+        return true;
+      // The cookie-path is a prefix of the request-path, and the last
+      // character of the cookie-path is %x2F ("/").
+      if (reference.endsWith("/"))
+        return true;
+      // The cookie-path is a prefix of the request-path, and the first
+      // character of the request-path that is not included in the cookie-
+      // path is a %x2F ("/") character.
+      if (path.at(reference.size()) == '/')
+        return true;
+    }
+    return false;
+  }
+
+  function isParentDomain(domain: String, reference: String)
+  {
+    if (!reference.startsWith("."))
+      return domain == reference;
+
+    return domain.endsWith(reference) || domain == reference.mid(1);
+  }
+
+  function qIsEffectiveTLD(domain: String)
+  {
+      // provide minimal checking by not accepting cookies on real TLDs
+      return !domain.contains(".");
+  }
+
+  function validateCookie(cookie: Cookie, url: Url) {
+    var cookieDomain = cookie.domain;
+    var domain = cookieDomain;
+    var host = url.hostname;
+    if (!isParentDomain(domain, host) && !isParentDomain(host, domain))
+      return false; // not accepted
+  
+    if (domain.startsWith("."))
+      domain = domain.mid(1);
+  
+    // We shouldn't reject if:
+    // "[...] the domain-attribute is identical to the canonicalized request-host"
+    // https://tools.ietf.org/html/rfc6265#section-5.3 step 5
+    if (host == domain)
+      return true;
+    // the check for effective TLDs makes the "embedded dot" rule from RFC 2109 section 4.3.2
+    // redundant; the "leading dot" rule has been relaxed anyway, see QNetworkCookie::normalize()
+    // we remove the leading dot for this check if it's present
+    // Normally defined in qtldurl_p.h, but uses fall-back in this file when topleveldomain isn't
+    // configured:
+    return !qIsEffectiveTLD(domain);
+  }
+
+  function normalize(cookie: Cookie, url: Url): Cookie {
+    var cookie = cookie.clone();
+
+    if (cookie.path.empty())
+    {
+      var pathAndFileName = url.pathname;
+      var defaultPath = pathAndFileName.left(pathAndFileName.lastIndexOf('/') + 1);
+      if (defaultPath.empty())
+        defaultPath = '/';
+      cookie.path = defaultPath;
+    }
+  
+    if (cookie.domain.empty())
+    {
+      cookie.domain = url.hostname;
+    }
+    else
+    {
+      var protocol = getIPFamily(cookie.domain);
+      if (protocol != IPv4 && protocol != IPv6 && !cookie.domain.startsWith(".")) {
+        // Ensure the domain starts with a dot if its field was not empty
+        // in the HTTP header. There are some servers that forget the
+        // leading dot and this is actually forbidden according to RFC 2109,
+        // but all browsers accept it anyway so we do that as well.
+        cookie.domain = "." + cookie.domain;
+      }
+    }
+    return cookie.build();
   }
 
   function insertCookie(cookie: Cookie)
