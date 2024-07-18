@@ -27,6 +27,14 @@ class Cookie {
   final domain: String;
   final path: String;
 
+  /**
+   * Parses a list of Set-Cookie headers.
+   */
+  static function fromSetCookies(hs: Array<String>): Array<Cookie> {
+    @:nullSafety(Off)
+    return hs.map(parseSetCookie).filter(c -> c != null);
+  }
+
   function new(c: CookieBuilder) {
     this.name = c.name;
     this.value = c.value;
@@ -187,20 +195,18 @@ class CookieBuilder {
   }
 }
 
-function parse(input: String): Array<Cookie> {
-  return isNonEmptyString(input) ? [ parseSetCookie(input) ] : [];
-}
-
 /**
  * Parses a [Set-Cookie header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie).
  * 
  * adapted from https://github.com/nfriedly/set-cookie-parser/blob/master/lib/set-cookie.js
  */
-function parseSetCookie(setCookieValue: String): Cookie {
+function parseSetCookie(setCookieValue: String): Null<Cookie> {
   var parts = setCookieValue.split(";").filter(isNonEmptyString);
 
   var nameValuePairStr = parts.shift();
-  @:nullSafety(Off) // TODO cpp don't ignore warning
+  if (nameValuePairStr == null) {
+    return null;
+  }
   var parsed = parseNameValuePair(nameValuePairStr);
   var name = parsed.name;
   var value = parsed.value;
@@ -214,8 +220,11 @@ function parseSetCookie(setCookieValue: String): Cookie {
 
   for (part in parts) {
     var sides = part.split("=");
-    @:nullSafety(Off) // TODO cpp don't ignore warning
-    var key = sides.shift().ltrim().toLowerCase();
+    var lside = sides.shift();
+    if (lside == null) {
+      return null;
+    }
+    var key = lside.ltrim().toLowerCase();
     var value = sides.join("=");
     if (key == "expires") {
       cookie.expires = parseCookieDate(value);
