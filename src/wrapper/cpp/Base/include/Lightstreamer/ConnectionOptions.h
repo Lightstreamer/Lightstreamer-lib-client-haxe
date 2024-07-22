@@ -733,26 +733,6 @@ public:
   void setSessionRecoveryTimeout(long sessionRecoveryTimeout) {
     ConnectionOptions_setSessionRecoveryTimeout(_delegate, sessionRecoveryTimeout);
   }
-  #ifdef LS_HAS_PROXY
-  /**
-   * Setter method that configures the coordinates to a proxy server to be used to connect to the Lightstreamer Server. 
-   * 
-   * @default none.
-   * 
-   * @lifecycle This value can be set and changed at any time. The supplied value will 
-   * be used for the next connection attempt.
-   * 
-   * @notification A change to this setting will be notified through a call to 
-   * {@link ClientListener#onPropertyChange} with argument "proxy" on any 
-   * ClientListener listening to the related LightstreamerClient.
-   * 
-   * @param proxy The proxy configuration. Specify an empty string as host to avoid using a proxy.
-   * 
-   */
-  void setProxy(const Proxy& proxy) {
-    ConnectionOptions_setProxy(_delegate, &proxy);
-  }
-  #endif
 };
 
 } // namespace Lightstreamer
