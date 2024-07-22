@@ -104,15 +104,14 @@ LightstreamerClient::setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel
 
 ## Self-Signed certificates
 
-To use a self-signed certificate, you typically need to create an instance of [Poco::Net::Context](https://docs.pocoproject.org/current/Poco.Net.Context.html) and configure it with your certificate and private key. Here's a general outline of the steps you might follow:
+To use a self-signed certificate, you typically need to configure a Trust Manager Factory with your certificate and private key. Here's a general outline of the steps you might follow:
 
 ```cpp
 auto privateKeyFile = "path/to/cert.pem"; // Certificate file
 auto certificateFile = "path/to/key.pem"; // Private key file
 auto caLocation = "path/to/ca.pem"; // CA file or path (can be empty if self-signed)
-Poco::Net::Context::Ptr pContext = new Poco::Net::Context(Poco::Net::Context::TLS_CLIENT_USE, privateKeyFile, certificateFile, caLocation);
 
-LightstreamerClient::setTrustManagerFactory(pContext);
+LightstreamerClient::setTrustManagerFactory(caLocation, certificateFile, privateKeyFile);
 ```
 
 ## Compatibility

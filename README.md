@@ -201,49 +201,6 @@ haxelib run hxcpp
 
 Should you be prompted to rebuild the hxcpp tool, please respond with "yes".
 
-**Building POCO**
-
-Lightstreamer Client SDK depends on POCO, a collection of cross-platform open-source libraries which simplify the development of portable applications in C++.
-
-Compiling POCO involves a few steps, and the process can vary depending on your operating system. 
-
-Here's a general guide to help you compile POCO:
-
-- **Download the Source Code**: Obtain the POCO C++ Libraries source code from the official repository:
-
-```sh
-git clone -b poco-1.13.3-release https://github.com/pocoproject/poco.git
-```
-
-- **Prepare the Build Environment**: Ensure you have [CMake](https://cmake.org) installed, as it is the recommended way to build POCO. You will need CMake release 3.5 or later.
-
-- **Install OpenSSL**: See the section [External Dependencies](https://docs.pocoproject.org/current/00200-GettingStarted.html) for the installation instructions.
-
-- **Generate Build Files**: Create a build directory within the POCO source tree and generate the build files using CMake. In CMake-Gui select (at least) these modules: Encodings, XML, JSON, Util, Net, NetSSL_OpenSSL and Crypto.
-
-```sh
-cd poco
-mkdir poco-build
-cmake -H. -Bpoco-build
-cmake-gui poco-build
-```
-
-- **Compile the Libraries**:
-
-```sh
-cmake --build poco-build
-```
-
-This will build the POCO libraries and any additional tools included in the source tree.
-
-- **Install (Optional)**: If you want to install the libraries on your system, you can use the install target with CMake:
-
-```sh
-sudo cmake --build poco-build --target install
-```
-
-Remember to check the [documentation](https://docs.pocoproject.org/current/00200-GettingStarted.html) for any platform-specific instructions or additional details that might be relevant to your setup.
-
 **Building the Lightstreamer Client SDK**
 
 Navigate to the `tools/cpp` directory and run the following command to build the SDK:
