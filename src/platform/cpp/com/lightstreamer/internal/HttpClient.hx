@@ -61,6 +61,10 @@ class HttpClient implements IHttpClient {
       if (cookies.length > 0) {
         req.setHeader("Cookie", cookies);
       }
+      // override the default read/write timeout (10 seconds).
+      // Since the client uses an external timer to track the elapsed time,
+      // cnxTimeout should not expire too early 
+      req.cnxTimeout = 1e9;
 			//
 			req.setPostData(body);
 			req.request(true);
