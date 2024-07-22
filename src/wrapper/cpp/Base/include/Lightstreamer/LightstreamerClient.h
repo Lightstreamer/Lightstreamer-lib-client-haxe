@@ -126,7 +126,7 @@ public:
    * 
    * @param uri the URI from which the supplied cookies were received.
    * 
-   * @param cookies a list of Poco::Net::HTTPCookie cookies.
+   * @param cookies a list of cookie declarations in the [Set-Cookie header format](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie). Notice that the cookie attributes may be stored in a normalized form.
    * 
    * @see #getCookies
    */
@@ -138,12 +138,10 @@ public:
    * (performed by this library) and connections to other sites that are performed
    * by the application. With this method, cookies received from the Server can be
    * extracted for sending through other connections, according with the URI to be accessed.
-   * <BR>See {@link #addCookies} for clarifications on when cookies are directly stored
-   * by the library and when not.
    *
-   * @param uri the URI to which the cookies should be sent, or null.
+   * @param uri the URI to which the cookies should be sent.
    * 
-   * @return a list of the Poco::Net::HTTPCookie cookies that can
+   * @return a list of cookies (in the [Set-Cookie header format](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie)) that can
    * be sent in a HTTP request for the specified URI.
    */
   static std::vector<std::string> getCookies(const std::string& uri) {
