@@ -68,7 +68,7 @@ class Cookie {
   function isExpired(now: Date) {
     // since it is not a session cookie, expirationDate is guaranteed to be not null
     @:nullSafety(Off)
-    return !isSessionCookie() && expirationDate.getTime() < now.getTime();
+    return !isSessionCookie() && expirationDate.getTime() <= now.getTime();
   }
 
   function clone(): CookieBuilder {
