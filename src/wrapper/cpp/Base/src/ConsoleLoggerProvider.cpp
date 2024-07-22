@@ -64,6 +64,7 @@ ConsoleLogger::ConsoleLogger(ConsoleLogLevel level, const std::string& category)
 
 void ConsoleLogger::print(const char* level, const std::string& line) {
   std::time_t t = std::time(nullptr);
+  // TODO localtime is not thread-safe
   std::tm tm = *std::localtime(&t);
   std::stringstream ss;
   ss << std::put_time(&tm, "%F %T") << "|" << level << "|" << _category << "|" << line;
