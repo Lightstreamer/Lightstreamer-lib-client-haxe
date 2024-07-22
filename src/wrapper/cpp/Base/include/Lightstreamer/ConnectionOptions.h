@@ -2,7 +2,6 @@
 #define INCLUDED_Lightstreamer_ConnectionOptions
 
 #include "../Lightstreamer.h"
-#include "Lightstreamer/Proxy.h"
 
 namespace Lightstreamer {
 

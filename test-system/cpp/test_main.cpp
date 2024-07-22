@@ -5,7 +5,6 @@
 #include "Lightstreamer/ItemUpdate.h"
 #include "Lightstreamer/LightstreamerError.h"
 #include "Lightstreamer/ClientMessageListener.h"
-#include "Lightstreamer/Proxy.h"
 #include "Lightstreamer/ConsoleLoggerProvider.h"
 #include "utest.h"
 #include <iostream>
