@@ -14,7 +14,7 @@ import com.lightstreamer.internal.NativeTypes;
 @:build(HaxeCBridge.expose()) @HaxeCBridge.name("LightstreamerClient")
 @:publicFields
 @:access(com.lightstreamer.client)
-class HxLightstreamerClient {
+class HxCBridgeLightstreamerClient {
 
   /*
    * WARNING: Ensure that the lock is acquired before accessing the class internals.
@@ -72,7 +72,7 @@ class HxLightstreamerClient {
   @HaxeCBridge.name("LightstreamerClient_new")
   static function create(serverAddress: ConstStar<CppString>, adapterSet: ConstStar<CppString>) {
     @:nullSafety(Off)
-    return new HxLightstreamerClient(
+    return new HxCBridgeLightstreamerClient(
       serverAddress.isEmpty() ? null : serverAddress, 
       adapterSet.isEmpty() ? null : adapterSet
     );
@@ -82,12 +82,12 @@ class HxLightstreamerClient {
     _client = new LSLightstreamerClient(serverAddress, adapterSet);
   }
 
-  function getConnectionOptions(): HxConnectionOptions {
-    return new HxConnectionOptions(_client.connectionOptions);
+  function getConnectionOptions(): HxCBridgeConnectionOptions {
+    return new HxCBridgeConnectionOptions(_client.connectionOptions);
   }
 
-  function getConnectionDetails(): HxConnectionDetails {
-    return new HxConnectionDetails(_client.connectionDetails);
+  function getConnectionDetails(): HxCBridgeConnectionDetails {
+    return new HxCBridgeConnectionDetails(_client.connectionDetails);
   }
 
   function addListener(l: cpp.Star<NativeClientListener>) {
@@ -129,11 +129,11 @@ class HxLightstreamerClient {
     _client.disconnect();
   }
 
-  function subscribe(sub: HxSubscription) {
+  function subscribe(sub: HxCBridgeSubscription) {
     _client.subscribe(sub._sub);
   }
 
-  function unsubscribe(sub: HxSubscription) {
+  function unsubscribe(sub: HxCBridgeSubscription) {
     _client.unsubscribe(sub._sub);
   }
 

@@ -8,7 +8,7 @@ import com.lightstreamer.cpp.CppStringMap;
 @:unreflective
 @:build(HaxeCBridge.expose()) @HaxeCBridge.name("ItemUpdate")
 @:publicFields
-class HxItemUpdate {
+class HxCBridgeItemUpdate {
   private final _upd: ItemUpdate;
 
   @:allow(com.lightstreamer.client.SubscriptionListenerAdapter)

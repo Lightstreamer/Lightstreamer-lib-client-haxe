@@ -7,7 +7,7 @@ import com.lightstreamer.client.ConnectionDetails.LSConnectionDetails;
 @:unreflective
 @:build(HaxeCBridge.expose()) @HaxeCBridge.name("ConnectionDetails")
 @:publicFields
-class HxConnectionDetails {
+class HxCBridgeConnectionDetails {
   private final _delegate: LSConnectionDetails;
 
   function new(details: LSConnectionDetails) {

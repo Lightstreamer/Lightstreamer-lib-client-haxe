@@ -11,7 +11,7 @@ import com.lightstreamer.client.Subscription.LSSubscription;
 @:build(HaxeCBridge.expose()) @HaxeCBridge.name("Subscription")
 @:publicFields
 @:access(com.lightstreamer.client)
-class HxSubscription {
+class HxCBridgeSubscription {
 
   /*
    * WARNING: Ensure that the lock is acquired before accessing the class internals.
@@ -26,7 +26,7 @@ class HxSubscription {
     var _items: NativeArray<String> = items.isEmpty() ? null : items;
     var _fields: NativeArray<String> = fields.isEmpty() ? null : fields;
     var _wrapper = wrapper == null ? null : cpp.Pointer.fromStar(wrapper);
-    return new HxSubscription(mode, _items, _fields, _wrapper);
+    return new HxCBridgeSubscription(mode, _items, _fields, _wrapper);
   }
 
   private function new(mode: String, items: NativeArray<String>, fields: NativeArray<String>, wrapper: Null<cpp.Pointer<NativeSubscription>>) {

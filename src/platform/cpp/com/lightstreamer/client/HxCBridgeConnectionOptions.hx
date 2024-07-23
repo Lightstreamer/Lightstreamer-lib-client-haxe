@@ -9,7 +9,7 @@ import com.lightstreamer.client.ConnectionOptions.LSConnectionOptions;
 @:unreflective
 @:build(HaxeCBridge.expose()) @HaxeCBridge.name("ConnectionOptions")
 @:publicFields
-class HxConnectionOptions {
+class HxCBridgeConnectionOptions {
   private final _delegate: LSConnectionOptions;
 
   function new(options: LSConnectionOptions) {

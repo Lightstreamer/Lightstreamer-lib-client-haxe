@@ -36,7 +36,7 @@ class SubscriptionListenerAdapter implements SubscriptionListener extends cpp.Fi
   }
   public function onItemUpdate(update: ItemUpdate): Void {
     // hxObj is released by NativeItemUpdate's destructor
-    var hxObj: RawPointer<cpp.Void> = HaxeCBridge.retainHaxeObject(new HxItemUpdate(update));
+    var hxObj: RawPointer<cpp.Void> = HaxeCBridge.retainHaxeObject(new HxCBridgeItemUpdate(update));
     var hxObjPtr = Pointer.fromRaw(hxObj).ptr;
     // ***** WARNING *****
     //
