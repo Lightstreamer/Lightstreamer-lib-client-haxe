@@ -9,7 +9,6 @@ namespace Lightstreamer {
   class SubscriptionListener;
   class ClientListener;
   class ClientMessageListener;
-  struct Proxy;
   class LoggerProvider;
 }
 
