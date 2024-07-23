@@ -11,7 +11,7 @@ test: test_ssl test_main
 
 test_main:
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -o $(BIN)/$@ $@.cpp $(LDFLAGS) $(LDLIBS)
-	$(BIN)/$@
+	$(BIN)/$@ $(UTEST_PATTERN)
 
 test_ssl:
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -o $(BIN)/$@ $@.cpp $(LDFLAGS) $(LDLIBS)

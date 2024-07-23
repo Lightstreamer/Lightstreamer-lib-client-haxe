@@ -12,7 +12,7 @@ test: test_ssl test_main
 
 test_main:
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -o $(BIN)/$@ $@.cpp $(LDFLAGS) $(LDLIBS) 
-	DYLD_LIBRARY_PATH=$(LD_LIB_PATH) $(BIN)/$@
+	DYLD_LIBRARY_PATH=$(LD_LIB_PATH) $(BIN)/$@ $(UTEST_PATTERN)
 
 test_ssl:
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -o $(BIN)/$@ $@.cpp $(LDFLAGS) $(LDLIBS) 

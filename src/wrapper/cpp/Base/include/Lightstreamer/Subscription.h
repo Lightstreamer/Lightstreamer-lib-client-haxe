@@ -2,6 +2,7 @@
 #define INCLUDED_Lightstreamer_Subscription
 
 #include "../Lightstreamer.h"
+#include "Lightstreamer/LightstreamerError.h"
 
 namespace Lightstreamer {
 
@@ -110,6 +111,8 @@ public:
     * @see #removeListener()
     */
   void addListener(SubscriptionListener* listener) {
+    if (listener == nullptr)
+      throw LightstreamerError("Argument cannot be null");
     Subscription_addListener(_delegate, listener);
   }
   /**
@@ -126,6 +129,8 @@ public:
     * @see #addListener()
     */
   void removeListener(SubscriptionListener* listener) {
+    if (listener == nullptr)
+      throw LightstreamerError("Argument cannot be null");
     Subscription_removeListener(_delegate, listener);
   }
   /**

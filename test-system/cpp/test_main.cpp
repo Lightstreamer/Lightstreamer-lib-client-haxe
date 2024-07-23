@@ -21,7 +21,6 @@ using Lightstreamer::LightstreamerClient;
 using Lightstreamer::Subscription;
 using Lightstreamer::ItemUpdate;
 using Lightstreamer::LightstreamerError;
-using Lightstreamer::Proxy;
 using Lightstreamer::ConsoleLoggerProvider;
 using Lightstreamer::ConsoleLogLevel;
 
@@ -141,6 +140,23 @@ struct Setup: public utest::Test {
 TEST(testLibName) {
   EXPECT_EQ("cpp_client", LightstreamerClient::libName());
   EXPECT_FALSE(LightstreamerClient::libVersion().empty());
+}
+
+TEST(testExceptions) {
+  LightstreamerClient client;
+  EXPECT_THROW(client.addListener(nullptr), LightstreamerError);
+  EXPECT_THROW(client.removeListener(nullptr), LightstreamerError);
+  EXPECT_THROW(client.subscribe(nullptr), LightstreamerError);
+  EXPECT_THROW(client.unsubscribe(nullptr), LightstreamerError);
+
+  Subscription sub("MERGE", {}, {});
+  EXPECT_THROW(sub.addListener(nullptr), LightstreamerError);
+  EXPECT_THROW(sub.removeListener(nullptr), LightstreamerError);
+
+  // **NB** when the test is linked to a dynamic library, the exceptions thrown within the library are not caught
+  EXPECT_THROW(sub.setRequestedBufferSize("foo"), LightstreamerError);
+  // but they are caught if the supertype is used. why?
+  EXPECT_THROW(sub.setRequestedBufferSize("foo"), std::runtime_error);
 }
 
 TEST_FIXTURE(Setup, testListeners) {
@@ -1332,6 +1348,7 @@ int main(int argc, char** argv) {
   runner.add(new testGC_removeListeners());
   runner.add(new testGC_destructors());
   runner.add(new testLibName());
+  runner.add(new testExceptions());
   runner.add(new testListeners());
   runner.add(new testGetSubscriptions());
   runner.add(new testSubscriptionListeners());

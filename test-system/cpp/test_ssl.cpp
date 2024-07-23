@@ -20,7 +20,6 @@ using Lightstreamer::LightstreamerClient;
 using Lightstreamer::Subscription;
 using Lightstreamer::ItemUpdate;
 using Lightstreamer::LightstreamerError;
-using Lightstreamer::Proxy;
 using Lightstreamer::ConsoleLoggerProvider;
 using Lightstreamer::ConsoleLogLevel;
 
