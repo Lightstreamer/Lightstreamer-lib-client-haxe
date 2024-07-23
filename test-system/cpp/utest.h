@@ -8,6 +8,8 @@
 #include <regex>
 #include <thread>
 #include <chrono>
+#include <algorithm>
+#include <random>
 
 #define EXPECT_EQ(expected, actual) check_eq((expected), (actual), __FILE__, __LINE__)
 #define EXPECT_NE(expected, actual) check_ne((expected), (actual), __FILE__, __LINE__)
@@ -44,6 +46,8 @@ void name::run()
 
 namespace utest {
 
+inline std::random_device::result_type g_seed;
+
 struct Reporter {
   int n_run = 0;
   std::vector<std::string> _errors;
@@ -52,7 +56,7 @@ struct Reporter {
   void onTestStart(const std::string& test, const std::string& filename, int line) {
     n_run++;
     std::stringstream ss;
-    ss << "\n********** '" << test << "' (" << filename << ":" << line << ") **********\n";
+    ss << "\n********** '" << test << "' (" << filename << ":" << line << ") ********** seed: " << g_seed << std::endl;
     std::cout << ss.str() << "\n";
   }
 
@@ -239,6 +243,12 @@ struct Runner {
       _pattern = ".*" + pattern + ".*";
     }
     bool no_regex = pattern == "";
+    // shuffle tests
+    auto rd = std::random_device {};
+    g_seed = rd();
+    auto rng = std::default_random_engine { g_seed };
+    std::shuffle(_tests.begin(), _tests.end(), rng);
+    //
     for (auto tt : _tests) {
       if (no_regex || std::regex_match(tt->name, _pattern)) {
         tt->start();
