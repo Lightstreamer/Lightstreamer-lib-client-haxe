@@ -1,4 +1,4 @@
-package com.lightstreamer.client;
+package com.lightstreamer.client.hxcbridge;
 
 import cpp.ConstStar;
 import com.lightstreamer.cpp.CppString;
@@ -11,7 +11,7 @@ import com.lightstreamer.cpp.CppStringMap;
 class HxCBridgeItemUpdate {
   private final _upd: ItemUpdate;
 
-  @:allow(com.lightstreamer.client.SubscriptionListenerAdapter)
+  @:allow(com.lightstreamer.client.hxcbridge.SubscriptionListenerAdapter)
   private function new(upd: ItemUpdate) {
     _upd = upd;
   }

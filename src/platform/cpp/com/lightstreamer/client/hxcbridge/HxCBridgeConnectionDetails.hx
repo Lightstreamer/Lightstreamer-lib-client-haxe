@@ -1,4 +1,4 @@
-package com.lightstreamer.client;
+package com.lightstreamer.client.hxcbridge;
 
 import cpp.ConstStar;
 import com.lightstreamer.cpp.CppString;
