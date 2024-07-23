@@ -21,7 +21,7 @@ class HxLightstreamerClient {
    */
   
   private final _client: LSLightstreamerClient;
-  private final _listeners = new HxListeners<NativeClientListener, ClientListenerAdapter>();
+  private final _listeners = new ListenerArray<NativeClientListener, ClientListenerAdapter>();
 
   static function GC() {
     cpp.vm.Gc.run(true);

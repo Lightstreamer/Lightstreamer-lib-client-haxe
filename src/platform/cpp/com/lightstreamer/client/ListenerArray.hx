@@ -9,7 +9,7 @@ import haxe.Constraints.Constructible;
  */
 @:generic
 @:unreflective
-class HxListeners<L, A: Constructible<(Pointer<L>)->Void>> {
+class ListenerArray<L, A: Constructible<(Pointer<L>)->Void>> {
   final _listeners = new Array<Pair<Pointer<L>, A>>();
 
   public function new() {}
@@ -52,5 +52,17 @@ class HxListeners<L, A: Constructible<(Pointer<L>)->Void>> {
 
   public function iterator(): Iterator<Pair<Pointer<L>, A>> {
     return _listeners.iterator();
+  }
+}
+
+@:structInit
+@:publicFields
+private class Pair<P, Q> {
+  final _1: P;
+  final _2: Q;
+
+  function new(_1: P, _2: Q) {
+    this._1 = _1;
+    this._2 = _2;
   }
 }

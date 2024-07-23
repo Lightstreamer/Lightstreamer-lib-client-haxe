@@ -18,7 +18,7 @@ class HxSubscription {
    */
   
   private final _sub: LSSubscription;
-  private final _listeners = new HxListeners<NativeSubscriptionListener, SubscriptionListenerAdapter>();
+  private final _listeners = new ListenerArray<NativeSubscriptionListener, SubscriptionListenerAdapter>();
 
   @HaxeCBridge.name("Subscription_new")
   @:nullSafety(Off)
