@@ -17,7 +17,7 @@ Further on the Web and Android platforms the API offers support for Web and Mobi
 |**Java SE**|[Get the lib](https://central.sonatype.com/artifact/com.lightstreamer/ls-javase-client/5.1.0)<br>[Changelog](CHANGELOG-JavaSE.md)<br>[Quickstart](https://sdk.lightstreamer.com/ls-javase-client/5.1.0/api/index.html#quickstart)<br>[API Reference](https://sdk.lightstreamer.com/ls-javase-client/5.1.0/api/index.html)<br>[Building](#java-se)|
 |**.NET**|[Get the lib](https://www.nuget.org/packages/Lightstreamer.DotNetStandard.Client/6.1.0)<br>[Changelog](CHANGELOG-.NET.md)<br>[Quickstart](https://sdk.lightstreamer.com/ls-dotnetstandard-client/6.1.0/api/articles/intro.html#quickstart)<br>[API Reference](https://sdk.lightstreamer.com/ls-dotnetstandard-client/6.1.0/api/api/index.html)<br>[Building](#net)|
 |**Python**|[Get the lib](https://pypi.org/project/lightstreamer-client-lib/2.1.0/)<br>[Changelog](CHANGELOG-Python.md)<br>[Quickstart](https://sdk.lightstreamer.com/ls-python-client/2.1.0/api/intro.html#quickstart)<br>[API Reference](https://sdk.lightstreamer.com/ls-python-client/2.1.0/api/modules.html)<br>[Building](#python)|
-|**C++**|[Changelog](CHANGELOG-C++.md)<br>[Quickstart](https://sdk.lightstreamer.com/ls-cpp-client/1.0.0-alpha.1/api/index.html)<br>[API Reference](https://sdk.lightstreamer.com/ls-cpp-client/1.0.0-alpha.1/api/annotated.html)<br>[Building](#cpp)|
+|**C++**|[Changelog](CHANGELOG-C++.md)<br>[Quickstart](https://sdk.lightstreamer.com/ls-cpp-client/0.1.0-alpha.1/api/index.html)<br>[API Reference](https://sdk.lightstreamer.com/ls-cpp-client/0.1.0-alpha.1/api/annotated.html)<br>[Building](#cpp)|
 
 ## Building
 
@@ -189,7 +189,7 @@ ant
 
 The generated package is saved in the folder `bin/python/build/lib`.
 
-### <a name="cpp"></a> C++
+### C++ <a name="cpp"></a>
 
 **Initial Project Setup**
 
@@ -203,13 +203,18 @@ Should you be prompted to rebuild the hxcpp tool, please respond with "yes".
 
 **Building the Lightstreamer Client SDK**
 
+The following notes assume that your system has a C++ toolchain installed, such as g++, clang++, or MSVC++. If not, it is recommended to install the latest Xcode from the App Store on Mac, use the system package manager to install the compilers on Linux, and use Microsoft Visual Studio on Windows.
+
 Navigate to the `tools/cpp` directory and run the following command to build the SDK:
 
 ```
 ant -e -Dbuild.settings=<hxml-file>
 ```
 
-Replace `<hxml-file>` with the path to your configuration file. You can find a selection of pre-defined configuration files for common systems within the `tools/cpp/res` directory. These files are sorted by operating system and specify whether you're building a debug or release version, and whether you're compiling a dynamic or static library. Omitting the `build.settings` flag defaults to constructing a dynamic debug library for your current operating system.
+Replace `<hxml-file>` with the path to your configuration file. You can find a selection of pre-defined configuration files for common systems within the `tools/cpp/res` directory. These files are organized by operating system and specify whether you're building a debug or release version, and whether you're compiling a dynamic or static library. Omitting the `build.settings` flag defaults to constructing a dynamic debug library for your current operating system.
+
+> [!WARNING]  
+> Before building the library, carefully review the configuration files you want to use, as the default settings may not be suited to your system.
 
 **Example for macOS**
 
