@@ -216,15 +216,13 @@ Replace `<hxml-file>` with the path to your configuration file. You can find a s
 > [!WARNING]  
 > Before building the library, carefully review the configuration files you want to use, as the default settings may not be suited to your system.
 
-**Example for macOS**
-
-To compile a dynamic library with debug symbols for macOS, use:
+For example, to compile a dynamic library with debug symbols for macOS, use:
 
 ```
 ant -e -Dbuild.settings=tools/cpp/res/build.mac.debug.hxml
 ```
 
-The resulting library will be placed in the `bin/cpp` directory, under an OS-specific subfolder. For example, the command above will produce `lightstreamer_clientd.dylib` in `bin/cpp/mac/debug`.
+The resulting library will be placed in the `bin/cpp` directory, under an OS-specific subfolder. Specifically, the command above will generate `lightstreamer_clientd.dylib` in `bin/cpp/mac/debug`.
 
 **HXML files**
 
@@ -251,8 +249,30 @@ These flags are organized into four distinct groups of symbols:
 Here, `<num>` represents a single digit ranging from 0 to 9. 
 
 Keep in mind that each symbol must define a single flag. For instance `CXXFLAG_0=-x` is an appropriate definition, whereas `CXXFLAG_0=-x -y` may confuse the compiler and therefore must be avoided.
+If the compiler option is a key-value pair, each component must appear in a distinct flag. For example the option `-o a.out` must be written as 
 
-The syntax for these flags varies based on the build tools being used. For practical examples, refer to the build configurations located in `tools/cpp/res`.
+```
+-D CXXFLAG_0=-o
+-D CXXFLAG_1=a.out
+```
+
+The syntax for these flags varies based on the toolchain being used. For practical examples, refer to the build configurations located in `tools/cpp/res`.
+
+A list of the most common flags is the following. For more information, refer to the documentation of [Haxe](https://haxe.org/manual/compiler-usage-flags.html) and [Hxcpp](https://haxe.org/manual/target-cpp-defines.html).
+
+* `--debug`: Add debug symbols to the generated library.
+* `-D HXCPP_ARM64`: Compile for ARM64 architecture. Other options are `HXCPP_M32` and `HXCPP_M64` for 32-bit and 64-bit Intel/AMD architectures.
+* `--cpp <path>`: Store the generated source files and binaries in the specified path.
+* `-D HAXE_OUTPUT_FILE=<file name>`: Use the given name (without the file extension part) as the name of the generated library.
+* `-D LDLIB_EXT=<ext>`: Use the given file extension as the extension of the generated library. Example: `.so` (don't forget the leading dot). If omitted, the default system extension is used.
+* `-D dll_link`: Create a dynamic library. To create a static library, use `-D static_link`. If omitted, an executable file is generated.
+* `-D NO_PRECOMPILED_HEADERS`: Don't precompile the header files. If omitted, the default behavior depends on the compiler toolchain. Usually the headers are not precompiled, except by MSVC.
+* `-D windows`: (Windows only) Add this flag if the compilation is for Windows.
+* `-D ABI=<option>`: (Windows only) Use the multithread dynamic/static version of the C++ standard runtime library. The possible values are: `/MD`, `/MT`, `/MDd` and `/MTd`. See the [MSVC docs](https://learn.microsoft.com/en-us/cpp/build/reference/md-mt-ld-use-run-time-library) for an explanation.
+* `-D CXXFLAG_<num>=<option>`: Add a compiler flag. Example: `-D CXXFLAG_0=-O2`.
+* `-D CPPFLAG_<num>=<option>`: Add a preprocessor flag. Example: `-D CPPFLAG_0=-I/usr/local/include`.
+* `-D LDFLAG_<num>=<option>`: Add a linker flag. Example: `-D LDFLAG_0=-L/usr/local/lib`.
+* `-D LDLIB_<num>=<option>`: Add a library to be linked. Example: = `-D LDLIB_0=-lssl`.
 
 ## Support
 

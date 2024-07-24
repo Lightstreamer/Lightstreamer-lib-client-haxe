@@ -1,3 +1,7 @@
+# Example configuration building a static library for macOS 14.5 arm64
+# Tested with Apple Clang 15.0.0
+# Refer to README.md for further details
+
 -D HXCPP_ARM64
 
 --cpp bin/cpp/mac/static-release

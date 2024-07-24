@@ -1,3 +1,7 @@
+# Example configuration building a dynamic library (debug version) for Ubuntu 22.04 aarch64
+# Tested with g++ 11.4.0
+# Refer to README.md for further details
+
 --debug
 
 -D HXCPP_ARM64
