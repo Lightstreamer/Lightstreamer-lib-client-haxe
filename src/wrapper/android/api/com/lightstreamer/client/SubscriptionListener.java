@@ -204,6 +204,7 @@ public interface SubscriptionListener {
    *              only)</li>
    *          <li>29 - RAW mode is not allowed by the current license terms (for special licenses only)</li>
    *          <li>30 - subscriptions are not allowed by the current license terms (for special licenses only)</li>
+   *          <li>61 - there was an error in the parsing of the server response</li>
    *          <li>66 - an unexpected exception was thrown by the Metadata Adapter while authorizing the connection</li>
    *          <li>68 - the Server could not fulfill the request because of an internal error.</li>
    *          <li>&lt;= 0 - the Metadata Adapter has refused the subscription or unsubscription request; the 

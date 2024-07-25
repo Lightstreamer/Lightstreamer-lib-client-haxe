@@ -256,6 +256,7 @@ class SubscriptionListener:
             * 28 - unfiltered dispatching is not allowed by the current license terms (for special licenses only)
             * 29 - RAW mode is not allowed by the current license terms (for special licenses only)
             * 30 - subscriptions are not allowed by the current license terms (for special licenses only)
+            * 61 - there was an error in the parsing of the server response
             * 66 - an unexpected exception was thrown by the Metadata Adapter while authorizing the connection
             * 68 - the Server could not fulfill the request because of an internal error.
             * <= 0 - the Metadata Adapter has refused the subscription or unsubscription request; the code value is dependent on the specific Metadata Adapter implementation
