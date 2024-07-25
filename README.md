@@ -203,7 +203,7 @@ Should you be prompted to rebuild the hxcpp tool, please respond with "yes".
 
 **Building the Lightstreamer Client SDK**
 
-The following notes assume that your system has a C++ toolchain installed, such as g++, clang++, or MSVC++. If not, it is recommended to install the latest Xcode from the App Store on Mac, use the system package manager to install the compilers on Linux, and use Microsoft Visual Studio on Windows.
+The following notes assume that your system has a C++ toolchain installed, such as g++, clang++, or MSVC++. If not, it is recommended to install the latest Xcode from the App Store on Mac, use the system package manager to install the compilers on Linux, or use Microsoft Visual Studio on Windows. The installed compiler must support the C++17 standard.
 
 Navigate to the `tools/cpp` directory and run the following command to build the SDK:
 
