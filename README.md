@@ -17,7 +17,7 @@ Further on the Web and Android platforms the API offers support for Web and Mobi
 |**Java SE**|[Get the lib](https://central.sonatype.com/artifact/com.lightstreamer/ls-javase-client/5.1.0)<br>[Changelog](CHANGELOG-JavaSE.md)<br>[Quickstart](https://sdk.lightstreamer.com/ls-javase-client/5.1.0/api/index.html#quickstart)<br>[API Reference](https://sdk.lightstreamer.com/ls-javase-client/5.1.0/api/index.html)<br>[Building](#java-se)|
 |**.NET**|[Get the lib](https://www.nuget.org/packages/Lightstreamer.DotNetStandard.Client/6.1.0)<br>[Changelog](CHANGELOG-.NET.md)<br>[Quickstart](https://sdk.lightstreamer.com/ls-dotnetstandard-client/6.1.0/api/articles/intro.html#quickstart)<br>[API Reference](https://sdk.lightstreamer.com/ls-dotnetstandard-client/6.1.0/api/api/index.html)<br>[Building](#net)|
 |**Python**|[Get the lib](https://pypi.org/project/lightstreamer-client-lib/2.1.0/)<br>[Changelog](CHANGELOG-Python.md)<br>[Quickstart](https://sdk.lightstreamer.com/ls-python-client/2.1.0/api/intro.html#quickstart)<br>[API Reference](https://sdk.lightstreamer.com/ls-python-client/2.1.0/api/modules.html)<br>[Building](#python)|
-|**C++**|[Changelog](CHANGELOG-C++.md)<br>[Quickstart](https://sdk.lightstreamer.com/ls-cpp-client/0.1.0-alpha.1/api/index.html)<br>[API Reference](https://sdk.lightstreamer.com/ls-cpp-client/0.1.0-alpha.1/api/annotated.html)<br>[Building](#cpp)|
+|**C++**|[Changelog](CHANGELOG-C++.md)<br>[Quickstart](https://sdk.lightstreamer.com/ls-cpp-client/1.0.0-alpha.1/api/index.html)<br>[API Reference](https://sdk.lightstreamer.com/ls-cpp-client/1.0.0-alpha.1/api/annotated.html)<br>[Building](#cpp)|
 
 ## Building
 
