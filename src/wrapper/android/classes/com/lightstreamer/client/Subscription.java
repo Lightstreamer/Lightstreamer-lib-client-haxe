@@ -293,7 +293,6 @@ public class Subscription {
     * with an "Item List".
     * @return the "Item List" to be subscribed to through the server, or null if the Subscription was initialized with an "Item Group" or was not initialized at all.
     */
-  @Nonnull 
   public String[] getItems() {
     return delegate.getItems();
   }
@@ -355,7 +354,6 @@ public class Subscription {
     * using a "Field List".
     * @return the "Field List" to be subscribed to through the server, or null if the Subscription was initialized with a "Field Schema" or was not initialized at all.
     */
-  @Nonnull 
   public String[] getFields() {
     return delegate.getFields();
   }
