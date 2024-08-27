@@ -87,6 +87,11 @@ class WsClient extends WebSocketListener implements Authenticator implements IWs
   public function dispose() {
     streamLogger.logDebug("WS disposing");
     isCanceled = true;
+    // **NB** It seems that if `ws.close` is not called before `ws.cancel`, connections may leak.
+    // Enabling the OkHttp logger, the following lines may be seen:
+    // > WARNING: A connection to http://... was leaked. Did you forget to close a response body?
+    // > java.lang.Throwable: response.body().close()
+    ws.close(1000, "");
     ws.cancel();
   }
 

@@ -42,6 +42,7 @@ class TestAll {
     runner.addCase(TestWsClientNode);
     #end
     #if java
+    // runner.addCase(TestOkHttp);
     runner.addCase(TestCookieHelperJava);
     runner.addCase(TestHttpClientJava);
     runner.addCase(TestWsClientJava);
