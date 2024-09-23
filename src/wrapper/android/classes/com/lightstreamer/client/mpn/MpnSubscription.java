@@ -33,6 +33,11 @@ public class MpnSubscription {
     /** @hidden */
     public final LSMpnSubscription delegate;
 
+    /** @hidden */
+    public MpnSubscription(LSMpnSubscription delegate) {
+        this.delegate = delegate;
+    }
+
     /**
      * Creates an object to be used to describe an MPN subscription that is going to be subscribed to through the MPN Module of Lightstreamer Server.<BR>
      * The object can be supplied to {@link LightstreamerClient#subscribe(MpnSubscription, boolean)} in order to bring the MPN subscription to "active" state.<BR>

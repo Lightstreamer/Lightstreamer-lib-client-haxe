@@ -626,7 +626,19 @@ LightstreamerClient.prototype = {
      * @see #findMpnSubscription
      */
     getMpnSubscriptions: function(filter) {
-        return this.delegate.getMpnSubscriptionWrappers(filter);
+        var res = [];
+        var subs = this.delegate.getMpnSubscriptions(filter);
+        for (var i = 0, len = subs.length; i < len; i++) {
+            /*LSMpnSubscription*/ var sub = subs[i];
+            if (sub.wrapper != null) {
+                res.push(sub.wrapper);
+            } else {
+                // since `sub` is a server subscription, i.e. it has not been created by the user through the MpnSubscription constructor, 
+                // it must be wrapped in an MpnSubscription
+                res.push(new MpnSubscription(sub));
+            }
+        }
+        return res;
     },
 
     /**
@@ -649,7 +661,10 @@ LightstreamerClient.prototype = {
      * @see #getMpnSubscriptions
      */
     findMpnSubscription: function(subscriptionId) {
-        return this.delegate.findMpnSubscriptionWrapper(subscriptionId);
+        /*LSMpnSubscription*/ var sub = this.delegate.findMpnSubscription(subscriptionId);
+        // when `sub.wrapper` == null, `sub` is a server subscription, i.e. it has not been created by the user through the MpnSubscription constructor, 
+        // so it must be wrapped in an MpnSubscription
+        return sub == null ? null : sub.wrapper != null ? sub.wrapper : new MpnSubscription(sub);
     },
 // #endif
 };

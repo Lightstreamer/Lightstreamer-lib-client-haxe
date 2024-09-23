@@ -20,6 +20,7 @@ import java.net.URI;
 import java.net.HttpCookie;
 import javax.net.ssl.TrustManagerFactory;
 import com.lightstreamer.client.LSLightstreamerClient;
+import com.lightstreamer.client.mpn.LSMpnSubscription;
 import com.lightstreamer.client.mpn.MpnDevice;
 import com.lightstreamer.client.mpn.MpnSubscription;
 
@@ -605,7 +606,18 @@ public class LightstreamerClient {
    * @see #findMpnSubscription(String)
    */
   public @Nonnull List<MpnSubscription> getMpnSubscriptions(@Nullable String filter) {
-    return delegate.getMpnSubscriptionWrappers(filter);
+    List<MpnSubscription> res = new java.util.ArrayList<>();
+    List<LSMpnSubscription> subs = delegate.getMpnSubscriptions(filter);
+    for (LSMpnSubscription sub : subs) {
+      if (sub.wrapper != null) {
+        res.add((MpnSubscription) sub.wrapper);
+      } else {
+        // since `sub` is a server subscription, i.e. it has not been created by the user through the MpnSubscription constructor, 
+        // it must be wrapped in an MpnSubscription
+        res.add(new MpnSubscription(sub));
+      }
+    }
+    return res;
   }
   
   /**
@@ -628,6 +640,9 @@ public class LightstreamerClient {
    * @see #getMpnSubscriptions(String)
    */
   public @Nullable MpnSubscription findMpnSubscription(@Nonnull String subscriptionId) {
-    return (MpnSubscription) delegate.findMpnSubscriptionWrapper(subscriptionId);
+    LSMpnSubscription sub = delegate.findMpnSubscription(subscriptionId);
+    // when `sub.wrapper` == null, `sub` is a server subscription, i.e. it has not been created by the user through the MpnSubscription constructor, 
+    // so it must be wrapped in an MpnSubscription
+    return sub == null ? null : sub.wrapper != null ? (MpnSubscription) sub.wrapper : new MpnSubscription(sub);
   }
 }

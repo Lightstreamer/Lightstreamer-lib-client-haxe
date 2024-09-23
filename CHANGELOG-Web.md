@@ -1,5 +1,13 @@
 # Lightstreamer Web Client Changelog
 
+## [Unreleased]
+*Compatible with Lightstreamer Server since 7.4.0*<br/>
+*Compatible with code developed with the previous version.*<br/>
+
+Fixed the methods `LightstreamerClient.getMpnSubscriptions` and `LightstreamerClient.findMpnSubscription` which, under certain situations,
+could fail to return the so-called Server MpnSubscriptions, i.e. those subscriptions that are created during a different session from the one in which the two methods are called.
+
+
 ## 9.2.0
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
 *May not be compatible with code developed with the previous version.*<br/>

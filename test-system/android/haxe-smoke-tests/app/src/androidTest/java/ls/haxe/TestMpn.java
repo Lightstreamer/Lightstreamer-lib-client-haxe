@@ -553,6 +553,76 @@ public class TestMpn {
         lsMonitor.await("SIGNAL => onSubscriptionError 17 Data Adapter not found");
     }
 
+    @Test(timeout=7000)
+    public void getServerSubscriptionsTest() throws Throwable {
+        final SequencingMonitor lsMonitor = new SequencingMonitor();
+        final SequencingMonitor subMonitor = new SequencingMonitor();
+
+        LightstreamerClient client2 = new LightstreamerClient(host, "TEST");
+        Context ctx = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        MpnDevice dev2 = new MpnDevice(ctx, device.getDeviceToken());
+        client2.connect();
+        client2.registerForMpn(dev2);
+        sub.setTriggerExpression("0==0");
+        sub.addListener(new StdoutMpnSubscriptionListener() {
+            @Override
+            public void onStatusChanged(@NonNull String status, long timestamp) {
+                subMonitor.signal("SIGNAL => onStatusChanged " + status);
+            }
+        });
+        client2.subscribe(sub, false);
+        subMonitor.await("SIGNAL => onStatusChanged ACTIVE");
+        subMonitor.await("SIGNAL => onStatusChanged SUBSCRIBED");
+        client2.disconnect();
+
+        device.addListener(new StdoutMpnDeviceListener() {
+            @Override
+            public void onSubscriptionsUpdated() {
+                lsMonitor.signal("SIGNAL => onSubscriptionsUpdated");
+            }
+        });
+        client.connect();
+        client.registerForMpn(device);
+
+        lsMonitor.await("SIGNAL => onSubscriptionsUpdated");
+        assertEquals(1, client.getMpnSubscriptions(null).size());
+    }
+
+    @Test(timeout=7000)
+    public void findServerSubscriptionTest() throws Throwable {
+        final SequencingMonitor lsMonitor = new SequencingMonitor();
+        final SequencingMonitor subMonitor = new SequencingMonitor();
+
+        LightstreamerClient client2 = new LightstreamerClient(host, "TEST");
+        Context ctx = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        MpnDevice dev2 = new MpnDevice(ctx, device.getDeviceToken());
+        client2.connect();
+        client2.registerForMpn(dev2);
+        sub.setTriggerExpression("0==0");
+        sub.addListener(new StdoutMpnSubscriptionListener() {
+            @Override
+            public void onStatusChanged(@NonNull String status, long timestamp) {
+                subMonitor.signal("SIGNAL => onStatusChanged " + status);
+            }
+        });
+        client2.subscribe(sub, false);
+        subMonitor.await("SIGNAL => onStatusChanged ACTIVE");
+        subMonitor.await("SIGNAL => onStatusChanged SUBSCRIBED");
+        client2.disconnect();
+
+        device.addListener(new StdoutMpnDeviceListener() {
+            @Override
+            public void onSubscriptionsUpdated() {
+                lsMonitor.signal("SIGNAL => onSubscriptionsUpdated");
+            }
+        });
+        client.connect();
+        client.registerForMpn(device);
+
+        lsMonitor.await("SIGNAL => onSubscriptionsUpdated");
+        assertNotNull(client.findMpnSubscription(sub.getSubscriptionId()));
+    }
+
     /**
      * Verifies that the client unsubscribes from an MPN item.
      */

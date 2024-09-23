@@ -49,6 +49,8 @@ var MpnSubscription = function() {
   var mode = arguments[0], items = arguments[1], fields = arguments[2];
   if (typeof mode === 'string') {
     this.delegate = new LSMpnSubscription(mode, items, fields, this);
+  } else if (mode instanceof LSMpnSubscription) {
+    this.delegate = mode;
   } else {
     var sub = mode.delegate;
     this.delegate = new LSMpnSubscription(sub, null, null, this);

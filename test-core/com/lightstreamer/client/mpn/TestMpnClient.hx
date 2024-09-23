@@ -333,6 +333,66 @@ class TestMpnClient extends utest.Test {
     .verify();
   }
 
+  function _testGetServerSubscriptions(async: utest.Async) {
+    setTransport();
+    var client2 = new LightstreamerClient(host, "TEST");
+    var dev2 = new MpnDevice(device.getDeviceToken(), "com.lightstreamer.demo.android.stocklistdemo", "Google");
+    client2.registerForMpn(dev2);
+    sub.setTriggerExpression("0==0");
+    subListener._onStatusChanged = (status, ts) -> exps.signal('onStatusChanged $status');
+    client2.subscribeMpn(sub, false);
+    exps
+    .then(() -> {
+      client2.connect();
+    })
+    .await("onStatusChanged ACTIVE")
+    .await("onStatusChanged SUBSCRIBED")
+    .then(() -> {
+      client2.disconnect();
+
+      devListener._onSubscriptionsUpdated = () -> exps.signal("onSubscriptionsUpdated");
+      client.connect();
+      client.registerForMpn(device);
+    })
+    .await("onSubscriptionsUpdated")
+    .then(() -> {
+      equals(1, client.getMpnSubscriptions(null).toHaxe().length);
+    })
+    .cleanup(this)
+    .then(() -> async.completed())
+    .verify();
+  }
+
+  function _testFindServerSubscription(async: utest.Async) {
+    setTransport();
+    var client2 = new LightstreamerClient(host, "TEST");
+    var dev2 = new MpnDevice(device.getDeviceToken(), "com.lightstreamer.demo.android.stocklistdemo", "Google");
+    client2.registerForMpn(dev2);
+    sub.setTriggerExpression("0==0");
+    subListener._onStatusChanged = (status, ts) -> exps.signal('onStatusChanged $status');
+    client2.subscribeMpn(sub, false);
+    exps
+    .then(() -> {
+      client2.connect();
+    })
+    .await("onStatusChanged ACTIVE")
+    .await("onStatusChanged SUBSCRIBED")
+    .then(() -> {
+      client2.disconnect();
+
+      devListener._onSubscriptionsUpdated = () -> exps.signal("onSubscriptionsUpdated");
+      client.connect();
+      client.registerForMpn(device);
+    })
+    .await("onSubscriptionsUpdated")
+    .then(() -> {
+      notNull(client.findMpnSubscription(sub.getSubscriptionId()));
+    })
+    .cleanup(this)
+    .then(() -> async.completed())
+    .verify();
+  }
+
   /**
    * Verifies that the client unsubscribes from an MPN item.
    */
