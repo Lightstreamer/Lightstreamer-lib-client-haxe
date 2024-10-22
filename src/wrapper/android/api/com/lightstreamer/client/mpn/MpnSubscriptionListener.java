@@ -106,7 +106,7 @@ public interface MpnSubscriptionListener {
      * Note that this event can be called multiple times in the life of an MpnSubscription instance only in case it is subscribed multiple times
      * through {@link com.lightstreamer.client.LightstreamerClient#unsubscribe(MpnSubscription)} and {@link com.lightstreamer.client.LightstreamerClient#subscribe(MpnSubscription, boolean)}. Two consecutive calls 
      * to this method are not possible.<BR>
-     * Note also that in some server clustering configurations this event may not be called. The corrisponding push notification is always sent, though.
+     * Note also that in some server clustering configurations this event may not be called. The corresponding push notification is always sent, though.
      * 
      * @see MpnSubscription#setTriggerExpression(String)
      */

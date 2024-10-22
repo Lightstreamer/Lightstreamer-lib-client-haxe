@@ -479,7 +479,7 @@ public class LightstreamerClient {
    * @lifecycle An {@link MpnDevice} can be registered at any time. The registration will be notified through a {@link com.lightstreamer.client.mpn.MpnDeviceListener#onRegistered()} event.
    * Note that forwarding of the registration to the server is made in a separate thread.
    * 
-   * @param device An {@link MpnDevice} instace, carrying all the information about the MPN device.
+   * @param device An {@link MpnDevice} instance, carrying all the information about the MPN device.
    * @throws IllegalArgumentException if the specified device is null.
    * 
    * @see #subscribe(MpnSubscription, boolean)
@@ -582,7 +582,7 @@ public class LightstreamerClient {
   /**
    * Inquiry method that returns a collection of the existing MPN subscription with a specified status.<BR>
    * Can return both objects created by the user, via {@link MpnSubscription} constructors, and objects created by the client, to represent pre-existing MPN subscriptions.<BR>
-   * Note that objects in the collection may be substitutued at any time with equivalent ones: do not rely on pointer matching, instead rely on the
+   * Note that objects in the collection may be substituted at any time with equivalent ones: do not rely on pointer matching, instead rely on the
    * {@link MpnSubscription#getSubscriptionId()} value to verify the equivalence of two MpnSubscription objects. Substitutions may happen
    * when an MPN subscription is modified, or when it is coalesced with a pre-existing subscription.
    * 
@@ -624,7 +624,7 @@ public class LightstreamerClient {
    * Inquiry method that returns the MpnSubscription with the specified subscription ID, or null if not found.<BR>
    * The object returned by this method can be an object created by the user, via MpnSubscription constructors, or an object created by the client,
    * to represent pre-existing MPN subscriptions.<BR>
-   * Note that objects returned by this method may be substitutued at any time with equivalent ones: do not rely on pointer matching, instead rely on the
+   * Note that objects returned by this method may be substituted at any time with equivalent ones: do not rely on pointer matching, instead rely on the
    * {@link MpnSubscription#getSubscriptionId()} value to verify the equivalence of two MpnSubscription objects. Substitutions may happen
    * when an MPN subscription is modified, or when it is coalesced with a pre-existing subscription.
    * 

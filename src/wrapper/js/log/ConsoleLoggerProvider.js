@@ -1,5 +1,5 @@
  /**
-  * Creates an instace of the concrete system console logger.
+  * Creates an instance of the concrete system console logger.
   * @constructor
   *  
   * @param {number} level The desired logging level. See {@link ConsoleLogLevel}.

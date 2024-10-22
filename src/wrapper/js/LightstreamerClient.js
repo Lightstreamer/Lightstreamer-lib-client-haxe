@@ -645,7 +645,7 @@ LightstreamerClient.prototype = {
      * Inquiry method that returns the MpnSubscription with the specified subscription ID, or null if not found.<BR>
      * The object returned by this method can be an object created by the user, via MpnSubscription constructors, or an object created by the client,
      * to represent pre-existing MPN subscriptions.<BR>
-     * Note that objects returned by this method may be substitutued at any time with equivalent ones: do not rely on pointer matching, instead rely on the
+     * Note that objects returned by this method may be substituted at any time with equivalent ones: do not rely on pointer matching, instead rely on the
      * {@link MpnSubscription#getSubscriptionId} value to verify the equivalence of two MpnSubscription objects. Substitutions may happen
      * when an MPN subscription is modified, or when it is coalesced with a pre-existing subscription.
      *

@@ -624,7 +624,7 @@ MpnSubscription.prototype = {
        * The ID is available only after the MPN subscription has been successfully subscribed on the server. I.e. when its status is <code>SUBSCRIBED</code> or
        * <code>TRIGGERED</code>.<BR>
        * Note: more than one MpnSubscription may exists at any given time referring to the same MPN subscription, and thus with the same subscription ID.
-       * For instace, copying an MpnSubscription with the copy initializer creates a second MpnSubscription instance with the same subscription ID. Also,
+       * For instance, copying an MpnSubscription with the copy initializer creates a second MpnSubscription instance with the same subscription ID. Also,
        * the <code>coalescing</code> flag of {@link LightstreamerClient#subscribeMpn} may cause the assignment of a pre-existing MPN subscription ID
        * to the new subscription.<BR>
        * Two MpnSubscription objects with the same subscription ID always represent the same server-side MPN subscription. It is the client's duty to keep the status

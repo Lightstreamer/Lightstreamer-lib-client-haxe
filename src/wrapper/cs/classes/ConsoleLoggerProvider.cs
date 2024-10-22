@@ -20,7 +20,7 @@ namespace com.lightstreamer.log
     readonly LSConsoleLoggerProvider _delegate;
 
     /// <summary>
-    /// Creates an instace of the concrete system console logger.</summary>
+    /// Creates an instance of the concrete system console logger.</summary>
     ///
     /// <param name="level"> The desired logging level. See <seealso cref="ConsoleLogLevel"/>.</param>
     public ConsoleLoggerProvider(int level) {
