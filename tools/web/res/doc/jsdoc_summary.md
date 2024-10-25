@@ -53,7 +53,7 @@ For each subscription to be subscribed to a Lightstreamer Server a {@link Subscr
 A simple Subscription containing three items and two fields to be subscribed in *MERGE* mode is easily created (see [Lightstreamer General Concepts](https://lightstreamer.com/docs/ls-server/latest/General%20Concepts.pdf)):
 
 ```
-var sub = new Ls.Subscription("MERGE",["item1","item2","item3"],["stock_name","last_price"]);
+var sub = new Subscription("MERGE",["item1","item2","item3"],["stock_name","last_price"]);
 sub.setDataAdapter("QUOTE_ADAPTER");
 sub.setRequestedSnapshot("yes");
 client.subscribe(sub);
@@ -76,10 +76,10 @@ Below is the complete JavaScript code embedded in an HTML page:
 <head>
     <script src="https://unpkg.com/lightstreamer-client-web/lightstreamer.min.js"></script>
     <script>
-    var client = new Ls.LightstreamerClient("https://push.lightstreamer.com","DEMO");  
+    var client = new LightstreamerClient("https://push.lightstreamer.com","DEMO");  
     client.connect();
     
-    var sub = new Ls.Subscription("MERGE",["item1","item2","item3"],["stock_name","last_price"]);
+    var sub = new Subscription("MERGE",["item1","item2","item3"],["stock_name","last_price"]);
     sub.setDataAdapter("QUOTE_ADAPTER");
     sub.setRequestedSnapshot("yes");
     sub.addListener({
