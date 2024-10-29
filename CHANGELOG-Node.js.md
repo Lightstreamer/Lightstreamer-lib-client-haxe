@@ -1,5 +1,13 @@
 # Lightstreamer Node.js Client Changelog
 
+## 9.2.1
+*Compatible with Lightstreamer Server since 7.4.0*<br/>
+*Compatible with code developed with the previous version.*<br/>
+*Made available on 29 Oct 2024*
+
+Fix the `README.md` in the package page on the npm repository.
+
+
 ## 9.2.0
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
 *May not be compatible with code developed with the previous version.*<br/>
