@@ -1,8 +1,9 @@
 # Lightstreamer Android Client Changelog
 
-## [Unreleased]
+## 5.2.1
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
 *Compatible with code developed with the previous version.*<br/>
+*Made available on 29 Oct 2024*
 
 Fixed the methods `LightstreamerClient.getMpnSubscriptions` and `LightstreamerClient.findMpnSubscription` which, under certain situations,
 could fail to return the so-called Server MpnSubscriptions, i.e. those subscriptions that are created during a different session from the one in which the two methods are called.
