@@ -46,6 +46,8 @@
   <target name="distribute" description="Publish the library to npmjs">
     <exec executable="npm" dir="${dist}" failonerror="true">
       <arg value="publish"/>
+      <arg value="--otp"/>
+      <arg value="${OTP}"/>
     </exec>
   </target>
 
