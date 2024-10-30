@@ -110,6 +110,20 @@ class TestClient extends utest.Test {
     client.connect();
   }
 
+  function _testSubscribeEmptyGroup(async: utest.Async) {
+    setTransport();
+    var sub = new Subscription("MERGE", ["empty_group"], ["count"]);
+    sub.setDataAdapter("COUNT");
+    sub.addListener(subListener);
+    subListener._onSubscriptionError = (code, errorMsg) -> {
+      equals(61, code);
+      equals("Expected 1 items but got 0", errorMsg);
+      async.completed();
+    };
+    client.subscribe(sub);
+    client.connect();
+  }
+
   function _testSubscriptionError(async: utest.Async) {
     setTransport();
     var sub = new Subscription("RAW", ["count"], ["count"]);
