@@ -73,7 +73,7 @@ macro function logTrace(logger: ExprOf<Logger>, line: Expr) {
 var logMessages = [];
 
 /**
- * Parses a log message and separates the string literals from the expressions embedded in the messagge. For example the message 'foo ${x+y} bar' contains the string literal "foo $1 bar" (where `$1` represents the embedded expression) and the expression `x+y`.
+ * Parses a log message and separates the string literals from the expressions embedded in the message. For example the message 'foo ${x+y} bar' contains the string literal "foo $1 bar" (where `$1` represents the embedded expression) and the expression `x+y`.
  * 
  * The parser has some limitations, thus the only messages accepted must have patterns such as:
  * 
