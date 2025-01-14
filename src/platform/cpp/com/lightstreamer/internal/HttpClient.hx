@@ -50,7 +50,7 @@ class HttpClient implements IHttpClient {
         }
       }
 			// set additional headers
-			req.setHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
+			req.setHeader("Content-Type", "text/plain; charset=utf-8");
 			if (headers != null) {
 				for (k => v in headers) {
 					req.setHeader(k, v);

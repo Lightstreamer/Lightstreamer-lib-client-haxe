@@ -1,5 +1,10 @@
 # Lightstreamer Java SE Client Changelog
 
+## [unreleased]
+
+Changed HTTP `Content-Type` header to use `text/plain` instead of `application/x-www-form-urlencoded`.
+
+
 ## 5.2.0
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
 *May not be compatible with code developed with the previous version.*<br/>

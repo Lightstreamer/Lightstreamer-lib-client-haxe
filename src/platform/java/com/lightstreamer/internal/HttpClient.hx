@@ -9,7 +9,7 @@ import com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.log.LoggerTools;
 
 class HttpClient implements Callback implements Authenticator implements IHttpClient {
-  static final TXT = MediaType.get("application/x-www-form-urlencoded; charset=utf-8");
+  static final TXT = MediaType.get("text/plain; charset=utf-8");
   // OkHttp performs best when you create a single OkHttpClient instance and reuse it for all of your HTTP calls 
   // (see https://square.github.io/okhttp/4.x/okhttp/okhttp3/-ok-http-client/#okhttpclients-should-be-shared)
   // Shutdown isn’t necessary. The threads and connections that are held will be released 

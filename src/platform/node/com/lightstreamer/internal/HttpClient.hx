@@ -37,7 +37,7 @@ class HttpClient implements IHttpClient {
       case _:
     }
     // set content-type
-    xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+    xhr.setRequestHeader("Content-Type","text/plain; charset=utf-8");
     xhr.send(body);
     xhr.onreadystatechange = () -> {
       if (isCanceled) return;

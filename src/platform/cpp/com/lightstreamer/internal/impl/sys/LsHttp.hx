@@ -182,7 +182,7 @@ class LsHttp extends Http {
 					b.writeString("; boundary=");
 					b.writeString(boundary);
 				} else
-					b.writeString("application/x-www-form-urlencoded");
+					b.writeString("text/plain; charset=utf-8");
 				b.writeString("\r\n");
 			}
 			if (multipart)

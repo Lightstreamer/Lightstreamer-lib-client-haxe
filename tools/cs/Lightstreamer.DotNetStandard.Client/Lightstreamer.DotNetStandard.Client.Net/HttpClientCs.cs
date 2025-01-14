@@ -53,7 +53,7 @@ namespace com.lightstreamer.cs
             IDictionary<string, string> headers)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, url);
-            request.Content = new StringContent(body, System.Text.Encoding.UTF8, "application/x-www-form-urlencoded");
+            request.Content = new StringContent(body, System.Text.Encoding.UTF8, "text/plain");
             // set headers
             if (headers != null)
             {

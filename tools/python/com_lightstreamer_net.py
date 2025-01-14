@@ -90,7 +90,7 @@ class HttpClientPy:
   async def _sendAsync(self, url, body, headers, proxy, sslContext):
     if headers is None:
       headers = {}
-    headers["Content-Type"] = "application/x-www-form-urlencoded; charset=utf-8"
+    headers["Content-Type"] = "text/plain; charset=utf-8"
     proxy_url, proxy_auth = build_proxy(proxy)
     try:
       session = SessionPy.getInstance()
