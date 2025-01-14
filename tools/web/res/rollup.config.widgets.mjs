@@ -1,6 +1,6 @@
 import virtual from '@rollup/plugin-virtual'
 import JsUtils from '../../JsUtils.mjs'
-import pkg from '../../../bin/web/build/dist/npm/package.json' assert { type: 'json' };
+import pkg from '../../../bin/web/build/dist/npm/package.json' with { type: 'json' };
 
 const classes = ["Chart", "DynaGrid", "SimpleChartListener", "StaticGrid", "StatusWidget", "ChartListener", "DynaGridListener", "StaticGridListener"]
 

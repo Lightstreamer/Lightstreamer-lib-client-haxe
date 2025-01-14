@@ -2,8 +2,8 @@ import { nodeResolve } from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import terser from '@rollup/plugin-terser'
 import JsUtils from '../../JsUtils.mjs'
-import pkg from '../../../bin/now4real/build/dist/log/package.json' assert { type: 'json' };
-import classes from '../../../src/wrapper/web/core/wrapper.export.json' assert { type: 'json' };
+import pkg from '../../../bin/now4real/build/dist/log/package.json' with { type: 'json' };
+import classes from '../../../src/wrapper/web/core/wrapper.export.json' with { type: 'json' };
 
 const dist = 'bin/now4real/build/dist/log'
 

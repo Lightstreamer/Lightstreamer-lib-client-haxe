@@ -2,8 +2,8 @@ import { nodeResolve } from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import terser from '@rollup/plugin-terser'
 import JsUtils from '../../JsUtils.mjs'
-import pkg from '../../../bin/dashboard/build/dist/package.json' assert { type: 'json' };
-import classes from '../../../src/wrapper/web/full/wrapper.export.json' assert { type: 'json' };
+import pkg from '../../../bin/dashboard/build/dist/package.json' with { type: 'json' };
+import classes from '../../../src/wrapper/web/full/wrapper.export.json' with { type: 'json' };
 
 const dist = 'bin/dashboard/build/dist'
 
