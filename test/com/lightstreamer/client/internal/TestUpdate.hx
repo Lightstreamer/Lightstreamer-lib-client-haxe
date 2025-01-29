@@ -27,6 +27,42 @@ class TestUpdate extends utest.Test {
     client.disconnect();
   }
 
+  // Tests that the `unquote` function correctly encodes and decodes UTF-8 byte sequences.
+  function testUtf8Decoding() {
+    var s = "\u{0}\u{f2}\u{2}\u{0}";
+    // Get the utf-8 encoding of `s`
+    var bytes = haxe.io.Bytes.ofString(s, haxe.io.Encoding.UTF8);
+    // The UTF-8 encoding of `s` is the array [0x00, 0xc3, 0xb2, 0x02, 0x00]
+    equals("00c3b20200", bytes.toHex());
+    #if js
+    // NOTE: in the JavaScript target, the Bytes class (once used internally by `unquote`) fails to convert a UTF-8 array back to a string.
+    // For example, in this case, it should return `s`, but it returns an empty string instead.
+    notEquals(s, bytes.toString()); // THIS IS WRONG!
+    // The TextDecoder class works correctly, so now `unquote` is based on it.
+    equals(s, new js.html.TextDecoder().decode(bytes.getData()));
+    #end
+    // The unquote of `s` is the same as `s`
+    equals(s, unquote(s));
+
+    equals("\u{20}\u{00DD}\u{20}\u{20}", unquote("\u{20}\u{00DD}\u{20}\u{20}"));
+
+    // Other tests suggested in https://www.cl.cam.ac.uk/~mgk25/ucs/examples/UTF-8-test.txt
+    equals("κόσμε", unquote("κόσμε"));
+    equals("\u{00000000}", unquote("\u{00000000}"));
+    equals("\u{00000080}", unquote("\u{00000080}"));
+    equals("\u{00000800}", unquote("\u{00000800}"));
+    equals("\u{00010000}", unquote("\u{00010000}"));
+
+    equals("\u{0000007F}", unquote("\u{0000007F}"));
+    equals("\u{000007FF}", unquote("\u{000007FF}"));
+    equals("\u{0000FFFF}", unquote("\u{0000FFFF}"));
+
+    equals("\u{0000D7FF}", unquote("\u{0000D7FF}"));
+    equals("\u{0000E000}", unquote("\u{0000E000}"));
+    equals("\u{0000FFFD}", unquote("\u{0000FFFD}"));
+    equals("\u{0010FFFF}", unquote("\u{0010FFFF}"));
+  }
+
   function testUnquote() {
     equals("", unquote(""));
     equals("☺", unquote("☺")); // unicode code point U+263A

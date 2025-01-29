@@ -159,8 +159,15 @@ function unquote(s: String): String {
     }
   }
   // j contains the length of the converted string
-  var ss = bb.getString(0, j, Encoding.UTF8);
-  return ss;
+  #if js
+  // NOTE: the Haxe method Bytes.getString is broken in the JS target. The JavaScript standard class TextDecoder is used instead.
+  // See issue https://github.com/HaxeFoundation/haxe/issues/11956
+  static var _decoder = new js.html.TextDecoder(); // UTF-8 is the default encoding
+  var data = bb.sub(0, j).getData();
+  return _decoder.decode(data);
+  #else
+  return bb.getString(0, j, Encoding.UTF8);
+  #end
 }
 
 /**
