@@ -1,8 +1,13 @@
 # Lightstreamer Node.js Client Changelog
 
-## [unreleased]
+## 9.2.2
+*Compatible with Lightstreamer Server since 7.4.0*<br/>
+*Compatible with code developed using the previous version*<br/>
+*Made available on 31 Jan 2025*
 
 Changed HTTP `Content-Type` header to use `text/plain` instead of `application/x-www-form-urlencoded`.
+
+**Fixed:** Resolved an issue where specific UTF-8 encoded byte sequences, particularly those containing the code point 0, led to empty or incomplete field values. This bug impacted the `ItemUpdate.getValue` method and other `ItemUpdate` methods.
 
 
 ## 9.2.1
