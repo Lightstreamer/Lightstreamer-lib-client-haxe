@@ -7,7 +7,7 @@ Changed HTTP `Content-Type` header to use `text/plain` instead of `application/x
 
 ## 9.2.1
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
-*Compatible with code developed with the previous version.*<br/>
+*Compatible with code developed using the previous version.*<br/>
 *Made available on 29 Oct 2024*
 
 Fixed the methods `LightstreamerClient.getMpnSubscriptions` and `LightstreamerClient.findMpnSubscription` which, under certain situations,
@@ -16,7 +16,7 @@ could fail to return the so-called Server MpnSubscriptions, i.e. those subscript
 
 ## 9.2.0
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
-*May not be compatible with code developed with the previous version.*<br/>
+*May not be compatible with code developed using the previous version.*<br/>
 *Made available on 16 Feb 2024*
 
 Fixed the responsiveness issues caused by the [throttling of timers](https://developer.chrome.com/blog/timer-throttling-in-chrome-88) in background tabs by creating a web worker and setting the timers only there.
@@ -28,7 +28,7 @@ Changed the behavior of the listener `ClientListener.onPropertyChange` to be cal
 
 ## 9.1.1
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
-*Compatible with code developed with the previous version.*<br/>
+*Compatible with code developed using the previous version.*<br/>
 *Made available on 31 Jan 2024*
 
 Fixed a bug that could prevent the `onSubscriptionsUpdated` event of `MpnDeviceListener` from firing when the `unsubscribeMpnSubscriptions` method of `LightstreamerClient` was invoked while registering an `MpnDevice`.
@@ -36,7 +36,7 @@ Fixed a bug that could prevent the `onSubscriptionsUpdated` event of `MpnDeviceL
 
 ## 9.1.0
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
-*Compatible with code developed with the previous version.*<br/>
+*Compatible with code developed using the previous version.*<br/>
 *Made available on 19 Dec 2023*
 
 Improved the client's performance to handle more server updates per second.
@@ -46,7 +46,7 @@ Fixed the issue with the `MpnSubscription` constructor that caused incorrect han
 
 ## 9.0.0
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
-*Not compatible with code developed with the previous version.*<br/>
+*Not compatible with code developed using the previous version.*<br/>
 *Made available on 10 Jul 2023* 
 
 Added a second argument to the listener `ClientMessageListener.onProcessed` carrying the response, from the Metadata Adapter of a Lightstreamer Server, to a message sent by the Client through the method `LightstreamerClient.sendMessage`.
@@ -58,7 +58,7 @@ Changed the behavior of the method `ItemUpdate.forEachChangedField` when `ItemUp
 
 ## 9.0.0-beta.6
 *Compatible with Lightstreamer Server since 7.3.2*<br/>
-*Not compatible with code developed with the previous version.*<br/>
+*Not compatible with code developed using the previous version.*<br/>
 *Made available on 22 Jun 2023* 
 
 Fixed the validation check of the setter `setItems` of the classes `Subscription` and `MpnSubscription` in order to accept item names that start with a digit but contain non-digit characters too.
@@ -66,7 +66,7 @@ Fixed the validation check of the setter `setItems` of the classes `Subscription
 
 ## 9.0.0-beta.5
 *Compatible with Lightstreamer Server since 7.3.2*<br/>
-*Not compatible with code developed with the previous version.*<br/>
+*Not compatible with code developed using the previous version.*<br/>
 *Made available on 19 Jun 2023* 
 
 Fixed a bug which caused the "core" variant of the library to crash when executed in a Web Worker.
@@ -74,7 +74,7 @@ Fixed a bug which caused the "core" variant of the library to crash when execute
 
 ## 9.0.0-beta.4
 *Compatible with Lightstreamer Server since 7.3.2*<br/>
-*Not compatible with code developed with the previous version.*<br/>
+*Not compatible with code developed using the previous version.*<br/>
 *Made available on 24 May 2023* 
 
 Patched the method `haxe.Timer.delay` so that it uses the function `setTimeout` instead of the function `setInterval`, which has an unexpected behavior when executed in a React Native application (see the issue https://github.com/facebook/react-native/issues/37464).
@@ -86,7 +86,7 @@ Updated the library haxe-concurrent to version 5.1.3.
 
 ## 9.0.0-beta.3
 *Compatible with Lightstreamer Server since 7.3.2*<br/>
-*Not compatible with code developed with the previous version.*<br/>
+*Not compatible with code developed using the previous version.*<br/>
 *Made available on 21 Apr 2023* 
 
 Fixed Typescript declarations.
@@ -94,7 +94,7 @@ Fixed Typescript declarations.
 
 ## 9.0.0-beta.2
 *Compatible with Lightstreamer Server since 7.3.2*<br/>
-*Not compatible with code developed with the previous version.*<br/>
+*Not compatible with code developed using the previous version.*<br/>
 *Made available on 5 Apr 2023* 
 
 Rewritten the function to decode the percent encoded messages sent by the Server so that it has the same behavior on all the targets.
@@ -106,7 +106,7 @@ Removed from the StatusWidget the led showing the status of the connection shari
 
 ## 9.0.0-beta.1
 *Compatible with Lightstreamer Server since 7.3.2*<br/>
-*Not compatible with code developed with the previous version.*<br/>
+*Not compatible with code developed using the previous version.*<br/>
 *Made available on 14 Mar 2023* 
 
 Rewritten the whole Client SDK in the cross-platform programming language Haxe, which allows to share the core features with the other Client SDKs and at the same time to add functionalities specific to this platform.<br>

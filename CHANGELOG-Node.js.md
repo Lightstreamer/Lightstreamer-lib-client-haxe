@@ -7,7 +7,7 @@ Changed HTTP `Content-Type` header to use `text/plain` instead of `application/x
 
 ## 9.2.1
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
-*Compatible with code developed with the previous version.*<br/>
+*Compatible with code developed using the previous version.*<br/>
 *Made available on 29 Oct 2024*
 
 Fix the `README.md` in the package page on the npm repository.
@@ -15,7 +15,7 @@ Fix the `README.md` in the package page on the npm repository.
 
 ## 9.2.0
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
-*May not be compatible with code developed with the previous version.*<br/>
+*May not be compatible with code developed using the previous version.*<br/>
 *Made available on 29 Oct 2024*
 
 Changed the behavior of the listener `ClientListener.onPropertyChange` to be called whenever the value of a property is changed by the server or by the user through a property setter.
@@ -23,7 +23,7 @@ Changed the behavior of the listener `ClientListener.onPropertyChange` to be cal
 
 ## 9.1.0
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
-*Compatible with code developed with the previous version.*<br/>
+*Compatible with code developed using the previous version.*<br/>
 *Made available on 19 Dec 2023*
 
 Improved the client's performance to handle more server updates per second.
@@ -31,7 +31,7 @@ Improved the client's performance to handle more server updates per second.
 
 ## 9.0.0
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
-*Not compatible with code developed with the previous version.*<br/>
+*Not compatible with code developed using the previous version.*<br/>
 *Made available on 10 Jul 2023* 
 
 Added a second argument to the listener `ClientMessageListener.onProcessed` carrying the response, from the Metadata Adapter of a Lightstreamer Server, to a message sent by the Client through the method `LightstreamerClient.sendMessage`.
@@ -43,7 +43,7 @@ Changed the behavior of the method `ItemUpdate.forEachChangedField` when `ItemUp
 
 ## 9.0.0-beta.3
 *Compatible with Lightstreamer Server since 7.3.2*<br/>
-*Not compatible with code developed with the previous version.*<br/>
+*Not compatible with code developed using the previous version.*<br/>
 *Made available on 22 Jun 2023* 
 
 Fixed the validation check of the setter `setItems` of the class `Subscription` in order to accept item names that start with a digit but contain non-digit characters too.
@@ -53,7 +53,7 @@ Updated the library haxe-concurrent to version 5.1.3.
 
 ## 9.0.0-beta.2
 *Compatible with Lightstreamer Server since 7.3.2*<br/>
-*Not compatible with code developed with the previous version.*<br/>
+*Not compatible with code developed using the previous version.*<br/>
 *Made available on 5 Apr 2023* 
 
 Rewritten the function to decode the percent encoded messages sent by the Server so that it has the same behavior on all the targets.
@@ -63,7 +63,7 @@ Suppressed the unsolicited console outputs produced by the library.
 
 ## 9.0.0-beta.1
 *Compatible with Lightstreamer Server since 7.3.2*<br/>
-*Not compatible with code developed with the previous version.*<br/>
+*Not compatible with code developed using the previous version.*<br/>
 *Made available on 14 Mar 2023* 
 
 Rewritten the whole Client SDK in the cross-platform programming language Haxe, which allows to share the core features with the other Client SDKs and at the same time to add functionalities specific to this platform.<br>
