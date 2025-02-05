@@ -356,7 +356,7 @@ export default /*@__PURE__*/(function() {
     });
     this.statusTextsContainer.appendChild(this.statusText);
 
-    this.updateWidget(OFF_LED,OFF_LED,OFF_LED,"Ready",DATA_STREAMING_SERVER,this.greyImg);
+    this.updateWidget(OFF_LED,OFF_LED,"Ready",DATA_STREAMING_SERVER,this.greyImg);
     this.updateWidgetS(this.greyImg);
         // added temporarily, as currently the color switch is not implemented
 
@@ -480,7 +480,7 @@ export default /*@__PURE__*/(function() {
           return;
         }
 
-        this.updateWidget(OFF_LED,OFF_LED,OFF_LED,"Ready",DATA_STREAMING_SERVER);
+        this.updateWidget(OFF_LED,OFF_LED,"Ready",DATA_STREAMING_SERVER);
         this.lsClient = null;
       },
 
@@ -551,7 +551,7 @@ export default /*@__PURE__*/(function() {
         var incipit = DATA_STREAMING_SERVER;
 
         if (status == LightstreamerConstants.DISCONNECTED) {
-          this.updateWidget(OFF_LED,OFF_LED,OFF_LED,"Disconnected",DATA_STREAMING_SERVER,this.greyImg);
+          this.updateWidget(OFF_LED,OFF_LED,"Disconnected",DATA_STREAMING_SERVER,this.greyImg);
           
         } else if (status == LightstreamerConstants.CONNECTING) {
           this.updateWidget(OFF_LED,OFF_LED,"Connecting...",incipit,this.greyImg);

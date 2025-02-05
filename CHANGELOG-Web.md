@@ -1,5 +1,10 @@
 # Lightstreamer Web Client Changelog
 
+## [unreleased]
+
+**Fixed:** The `StatusWidget` displayed an incorrect label, showing a number instead of "Disconnected" when the client was disconnected.
+
+
 ## 9.2.2
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
 *Compatible with Chrome 72+*<br/>
