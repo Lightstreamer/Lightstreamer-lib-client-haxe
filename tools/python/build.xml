@@ -52,7 +52,7 @@
     <exec executable="git" failonerror="true">
       <arg value="commit"/>
       <arg value="-m"/>
-      <arg value="Release Python SDK ${version} build ${build.number}"/>
+      <arg value="Python-v${version}"/>
     </exec>
     <exec executable="git" failonerror="true">
       <arg value="push"/>

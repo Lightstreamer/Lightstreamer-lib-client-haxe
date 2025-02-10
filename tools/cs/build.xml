@@ -34,7 +34,7 @@
     <exec executable="git" failonerror="true">
       <arg value="commit"/>
       <arg value="-m"/>
-      <arg value="Release .NET SDK ${version} build ${build.number}"/>
+      <arg value="NET-v${version}"/>
     </exec>
     <exec executable="git" failonerror="true">
       <arg value="push"/>

@@ -59,7 +59,7 @@
     <exec executable="git" failonerror="true">
       <arg value="commit"/>
       <arg value="-m"/>
-      <arg value="Release Node.js SDK ${version} build ${build.number}"/>
+      <arg value="Node-v${version}"/>
     </exec>
     <exec executable="git" failonerror="true">
       <arg value="push"/>

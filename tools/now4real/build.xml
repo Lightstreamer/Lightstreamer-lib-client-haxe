@@ -16,7 +16,7 @@
     <exec executable="git" failonerror="true">
       <arg value="commit"/>
       <arg value="-m"/>
-      <arg value="Release Web SDK for Now4real ${version} build ${build.number}"/>
+      <arg value="Now4real-v${version}"/>
     </exec>
     <exec executable="git" failonerror="true">
       <arg value="push"/>

@@ -67,7 +67,7 @@
     <exec executable="git" failonerror="true">
       <arg value="commit"/>
       <arg value="-m"/>
-      <arg value="Release C++ SDK ${version} build ${build.number}"/>
+      <arg value="Cpp-v${version}"/>
     </exec>
     <exec executable="git" failonerror="true">
       <arg value="push"/>
