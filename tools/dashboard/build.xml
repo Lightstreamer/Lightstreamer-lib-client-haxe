@@ -33,6 +33,21 @@
 
   <include file="${tools}/../web/build-common.xml"/>
 
+  <target name="push" description="Push the changes to CodeCommit">
+    <exec executable="git" failonerror="true">
+      <arg value="add"/>
+      <arg value="-A"/>
+    </exec>
+    <exec executable="git" failonerror="true">
+      <arg value="commit"/>
+      <arg value="-m"/>
+      <arg value="Release Web SDK for Dashboard ${version} build ${build.number}"/>
+    </exec>
+    <exec executable="git" failonerror="true">
+      <arg value="push"/>
+    </exec>
+  </target>
+
   <target name="package" depends="package_haxe,package_common,common.package_worker_timers" description="Build the library">
     <exec executable="npx" failonerror="true">
       <arg value="rollup"/>

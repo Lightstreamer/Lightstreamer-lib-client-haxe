@@ -84,6 +84,35 @@
   <target name="distribute" depends="distribute.snapshot,distribute.release" description="Publish the library to Maven Central">
   </target>
 
+  <target name="push" description="Push the changes to CodeCommit and Github, and create a Github release">
+    <exec executable="git" failonerror="true">
+      <arg value="add"/>
+      <arg value="-A"/>
+    </exec>
+    <exec executable="git" failonerror="true">
+      <arg value="commit"/>
+      <arg value="-m"/>
+      <arg value="Release Android SDK ${version} build ${build.number}"/>
+    </exec>
+    <exec executable="git" failonerror="true">
+      <arg value="push"/>
+    </exec>
+    <exec executable="git" failonerror="true">
+      <arg value="push"/>
+      <arg value="github"/>
+      <arg value="main"/>
+    </exec>
+    <exec executable="gh" failonerror="true">
+      <arg value="release"/>
+      <arg value="create"/>
+      <arg value="Android-v${version}"/>
+      <arg value="--title"/>
+      <arg value="Android Client SDK ${version}"/>
+      <arg value="--notes"/>
+      <arg value="[Changelog](CHANGELOG-Android.md)"/>
+    </exec>
+  </target>
+
   <target name="package" depends="package_wrapper" description="Build the library">
     <jar destfile="${lib.jar}">
       <fileset dir="${api.classes}"/>

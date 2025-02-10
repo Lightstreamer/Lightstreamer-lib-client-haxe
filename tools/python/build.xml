@@ -44,6 +44,35 @@
     </exec>
   </target>
 
+  <target name="push" description="Push the changes to CodeCommit and Github, and create a Github release">
+    <exec executable="git" failonerror="true">
+      <arg value="add"/>
+      <arg value="-A"/>
+    </exec>
+    <exec executable="git" failonerror="true">
+      <arg value="commit"/>
+      <arg value="-m"/>
+      <arg value="Release Python SDK ${version} build ${build.number}"/>
+    </exec>
+    <exec executable="git" failonerror="true">
+      <arg value="push"/>
+    </exec>
+    <exec executable="git" failonerror="true">
+      <arg value="push"/>
+      <arg value="github"/>
+      <arg value="main"/>
+    </exec>
+    <exec executable="gh" failonerror="true">
+      <arg value="release"/>
+      <arg value="create"/>
+      <arg value="Python-v${version}"/>
+      <arg value="--title"/>
+      <arg value="Python Client SDK ${version}"/>
+      <arg value="--notes"/>
+      <arg value="[Changelog](CHANGELOG-Python.md)"/>
+    </exec>
+  </target>
+
   <target name="distribute.test" description="Upload the library to TestPypi">
     <exec executable="python" dir="${lib}" failonerror="true">
       <arg value="-m"/>

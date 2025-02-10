@@ -26,6 +26,35 @@
   <property name="nuspec.template" location="${tools}/res/Lightstreamer.DotNetStandard.Client.nuspec"/>
   <property name="nuspec.file" location="${tools.project}/Lightstreamer.DotNetStandard.Client.nuspec"/>
 
+  <target name="push" description="Push the changes to CodeCommit and Github, and create a Github release">
+    <exec executable="git" failonerror="true">
+      <arg value="add"/>
+      <arg value="-A"/>
+    </exec>
+    <exec executable="git" failonerror="true">
+      <arg value="commit"/>
+      <arg value="-m"/>
+      <arg value="Release .NET SDK ${version} build ${build.number}"/>
+    </exec>
+    <exec executable="git" failonerror="true">
+      <arg value="push"/>
+    </exec>
+    <exec executable="git" failonerror="true">
+      <arg value="push"/>
+      <arg value="github"/>
+      <arg value="main"/>
+    </exec>
+    <exec executable="gh" failonerror="true">
+      <arg value="release"/>
+      <arg value="create"/>
+      <arg value="NET-v${version}"/>
+      <arg value="--title"/>
+      <arg value=".NET Client SDK ${version}"/>
+      <arg value="--notes"/>
+      <arg value="[Changelog](CHANGELOG-.NET.md)"/>
+    </exec>
+  </target>
+
   <target name="test" description="Run the tests">
     <copy file="${test.project}" todir="${test}"/>
     <exec executable="haxe">

@@ -8,6 +8,21 @@
 
   <property name="tools" location="tools/now4real"/>
 
+  <target name="push" description="Push the changes to CodeCommit">
+    <exec executable="git" failonerror="true">
+      <arg value="add"/>
+      <arg value="-A"/>
+    </exec>
+    <exec executable="git" failonerror="true">
+      <arg value="commit"/>
+      <arg value="-m"/>
+      <arg value="Release Web SDK for Now4real ${version} build ${build.number}"/>
+    </exec>
+    <exec executable="git" failonerror="true">
+      <arg value="push"/>
+    </exec>
+  </target>
+
   <target name="package" description="Build the library">
     <ant antfile="${tools}/build-log.xml" target="package" useNativeBasedir="true" inheritAll="false"/>
     <ant antfile="${tools}/build-nolog.xml" target="package" useNativeBasedir="true" inheritAll="false"/>

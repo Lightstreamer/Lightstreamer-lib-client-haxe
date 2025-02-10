@@ -51,6 +51,35 @@
     </exec>
   </target>
 
+  <target name="push" description="Push the changes to CodeCommit and Github, and create a Github release">
+    <exec executable="git" failonerror="true">
+      <arg value="add"/>
+      <arg value="-A"/>
+    </exec>
+    <exec executable="git" failonerror="true">
+      <arg value="commit"/>
+      <arg value="-m"/>
+      <arg value="Release Node.js SDK ${version} build ${build.number}"/>
+    </exec>
+    <exec executable="git" failonerror="true">
+      <arg value="push"/>
+    </exec>
+    <exec executable="git" failonerror="true">
+      <arg value="push"/>
+      <arg value="github"/>
+      <arg value="main"/>
+    </exec>
+    <exec executable="gh" failonerror="true">
+      <arg value="release"/>
+      <arg value="create"/>
+      <arg value="Node-v${version}"/>
+      <arg value="--title"/>
+      <arg value="Node.js Client SDK ${version}"/>
+      <arg value="--notes"/>
+      <arg value="[Changelog](CHANGELOG-Node.js.md)"/>
+    </exec>
+  </target>
+
   <target name="docs" description="Build the docs">
     <copy file="${jsdoc.config.tmpl}" tofile="${jsdoc.config}" overwrite="true">
       <filterset>
