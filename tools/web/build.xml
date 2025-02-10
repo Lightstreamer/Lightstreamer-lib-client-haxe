@@ -76,6 +76,7 @@
       <arg value="-c"/><arg value="${jsdoc.config}"/>
       <arg value="${jsdoc.src}"/>
     </exec>
+    <delete file="${jsdoc.config}"/>
   </target>
 
   <target name="package" description="Build the library">

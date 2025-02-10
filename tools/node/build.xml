@@ -98,6 +98,7 @@
       <arg value="-c"/><arg value="${jsdoc.config}"/>
       <arg value="${jsdoc.src}"/>
     </exec>
+    <delete file="${jsdoc.config}"/>
   </target>
 
   <target name="package" depends="types.d.ts" description="Build the library">
