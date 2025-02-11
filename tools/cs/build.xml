@@ -26,6 +26,19 @@
   <property name="nuspec.template" location="${tools}/res/Lightstreamer.DotNetStandard.Client.nuspec"/>
   <property name="nuspec.file" location="${tools.project}/Lightstreamer.DotNetStandard.Client.nuspec"/>
 
+  <!-- See https://learn.microsoft.com/en-gb/nuget/nuget-org/publish-a-package -->
+  <target name="distribute" description="Publish the library to nuget">
+    <exec executable="dotnet" dir="${dist}" failonerror="true">
+      <arg value="nuget"/>
+      <arg value="push"/>
+      <arg value="Lightstreamer.DotNetStandard.Client.${version}.nupkg"/>
+      <arg value="--api-key"/>
+      <arg value="${nuget.api.key}"/>
+      <arg value="--source"/>
+      <arg value="https://api.nuget.org/v3/index.json"/>
+    </exec>
+  </target>
+
   <target name="push" description="Push the changes to CodeCommit and Github, and create a Github release">
     <exec executable="git" failonerror="true">
       <arg value="add"/>
