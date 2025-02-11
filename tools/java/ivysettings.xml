@@ -2,7 +2,7 @@
 
   <settings defaultResolver="default"/>
 
-  <credentials host="oss.sonatype.org" realm="Sonatype Nexus Repository Manager" username="${repo.user}" passwd="${repo.password}"/>
+  <credentials host="oss.sonatype.org" realm="Sonatype Nexus Repository Manager" username="${sonatype.user}" passwd="${sonatype.password}"/>
 
   <include url="${ivy.default.settings.dir}/ivysettings-public.xml"/>
 
