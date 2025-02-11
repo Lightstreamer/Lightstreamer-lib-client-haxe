@@ -45,10 +45,18 @@
 
   <target name="distribute" description="Publish the library to npmjs">
     <exec executable="npm" dir="${dist}" failonerror="true">
-      <arg value="publish"/>
-      <arg value="--otp"/>
-      <arg value="${OTP}"/>
+      <arg value="config"/>
+      <arg value="set"/>
+      <arg value="//registry.npmjs.org/:_authToken=${npm.api.key}"/>
     </exec>
+    <exec executable="npm" dir="${dist}" failonerror="true">
+      <arg value="publish"/>
+    </exec>
+    <!-- <exec executable="npm" dir="${dist}" failonerror="true">
+      <arg value="publish"/>
+      <arg value="-&#45;otp"/>
+      <arg value="${OTP}"/>
+    </exec> -->
   </target>
 
   <target name="push" description="Push the changes to CodeCommit and Github, and create a Github release">
