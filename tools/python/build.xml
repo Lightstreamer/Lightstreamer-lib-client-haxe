@@ -95,6 +95,13 @@
   </target>
 
   <target name="docs" description="Build the docs">
+    <!-- Install the Client SDK to resolve third-party dependencies required by Sphinx for documentation generation -->
+    <exec executable="pip" dir="${lib}" failonerror="true">
+      <arg value="install"/>
+      <arg value="-e"/>
+      <arg value="."/>
+    </exec>
+
     <exec executable="make" dir="${docs}" failonerror="true" osfamily="unix">
       <arg value="clean"/>
       <arg value="html"/>
