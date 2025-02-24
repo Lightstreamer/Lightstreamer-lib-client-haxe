@@ -4,6 +4,6 @@ all: clean run
 build:
 
 run: build
-	open test.html
+	open -a "Google Chrome" test.html
 
 clean:

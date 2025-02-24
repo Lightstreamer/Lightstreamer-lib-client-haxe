@@ -5,7 +5,7 @@ build:
 	npx browserify main.js -o dist/bundle.js
 
 run: build
-	open test.html
+	open -a "Google Chrome" test.html
 
 clean:
 	rm -f dist/*

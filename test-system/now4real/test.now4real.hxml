@@ -8,6 +8,6 @@
 --main TestCore
 
 --js bin-test/now4real/test-now4real.js
---cmd open test-system/now4real/test-now4real.html
+--cmd open -a "Google Chrome" test-system/now4real/test-now4real.html
 
 -D LS_WEB

@@ -5,7 +5,7 @@ build:
 	npx rollup -c
 
 run: build
-	open test.html
+	open -a "Google Chrome" test.html
 
 clean:
 	rm -f dist/*

@@ -140,6 +140,7 @@
       <arg value="${tools}/res/rollup.config.test.mjs"/>
     </exec>
     <exec executable="open">
+      <arg value="-a"/><arg value="Google Chrome"/>
       <arg value="index.html"/>
     </exec>
   </target>

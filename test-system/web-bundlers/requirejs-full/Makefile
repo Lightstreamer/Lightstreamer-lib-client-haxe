@@ -4,7 +4,7 @@ all: clean run
 build:
 
 run: build
-	open test-ns.html
-	open test.html
+	open -a "Google Chrome" test-ns.html
+	open -a "Google Chrome" test.html
 
 clean:

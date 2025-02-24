@@ -8,7 +8,7 @@
 --main TestCore
 
 --js bin-test/web/test-mpn.js
---cmd open test-system/web/test-mpn.html
+--cmd open -a "Google Chrome" test-system/web/test-mpn.html
 
 -D LS_WEB
 -D LS_MPN
