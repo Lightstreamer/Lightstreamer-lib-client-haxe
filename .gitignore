@@ -10,5 +10,6 @@ dist/
 lib/
 pages/
 .python-version
+.haxelib/
 
 scratch.md
