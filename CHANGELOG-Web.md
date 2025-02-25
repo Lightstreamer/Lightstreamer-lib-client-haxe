@@ -1,6 +1,14 @@
 # Lightstreamer Web Client Changelog
 
-## [unreleased]
+## 9.2.3
+*Compatible with Lightstreamer Server since 7.4.0*<br/>
+*Compatible with Chrome 72+*<br/>
+*Compatible with Firefox 65+*<br/>
+*Compatible with Edge 80+*<br/>
+*Compatible with Opera 58+*<br/>
+*Compatible with Safari 12.1+*<br/>
+*Compatible with code developed using the previous version*<br/>
+*Made available on 25 Feb 2025*
 
 **Fixed:** The `StatusWidget` displayed an incorrect label, showing a number instead of "Disconnected" when the client was disconnected.
 
