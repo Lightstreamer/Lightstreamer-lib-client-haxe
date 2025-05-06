@@ -57,7 +57,7 @@ You can check the installation with typing `haxe --version`. You should get an o
 > It has been observed that lix may occasionally not work as expected. Should you experience any anomalies, the following steps are recommended:
 >
 > 1. Uninstall lix from your system: `npm uninstall -g lix`
-> 2. Manually install [Haxe 4.3.4](https://haxe.org/download/)
+> 2. Manually install [Haxe 4.3.4](https://haxe.org/download/version/4.3.4/)
 > 3. Install the project dependencies by executing `haxelib install --always tools/deps.hxml` within the project directory
 
 ### Other tools set up
