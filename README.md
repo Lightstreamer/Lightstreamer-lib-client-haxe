@@ -34,6 +34,9 @@ All the commands need to be issued from the folder containing the cloned project
 
 ### Haxe set up
 
+> [!WARNING]
+> On Windows, we strongly recommend installing Haxe via the Windows Subsystem for Linux (WSL). WSL provides a native Linux environment right on your Windows machine, perfectly aligning with Haxe's Unix-based ecosystem. This approach simplifies package management and enhances tool integration, resulting in a more robust and reliable development experience.
+
 To set up a Haxe 4.3.4 development environment, first you need to install the following tools:
 
 - [node.js 22+](https://nodejs.org) and npm CLI (which is bundled with node.js)
