@@ -15,6 +15,7 @@
   <property name="docs" location="${build}/docs/api"/>
   <property name="dist" location="${build}/dist"/>
   <property name="m2.dir" location="${build}/m2"/>
+  <property name="central.bundle.zip" location="${build}/central-bundle.zip"/>
 
   <property name="client.name" value="ls-javase-client"/>
   <property name="dist.pom" location="${dist}/${client.name}.pom"/>
@@ -78,11 +79,25 @@
       <artifacts pattern="${dist}/[artifact](-[classifier]).[ext]"/>
     </ivy:publish> -->
 
-    <!-- The artifacts are saved to ${m2.dir} directory -->
+    <!-- The artifacts to be published are saved in the ${m2.dir} directory -->
     <ivy:publish resolver="m2-project-dir" publishivy="false">
       <artifacts pattern="${dist}/[artifact](-[classifier]).[ext]"/>
     </ivy:publish>
-    <zip destfile="${build}/central-bundle.zip" basedir="${m2.dir}"/>
+    <!-- Bundle the artifacts into a single ZIP file for upload -->
+    <zip destfile="${central.bundle.zip}" basedir="${m2.dir}"/>
+    <!-- Generate a Base64-encoded string of the Sonatype username and password in the format "username:password" for authentication -->
+    <exec executable="/bin/bash" failonerror="true" outputproperty="encoded_sonatype_usr_pwd">
+      <arg value="-c"/>
+      <arg value='printf "${sonatype.user}:${sonatype.password}" | base64'/>
+    </exec>
+    <!-- Upload the bundle to Maven Central Portal -->
+    <!-- See https://central.sonatype.org/publish/publish-portal-api/#uploading-a-deployment-bundle -->
+    <exec executable="curl" failonerror="true">
+      <arg value="--request"/><arg value="POST"/>
+      <arg value="--header"/><arg value="Authorization: Bearer ${encoded_sonatype_usr_pwd}"/>
+      <arg value="--form"/><arg value="bundle=@${central.bundle.zip}"/>
+      <arg value="https://central.sonatype.com/api/v1/publisher/upload"/>
+    </exec>
   </target>
 
   <target name="distribute" depends="distribute.snapshot,distribute.release" description="Publish the library to Maven Central">
