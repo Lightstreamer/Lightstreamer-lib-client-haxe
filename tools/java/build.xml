@@ -73,7 +73,10 @@
   </target>
 
   <target name="distribute.release" depends="prepare.dist" unless="lib.is.snapshot">
-    <ivy:publish resolver="nexus-central" publishivy="false">
+    <!-- <ivy:publish resolver="nexus-central" publishivy="false">
+      <artifacts pattern="${dist}/[artifact](-[classifier]).[ext]"/>
+    </ivy:publish> -->
+    <ivy:publish resolver="user-dir-m2-publish" publishivy="false">
       <artifacts pattern="${dist}/[artifact](-[classifier]).[ext]"/>
     </ivy:publish>
   </target>
