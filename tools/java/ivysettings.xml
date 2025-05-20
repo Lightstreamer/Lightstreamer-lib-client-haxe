@@ -20,8 +20,8 @@
       <artifact pattern="${user.home}/.m2/repository/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
     </filesystem>
 
-    <filesystem name="user-dir-m2-publish" m2compatible="true">
-      <artifact pattern="${user.dir}/dist/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
+    <filesystem name="m2-project-dir" m2compatible="true">
+      <artifact pattern="${m2.dir}/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
     </filesystem>
 
     <chain name="default">
