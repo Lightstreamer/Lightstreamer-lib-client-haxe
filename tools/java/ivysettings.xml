@@ -22,7 +22,7 @@
 
     <!-- Resolver for artifacts in lib-client-haxe/bin/java/m2 directory -->
     <filesystem name="m2-project-dir" m2compatible="true" signer="gpg">
-      <artifact pattern="${m2.dir}/[artifact]-[revision](-[classifier]).[ext]"/>
+      <artifact pattern="${m2.dir}/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
     </filesystem>
 
     <chain name="default">
