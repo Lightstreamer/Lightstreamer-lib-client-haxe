@@ -77,9 +77,12 @@
     <!-- <ivy:publish resolver="nexus-central" publishivy="false">
       <artifacts pattern="${dist}/[artifact](-[classifier]).[ext]"/>
     </ivy:publish> -->
+
+    <!-- The artifacts are saved to ${m2.dir} directory -->
     <ivy:publish resolver="m2-project-dir" publishivy="false">
       <artifacts pattern="${dist}/[artifact](-[classifier]).[ext]"/>
     </ivy:publish>
+    <zip destfile="${build}/central-bundle.zip" basedir="${m2.dir}"/>
   </target>
 
   <target name="distribute" depends="distribute.snapshot,distribute.release" description="Publish the library to Maven Central">
