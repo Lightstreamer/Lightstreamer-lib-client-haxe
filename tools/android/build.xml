@@ -72,9 +72,13 @@
   </target>
 
   <target name="distribute.snapshot" depends="prepare.dist" if="lib.is.snapshot">
-    <ivy:publish resolver="nexus-snapshot" overwrite="true" publishivy="false">
+    <!-- 
+      Snapshot publishing to Maven Central is not automated yet.
+      See: https://central.sonatype.org/publish/publish-portal-snapshots/
+    -->
+    <!-- <ivy:publish resolver="nexus-snapshot" overwrite="true" publishivy="false">
       <artifacts pattern="${dist}/[artifact](-[classifier]).[ext]"/>
-    </ivy:publish>
+    </ivy:publish> -->
   </target>
 
   <target name="distribute.release" depends="prepare.dist" unless="lib.is.snapshot">
