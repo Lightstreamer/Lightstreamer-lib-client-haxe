@@ -1,5 +1,13 @@
 # Lightstreamer Python Client Changelog
 
+## 2.2.2
+*Compatible with Lightstreamer Server since 7.4.0*<br/>
+*Compatible with code developed with the previous version.*<br/>
+*Made available on 23 May 2025*
+
+Fixed an uncaught exception that occurred when `LightstreamerClient` was configured with a logger set to INFO level or higher.
+
+
 ## 2.2.1
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
 *Compatible with code developed with the previous version.*<br/>
