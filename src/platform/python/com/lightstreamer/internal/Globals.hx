@@ -43,5 +43,5 @@ class Globals {
     sslContext = null;
   }
 
-  public function toString() return "{}";
+  public function toString(): String return "{}";
 }
