@@ -93,8 +93,10 @@ function applyUpatesToCurrentFields(currentValues: Null<Map<Pos, Null<CurrFieldV
             newValues[f] = StringVal(patch.apply(str));
           case null:
             throw new IllegalStateException('Cannot apply the TLCP-diff to the field $f because the field is null');
+          #if LS_JSON_PATCH
           case JsonVal(_):
             throw new IllegalStateException('Cannot apply the TLCP-diff to the field $f because the field is JSON');
+          #end
         }
       #end
       }

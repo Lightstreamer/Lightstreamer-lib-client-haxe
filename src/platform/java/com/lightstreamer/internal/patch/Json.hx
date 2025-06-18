@@ -15,6 +15,7 @@
  */
 package com.lightstreamer.internal.patch;
 
+#if LS_JSON_PATCH
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -35,3 +36,4 @@ abstract Json(JsonNode) to JsonNode from JsonNode {
 }
 
 typedef JsonPatch = Json;
+#end
