@@ -1,5 +1,6 @@
 <project name="Android client library" 
   xmlns:if="ant:if"
+  xmlns:unless="ant:unless"
   xmlns:ivy="antlib:org.apache.ivy.ant" 
   default="package" 
   basedir="../..">
@@ -40,7 +41,10 @@
   <property name="haxe.lib.jar" location="${build}/haxe/lib/ls-android-client-haxe.jar"/>
 
   <property name="tools" location="tools/android"/>
-  <property name="tools.ivy" location="${tools}/ivy.xml"/>
+  <property name="build.android.hxml" value="build.android.hxml" unless:set="NO_3DPARTY_LIBS"/>
+  <property name="build.android.hxml" value="build.android.no3dpartylibs.hxml" if:set="NO_3DPARTY_LIBS"/>
+  <property name="tools.ivy" location="${tools}/ivy.xml" unless:set="NO_3DPARTY_LIBS"/>
+  <property name="tools.ivy" location="${tools}/ivy.no3dpartylibs.xml" if:set="NO_3DPARTY_LIBS"/>
   <property name="tools.ivysettings" location="${tools}/ivysettings.xml"/>
   <property name="doc.overview.template" location="${tools}/android_overview.html"/>
   <property name="doc.overview" location="${build}/android_overview.html"/>
@@ -187,7 +191,7 @@
     <echo message="Version: ${version} build ${build.number}"/>
     <echo message="CID: ${cid}"/>
     <exec executable="haxe" failonerror="true">
-      <arg value="build.android.hxml"/>
+      <arg value="${build.android.hxml}"/>
       <arg line="-D no-traces"/>
       <arg value="-D"/><arg value="LS_VERSION=${version}"/>
       <arg value="-D"/><arg value="LS_BUILD=${build.number}"/>

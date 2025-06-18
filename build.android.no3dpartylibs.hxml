@@ -1,0 +1,20 @@
+build.common.hxml
+
+--class-path src/platform/java
+--class-path src/extern/android
+--class-path src/mpn/common
+--class-path src/mpn/android
+
+--java-lib-extern %ANDROID_HOME%/platforms/android-30/android.jar
+--java-lib-extern bin/android/build/deps
+
+-D android
+-D jvm.dynamic-level=0
+--jvm bin/android/build/haxe/lib/ls-android-client-haxe.jar
+
+-D LS_MPN
+-D LS_HAS_PROXY
+-D LS_HAS_COOKIES
+-D LS_HAS_TRUST_MANAGER
+# -D LS_JSON_PATCH
+-D LS_TLCP_DIFF
