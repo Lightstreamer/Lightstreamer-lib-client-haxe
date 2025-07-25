@@ -46,6 +46,8 @@ ClientMessageListener.prototype = {
    * network, false otherwise.
    * <BR>Event if the flag is true, it is not possible to infer whether the message
    * actually reached the Lightstreamer Server or not.
+   * 
+   * @see {@link https://lightstreamer.com/blog/client-to-server-messaging-in-lightstreamer-explained/#Aborted_messages Client-to-Server Messaging in Lightstreamer Explained — Aborted messages}
    */
   onAbort: function(originalMessage,sentOnNetwork) {
     return;

@@ -346,6 +346,8 @@ namespace com.lightstreamer.client
         /// </summary>
         /// <param name="message"> a text message, whose interpretation is entirely demanded to the Metadata Adapter
         /// associated to the current connection. </param>
+        /// 
+        /// <seealso href="https://lightstreamer.com/blog/client-to-server-messaging-in-lightstreamer-explained/">Client-to-Server Messaging in Lightstreamer Explained</seealso>
         public virtual void sendMessage(string message)
         {
           _delegate.sendMessage(message);
@@ -408,6 +410,8 @@ namespace com.lightstreamer.client
         /// <param name="enqueueWhileDisconnected"> if this flag is set to true, and the client is in a disconnected status when
         /// the provided message is handled, then the message is not aborted right away but is queued waiting for a new
         /// session. Note that the message can still be aborted later when a new session is established. </param>
+        /// 
+        /// <seealso href="https://lightstreamer.com/blog/client-to-server-messaging-in-lightstreamer-explained/">Client-to-Server Messaging in Lightstreamer Explained</seealso>
         public virtual void sendMessage(string message, string sequence, int delayTimeout, ClientMessageListener listener, bool enqueueWhileDisconnected)
         {
           _delegate.sendMessage(message, sequence, delayTimeout, listener, enqueueWhileDisconnected);

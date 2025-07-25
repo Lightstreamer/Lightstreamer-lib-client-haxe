@@ -385,6 +385,8 @@ LightstreamerClient.prototype = {
      * is handled, then the message is not aborted right away but is queued waiting
      * for a new session. Note that the message can still be aborted later when a new
      * session is established.
+     * 
+     * @see {@link https://lightstreamer.com/blog/client-to-server-messaging-in-lightstreamer-explained/ Client-to-Server Messaging in Lightstreamer Explained}
      */
     sendMessage: function(msg,sequence,delayTimeout,listener,enqueueWhileDisconnected) {
         this.delegate.sendMessage(msg, sequence, delayTimeout, listener, enqueueWhileDisconnected);

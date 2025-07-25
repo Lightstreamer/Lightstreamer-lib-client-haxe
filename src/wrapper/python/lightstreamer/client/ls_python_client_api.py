@@ -198,6 +198,8 @@ class ClientMessageListener:
 
    :param originalMessage: the message to which this notification is related.
    :param sentOnNetwork: true if the message was sent on the network, false otherwise. Even if the flag is true, it is not possible to infer whether the message actually reached the Lightstreamer Server or not.
+
+   .. seealso:: `Client-to-Server Messaging in Lightstreamer Explained — Aborted messages <https://lightstreamer.com/blog/client-to-server-messaging-in-lightstreamer-explained/#Aborted_messages>`_
     """
     pass
 

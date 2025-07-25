@@ -457,6 +457,8 @@ public:
    * session. Note that the message can still be aborted later when a new session is established.
    * 
    * @warning A listener is exclusive to a single method invocation and should not be employed further. Following the listener's activation, the internal garbage collector will release the allocated memory.
+   * 
+   * @see <a href="https://lightstreamer.com/blog/client-to-server-messaging-in-lightstreamer-explained/">Client-to-Server Messaging in Lightstreamer Explained</a>
    */
   void sendMessage(const std::string& message, const std::string& sequence = "", int delayTimeout = -1, ClientMessageListener* listener = nullptr, bool enqueueWhileDisconnected = false) {
     LightstreamerClient_sendMessage(_client, &message, &sequence, delayTimeout, listener, enqueueWhileDisconnected);

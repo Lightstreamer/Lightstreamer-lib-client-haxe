@@ -1131,6 +1131,8 @@ class LightstreamerClient:
    :param delayTimeout: a timeout, expressed in milliseconds. If higher than the Server configured timeout on missing messages, the latter will be used instead. The parameter is optional; if a negative value is supplied, the Server configured timeout on missing messages will be applied. This timeout is ignored for the special "UNORDERED_MESSAGES" sequence, although a server-side timeout on missing messages still applies.
    :param listener: an object suitable for receiving notifications about the processing outcome. The parameter is optional; if not supplied, no notification will be available.
    :param enqueueWhileDisconnected: if this flag is set to true, and the client is in a disconnected status when the provided message is handled, then the message is not aborted right away but is queued waiting for a new session. Note that the message can still be aborted later when a new session is established.
+
+   .. seealso:: `Client-to-Server Messaging in Lightstreamer Explained <https://lightstreamer.com/blog/client-to-server-messaging-in-lightstreamer-explained/>`_
    """
     self.delegate.sendMessage(message, sequence, delayTimeout, listener, enqueueWhileDisconnected)
 

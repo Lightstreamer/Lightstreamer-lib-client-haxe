@@ -357,6 +357,8 @@ public class LightstreamerClient {
    *  
    * @param message a text message, whose interpretation is entirely demanded to the Metadata Adapter
    * associated to the current connection.
+   * 
+   * @see <a href="https://lightstreamer.com/blog/client-to-server-messaging-in-lightstreamer-explained/">Client-to-Server Messaging in Lightstreamer Explained</a>
    */
   public void sendMessage(@Nonnull String message) {
     delegate.sendMessage(message);
@@ -425,6 +427,8 @@ public class LightstreamerClient {
    * @param enqueueWhileDisconnected if this flag is set to true, and the client is in a disconnected status when
    * the provided message is handled, then the message is not aborted right away but is queued waiting for a new
    * session. Note that the message can still be aborted later when a new session is established.
+   * 
+   * @see <a href="https://lightstreamer.com/blog/client-to-server-messaging-in-lightstreamer-explained/">Client-to-Server Messaging in Lightstreamer Explained</a>
    */
   public void sendMessage(@Nonnull final String message, @Nullable String sequence, final int delayTimeout, @Nullable final ClientMessageListener listener, final boolean enqueueWhileDisconnected) {
     delegate.sendMessage(message, sequence, delayTimeout, listener, enqueueWhileDisconnected);

@@ -35,6 +35,8 @@ public interface ClientMessageListener {
    * @param sentOnNetwork true if the message was sent on the network, false otherwise. 
    *        Even if the flag is true, it is not possible to infer whether the message actually reached the 
    *        Lightstreamer Server or not.
+   * 
+   * @see <a href="https://lightstreamer.com/blog/client-to-server-messaging-in-lightstreamer-explained/#Aborted_messages">Client-to-Server Messaging in Lightstreamer Explained — Aborted messages</a>
    */
   void onAbort(@Nonnull String originalMessage, boolean sentOnNetwork);  
   
