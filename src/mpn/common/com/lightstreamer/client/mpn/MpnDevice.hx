@@ -163,7 +163,7 @@ class LSMpnDevice {
   @:allow(com.lightstreamer.client.internal.MpnClientMachine)
   function onRegistered(timestamp: Long) {
     lock.synchronized(() -> {
-      mpnDeviceLogger.logInfo('MPN device registered: $deviceId)');
+      mpnDeviceLogger.logInfo('MPN device registered: $deviceId');
       status = REGISTERED;
       statusTs = new Timestamp(timestamp);
       
