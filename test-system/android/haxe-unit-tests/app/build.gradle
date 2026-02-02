@@ -25,15 +25,23 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    packagingOptions {
+        // Prevent merge conflicts from duplicate metadata in OkHttp
+        exclude 'META-INF/versions/9/OSGI-INF/MANIFEST.MF'
+    }
 }
 
 dependencies {
-    def home = System.properties['user.home']
-    implementation files("${home}/git/lib-client-haxe/bin-test/android/TestAll.jar")
-    implementation files("${home}/git/lib-client-haxe/bin/android/build/api/lib/ls-android-client-api.jar")
-    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
-    implementation 'com.squareup.okhttp3:okhttp-urlconnection:4.12.0'
-    implementation 'com.squareup.okhttp3:okhttp-tls:4.12.0'
+    def gitHome = System.getenv('LS_GITHUB')
+    if (gitHome == null || gitHome.isEmpty()) {
+        throw new GradleException("Environment variable 'LS_GITHUB' is not set or empty.")
+    }
+    implementation files("${gitHome}/Lightstreamer-lib-client-haxe/bin-test/android/TestAll.jar")
+    implementation files("${gitHome}/Lightstreamer-lib-client-haxe/bin/android/build/api/lib/ls-android-client-api.jar")
+    implementation 'com.squareup.okhttp3:okhttp:5.3.2'
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection:5.3.2'
+    implementation 'com.squareup.okhttp3:okhttp-tls:5.3.2'
     implementation 'com.flipkart.zjsonpatch:zjsonpatch:0.4.14'
     implementation 'com.google.android.gms:play-services-base:18.0.1'
 
