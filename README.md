@@ -37,7 +37,7 @@ All the commands need to be issued from the folder containing the cloned project
 > [!WARNING]
 > On Windows, we strongly recommend installing Haxe via the Windows Subsystem for Linux (WSL). WSL provides a native Linux environment right on your Windows machine, perfectly aligning with Haxe's Unix-based ecosystem. This approach simplifies package management and enhances tool integration, resulting in a more robust and reliable development experience.
 
-To set up a Haxe 4.3.4 development environment, first you need to install the following tools:
+To set up a Haxe 4.3.7 development environment, first you need to install the following tools:
 
 - [node.js 22+](https://nodejs.org) and npm CLI (which is bundled with node.js)
 - [lix](https://github.com/lix-pm/lix.client), a package manager for Haxe.
@@ -54,13 +54,13 @@ To install the right versions of Haxe dependencies and to fetch the project spec
 lix download
 ```
 
-You can check the installation with typing `haxe --version`. You should get an output like `4.3.4`.
+You can check the installation with typing `haxe --version`. You should get an output like `4.3.7`.
 
 > [!WARNING]
 > It has been observed that lix may occasionally not work as expected. Should you experience any anomalies, the following steps are recommended:
 >
 > 1. Uninstall lix from your system: `npm uninstall -g lix`
-> 2. Manually install [Haxe 4.3.4](https://haxe.org/download/version/4.3.4/)
+> 2. Manually install [Haxe 4.3.7](https://haxe.org/download/version/4.3.7/)
 > 3. Install the project dependencies by executing `haxelib install --always tools/deps.hxml` within the project directory
 
 ### Other tools set up
