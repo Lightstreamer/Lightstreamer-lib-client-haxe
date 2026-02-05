@@ -22,6 +22,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({
     TestCore.class,
+    TestCertificatePinning.class,
     TestExtra.class,
     TestDisconnectFuture.class
 })

@@ -25,7 +25,7 @@
 	<dependency>
   		<groupId>com.lightstreamer</groupId>
   		<artifactId>ls-javase-client</artifactId>
-  		<version>5.2.0-snapshot.3</version>
+  		<version>5.3.0-alpha.1</version>
 	</dependency>
   </dependencies>
   
