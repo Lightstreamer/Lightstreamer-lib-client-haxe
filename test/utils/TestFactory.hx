@@ -36,13 +36,15 @@ class TestFactory implements IFactory {
   public function createWsClient(url: String, headers: Null<Map<String, String>>, 
     onOpen: IWsClient->Void,
     onText: (IWsClient, String)->Void, 
-    onError: (IWsClient, String)->Void): IWsClient {
+    onError: (IWsClient, String)->Void,
+    onFatalError: (IWsClient, Int, String)->Void): IWsClient {
     return ws.create(url, headers, onOpen, onText, onError);
   }
   
   public function createHttpClient(url: String, body: String, headers: Null<Map<String, String>>,
     onText: (IHttpClient, String)->Void, 
     onError: (IHttpClient, String)->Void, 
+    onFatalError: (IHttpClient, Int, String)->Void,
     onDone: IHttpClient->Void): IHttpClient {
     return http.create(url, body, headers, onText, onError, onDone);
   }
@@ -50,6 +52,7 @@ class TestFactory implements IFactory {
   public function createCtrlClient(url: String, body: String, headers: Null<Map<String, String>>,
     onText: (IHttpClient, String)->Void, 
     onError: (IHttpClient, String)->Void, 
+    onFatalError: (IHttpClient, Int, String)->Void,
     onDone: IHttpClient->Void): IHttpClient {
     return ctrl.create(url, body, headers, onText, onError, onDone);
   }

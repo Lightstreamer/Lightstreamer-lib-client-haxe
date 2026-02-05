@@ -29,21 +29,25 @@ class WsClient extends WebSocketListener implements Authenticator implements IWs
   final onOpenCb: WsClient->Void;
   final onTextCb: (WsClient, String)->Void;
   final onErrorCb: (WsClient, String)->Void;
+  final onFatalErrorCb: (WsClient, Int, String)->Void;
   @:volatile var isCanceled: Bool = false;
 
   public function new(url: String,
     headers: Null<Map<String, String>>, 
     proxy: Null<Proxy>,
     trustManagerFactory: Null<java.javax.net.ssl.TrustManagerFactory>,
+    certificatePins: Array<String>,
     onOpen: WsClient->Void,
     onText: (WsClient, String)->Void, 
-    onError: (WsClient, String)->Void) {
+    onError: (WsClient, String)->Void,
+    onFatalError: (WsClient, Int, String)->Void) {
     super();
-    streamLogger.logDebug('WS connecting: $url headers($headers) proxy($proxy) trustManager($trustManagerFactory)');
+    streamLogger.logDebug('WS connecting: $url headers($headers) proxy($proxy) trustManager($trustManagerFactory) certificatePins($certificatePins)');
     this.proxy = proxy;
     this.onOpenCb = onOpen;
     this.onTextCb = onText;
     this.onErrorCb = onError;
+    this.onFatalErrorCb = onFatalError;
     var reqBuilder = new Request.Request_Builder();
     // set headers
     if (headers != null) {
@@ -85,6 +89,15 @@ class WsClient extends WebSocketListener implements Authenticator implements IWs
       sslContext.init(null, java.NativeArray.make((x509TrustManager:java.javax.net.ssl.TrustManager)), null);
       var sslSocketFactory = sslContext.getSocketFactory();
       clientBuilder.sslSocketFactory(sslSocketFactory, x509TrustManager);
+    }
+    // set certificate pins
+    if (certificatePins.length > 0) {
+      var hostname = new java.net.URL(url).getHost();
+      var certificatePinner = new CertificatePinner.CertificatePinner_Builder();
+      for (pin in certificatePins) {
+        certificatePinner.add(hostname, pin);
+      }
+      clientBuilder.certificatePinner(certificatePinner.build());
     }
     this.ws = clientBuilder.build().newWebSocket(request, this);
   }
@@ -143,9 +156,14 @@ class WsClient extends WebSocketListener implements Authenticator implements IWs
     if (isDisposed()) {
       return;
     }
-    var msg = ex.getMessage();
-    streamLogger.logDebugEx2('WS event: error($msg)', ex);
-    onErrorCb(this, msg);
+    if (ex is java.javax.net.ssl.SSLPeerUnverifiedException) {
+      streamLogger.logErrorEx2("Connection fatal error", ex);
+      onFatalErrorCb(this, 62, "Certificate pinning failure");
+    } else {
+      var msg = ex.getMessage();
+      streamLogger.logDebugEx2('WS event: error($msg)', ex);
+      onErrorCb(this, msg);
+    }
     webSocket.cancel();
   }
 

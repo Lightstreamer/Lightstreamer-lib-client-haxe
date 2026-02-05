@@ -36,19 +36,23 @@ class HttpClient implements Callback implements Authenticator implements IHttpCl
   final onText: (HttpClient, String)->Void;
   final onError: (HttpClient, String)->Void;
   final onDone: HttpClient->Void;
+  final onFatalErrorCb: (HttpClient, Int, String)->Void;
   @:volatile var isCanceled: Bool = false;
 
   public function new(url: String, body: String, 
     headers: Null<Map<String, String>>, 
     proxy: Null<Proxy>,
     trustManagerFactory: Null<java.javax.net.ssl.TrustManagerFactory>,
+    certificatePins: Array<String>,
     onText: (HttpClient, String)->Void, 
     onError: (HttpClient, String)->Void, 
+    onFatalError: (HttpClient, Int, String)->Void,
     onDone: HttpClient->Void) {
-    streamLogger.logDebug('HTTP sending: $url $body headers($headers) proxy($proxy) trustManager($trustManagerFactory)');
+    streamLogger.logDebug('HTTP sending: $url $body headers($headers) proxy($proxy) trustManager($trustManagerFactory) certificatePins($certificatePins)');
     this.proxy = proxy;
     this.onText = onText;
     this.onError = onError;
+    this.onFatalErrorCb = onFatalError;
     this.onDone = onDone;
     var reqBuilder = new Request.Request_Builder();
     // set headers
@@ -89,6 +93,15 @@ class HttpClient implements Callback implements Authenticator implements IHttpCl
       var sslSocketFactory = sslContext.getSocketFactory();
       clientBuilder.sslSocketFactory(sslSocketFactory, x509TrustManager);
     }
+    // set certificate pins
+    if (certificatePins.length > 0) {
+      var hostname = new java.net.URL(url).getHost();
+      var certificatePinner = new CertificatePinner.CertificatePinner_Builder();
+      for (pin in certificatePins) {
+        certificatePinner.add(hostname, pin);
+      }
+      clientBuilder.certificatePinner(certificatePinner.build());
+    }
     this.call = clientBuilder.build().newCall(request);
     call.enqueue(this);
   }
@@ -108,8 +121,13 @@ class HttpClient implements Callback implements Authenticator implements IHttpCl
     if (isDisposed()) {
       return;
     }
-    streamLogger.logDebugEx2('HTTP event: error(${ex.getMessage()})', ex);
-    onError(this, ex.getMessage());
+    if (ex is java.javax.net.ssl.SSLPeerUnverifiedException) {
+      streamLogger.logErrorEx2("Connection fatal error", ex);
+      onFatalErrorCb(this, 62, "Certificate pinning failure");
+    } else {
+      streamLogger.logDebugEx2('HTTP event: error(${ex.getMessage()})', ex);
+      onError(this, ex.getMessage());
+    }
     call.cancel();
   }
 

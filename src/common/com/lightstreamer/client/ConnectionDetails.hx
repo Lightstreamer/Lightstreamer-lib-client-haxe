@@ -41,6 +41,7 @@ class LSConnectionDetails {
   var serverInstanceAddress: Null<String>;
   var serverSocketName: Null<String>;
   var clientIp: Null<String>;
+  var certificatePins: Array<String> = [];
   final client: LightstreamerClient;
   final lock: com.lightstreamer.internal.RLock;
 
@@ -64,6 +65,47 @@ class LSConnectionDetails {
     if (oldValue != newValue) {
       client.machine.evtServerAddressChanged();
     }
+  }
+
+  function arrayEqual(a: Array<String>, b: Array<String>): Bool {
+    if (a.length != b.length) {
+      return false;
+    }
+    for (i in 0...a.length) {
+      if (a[i] != b[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public function getCertificatePins(): Array<String> {
+    return certificatePins.copy();
+  }
+  public function setCertificatePins(pins: Array<String>): Void {
+    if (arrayEqual(pins, this.certificatePins)) {
+      return;
+    }
+    for (pin in pins) {
+        if (StringTools.startsWith(pin, "sha1/")) {
+          try {
+            haxe.crypto.Base64.decode(pin.substring("sha1/".length));
+          } catch(_) {
+            throw new IllegalArgumentException('Invalid pin hash: $pin');
+          }
+        } else if (StringTools.startsWith(pin, "sha256/")) {
+          try {
+            haxe.crypto.Base64.decode(pin.substring("sha256/".length));
+          } catch(_) {
+            throw new IllegalArgumentException('Invalid pin hash: $pin');
+          }
+        } else {
+          throw new IllegalArgumentException('Pins must start with "sha256/" or "sha1/": $pin');
+        }
+    }
+    actionLogger.logInfo('certificatePins changed: $pins');
+    this.certificatePins = pins.copy();
+    client.eventDispatcher.onPropertyChange("certificatePins");
   }
 
   public function getAdapterSet(): Null<String> {

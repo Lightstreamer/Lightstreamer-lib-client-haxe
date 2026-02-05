@@ -42,6 +42,13 @@ macro function logErrorEx(logger: ExprOf<Logger>, line: Expr, exception: Expr/*h
   }
 }
 
+macro function logErrorEx2(logger: ExprOf<Logger>, line: Expr, exception: Expr/*NativeException*/) {
+  line = extractLog(line);
+  return macro if ($logger.isErrorEnabled()) {
+    $logger.error($line, $exception);
+  }
+}
+
 macro function logWarn(logger: ExprOf<Logger>, line: Expr) {
   line = extractLog(line);
   return macro if ($logger.isWarnEnabled()) {

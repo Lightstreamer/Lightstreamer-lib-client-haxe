@@ -41,7 +41,7 @@ class TestWsClientJava extends utest.Test {
 
   function testPolling(async: utest.Async) {
     ws = new WsClient(
-      host + "/lightstreamer", null, null, null,
+      host + "/lightstreamer", null, null, null, [],
       function onOpen(c) {
         c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg");
       },
@@ -54,12 +54,13 @@ class TestWsClientJava extends utest.Test {
       function onError(c, error) {
         fail(error); 
         async.completed(); 
-      });
+      },
+      function onFatalError(c, errCode, errMsg) {});
   }
 
   function testStreaming(async: utest.Async) {
     ws = new WsClient(
-      host + "/lightstreamer", null, null, null,
+      host + "/lightstreamer", null, null, null, [],
       function onOpen(c) {
         c.send("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg");
       },
@@ -71,13 +72,14 @@ class TestWsClientJava extends utest.Test {
       function onError(c, error) { 
         fail(error); 
         async.completed(); 
-      });
+      },
+      function onFatalError(c, errCode, errMsg) {});
   }
 
   @:timeout(3000)
   function testHttps(async: utest.Async) {
     ws = new WsClient(
-      "https://push.lightstreamer.com/lightstreamer", null, null, null,
+      "https://push.lightstreamer.com/lightstreamer", null, null, null, [],
       function onOpen(c) {
         c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg");
       },
@@ -89,13 +91,14 @@ class TestWsClientJava extends utest.Test {
       function onError(c, error) { 
         fail(error); 
         async.completed(); 
-      });
+      },
+      function onFatalError(c, errCode, errMsg) {});
   }
 
   function testConnectionError(async: utest.Async) {
     ws = new WsClient(
       secHost + "/lightstreamer", 
-      null, null, null,
+      null, null, null, [],
       function onOpen(c) {
         fail("Unexpected call"); 
         async.completed(); 
@@ -111,7 +114,8 @@ class TestWsClientJava extends utest.Test {
         equals("PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target", error);
         #end
         async.completed(); 
-      });
+      },
+      function onFatalError(c, errCode, errMsg) {});
   }
 
   function testCookies(async: utest.Async) {
@@ -123,7 +127,7 @@ class TestWsClientJava extends utest.Test {
     LightstreamerClient.addCookies(uri, new NativeList([cookie]));
 
     ws = new WsClient(
-      host + "/lightstreamer", null, null, null,
+      host + "/lightstreamer", null, null, null, [],
       function onOpen(c) {
         var cookies = LightstreamerClient.getCookies(uri).toHaxe().map(c -> c.getName() + "=" + c.getValue());
         equals(2, cookies.length);
@@ -136,13 +140,14 @@ class TestWsClientJava extends utest.Test {
       function onError(c, error) {
         fail(error); 
         async.completed(); 
-      });
+      },
+      function onFatalError(c, errCode, errMsg) {});
   }
 
   function testHeaders(async: utest.Async) {
     ws = new WsClient(
       host + "/lightstreamer", 
-      ["X-Header" => "header"], null, null,
+      ["X-Header" => "header"], null, null, [],
       function onOpen(c) {
         c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg");
       },
@@ -154,7 +159,8 @@ class TestWsClientJava extends utest.Test {
       function onError(c, error) {
         fail(error); 
         async.completed(); 
-      });
+      },
+      function onFatalError(c, errCode, errMsg) {});
   }
 
   function testProxy(async: utest.Async) {
@@ -166,7 +172,7 @@ class TestWsClientJava extends utest.Test {
       #else
       new Proxy("HTTP", "localtest.me", 8079, "myuser", "mypassword"),
       #end
-      null,
+      null, [],
       function onOpen(c) {
         c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg");
       },
@@ -178,7 +184,8 @@ class TestWsClientJava extends utest.Test {
       function onError(c, error) {
         fail(error); 
         async.completed(); 
-      });
+      },
+      function onFatalError(c, errCode, errMsg) {});
   }
 
   @:timeout(3000)
@@ -191,7 +198,7 @@ class TestWsClientJava extends utest.Test {
       #else
       new Proxy("HTTP", "localtest.me", 8079, "myuser", "mypassword"),
       #end
-      null,
+      null, [],
       function onOpen(c) {
         c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg");
       },
@@ -203,7 +210,8 @@ class TestWsClientJava extends utest.Test {
       function onError(c, error) {
         fail(error); 
         async.completed(); 
-      });
+      },
+      function onFatalError(c, errCode, errMsg) {});
   }
 
   function testTrustManager(async: utest.Async) {
@@ -221,7 +229,7 @@ class TestWsClientJava extends utest.Test {
     LightstreamerClient.setTrustManagerFactory(tmf);
     ws = new WsClient(
       secHost + "/lightstreamer", null, null, 
-      Globals.instance.getTrustManagerFactory(),
+      Globals.instance.getTrustManagerFactory(), [],
       function onOpen(c) {
         c.send("create_session\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg");
       },
@@ -233,6 +241,7 @@ class TestWsClientJava extends utest.Test {
       function onError(c, error) {
         fail(error); 
         async.completed(); 
-      });
+      },
+      function onFatalError(c, errCode, errMsg) {});
   }
 }

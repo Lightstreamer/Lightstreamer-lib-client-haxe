@@ -16,6 +16,7 @@
 package com.lightstreamer.internal;
 
 import com.lightstreamer.client.ConnectionOptions;
+import com.lightstreamer.client.ConnectionDetails;
 import com.lightstreamer.client.LightstreamerClient.LSLightstreamerClient;
 import com.lightstreamer.internal.Types.Millis;
 
@@ -27,6 +28,7 @@ interface IHttpClient {
 typedef IHttpClientFactory = (url: String, body: String, headers: Null<Map<String, String>>,
   onText: (IHttpClient, String)->Void, 
   onError: (IHttpClient, String)->Void, 
+  onFatalError: (IHttpClient, Int, String)->Void,
   onDone: IHttpClient->Void) -> IHttpClient;
 
 interface IWsClient {
@@ -38,7 +40,8 @@ interface IWsClient {
 typedef IWsClientFactory = (url: String, headers: Null<Map<String, String>>, 
   onOpen: IWsClient->Void,
   onText: (IWsClient, String)->Void, 
-  onError: (IWsClient, String)->Void) -> IWsClient;
+  onError: (IWsClient, String)->Void,
+  onFatalError: (IWsClient, Int, String)->Void) -> IWsClient;
 
 interface ITimer {
   function cancel(): Void;
@@ -75,14 +78,17 @@ interface IFactory {
   public function createWsClient(url: String, headers: Null<Map<String, String>>, 
     onOpen: IWsClient->Void,
     onText: (IWsClient, String)->Void, 
-    onError: (IWsClient, String)->Void): IWsClient;
+    onError: (IWsClient, String)->Void,
+    onFatalError: (IWsClient, Int, String)->Void): IWsClient;
   public function createHttpClient(url: String, body: String, headers: Null<Map<String, String>>,
     onText: (IHttpClient, String)->Void, 
     onError: (IHttpClient, String)->Void, 
+    onFatalError: (IHttpClient, Int, String)->Void,
     onDone: IHttpClient->Void): IHttpClient;
   public function createCtrlClient(url: String, body: String, headers: Null<Map<String, String>>,
     onText: (IHttpClient, String)->Void, 
     onError: (IHttpClient, String)->Void, 
+    onFatalError: (IHttpClient, Int, String)->Void,
     onDone: IHttpClient->Void): IHttpClient;
   public function createReachabilityManager(host: String): IReachability;  
   public function createTimer(id: String, delay: Millis, callback: ITimer->Void): ITimer;
@@ -92,19 +98,23 @@ interface IFactory {
 
 class Factory implements IFactory {
 	final connectionOptions: LSConnectionOptions;
+  final connectionDetails: LSConnectionDetails;
 
   public function new(client: LSLightstreamerClient) {
     this.connectionOptions = client.connectionOptions;
+    this.connectionDetails = client.connectionDetails;
   }
 
   public function createWsClient(url: String, headers: Null<Map<String, String>>, 
     onOpen: IWsClient->Void,
     onText: (IWsClient, String)->Void, 
-    onError: (IWsClient, String)->Void): IWsClient {
+    onError: (IWsClient, String)->Void,
+    onFatalError: (IWsClient, Int, String)->Void): IWsClient {
     #if java
     var proxy = connectionOptions.getProxy();
     var trustManager = com.lightstreamer.internal.Globals.instance.getTrustManagerFactory();
-    return new com.lightstreamer.internal.WsClient(url, headers, proxy, trustManager, onOpen, onText, onError);
+    var certificates = connectionDetails.getCertificatePins();
+    return new com.lightstreamer.internal.WsClient(url, headers, proxy, trustManager, certificates, onOpen, onText, onError, onFatalError);
     #elseif cs
     var proxy = connectionOptions.getProxy();
     var trustManager = com.lightstreamer.internal.Globals.instance.getTrustManagerFactory();
@@ -128,11 +138,13 @@ class Factory implements IFactory {
   public function createHttpClient(url: String, body: String, headers: Null<Map<String, String>>,
     onText: (IHttpClient, String)->Void, 
     onError: (IHttpClient, String)->Void, 
+    onFatalError: (IHttpClient, Int, String)->Void,
     onDone: IHttpClient->Void): IHttpClient {
     #if java
     var proxy = connectionOptions.getProxy();
     var trustManager = com.lightstreamer.internal.Globals.instance.getTrustManagerFactory();
-    return new com.lightstreamer.internal.HttpClient(url, body, headers, proxy, trustManager, onText, onError, onDone);
+    var certificates = connectionDetails.getCertificatePins();
+    return new com.lightstreamer.internal.HttpClient(url, body, headers, proxy, trustManager, certificates, onText, onError, onFatalError, onDone);
     #elseif cs
     return new com.lightstreamer.internal.HttpClient(url, body, headers, onText, onError, onDone);
     #elseif js
@@ -152,8 +164,9 @@ class Factory implements IFactory {
   public function createCtrlClient(url: String, body: String, headers: Null<Map<String, String>>,
     onText: (IHttpClient, String)->Void, 
     onError: (IHttpClient, String)->Void, 
+    onFatalError: (IHttpClient, Int, String)->Void,
     onDone: IHttpClient->Void): IHttpClient {
-    return createHttpClient(url, body, headers, onText, onError, onDone);
+    return createHttpClient(url, body, headers, onText, onError, onFatalError, onDone);
   }
   
   public function createReachabilityManager(host: String): IReachability {

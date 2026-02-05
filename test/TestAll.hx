@@ -108,6 +108,7 @@ class TestAll {
     #end
     runner.addCase(TestClient);
     runner.addCase(TestClientExtra);
+    runner.addCase(TestCertificatePinning);
   }
 
   public static function main() {

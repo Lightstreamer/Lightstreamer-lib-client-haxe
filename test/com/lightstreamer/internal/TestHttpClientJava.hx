@@ -40,12 +40,13 @@ class TestHttpClientJava extends utest.Test {
   function testPolling(async: utest.Async) {
     new HttpClient(
       host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
-      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null,
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null, [],
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
         fail(error); 
         async.completed(); 
       }, 
+      function onFatalError(c, errCode, errMsg) null,
       function onDone(c) { 
         isTrue(output.length > 0);
         match(~/CONOK/, output[0]);
@@ -56,7 +57,7 @@ class TestHttpClientJava extends utest.Test {
   function testStreaming(async: utest.Async) {
     new HttpClient(
       host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
-      "LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null,
+      "LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null, [],
       function onText(c, line) {
         if (c.isDisposed()) return;
         match(~/CONOK/, line);
@@ -68,6 +69,7 @@ class TestHttpClientJava extends utest.Test {
         fail(error); 
         async.completed(); 
       }, 
+      function onFatalError(c, errCode, errMsg) null,
       function onDone(c) null);
   }
 
@@ -75,12 +77,13 @@ class TestHttpClientJava extends utest.Test {
   function testHttps(async: utest.Async) {
     new HttpClient(
       "https://push.lightstreamer.com/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
-      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null,
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null, [],
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
         fail(error); 
         async.completed(); 
       }, 
+      function onFatalError(c, errCode, errMsg) null,
       function onDone(c) {
         isTrue(output.length > 0);
         match(~/CONOK/, output[0]);
@@ -91,7 +94,7 @@ class TestHttpClientJava extends utest.Test {
   function testConnectionError(async: utest.Async) {
     new HttpClient(
       secHost + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
-      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null,
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null, [],
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
         #if android
@@ -101,6 +104,7 @@ class TestHttpClientJava extends utest.Test {
         #end
         async.completed(); 
       }, 
+      function onFatalError(c, errCode, errMsg) null,
       function onDone(c) { 
         fail("Unexpected call"); 
         async.completed(); 
@@ -117,12 +121,13 @@ class TestHttpClientJava extends utest.Test {
 
     new HttpClient(
       host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
-      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null,
+      "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null, [],
       function onText(c, line) null, 
       function onError(c, error) { 
         fail(error); 
         async.completed(); 
       }, 
+      function onFatalError(c, errCode, errMsg) null,
       function onDone(c) {
         var cookies = LightstreamerClient.getCookies(uri).toHaxe().map(c -> c.getName() + "=" + c.getValue());
         equals(2, cookies.length);
@@ -136,12 +141,13 @@ class TestHttpClientJava extends utest.Test {
     new HttpClient(
       host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", 
-      ["X-Header" => "header"], null, null,
+      ["X-Header" => "header"], null, null, [],
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
         fail(error); 
         async.completed(); 
       }, 
+      function onFatalError(c, errCode, errMsg) null,
       function onDone(c) { 
         isTrue(output.length > 0);
         match(~/CONOK/, output[0]);
@@ -159,12 +165,13 @@ class TestHttpClientJava extends utest.Test {
       #else
       new Proxy("HTTP", "localtest.me", 8079, "myuser", "mypassword"),
       #end
-      null,
+      null, [],
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
         fail(error); 
         async.completed(); 
       }, 
+      function onFatalError(c, errCode, errMsg) null,
       function onDone(c) { 
         isTrue(output.length > 0);
         match(~/CONOK/, output[0]);
@@ -183,12 +190,13 @@ class TestHttpClientJava extends utest.Test {
       #else
       new Proxy("HTTP", "localtest.me", 8079, "myuser", "mypassword"),
       #end
-      null,
+      null, [],
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
         fail(error); 
         async.completed(); 
       }, 
+      function onFatalError(c, errCode, errMsg) null,
       function onDone(c) { 
         isTrue(output.length > 0);
         match(~/CONOK/, output[0]);
@@ -207,12 +215,13 @@ class TestHttpClientJava extends utest.Test {
     new HttpClient(
       secHost + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, 
-      Globals.instance.getTrustManagerFactory(),
+      Globals.instance.getTrustManagerFactory(), [],
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
         fail(error); 
         async.completed(); 
       }, 
+      function onFatalError(c, errCode, errMsg) null,
       function onDone(c) { 
         isTrue(output.length > 0);
         match(~/CONOK/, output[0]);

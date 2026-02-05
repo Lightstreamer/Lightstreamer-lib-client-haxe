@@ -954,6 +954,103 @@ class ClientMachine {
     }
   }
 
+  function evtTransportFatalError(errCode: Int, errMsg: String) {
+    traceEvent("transport.fatal.error");
+    var terminationCause = TerminationCause.TC_standardError(errCode, errMsg);
+    switch state.s_m {
+    case s120, s121, s122:
+      disposeWS();
+      notifyStatus(DISCONNECTED);
+      notifyServerErrorIfCauseIsError(terminationCause);
+      goto(state.s_m = s100);
+      cancel_evtTransportTimeout();
+      evtTerminate(terminationCause);
+    case s130:
+      disposeHTTP();
+      notifyStatus(DISCONNECTED);
+      notifyServerErrorIfCauseIsError(terminationCause);
+      goto(state.s_m = s100);
+      cancel_evtTransportTimeout();
+      evtTerminate(terminationCause);
+    case s140:
+      disposeHTTP();
+      notifyStatus(DISCONNECTED);
+      notifyServerErrorIfCauseIsError(terminationCause);
+      goto(state.s_m = s100);
+      cancel_evtTransportTimeout();
+      evtTerminate(terminationCause);
+    case s150:
+      switch state.s_tr {
+      case s210:
+        disposeWS();
+        notifyStatus(DISCONNECTED);
+        notifyServerErrorIfCauseIsError(terminationCause);
+        state.clear_w();
+        state.goto_m_from_session(s100);
+        exit_w();
+        evtEndSession();
+        evtTerminate(terminationCause);
+      case s220:
+        disposeHTTP();
+        notifyStatus(DISCONNECTED);
+        notifyServerErrorIfCauseIsError(terminationCause);
+        state.goto_m_from_session(s100);
+        cancel_evtTransportTimeout();
+        evtEndSession();
+        evtTerminate(terminationCause);
+      case s230:
+        disposeHTTP();
+        notifyStatus(DISCONNECTED);
+        notifyServerErrorIfCauseIsError(terminationCause);
+        state.goto_m_from_session(s100);
+        cancel_evtTransportTimeout();
+        evtEndSession();
+        evtTerminate(terminationCause);
+      case s240:
+        disposeWS();
+        notifyStatus(DISCONNECTED);
+        notifyServerErrorIfCauseIsError(terminationCause);
+        state.goto_m_from_ws(s100);
+        exit_ws_to_m();
+        evtTerminate(terminationCause);
+      case s250:
+        disposeWS();
+        notifyStatus(DISCONNECTED);
+        notifyServerErrorIfCauseIsError(terminationCause);
+        state.goto_m_from_wp(s100);
+        exit_ws_to_m();
+        evtTerminate(terminationCause);
+      case s260:
+        disposeHTTP();
+        notifyStatus(DISCONNECTED);
+        notifyServerErrorIfCauseIsError(terminationCause);
+        state.goto_m_from_rec(s100);
+        exit_rec_to_m();
+        evtTerminate(terminationCause);
+      case s270:
+        if (state.s_h == s710) {
+          disposeHTTP();
+          notifyStatus(DISCONNECTED);
+          notifyServerErrorIfCauseIsError(terminationCause);
+          state.goto_m_from_hs(s100);
+          exit_hs_to_m();
+          evtTerminate(terminationCause);
+        } else if (state.s_h == s720) {
+          disposeHTTP();
+          notifyStatus(DISCONNECTED);
+          notifyServerErrorIfCauseIsError(terminationCause);
+          state.goto_m_from_hp(s100);
+          exit_hp_to_m();
+          evtTerminate(terminationCause);
+        }
+      default:
+        // ignore
+      }
+    default:
+      // ignore
+    }
+  }
+
   function evtTransportError() {
     traceEvent("transport.error");
     switch state.s_m {
@@ -2842,6 +2939,19 @@ class ClientMachine {
     }
   }
 
+  function evtCtrlFatalError(code: Int, msg: String) {
+    traceEvent("ctrl.fatal.error");
+    var terminationCause = TC_standardError(code, msg);
+    if (state.s_ctrl == s1102) {
+      disposeHTTP();
+      notifyStatus(DISCONNECTED);
+      notifyServerError_ERROR(code, msg);
+      state.goto_m_from_ctrl(s100);
+      exit_ctrl_to_m();
+      evtTerminate(terminationCause);
+    }
+  }
+
   function evtCtrlError() {
     traceEvent("ctrl.error");
     if (state.s_ctrl == s1102) {
@@ -3329,6 +3439,13 @@ class ClientMachine {
             return;
           evtTransportError();
         }));
+      },
+      function onFatalError(client, code, error) {
+        sessionThread.submit(() -> lock.synchronized(() -> {
+          if (client.isDisposed())
+            return;
+          evtTransportFatalError(code, error);
+        }));
       });
   }
 
@@ -3471,6 +3588,13 @@ class ClientMachine {
           if (client.isDisposed())
             return;
           evtTransportError();
+        }));
+      },
+      function onFatalError(client, errCode, errMsg) {
+        sessionThread.submit(() -> lock.synchronized(() -> {   
+          if (client.isDisposed())
+            return;
+          evtTransportFatalError(errCode, errMsg);
         }));
       },
       function onDone(client) {
@@ -4584,6 +4708,13 @@ class ClientMachine {
           if (client.isDisposed())
             return;
           evtCtrlError();
+        }));
+      },
+      function onFatalError(client, errCode, errMsg) {
+        sessionThread.submit(() -> lock.synchronized(() -> {
+          if (client.isDisposed())
+            return;
+          evtCtrlFatalError(errCode, errMsg);
         }));
       },
       function onDone(client) {
