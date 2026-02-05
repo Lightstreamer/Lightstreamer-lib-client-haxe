@@ -79,6 +79,12 @@ class LSConnectionDetails {
     return true;
   }
 
+  public function getCertificatePins_Native(): NativeList<String> {
+    return new NativeList(getCertificatePins());
+  }
+  public function setCertificatePins_Native(pins: NativeList<String>): Void {
+    setCertificatePins(pins);
+  }
   public function getCertificatePins(): Array<String> {
     return certificatePins.copy();
   }
