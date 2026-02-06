@@ -15,6 +15,7 @@
  */
 package com.lightstreamer.client;
 
+import java.util.List;
 import javax.annotation.Nullable;
 import com.lightstreamer.client.LSConnectionDetails;
 import com.lightstreamer.client.LSLightstreamerClient;
@@ -116,6 +117,20 @@ public class ConnectionDetails {
    */
   public void setServerAddress(@Nullable String serverAddress) {
     delegate.setServerAddress(serverAddress);
+  }
+
+  /**
+   * TODO
+   */
+  public List<String> getCertificatePins() {
+    return delegate.getCertificatePins_Native();
+  }
+
+  /**
+   * TODO
+   */
+  public void setCertificatePins(List<String> pins) {
+    delegate.setCertificatePins_Native(pins);
   }
 
   /**
