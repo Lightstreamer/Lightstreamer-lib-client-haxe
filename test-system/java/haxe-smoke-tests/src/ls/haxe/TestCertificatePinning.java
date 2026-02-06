@@ -102,7 +102,7 @@ public class TestCertificatePinning extends ConcurrentTestCase {
 		client = new LightstreamerClient("https://push.lightstreamer.com", "DEMO");
 		client.addListener(new BaseClientListener() {
 			public void onServerError(int code, String msg) {
-				threadAssertEquals("62 Certificate pinning failure", code + " " + msg);
+				threadAssertEquals("62 Unrecognized server's identity", code + " " + msg);
 				resume();
 			}
 		});

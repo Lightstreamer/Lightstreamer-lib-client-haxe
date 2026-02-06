@@ -158,7 +158,7 @@ class WsClient extends WebSocketListener implements Authenticator implements IWs
     }
     if (ex is java.javax.net.ssl.SSLPeerUnverifiedException) {
       streamLogger.logErrorEx2("Connection fatal error", ex);
-      onFatalErrorCb(this, 62, "Certificate pinning failure");
+      onFatalErrorCb(this, 62, "Unrecognized server's identity");
     } else {
       var msg = ex.getMessage();
       streamLogger.logDebugEx2('WS event: error($msg)', ex);

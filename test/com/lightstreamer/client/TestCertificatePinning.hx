@@ -119,7 +119,7 @@ class TestCertificatePinning extends utest.Test {
     listener = new BaseClientListener();
     client.addListener(listener);
     listener._onServerError = (code, msg) -> {
-      equals("62 Certificate pinning failure", '$code $msg');
+      equals("62 Unrecognized server's identity", '$code $msg');
       async.completed();
     };
     client.connect();
@@ -138,7 +138,7 @@ class TestCertificatePinning extends utest.Test {
     listener = new BaseClientListener();
     client.addListener(listener);
     listener._onServerError = (code, msg) -> {
-      equals("62 Certificate pinning failure", '$code $msg');
+      equals("62 Unrecognized server's identity", '$code $msg');
       async.completed();
     };
     client.connect();
@@ -172,7 +172,7 @@ class TestCertificatePinning extends utest.Test {
       ]);
       setTransport("WS");
     })
-    .await("62 Certificate pinning failure")
+    .await("62 Unrecognized server's identity")
     .then(() -> async.completed())
     .verify();
   }
@@ -205,7 +205,7 @@ class TestCertificatePinning extends utest.Test {
       ]);
       setTransport("WS-STREAMING");
     })
-    .await("62 Certificate pinning failure")
+    .await("62 Unrecognized server's identity")
     .then(() -> async.completed())
     .verify();
   }
@@ -238,7 +238,7 @@ class TestCertificatePinning extends utest.Test {
       ]);
       setTransport("WS-POLLING");
     })
-    .await("62 Certificate pinning failure")
+    .await("62 Unrecognized server's identity")
     .then(() -> async.completed())
     .verify();
   }
@@ -271,7 +271,7 @@ class TestCertificatePinning extends utest.Test {
       ]);
       setTransport("HTTP-STREAMING");
     })
-    .await("62 Certificate pinning failure")
+    .await("62 Unrecognized server's identity")
     .then(() -> async.completed())
     .verify();
   }
@@ -304,7 +304,7 @@ class TestCertificatePinning extends utest.Test {
       ]);
       setTransport("HTTP-POLLING");
     })
-    .await("62 Certificate pinning failure")
+    .await("62 Unrecognized server's identity")
     .then(() -> async.completed())
     .verify();
   }
@@ -409,7 +409,7 @@ class TestCertificatePinning extends utest.Test {
     listener = new BaseClientListener();
     client.addListener(listener);
     listener._onServerError = (code, msg) -> {
-      equals("62 Certificate pinning failure", '$code $msg');
+      equals("62 Unrecognized server's identity", '$code $msg');
       async.completed();
     };
     client.connect();

@@ -123,7 +123,7 @@ class HttpClient implements Callback implements Authenticator implements IHttpCl
     }
     if (ex is java.javax.net.ssl.SSLPeerUnverifiedException) {
       streamLogger.logErrorEx2("Connection fatal error", ex);
-      onFatalErrorCb(this, 62, "Certificate pinning failure");
+      onFatalErrorCb(this, 62, "Unrecognized server's identity");
     } else {
       streamLogger.logDebugEx2('HTTP event: error(${ex.getMessage()})', ex);
       onError(this, ex.getMessage());
