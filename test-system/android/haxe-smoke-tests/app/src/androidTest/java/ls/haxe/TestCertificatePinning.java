@@ -111,4 +111,25 @@ public class TestCertificatePinning extends ConcurrentTestCase {
         client.connect();
         await(3000);
     }
+
+    @Test
+    public void testGetCertificatePins() throws Exception {
+        client = new LightstreamerClient("https://push.lightstreamer.com", "DEMO");
+        client.connectionDetails.setCertificatePins(asList(
+                leafCertificate,
+                intermediateCertificate));
+        assertEquals(asList(leafCertificate, intermediateCertificate),
+                client.connectionDetails.getCertificatePins());
+    }
+
+    @Test
+    public void testSetCertificatePinsWithNull() throws Exception {
+        client = new LightstreamerClient("https://push.lightstreamer.com", "DEMO");
+        try {
+            client.connectionDetails.setCertificatePins(null);
+            fail("Expected exception");
+        } catch(IllegalArgumentException e) {
+            assertEquals("Pins list cannot be null", e.getMessage());
+        }
+    }
 }

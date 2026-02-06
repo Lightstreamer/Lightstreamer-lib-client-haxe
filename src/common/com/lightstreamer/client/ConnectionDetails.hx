@@ -83,6 +83,9 @@ class LSConnectionDetails {
     return new NativeList(getCertificatePins());
   }
   public function setCertificatePins_Native(pins: NativeList<String>): Void {
+    if (pins == null) {
+      throw new IllegalArgumentException("Pins list cannot be null");
+    }
     setCertificatePins(pins);
   }
   public function getCertificatePins(): Array<String> {

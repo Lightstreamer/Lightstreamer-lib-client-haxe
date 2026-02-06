@@ -1,8 +1,7 @@
 package ls.haxe;
 
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.Before;
@@ -110,5 +109,26 @@ public class TestCertificatePinning extends ConcurrentTestCase {
 				bogusCertificate));
 		client.connect();
 		await(3000);
+	}
+	
+	@Test
+	public void testGetCertificatePins() throws Exception {
+		client = new LightstreamerClient("https://push.lightstreamer.com", "DEMO");
+		client.connectionDetails.setCertificatePins(asList(
+				leafCertificate,
+				intermediateCertificate));
+		assertEquals(asList(leafCertificate, intermediateCertificate), 
+				client.connectionDetails.getCertificatePins());
+	}
+	
+	@Test
+    public void testSetCertificatePinsWithNull() throws Exception {
+		client = new LightstreamerClient("https://push.lightstreamer.com", "DEMO");
+		try {
+			client.connectionDetails.setCertificatePins(null);
+			fail("Expected exception");
+		} catch(IllegalArgumentException e) {
+			assertEquals("Pins list cannot be null", e.getMessage());
+		}
 	}
 }
