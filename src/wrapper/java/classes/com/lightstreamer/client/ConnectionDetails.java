@@ -119,14 +119,59 @@ public class ConnectionDetails {
   }
 
   /**
-   * TODO
+   * Gets the list of certificate pins currently configured.
+   * 
+   * @return the list of pins currently configured. Each pin is a string in the format "sha256/BASE64ENCODEDVALUE" or "sha1/BASE64ENCODEDVALUE".
+   * 
+   * @see #setCertificatePins(List)
    */
   public List<String> getCertificatePins() {
     return delegate.getCertificatePins_Native();
   }
 
   /**
-   * TODO
+   * Configures certificate pinning for server authentication over TLS connections.
+   * <p>When pins are configured, the library validates that at least one of the provided pins 
+   * matches a certificate in the server's chain before establishing a session. If no match is 
+   * found, the connection is aborted and any registered listener is notified via {@link ClientListener#onServerError} with error code {@code 62} and 
+   * the message {@code "Unrecognized server's identity"}.</p>
+   * 
+   * <b>Lifecycle:</b>
+   * <p>Ideally, certificate pins should be set prior to calling 
+   * {@link LightstreamerClient#connect}. However, this configuration is dynamic and 
+   * can be updated at any time; the new pins will be applied to all subsequent 
+   * network requests issued by the client.</p>
+   * 
+   * <b>Notification:</b>
+   * <p>A change to this setting will be notified on any registered listener through a call to 
+   * {@link ClientListener#onPropertyChange} with argument "certificatePins".</p>
+   * 
+   * <b>Unsecure Connections:</b> 
+   * <p>Pinning is only enforced when the connection is established over HTTPS/WSS.
+   * If a plain HTTP/WS connection is used, these pins are ignored.</p>
+   * 
+   * <b>Self-Signed Certificates:</b>
+   * <p>Pinning does not bypass standard TLS trust validation. A self-signed certificate 
+   * must still be accepted by the underlying {@code javax.net.ssl.TrustManager} (e.g., by 
+   * adding it to the truststore through {@link LightstreamerClient#setTrustManagerFactory}) before pinning can be applied.</p>
+   * 
+   * <b>Example:</b>
+   * <pre>{@code
+   * client.connectionDetails.setCertificatePins(Arrays.asList(
+   *    "sha256/afwiKY3RxoMmLkuRW1l7QsPZTJPwDS2pdDROQjXw8ig=",
+   *    "sha256/klO23nT2ehFDXCfx3eHTDRESMz3asj1muO+4aIdjiuY="
+   * ));
+   * }</pre>
+   * 
+   * @param pins A list of pin strings. Each pin is a string in the format "sha256/BASE64ENCODEDVALUE" (or "sha1/BASE64ENCODEDVALUE"), 
+   * where BASE64ENCODEDVALUE is the Base64 encoding of the SHA-256 (or SHA-1) hash of the Subject Public Key Info (SPKI) of the certificate to pin. 
+   * Pass an empty list to disable pinning and clear existing pins.
+   * 
+   * @throws IllegalArgumentException if any pin does not adhere to the required format or if the pins list is null.
+   * 
+   * @see ClientListener#onServerError(int, String)
+   * @see LightstreamerClient#setTrustManagerFactory(javax.net.ssl.TrustManagerFactory)
+   * @see ClientListener#onPropertyChange(String)
    */
   public void setCertificatePins(List<String> pins) {
     delegate.setCertificatePins_Native(pins);

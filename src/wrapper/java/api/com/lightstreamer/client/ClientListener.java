@@ -71,6 +71,7 @@ public interface ClientListener {
    *   </ul>
    *   <li>60 - this version of the client is not allowed by the current license terms.</li>
    *   <li>61 - there was an error in the parsing of the server response thus the client cannot continue with the current session.</li>
+   *   <li>62 - the Server's identity has not been recognized over the TLS connection (see {@link ConnectionDetails#setCertificatePins(java.util.List)}).</li>
    *   <li>66 - an unexpected exception was thrown by the Metadata Adapter while authorizing the connection.</li>
    *   <li>68 - the Server could not open or continue with the session because of an internal error.</li>
    *   <li>70 - an unusable port was configured on the server address.</li>
@@ -199,6 +200,7 @@ public interface ClientListener {
    * <li>idleTimeout</li>
    * <li>keepaliveInterval</li>
    * <li>pollingInterval</li>
+   * <li>certificatePins</li>
    * </ul>
    * 
    * @see LightstreamerClient#connectionDetails
