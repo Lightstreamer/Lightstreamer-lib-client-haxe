@@ -1,5 +1,14 @@
 # Lightstreamer Android Client Changelog
 
+## 5.3.0-alpha.1
+*Compatible with Lightstreamer Server since 7.4.0.*<br/>
+*Compatible with Android 8 (API level 26) or greater.*<br/>
+*Compatible with code developed with the previous version.*<br/>
+*Made available on 9 Feb 2026.*
+
+**New:** Added support for certificate pinning through the `ConnectionDetails.setCertificatePins` method, allowing clients to restrict TLS connections to servers presenting specific certificates.
+
+
 ## 5.2.2
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
 *Compatible with code developed with the previous version.*<br/>
