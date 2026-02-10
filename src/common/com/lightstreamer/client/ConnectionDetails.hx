@@ -86,7 +86,7 @@ class LSConnectionDetails {
     if (pins == null) {
       throw new IllegalArgumentException("Pins list cannot be null");
     }
-    setCertificatePins(pins);
+    setCertificatePins(pins.toHaxe());
   }
   public function getCertificatePins(): Array<String> {
     return certificatePins.copy();
