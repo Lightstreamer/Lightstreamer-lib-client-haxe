@@ -363,6 +363,23 @@ class TestCertificatePinning extends utest.Test {
     client.connect();
   }
 
+  function testGoodIntermediateCertificate(async: utest.Async) {
+    var transport = "WS-STREAMING";
+    client = new LightstreamerClient("https://push.lightstreamer.com", "DEMO");
+    client.connectionDetails.setCertificatePins([
+      intermediateCertificate
+    ]);
+    listener = new BaseClientListener();
+    client.addListener(listener);
+    listener._onStatusChange = function(status) {
+      if (status == "CONNECTED:" + transport) {
+        pass();
+        async.completed();
+      }
+    };
+    client.connect();
+  }
+
   function testGoodAndBadCertificates(async: utest.Async) {
     var transport = "WS-STREAMING";
     client = new LightstreamerClient("https://push.lightstreamer.com", "DEMO");
