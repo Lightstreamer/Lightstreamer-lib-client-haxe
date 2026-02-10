@@ -493,7 +493,7 @@ class ClientMachine {
           notifyStatus(DISCONNECTED);
           notifyServerErrorIfCauseIsError(terminationCause);
           state.goto_m_from_wp(s100);
-          exit_ws_to_m();
+          exit_wp_to_m();
           evtTerminate(terminationCause);
         } else if (state.s_wp?.m == s602) {
           sendDestroyWS();
@@ -1018,7 +1018,7 @@ class ClientMachine {
         notifyStatus(DISCONNECTED);
         notifyServerErrorIfCauseIsError(terminationCause);
         state.goto_m_from_wp(s100);
-        exit_ws_to_m();
+        exit_wp_to_m();
         evtTerminate(terminationCause);
       case s260:
         disposeHTTP();
