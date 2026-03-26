@@ -250,6 +250,45 @@
     <ivy:retrieve pattern="${deps}/[artifact]-[type]-[revision].[ext]"/>
   </target>
 
+  <!-- Dependency-Check Ant plugin configuration -->
+  <property name="dependency-check.home" value="tools/dependency-check-ant"/>
+  <path id="dependency-check.path">
+    <pathelement location="${dependency-check.home}/dependency-check-ant.jar"/>
+      <fileset dir="${dependency-check.home}/lib">
+          <include name="*.jar"/>
+      </fileset>
+  </path>
+  <taskdef resource="dependency-check-taskdefs.properties">
+    <classpath refid="dependency-check.path" />
+  </taskdef>
+
+  <!-- 
+    Executes a security vulnerability scan on this project dependencies using the OWASP Dependency-Check tool.
+    
+    Dependencies:
+      - Requires the Dependency-Check Ant plugin and associated libraries in the `${dependency-check.home}` directory
+        (to download the plugin and its dependencies, see https://dependency-check.github.io/DependencyCheck/dependency-check-ant/index.html)
+      - Must have JAR files of the project dependencies present in the ${deps} directory
+    
+    Output:
+      - Generates an HTML vulnerability report in the ${build} directory
+    
+    Usage:
+      Run: ant check-deps
+
+    WARNING: This target may take a long time to execute, especially on the first run, as it needs to download vulnerability data
+    from the National Vulnerability Database (NVD) hosted by NIST: https://nvd.nist.gov.
+  -->
+  <target name="check-deps" description="Check project dependencies for security vulnerabilities">
+    <dependency-check projectname="${ant.project.name}"
+                      reportoutputdirectory="${build}"
+                      reportformat="HTML">
+      <fileset dir="${deps}">
+        <include name="**/*.jar"/>
+      </fileset>
+    </dependency-check>
+  </target>
+
   <target name="clean" description="Clean the project">
     <delete dir="${build}"/>
   </target>

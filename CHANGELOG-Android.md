@@ -1,5 +1,14 @@
 # Lightstreamer Android Client Changelog
 
+## 5.3.1
+*Compatible with Lightstreamer Server since 7.4.0.*<br/>
+*Compatible with Android 8 (API level 26) or greater.*<br/>
+*Compatible with code developed with the previous version.*<br/>
+*Made available on 26 Mar 2026.*
+
+Bumped the version of the `com.fasterxml.jackson.core` library to 2.21.2, in order to fix the security vulnerability [GHSA-72hv-8253-57qq](https://github.com/advisories/GHSA-72hv-8253-57qq) affecting the previous versions of the library.
+
+
 ## 5.3.0
 *Compatible with Lightstreamer Server since 7.4.0.*<br/>
 *Compatible with Android 8 (API level 26) or greater.*<br/>
