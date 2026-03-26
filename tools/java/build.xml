@@ -242,7 +242,7 @@
   </target>
 
   <!-- Dependency-Check Ant plugin configuration -->
-  <property name="dependency-check.home" value="tools/dependency-check-ant"/>
+  <!-- <property name="dependency-check.home" value="tools/dependency-check-ant"/>
   <path id="dependency-check.path">
     <pathelement location="${dependency-check.home}/dependency-check-ant.jar"/>
       <fileset dir="${dependency-check.home}/lib">
@@ -251,7 +251,7 @@
   </path>
   <taskdef resource="dependency-check-taskdefs.properties">
     <classpath refid="dependency-check.path" />
-  </taskdef>
+  </taskdef> -->
 
   <!-- 
     Executes a security vulnerability scan on this project dependencies using the OWASP Dependency-Check tool.
