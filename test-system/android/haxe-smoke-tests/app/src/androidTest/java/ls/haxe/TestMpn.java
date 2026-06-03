@@ -76,7 +76,10 @@ public class TestMpn {
     @Parameterized.Parameters
     public static Collection<Object> data() {
         return Arrays.asList(new Object[] {
-                "WS-STREAMING", "HTTP-STREAMING", "WS-POLLING", "HTTP-POLLING"
+                "WS-STREAMING",
+                "HTTP-STREAMING",
+                "WS-POLLING",
+                "HTTP-POLLING"
         });
     }
 
@@ -98,6 +101,13 @@ public class TestMpn {
     @Before
     public void setUp() throws Exception {
         Context ctx = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        // Remove LS_registration_id from SharedPreferences to ensure each test uses a fresh device token.
+        // This guarantees test isolation by providing unique device identities across test runs.
+        ctx.getSharedPreferences(ctx.getPackageName(), Context.MODE_PRIVATE)
+                .edit()
+                .remove("LS_registration_id")
+                .apply();
+
         /* create an Android device */
         device = new MpnDevice(ctx, "devtok" + System.nanoTime());
         /* create notification descriptor */
