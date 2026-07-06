@@ -1,5 +1,16 @@
 # Lightstreamer Java SE Client Changelog
 
+## 5.3.2
+*Compatible with Lightstreamer Server since 7.4.0.*<br/>
+*Compatible with Java 8+.*<br/>
+*Compatible with code developed with the previous version.*<br/>
+*Made available on 6 Jul 2026.*
+
+Updated the `zjsonpatch` library to version 0.4.16. 
+
+Updated the `jackson-databind` library to version 2.18.8.
+
+
 ## 5.3.1
 *Compatible with Lightstreamer Server since 7.4.0.*<br/>
 *Compatible with Java 8+.*<br/>
