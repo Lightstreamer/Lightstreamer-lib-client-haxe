@@ -43,7 +43,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:5.3.2'
     implementation 'com.squareup.okhttp3:okhttp-urlconnection:5.3.2'
     implementation 'com.squareup.okhttp3:okhttp-tls:5.3.2'
-    implementation 'com.flipkart.zjsonpatch:zjsonpatch:0.4.14'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.8'
+    implementation 'com.flipkart.zjsonpatch:zjsonpatch:0.4.16'
     implementation 'com.google.android.gms:play-services-base:18.0.1'
 
     implementation 'androidx.appcompat:appcompat:1.4.0'
