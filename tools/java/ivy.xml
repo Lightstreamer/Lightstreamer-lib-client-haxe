@@ -13,8 +13,8 @@
       <dependency org="com.google.code.findbugs" name="jsr305" rev="3.0.2" conf="default->default"/>
       <dependency org="com.squareup.okhttp3" name="okhttp" rev="5.3.2" conf="default->default"/>
       <dependency org="com.squareup.okhttp3" name="okhttp-urlconnection" rev="5.3.2" conf="default->default"/>
-      <!-- zjsonpatch is compatible with both Jackson 2.x and 3.x but requires explicitly declaring one version -->
+      <!-- NB force zjsonpatch to use a newer version of jackson -->
       <dependency org="com.fasterxml.jackson.core" name="jackson-databind" rev="2.18.8" conf="default->default"/>
-      <dependency org="io.github.vishwakarma" name="zjsonpatch" rev="0.6.2" conf="default->default"/>
+      <dependency org="com.flipkart.zjsonpatch" name="zjsonpatch" rev="0.4.16" conf="default->default"/>
   </dependencies>
 </ivy-module>
