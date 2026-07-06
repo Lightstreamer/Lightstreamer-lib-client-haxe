@@ -20,17 +20,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
-import okhttp3.*;
-import okhttp3.tls.HandshakeCertificates;
-
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -39,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void testAll(View view) throws Exception {
+    public void testAll(View view) {
         haxe.root.TestAll.androidMain(getApplicationContext());
     }
 }

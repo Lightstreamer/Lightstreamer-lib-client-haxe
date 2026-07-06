@@ -7,8 +7,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.testapp"
-        minSdk 21
-        targetSdk 34
+        minSdk 26
         versionCode 1
         versionName "1.0"
 
@@ -25,11 +24,13 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
     packagingOptions {
-        // Prevent merge conflicts from duplicate metadata in OkHttp
-        exclude 'META-INF/versions/9/OSGI-INF/MANIFEST.MF'
+        resources {
+            excludes += ['META-INF/versions/9/OSGI-INF/MANIFEST.MF']
+        }
     }
+
+    namespace 'com.example.testapp'
 }
 
 dependencies {
