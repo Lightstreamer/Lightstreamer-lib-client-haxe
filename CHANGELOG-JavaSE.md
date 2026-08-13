@@ -1,5 +1,14 @@
 # Lightstreamer Java SE Client Changelog
 
+## 5.3.3
+*Compatible with Lightstreamer Server since 7.4.0.*<br/>
+*Compatible with Java 8+.*<br/>
+*Compatible with code developed with the previous version.*<br/>
+*Made available on 13 Aug 2026.*
+
+Bumped the version of `com.fasterxml.jackson.core:jackson-databind` to 2.22.1, in order to fix security vulnerabilities affecting the previous versions of the library.
+
+
 ## 5.3.2
 *Compatible with Lightstreamer Server since 7.4.0.*<br/>
 *Compatible with Java 8+.*<br/>
