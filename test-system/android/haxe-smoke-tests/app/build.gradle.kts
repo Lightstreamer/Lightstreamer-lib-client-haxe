@@ -60,7 +60,7 @@ android {
 }
 
 dependencies {
-    implementation("com.lightstreamer:ls-android-client:5.3.2-snapshot")
+    implementation("com.lightstreamer:ls-android-client:5.3.3-snapshot.1")
     implementation("net.jodah:concurrentunit:0.4.6")
     implementation("com.google.android.gms:play-services-base:18.0.1") // Needed by MPN
 
