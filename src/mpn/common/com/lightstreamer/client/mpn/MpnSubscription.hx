@@ -479,6 +479,13 @@ class LSMpnSubscription {
 
   @:synchronized
   @:allow(com.lightstreamer.client.internal.MpnSubscriptionManager)
+  function fireOnModification() {
+    mpnSubscriptionLogger.logInfo('${madeByServer ? "Server " : ""}MPNSubscription modified pnSubId: $m_mpnSubId');
+    eventDispatcher.onModification();
+  }
+
+  @:synchronized
+  @:allow(com.lightstreamer.client.internal.MpnSubscriptionManager)
   function fireOnPropertyChange(property: String) {
     if (mpnSubscriptionLogger.isInfoEnabled()) {
       var propVal: String;

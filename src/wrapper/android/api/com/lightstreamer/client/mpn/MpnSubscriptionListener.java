@@ -176,4 +176,9 @@ public interface MpnSubscriptionListener {
      * </ul>
      */
     public void onModificationError(int code, String message, String propertyName);
+
+    /**
+     * TODO
+     */
+    public void onModification();
 }

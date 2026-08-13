@@ -176,11 +176,14 @@ class LSMpnDevice {
   function onSuspend(timestamp: Long) {
     lock.synchronized(() -> {
       mpnDeviceLogger.logInfo('MPN device suspended: $deviceId');
+      var oldStatus = status;
       status = SUSPENDED;
       statusTs = new Timestamp(timestamp);
       
-      eventDispatcher.onStatusChanged(SUSPENDED, timestamp);
-      eventDispatcher.onSuspended();
+      if (oldStatus == REGISTERED) {
+        eventDispatcher.onStatusChanged(SUSPENDED, timestamp);
+        eventDispatcher.onSuspended();
+      }
     });
   }
 
@@ -188,11 +191,14 @@ class LSMpnDevice {
   function onResume(timestamp: Long) {
     lock.synchronized(() -> {
       mpnDeviceLogger.logInfo('MPN device resumed: $deviceId');
+      var oldStatus = status;
       status = REGISTERED;
       statusTs = new Timestamp(timestamp);
       
-      eventDispatcher.onStatusChanged(REGISTERED, timestamp);
-      eventDispatcher.onResumed();
+      if (oldStatus == SUSPENDED) {
+        eventDispatcher.onStatusChanged(REGISTERED, timestamp);
+        eventDispatcher.onResumed();
+      }
     });
   }
 

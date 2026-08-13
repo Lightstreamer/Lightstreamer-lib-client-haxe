@@ -554,6 +554,14 @@ class MpnSubscriptionManager implements Encodable {
     }
   }
 
+  public function evtMPNCONF() {
+    traceEvent("MPNCONF");
+    if (state.s_st != null) {
+      // Activated superstate is active
+      notifyOnModification();
+    }
+  }
+
   public function evtMpnUpdate(update: ItemUpdate) {
     traceEvent("update");
     var ts = update.getValue("status_timestamp");
@@ -857,6 +865,10 @@ class MpnSubscriptionManager implements Encodable {
   
   function doSetCurrentTrigger() {
     m_currentTrigger = m_subscription.fetch_requestedTrigger();
+  }
+
+  function notifyOnModification() {
+    m_subscription.fireOnModification();
   }
   
   function notifyOnModificationError_Format(code: Int, msg: String) {

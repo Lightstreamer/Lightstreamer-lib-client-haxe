@@ -391,6 +391,7 @@ class MpnClientMachine extends ClientMachine {
     } else if (state.s_mpn.tk == s453 || state.s_mpn.tk == s454) {
       if (deviceId == mpn_deviceId && adapterName == mpn_adapterName) {
         doMPNREG_RefreshToken(deviceId, adapterName);
+        notifyDeviceRegistered(0);
         goto(state.s_mpn.tk = s450);
         evtMpnCheckPending();
       } else {
@@ -479,14 +480,15 @@ class MpnClientMachine extends ClientMachine {
     traceEvent("DEV.update");
     if (state.s_mpn.st == s410) {
       if (status == "ACTIVE") {
-        if (!mpn_device.sure().isRegistered()) {
-          notifyDeviceRegistered(timestamp);
-        }
+        // if (!mpn_device.sure().isRegistered()) {
+        //   notifyDeviceRegistered(timestamp);
+        // }
         goto(state.s_mpn.st = s410);
       } else if (status == "SUSPENDED") {
-        if (!mpn_device.sure().isSuspended()) {
-          notifyDeviceSuspended(timestamp);
-        }
+        // if (!mpn_device.sure().isSuspended()) {
+        //   notifyDeviceSuspended(timestamp);
+        // }
+        notifyDeviceSuspended(timestamp);
         goto(state.s_mpn.st = s411);
       }
     } else if (state.s_mpn.st == s411) {
@@ -913,6 +915,12 @@ class MpnClientMachine extends ClientMachine {
 
   function doMPNCONF(mpnSubId: String) {
     onFreshData();
+    for (sm in mpnSubscriptionManagers) {
+      if (sm.fetch_mpnSubId() == mpnSubId) {
+        sm.evtMPNCONF();
+      }
+    }
+    mpnSubscriptionManagers.compact();
   }
 
   public function encodeMpnRegister(): String {
