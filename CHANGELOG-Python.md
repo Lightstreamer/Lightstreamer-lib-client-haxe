@@ -2,6 +2,7 @@
 
 ## 2.2.2
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
+*Compatible with Python 3.7+.*<br/>
 *Compatible with code developed with the previous version.*<br/>
 *Made available on 23 May 2025*
 
@@ -10,6 +11,7 @@ Fixed an uncaught exception that occurred when `LightstreamerClient` was configu
 
 ## 2.2.1
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
+*Compatible with Python 3.7+.*<br/>
 *Compatible with code developed with the previous version.*<br/>
 *Made available on 25 Feb 2025*
 
@@ -18,6 +20,7 @@ Changed HTTP `Content-Type` header to use `text/plain` instead of `application/x
 
 ## 2.2.0
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
+*Compatible with Python 3.7+.*<br/>
 *May not be compatible with code developed with the previous version.*<br/>
 *Made available on 29 Oct 2024*
 
@@ -26,6 +29,7 @@ Changed the behavior of the listener `ClientListener.onPropertyChange` to be cal
 
 ## 2.1.0
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
+*Compatible with Python 3.7+.*<br/>
 *Compatible with code developed with the previous version.*<br/>
 *Made available on 19 Dec 2023*
 
@@ -34,6 +38,7 @@ Improved the client's performance to handle more server updates per second.
 
 ## 2.0.0
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
+*Compatible with Python 3.7+.*<br/>
 *Not compatible with code developed with the previous version.*<br/>
 *Made available on 10 Jul 2023* 
 
@@ -44,6 +49,7 @@ Added this check: when a `Subscription` is configured by means of an ItemList or
 
 ## 1.0.3
 *Compatible with Lightstreamer Server since 7.3.2*<br/>
+*Compatible with Python 3.7+.*<br/>
 *Compatible with code developed with the previous version.*<br/>
 *Made available on 22 Jun 2023* 
 
@@ -54,6 +60,7 @@ Updated the library haxe-concurrent to version 5.1.3.
 
 ## 1.0.2
 _Compatible with Lightstreamer Server since 7.3.2._<br>
+_Compatible with Python 3.7+._<br/>
 _Compatible with code developed for the previous versions._<br>
 _Released on 5 Apr 2023._
 
@@ -64,6 +71,7 @@ Suppressed the unsolicited console outputs produced by the library.
 
 ## 1.0.1 build 20221205
 _Compatible with Lightstreamer Server since 7.3.0._<br>
+_Compatible with Python 3.7+._<br/>
 _Compatible with code developed for the previous versions._<br>
 _Released on 5 Dec 2022._
 
@@ -73,6 +81,7 @@ Fixed a bug that could have caused a `Subscription` object not to be deleted aft
 
 ## 1.0.0 build 20221122
 _Compatible with Lightstreamer Server since 7.3.0._<br>
+_Compatible with Python 3.7+._<br/>
 _Not compatible with code developed for the previous versions._<br>
 _Released on 22 Nov 2022._
 
