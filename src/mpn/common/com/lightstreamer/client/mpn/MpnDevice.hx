@@ -242,6 +242,22 @@ class LSMpnDevice {
   }
 
   @:allow(com.lightstreamer.client.internal.MpnClientMachine)
+  function fireOnMultipleUnsubscriptionsError(code: Int, msg: String) {
+    lock.synchronized(() -> {
+      mpnDeviceLogger.logWarn('MPN multiple unsubscriptions failed: $code - $msg $deviceId');
+      eventDispatcher.onMultipleUnsubscriptionsError(code, msg);
+    });
+  }
+  
+  @:allow(com.lightstreamer.client.internal.MpnClientMachine)
+  function fireOnMultipleUnsubscriptions() {
+    lock.synchronized(() -> {
+      mpnDeviceLogger.logInfo('MPN multiple unsubscriptions successfully completed: $deviceId');
+      eventDispatcher.onMultipleUnsubscriptions();
+    });
+  }
+
+  @:allow(com.lightstreamer.client.internal.MpnClientMachine)
   function fireOnBadgeResetFailed(code: Int, msg: String) {
     // Swift only
     lock.synchronized(() -> {

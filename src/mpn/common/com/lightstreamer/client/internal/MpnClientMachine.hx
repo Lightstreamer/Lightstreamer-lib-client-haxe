@@ -95,6 +95,7 @@ class MpnClientMachine extends ClientMachine {
       forward = evtREQOK_TransportRegion(reqId);
     } else if (state.s_mpn.ft == s432 && reqId == mpn_filter_lastDeactivateReqId) {
       doREQMpnUnsubscribeFilter();
+      notifyOnMultipleUnsubscriptions();
       goto(state.s_mpn.ft = s430);
       forward = evtREQOK_TransportRegion(reqId);
       evtMpnCheckFilter();
@@ -127,6 +128,7 @@ class MpnClientMachine extends ClientMachine {
       evtMpnCheckNext();
     } else if (state.s_mpn.ft == s432 && reqId == mpn_filter_lastDeactivateReqId) {
       doREQMpnUnsubscribeFilter();
+      notifyOnMultipleUnsubscriptionsError(code, msg);
       goto(state.s_mpn.ft = s430);
       forward = evtREQERR_TransportRegion(reqId, code, msg);
       evtMpnCheckFilter();
@@ -879,6 +881,14 @@ class MpnClientMachine extends ClientMachine {
 
   function doREQMpnUnsubscribeFilter() {
     mpn_filter_pendings.shift();
+  }
+
+  function notifyOnMultipleUnsubscriptions() {
+    mpn_device.sure().fireOnMultipleUnsubscriptions();
+  }
+
+  function notifyOnMultipleUnsubscriptionsError(code: Int, msg: String) {
+    mpn_device.sure().fireOnMultipleUnsubscriptionsError(code, msg);
   }
 
   function doREQOKMpnResetBadge() {

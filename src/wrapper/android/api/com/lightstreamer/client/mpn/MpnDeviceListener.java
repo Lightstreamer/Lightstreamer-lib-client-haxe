@@ -106,4 +106,8 @@ public interface MpnDeviceListener {
      * @see com.lightstreamer.client.LightstreamerClient#getMpnSubscriptions(String)
      */
     public void onSubscriptionsUpdated();
+
+    // TODO write docs
+    public void onMultipleUnsubscriptions();
+    public void onMultipleUnsubscriptionsError(int errorCode, String errorMessage);
 }

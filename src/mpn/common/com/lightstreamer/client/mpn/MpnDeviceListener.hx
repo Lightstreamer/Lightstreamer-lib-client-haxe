@@ -27,4 +27,6 @@ extern interface MpnDeviceListener {
   public function onStatusChanged(status: String, timestamp: Long): Void;
   public function onRegistrationFailed(code: Int, message: String): Void;
   public function onSubscriptionsUpdated(): Void;
+  public function onMultipleUnsubscriptions(): Void;
+  public function onMultipleUnsubscriptionsError(errorCode: Int, errorMessage: String): Void;
 }
