@@ -1,5 +1,16 @@
 # Lightstreamer Python Client Changelog
 
+## 2.2.3
+*Compatible with Lightstreamer Server since 7.4.0*<br/>
+*Compatible with Python 3.7+.*<br/>
+*Compatible with code developed with the previous version.*<br/>
+*Made available on 20 Aug 2026*
+
+Fixed the deprecation warning caused by passing `ssl=None` to `aiohttp` requests.
+
+Fixed the runtime warning caused by the WebSocket disposal callback being treated as an unawaited coroutine ([issue #8](https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe/issues/8)).
+
+
 ## 2.2.2
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
 *Compatible with Python 3.7+.*<br/>
