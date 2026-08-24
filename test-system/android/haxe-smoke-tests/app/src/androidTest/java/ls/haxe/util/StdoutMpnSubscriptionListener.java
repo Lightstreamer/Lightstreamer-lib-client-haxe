@@ -70,4 +70,9 @@ public class StdoutMpnSubscriptionListener implements MpnSubscriptionListener {
     public void onModificationError(int i, String s, String s1) {
 
     }
+
+    @Override
+    public void onModification() {
+
+    }
 }

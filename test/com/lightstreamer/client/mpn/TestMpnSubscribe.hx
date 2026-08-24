@@ -30,6 +30,8 @@ private class BaseMpnListener implements MpnDeviceListener {
   public function onRegistrationFailed(code: Int, message: String): Void {}
   dynamic public function _onSubscriptionsUpdated() {}
   public function onSubscriptionsUpdated(): Void _onSubscriptionsUpdated();
+  public function onMultipleUnsubscriptions(): Void {}
+  public function onMultipleUnsubscriptionsError(errorCode: Int, errorMessage: String): Void {}
 }
 
 class TestMpnSubscribe extends utest.Test {

@@ -59,4 +59,14 @@ public class BaseMpnDeviceListener implements MpnDeviceListener {
     public void onSubscriptionsUpdated() {
 
     }
+
+    @Override
+    public void onMultipleUnsubscriptions() {
+
+    }
+
+    @Override
+    public void onMultipleUnsubscriptionsError(int errorCode, String errorMessage) {
+
+    }
 }
