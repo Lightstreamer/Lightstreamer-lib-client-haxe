@@ -482,14 +482,9 @@ class MpnClientMachine extends ClientMachine {
     traceEvent("DEV.update");
     if (state.s_mpn.st == s410) {
       if (status == "ACTIVE") {
-        // if (!mpn_device.sure().isRegistered()) {
-        //   notifyDeviceRegistered(timestamp);
-        // }
+        // No need to call notifyDeviceRegistered: the device is already registered.
         goto(state.s_mpn.st = s410);
       } else if (status == "SUSPENDED") {
-        // if (!mpn_device.sure().isSuspended()) {
-        //   notifyDeviceSuspended(timestamp);
-        // }
         notifyDeviceSuspended(timestamp);
         goto(state.s_mpn.st = s411);
       }

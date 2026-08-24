@@ -180,7 +180,8 @@ class LSMpnDevice {
       status = SUSPENDED;
       statusTs = new Timestamp(timestamp);
       
-      if (oldStatus == REGISTERED) {
+      // Notify only if the status was not already SUSPENDED.
+      if (oldStatus != SUSPENDED) {
         eventDispatcher.onStatusChanged(SUSPENDED, timestamp);
         eventDispatcher.onSuspended();
       }
@@ -195,7 +196,8 @@ class LSMpnDevice {
       status = REGISTERED;
       statusTs = new Timestamp(timestamp);
       
-      if (oldStatus == SUSPENDED) {
+      // Notify only if the status was not already REGISTERED.
+      if (oldStatus != REGISTERED) {
         eventDispatcher.onStatusChanged(REGISTERED, timestamp);
         eventDispatcher.onResumed();
       }
