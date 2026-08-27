@@ -737,9 +737,12 @@ class MpnSubscriptionManager implements Encodable {
     if (trigger != null) {
       req.PN_trigger(trigger);
     }
-    if (m_coalescing) {
-      req.PN_coalescing(true);
-    }
+    // TODO Remove support for non-coalescing subscriptions.
+    // if (m_coalescing) {
+    //   req.PN_coalescing(true);
+    // }
+    // Temporarily, the parameter is forced to true.
+    req.PN_coalescing(true);
     protocolLogger.logInfo('Sending MPNSubscription activate: $req');
     return req.getEncodedString();
   }
