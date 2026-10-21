@@ -98,13 +98,6 @@ class TestMpnSubscription extends utest.Test {
     raisesEx(() -> sub.setItems([""]), IllegalArgumentException, "Item List is invalid");
   }
 
-  function testItemGroup() {
-    equals(null, sub.getItemGroup());
-
-    sub.setItemGroup("grp");
-    equals("grp", sub.getItemGroup());
-  }
-
   function testFields() {
     strictSame(["f1"], sub.getFields());
 
@@ -113,13 +106,6 @@ class TestMpnSubscription extends utest.Test {
 
     raisesEx(() -> sub.setFields([]), IllegalArgumentException, "Field List is empty");
     raisesEx(() -> sub.setFields([""]), IllegalArgumentException, "Field List is invalid");
-  }
-
-  function testFieldSchema() {
-    equals(null, sub.getFieldSchema());
-
-    sub.setFieldSchema("scm");
-    equals("scm", sub.getFieldSchema());
   }
 
   function testRequestedBufferSize() {

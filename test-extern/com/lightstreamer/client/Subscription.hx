@@ -41,12 +41,8 @@ extern class Subscription {
   public function getMode(): String;
   public function getItems(): Null<NativeArray<String>>;
   public function setItems(items: Null<NativeArray<String>>): Void;
-  public function getItemGroup(): Null<String>;
-  public function setItemGroup(group: Null<String>): Void;
   public function getFields(): Null<NativeArray<String>>;
   public function setFields(fields: Null<NativeArray<String>>): Void;
-  public function getFieldSchema(): Null<String>;
-  public function setFieldSchema(schema: Null<String>): Void;
   public function getRequestedBufferSize(): Null<String>;
   public function setRequestedBufferSize(size: Null<String>): Void;
   public function getRequestedSnapshot(): Null<String>;
@@ -61,8 +57,6 @@ extern class Subscription {
   public function setCommandSecondLevelDataAdapter(dataAdapter: Null<String>): Void;
   public function getCommandSecondLevelFields(): Null<NativeArray<String>>;
   public function setCommandSecondLevelFields(fields: Null<NativeArray<String>>): Void;
-  public function getCommandSecondLevelFieldSchema(): Null<String>;
-  public function setCommandSecondLevelFieldSchema(schema: String): Void;
   #else
   public var Listeners(default, never): NativeList<SubscriptionListener>;
   public var Active(default, never): Bool;
@@ -70,9 +64,7 @@ extern class Subscription {
   public var DataAdapter(default, default): Null<String>;
   public var Mode(default, never): String;
   public var Items(default, default): Null<NativeArray<String>>;
-  public var ItemGroup(default, default): Null<String>;
   public var Fields(default, default): Null<NativeArray<String>>;
-  public var FieldSchema(default, default): Null<String>;
   public var RequestedBufferSize(default, default): Null<String>;
   public var RequestedSnapshot(default, default): Null<String>;
   public var RequestedMaxFrequency(default, default): Null<String>;
@@ -81,7 +73,6 @@ extern class Subscription {
   public var KeyPosition(default, never): Int;
   public var CommandSecondLevelDataAdapter(default, default): Null<String>;
   public var CommandSecondLevelFields(default, default): Null<NativeArray<String>>;
-  public var CommandSecondLevelFieldSchema(default, default): Null<String>;
   #end
 
   #if (java || cs)

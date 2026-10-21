@@ -192,12 +192,12 @@ class TestSubscribe_WS extends utest.Test {
     .verify();
   }
 
-  function testSUBOK_ItemGroupAndFieldSchema(async: utest.Async) {
+  function testSUBOK_SingleItemAndField(async: utest.Async) {
     exps
     .then(() -> {
       subListener._onSubscription = () -> exps.signal("onSubscription");
-      sub.setItemGroup("ig");
-      sub.setFieldSchema("fs");
+      sub.setItems(["ig"]);
+      sub.setFields(["fs"]);
       client.subscribe(sub);
       client.connect();
     })
@@ -210,7 +210,7 @@ class TestSubscribe_WS extends utest.Test {
       ws.onText("CONOK,sid,70000,5000,*");
     })
     .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=ig&LS_schema=fs&LS_snapshot=false&LS_ack=false")
-    .then(() -> ws.onText("SUBOK,1,10,20"))
+    .then(() -> ws.onText("SUBOK,1,1,1"))
     .await("onSubscription")
     .then(() -> isTrue(sub.isSubscribed()))
     .then(() -> async.completed())

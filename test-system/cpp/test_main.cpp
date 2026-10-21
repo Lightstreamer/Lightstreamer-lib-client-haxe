@@ -346,11 +346,13 @@ TEST_FIXTURE(Setup, testSubscriptionAccessors) {
   sub.setItems({});
   EXPECT_EQ(0, sub.getItems().size());
 
-  EXPECT_EQ("", sub.getItemGroup());
-  sub.setItemGroup("grp");
-  EXPECT_EQ("grp", sub.getItemGroup());
-  sub.setItemGroup("");
-  EXPECT_EQ("", sub.getItemGroup());
+  std::vector<std::string> configuredItems = {"grp"};
+  sub.setItems(configuredItems);
+  configuredItems.at(0) = "changed";
+  EXPECT_EQ("grp", sub.getItems().at(0));
+  items = sub.getItems();
+  items.at(0) = "changed";
+  EXPECT_EQ("grp", sub.getItems().at(0));
 
   EXPECT_EQ(0, sub.getFields().size());
   sub.setFields({"f1", "f2"});
@@ -361,11 +363,13 @@ TEST_FIXTURE(Setup, testSubscriptionAccessors) {
   sub.setFields({});
   EXPECT_EQ(0, sub.getFields().size());
 
-  EXPECT_EQ("", sub.getFieldSchema());
-  sub.setFieldSchema("scm");
-  EXPECT_EQ("scm", sub.getFieldSchema());
-  sub.setFieldSchema("");
-  EXPECT_EQ("", sub.getFieldSchema());
+  std::vector<std::string> configuredFields = {"scm"};
+  sub.setFields(configuredFields);
+  configuredFields.at(0) = "changed";
+  EXPECT_EQ("scm", sub.getFields().at(0));
+  fields = sub.getFields();
+  fields.at(0) = "changed";
+  EXPECT_EQ("scm", sub.getFields().at(0));
 
   EXPECT_EQ("", sub.getRequestedBufferSize());
   sub.setRequestedBufferSize("unlimited");
@@ -423,15 +427,12 @@ TEST_FIXTURE(Setup, testSubscriptionSetterValidators) {
   EXPECT_THROW(sub.getKeyPosition(), std::runtime_error);
   EXPECT_THROW(sub.setCommandSecondLevelDataAdapter("xyz"), std::runtime_error);
   EXPECT_THROW(sub.setCommandSecondLevelFields({"xyz"}), std::runtime_error);
-  EXPECT_THROW(sub.setCommandSecondLevelFieldSchema("xyz"), std::runtime_error);
 
   client.subscribe(&sub);
   // can't change the properties when the subscription is active
   EXPECT_THROW(sub.setDataAdapter("xyz"), std::runtime_error);
   EXPECT_THROW(sub.setItems({"i1"}), std::runtime_error);
-  EXPECT_THROW(sub.setItemGroup("i1"), std::runtime_error);
   EXPECT_THROW(sub.setFields({"f1"}), std::runtime_error);
-  EXPECT_THROW(sub.setFieldSchema("f1"), std::runtime_error);
   EXPECT_THROW(sub.setRequestedBufferSize("123"), std::runtime_error);
   EXPECT_THROW(sub.setRequestedSnapshot("123"), std::runtime_error);
   EXPECT_THROW(sub.setRequestedMaxFrequency("unfiltered"), std::runtime_error);
@@ -459,11 +460,13 @@ TEST_FIXTURE(Setup, testSubscriptionAccessorsInCommandMode) {
   sub.setCommandSecondLevelFields({});
   EXPECT_EQ(0, sub.getCommandSecondLevelFields().size());
 
-  EXPECT_EQ("", sub.getCommandSecondLevelFieldSchema());
-  sub.setCommandSecondLevelFieldSchema("scm");
-  EXPECT_EQ("scm", sub.getCommandSecondLevelFieldSchema());
-  sub.setCommandSecondLevelFieldSchema("");
-  EXPECT_EQ("", sub.getCommandSecondLevelFieldSchema());
+  std::vector<std::string> configuredFields = {"scm"};
+  sub.setCommandSecondLevelFields(configuredFields);
+  configuredFields.at(0) = "changed";
+  EXPECT_EQ("scm", sub.getCommandSecondLevelFields().at(0));
+  fields = sub.getCommandSecondLevelFields();
+  fields.at(0) = "changed";
+  EXPECT_EQ("scm", sub.getCommandSecondLevelFields().at(0));
 }
 
 TEST_FIXTURE(Setup, testSubscribe) {

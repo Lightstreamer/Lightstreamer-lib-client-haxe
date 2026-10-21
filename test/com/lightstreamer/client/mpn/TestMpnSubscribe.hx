@@ -64,6 +64,24 @@ class TestMpnSubscribe extends utest.Test {
     #end
   }
   
+  function testConfigureBeforeSubmission() {
+    #if (java || cs)
+    var subscription = new MpnSubscription("MERGE");
+    #else
+    var subscription = new MpnSubscription("MERGE", null, null);
+    #end
+    subscription.setNotificationFormat("fmt");
+    client.registerForMpn(device);
+    raisesEx(() -> client.subscribeMpn(subscription, false), com.lightstreamer.internal.NativeTypes.IllegalArgumentException, "Specify property 'items'");
+    subscription.setItems(["i1"]);
+    raisesEx(() -> client.subscribeMpn(subscription, false), com.lightstreamer.internal.NativeTypes.IllegalArgumentException, "Specify property 'fields'");
+    subscription.setFields(["f1"]);
+    client.subscribeMpn(subscription, false);
+    equals(true, subscription.isActive());
+    strictSame(["i1"], subscription.getItems());
+    strictSame(["f1"], subscription.getFields());
+  }
+
   function testSnapshotIsEmpty(async: utest.Async) {
     exps
     .then(() -> {    
@@ -121,7 +139,7 @@ class TestMpnSubscribe extends utest.Test {
     .then(() -> {
       ws.onText("EOS,2,1");
       ws.onText("SUBOK,3,1,10");
-      ws.onText("U,3,1,ACTIVE|100|fmt|trg|i1|f1|adt|MERGE|unlimited|unlimited");
+      ws.onText("U,3,1,ACTIVE|100|fmt|trg|i1 i2|f1 f2|adt|MERGE|unlimited|unlimited");
     })
     .await("onSubscriptionsUpdated")
     .then(() -> {
@@ -130,8 +148,8 @@ class TestMpnSubscribe extends utest.Test {
       var sub = ls[0];
       equals("fmt", sub.getActualNotificationFormat());
       equals("trg", sub.getActualTriggerExpression());
-      equals("i1", sub.getItemGroup());
-      equals("f1", sub.getFieldSchema());
+      strictSame(["i1", "i2"], sub.getItems());
+      strictSame(["f1", "f2"], sub.getFields());
       equals("adt", sub.getDataAdapter());
       equals("MERGE", sub.getMode());
       equals("unlimited", sub.getRequestedMaxFrequency());
