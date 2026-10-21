@@ -74,7 +74,7 @@
   * <BR>The lists are defined as follows:
    * <ul>
   * <li>"Item List": an array of Strings each one representing a literal item name.
-   * For the Item List to be correctly interpreted a LiteralBasedProvider or a MetadataProvider
+  * For the Item List to be correctly interpreted a MetadataProvider
    * with a compatible implementation of getItems has to be configured in the associated Adapter Set.
    * <BR>Note that no item in the list can be empty, can contain spaces or can 
    * be a number. 
@@ -84,7 +84,7 @@
    * method or by specifying it in the constructor.
    * </li> 
   * <li>"Field List": an array of Strings each one representing a field name.
-   * For the Field List to be correctly interpreted a LiteralBasedProvider or a MetadataProvider
+  * For the Field List to be correctly interpreted a MetadataProvider
    * with a compatible implementation of getFields has to be configured in the associated Adapter Set.
    * <BR>Note that no field in the list can be empty or can contain spaces. 
    * <BR>When using a Field List, fields in the subscription are identified by their name or by

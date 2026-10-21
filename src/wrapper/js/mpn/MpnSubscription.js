@@ -152,9 +152,10 @@ MpnSubscription.prototype = {
        * For instance, if the subscription contains fields "stock_name" and "last_price", the notification format could be something like this:<ul>
        * <li><code>{ "notification" : { "body" : "Stock ${stock_name} is now valued ${last_price}" } }</code></li>
        * </ul>
-       * Named arguments are available if the Metadata Adapter is a subclass of LiteralBasedProvider or provides equivalent functionality, otherwise only
-       * indexed arguments may be used. In both cases common metadata rules apply: field names and indexes are checked against the Metadata Adapter, hence
-      * they must be consistent with the explicit field and item lists specified.<BR>
+      * Named arguments require a Metadata Adapter that supports field-name resolution; otherwise only
+      * indexed arguments may be used. In both cases common metadata rules apply: field names and indexes
+      * are checked against the Metadata Adapter, hence they must be consistent with the explicit field
+      * and item lists specified.<BR>
        * A special server-managed argument may also be used:<ul>
        * <li><code>${LS_MPN_subscription_ID}</code>: the ID of the MPN subscription generating the push notification.
        * </ul>

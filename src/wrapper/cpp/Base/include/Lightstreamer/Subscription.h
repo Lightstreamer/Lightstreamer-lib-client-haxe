@@ -33,7 +33,7 @@ namespace Lightstreamer {
   * These lists are defined as follows:
   * <ul>
   *  <li>"Item List": an Item List is an array of strings each one representing an item. 
-  *  For the Item List to be correctly interpreted a LiteralBasedProvider or a MetadataProvider 
+  *  For the Item List to be correctly interpreted a MetadataProvider
   *  with a compatible implementation of getItems has to be configured in the associated 
   *  Adapter Set.<BR>
   *  Note that no item in the list can be empty, can contain spaces or can be a number.<BR>
@@ -45,7 +45,7 @@ namespace Lightstreamer {
   * The field list is defined as follows:
   * <ul>
   *  <li>"Field List": a Field List is an array of Strings each one representing a field. 
-  *  For the Field List to be correctly interpreted a LiteralBasedProvider or a MetadataProvider 
+  *  For the Field List to be correctly interpreted a MetadataProvider
   *  with a compatible implementation of getFields has to be configured in the associated 
   *  Adapter Set.<BR>
   *  Note that no field in the list can be empty or can contain spaces.<BR>

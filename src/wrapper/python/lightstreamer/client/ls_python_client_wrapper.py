@@ -1289,7 +1289,7 @@ configured before calling :meth:`LightstreamerClient.subscribe`.
   * "Item List": an array of Strings each representing a literal item name. No item can be empty, contain spaces or be a number. Items are identified by name or by their 1-based index within the list. Configure the list with :meth:`setItems` or the constructor.
   * "Field List": an array of Strings each representing a field name. No field can be empty or contain spaces. Fields are identified by name or by their 1-based index within the list. Configure the list with :meth:`setFields` or the constructor.
 
-The associated Adapter Set must use a LiteralBasedProvider or a MetadataProvider
+The associated Adapter Set must use a MetadataProvider
 with compatible getItems and getFields implementations that interpret these explicit lists.
 COMMAND subscriptions remain one-level unless :meth:`setCommandSecondLevelFields`
 configures an explicit second-level field list.
