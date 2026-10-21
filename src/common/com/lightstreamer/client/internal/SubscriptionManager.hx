@@ -391,18 +391,12 @@ class SubscriptionManagerLiving implements SubscriptionManager {
     req.LS_op("add");
     req.LS_subId(subId);
     req.LS_mode(m_subscription.fetch_mode());
-    var group = m_subscription.getItemGroup();
     var items = m_subscription.fetchItems();
-    if (group != null) {
-      req.LS_group(group);
-    } else if (items != null) {
+    if (items != null) {
       req.LS_group(items.join(" "));
     }
-    var schema = m_subscription.getFieldSchema();
     var fields = m_subscription.fetchFields();
-    if (schema != null) {
-      req.LS_schema(schema);
-    } else if (fields != null) {
+    if (fields != null) {
       req.LS_schema(fields.join(" "));
     }
     var adapter = m_subscription.getDataAdapter();
@@ -586,6 +580,6 @@ class SubscriptionManagerLiving implements SubscriptionManager {
   }
 
   static function is2LevelCommand(sub: Subscription): Bool {
-    return sub.fetch_mode() == Command && (sub.getCommandSecondLevelFields() != null || sub.getCommandSecondLevelFieldSchema() != null);
+    return sub.fetch_mode() == Command && sub.getCommandSecondLevelFields() != null;
   }
 }

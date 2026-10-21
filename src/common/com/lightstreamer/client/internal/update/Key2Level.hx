@@ -441,11 +441,7 @@ class Key2Level implements ItemKey {
     }
     sub2.setItems(items);
     var fields2 = sub.getCommandSecondLevelFields();
-    if (fields2 != null) {
-      sub2.setFields(fields2);
-    } else {
-      sub2.setFieldSchema(sub.getCommandSecondLevelFieldSchema());
-    }
+    sub2.setFields(fields2.sure());
     sub2.setDataAdapter(sub.getCommandSecondLevelDataAdapter());
     sub2.setRequestedSnapshot(SnpYes.toString());
     sub2.setRequestedMaxFrequency(item.strategy.requestedMaxFrequency.toString());

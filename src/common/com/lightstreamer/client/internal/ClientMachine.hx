@@ -4899,11 +4899,11 @@ class ClientMachine {
     if (subscription.isActive()) {
       throw new IllegalStateException("Cannot subscribe to an active Subscription");
     }
-    if (subscription.fetchItems() == null && subscription.getItemGroup() == null) {
-      throw new IllegalArgumentException("Specify property 'items' or 'itemGroup'");
+    if (subscription.fetchItems() == null) {
+      throw new IllegalArgumentException("Specify property 'items'");
     }
-    if (subscription.fetchFields() == null && subscription.getFieldSchema() == null) {
-      throw new IllegalArgumentException("Specify property 'fields' or 'fieldSchema'");
+    if (subscription.fetchFields() == null) {
+      throw new IllegalArgumentException("Specify property 'fields'");
     }
     var sm = new SubscriptionManagerLiving(subscription, this);
     actionLogger.logInfo('${isInternal ? "Internal subscription" : "Subscription"} requested: subId: ${sm.subId} $subscription');

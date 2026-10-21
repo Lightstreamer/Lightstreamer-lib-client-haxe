@@ -25,7 +25,7 @@ using com.lightstreamer.log.LoggerTools;
 using com.lightstreamer.internal.NullTools;
 using com.lightstreamer.client.internal.update.UpdateUtils.CurrFieldValTools;
 
-final NO_FIELDS = "The Subscription was initiated using a Field Schema: the field names are not available";
+final NO_FIELDS = "The field names are not available";
 final POS_OUT_BOUNDS = "The field position is out of bounds";
 final UNKNOWN_FIELD_NAME = "The field name is unknown";
 

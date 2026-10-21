@@ -39,8 +39,6 @@ class LSMpnSubscription {
   var mode: MpnSubscriptionMode;
   var items: Null<Items>;
   var fields: Null<Fields>;
-  var group: Null<Name>;
-  var schema: Null<Name>;
   var dataAdapter: Null<Name>;
   var bufferSize: Null<RequestedBufferSize>;
   var requestedMaxFrequency: Null<MpnRequestedMaxFrequency>;
@@ -127,9 +125,7 @@ class LSMpnSubscription {
     var _items = subscription.getItems();
     var _fields = subscription.getFields();
     this.items = _items != null ? Items.fromArray(_items) : null;
-    this.group = Name.fromString(subscription.getItemGroup());
     this.fields = _fields != null ? Fields.fromArray(_fields) : null;
-    this.schema = Name.fromString(subscription.getFieldSchema());
     this.dataAdapter = Name.fromString(subscription.getDataAdapter());
     this.bufferSize = RequestedBufferSizeTools.fromString(subscription.getRequestedBufferSize());
     this.requestedMaxFrequency = MpnRequestedMaxFrequencyTools.fromString(subscription.getRequestedMaxFrequency());
@@ -137,9 +133,7 @@ class LSMpnSubscription {
 
   function initFromMpnSubscription(mpnSubscription: MpnSubscription) {
     this.items = mpnSubscription.items;
-    this.group = mpnSubscription.group;
     this.fields = mpnSubscription.fields;
-    this.schema = mpnSubscription.schema;
     this.dataAdapter = mpnSubscription.dataAdapter;
     this.bufferSize = mpnSubscription.bufferSize;
     this.requestedMaxFrequency = mpnSubscription.requestedMaxFrequency;
@@ -223,16 +217,6 @@ class LSMpnSubscription {
   public function setFields(fields: Null<NativeArray<String>>): Void {
     checkActive();
     this.fields = Fields.fromArray(fields == null ? null : fields.toHaxe());
-    this.schema = null;
-  }
-
-  public function getFieldSchema(): Null<String> {
-    return schema;
-  }
-  public function setFieldSchema(schema: Null<String>): Void {
-    checkActive();
-    this.schema = Name.fromString(schema);
-    this.fields = null;
   }
 
   public function getItems(): Null<NativeArray<String>> {
@@ -241,16 +225,6 @@ class LSMpnSubscription {
   public function setItems(items: Null<NativeArray<String>>): Void {
     checkActive();
     this.items = Items.fromArray(items == null ? null : items.toHaxe());
-    this.group = null;
-  }
-
-  public function getItemGroup(): Null<String> {
-    return group;
-  }
-  public function setItemGroup(group: Null<String>): Void {
-    checkActive();
-    this.group = Name.fromString(group);
-    this.items = null;
   }
 
   public function getRequestedBufferSize(): Null<String> {
@@ -352,26 +326,24 @@ class LSMpnSubscription {
 
   @:synchronized
   @:allow(com.lightstreamer.client.internal.MpnSubscriptionManager)
-  function changeGroup(_group: Null<String>) {
-    if (_group == null) {
+  function changeItems(rawItems: Null<String>) {
+    if (rawItems == null) {
       return;
     }
-    if (group != _group) {
-      group = new Name(_group);
-      items = null;
+    if (items == null || (items : Array<String>).join(" ") != rawItems) {
+      items = Items.fromArray(rawItems.split(" "));
       fireOnPropertyChange("group");
     }
   }
 
   @:synchronized
   @:allow(com.lightstreamer.client.internal.MpnSubscriptionManager)
-  function changeSchema(_schema: Null<String>) {
-    if (_schema == null) {
+  function changeFields(rawFields: Null<String>) {
+    if (rawFields == null) {
       return;
     }
-    if (schema != _schema) {
-      schema = new Name(_schema);
-      fields = null;
+    if (fields == null || (fields : Array<String>).join(" ") != rawFields) {
+      fields = Fields.fromArray(rawFields.split(" "));
       fireOnPropertyChange("schema");
     }
   }
@@ -486,9 +458,9 @@ class LSMpnSubscription {
       case "mode":
         propVal = 'newValue: $mode';
       case "group":
-        propVal = 'newValue: $group';
+        propVal = 'newValue: $items';
       case "schema":
-        propVal = 'newValue: $schema';
+        propVal = 'newValue: $fields';
       case "adapter":
         propVal = 'newValue: $dataAdapter';
       case "notification_format":
@@ -585,8 +557,8 @@ class LSMpnSubscription {
   public function toString(): String {
     var map = new InfoMap();
     map["mode"] = mode;
-    map["items"] = items != null ? Std.string(items) : group;
-    map["fields"] = fields != null ? Std.string(fields) : schema;
+    map["items"] = items != null ? Std.string(items) : null;
+    map["fields"] = fields != null ? Std.string(fields) : null;
     map["dataAdapter"] = dataAdapter;
     map["requestedBufferSize"] = bufferSize;
     map["requestedMaxFrequency"] = requestedMaxFrequency;

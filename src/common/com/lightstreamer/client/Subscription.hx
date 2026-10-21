@@ -44,8 +44,6 @@ class LSSubscription {
   final mode: SubscriptionMode;
   var items: Null<Items>;
   var fields: Null<Fields>;
-  var group: Null<Name>;
-  var schema: Null<Name>;
   var dataAdapter: Null<Name>;
   var bufferSize: Null<RequestedBufferSize>;
   var snapshot: Null<RequestedSnapshot>;
@@ -53,7 +51,6 @@ class LSSubscription {
   var selector: Null<Name>;
   var dataAdapter2: Null<Name>;
   var fields2: Null<Fields>;
-  var schema2: Null<Name>;
   // /* other variables */
   var state: SubscriptionState = Inactive;
   var subId: Null<Int>;
@@ -161,16 +158,6 @@ class LSSubscription {
   public function setItems(items: Null<NativeArray<String>>): Void {
     checkActive();
     this.items = Items.fromArray(items == null ? null : items.toHaxe());
-    this.group = null;
-  }
-
-  public function getItemGroup(): Null<String> {
-    return group;
-  }
-  public function setItemGroup(group: Null<String>): Void {
-    checkActive();
-    this.group = Name.fromString(group);
-    this.items = null;
   }
 
   public function getFields(): Null<NativeArray<String>> {
@@ -191,16 +178,6 @@ class LSSubscription {
       }
     }
     this.fields = newValue;
-    this.schema = null;
-  }
-
-  public function getFieldSchema(): Null<String> {
-    return schema;
-  }
-  public function setFieldSchema(schema: Null<String>): Void {
-    checkActive();
-    this.schema = Name.fromString(schema);
-    this.fields = null;
   }
 
   public function getRequestedBufferSize(): Null<String> {
@@ -303,17 +280,6 @@ class LSSubscription {
     checkCommand();
     var newValue = Fields.fromArray(fields == null ? null : fields.toHaxe());
     this.fields2 = newValue;
-    this.schema2 = null;
-  }
-
-  public function getCommandSecondLevelFieldSchema(): Null<String> {
-    return schema2;
-  }
-  public function setCommandSecondLevelFieldSchema(schema: String): Void {
-    checkActive();
-    checkCommand();
-    this.schema2 = Name.fromString(schema);
-    this.fields2 = null;
   }
 
   #if (java || cs)
@@ -729,14 +695,14 @@ class LSSubscription {
   public function toString(): String {
     var map = new InfoMap();
     map["mode"] = mode;
-    map["items"] = items != null ? Std.string(items) : group;
-    map["fields"] = fields != null ? Std.string(fields) : schema;
+    map["items"] = items != null ? Std.string(items) : null;
+    map["fields"] = fields != null ? Std.string(fields) : null;
     map["dataAdapter"] = dataAdapter;
     map["requestedBufferSize"] = bufferSize;
     map["requestedSnapshot"] = snapshot;
     map["requestedMaxFrequency"] = requestedMaxFrequency;
     map["selector"] = selector;
-    map["secondLevelFields"] = fields2 != null ? Std.string(fields2) : schema2;
+    map["secondLevelFields"] = fields2 != null ? Std.string(fields2) : null;
     map["secondLevelDataAdapter"] = dataAdapter2;
     return map.toString();
   }

@@ -107,15 +107,6 @@ class HxCBridgeSubscription {
     _sub.setItems(items.isEmpty() ? null : items);
   }
 
-  function getItemGroup(): CppString {
-    return _sub.getItemGroup() ?? "";
-  }
-
-  function setItemGroup(group: ConstStar<CppString>) {
-    @:nullSafety(Off)
-    _sub.setItemGroup(group.isEmpty() ? null : group);
-  }
-
   function getFields(): CppStringVector {
     var xs = _sub.getFields();
     var res: CppStringVector = xs == null ? new CppStringVector() : xs;
@@ -125,15 +116,6 @@ class HxCBridgeSubscription {
   function setFields(fields: ConstStar<CppStringVector>) {
     @:nullSafety(Off)
     _sub.setFields(fields.isEmpty() ? null : fields);
-  }
-
-  function getFieldSchema(): CppString {
-    return _sub.getFieldSchema() ?? "";
-  }
-
-  function setFieldSchema(schema: ConstStar<CppString>) {
-    @:nullSafety(Off)
-    _sub.setFieldSchema(schema.isEmpty() ? null : schema);
   }
 
   function getRequestedBufferSize(): CppString {
@@ -198,15 +180,6 @@ class HxCBridgeSubscription {
   function setCommandSecondLevelFields(fields: ConstStar<CppStringVector>) {
     @:nullSafety(Off)
     _sub.setCommandSecondLevelFields(fields.isEmpty() ? null : fields);
-  }
-
-  function getCommandSecondLevelFieldSchema(): CppString {
-    return _sub.getCommandSecondLevelFieldSchema() ?? "";
-  }
-
-  function setCommandSecondLevelFieldSchema(schema: ConstStar<CppString>) {
-    @:nullSafety(Off)
-    _sub.setCommandSecondLevelFieldSchema(schema.isEmpty() ? null : schema);
   }
 
   function getValueSS(@:nullSafety(Off) itemName: ConstStar<CppString>, @:nullSafety(Off) fieldName: ConstStar<CppString>): CppString {
