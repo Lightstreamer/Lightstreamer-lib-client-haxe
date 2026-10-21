@@ -44,9 +44,7 @@
     * <li>
     * The field position can always be used; however, the field positions for 
     * the second-level fields start at the highest position of the first-level 
-    * field list + 1. If a field schema had been specified for either first-level or 
-    * second-level Subscriptions, then client-side knowledge of the first-level schema 
-    * length would be required.
+    * field list + 1.
     * </li>
     * </ul>
     */
@@ -59,12 +57,10 @@ ItemUpdate.prototype = {
     /**  
      * Inquiry method that retrieves the name of the item to which this update 
      * pertains.
-     * <BR>The name will be null if the related Subscription was initialized
-     * using an "Item Group".
+    * <BR>The name is taken from the explicit item list of the related Subscription.
      * 
      * @return {String} the name of the item to which this update pertains.
      * 
-     * @see Subscription#setItemGroup
      * @see Subscription#setItems
      */
     getItemName: function() {
@@ -72,12 +68,11 @@ ItemUpdate.prototype = {
     },
     
     /**  
-     * Inquiry method that retrieves the position in the "Item List" or "Item Group"
+    * Inquiry method that retrieves the position in the explicit "Item List"
      * of the item to which this update pertains.
      * 
      * @return {Number} the 1-based position of the item to which this update pertains.
      * 
-     * @see Subscription#setItemGroup
      * @see Subscription#setItems
      */
     getItemPos: function() {
@@ -91,8 +86,8 @@ ItemUpdate.prototype = {
      * @throws {IllegalArgumentException} if the specified field is not
      * part of the Subscription.
      * 
-     * @param {String} fieldNameOrPos The field name or the 1-based position of the field
-     * within the "Field List" or "Field Schema".
+    * @param {String|Number} fieldNameOrPos The field name or its 1-based position in the
+    * explicit field list (the combined first-level and second-level lists for two-level COMMAND subscriptions).
      * 
      * @return {String} The value of the specified field; it can be null in the following 
      * cases:
@@ -105,7 +100,6 @@ ItemUpdate.prototype = {
      * are valued).</li>
      * </ul>
      * 
-     * @see Subscription#setFieldSchema
      * @see Subscription#setFields
      */
     getValue: function(fieldNameOrPos) {
@@ -137,8 +131,8 @@ ItemUpdate.prototype = {
      * @throws {IllegalArgumentException} if the specified field is not
      * part of the Subscription.
      * 
-     * @param {String} fieldNameOrPos The field name or the 1-based position of the field
-     * within the "Field List" or "Field Schema".
+    * @param {String|Number} fieldNameOrPos The field name or its 1-based position in the
+    * explicit field list (the combined first-level and second-level lists for two-level COMMAND subscriptions).
      * 
      * @return {Object} A JSON Patch structure representing the difference between
      * the new value and the previous one, or null if the difference in JSON Patch format
@@ -156,8 +150,8 @@ ItemUpdate.prototype = {
      * If the Subscription mode is COMMAND then the change is meant as 
      * relative to the same key.
      * 
-     * @param {String} fieldNameOrPos The field name or the 1-based position of the field
-     * within the field list or field schema.
+    * @param {String|Number} fieldNameOrPos The field name or its 1-based position in the
+    * explicit field list (the combined first-level and second-level lists for two-level COMMAND subscriptions).
      * 
      * @return {boolean} Unless the Subscription mode is COMMAND, the return value is true 
      * in the following cases:
@@ -255,9 +249,8 @@ ItemUpdate.prototype = {
    /**
     * Callback for {@link ItemUpdate#forEachChangedField} and {@link ItemUpdate#forEachField} 
     * @callback ItemUpdateChangedFieldCallback
-    * @param {String} fieldName of the involved changed field. If the related Subscription was
-    * initialized using a "Field Schema" it will be null.
+    * @param {String} fieldName name of the involved changed field from the explicit field list.
     * @param {Number} fieldPos 1-based position of the field within
-    * the "Field List" or "Field Schema".
+    * the explicit field list (the combined lists for two-level COMMAND subscriptions).
     * @param {String} value the value for the field. See {@link ItemUpdate#getValue} for details.
     */

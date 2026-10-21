@@ -37,8 +37,8 @@ import com.lightstreamer.client.mpn.LSMpnSubscription;
  * the MPN subscription switches to "triggered" state and a single push notification is sent. Once triggered, no other push notifications are sent.<BR>
  * When an MpnSubscription is subscribed on the server, it acquires a permanent subscription ID that the server later uses to identify the same
  * MPN subscription on subsequent sessions.<BR>
- * An MpnSubscription can be configured to use either an Item Group or an Item List to specify the items to be subscribed to, and using either a Field Schema
- * or Field List to specify the fields. The same rules that apply to {@link Subscription} apply to MpnSubscription.<BR>
+ * An MpnSubscription uses explicit item and field lists. The same name validation rules that apply to
+ * {@link Subscription} apply to MpnSubscription.<BR>
  * An MpnSubscription object can also be provided by the client to represent a pre-existing MPN subscription on the server. In fact, differently than real-time
  * subscriptions, MPN subscriptions are persisted on the server's MPN Module database and survive the session they were created on.<BR>
  * MPN subscriptions are associated with the MPN device, and after the device has been registered the client retrieves pre-existing MPN subscriptions from the
@@ -62,10 +62,8 @@ public class MpnSubscription {
      * <li><code>MERGE</code></li>
      * <li><code>DISTINCT</code></li>
      * </ul>
-     * @param items An array of items to be subscribed to through Lightstreamer Server. It is also possible specify the "Item List" or
-     * "Item Group" later through {@link #setItems(String[])} and {@link #setItemGroup(String)}.
-     * @param fields An array of fields for the items to be subscribed to through Lightstreamer Server. It is also possible to specify the "Field List" or
-     * "Field Schema" later through {@link #setFields(String[])} and {@link #setFieldSchema(String)}.
+    * @param items An array of item names to be subscribed to through Lightstreamer Server, replaceable through {@link #setItems(String[])}.
+    * @param fields An array of field names to be subscribed to through Lightstreamer Server, replaceable through {@link #setFields(String[])}.
      * @throws IllegalArgumentException If no or invalid subscription mode is passed.
      * @throws IllegalArgumentException If either the items or the fields array is left null.
      * @throws IllegalArgumentException If the specified "Item List" or "Field List" is not valid; see {@link #setItems(String[])} and {@link #setFields(String[])} for details.
@@ -84,8 +82,7 @@ public class MpnSubscription {
      * <li><code>DISTINCT</code></li>
      * </ul>
      * @param item The item name to be subscribed to through Lightstreamer Server.
-     * @param fields An array of fields for the items to be subscribed to through Lightstreamer Server. It is also possible to specify the "Field List" or
-     * "Field Schema" later through {@link #setFields(String[])} and {@link #setFieldSchema(String)}.
+    * @param fields An array of field names to be subscribed to through Lightstreamer Server, replaceable through {@link #setFields(String[])}.
      * @throws IllegalArgumentException If no or invalid subscription mode is passed.
      * @throws IllegalArgumentException If either the item or the fields array is left null.
      * @throws IllegalArgumentException If the specified "Field List" is not valid; see {@link #setFields(String[])} for details.
@@ -98,6 +95,7 @@ public class MpnSubscription {
      * Creates an object to be used to describe an MPN subscription that is going to be subscribed to through the MPN Module of Lightstreamer Server.<BR>
      * The object can be supplied to {@link LightstreamerClient#subscribe(MpnSubscription, boolean)} in order to bring the MPN subscription to "active" state.<BR>
      * Note that all of the methods used to describe the subscription to the server can only be called while the instance is in the "inactive" state.
+    * Configure explicit item and field lists with {@link #setItems(String[])} and {@link #setFields(String[])} before subscribing.
      * 
      * @param subscriptionMode The subscription mode for the items, required by Lightstreamer Server. Permitted values are:<ul>
      * <li><code>MERGE</code></li>
@@ -208,7 +206,7 @@ public class MpnSubscription {
      * </ul>
      * Named arguments are available if the Metadata Adapter is a subclass of LiteralBasedProvider or provides equivalent functionality, otherwise only
      * indexed arguments may be used. In both cases common metadata rules apply: field names and indexes are checked against the Metadata Adapter, hence
-     * they must be consistent with the schema and group specified.<BR>
+    * they must be consistent with the explicit field and item lists specified.<BR>
      * A special server-managed argument may also be used:<ul>
      * <li><code>${LS_MPN_subscription_ID}</code>: the ID of the MPN subscription generating the push notification.
      * </ul>
@@ -390,14 +388,14 @@ public class MpnSubscription {
     /**
      * Setter method that sets the "Item List" to be subscribed to through 
      * Lightstreamer Server. <BR>
-     * Any call to this method will override any "Item List" or "Item Group"
-     * previously specified.
+    * Any call to this method replaces the previously specified item list.
      * 
      * @lifecycle This method can only be called while the MpnSubscription
      * instance is in its "inactive" state.
      * 
      * @notification A change to this setting will be notified through a call to {@link MpnSubscriptionListener#onPropertyChanged(String)}
-     * with argument <code>group</code> on any {@link MpnSubscriptionListener} listening to the related MpnSubscription.
+    * with the legacy argument <code>group</code> on any {@link MpnSubscriptionListener} listening to the related MpnSubscription.
+    * Read the explicit item list through {@link #getItems()}.
      * 
      * @param items an array of items to be subscribed to through the server. 
      * @throws IllegalArgumentException if any of the item names in the "Item List"
@@ -414,65 +412,27 @@ public class MpnSubscription {
      * Note that if the single-item-constructor was used, this method will return an array 
      * of length 1 containing such item.<BR>
      * Note: if the MpnSubscription has been created by the client, such as when obtained through {@link LightstreamerClient#getMpnSubscriptions(String)},
-     * items are always expressed with an "Item Group"", even if originally the MPN subscription used an "Item List".
+    * this method returns the explicit item list reported by the server.
      *
-     * @lifecycle This method can only be called if the MpnSubscription has been initialized 
-     * with an "Item List".
-
-     * @return the "Item List" to be subscribed to through the server, or null if the MpnSubscription was initialized with an "Item Group" or was not initialized at all.
+    * @lifecycle This method can be called at any time.
+    * @return the explicit item list, or null if it has not been configured.
      */
-    @Nonnull
+    @Nullable
     public String[] getItems() {
         return delegate.getItems();
     }
 
     /**
-     * Setter method that sets the "Item Group" to be subscribed to through 
-     * Lightstreamer Server. <BR>
-     * Any call to this method will override any "Item List" or "Item Group"
-     * previously specified.
-     * 
-     * @lifecycle This method can only be called while the MpnSubscription
-     * instance is in its "inactive" state.
-     * 
-     * @notification A change to this setting will be notified through a call to {@link MpnSubscriptionListener#onPropertyChanged(String)}
-     * with argument <code>group</code> on any {@link MpnSubscriptionListener} listening to the related MpnSubscription.
-     * 
-     * @param groupName A String to be expanded into an item list by the
-     * Metadata Adapter. 
-     * @throws IllegalStateException if the MpnSubscription is currently 
-     * "active".
-     */
-    public void setItemGroup(@Nonnull String groupName) {
-        delegate.setItemGroup(groupName);
-    }
-
-    /**
-     * Inquiry method that can be used to read the item group specified for this MpnSubscription.<BR>
-     * Note: if the MpnSubscription has been created by the client, such as when obtained through {@link LightstreamerClient#getMpnSubscriptions(String)},
-     * items are always expressed with an "Item Group"", even if originally the MPN subscription used an "Item List".
-     *
-     * @lifecycle This method can only be called if the MpnSubscription has been initialized
-     * using an "Item Group"
-     * 
-     * @return the "Item Group" to be subscribed to through the server, or null if the MpnSubscription was initialized with an "Item List" or was not initialized at all.
-     */
-    @Nonnull
-    public String getItemGroup() {
-        return delegate.getItemGroup();
-    }
-
-    /**
      * Setter method that sets the "Field List" to be subscribed to through 
      * Lightstreamer Server. <BR>
-     * Any call to this method will override any "Field List" or "Field Schema"
-     * previously specified.
+    * Any call to this method replaces the previously specified field list.
      * 
      * @lifecycle This method can only be called while the MpnSubscription
      * instance is in its "inactive" state.
      * 
      * @notification A change to this setting will be notified through a call to {@link MpnSubscriptionListener#onPropertyChanged(String)}
-     * with argument <code>schema</code> on any {@link MpnSubscriptionListener} listening to the related MpnSubscription.
+    * with the legacy argument <code>schema</code> on any {@link MpnSubscriptionListener} listening to the related MpnSubscription.
+    * Read the explicit field list through {@link #getFields()}.
      * 
      * @param fields an array of fields to be subscribed to through the server. 
      * @throws IllegalArgumentException if any of the field names in the list
@@ -487,53 +447,15 @@ public class MpnSubscription {
     /**
      * Inquiry method that can be used to read the "Field List" specified for this MpnSubscription.<BR>
      * Note: if the MpnSubscription has been created by the client, such as when obtained through {@link LightstreamerClient#getMpnSubscriptions(String)},
-     * fields are always expressed with a "Field Schema"", even if originally the MPN subscription used a "Field List".
+    * this method returns the explicit field list reported by the server.
      *
-     * @lifecycle  This method can only be called if the MpnSubscription has been initialized 
-     * using a "Field List".
+    * @lifecycle This method can be called at any time.
      * 
-     * @return the "Field List" to be subscribed to through the server, or null if the MpnSubscription was initialized with a "Field Schema" or was not initialized at all.
+    * @return the explicit field list, or null if it has not been configured.
      */
-    @Nonnull
+    @Nullable
     public String[] getFields() {
         return delegate.getFields();
-    }
-
-    /**
-     * Setter method that sets the "Field Schema" to be subscribed to through 
-     * Lightstreamer Server. <BR>
-     * Any call to this method will override any "Field List" or "Field Schema"
-     * previously specified.
-     * 
-     * @lifecycle This method can only be called while the MpnSubscription
-     * instance is in its "inactive" state.
-     * 
-     * @notification A change to this setting will be notified through a call to {@link MpnSubscriptionListener#onPropertyChanged(String)}
-     * with argument <code>schema</code> on any {@link MpnSubscriptionListener} listening to the related MpnSubscription.
-     * 
-     * @param schemaName A String to be expanded into a field list by the
-     * Metadata Adapter. 
-     * 
-     * @throws IllegalStateException if the MpnSubscription is currently 
-     * "active".
-     */
-    public void setFieldSchema(@Nonnull String schemaName) {
-        delegate.setFieldSchema(schemaName);
-    }
-
-    /**
-     * Inquiry method that can be used to read the field schema specified for this MpnSubscription.<BR>
-     * Note: if the MpnSubscription has been created by the client, such as when obtained through {@link LightstreamerClient#getMpnSubscriptions(String)},
-     * fields are always expressed with a "Field Schema"", even if originally the MPN subscription used a "Field List".
-     *
-     * @lifecycle This method can only be called if the MpnSubscription has been initialized 
-     * using a "Field Schema"
-     * 
-     * @return the "Field Schema" to be subscribed to through the server, or null if the MpnSubscription was initialized with a "Field List" or was not initialized at all.
-     */
-    @Nonnull
-    public String getFieldSchema() {
-        return delegate.getFieldSchema();
     }
 
     /**

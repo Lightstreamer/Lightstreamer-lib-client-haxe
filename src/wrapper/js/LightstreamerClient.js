@@ -409,6 +409,7 @@ LightstreamerClient.prototype = {
      * Operation method that adds a {@link Subscription} to the list of "active"
      * Subscriptions.
      * The Subscription cannot already be in the "active" state.
+    * Both explicit item and field lists must be configured before this call.
      * <BR>Active subscriptions are subscribed to through the server as soon as possible
      * (i.e. as soon as there is a session available). Active Subscription are
      * automatically persisted across different sessions as long as a related
@@ -426,9 +427,9 @@ LightstreamerClient.prototype = {
      * {@link SubscriptionListener#onSubscription} event.</p>
      *
      * @throws {IllegalArgumentException} if the given Subscription does
-     * not contain a field list/field schema.
+    * not contain an explicit field list.
      * @throws {IllegalArgumentException} if the given Subscription does
-     * not contain a item list/item group.
+    * not contain an explicit item list.
      * @throws {IllegalStateException}  if the given Subscription is already "active".
      *
      * @param {Subscription} subscription A {@link Subscription} object, carrying
@@ -533,10 +534,11 @@ LightstreamerClient.prototype = {
      * This operation adds the {@link MpnSubscription} to the list of "active" subscriptions. MPN subscriptions are activated on the server as soon as possible
      * (i.e. as soon as there is a session available and subsequently as soon as the MPN device registration succeeds). Differently than real-time subscriptions,
      * MPN subscriptions are persisted on the server's MPN Module database and survive the session they were created on.<BR>
-     * If the <code>coalescing</code> flag is <i>set</i>, the activation of two MPN subscriptions with the same Adapter Set, Data Adapter, Group, Schema and trigger expression will be
+    * Both explicit item and field lists must be configured before this call.<BR>
+    * If the <code>coalescing</code> flag is <i>set</i>, the activation of two MPN subscriptions with the same Adapter Set, Data Adapter, item list, field list and trigger expression will be
      * considered the same MPN subscription. Activating two such subscriptions will result in the second activation modifying the first MpnSubscription (that
      * could have been issued within a previous session). If the <code>coalescing</code> flag is <i>not set</i>, two activations are always considered different MPN subscriptions,
-     * whatever the Adapter Set, Data Adapter, Group, Schema and trigger expression are set.<BR>
+    * whatever the Adapter Set, Data Adapter, item list, field list and trigger expression are set.<BR>
      * The rationale behind the <code>coalescing</code> flag is to allow simple apps to always activate their MPN subscriptions when the app starts, without worrying if
      * the same subscriptions have been activated before or not. In fact, since MPN subscriptions are persistent, if they are activated every time the app starts and
      * the <code>coalescing</code> flag is not set, every activation is a <i>new</i> MPN subscription, leading to multiple push notifications for the same event.
@@ -553,9 +555,9 @@ LightstreamerClient.prototype = {
      *
      * @param subscription An MpnSubscription object, carrying all the information to route real-time data via push notifications.
      * @param coalescing A flag that specifies if the MPN subscription must coalesce with any pre-existing MPN subscription with the same Adapter Set, Data Adapter,
-     * Group, Schema and trigger expression.
-     * @throws IllegalStateException if the given MPN subscription does not contain a field list/field schema.
-     * @throws IllegalStateException if the given MPN subscription does not contain a item list/item group.
+    * item list, field list and trigger expression.
+    * @throws IllegalStateException if the given MPN subscription does not contain an explicit field list.
+    * @throws IllegalStateException if the given MPN subscription does not contain an explicit item list.
      * @throws IllegalStateException if there is no MPN device registered.
      * @throws IllegalStateException if the given MPN subscription is already active.
      *

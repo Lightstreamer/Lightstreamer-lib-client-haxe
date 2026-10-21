@@ -44,14 +44,13 @@ public:
    *       should clear the list in order to keep a coherent view.</li>
    * </ul>
    * Note that, if the involved Subscription has a two-level behavior enabled
-   * (see {@link Subscription#setCommandSecondLevelFields()} and {@link Subscription#setCommandSecondLevelFieldSchema()})
+  * (see {@link Subscription#setCommandSecondLevelFields()})
    * , the notification refers to the first-level item (which is in COMMAND mode).
    * This kind of notification is not possible for second-level items (which are in MERGE 
    * mode).
    * 
-   * @param itemName name of the involved item. If the Subscription was initialized using an "Item Group" then an 
-   *        empty string is supplied.
-   * @param itemPos 1-based position of the item within the "Item List" or "Item Group".
+  * @param itemName name of the involved item in the explicit item list.
+  * @param itemPos 1-based position of the item within the item list.
    */
   virtual void onClearSnapshot(const std::string& itemName, int itemPos) {}
   /**
@@ -66,7 +65,6 @@ public:
    * 
    * @see Subscription#setRequestedMaxFrequency()
    * @see Subscription#setCommandSecondLevelFields()
-   * @see Subscription#setCommandSecondLevelFieldSchema()
    */
   virtual void onCommandSecondLevelItemLostUpdates(int lostUpdates, const std::string& key) {}
   /**
@@ -99,7 +97,6 @@ public:
    * 
    * @see ConnectionDetails#setAdapterSet()
    * @see Subscription#setCommandSecondLevelFields()
-   * @see Subscription#setCommandSecondLevelFieldSchema()
    */
   virtual void onCommandSecondLevelSubscriptionError(int code, const std::string& message, const std::string& key) {}
   /**
@@ -109,14 +106,13 @@ public:
    * subscription mode and snapshot information was indeed requested for the items. By implementing this 
    * method it is possible to perform actions which require that all the initial values have been received. <BR>
    * Note that, if the involved Subscription has a two-level behavior enabled
-   * (see {@link Subscription#setCommandSecondLevelFields()} and {@link Subscription#setCommandSecondLevelFieldSchema()})
+  * (see {@link Subscription#setCommandSecondLevelFields()})
    * , the notification refers to the first-level item (which is in COMMAND mode).
    * Snapshot-related updates for the second-level items 
    * (which are in MERGE mode) can be received both before and after this notification.
    * 
-   * @param itemName name of the involved item. If the Subscription was initialized using an "Item Group" then an 
-   *        empty string is supplied.
-   * @param itemPos 1-based position of the item within the "Item List" or "Item Group".
+  * @param itemName name of the involved item in the explicit item list.
+  * @param itemPos 1-based position of the item within the item list.
    * 
    * @see Subscription#setRequestedSnapshot()
    * @see ItemUpdate#isSnapshot()
@@ -136,9 +132,8 @@ public:
    * </ul>
    * By implementing this method it is possible to perform recovery actions.
    * 
-   * @param itemName name of the involved item. If the Subscription was initialized using an "Item Group" then an 
-   *        empty string is supplied.
-   * @param itemPos 1-based position of the item within the "Item List" or "Item Group".
+  * @param itemName name of the involved item in the explicit item list.
+  * @param itemPos 1-based position of the item within the item list.
    * @param lostUpdates The number of consecutive updates dropped for the item.
    * 
    * @see Subscription#setRequestedMaxFrequency()
@@ -173,7 +168,7 @@ public:
    * Note that two consecutive calls to this method are not possible, as before a second onSubscription event is 
    * fired an {@link #onUnsubscription} event is eventually fired. <BR> 
    * If the involved Subscription has a two-level behavior enabled
-   * (see {@link Subscription#setCommandSecondLevelFields()} and {@link Subscription#setCommandSecondLevelFieldSchema()})
+  * (see {@link Subscription#setCommandSecondLevelFields()})
    * , second-level subscriptions are not notified.
    */
   virtual void onSubscription() {}
@@ -224,7 +219,7 @@ public:
    * Note that two consecutive calls to this method are not possible, as before a second onUnsubscription event 
    * is fired an {@link #onSubscription} event is eventually fired. <BR> 
    * If the involved Subscription has a two-level behavior enabled
-   * (see {@link Subscription#setCommandSecondLevelFields()} and {@link Subscription#setCommandSecondLevelFieldSchema()})
+  * (see {@link Subscription#setCommandSecondLevelFields()})
    * , second-level unsubscriptions are not notified.
    */
   virtual void onUnsubscription() {}
@@ -234,7 +229,7 @@ public:
    * (see {@link Subscription#setRequestedMaxFrequency()}).
    * Since the frequency limit is applied on an item basis and a Subscription can involve multiple items,
    * this is actually the maximum frequency among all items. For Subscriptions with two-level behavior
-   * (see {@link Subscription#setCommandSecondLevelFields()} and {@link Subscription#setCommandSecondLevelFieldSchema()})
+  * (see {@link Subscription#setCommandSecondLevelFields()})
    * , the reported frequency limit applies to both first-level and second-level items. <BR>
    * The value may differ from the requested one because of restrictions operated on the server side,
    * but also because of number rounding. <BR>

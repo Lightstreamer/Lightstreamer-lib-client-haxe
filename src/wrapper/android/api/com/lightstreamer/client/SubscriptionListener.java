@@ -40,14 +40,13 @@ public interface SubscriptionListener {
    *       should clear the list in order to keep a coherent view.</li>
    * </ul>
    * Note that, if the involved Subscription has a two-level behavior enabled
-   * (see {@link Subscription#setCommandSecondLevelFields(String[])} and {@link Subscription#setCommandSecondLevelFieldSchema(String)})
+  * (see {@link Subscription#setCommandSecondLevelFields(String[])})
    * , the notification refers to the first-level item (which is in COMMAND mode).
    * This kind of notification is not possible for second-level items (which are in MERGE 
    * mode).
    * 
-   * @param itemName name of the involved item. If the Subscription was initialized using an "Item Group" then a 
-   *        null value is supplied.
-   * @param itemPos 1-based position of the item within the "Item List" or "Item Group".
+  * @param itemName name of the involved item in the explicit item list.
+  * @param itemPos 1-based position of the item within the item list.
    */
   void onClearSnapshot(@Nullable String itemName, int itemPos);
 
@@ -63,7 +62,6 @@ public interface SubscriptionListener {
    * 
    * @see Subscription#setRequestedMaxFrequency(String)
    * @see Subscription#setCommandSecondLevelFields(String[])
-   * @see Subscription#setCommandSecondLevelFieldSchema(String)
    */
   void onCommandSecondLevelItemLostUpdates(int lostUpdates, @Nonnull String key);
 
@@ -97,7 +95,6 @@ public interface SubscriptionListener {
    * 
    * @see ConnectionDetails#setAdapterSet(String)
    * @see Subscription#setCommandSecondLevelFields(String[])
-   * @see Subscription#setCommandSecondLevelFieldSchema(String)
    */
   void onCommandSecondLevelSubscriptionError(int code, @Nullable String message, String key);
 
@@ -108,14 +105,13 @@ public interface SubscriptionListener {
    * subscription mode and snapshot information was indeed requested for the items. By implementing this 
    * method it is possible to perform actions which require that all the initial values have been received. <BR>
    * Note that, if the involved Subscription has a two-level behavior enabled
-   * (see {@link Subscription#setCommandSecondLevelFields(String[])} and {@link Subscription#setCommandSecondLevelFieldSchema(String)})
+  * (see {@link Subscription#setCommandSecondLevelFields(String[])})
    * , the notification refers to the first-level item (which is in COMMAND mode).
    * Snapshot-related updates for the second-level items 
    * (which are in MERGE mode) can be received both before and after this notification.
    * 
-   * @param itemName name of the involved item. If the Subscription was initialized using an "Item Group" then a 
-   *        null value is supplied.
-   * @param itemPos 1-based position of the item within the "Item List" or "Item Group".
+  * @param itemName name of the involved item in the explicit item list.
+  * @param itemPos 1-based position of the item within the item list.
    * 
    * @see Subscription#setRequestedSnapshot(String)
    * @see ItemUpdate#isSnapshot
@@ -136,9 +132,8 @@ public interface SubscriptionListener {
    * </ul>
    * By implementing this method it is possible to perform recovery actions.
    * 
-   * @param itemName name of the involved item. If the Subscription was initialized using an "Item Group" then a 
-   *        null value is supplied.
-   * @param itemPos 1-based position of the item within the "Item List" or "Item Group".
+  * @param itemName name of the involved item in the explicit item list.
+  * @param itemPos 1-based position of the item within the item list.
    * @param lostUpdates The number of consecutive updates dropped for the item.
    * 
    * @see Subscription#setRequestedMaxFrequency(String)
@@ -178,7 +173,7 @@ public interface SubscriptionListener {
    * Note that two consecutive calls to this method are not possible, as before a second onSubscription event is 
    * fired an {@link #onUnsubscription} event is eventually fired. <BR> 
    * If the involved Subscription has a two-level behavior enabled
-   * (see {@link Subscription#setCommandSecondLevelFields(String[])} and {@link Subscription#setCommandSecondLevelFieldSchema(String)})
+  * (see {@link Subscription#setCommandSecondLevelFields(String[])})
    * , second-level subscriptions are not notified.
    */
   void onSubscription();
@@ -231,7 +226,7 @@ public interface SubscriptionListener {
    * Note that two consecutive calls to this method are not possible, as before a second onUnsubscription event 
    * is fired an {@link #onSubscription} event is eventually fired. <BR> 
    * If the involved Subscription has a two-level behavior enabled
-   * (see {@link Subscription#setCommandSecondLevelFields(String[])} and {@link Subscription#setCommandSecondLevelFieldSchema(String)})
+  * (see {@link Subscription#setCommandSecondLevelFields(String[])})
    * , second-level unsubscriptions are not notified.
    */
   void onUnsubscription();
@@ -242,7 +237,7 @@ public interface SubscriptionListener {
    * (see {@link Subscription#setRequestedMaxFrequency(String)}).
    * Since the frequency limit is applied on an item basis and a Subscription can involve multiple items,
    * this is actually the maximum frequency among all items. For Subscriptions with two-level behavior
-   * (see {@link Subscription#setCommandSecondLevelFields(String[])} and {@link Subscription#setCommandSecondLevelFieldSchema(String)})
+  * (see {@link Subscription#setCommandSecondLevelFields(String[])})
    * , the reported frequency limit applies to both first-level and second-level items. <BR>
    * The value may differ from the requested one because of restrictions operated on the server side,
    * but also because of number rounding. <BR>

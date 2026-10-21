@@ -244,7 +244,7 @@ class SubscriptionListener:
    fired an :meth:`onUnsubscription` event is eventually fired. 
  
    If the involved Subscription has a two-level behavior enabled
-   (see :meth:`.Subscription.setCommandSecondLevelFields` and :meth:`.Subscription.setCommandSecondLevelFieldSchema`), second-level subscriptions are not notified.
+  (see :meth:`.Subscription.setCommandSecondLevelFields`), second-level subscriptions are not notified.
    """
     pass
   
@@ -295,7 +295,7 @@ class SubscriptionListener:
    is fired an :meth:`onSubscription` event is eventually fired. 
  
    If the involved Subscription has a two-level behavior enabled
-   (see :meth:`.Subscription.setCommandSecondLevelFields` and :meth:`.Subscription.setCommandSecondLevelFieldSchema`)
+  (see :meth:`.Subscription.setCommandSecondLevelFields`)
    , second-level unsubscriptions are not notified.
    """
     pass
@@ -308,13 +308,13 @@ class SubscriptionListener:
      * For an item delivered in DISTINCT mode, to notify that all the previous updates received for the item should be considered as obsolete; hence, if the listener were showing a list of recent updates for the item, it should clear the list in order to keep a coherent view.
    
    Note that, if the involved Subscription has a two-level behavior enabled
-   (see :meth:`.Subscription.setCommandSecondLevelFields` and :meth:`.Subscription.setCommandSecondLevelFieldSchema`)
+  (see :meth:`.Subscription.setCommandSecondLevelFields`)
    , the notification refers to the first-level item (which is in COMMAND mode).
    This kind of notification is not possible for second-level items (which are in MERGE 
    mode).
    
-   :param itemName: name of the involved item. If the Subscription was initialized using an "Item Group" then a None value is supplied.
-   :param itemPos: 1-based position of the item within the "Item List" or "Item Group".
+  :param itemName: name of the involved item from the explicit "Item List".
+  :param itemPos: 1-based position of the item within the "Item List".
    """
     pass
 
@@ -334,14 +334,13 @@ class SubscriptionListener:
    method it is possible to perform actions which require that all the initial values have been received. 
 
    Note that, if the involved Subscription has a two-level behavior enabled
-   (see :meth:`.Subscription.setCommandSecondLevelFields` and :meth:`.Subscription.setCommandSecondLevelFieldSchema`)
+  (see :meth:`.Subscription.setCommandSecondLevelFields`)
    , the notification refers to the first-level item (which is in COMMAND mode).
    Snapshot-related updates for the second-level items 
    (which are in MERGE mode) can be received both before and after this notification.
    
-   :param itemName: name of the involved item. If the Subscription was initialized using an "Item Group" then a 
-          None value is supplied.
-   :param itemPos: 1-based position of the item within the "Item List" or "Item Group".
+     :param itemName: name of the involved item from the explicit "Item List".
+     :param itemPos: 1-based position of the item within the "Item List".
    
    .. seealso:: :meth:`.Subscription.setRequestedSnapshot`
    .. seealso:: :meth:`ItemUpdate.isSnapshot`
@@ -361,8 +360,8 @@ class SubscriptionListener:
    
    By implementing this method it is possible to perform recovery actions.
    
-   :param itemName: name of the involved item. If the Subscription was initialized using an "Item Group" then a None value is supplied.
-   :param itemPos: 1-based position of the item within the "Item List" or "Item Group".
+  :param itemName: name of the involved item from the explicit "Item List".
+  :param itemPos: 1-based position of the item within the "Item List".
    :param lostUpdates: The number of consecutive updates dropped for the item.
    
    .. seealso:: :meth:`.Subscription.setRequestedMaxFrequency`
@@ -375,7 +374,7 @@ class SubscriptionListener:
    (see :meth:`.Subscription.setRequestedMaxFrequency`).
    Since the frequency limit is applied on an item basis and a Subscription can involve multiple items,
    this is actually the maximum frequency among all items. For Subscriptions with two-level behavior
-   (see :meth:`.Subscription.setCommandSecondLevelFields` and :meth:`.Subscription.setCommandSecondLevelFieldSchema`)
+  (see :meth:`.Subscription.setCommandSecondLevelFields`)
    , the reported frequency limit applies to both first-level and second-level items. 
 
    The value may differ from the requested one because of restrictions operated on the server side,
@@ -413,7 +412,6 @@ class SubscriptionListener:
    
    .. seealso:: :meth:`.ConnectionDetails.setAdapterSet`
    .. seealso:: :meth:`.Subscription.setCommandSecondLevelFields`
-   .. seealso:: :meth:`.Subscription.setCommandSecondLevelFieldSchema`
     """
     pass
 
@@ -430,7 +428,6 @@ class SubscriptionListener:
    
    .. seealso:: :meth:`.Subscription.setRequestedMaxFrequency`
    .. seealso:: :meth:`.Subscription.setCommandSecondLevelFields`
-   .. seealso:: :meth:`.Subscription.setCommandSecondLevelFieldSchema`
    """
     pass
 
@@ -465,27 +462,25 @@ class ItemUpdate:
  be supplied, the following convention should be followed:
 
   * The field name can always be used, both for the first-level and the second-level fields. In case of name conflict, the first-level field is meant.
-  * The field position can always be used; however, the field positions for the second-level fields start at the highest position of the first-level field list + 1. If a field schema had been specified for either first-level or second-level Subscriptions, then client-side knowledge of the first-level schema length would be required.
+  * The field position can always be used; the second-level field positions start at the length of the explicit first-level field list + 1.
  """
 
   def getItemName(self):
     """Inquiry method that retrieves the name of the item to which this update pertains. 
  
-   The name will be None if the related Subscription was initialized using an "Item Group".
+  The name is taken from the explicit item list of the related Subscription.
 
    :return: The name of the item to which this update pertains.
 
-   .. seealso:: :meth:`.Subscription.setItemGroup`
    .. seealso:: :meth:`.Subscription.setItems`
    """
     pass
 
   def getItemPos(self):
-    """Inquiry method that retrieves the position in the "Item List" or "Item Group" of the item to which this update pertains.
+    """Inquiry method that retrieves the position in the explicit "Item List" of the item to which this update pertains.
 
    :return: The 1-based position of the item to which this update pertains.
 
-   .. seealso:: :meth:`.Subscription.setItemGroup`
    .. seealso:: :meth:`.Subscription.setItems`
     """
     pass
@@ -509,7 +504,7 @@ class ItemUpdate:
 
   :raises IllegalArgumentException: if the specified field is not part of the Subscription.
 
-  :param fieldNameOrPos: The field name or the 1-based position of the field within the "Field List" or "Field Schema".
+  :param fieldNameOrPos: The field name or its 1-based position in the explicit field list (the combined first-level and second-level lists for two-level COMMAND subscriptions).
 
   :return: The value of the specified field; it can be None in the following cases:
   
@@ -517,7 +512,6 @@ class ItemUpdate:
     * no value has been received for the field yet;
     * the item is subscribed to with the COMMAND mode and a DELETE command is received (only the fields used to carry key and command information are valued).
   
-  .. seealso:: :meth:`.Subscription.setFieldSchema`
   .. seealso:: :meth:`.Subscription.setFields`
     """
     pass
@@ -525,7 +519,7 @@ class ItemUpdate:
   def isValueChanged(self,fieldNameOrPos):
     """Inquiry method that asks whether the value for a field has changed after the reception of the last update from the Server for an item. If the Subscription mode is COMMAND then the change is meant as relative to the same key.
         
-  :param fieldNameOrPos: The field name or the 1-based position of the field within the field list or field schema.
+  :param fieldNameOrPos: The field name or its 1-based position in the explicit field list (the combined first-level and second-level lists for two-level COMMAND subscriptions).
         
   :return: Unless the Subscription mode is COMMAND, the return value is true in the following cases:
         
@@ -558,7 +552,7 @@ When the above conditions are not met, the method just returns None; in this cas
         
 :raises IllegalArgumentException: if the specified field is not part of the Subscription.
         
-:param fieldNameOrPos: The field name or the 1-based position of the field within the "Field List" or "Field Schema".
+:param fieldNameOrPos: The field name or its 1-based position in the explicit field list (the combined first-level and second-level lists for two-level COMMAND subscriptions).
         
 :return: A JSON Patch structure representing the difference between the new value and the previous one, or None if the difference in JSON Patch format is not available for any reason.
         
@@ -575,18 +569,15 @@ When the above conditions are not met, the method just returns None; in this cas
    All of this is also true on tables that have the two-level behavior enabled, but in case of 
    DELETE commands second-level fields will not be iterated.
    
-   :raises IllegalStateException: if the Subscription was initialized using a field schema.
-   
    :return: A map containing the values for each field changed with the last server update.
    
-   .. seealso:: :meth:`.Subscription.setFieldSchema`
    .. seealso:: :meth:`.Subscription.setFields`
    """
     pass
 
   def getChangedFieldsByPosition(self):
     """Returns a map containing the values for each field changed with the last server update. 
-   The 1-based field position within the field schema or field list is used as key for the values in the map. 
+  The 1-based field position within the explicit field list is used as key for the values in the map.
    Note that if the Subscription mode of the involved Subscription is COMMAND, then changed fields 
    are meant as relative to the previous update for the same key. On such tables if a DELETE command 
    is received, all the fields, excluding the key field, will be present as changed, with None value. 
@@ -595,7 +586,6 @@ When the above conditions are not met, the method just returns None; in this cas
    
    :return: A map containing the values for each field changed with the last server update.
    
-   .. seealso:: :meth:`.Subscription.setFieldSchema`
    .. seealso:: :meth:`.Subscription.setFields`
    """
     pass
@@ -604,22 +594,18 @@ When the above conditions are not met, the method just returns None; in this cas
     """Returns a map containing the values for each field in the Subscription.
    The related field name is used as key for the values in the map. 
    
-   :raises IllegalStateException: if the Subscription was initialized using a field schema.
-   
    :return: A map containing the values for each field in the Subscription.
    
-   .. seealso:: :meth:`.Subscription.setFieldSchema`
    .. seealso:: :meth:`.Subscription.setFields`
    """
     pass
 
   def getFieldsByPosition(self):
     """Returns a map containing the values for each field in the Subscription.
-   The 1-based field position within the field schema or field list is used as key for the values in the map. 
+  The 1-based field position within the explicit field list is used as key for the values in the map.
    
    :return: A map containing the values for each field in the Subscription.
    
-   .. seealso:: :meth:`.Subscription.setFieldSchema`
    .. seealso:: :meth:`.Subscription.setFields`
    """
     pass

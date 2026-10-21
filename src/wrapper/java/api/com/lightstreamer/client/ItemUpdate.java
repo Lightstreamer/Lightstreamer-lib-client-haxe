@@ -38,28 +38,23 @@ import java.util.*;
  *  <li>The field name can always be used, both for the first-level and the second-level fields. 
  *  In case of name conflict, the first-level field is meant.</li>
  *  <li>The field position can always be used; however, the field positions for the second-level 
- *  fields start at the highest position of the first-level field list + 1. If a field schema had 
- *  been specified for either first-level or second-level Subscriptions, then client-side knowledge 
- *  of the first-level schema length would be required.</li>
+ *  fields start at the highest position of the first-level field list + 1.</li>
  *</ul>
  */
 public interface ItemUpdate {
   
   /**
    * Inquiry method that retrieves the name of the item to which this update pertains. <BR> 
-   * The name will be null if the related Subscription was initialized using an "Item Group".
    * @return The name of the item to which this update pertains.
-   * @see Subscription#setItemGroup(String)
    * @see Subscription#setItems(String[])
    */
   @Nullable 
   public String getItemName();
   
   /**
-   * Inquiry method that retrieves the position in the "Item List" or "Item Group" of the item to 
+  * Inquiry method that retrieves the position in the item list of the item to
    * which this update pertains.
    * @return The 1-based position of the item to which this update pertains.
-   * @see Subscription#setItemGroup(String)
    * @see Subscription#setItems(String[])
    */
   public int getItemPos();
@@ -82,7 +77,7 @@ public interface ItemUpdate {
   
   /**
    * Returns the current value for the specified field
-   * @param fieldPos The 1-based position of the field within the "Field List" or "Field Schema".
+  * @param fieldPos The 1-based position of the field within the field list.
    * @throws IllegalArgumentException if the specified field is not part of the Subscription.
    * @return The value of the specified field; it can be null in the following cases:<BR>
    * <ul>
@@ -91,7 +86,6 @@ public interface ItemUpdate {
    *  <li>the item is subscribed to with the COMMAND mode and a DELETE command is received 
    *  (only the fields used to carry key and command information are valued).</li>
    * </ul>
-   * @see Subscription#setFieldSchema(String)
    * @see Subscription#setFields(String[])
    */
   @Nullable 
@@ -150,7 +144,7 @@ public interface ItemUpdate {
    * Inquiry method that asks whether the value for a field has changed after the reception of the last 
    * update from the Server for an item. If the Subscription mode is COMMAND then the change is meant as 
    * relative to the same key.
-   * @param fieldPos The 1-based position of the field within the "Field List" or "Field Schema".
+  * @param fieldPos The 1-based position of the field within the field list.
    * @throws IllegalArgumentException if the specified field is not part of the Subscription.
    * @return Unless the Subscription mode is COMMAND, the return value is true in the following cases:
    * <ul>
@@ -167,7 +161,6 @@ public interface ItemUpdate {
    *  used to carry key information).</li>
    * </ul>
    * In all other cases, the return value is false.
-   * @see Subscription#setFieldSchema(String)
    * @see Subscription#setFields(String[])
    */
   public boolean isValueChanged(int fieldPos);
@@ -233,7 +226,7 @@ public interface ItemUpdate {
   * @throws IllegalArgumentException if the specified field is not
   * part of the Subscription.
   * 
-  * @param fieldPos The 1-based position of the field within the "Field List" or "Field Schema".
+  * @param fieldPos The 1-based position of the field within the field list.
   * 
   * @return A JSON Patch structure representing the difference between
   * the new value and the previous one, or null if the difference in JSON Patch format
@@ -253,11 +246,8 @@ public interface ItemUpdate {
    * All of this is also true on tables that have the two-level behavior enabled, but in case of 
    * DELETE commands second-level fields will not be iterated.
    * 
-   * @throws IllegalStateException if the Subscription was initialized using a field schema.
-   * 
    * @return An immutable Map containing the values for each field changed with the last server update.
    * 
-   * @see Subscription#setFieldSchema(String)
    * @see Subscription#setFields(String[])
    */
   @Nonnull 
@@ -265,7 +255,7 @@ public interface ItemUpdate {
   
   /**
    * Returns an immutable Map containing the values for each field changed with the last server update. 
-   * The 1-based field position within the field schema or field list is used as key for the values in the map. 
+  * The 1-based field position within the field list is used as key for the values in the map.
    * Note that if the Subscription mode of the involved Subscription is COMMAND, then changed fields 
    * are meant as relative to the previous update for the same key. On such tables if a DELETE command 
    * is received, all the fields, excluding the key field, will be present as changed, with null value. 
@@ -274,7 +264,6 @@ public interface ItemUpdate {
    * 
    * @return An immutable Map containing the values for each field changed with the last server update.
    * 
-   * @see Subscription#setFieldSchema(String)
    * @see Subscription#setFields(String[])
    */
   @Nonnull 
@@ -285,11 +274,8 @@ public interface ItemUpdate {
    * Returns an immutable Map containing the values for each field in the Subscription.
    * The related field name is used as key for the values in the map. 
    * 
-   * @throws IllegalStateException if the Subscription was initialized using a field schema.
-   * 
    * @return An immutable Map containing the values for each field in the Subscription.
    * 
-   * @see Subscription#setFieldSchema(String)
    * @see Subscription#setFields(String[])
    */
   @Nonnull 
@@ -298,11 +284,10 @@ public interface ItemUpdate {
 
   /**
    * Returns an immutable Map containing the values for each field in the Subscription.
-   * The 1-based field position within the field schema or field list is used as key for the values in the map. 
+  * The 1-based field position within the field list is used as key for the values in the map.
    * 
    * @return An immutable Map containing the values for each field in the Subscription.
    * 
-   * @see Subscription#setFieldSchema(String)
    * @see Subscription#setFields(String[])
    */
   @Nonnull 

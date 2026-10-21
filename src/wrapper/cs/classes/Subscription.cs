@@ -26,16 +26,9 @@ namespace com.lightstreamer.client
     /// <seealso cref="LightstreamerClient.subscribe(Subscription)"/> method, its state becomes "active". 
     /// This means that the client activates a subscription to the required items through 
     /// Lightstreamer Server and the Subscription object begins to receive real-time events. <br/>
-    /// A Subscription can be configured to use either an Item Group or an Item List to specify the 
-    /// items to be subscribed to and using either a Field Schema or Field List to specify the fields. <br/>
-    /// "Item Group" and "Item List" are defined as follows:
+    /// A Subscription uses an explicit Item List and Field List. <br/>
+    /// These lists are defined as follows:
     /// <ul>
-    ///  <li>"Item Group": an Item Group is a String identifier representing a list of items. 
-    ///  Such Item Group has to be expanded into a list of items by the getItems method of the 
-    ///  MetadataProvider of the associated Adapter Set. When using an Item Group, items in the 
-    ///  subscription are identified by their 1-based index within the group.<br/>
-    ///  It is possible to configure the Subscription to use an "Item Group" leveraging the 
-    ///  <seealso cref="Subscription.ItemGroup"/> property.</li> 
     ///  <li>"Item List": an Item List is an array of Strings each one representing an item. 
     ///  For the Item List to be correctly interpreted a LiteralBasedProvider or a MetadataProvider 
     ///  with a compatible implementation of getItems has to be configured in the associated 
@@ -46,14 +39,8 @@ namespace com.lightstreamer.client
     ///  It is possible to configure the Subscription to use an "Item List" leveraging the 
     ///  <seealso cref="Subscription.Items"/> property or by specifying it in the constructor.</li>
     /// </ul>
-    /// "Field Schema" and "Field List" are defined as follows:
+    /// The field list is defined as follows:
     /// <ul>
-    ///  <li>"Field Schema": a Field Schema is a String identifier representing a list of fields. 
-    ///  Such Field Schema has to be expanded into a list of fields by the getFields method of 
-    ///  the MetadataProvider of the associated Adapter Set. When using a Field Schema, fields 
-    ///  in the subscription are identified by their 1-based index within the schema.<br/>
-    ///  It is possible to configure the Subscription to use a "Field Schema" leveraging the 
-    ///  <seealso cref="Subscription.FieldSchema"/> property.</li>
     ///  <li>"Field List": a Field List is an array of Strings each one representing a field. 
     ///  For the Field List to be correctly interpreted a LiteralBasedProvider or a MetadataProvider 
     ///  with a compatible implementation of getFields has to be configured in the associated 
@@ -88,11 +75,9 @@ namespace com.lightstreamer.client
         ///  <li>COMMAND</li>
         /// </ul> </param>
         /// <param name="items"> an array of items to be subscribed to through Lightstreamer server. <br/>
-        /// It is also possible specify the "Item List" or "Item Group" later through 
-        /// <seealso cref="Subscription.Items"/> and <seealso cref="Subscription.ItemGroup"/>. </param>
+        /// The item list can be replaced through <seealso cref="Subscription.Items"/>. </param>
         /// <param name="fields"> an array of fields for the items to be subscribed to through Lightstreamer Server. <br/>
-        /// It is also possible to specify the "Field List" or "Field Schema" later through 
-        /// <seealso cref="Subscription.Fields"/> and <seealso cref="Subscription.FieldSchema"/>.
+        /// The field list can be replaced through <seealso cref="Subscription.Fields"/>.
         /// </param>
         public Subscription(string subscriptionMode, string[] items, string[] fields)
         {
@@ -119,8 +104,7 @@ namespace com.lightstreamer.client
         /// </ul> </param>
         /// <param name="item"> the item name to be subscribed to through Lightstreamer Server. </param>
         /// <param name="fields"> an array of fields for the items to be subscribed to through Lightstreamer Server. <br/>
-        /// It is also possible to specify the "Field List" or "Field Schema" later through 
-        /// <seealso cref="Subscription.Fields"/> and <seealso cref="Subscription.FieldSchema"/>.
+        /// The field list can be replaced through <seealso cref="Subscription.Fields"/>.
         /// </param>
         public Subscription(string subscriptionMode, string item, string[] fields)
         {
@@ -136,6 +120,7 @@ namespace com.lightstreamer.client
         /// Note that all of the methods used to describe the subscription to the server can only be 
         /// called while the instance is in the "inactive" state; the only exception is 
         /// <seealso cref="Subscription.RequestedMaxFrequency"/>.
+        /// Configure explicit <seealso cref="Subscription.Items"/> and <seealso cref="Subscription.Fields"/> before subscribing.
         /// </summary>
         /// <param name="subscriptionMode"> the subscription mode for the items, required by Lightstreamer Server. 
         /// Permitted values are:
@@ -275,12 +260,12 @@ namespace com.lightstreamer.client
 
         /// <value>
         /// Property <c>Items</c> represents the "Item List"  to be subscribed to through Lightstreamer Server.
-        /// Any call to set this property will override any "Item List" or "Item Group" previously specified.
+        /// Any call to set this property will override the previously specified "Item List".
         /// Note that if the single-item-constructor was used, this method will return an array 
         /// of length 1 containing such item.<br/>
         /// <br/>
-        /// <b>Lifecycle:</b>  This method can only be called if the Subscription has been initialized 
-        /// with an "Item List".
+        /// Returns null if the item list has not been configured.<br/>
+        /// <b>Lifecycle:</b> This property can be read at any time and set only while inactive.
         /// </value>
         public virtual string[] Items
         {
@@ -295,28 +280,8 @@ namespace com.lightstreamer.client
         }
 
         /// <value>
-        /// Property <c>ItemGroup</c> represents the the "Item Group" to be subscribed to through
-        /// Lightstreamer Server.
-        /// Any call to set this property will override any "Item List" or "Item Group" previously specified.<br/>
-        /// <br/>
-        /// <b>Lifecycle:</b>  This method can only be called if the Subscription has been initialized
-        /// using an "Item Group".
-        /// </value>
-        public virtual string ItemGroup
-        {
-            get
-            {
-              return _delegate.getItemGroup();
-            }
-            set
-            {
-              _delegate.setItemGroup(value);
-            }
-        }
-
-        /// <value>
         /// Property <c>Fields</c> represents the "Field  List"  to be subscribed to through Lightstreamer Server.
-        /// Any call to set this property will override any "Field  List" or "Field Schema" previously specified.<br/>
+        /// Any call to set this property will override the previously specified "Field List".<br/>
         /// <br/>
         /// <b>Lifecycle:</b> This property can be set only while the Subscription instance is in its "inactive" state.
         /// </value>
@@ -329,24 +294,6 @@ namespace com.lightstreamer.client
             set
             {
               _delegate.setFields(value);
-            }
-        }
-
-        /// <value>
-        /// Property <c>FieldSchema</c> represents the "Field Schema" to be subscribed to through Lightstreamer Server.
-        /// Any call to set this property will override any "Field  List" or "Field Schema" previously specified.<br/>
-        /// <br/>
-        /// <b>Lifecycle:</b> This property can be set only while the Subscription instance is in its "inactive" state.
-        /// </value>
-        public virtual string FieldSchema
-        {
-            get
-            {
-              return _delegate.getFieldSchema();
-            }
-            set
-            {
-              _delegate.setFieldSchema(value);
             }
         }
 
@@ -414,8 +361,7 @@ namespace com.lightstreamer.client
         /// Lightstreamer Server for all the items in the Subscription. It can be used only if the
         /// Subscription mode is MERGE, DISTINCT or COMMAND (in the latter case, the frequency limitation
         /// applies to the UPDATE events for each single key). For Subscriptions with two-level behavior
-        /// (see <seealso cref="Subscription.CommandSecondLevelFields"/> and 
-        /// <seealso cref="Subscription.CommandSecondLevelFieldSchema"/>,
+        /// (see <seealso cref="Subscription.CommandSecondLevelFields"/>),
         /// the specified frequency limit applies to both first-level and second-level items.<br/>
         /// Note that frequency limits on the items can also be set on the server side and this request can
         /// only be issued in order to furtherly reduce the frequency, not to rise it beyond these limits.<br/>
@@ -489,9 +435,8 @@ namespace com.lightstreamer.client
         /// <value>
         /// Read-only property <c>CommandPosition</c> represents the "command" field in a COMMAND
         /// Subscription.<br/>
-        /// This method can only be used if the Subscription mode is COMMAND and the Subscription 
-        /// was initialized using a "Field Schema".<br/>
-        /// The value is the 1-based position of the "command" field within the "Field Schema".<br/>
+        /// This property can only be used if the Subscription mode is COMMAND.<br/>
+        /// The value is the 1-based position of the "command" field within the field list.<br/>
         /// <br/>
         /// <b>Lifecycle:</b>  This method can be called at any time after the first 
         /// <seealso cref="SubscriptionListener.onSubscription"/> event.
@@ -507,9 +452,8 @@ namespace com.lightstreamer.client
         /// <value>
         /// Read-only property <c>KeyPosition</c> represents the position of the "key" field in a
         /// COMMAND Subscription.<br/>
-        /// This method can only be used if the Subscription mode is COMMAND
-        /// and the Subscription was initialized using a "Field Schema".<br/>
-        /// The value is the 1-based position of the "key" field within the "Field Schema".<br/>
+        /// This property can only be used if the Subscription mode is COMMAND.<br/>
+        /// The value is the 1-based position of the "key" field within the field list.<br/>
         /// <br/>
         /// <b>Lifecycle:</b>  This method can be called at any time.
         /// </value>
@@ -529,7 +473,7 @@ namespace com.lightstreamer.client
         /// data_provider element, in the "adapters.xml" file that defines the Adapter Set (a missing
         /// attribute configures the "DEFAULT" name).<br/>
         /// A null value is equivalent to the "DEFAULT" name.<br/>
-        /// See also: <seealso cref="Subscription.CommandSecondLevelFields"/>, <seealso cref="Subscription.CommandSecondLevelFieldSchema"/><br/>
+        /// See also: <seealso cref="Subscription.CommandSecondLevelFields"/><br/>
         /// <br/>
         /// <b>Lifecycle:</b> This method can only be called while the Subscription instance is in its
         /// "inactive" state.<br/>
@@ -553,9 +497,9 @@ namespace com.lightstreamer.client
         /// Property <c>CommandSecondLevelFields</c> represents the "Field List" to be subscribed to
         /// through Lightstreamer Server for the second-level items. It can only be used on COMMAND
         /// Subscriptions.<br/>
-        /// Any call to this method will override any "Field List" or "Field Schema" previously specified
+        /// Any assignment to this property replaces the field list previously specified
         /// for the second-level.<br/>
-        /// Calling this method enables the two-level behavior: in synthesis, each time a new key is received
+        /// Setting an explicit field list enables the two-level behavior: in synthesis, each time a new key is received
         /// on the COMMAND Subscription, the key value is treated as an Item name and an underlying
         /// Subscription for this Item is created and subscribed to automatically, to feed fields specified
         /// by this method. This mono-item Subscription is specified through an "Item List" containing only
@@ -565,10 +509,9 @@ namespace com.lightstreamer.client
         /// "unfiltered" case). All other Subscription properties are left as the default. When the key is
         /// deleted by a DELETE command on the first-level Subscription, the associated second-level
         /// Subscription is also unsubscribed from.<br/>
-        /// Specifying null as parameter will disable the two-level behavior.<br/>
+        /// Specifying null disables the two-level behavior. Leaving this property unconfigured keeps one-level COMMAND behavior.<br/>
         /// Ensure that no name conflict is generated between first-level and second-level fields. In case
         /// of conflict, the second-level field will not be accessible by name, but only by position.<br/>
-        /// See also: <seealso cref="Subscription.CommandSecondLevelFieldSchema"/><br/>
         /// <br/>
         /// <b>Lifecycle:</b> This method can only be called while the Subscription instance is in its
         /// "inactive" state.<br/>
@@ -582,41 +525,6 @@ namespace com.lightstreamer.client
             set
             {
               _delegate.setCommandSecondLevelFields(value);
-            }
-        }
-
-        /// <value>
-        /// Property <c>CommandSecondLevelFieldSchema</c> represents the "Field Schema" to be subscribed to
-        /// through Lightstreamer Server for the second-level items. It can only be used on
-        /// COMMAND Subscriptions.<br/>
-        /// Any call to this method will override any "Field List" or "Field Schema" previously specified for
-        /// the second-level.<br/>
-        /// Calling this method enables the two-level behavior: in synthesis, each time a new key is received
-        /// on the COMMAND Subscription, the key value is treated as an Item name and an underlying
-        /// Subscription for this Item is created and subscribed to automatically, to feed fields specified
-        /// by this method. This mono-item Subscription is specified through an "Item List" containing only
-        /// the Item name received. As a consequence, all the conditions provided for subscriptions through
-        /// Item Lists have to be satisfied. The item is subscribed to in "MERGE" mode, with snapshot request
-        /// and with the same maximum frequency setting as for the first-level items (including the
-        /// "unfiltered" case). All other Subscription properties are left as the default. When the key is
-        /// deleted by a DELETE command on the first-level Subscription, the associated second-level
-        /// Subscription is also unsubscribed from.<br/>
-        /// Specify null as parameter will disable the two-level behavior.<br/>
-        /// See also: <seealso cref="Subscription.CommandSecondLevelFields"/><br/>
-        /// <br/>
-        /// 
-        /// <b>Lifecycle:</b> This method can only be called while the Subscription instance is in
-        /// its "inactive" state.
-        /// </value>
-        public virtual string CommandSecondLevelFieldSchema
-        {
-            get
-            {
-              return _delegate.getCommandSecondLevelFieldSchema();
-            }
-            set
-            {
-              _delegate.setCommandSecondLevelFieldSchema(value);
             }
         }
 
@@ -659,10 +567,8 @@ namespace com.lightstreamer.client
         /// <b>Lifecycle:</b>  This method can be called at any time; if called 
         /// to retrieve a value that has not been received yet, then it will return null.
         /// </summary>
-        /// <param name="itemPos"> the 1-based position of an item within the configured "Item Group"
-        /// or "Item List" </param>
-        /// <param name="fieldPos"> the 1-based position of a field within the configured "Field Schema"
-        /// or "Field List" </param>
+        /// <param name="itemPos"> the 1-based position of an item within the configured item list. </param>
+        /// <param name="fieldPos"> the 1-based position of a field within the configured field list. </param>
         /// <returns> the current value for the specified field of the specified item
         /// (possibly null), or null if no value has been received yet.
         /// </returns>
@@ -685,8 +591,7 @@ namespace com.lightstreamer.client
         /// to retrieve a value that has not been received yet, then it will return null.
         /// </summary>
         /// <param name="itemName"> an item in the configured "Item List" </param>
-        /// <param name="fieldPos"> the 1-based position of a field within the configured "Field Schema"
-        /// or "Field List" </param>
+        /// <param name="fieldPos"> the 1-based position of a field within the configured field list. </param>
         /// <returns> the current value for the specified field of the specified item
         /// (possibly null), or null if no value has been received yet.
         /// </returns>
@@ -708,8 +613,7 @@ namespace com.lightstreamer.client
         /// <br/>
         /// <b>Lifecycle:</b>  This method can be called at any time; if called 
         /// to retrieve a value that has not been received yet, then it will return null. </summary>
-        /// <param name="itemPos"> the 1-based position of an item within the configured "Item Group"
-        /// or "Item List" </param>
+        /// <param name="itemPos"> the 1-based position of an item within the configured item list. </param>
         /// <param name="fieldName"> a field in the configured "Field List" </param>
         /// <returns> the current value for the specified field of the specified item
         /// (possibly null), or null if no value has been received yet.
@@ -723,7 +627,7 @@ namespace com.lightstreamer.client
         /// This method can only be used if the Subscription mode is COMMAND. 
         /// Subscriptions with two-level behavior
         /// are also supported, hence the specified field 
-        /// (see <seealso cref="Subscription.CommandSecondLevelFields"/> and <seealso cref="Subscription.CommandSecondLevelFieldSchema"/>)
+        /// (see <seealso cref="Subscription.CommandSecondLevelFields"/>)
         /// can be either a first-level or a second-level one. <br/>
         /// It is suggested to consume real-time data by implementing and adding a proper 
         /// <seealso cref="SubscriptionListener"/> rather than probing this method.<br/>
@@ -744,18 +648,16 @@ namespace com.lightstreamer.client
         /// Returns the latest value received for the specified item/key/field combination. 
         /// This method can only be used if the Subscription mode is COMMAND. 
         /// Subscriptions with two-level behavior
-        /// (see <seealso cref="Subscription.CommandSecondLevelFields"/> and <seealso cref="Subscription.CommandSecondLevelFieldSchema"/>)
+        /// (see <seealso cref="Subscription.CommandSecondLevelFields"/>)
         /// are also supported, hence the specified field 
         /// can be either a first-level or a second-level one. <br/>
         /// It is suggested to consume real-time data by implementing and adding a proper 
         /// <seealso cref="SubscriptionListener"/> rather than probing this method. <br/>
         /// Note that internal data is cleared when the Subscription is unsubscribed from.
         /// </summary>
-        /// <param name="itemPos"> the 1-based position of an item within the configured "Item Group"
-        /// or "Item List" </param>
+        /// <param name="itemPos"> the 1-based position of an item within the configured item list. </param>
         /// <param name="keyValue"> the value of a key received on the COMMAND subscription. </param>
-        /// <param name="fieldPos"> the 1-based position of a field within the configured "Field Schema"
-        /// or "Field List" </param>
+        /// <param name="fieldPos"> the 1-based position of a field within the configured field list. </param>
         /// <returns> the current value for the specified field of the specified key within the 
         /// specified item (possibly null), or null if the specified key has not been added yet 
         /// (note that it might have been added and then deleted). </returns>
@@ -768,15 +670,14 @@ namespace com.lightstreamer.client
         /// Returns the latest value received for the specified item/key/field combination. 
         /// This method can only be used if the Subscription mode is COMMAND. 
         /// Subscriptions with two-level behavior
-        /// (see <seealso cref="Subscription.CommandSecondLevelFields"/> and <seealso cref="Subscription.CommandSecondLevelFieldSchema"/>)
+        /// (see <seealso cref="Subscription.CommandSecondLevelFields"/>)
         /// are also supported, hence the specified field 
         /// can be either a first-level or a second-level one.<br/>
         /// It is suggested to consume real-time data by implementing and adding a proper 
         /// <seealso cref="SubscriptionListener"/> rather than probing this method.<br/>
         /// Note that internal data is cleared when the Subscription is unsubscribed from.
         /// </summary>
-        /// <param name="itemPos"> the 1-based position of an item within the configured "Item Group"
-        /// or "Item List" </param>
+        /// <param name="itemPos"> the 1-based position of an item within the configured item list. </param>
         /// <param name="keyValue"> the value of a key received on the COMMAND subscription. </param>
         /// <param name="fieldName"> a field in the configured "Field List" </param>
         /// <returns> the current value for the specified field of the specified key within the 
@@ -791,7 +692,7 @@ namespace com.lightstreamer.client
         /// Returns the latest value received for the specified item/key/field combination. 
         /// This method can only be used if the Subscription mode is COMMAND. 
         /// Subscriptions with two-level behavior
-        /// (see <seealso cref="Subscription.CommandSecondLevelFields"/> and <seealso cref="Subscription.CommandSecondLevelFieldSchema"/>)
+        /// (see <seealso cref="Subscription.CommandSecondLevelFields"/>)
         /// are also supported, hence the specified field 
         /// can be either a first-level or a second-level one.<br/>
         /// It is suggested to consume real-time data by implementing and adding a proper 
@@ -800,8 +701,7 @@ namespace com.lightstreamer.client
         /// </summary>
         /// <param name="itemName"> an item in the configured "Item List" </param>
         /// <param name="keyValue"> the value of a key received on the COMMAND subscription. </param>
-        /// <param name="fieldPos"> the 1-based position of a field within the configured "Field Schema"
-        /// or "Field List" </param>
+        /// <param name="fieldPos"> the 1-based position of a field within the configured field list. </param>
         /// <returns> the current value for the specified field of the specified key within the 
         /// specified item (possibly null), or null if the specified key has not been added yet 
         /// (note that it might have been added and then deleted). </returns>

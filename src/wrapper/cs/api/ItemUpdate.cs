@@ -37,17 +37,14 @@ namespace com.lightstreamer.client
     ///  <li>The field name can always be used, both for the first-level and the second-level fields. 
     ///  In case of name conflict, the first-level field is meant.</li>
     ///  <li>The field position can always be used; however, the field positions for the second-level 
-    ///  fields start at the highest position of the first-level field list + 1. If a field schema had 
-    ///  been specified for either first-level or second-level Subscriptions, then client-side knowledge 
-    ///  of the first-level schema length would be required.</li>
+    ///  fields start at the highest position of the first-level field list + 1.</li>
     /// </ul>
     /// </summary>
     public interface ItemUpdate
     {
         /// <value>
         /// Read-only property <c>ItemName</c> represents the name of the item to which this update pertains.<br/> 
-        /// The name will be null if the related Subscription was initialized using an "Item Group".<br/>
-        /// See also: <c>Subscription.ItemGroup</c>, <c>Subscription.Items</c>.<br/>
+        /// See also: <c>Subscription.Items</c>.<br/>
         /// </value>
         public string ItemName
         {
@@ -55,9 +52,9 @@ namespace com.lightstreamer.client
         }
 
         /// <value>
-        /// Read-only property <c>ItemPos</c> represents the 1-based the position in the "Item List" or
-        /// "Item Group" of the item to which this update pertains.<br/>
-        /// See also: <c>Subscription.ItemGroup</c>, <c>Subscription.Items</c>.<br/>
+        /// Read-only property <c>ItemPos</c> represents the 1-based position in the item list
+        /// of the item to which this update pertains.<br/>
+        /// See also: <c>Subscription.Items</c>.<br/>
         /// </value>
         public int ItemPos
         {
@@ -81,8 +78,7 @@ namespace com.lightstreamer.client
 
         /// <summary>
         /// Returns the current value for the specified field </summary>
-        /// <param name="fieldPos"> The 1-based position of the field within the "Field List" or
-        /// "Field Schema".</param>
+        /// <param name="fieldPos"> The 1-based position of the field within the field list.</param>
         /// <returns> The value of the specified field; it can be null in the following cases:<br/>
         /// <ul>
         ///  <li>a null value has been received from the Server, as null is a possible value for a field;</li>
@@ -90,7 +86,6 @@ namespace com.lightstreamer.client
         ///  <li>the item is subscribed to with the COMMAND mode and a DELETE command is received 
         ///  (only the fields used to carry key and command informations are valued).</li>
         /// </ul> </returns>
-        /// <c>Subscription.FieldSchema</c>
         /// <c>Subscription.Fields</c>
         public string getValue(int fieldPos);
 
@@ -147,7 +142,7 @@ namespace com.lightstreamer.client
         /// Inquiry method that asks whether the value for a field has changed after the reception of the last 
         /// update from the Server for an item. If the Subscription mode is COMMAND then the change is meant as 
         /// relative to the same key. </summary>
-        /// <param name="fieldPos"> The 1-based position of the field within the "Field List" or "Field Schema". </param>
+        /// <param name="fieldPos"> The 1-based position of the field within the field list. </param>
         /// <returns> Unless the Subscription mode is COMMAND, the return value is true in the following cases:
         /// <ul>
         ///  <li>It is the first update for the item;</li>
@@ -163,7 +158,6 @@ namespace com.lightstreamer.client
         ///  used to carry key information).</li>
         /// </ul>
         /// In all other cases, the return value is false. </returns>
-        /// <c>Subscription.FieldSchema</c>
         /// <c>Subscription.Fields</c>
         public bool isValueChanged(int fieldPos);
 
@@ -226,7 +220,7 @@ namespace com.lightstreamer.client
         /// <exception cref="System.ArgumentException"> if the specified field is not
         /// part of the Subscription.</exception>
         /// 
-        /// <param name="fieldPos"> The 1-based position of the field within the "Field List" or "Field Schema".</param>
+        /// <param name="fieldPos"> The 1-based position of the field within the field list.</param>
         /// 
         /// <returns> A JSON Patch structure representing the difference between
         /// the new value and the previous one, or null if the difference in JSON Patch format
@@ -247,7 +241,6 @@ namespace com.lightstreamer.client
         /// <returns> An immutable Map containing the values for each field changed with the last
         /// server update.
         /// </returns>
-        /// <c>Subscription.FieldSchema</c>
         /// <c>Subscription.Fields</c>
         public IDictionary<string, string> ChangedFields
         {
@@ -256,7 +249,7 @@ namespace com.lightstreamer.client
 
         /// <summary>
         /// Returns an immutable Map containing the values for each field changed with the last server update. 
-        /// The 1-based field position within the field schema or field list is used as key for the values in the map. 
+        /// The 1-based field position within the field list is used as key for the values in the map.
         /// Note that if the Subscription mode of the involved Subscription is COMMAND, then changed fields 
         /// are meant as relative to the previous update for the same key. On such tables if a DELETE command 
         /// is received, all the fields, excluding the key field, will be present as changed, with null value. 
@@ -265,7 +258,6 @@ namespace com.lightstreamer.client
         /// </summary>
         /// <returns> An immutable Map containing the values for each field changed with the last server update.
         /// </returns>
-        /// <c>Subscription.FieldSchema</c>
         /// <c>Subscription.Fields</c>
         public IDictionary<int, string> ChangedFieldsByPosition
         {
@@ -278,7 +270,6 @@ namespace com.lightstreamer.client
         /// </summary>
         /// <returns> An immutable Map containing the values for each field in the Subscription.
         /// </returns>
-        /// <c>Subscription.FieldSchema</c>
         /// <c>Subscription.Fields</c>
         public IDictionary<string, string> Fields
         {
@@ -287,11 +278,10 @@ namespace com.lightstreamer.client
 
         /// <summary>
         /// Returns an immutable Map containing the values for each field in the Subscription.
-        /// The 1-based field position within the field schema or field list is used as key for the values in the map. 
+        /// The 1-based field position within the field list is used as key for the values in the map.
         /// </summary>
         /// <returns> An immutable Map containing the values for each field in the Subscription.
         /// </returns>
-        /// <c>Subscription.FieldSchema</c>
         /// <c>Subscription.Fields</c>
         public IDictionary<int, string> FieldsByPosition
         {

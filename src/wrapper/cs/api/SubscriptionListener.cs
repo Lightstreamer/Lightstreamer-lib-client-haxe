@@ -37,14 +37,13 @@ namespace com.lightstreamer.client
         ///       should clear the list in order to keep a coherent view.</li>
         /// </ul>
         /// Note that, if the involved Subscription has a two-level behavior enabled
-        /// (see <c>Subscription.CommandSecondLevelFields</c> and <c>Subscription.CommandSecondLevelFieldSchema</c>)
+        /// (see <c>Subscription.CommandSecondLevelFields</c>)
         /// , the notification refers to the first-level item (which is in COMMAND mode).
         /// This kind of notification is not possible for second-level items (which are in MERGE 
         /// mode).
         /// </summary>
-        /// <param name="itemName"> name of the involved item. If the Subscription was initialized using an "Item Group" then a 
-        ///        null value is supplied. </param>
-        /// <param name="itemPos"> 1-based position of the item within the "Item List" or "Item Group". </param>
+        /// <param name="itemName"> name of the involved item in the explicit item list. </param>
+        /// <param name="itemPos"> 1-based position of the item within the item list. </param>
         void onClearSnapshot(string itemName, int itemPos);
 
         /// <summary>
@@ -59,7 +58,6 @@ namespace com.lightstreamer.client
         /// </param>
         /// <c>Subscription.RequestedMaxFrequency</c>
         /// <c>Subscription.CommandSecondLevelFields</c>
-        /// <c>Subscription.CommandSecondLevelFieldSchema</c>
         void onCommandSecondLevelItemLostUpdates(int lostUpdates, string key);
 
         /// <summary>
@@ -92,7 +90,6 @@ namespace com.lightstreamer.client
         /// </param>
         /// <c>ConnectionDetails.AdapterSet</c>
         /// <c>Subscription.CommandSecondLevelFields</c>
-        /// <c>Subscription.CommandSecondLevelFieldSchema</c>
         void onCommandSecondLevelSubscriptionError(int code, string message, string key);
 
         /// <summary>
@@ -102,14 +99,13 @@ namespace com.lightstreamer.client
         /// subscription mode and snapshot information was indeed requested for the items. By implementing this 
         /// method it is possible to perform actions which require that all the initial values have been received.<br/>
         /// Note that, if the involved Subscription has a two-level behavior enabled
-        /// (see <c>Subscription.CommandSecondLevelFields</c> and <c>Subscription.CommandSecondLevelFieldSchema</c>)
+        /// (see <c>Subscription.CommandSecondLevelFields</c>)
         /// , the notification refers to the first-level item (which is in COMMAND mode).
         /// Snapshot-related updates for the second-level items 
         /// (which are in MERGE mode) can be received both before and after this notification.
         /// </summary>
-        /// <param name="itemName"> name of the involved item. If the Subscription was initialized using an "Item Group" then a 
-        ///        null value is supplied. </param>
-        /// <param name="itemPos"> 1-based position of the item within the "Item List" or "Item Group".
+        /// <param name="itemName"> name of the involved item in the explicit item list. </param>
+        /// <param name="itemPos"> 1-based position of the item within the item list.
         /// </param>
         /// <c>Subscription.RequestedSnapshot</c>
         /// <c>ItemUpdate.isSnapshot</c>
@@ -129,9 +125,8 @@ namespace com.lightstreamer.client
         /// </ul>
         /// By implementing this method it is possible to perform recovery actions.
         /// </summary>
-        /// <param name="itemName"> name of the involved item. If the Subscription was initialized using an "Item Group" then a 
-        ///        null value is supplied. </param>
-        /// <param name="itemPos"> 1-based position of the item within the "Item List" or "Item Group". </param>
+        /// <param name="itemName"> name of the involved item in the explicit item list. </param>
+        /// <param name="itemPos"> 1-based position of the item within the item list. </param>
         /// <param name="lostUpdates"> The number of consecutive updates dropped for the item.
         /// </param>
         /// <c>Subscription.RequestedMaxFrequency</c>
@@ -169,7 +164,7 @@ namespace com.lightstreamer.client
         /// Note that two consecutive calls to this method are not possible, as before a second onSubscription event is 
         /// fired an <seealso cref="SubscriptionListener.onUnsubscription"/> event is eventually fired.<br/> 
         /// If the involved Subscription has a two-level behavior enabled
-        /// (see <c>Subscription.CommandSecondLevelFields</c> and <c>Subscription.CommandSecondLevelFieldSchema</c>)
+        /// (see <c>Subscription.CommandSecondLevelFields</c>)
         /// , second-level subscriptions are not notified.
         /// </summary>
         void onSubscription();
@@ -221,7 +216,7 @@ namespace com.lightstreamer.client
         /// Note that two consecutive calls to this method are not possible, as before a second onUnsubscription event 
         /// is fired an <seealso cref="SubscriptionListener.onSubscription"/> event is eventually fired.<br/> 
         /// If the involved Subscription has a two-level behavior enabled
-        /// (see <c>Subscription.CommandSecondLevelFields</c> and <c>Subscription.CommandSecondLevelFieldSchema</c>)
+        /// (see <c>Subscription.CommandSecondLevelFields</c>)
         /// , second-level unsubscriptions are not notified.
         /// </summary>
         void onUnsubscription();
@@ -232,7 +227,7 @@ namespace com.lightstreamer.client
         /// (see <c>Subscription.requestedMaxFrequency</c>).
         /// Since the frequency limit is applied on an item basis and a Subscription can involve multiple items,
         /// this is actually the maximum frequency among all items. For Subscriptions with two-level behavior
-        /// (see <c>Subscription.CommandSecondLevelFields</c> and <c>Subscription.CommandSecondLevelFieldSchema</c>)
+        /// (see <c>Subscription.CommandSecondLevelFields</c>)
         /// , the reported frequency limit applies to both first-level and second-level items.<br/>
         /// The value may differ from the requested one because of restrictions operated on the server side,
         /// but also because of number rounding.<br/>

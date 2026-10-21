@@ -1138,7 +1138,7 @@ class LightstreamerClient:
 
   def subscribe(self,subscription):
     """Operation method that adds a Subscription to the list of "active" Subscriptions. The Subscription cannot already 
-   be in the "active" state. 
+   be in the "active" state. Both explicit item and field lists must be configured before this call.
 
    Active subscriptions are subscribed to through the server as soon as possible (i.e. as soon as there is a 
    session available). Active Subscription are automatically persisted across different sessions as long as a 
@@ -1156,6 +1156,9 @@ class LightstreamerClient:
    event.
    
    :param subscription: A Subscription object, carrying all the information needed to process real-time values.
+
+  :raises IllegalArgumentException: if the Subscription does not contain an explicit item list or field list.
+  :raises IllegalStateException: if the Subscription is already active.
    
    .. seealso:: :meth:`unsubscribe`
    """
@@ -1280,18 +1283,16 @@ After the creation, a Subscription object is in the "inactive" state. When a Sub
 This means that the client activates a subscription to the required items through 
 Lightstreamer Server and the Subscription object begins to receive real-time events. 
 
-A Subscription can be configured to use either an Item Group or an Item List to specify the 
-items to be subscribed to and using either a Field Schema or Field List to specify the fields. 
+A Subscription uses an explicit "Item List" and "Field List". Both lists must be
+configured before calling :meth:`LightstreamerClient.subscribe`.
 
-"Item Group" and "Item List" are defined as follows:
-  
-   * "Item Group": an Item Group is a String identifier representing a list of items. Such Item Group has to be expanded into a list of items by the getItems method of the MetadataProvider of the associated Adapter Set. When using an Item Group, items in the subscription are identified by their 1-based index within the group. It is possible to configure the Subscription to use an "Item Group" using the :meth:`setItemGroup` method. 
-   * "Item List": an Item List is an array of Strings each one representing an item. For the Item List to be correctly interpreted a LiteralBasedProvider or a MetadataProvider with a compatible implementation of getItems has to be configured in the associated Adapter Set. Note that no item in the list can be empty, can contain spaces or can be a number. When using an Item List, items in the subscription are identified by their name or by their 1-based index within the list. It is possible to configure the Subscription to use an "Item List" using the :meth:`setItems` method or by specifying it in the constructor.
-  
-"Field Schema" and "Field List" are defined as follows:
-  
-   * "Field Schema": a Field Schema is a String identifier representing a list of fields. Such Field Schema has to be expanded into a list of fields by the getFields method of the MetadataProvider of the associated Adapter Set. When using a Field Schema, fields in the subscription are identified by their 1-based index within the schema. It is possible to configure the Subscription to use a "Field Schema" using the :meth:`setFieldSchema` method.
-   * "Field List": a Field List is an array of Strings each one representing a field. For the Field List to be correctly interpreted a LiteralBasedProvider or a MetadataProvider with a compatible implementation of getFields has to be configured in the associated Adapter Set. Note that no field in the list can be empty or can contain spaces. When using a Field List, fields in the subscription are identified by their name or by their 1-based index within the list. It is possible to configure the Subscription to use a "Field List" using the :meth:`setFields` method or by specifying it in the constructor.
+  * "Item List": an array of Strings each representing a literal item name. No item can be empty, contain spaces or be a number. Items are identified by name or by their 1-based index within the list. Configure the list with :meth:`setItems` or the constructor.
+  * "Field List": an array of Strings each representing a field name. No field can be empty or contain spaces. Fields are identified by name or by their 1-based index within the list. Configure the list with :meth:`setFields` or the constructor.
+
+The associated Adapter Set must use a LiteralBasedProvider or a MetadataProvider
+with compatible getItems and getFields implementations that interpret these explicit lists.
+COMMAND subscriptions remain one-level unless :meth:`setCommandSecondLevelFields`
+configures an explicit second-level field list.
   
 A Subscription can be supplied to :meth:`LightstreamerClient.subscribe` and :meth:`LightstreamerClient.unsubscribe`, in order to bring the Subscription to "active" or back to "inactive" state. 
 
@@ -1304,12 +1305,12 @@ Note that all of the methods used to describe the subscription to the server can
      * RAW
      * COMMAND
     
-:param items: an array of items to be subscribed to through Lightstreamer server. It is also possible specify the "Item List" or "Item Group" later through :meth:`setItems` and :meth:`setItemGroup`.
+:param items: an explicit list of item names. It is also possible to configure the list later with :meth:`setItems`.
 
-:param fields: an array of fields for the items to be subscribed to through Lightstreamer Server. It is also possible to specify the "Field List" or "Field Schema" later through :meth:`setFields` and :meth:`setFieldSchema`.
+:param fields: an explicit list of field names. It is also possible to configure the list later with :meth:`setFields`.
 
 :raises IllegalArgumentException: If no or invalid subscription mode is passed.
-:raises IllegalArgumentException: If either the items or the fields array is left None.
+:raises IllegalArgumentException: If the list of items is specified while the list of fields is not, or viceversa.
 :raises IllegalArgumentException: If the specified "Item List" or "Field List" is not valid; see :meth:`setItems` and :meth:`setFields` for details.
   """
 
@@ -1436,10 +1437,9 @@ Note that all of the methods used to describe the subscription to the server can
     Note that if the single-item-constructor was used, this method will return an array 
     of length 1 containing such item.
     
-    **lifecycle** This method can only be called if the Subscription has been initialized 
-    with an "Item List".
+    **lifecycle** This method can be called at any time.
 
-    :return: the "Item List" to be subscribed to through the server, or None if the Subscription was initialized with an "Item Group" or was not initialized at all.
+    :return: the explicit "Item List", or None if it has not been configured.
     """
     return self.delegate.getItems()
 
@@ -1447,8 +1447,7 @@ Note that all of the methods used to describe the subscription to the server can
     """Setter method that sets the "Item List" to be subscribed to through 
     Lightstreamer Server. 
 
-    Any call to this method will override any "Item List" or "Item Group"
-    previously specified.
+    Any call to this method will override the previously specified "Item List".
     
     **lifecycle** This method can only be called while the Subscription
     instance is in its "inactive" state.
@@ -1460,39 +1459,12 @@ Note that all of the methods used to describe the subscription to the server can
     """
     self.delegate.setItems(items)
 
-  def getItemGroup(self):
-    """Inquiry method that can be used to read the item group specified for this Subscription.
-    
-    **lifecycle** This method can only be called if the Subscription has been initialized
-    using an "Item Group"
-
-    :return: the "Item Group" to be subscribed to through the server, or None if the Subscription was initialized with an "Item List" or was not initialized at all.
-    """
-    return self.delegate.getItemGroup()
-
-  def setItemGroup(self,group):
-    """Setter method that sets the "Item Group" to be subscribed to through 
-    Lightstreamer Server. 
-
-    Any call to this method will override any "Item List" or "Item Group"
-    previously specified.
-    
-    **lifecycle** This method can only be called while the Subscription
-    instance is in its "inactive" state.
-    
-    :raises IllegalStateException: if the Subscription is currently "active".
-    
-    :param groupName: A String to be expanded into an item list by the Metadata Adapter. 
-    """
-    self.delegate.setItemGroup(group)
-
   def getFields(self):
     """Inquiry method that can be used to read the "Field List" specified for this Subscription.
     
-    **lifecycle**  This method can only be called if the Subscription has been initialized 
-    using a "Field List".
+    **lifecycle** This method can be called at any time.
 
-    :return: the "Field List" to be subscribed to through the server, or None if the Subscription was initialized with a "Field Schema" or was not initialized at all.
+    :return: the explicit "Field List", or None if it has not been configured.
     """
     return self.delegate.getFields()
 
@@ -1500,8 +1472,7 @@ Note that all of the methods used to describe the subscription to the server can
     """Setter method that sets the "Field List" to be subscribed to through 
     Lightstreamer Server. 
 
-    Any call to this method will override any "Field List" or "Field Schema"
-    previously specified.
+    Any call to this method will override the previously specified "Field List".
     
     **lifecycle** This method can only be called while the Subscription
     instance is in its "inactive" state.
@@ -1512,32 +1483,6 @@ Note that all of the methods used to describe the subscription to the server can
     :param fields: an array of fields to be subscribed to through the server. 
     """
     self.delegate.setFields(fields)
-
-  def getFieldSchema(self):
-    """Inquiry method that can be used to read the field schema specified for this Subscription.
-    
-    **lifecycle** This method can only be called if the Subscription has been initialized 
-    using a "Field Schema"
-
-    :return: the "Field Schema" to be subscribed to through the server, or None if the Subscription was initialized with a "Field List" or was not initialized at all.
-    """
-    return self.delegate.getFieldSchema()
-
-  def setFieldSchema(self,schema):
-    """Setter method that sets the "Field Schema" to be subscribed to through 
-    Lightstreamer Server. 
-
-    Any call to this method will override any "Field List" or "Field Schema"
-    previously specified.
-    
-    **lifecycle** This method can only be called while the Subscription
-    instance is in its "inactive" state.
-    
-    :raises IllegalStateException: if the Subscription is currently "active".
-    
-    :param schemaName: A String to be expanded into a field list by the Metadata Adapter. 
-    """
-    self.delegate.setFieldSchema(schema)
 
   def getRequestedBufferSize(self):
     """Inquiry method that can be used to read the buffer size, configured though
@@ -1630,7 +1575,7 @@ Lightstreamer Server for all the items in the Subscription. It can
 be used only if the Subscription mode is MERGE, DISTINCT or
 COMMAND (in the latter case, the frequency limitation applies to the
 UPDATE events for each single key). For Subscriptions with two-level behavior
-(see :meth:`Subscription.setCommandSecondLevelFields` and :meth:`Subscription.setCommandSecondLevelFieldSchema`)
+(see :meth:`Subscription.setCommandSecondLevelFields`)
 , the specified frequency limit applies to both first-level and second-level items. 
 
 Note that frequency limits on the items can also be set on the
@@ -1696,30 +1641,27 @@ differences based on the Subscription status:
   def getCommandPosition(self):
     """Returns the position of the "command" field in a COMMAND Subscription. 
 
-    This method can only be used if the Subscription mode is COMMAND and the Subscription 
-    was initialized using a "Field Schema".
+    This method can only be used if the Subscription mode is COMMAND.
     
     **lifecycle** This method can be called at any time after the first 
     :meth:`.SubscriptionListener.onSubscription` event.
 
     :raises IllegalStateException: if the Subscription mode is not COMMAND or if the :meth:`.SubscriptionListener.onSubscription` event for this Subscription was not yet fired.
-    :raises IllegalStateException: if a "Field List" was specified.
 
-    :return: the 1-based position of the "command" field within the "Field Schema".
+    :return: the 1-based position of the "command" field within the "Field List".
     """
     return self.delegate.getCommandPosition()
 
   def getKeyPosition(self):
     """Returns the position of the "key" field in a COMMAND Subscription. 
 
-    This method can only be used if the Subscription mode is COMMAND
-    and the Subscription was initialized using a "Field Schema".
+    This method can only be used if the Subscription mode is COMMAND.
      
     **lifecycle** This method can be called at any time.
     
     :raises IllegalStateException: if the Subscription mode is not COMMAND or if the :meth:`.SubscriptionListener.onSubscription` event for this Subscription was not yet fired.
     
-    :return: the 1-based position of the "key" field within the "Field Schema".
+    :return: the 1-based position of the "key" field within the "Field List".
     """
     return self.delegate.getKeyPosition()
 
@@ -1761,7 +1703,6 @@ differences based on the Subscription status:
     :param dataAdapter: the name of the Data Adapter. A None value is equivalent to the "DEFAULT" name.
      
     .. seealso:: :meth:`Subscription.setCommandSecondLevelFields`
-    .. seealso:: :meth:`Subscription.setCommandSecondLevelFieldSchema`
     """
     self.delegate.setCommandSecondLevelDataAdapter(dataAdapter)
 
@@ -1769,11 +1710,10 @@ differences based on the Subscription status:
     """Inquiry method that can be used to read the "Field List" specified for second-level 
     Subscriptions.
     
-    **lifecycle** This method can only be called if the second-level of this Subscription 
-    has been initialized using a "Field List"
+    **lifecycle** This method can be called at any time.
 
     :raises IllegalStateException: if the Subscription mode is not COMMAND
-    :return: the list of fields to be subscribed to through the server, or None if the Subscription was initialized with a "Field Schema" or was not initialized at all.
+    :return: the explicit second-level field list, or None if two-level behavior is disabled.
 
     .. seealso:: :meth:`Subscription.setCommandSecondLevelFields`
     """
@@ -1784,8 +1724,7 @@ differences based on the Subscription status:
     Lightstreamer Server for the second-level items. It can only be used on
     COMMAND Subscriptions. 
 
-    Any call to this method will override any "Field List" or "Field Schema"
-    previously specified for the second-level. 
+    Any call to this method will override the previously specified second-level "Field List".
 
     Calling this method enables the two-level behavior:
 
@@ -1812,59 +1751,9 @@ differences based on the Subscription status:
     
     :param fields: An array of Strings containing a list of fields to be subscribed to through the server. Ensure that no name conflict is generated between first-level and second-level fields. In case of conflict, the second-level field will not be accessible by name, but only by position.
     
-    .. seealso:: :meth:`Subscription.setCommandSecondLevelFieldSchema`
+    .. seealso:: :meth:`Subscription.getCommandSecondLevelFields`
     """
     self.delegate.setCommandSecondLevelFields(fields)
-
-  def getCommandSecondLevelFieldSchema(self):
-    """Inquiry method that can be used to read the "Field Schema" specified for second-level 
-    Subscriptions.
-    
-    **lifecycle** This method can only be called if the second-level of this Subscription has 
-    been initialized using a "Field Schema".
-
-    :raises IllegalStateException: if the Subscription mode is not COMMAND
-    :return: the "Field Schema" to be subscribed to through the server, or None if the Subscription was initialized with a "Field List" or was not initialized at all.
-
-    .. seealso:: :meth:`Subscription.setCommandSecondLevelFieldSchema`
-    """
-    return self.delegate.getCommandSecondLevelFieldSchema()
-
-  def setCommandSecondLevelFieldSchema(self,schema):
-    """Setter method that sets the "Field Schema" to be subscribed to through 
-    Lightstreamer Server for the second-level items. It can only be used on
-    COMMAND Subscriptions. 
-
-    Any call to this method will override any "Field List" or "Field Schema"
-    previously specified for the second-level. 
-
-    Calling this method enables the two-level behavior:
-
-    in synthesis, each time a new key is received on the COMMAND Subscription, 
-    the key value is treated as an Item name and an underlying Subscription for
-    this Item is created and subscribed to automatically, to feed fields specified
-    by this method. This mono-item Subscription is specified through an "Item List"
-    containing only the Item name received. As a consequence, all the conditions
-    provided for subscriptions through Item Lists have to be satisfied. The item is 
-    subscribed to in "MERGE" mode, with snapshot request and with the same maximum
-    frequency setting as for the first-level items (including the "unfiltered" 
-    case). All other Subscription properties are left as the default. When the 
-    key is deleted by a DELETE command on the first-level Subscription, the 
-    associated second-level Subscription is also unsubscribed from. 
-
-    Specify None as parameter will disable the two-level behavior.
-    
-    **lifecycle** This method can only be called while the Subscription
-    instance is in its "inactive" state.
-    
-    :raises IllegalStateException: if the Subscription is currently "active".
-    :raises IllegalStateException: if the Subscription mode is not "COMMAND".
-    
-    :param schemaName: A String to be expanded into a field list by the Metadata Adapter. 
-    
-    .. seealso:: :meth:`Subscription.setCommandSecondLevelFields`
-    """
-    return self.delegate.setCommandSecondLevelFieldSchema(schema)
 
   def getValue(self,itemNameOrPos,fieldNameOrPos):
     """Returns the latest value received for the specified item/field pair.
@@ -1884,9 +1773,9 @@ to retrieve a value that has not been received yet, then it will return None.
           
 :raises IllegalArgumentException: if an invalid item name or field name is specified or if the specified item position or field position is out of bounds.
      
-:param itemNameOrPos: a String representing an item in the configured item list or a Number representing the 1-based position of the item in the specified item group. (In case an item list was specified, passing the item position is also possible).
+:param itemNameOrPos: an item name from the explicit item list, or its 1-based position in that list.
      
-:param fieldNameOrPos: a String representing a field in the configured field list or a Number representing the 1-based position of the field in the specified field schema. (In case a field list was specified, passing the field position is also possible).
+:param fieldNameOrPos: a field name from the explicit field list, or its 1-based position in that list.
      
 :return: the current value for the specified field of the specified item(possibly None), or None if no value has been received yet.
      """
@@ -1904,11 +1793,11 @@ Note that internal data is cleared when the Subscription is unsubscribed from.
 :raises IllegalArgumentException: if an invalid item name or field name is specified or if the specified item position or field position is out of bounds.
 :raises IllegalStateException: if the Subscription mode is not COMMAND.
      
-:param itemIdentifier: a String representing an item in the configured item list or a Number representing the 1-based position of the item in the specified item group. (In case an item list was specified, passing the item position is also possible).
+:param itemNameOrPos: an item name from the explicit item list, or its 1-based position in that list.
      
 :param keyValue: a String containing the value of a key received on the COMMAND subscription.
      
-:param fieldIdentifier: a String representing a field in the configured field list or a Number representing the 1-based position of the field in the specified field schema. (In case a field list was specified, passing the field position is also possible).
+:param fieldNameOrPos: a field name from the explicit field list, or its 1-based position in the combined first-level and optional second-level field lists.
      
 :return: the current value for the specified field of the specified key within the specified item (possibly None), or None if the specified key has not been added yet (note that it might have been added and eventually deleted).
     """

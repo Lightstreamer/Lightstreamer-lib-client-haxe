@@ -69,10 +69,8 @@ SubscriptionListener.prototype = {
      * </ul>
      * By implementing this method it is possible to perform recovery actions.
      * 
-     * @param {String} itemName name of the involved item. If the Subscription
-     * was initialized using an "Item Group" then a null value is supplied.
-     * @param {Number} itemPos 1-based position of the item within the "Item List" 
-     * or "Item Group".
+    * @param {String} itemName name of the involved item from the explicit "Item List".
+    * @param {Number} itemPos 1-based position of the item within the "Item List".
      * @param {Number} lostUpdates The number of consecutive updates dropped
      * for the item.
      * 
@@ -98,7 +96,6 @@ SubscriptionListener.prototype = {
      * 
      * @see Subscription#setRequestedMaxFrequency
      * @see Subscription#setCommandSecondLevelFields
-     * @see Subscription#setCommandSecondLevelFieldSchema
      */
     onCommandSecondLevelItemLostUpdates: function(lostUpdates, key) {
       
@@ -119,10 +116,8 @@ SubscriptionListener.prototype = {
      * Snapshot-related updates for the second-level items (which are in
      * MERGE mode) can be received both before and after this notification.
      *
-     * @param {String} itemName name of the involved item. If the Subscription
-     * was initialized using an "Item Group" then a null value is supplied.
-     * @param {Number} itemPos 1-based position of the item within the "Item List" 
-     * or "Item Group".
+    * @param {String} itemName name of the involved item from the explicit "Item List".
+    * @param {Number} itemPos 1-based position of the item within the "Item List".
      * 
      * @see Subscription#setRequestedSnapshot
      * @see ItemUpdate#isSnapshot
@@ -151,10 +146,8 @@ SubscriptionListener.prototype = {
      * MERGE mode).
      * <BR/>This event can be sent by the Lightstreamer Server since version 6.0
      *
-     * @param {String} itemName name of the involved item. If the Subscription
-     * was initialized using an "Item Group" then a null value is supplied.
-     * @param {Number} itemPos 1-based position of the item within the "Item List" 
-     * or "Item Group".
+    * @param {String} itemName name of the involved item from the explicit "Item List".
+    * @param {Number} itemPos 1-based position of the item within the "Item List".
      */
     onClearSnapshot: function(itemName, itemPos) {
       return;
@@ -272,7 +265,6 @@ SubscriptionListener.prototype = {
      * 
      * @see ConnectionDetails#setAdapterSet
      * @see Subscription#setCommandSecondLevelFields
-     * @see Subscription#setCommandSecondLevelFieldSchema
      */
     onCommandSecondLevelSubscriptionError: function(code, message, key) {
       
@@ -304,7 +296,7 @@ SubscriptionListener.prototype = {
      * (see {@link Subscription#setRequestedMaxFrequency}).
      * Since the frequency limit is applied on an item basis and a Subscription can involve multiple items,
      * this is actually the maximum frequency among all items. For Subscriptions with two-level behavior
-     * (see {@link Subscription#setCommandSecondLevelFields} and {@link Subscription#setCommandSecondLevelFieldSchema})
+    * (see {@link Subscription#setCommandSecondLevelFields})
      * , the reported frequency limit applies to both first-level and second-level items. <BR>
      * The value may differ from the requested one because of restrictions operated on the server side,
      * but also because of number rounding. <BR>

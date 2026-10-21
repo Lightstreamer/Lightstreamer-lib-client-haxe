@@ -277,6 +277,8 @@ namespace com.lightstreamer.client
         /// <summary>
         /// Operation method that adds a Subscription to the list of "active" Subscriptions. The Subscription cannot already 
         /// be in the "active" state. <br/>
+        /// Explicit item and field lists must be configured through the constructor or
+        /// <seealso cref="Subscription.Items"/> and <seealso cref="Subscription.Fields"/> before this call.
         /// Active subscriptions are subscribed to through the server as soon as possible (i.e. as soon as there is a 
         /// session available). Active Subscription are automatically persisted across different sessions as long as a 
         /// related unsubscribe call is not issued.
@@ -291,6 +293,7 @@ namespace com.lightstreamer.client
         /// </summary>
         /// <param name="subscription"> A Subscription object, carrying all the information needed to process real-time values.
         /// </param>
+        /// <exception cref="System.ArgumentException">The subscription has no explicit item list or field list.</exception>
         /// <seealso cref="unsubscribe" />
         public virtual void subscribe(Subscription subscription)
         {
