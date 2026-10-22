@@ -67,6 +67,17 @@ class TestClient extends utest.Test {
     client.connect();
   }
 
+  function _testDataAdapterState(async: utest.Async) {
+    setTransport();
+    listener._onDataAdapterStateChange = function(state, adapter) {
+      if (adapter == "COUNT") {
+        equals("onDataAdapterStateChange started COUNT", 'onDataAdapterStateChange $state $adapter');
+        async.completed();
+      }
+    };
+    client.connect();
+  }
+
   @:timeout(3000)
   function _testOnlineServer(async: utest.Async) {
     var transport = _param;

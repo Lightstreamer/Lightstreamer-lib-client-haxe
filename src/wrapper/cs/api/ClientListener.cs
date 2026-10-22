@@ -27,6 +27,22 @@ namespace com.lightstreamer.client
     public interface ClientListener
     {
         /// <summary>
+        /// Event handler called for every Data Adapter state notification for each
+        /// Data Adapter included in the session's Adapter Set.
+        /// <br/>The state values are <c>started</c>, <c>disabled</c>, <c>resumed</c>,
+        /// <c>restarted</c>, and <c>terminated</c>. The expected sequence is
+        /// <c>started</c>, followed by zero or more repetitions of <c>disabled</c>
+        /// followed by either <c>resumed</c> or <c>restarted</c>. A <c>terminated</c>
+        /// notification may occur at any time and may be followed by a new occurrence
+        /// of that sequence.
+        /// <br/>Adapters based on older Adapter Interface versions may send only
+        /// <c>started</c> and <c>terminated</c> notifications.
+        /// </summary>
+        /// <param name="state">The state value received in the message, unchanged.</param>
+        /// <param name="dataAdapterName">The Data Adapter name received in the message, unchanged.</param>
+        void onDataAdapterStateChange(string state, string dataAdapterName);
+
+        /// <summary>
         /// Event handler that receives a notification when the ClientListener instance is removed from a LightstreamerClient 
         /// through <c>LightstreamerClient.removeListener(ClientListener)</c>. This is the last event to be fired on the listener. </summary>
         void onListenEnd();

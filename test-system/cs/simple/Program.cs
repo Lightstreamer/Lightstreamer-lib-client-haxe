@@ -73,6 +73,7 @@ namespace myapp
             }
             public void onListenEnd() { }
             public void onServerError(int errorCode, String errorMessage) { }
+            public void onDataAdapterStateChange(String state, String dataAdapterName) { }
             public void onStatusChange(String status) { }
             public void onPropertyChange(String property) { }
         }

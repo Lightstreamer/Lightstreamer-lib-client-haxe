@@ -22,6 +22,7 @@ package com.lightstreamer.client;
   public function onListenEnd(#if js client: LightstreamerClient #end): Void;
   public function onListenStart(#if js client: LightstreamerClient #end): Void;
   public function onServerError(errorCode: Int, errorMessage: String): Void;
+  public function onDataAdapterStateChange(state: String, dataAdapterName: String): Void;
   public function onStatusChange(status: String): Void;
   public function onPropertyChange(property: String): Void;
   #if LS_WEB

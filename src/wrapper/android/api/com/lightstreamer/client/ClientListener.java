@@ -27,6 +27,23 @@ import javax.annotation.Nonnull;
  * same thread.
  */
 public interface ClientListener {
+
+  /**
+   * Event handler called for every Data Adapter state notification for each
+   * Data Adapter included in the session's Adapter Set.
+   * <BR>The state values are {@code started}, {@code disabled}, {@code resumed},
+   * {@code restarted}, and {@code terminated}. The expected sequence is
+   * {@code started}, followed by zero or more repetitions of {@code disabled}
+   * followed by either {@code resumed} or {@code restarted}. A {@code terminated}
+   * notification may occur at any time and may be followed by a new occurrence
+   * of that sequence.
+   * <BR>Adapters based on older Adapter Interface versions may send only
+   * {@code started} and {@code terminated} notifications.
+   *
+   * @param state The state value received in the message, unchanged.
+   * @param dataAdapterName The Data Adapter name received in the message, unchanged.
+   */
+  void onDataAdapterStateChange(@Nonnull String state, @Nonnull String dataAdapterName);
   
   /**
    * Event handler that receives a notification when the ClientListener instance is removed from a LightstreamerClient 
