@@ -101,7 +101,24 @@ class TestSubscription extends utest.Test {
     sub.setItems(["123_456"]);
     strictSame(["123_456"], sub.getItems());
 
-    raisesEx(() -> sub.setItems(["123"]), IllegalArgumentException, "Item List is invalid");
+    sub.setItems(["123"]);
+    strictSame(["123"], sub.getItems());
+  }
+
+  function testArbitraryNames() {
+    var unicode = haxe.io.Bytes.ofHex("c3a9e4b8adf09f9880").toString();
+    var names = ["123", " ", " a b ", "&=%+?#/", "\u0000\t\r\n", unicode, "123"];
+    var subscription = new Subscription("MERGE", names, names);
+    strictSame(names, subscription.getItems());
+    strictSame(names, subscription.getFields());
+    sub.setItems(names);
+    sub.setFields(names);
+    strictSame(names, sub.getItems());
+    strictSame(names, sub.getFields());
+
+    var command = new Subscription("COMMAND", ["123"], ["key", "command", "a b"]);
+    command.setCommandSecondLevelFields(names);
+    strictSame(names, command.getCommandSecondLevelFields());
   }
 
   function testFields() {

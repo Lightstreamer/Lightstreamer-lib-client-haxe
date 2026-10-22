@@ -177,7 +177,7 @@ class TestUpdate extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=i1%20i2&LS_schema=f1%20f2%20f3%20f4&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=i1&i2&LS_field=f1&f2&f3&f4&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,1,2,4");
       ws.onText("U,1,1,#|#|$|z");
@@ -256,7 +256,7 @@ class TestUpdate extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=i1%20i2&LS_schema=f1%20f2&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=i1&i2&LS_field=f1&f2&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,1,2,2");
       ws.onText("U,1,1,a|b");
@@ -363,7 +363,7 @@ class TestUpdate extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=i1%20i2&LS_schema=f1%20f2&LS_snapshot=true&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=i1&i2&LS_field=f1&f2&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,1,2,2");
       ws.onText("U,1,1,a|b");
@@ -471,7 +471,7 @@ class TestUpdate extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=i1%20i2&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=i1&i2&LS_field=f1&f2&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,1,2,2");
       ws.onText("U,1,1,a|b");
@@ -570,7 +570,7 @@ class TestUpdate extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=i1%20i2&LS_schema=f1%20f2&LS_snapshot=true&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=i1&i2&LS_field=f1&f2&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,1,2,2");
       ws.onText("U,1,1,a|b");
@@ -682,7 +682,7 @@ class TestUpdate extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=i1%20i2&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=i1&i2&LS_field=f1&f2&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,1,2,2");
       ws.onText("U,1,1,a|b");
@@ -782,7 +782,7 @@ class TestUpdate extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("U,1,1,a|b|k1|ADD");
@@ -904,7 +904,7 @@ class TestUpdate extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("U,1,1,a|b|k1|ADD");
@@ -1010,7 +1010,7 @@ class TestUpdate extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("U,1,1,a|b|k1|ADD");
@@ -1118,7 +1118,7 @@ class TestUpdate extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("U,1,1,x|y|k1|DELETE");
@@ -1172,7 +1172,7 @@ class TestUpdate extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=true&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("U,1,1,a|b|k1|ADD");
@@ -1309,7 +1309,7 @@ class TestUpdate extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=i1%20i2&LS_schema=f1%20f2&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=i1&i2&LS_field=f1&f2&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,1,2,2");
     })
@@ -1327,7 +1327,7 @@ class TestUpdate extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=3&LS_op=add&LS_subId=1&LS_mode=RAW&LS_group=i1%20i2&LS_schema=f1%20f2&LS_ack=false")
+    .await("control\r\nLS_reqId=3&LS_op=add&LS_subId=1&LS_mode=RAW&LS_item=i1&i2&LS_field=f1&f2&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,1,2,2");
     })

@@ -63,18 +63,68 @@ class TestUpdate2Level extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("U,1,1,a|b|123_456|ADD");
     })
-    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=123_456&LS_schema=f3%20f4&LS_snapshot=true&LS_ack=false")
+    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=123_456&LS_field=f3&f4&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       strictEquals(1, updates.length);
       var u = updates[0];
       strictEquals("123_456", u.getValue(3));
       strictEquals("123_456", u.getValue("key"));
     })
+    .then(() -> async.completed())
+    .verify();
+  }
+
+  function testADD_SpecialItemName(async: utest.Async) {
+    exps
+    .then(() -> {
+      sub.setCommandSecondLevelFields(["f 3", "f&4"]);
+      client.subscribe(sub);
+      client.connect();
+    })
+    .await("ws.init http://server/lightstreamer")
+    .then(() -> ws.onOpen())
+    .await("wsok")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .then(() -> {
+      ws.onText("WSOK");
+      ws.onText("CONOK,sid,70000,5000,*");
+    })
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
+    .then(() -> {
+      ws.onText("SUBCMD,1,2,4,3,4");
+      ws.onText("U,1,1,a|b|a%20b%26%3D%2B%25|ADD");
+    })
+    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=a%20b%26%3D%2B%25&LS_field=f%203&f%264&LS_snapshot=true&LS_ack=false")
+    .then(() -> strictEquals("a b&=+%", updates[0].getValue("key")))
+    .then(() -> async.completed())
+    .verify();
+  }
+
+  function testADD_EmptyItemName(async: utest.Async) {
+    exps
+    .then(() -> {
+      client.subscribe(sub);
+      client.connect();
+    })
+    .await("ws.init http://server/lightstreamer")
+    .then(() -> ws.onOpen())
+    .await("wsok")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .then(() -> {
+      ws.onText("WSOK");
+      ws.onText("CONOK,sid,70000,5000,*");
+    })
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
+    .then(() -> {
+      ws.onText("SUBCMD,1,2,4,3,4");
+      ws.onText("U,1,1,a|b|$|ADD");
+    })
+    .await("onItemUpdate", "on2LevelError 14 The received key value is not a valid name for an Item ")
     .then(() -> async.completed())
     .verify();
   }
@@ -93,12 +143,12 @@ class TestUpdate2Level extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("U,1,1,a|b|item1|ADD");
     })
-    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f3%20f4&LS_snapshot=true&LS_ack=false")
+    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f3&f4&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       strictEquals(1, updates.length);
       var u = updates[0];
@@ -160,12 +210,12 @@ class TestUpdate2Level extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("U,1,1,a|b|item1|UPDATE");
     })
-    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f3%20f4&LS_snapshot=true&LS_ack=false")
+    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f3&f4&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       strictEquals(1, updates.length);
       var u = updates[0];
@@ -211,7 +261,7 @@ class TestUpdate2Level extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("U,1,1,a|b|item1|DELETE");
@@ -248,7 +298,7 @@ class TestUpdate2Level extends utest.Test {
     .verify();
   }
 
-  function testADD_BadItemName(async: utest.Async) {
+  function testADD_NumericItemName(async: utest.Async) {
     exps
     .then(() -> {
       client.subscribe(sub);
@@ -262,13 +312,12 @@ class TestUpdate2Level extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("U,1,1,a|b|123|ADD");
     })
-    .await("onItemUpdate")
-    .await("on2LevelError 14 The received key value is not a valid name for an Item 123")
+    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=123&LS_field=f3&f4&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       strictEquals(1, updates.length);
       var u = updates[0];
@@ -314,12 +363,12 @@ class TestUpdate2Level extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("U,1,1,a|b|item1|ADD");
     })
-    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f3%20f4&LS_snapshot=true&LS_ack=false")
+    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f3&f4&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("REQERR,2,-5,error");  
     })
@@ -370,12 +419,12 @@ class TestUpdate2Level extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("U,1,1,a|b|item1|ADD");
     })
-    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_snapshot=true&LS_ack=false")
+    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,2,1,2");
       ws.onText("U,2,1,c|d");
@@ -542,12 +591,12 @@ class TestUpdate2Level extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("U,1,1,a|b|item1|ADD");
     })
-    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_snapshot=true&LS_ack=false")
+    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,2,1,2");
       ws.onText("U,1,1,A|||DELETE");
@@ -631,12 +680,12 @@ class TestUpdate2Level extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("U,1,1,a|b|item1|ADD");
     })
-    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_snapshot=true&LS_ack=false")
+    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       var u = updates[0];
       strictEquals("i1", u.getItemName());
@@ -765,12 +814,12 @@ class TestUpdate2Level extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=true&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("U,1,1,a|b|item1|ADD");
     })
-    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f3%20f4&LS_snapshot=true&LS_ack=false")
+    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f3&f4&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       var u = updates[0];
       strictEquals("i1", u.getItemName());
@@ -804,7 +853,7 @@ class TestUpdate2Level extends utest.Test {
     .then(() -> {
       ws.onText("U,1,1,c|d|item2|ADD");
     })
-    .await("onItemUpdate", "control\r\nLS_reqId=3&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_group=item2&LS_schema=f3%20f4&LS_snapshot=true&LS_ack=false")
+    .await("onItemUpdate", "control\r\nLS_reqId=3&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_item=item2&LS_field=f3&f4&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       var u = updates[1];
       strictEquals("i1", u.getItemName());
@@ -834,7 +883,7 @@ class TestUpdate2Level extends utest.Test {
     .then(() -> {
       ws.onText("U,1,2,e|f|item3|ADD");
     })
-    .await("onItemUpdate", "control\r\nLS_reqId=4&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_group=item3&LS_schema=f3%20f4&LS_snapshot=true&LS_ack=false")
+    .await("onItemUpdate", "control\r\nLS_reqId=4&LS_op=add&LS_subId=4&LS_mode=MERGE&LS_item=item3&LS_field=f3&f4&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       var u = updates[2];
       strictEquals("i2", u.getItemName());
@@ -879,16 +928,16 @@ class TestUpdate2Level extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("U,1,1,a|b|item1|ADD");
     })
-    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f3%20f4&LS_snapshot=true&LS_ack=false")
+    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f3&f4&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("U,1,2,c|d|item2|ADD");
     })
-    .await("onItemUpdate", "control\r\nLS_reqId=3&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_group=item2&LS_schema=f3%20f4&LS_snapshot=true&LS_ack=false")
+    .await("onItemUpdate", "control\r\nLS_reqId=3&LS_op=add&LS_subId=3&LS_mode=MERGE&LS_item=item2&LS_field=f3&f4&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,2,1,2");
       ws.onText("SUBOK,3,1,2");
@@ -964,12 +1013,12 @@ class TestUpdate2Level extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("U,1,1,a|b|item1|ADD");
     })
-    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f3%20f4&LS_snapshot=true&LS_ack=false")
+    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f3&f4&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       var u = updates[0];
       strictEquals("i1", u.getItemName());
@@ -1047,7 +1096,7 @@ class TestUpdate2Level extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("OV,1,1,5");
@@ -1072,12 +1121,12 @@ class TestUpdate2Level extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("U,1,1,a|b|item1|ADD");
     })
-    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_snapshot=true&LS_ack=false")
+    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,2,1,2");
       ws.onText("OV,2,1,5");
@@ -1102,7 +1151,7 @@ class TestUpdate2Level extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("CONF,1,111,filtered");
@@ -1127,12 +1176,12 @@ class TestUpdate2Level extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("U,1,1,a|b|item1|ADD");
     })
-    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_snapshot=true&LS_ack=false")
+    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,2,1,2");
       ws.onText("CONF,2,111,filtered");
@@ -1157,12 +1206,12 @@ class TestUpdate2Level extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("U,1,1,a|b|item1|ADD");
     })
-    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_snapshot=true&LS_ack=false")
+    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,2,1,2");
       ws.onText("CONF,1,111,filtered");
@@ -1188,12 +1237,12 @@ class TestUpdate2Level extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("U,1,1,a|b|item1|ADD");
     })
-    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_snapshot=true&LS_ack=false")
+    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,2,1,2");
       ws.onText("CONF,1,111,filtered");
@@ -1219,12 +1268,12 @@ class TestUpdate2Level extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("U,1,1,a|b|item1|ADD");
     })
-    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_snapshot=true&LS_ack=false")
+    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,2,1,2");
       ws.onText("CONF,1,111,filtered");
@@ -1251,12 +1300,12 @@ class TestUpdate2Level extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("U,1,1,a|b|item1|ADD");
     })
-    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_snapshot=true&LS_ack=false")
+    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,2,1,2");
       sub.setRequestedMaxFrequency("456");
@@ -1282,12 +1331,12 @@ class TestUpdate2Level extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("U,1,1,a|b|item1|ADD");
     })
-    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_snapshot=true&LS_ack=false")
+    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,2,1,2");
       ws.onText("CONF,1,111,filtered");
@@ -1317,12 +1366,12 @@ class TestUpdate2Level extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("U,1,1,a|b|item1|ADD");
     })
-    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_snapshot=true&LS_ack=false")
+    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,2,1,2");
       ws.onText("CONF,1,unlimited,filtered");
@@ -1350,12 +1399,12 @@ class TestUpdate2Level extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("U,1,1,a|b|item1|ADD");
     })
-    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_snapshot=true&LS_ack=false")
+    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,2,1,2");
       ws.onText("CONF,1,111,filtered");
@@ -1384,12 +1433,12 @@ class TestUpdate2Level extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("U,1,1,a|b|item1|ADD");
     })
-    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_snapshot=true&LS_ack=false")
+    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,2,1,2");
       ws.onText("CONF,1,111,filtered");
@@ -1419,12 +1468,12 @@ class TestUpdate2Level extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1%20i2&LS_schema=f1%20f2%20key%20command&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("U,1,1,a|b|item1|ADD");
     })
-    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=item1&LS_schema=f5%20f6&LS_snapshot=true&LS_ack=false")
+    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,2,1,2");
       ws.onText("CONF,2,unlimited,filtered");

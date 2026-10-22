@@ -54,7 +54,7 @@ class TestJsonPatch extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=count&LS_schema=count&LS_snapshot=true&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=count&LS_field=count&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,1,1,1");
       for (upd in updates) {
@@ -88,7 +88,7 @@ class TestJsonPatch extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=count&LS_schema=count&LS_snapshot=true&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=count&LS_field=count&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,1,1,1");
       for (upd in updates) {
@@ -394,7 +394,7 @@ class TestJsonPatch extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=count&LS_schema=count&LS_snapshot=true&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=count&LS_field=count&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,1,1,1");
       ws.onText("U,1,1," + "{}");
@@ -439,7 +439,7 @@ class TestJsonPatch extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=count&LS_schema=count&LS_snapshot=true&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=count&LS_field=count&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,1,1,1");
       ws.onText("U,1,1," + "{}");
@@ -481,7 +481,7 @@ class TestJsonPatch extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_group=count&LS_schema=count&LS_snapshot=true&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=count&LS_field=count&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,1,1,1");
       ws.onText("U,1,1,foo");
@@ -517,7 +517,7 @@ class TestJsonPatch extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1&LS_schema=key%20command%20value&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&LS_field=key&command&value&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,1,3,1,2");
       ws.onText('U,1,1,k1|ADD|{"x":1}');
@@ -561,7 +561,7 @@ class TestJsonPatch extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1&LS_schema=key%20command%20value&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&LS_field=key&command&value&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,1,3,1,2");
       ws.onText('U,1,1,k2|ADD|{"x":1}');
@@ -612,12 +612,12 @@ class TestJsonPatch extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=i1&LS_schema=key%20command&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&LS_field=key&command&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBCMD,1,1,2,1,2");
       ws.onText("U,1,1,k1|ADD");
     })
-    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_group=k1&LS_schema=value&LS_snapshot=true&LS_ack=false")
+    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=k1&LS_field=value&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,2,1,1");
       ws.onText('U,2,1,{"x":1}');

@@ -48,6 +48,31 @@ class TestMpnSubscription extends utest.Test {
     equals(null, sub.getTriggerExpression());
   }
 
+  function testArbitraryNamesAndCopying() {
+    var unicode = haxe.io.Bytes.ofHex("c3a9e4b8adf09f9880").toString();
+    var names = ["123", " ", " a b ", "&=%+?#/", "\u0000\t\r\n", unicode, "123"];
+    var subscription = new MpnSubscription("MERGE", names, names);
+    strictSame(names, subscription.getItems());
+    strictSame(names, subscription.getFields());
+    sub.setItems(names);
+    sub.setFields(names);
+    strictSame(names, sub.getItems());
+    strictSame(names, sub.getFields());
+
+    var source = new Subscription("MERGE", names, names);
+    #if js
+    var converted = new MpnSubscription(source, null, null);
+    var copied = new MpnSubscription(subscription, null, null);
+    #else
+    var converted = new MpnSubscription(source);
+    var copied = new MpnSubscription(subscription);
+    #end
+    strictSame(names, converted.getItems());
+    strictSame(names, converted.getFields());
+    strictSame(names, copied.getItems());
+    strictSame(names, copied.getFields());
+  }
+
   function testNotificationFormat() {
     equals(null, sub.getNotificationFormat());
 
