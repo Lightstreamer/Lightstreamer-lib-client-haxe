@@ -35,7 +35,7 @@
   *  For the Item List to be correctly interpreted a MetadataProvider
   *  with a compatible implementation of getItems has to be configured in the associated 
   *  Adapter Set.<BR>
-  *  Note that no item in the list can be empty, can contain spaces or can be a number.<BR>
+  *  Note that each item name must be non-empty; any character is allowed.<BR>
   *  When using an Item List, items in the subscription are identified by their name or 
   *  by their 1-based index within the list.<BR>
   *  It is possible to configure the Subscription to use an "Item List" using the 
@@ -47,7 +47,7 @@
   *  For the Field List to be correctly interpreted a MetadataProvider
   *  with a compatible implementation of getFields has to be configured in the associated 
   *  Adapter Set.<BR>
-  *  Note that no field in the list can be empty or can contain spaces.<BR>
+  *  Note that each field name must be non-empty; any character is allowed.<BR>
   *  When using a Field List, fields in the subscription are identified by their name or 
   *  by their 1-based index within the list.<BR>
   *  It is possible to configure the Subscription to use a "Field List" using the 
@@ -294,7 +294,7 @@ public class Subscription {
     * instance is in its "inactive" state.
     * 
     * @throws IllegalArgumentException if any of the item names in the "Item List"
-    * contains a space or is a number or is empty/null.
+    * is empty/null.
     * @throws IllegalStateException if the Subscription is currently 
     * "active".
     * 
@@ -323,7 +323,7 @@ public class Subscription {
     * instance is in its "inactive" state.
     * 
     * @throws IllegalArgumentException if any of the field names in the list
-    * contains a space or is empty/null.
+    * is empty/null.
     * @throws IllegalStateException if the Subscription is currently 
     * "active".
     * 
@@ -653,7 +653,7 @@ public class Subscription {
     * instance is in its "inactive" state.
     * 
     * @throws IllegalArgumentException if any of the field names in the "Field List"
-    * contains a space or is empty/null.
+    * is empty/null.
     * @throws IllegalStateException if the Subscription is currently 
     * "active".
     * @throws IllegalStateException if the Subscription mode is not "COMMAND".

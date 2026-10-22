@@ -393,11 +393,11 @@ class SubscriptionManagerLiving implements SubscriptionManager {
     req.LS_mode(m_subscription.fetch_mode());
     var items = m_subscription.fetchItems();
     if (items != null) {
-      req.LS_group(items.join(" "));
+      req.LS_item(items);
     }
     var fields = m_subscription.fetchFields();
     if (fields != null) {
-      req.LS_schema(fields.join(" "));
+      req.LS_field(fields);
     }
     var adapter = m_subscription.getDataAdapter();
     if (adapter != null) {

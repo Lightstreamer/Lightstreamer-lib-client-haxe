@@ -689,11 +689,11 @@ class MpnSubscriptionManager implements Encodable {
     req.LS_mode(m_subscription.fetch_mode().sure());
     var items = m_subscription.getItems();
     if (items != null) {
-      req.LS_group(items.toHaxe().join(" "));
+      req.LS_item(items.toHaxe());
     }
     var fields = m_subscription.getFields();
     if (fields != null) {
-      req.LS_schema(fields.toHaxe().join(" "));
+      req.LS_field(fields.toHaxe());
     }
     var adapter = m_subscription.getDataAdapter();
     if (adapter != null) {
@@ -749,11 +749,11 @@ class MpnSubscriptionManager implements Encodable {
     req.LS_mode(m_subscription.fetch_mode().sure());
     var items = m_subscription.getItems();
     if (items != null) {
-      req.LS_group(items.toHaxe().join(" "));
+      req.LS_item(items.toHaxe());
     }
     var fields = m_subscription.getFields();
     if (fields != null) {
-      req.LS_schema(fields.toHaxe().join(" "));
+      req.LS_field(fields.toHaxe());
     }
     var adapter = m_subscription.getDataAdapter();
     if (adapter != null) {

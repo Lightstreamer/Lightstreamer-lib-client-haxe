@@ -1286,8 +1286,8 @@ Lightstreamer Server and the Subscription object begins to receive real-time eve
 A Subscription uses an explicit "Item List" and "Field List". Both lists must be
 configured before calling :meth:`LightstreamerClient.subscribe`.
 
-  * "Item List": an array of Strings each representing a literal item name. No item can be empty, contain spaces or be a number. Items are identified by name or by their 1-based index within the list. Configure the list with :meth:`setItems` or the constructor.
-  * "Field List": an array of Strings each representing a field name. No field can be empty or contain spaces. Fields are identified by name or by their 1-based index within the list. Configure the list with :meth:`setFields` or the constructor.
+  * "Item List": an array of Strings each representing a literal item name. Each item name must be non-empty; any character is allowed. Items are identified by name or by their 1-based index within the list. Configure the list with :meth:`setItems` or the constructor.
+  * "Field List": an array of Strings each representing a field name. Each field name must be non-empty; any character is allowed. Fields are identified by name or by their 1-based index within the list. Configure the list with :meth:`setFields` or the constructor.
 
 The associated Adapter Set must use a MetadataProvider
 with compatible getItems and getFields implementations that interpret these explicit lists.
@@ -1452,7 +1452,7 @@ Note that all of the methods used to describe the subscription to the server can
     **lifecycle** This method can only be called while the Subscription
     instance is in its "inactive" state.
     
-    :raises IllegalArgumentException: if any of the item names in the "Item List" contains a space or is a number or is empty/None.
+    :raises IllegalArgumentException: if any of the item names in the "Item List" is empty/None.
     :raises IllegalStateException: if the Subscription is currently "active".
     
     :param items: an array of items to be subscribed to through the server. 
@@ -1477,7 +1477,7 @@ Note that all of the methods used to describe the subscription to the server can
     **lifecycle** This method can only be called while the Subscription
     instance is in its "inactive" state.
     
-    :raises IllegalArgumentException: if any of the field names in the list contains a space or is empty/None.
+    :raises IllegalArgumentException: if any of the field names in the list is empty/None.
     :raises IllegalStateException: if the Subscription is currently "active".
     
     :param fields: an array of fields to be subscribed to through the server. 
@@ -1745,7 +1745,7 @@ differences based on the Subscription status:
     **lifecycle** This method can only be called while the Subscription
     instance is in its "inactive" state.
     
-    :raises IllegalArgumentException: if any of the field names in the "Field List" contains a space or is empty/None.
+    :raises IllegalArgumentException: if any of the field names in the "Field List" is empty/None.
     :raises IllegalStateException: if the Subscription is currently "active".
     :raises IllegalStateException: if the Subscription mode is not "COMMAND".
     

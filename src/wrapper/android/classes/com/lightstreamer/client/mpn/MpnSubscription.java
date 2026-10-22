@@ -400,7 +400,7 @@ public class MpnSubscription {
      * 
      * @param items an array of items to be subscribed to through the server. 
      * @throws IllegalArgumentException if any of the item names in the "Item List"
-     * contains a space or is a number or is empty/null.
+     * is empty/null.
      * @throws IllegalStateException if the MpnSubscription is currently 
      * "active".
      */
@@ -437,7 +437,7 @@ public class MpnSubscription {
      * 
      * @param fields an array of fields to be subscribed to through the server. 
      * @throws IllegalArgumentException if any of the field names in the list
-     * contains a space or is empty/null.
+     * is empty/null.
      * @throws IllegalStateException if the MpnSubscription is currently 
      * "active".
      */
