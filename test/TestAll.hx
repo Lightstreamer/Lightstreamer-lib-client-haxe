@@ -28,7 +28,7 @@ class TestAll {
     #if python
     Logging.basicConfig({level: Logging.DEBUG, format: "%(message)s", stream: python.lib.Sys.stdout});
     #end
-    LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.DEBUG));
+    LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.ERROR));
     #if java
     utils.TestTools.enableOkHttpLogger();
     #end
