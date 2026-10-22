@@ -24,6 +24,7 @@ extern interface ClientListener {
   public function onStatusChange(status:String): Void;
   public function onServerError(code:Int, message:String): Void;
   public function onDataAdapterStateChange(state:String, dataAdapterName:String): Void;
+  public function onMetadataAdapterStateChange(state:String): Void;
   public function onPropertyChange(property:String): Void;
   public function onListenEnd(): Void;
   public function onListenStart(): Void;

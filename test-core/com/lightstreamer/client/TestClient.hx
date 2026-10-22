@@ -78,6 +78,15 @@ class TestClient extends utest.Test {
     client.connect();
   }
 
+  function _testMetadataAdapterState(async: utest.Async) {
+    setTransport();
+    listener._onMetadataAdapterStateChange = function(state) {
+      equals("started", state);
+      async.completed();
+    };
+    client.connect();
+  }
+
   @:timeout(3000)
   function _testOnlineServer(async: utest.Async) {
     var transport = _param;

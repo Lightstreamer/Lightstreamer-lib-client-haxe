@@ -23,6 +23,8 @@ class BaseClientListener implements ClientListener {
   public function onServerError(code:Int, message:String) _onServerError(code, message);
   dynamic public function _onDataAdapterStateChange(state:String, dataAdapterName:String) {}
   public function onDataAdapterStateChange(state:String, dataAdapterName:String) _onDataAdapterStateChange(state, dataAdapterName);
+  dynamic public function _onMetadataAdapterStateChange(state:String) {}
+  public function onMetadataAdapterStateChange(state:String) _onMetadataAdapterStateChange(state);
   dynamic public function _onPropertyChange(property:String) {}
   public function onPropertyChange(property:String) _onPropertyChange(property);
   dynamic public function _onServerKeepalive() {}

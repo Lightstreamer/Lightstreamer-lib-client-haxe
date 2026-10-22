@@ -42,6 +42,9 @@ class ClientListenerAdapter implements ClientListener extends cpp.Finalizable {
   public function onDataAdapterStateChange(state: String, dataAdapterName: String): Void {
     _listener.ref.onDataAdapterStateChange(state, dataAdapterName);
   }
+  public function onMetadataAdapterStateChange(state: String): Void {
+    _listener.ref.onMetadataAdapterStateChange(state);
+  }
   public function onStatusChange(status: String): Void {
     _listener.ref.onStatusChange(status);
   }

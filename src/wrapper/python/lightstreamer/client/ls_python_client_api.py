@@ -40,6 +40,22 @@ class ClientListener:
    """
     pass
 
+  def onMetadataAdapterStateChange(self,state):
+    """Event handler called for every Metadata Adapter state notification.
+
+   The state values are ``started``, ``disabled``, ``resumed``, ``restarted``,
+   and ``terminated``. The expected sequence is ``started``, followed by zero
+   or more repetitions of ``disabled`` followed by either ``resumed`` or
+   ``restarted``. A ``terminated`` notification may occur at any time and may
+   be followed by a new occurrence of that sequence.
+
+   Adapters based on older Adapter Interface versions may send only ``started``
+   and ``terminated`` notifications.
+
+   :param state: The state value received in the message.
+   """
+    pass
+
   def onStatusChange(self,status):
     """Event handler that receives a notification each time the LightstreamerClient status has changed. The status changes 
    may be originated either by custom actions (e.g. by calling :meth:`.LightstreamerClient.disconnect`) or by internal 

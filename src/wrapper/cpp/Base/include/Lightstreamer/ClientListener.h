@@ -49,6 +49,20 @@ public:
    */
   virtual void onDataAdapterStateChange(const std::string& state, const std::string& dataAdapterName) {}
   /**
+   * Event handler called for every Metadata Adapter state notification.
+   * <BR>The state values are <code>started</code>, <code>disabled</code>,
+   * <code>resumed</code>, <code>restarted</code>, and <code>terminated</code>.
+   * The expected sequence is <code>started</code>, followed by zero or more
+   * repetitions of <code>disabled</code> followed by either <code>resumed</code>
+   * or <code>restarted</code>. A <code>terminated</code> notification may occur
+   * at any time and may be followed by a new occurrence of that sequence.
+   * <BR>Adapters based on older Adapter Interface versions may send only
+   * <code>started</code> and <code>terminated</code> notifications.
+   *
+   * @param state The state value received in the message.
+   */
+  virtual void onMetadataAdapterStateChange(const std::string& state) {}
+  /**
    * Event handler that receives a notification when the ClientListener instance is removed from a LightstreamerClient 
    * through {@link LightstreamerClient#removeListener()}. This is the last event to be fired on the listener.
    */

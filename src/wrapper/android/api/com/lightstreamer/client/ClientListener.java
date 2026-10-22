@@ -44,6 +44,21 @@ public interface ClientListener {
    * @param dataAdapterName The Data Adapter name received in the message, unchanged.
    */
   void onDataAdapterStateChange(@Nonnull String state, @Nonnull String dataAdapterName);
+
+  /**
+   * Event handler called for every Metadata Adapter state notification.
+   * <BR>The state values are {@code started}, {@code disabled}, {@code resumed},
+   * {@code restarted}, and {@code terminated}. The expected sequence is
+   * {@code started}, followed by zero or more repetitions of {@code disabled}
+   * followed by either {@code resumed} or {@code restarted}. A {@code terminated}
+   * notification may occur at any time and may be followed by a new occurrence
+   * of that sequence.
+   * <BR>Adapters based on older Adapter Interface versions may send only
+   * {@code started} and {@code terminated} notifications.
+   *
+   * @param state The state value received in the message.
+   */
+  void onMetadataAdapterStateChange(@Nonnull String state);
   
   /**
    * Event handler that receives a notification when the ClientListener instance is removed from a LightstreamerClient 

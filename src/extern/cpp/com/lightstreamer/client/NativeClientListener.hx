@@ -26,6 +26,7 @@ extern class NativeClientListener {
   function onListenStart(): Void;
   function onServerError(errorCode: Int, errorMessage: Reference<CppString>): Void;
   function onDataAdapterStateChange(state: Reference<CppString>, dataAdapterName: Reference<CppString>): Void;
+  function onMetadataAdapterStateChange(state: Reference<CppString>): Void;
   function onStatusChange(status: Reference<CppString>): Void;
   function onPropertyChange(property: Reference<CppString>): Void;
 }

@@ -624,6 +624,10 @@ class ClientMachine {
       var adapterState = args[1];
       var dataAdapterName = args[2];
       evtDATA_STATE(adapterState, dataAdapterName);
+    } else if (line.startsWith("METADATA_STATE,")) {
+      var args = line.split(",");
+      var adapterState = args[1];
+      evtMETADATA_STATE(adapterState);
     } else if (line.startsWith("CONS")) {
       // CONS,(unmanaged|unlimited|<bandwidth>)
       var args = line.split(",");
@@ -2416,6 +2420,17 @@ class ClientMachine {
     }
   }
 
+  function evtMETADATA_STATE(adapterState: String) {
+    traceEvent("METADATA_STATE");
+    protocolLogger.logDebug('METADATA_STATE $adapterState');
+    if (state.inPushing()) {
+      doMETADATA_STATE(adapterState);
+      if (state.inStreaming()) {
+        evtRestartKeepalive();
+      }
+    }
+  }
+
   function evtCONS(bandwidth: RealMaxBandwidth) {
     traceEvent("CONS");
     protocolLogger.logDebug('CONS $bandwidth');
@@ -4097,6 +4112,10 @@ class ClientMachine {
 
   function doDATA_STATE(adapterState: String, dataAdapterName: String) {
     clientEventDispatcher.onDataAdapterStateChange(adapterState, dataAdapterName);
+  }
+
+  function doMETADATA_STATE(adapterState: String) {
+    clientEventDispatcher.onMetadataAdapterStateChange(adapterState);
   }
 
   function doCONS(bandwidth: RealMaxBandwidth) {

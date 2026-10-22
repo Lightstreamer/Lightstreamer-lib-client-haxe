@@ -27,6 +27,10 @@ public class BaseClientListener implements ClientListener {
     }
 
     @Override
+    public void onMetadataAdapterStateChange(String state) {
+    }
+
+    @Override
     public void onListenEnd() {
     }
 

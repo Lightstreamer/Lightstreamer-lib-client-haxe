@@ -56,6 +56,23 @@ ClientListener.prototype = {
 
    },
 
+   /**
+    * Event handler called for every Metadata Adapter state notification.
+    * <BR>The state values are <code>started</code>, <code>disabled</code>,
+    * <code>resumed</code>, <code>restarted</code>, and <code>terminated</code>.
+    * The expected sequence is <code>started</code>, followed by zero or more
+    * repetitions of <code>disabled</code> followed by either <code>resumed</code>
+    * or <code>restarted</code>. A <code>terminated</code> notification may occur
+    * at any time and may be followed by a new occurrence of that sequence.
+    * <BR>Adapters based on older Adapter Interface versions may send only
+    * <code>started</code> and <code>terminated</code> notifications.
+    *
+    * @param {String} state The state value received in the message.
+    */
+   onMetadataAdapterStateChange: function(state) {
+
+   },
+
     /**
      * Event handler that is called when the Server notifies a refusal on the
      * client attempt to open a new connection or the interruption of a
