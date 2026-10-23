@@ -478,6 +478,84 @@ class TestSubscribe_WS extends utest.Test {
     .verify();
   }
 
+  function testSTALE(async: utest.Async) {
+    exps
+    .then(() -> {
+      subListener._onItemStale = (name, pos) -> exps.signal('onItemStale $name $pos');
+      client.subscribe(sub);
+      client.connect();
+    })
+    .await("ws.init http://server/lightstreamer")
+    .then(() -> ws.onOpen())
+    .await("wsok")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .then(() -> {
+      ws.onText("WSOK");
+      ws.onText("CONOK,sid,70000,5000,*");
+    })
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false&LS_ack=false")
+    .then(() -> {
+      ws.onText("SUBOK,1,1,2");
+      ws.onText("STALE,1,1");
+    })
+    .await("onItemStale item 1")
+    .then(() -> async.completed())
+    .verify();
+  }
+
+  function testRESUME(async: utest.Async) {
+    exps
+    .then(() -> {
+      subListener._onItemResume = (name, pos) -> exps.signal('onItemResume $name $pos');
+      client.subscribe(sub);
+      client.connect();
+    })
+    .await("ws.init http://server/lightstreamer")
+    .then(() -> ws.onOpen())
+    .await("wsok")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .then(() -> {
+      ws.onText("WSOK");
+      ws.onText("CONOK,sid,70000,5000,*");
+    })
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false&LS_ack=false")
+    .then(() -> {
+      ws.onText("SUBOK,1,1,2");
+      ws.onText("STALE,1,1");
+      ws.onText("RESUME,1,1");
+    })
+    .await("onItemResume item 1")
+    .then(() -> async.completed())
+    .verify();
+  }
+
+  function testLOST(async: utest.Async) {
+    exps
+    .then(() -> {
+      subListener._onItemLostUpdates = (name, pos, losts, isOverflow) -> exps.signal('onItemLostUpdates $name $pos $losts $isOverflow');
+      client.subscribe(sub);
+      client.connect();
+    })
+    .await("ws.init http://server/lightstreamer")
+    .then(() -> ws.onOpen())
+    .await("wsok")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .then(() -> {
+      ws.onText("WSOK");
+      ws.onText("CONOK,sid,70000,5000,*");
+    })
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false&LS_ack=false")
+    .then(() -> {
+      ws.onText("SUBOK,1,1,2");
+      ws.onText("LOST,1,1,33");
+    })
+    .await("onItemLostUpdates item 1 33 false")
+    .then(() -> ws.onText("LOST,1,1,?"))
+    .await("onItemLostUpdates item 1 -1 false")
+    .then(() -> async.completed())
+    .verify();
+  }
+
   function testSUBOK_Abort(async: utest.Async) {
     exps
     .then(() -> {

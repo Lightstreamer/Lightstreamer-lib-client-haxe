@@ -32,7 +32,7 @@ class TestUpdate2Level extends utest.Test {
       exps.signal("onItemUpdate");
     };
     subListener._onRealMaxFrequency = freq -> exps.signal('onRealMaxFrequency $freq');
-    subListener._onItemLostUpdates = (name, pos, losts, isOverflow) -> exps.signal('onItemLostUpdates $name $pos $losts');
+    subListener._onItemLostUpdates = (name, pos, losts, isOverflow) -> exps.signal('onItemLostUpdates $name $pos $losts $isOverflow');
     subListener._onCommandSecondLevelItemLostUpdates = (losts, key) -> exps.signal('onCommandSecondLevelItemLostUpdates $losts $key');
     subListener._onEndOfSnapshot = (name, pos) -> exps.signal('onEndOfSnapshot $name $pos');
     subListener._onCommandSecondLevelSubscriptionError = (code, message, key) -> exps.signal('on2LevelError $code $message $key');
@@ -1101,7 +1101,7 @@ class TestUpdate2Level extends utest.Test {
       ws.onText("SUBCMD,1,2,4,3,4");
       ws.onText("OV,1,1,5");
     })
-    .await("onItemLostUpdates i1 1 5")
+    .await("onItemLostUpdates i1 1 5 true")
     .then(() -> async.completed())
     .verify();
   }
@@ -1132,6 +1132,65 @@ class TestUpdate2Level extends utest.Test {
       ws.onText("OV,2,1,5");
     })
     .await("onCommandSecondLevelItemLostUpdates 5 item1")
+    .then(() -> async.completed())
+    .verify();
+  }
+
+  function testLOST1Level(async: utest.Async) {
+    exps
+    .then(() -> {
+      sub.setCommandSecondLevelFields(["f5", "f6"]);
+      client.subscribe(sub);
+      client.connect();
+    })
+    .await("ws.init http://server/lightstreamer")
+    .then(() -> ws.onOpen())
+    .await("wsok")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .then(() -> {
+      ws.onText("WSOK");
+      ws.onText("CONOK,sid,70000,5000,*");
+    })
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
+    .then(() -> {
+      ws.onText("SUBCMD,1,2,4,3,4");
+      ws.onText("LOST,1,1,5");
+    })
+    .await("onItemLostUpdates i1 1 5 false")
+    .then(() -> async.completed())
+    .verify();
+  }
+
+  function testLOST2Level(async: utest.Async) {
+    exps
+    .then(() -> {
+      subListener._onItemLostUpdates = (name, pos, losts, isOverflow) -> fail("Unexpected onItemLostUpdates");
+      subListener._onCommandSecondLevelItemLostUpdates = (losts, key) -> fail("Unexpected onCommandSecondLevelItemLostUpdates");
+      sub.setCommandSecondLevelFields(["f5", "f6"]);
+      client.subscribe(sub);
+      client.connect();
+    })
+    .await("ws.init http://server/lightstreamer")
+    .then(() -> ws.onOpen())
+    .await("wsok")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .then(() -> {
+      ws.onText("WSOK");
+      ws.onText("CONOK,sid,70000,5000,*");
+    })
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=i1&i2&LS_field=f1&f2&key&command&LS_snapshot=false&LS_ack=false")
+    .then(() -> {
+      ws.onText("SUBCMD,1,2,4,3,4");
+      ws.onText("U,1,1,a|b|item1|ADD");
+    })
+    .await("onItemUpdate", "control\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=MERGE&LS_item=item1&LS_field=f5&f6&LS_snapshot=true&LS_ack=false")
+    .then(() -> {
+      ws.onText("SUBOK,2,1,2");
+      ws.onText("LOST,2,1,5");
+      ws.onText("U,2,1,c|d");
+    })
+    .await("onItemUpdate")
+    .then(() -> strictEquals(2, updates.length))
     .then(() -> async.completed())
     .verify();
   }

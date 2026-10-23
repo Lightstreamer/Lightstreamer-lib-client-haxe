@@ -49,8 +49,10 @@ class BaseSubscriptionListener implements SubscriptionListener {
   public function onEndOfSnapshot(itemName:Null<String>, itemPos:Int) _onEndOfSnapshot(itemName, itemPos);
   dynamic public function _onItemLostUpdates(itemName:Null<String>, itemPos:Int, lostUpdates:Int, isOverflow:Bool) {}
   public function onItemLostUpdates(itemName:Null<String>, itemPos:Int, lostUpdates:Int, isOverflow:Bool) _onItemLostUpdates(itemName, itemPos, lostUpdates, isOverflow);
-  public function onItemStale(itemName:Null<String>, itemPos:Int) {}
-  public function onItemResume(itemName:Null<String>, itemPos:Int) {}
+  dynamic public function _onItemStale(itemName:Null<String>, itemPos:Int) {}
+  public function onItemStale(itemName:Null<String>, itemPos:Int) _onItemStale(itemName, itemPos);
+  dynamic public function _onItemResume(itemName:Null<String>, itemPos:Int) {}
+  public function onItemResume(itemName:Null<String>, itemPos:Int) _onItemResume(itemName, itemPos);
   dynamic public function _onRealMaxFrequency(frequency:Null<String>) {}
   public function onRealMaxFrequency(frequency:Null<String>) _onRealMaxFrequency(frequency);
   dynamic public function _onCommandSecondLevelSubscriptionError(code:Int, message:String, key:String) {}

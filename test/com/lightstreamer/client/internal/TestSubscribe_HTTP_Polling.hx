@@ -370,6 +370,99 @@ class TestSubscribe_HTTP_Polling extends utest.Test {
     .verify();
   }
 
+  function testSTALE(async: utest.Async) {
+    exps
+    .then(() -> {
+      subListener._onItemStale = (name, pos) -> exps.signal('onItemStale $name $pos');
+      client.subscribe(sub);
+      client.connect();
+    })
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
+    .then(() -> {
+      http.onText("CONOK,sid,70000,5000,*");
+      http.onText("LOOP,0");
+    })
+    .await("http.dispose")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop")
+    .await("ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.6.0&LS_session=sid\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false")
+    .then(() -> {
+      ctrl.onText("REQOK,1");
+      ctrl.onDone();
+    })
+    .await("ctrl.dispose")
+    .then(() -> {
+      http.onText("CONOK,sid,70000,5000,*");
+      http.onText("SUBOK,1,1,2");
+      http.onText("STALE,1,1");
+    })
+    .await("onItemStale item 1")
+    .then(() -> async.completed())
+    .verify();
+  }
+
+  function testRESUME(async: utest.Async) {
+    exps
+    .then(() -> {
+      subListener._onItemResume = (name, pos) -> exps.signal('onItemResume $name $pos');
+      client.subscribe(sub);
+      client.connect();
+    })
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
+    .then(() -> {
+      http.onText("CONOK,sid,70000,5000,*");
+      http.onText("LOOP,0");
+    })
+    .await("http.dispose")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop")
+    .await("ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.6.0&LS_session=sid\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false")
+    .then(() -> {
+      ctrl.onText("REQOK,1");
+      ctrl.onDone();
+    })
+    .await("ctrl.dispose")
+    .then(() -> {
+      http.onText("CONOK,sid,70000,5000,*");
+      http.onText("SUBOK,1,1,2");
+      http.onText("STALE,1,1");
+      http.onText("RESUME,1,1");
+    })
+    .await("onItemResume item 1")
+    .then(() -> async.completed())
+    .verify();
+  }
+
+  function testLOST(async: utest.Async) {
+    exps
+    .then(() -> {
+      subListener._onItemLostUpdates = (name, pos, losts, isOverflow) -> exps.signal('onItemLostUpdates $name $pos $losts $isOverflow');
+      client.subscribe(sub);
+      client.connect();
+    })
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
+    .then(() -> {
+      http.onText("CONOK,sid,70000,5000,*");
+      http.onText("LOOP,0");
+    })
+    .await("http.dispose")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop")
+    .await("ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.6.0&LS_session=sid\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false")
+    .then(() -> {
+      ctrl.onText("REQOK,1");
+      ctrl.onDone();
+    })
+    .await("ctrl.dispose")
+    .then(() -> {
+      http.onText("CONOK,sid,70000,5000,*");
+      http.onText("SUBOK,1,1,2");
+      http.onText("LOST,1,1,33");
+    })
+    .await("onItemLostUpdates item 1 33 false")
+    .then(() -> http.onText("LOST,1,1,?"))
+    .await("onItemLostUpdates item 1 -1 false")
+    .then(() -> async.completed())
+    .verify();
+  }
+
   function testSUBOK_Abort(async: utest.Async) {
     exps
     .then(() -> {
