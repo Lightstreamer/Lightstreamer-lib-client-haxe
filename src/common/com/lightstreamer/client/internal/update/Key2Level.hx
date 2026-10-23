@@ -502,10 +502,12 @@ private class Sub2LevelDelegate implements SubscriptionListener {
     });
   }
 
-  public function onItemLostUpdates(itemName: Null<String>, itemPos: Pos, lostUpdates: Int) {
-    synchronized(() -> {
-      key.evtOnItemLostUpdates2Level(lostUpdates);
-    });
+  public function onItemLostUpdates(itemName: Null<String>, itemPos: Pos, lostUpdates: Int, isOverflow: Bool) {
+    if (isOverflow) {
+      synchronized(() -> {
+        key.evtOnItemLostUpdates2Level(lostUpdates);
+      });
+    }
   }
 
   public function onRealMaxFrequency(frequency: Null<String>) {
@@ -528,6 +530,8 @@ private class Sub2LevelDelegate implements SubscriptionListener {
   public function onCommandSecondLevelItemLostUpdates(lostUpdates:Int, key:String) {}
   public function onCommandSecondLevelSubscriptionError(code:Int, message:String, key:String) {}
   public function onEndOfSnapshot(itemName:Null<String>, itemPos:Int) {}
+  public function onItemStale(itemName:Null<String>, itemPos:Int) {}
+  public function onItemResume(itemName:Null<String>, itemPos:Int) {}
   public function onListenEnd(#if js sub: Subscription #end) {}
   public function onListenStart(#if js sub: Subscription #end) {}
   public function onSubscription() {}

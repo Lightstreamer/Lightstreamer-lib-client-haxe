@@ -657,9 +657,23 @@ class LSSubscription {
 
   @:synchronized
   @:allow(com.lightstreamer.client.internal.SubscriptionManager)
-  function fireOnLostUpdates(itemIdx: Pos, lostUpdates: Int, subId: Int) {
-    subscriptionLogger.logDebug('Subscription $subId:${getItemNameOrPos(itemIdx)}: lost $lostUpdates updates');
-    eventDispatcher.onItemLostUpdates(getItemName(itemIdx), itemIdx, lostUpdates);
+  function fireOnLostUpdates(itemIdx: Pos, lostUpdates: Int, isOverflow: Bool, subId: Int) {
+    subscriptionLogger.logDebug('Subscription $subId:${getItemNameOrPos(itemIdx)}: lost $lostUpdates updates (overflow: $isOverflow)');
+    eventDispatcher.onItemLostUpdates(getItemName(itemIdx), itemIdx, lostUpdates, isOverflow);
+  }
+
+  @:synchronized
+  @:allow(com.lightstreamer.client.internal.SubscriptionManager)
+  function fireOnItemStale(itemIdx: Pos, subId: Int) {
+    subscriptionLogger.logDebug('Subscription $subId:${getItemNameOrPos(itemIdx)}: item stale');
+    eventDispatcher.onItemStale(getItemName(itemIdx), itemIdx);
+  }
+
+  @:synchronized
+  @:allow(com.lightstreamer.client.internal.SubscriptionManager)
+  function fireOnItemResume(itemIdx: Pos, subId: Int) {
+    subscriptionLogger.logDebug('Subscription $subId:${getItemNameOrPos(itemIdx)}: item resumed');
+    eventDispatcher.onItemResume(getItemName(itemIdx), itemIdx);
   }
   
   @:synchronized

@@ -85,9 +85,9 @@ public:
   void onEndOfSnapshot(const std::string& name, int pos) override {
     if (_onEndOfSnapshot) _onEndOfSnapshot(name, pos);
   }
-  std::function<void(const std::string&, int, int)> _onItemLostUpdates;
-  void onItemLostUpdates(const std::string& name, int pos, int lost) override {
-    if (_onItemLostUpdates) _onItemLostUpdates(name, pos, lost);
+  std::function<void(const std::string&, int, int, bool)> _onItemLostUpdates;
+  void onItemLostUpdates(const std::string& name, int pos, int lost, bool isOverflow) override {
+    if (_onItemLostUpdates) _onItemLostUpdates(name, pos, lost, isOverflow);
   }
 };
 
@@ -992,7 +992,7 @@ TEST_FIXTURE(Setup, testOverflow) {
 	sub.setDataAdapter("OVERFLOW");
   sub.setRequestedMaxFrequency("unfiltered");
   sub.addListener(subListener);
-  subListener->_onItemLostUpdates = [&](auto& name, auto pos, auto lost) {
+  subListener->_onItemLostUpdates = [&](auto& name, auto pos, auto lost, auto isOverflow) {
     EXPECT_EQ("overflow", name);
 	  EXPECT_EQ(1, pos);
 	  client.unsubscribe(&sub);

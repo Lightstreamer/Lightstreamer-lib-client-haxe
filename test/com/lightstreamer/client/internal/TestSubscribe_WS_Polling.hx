@@ -337,7 +337,7 @@ class TestSubscribe_WS_Polling extends utest.Test {
   function testOV(async: utest.Async) {
     exps
     .then(() -> {
-      subListener._onItemLostUpdates = (name, pos, losts) -> exps.signal('onItemLostUpdates $name $pos $losts');
+      subListener._onItemLostUpdates = (name, pos, losts, isOverflow) -> exps.signal('onItemLostUpdates $name $pos $losts $isOverflow');
       client.subscribe(sub);
       client.connect();
     })
@@ -358,7 +358,7 @@ class TestSubscribe_WS_Polling extends utest.Test {
       ws.onText("SUBOK,1,1,2");
       ws.onText("OV,1,1,33");
     })
-    .await("onItemLostUpdates item 1 33")
+    .await("onItemLostUpdates item 1 33 true")
     .then(() -> async.completed())
     .verify();
   }

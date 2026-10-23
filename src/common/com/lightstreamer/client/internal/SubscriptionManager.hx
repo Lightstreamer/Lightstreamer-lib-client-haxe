@@ -34,6 +34,9 @@ interface SubscriptionManager extends Encodable {
   public function evtUNSUB(): Void;
   public function evtEOS(itemIdx: Pos): Void;
   public function evtCS(itemIdx: Pos): Void;
+  public function evtSTALE(itemIdx: Pos): Void;
+  public function evtRESUME(itemIdx: Pos): Void;
+  public function evtLOST(itemIdx: Pos, lostUpdates: Int): Void;
   public function evtOV(itemIdx: Pos, lostUpdates: Int): Void;
   public function evtCONF(freq: RealMaxFrequency): Void;
   public function evtREQOK(reqId: Int): Void;
@@ -319,6 +322,30 @@ class SubscriptionManagerLiving implements SubscriptionManager {
     }
   }
 
+  public function evtSTALE(itemIdx: Int) {
+    traceEvent("STALE");
+    if (state.s_s == s10) {
+      doSTALE(itemIdx);
+      goto(state.s_s = s10);
+    }
+  }
+
+  public function evtRESUME(itemIdx: Int) {
+    traceEvent("RESUME");
+    if (state.s_s == s10) {
+      doRESUME(itemIdx);
+      goto(state.s_s = s10);
+    }
+  }
+
+  public function evtLOST(itemIdx: Int, lostUpdates: Int) {
+    traceEvent("LOST");
+    if (state.s_s == s10) {
+      doLOST(itemIdx, lostUpdates);
+      goto(state.s_s = s10);
+    }
+  }
+
   public function evtOV(itemIdx: Int, lostUpdates: Int) {
     traceEvent("OV");
     if (state.s_s == s10) {
@@ -567,8 +594,20 @@ class SubscriptionManagerLiving implements SubscriptionManager {
     m_subscription.fireOnClearSnapshot(itemIdx, subId);
   }
   
+  function doSTALE(itemIdx: Int) {
+    m_subscription.fireOnItemStale(itemIdx, subId);
+  }
+
+  function doRESUME(itemIdx: Int) {
+    m_subscription.fireOnItemResume(itemIdx, subId);
+  }
+
+  function doLOST(itemIdx: Int, lostUpdates: Int) {
+    m_subscription.fireOnLostUpdates(itemIdx, lostUpdates, false, subId);
+  }
+
   function doOV(itemIdx: Int, lostUpdates: Int) {
-    m_subscription.fireOnLostUpdates(itemIdx, lostUpdates, subId);
+    m_subscription.fireOnLostUpdates(itemIdx, lostUpdates, true, subId);
   }
   
   function doCONF(freq: RealMaxFrequency) {

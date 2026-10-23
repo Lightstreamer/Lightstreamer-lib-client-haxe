@@ -22,7 +22,9 @@ package com.lightstreamer.client;
   function onCommandSecondLevelItemLostUpdates(lostUpdates: Int, key: String): Void;
   function onCommandSecondLevelSubscriptionError(code: Int, message: String, key: String): Void;
   function onEndOfSnapshot(itemName: Null<String>, itemPos: Int): Void;
-  function onItemLostUpdates(itemName: Null<String>, itemPos: Int, lostUpdates: Int): Void;
+  function onItemLostUpdates(itemName: Null<String>, itemPos: Int, lostUpdates: Int, isOverflow: Bool): Void;
+  function onItemStale(itemName: Null<String>, itemPos: Int): Void;
+  function onItemResume(itemName: Null<String>, itemPos: Int): Void;
   function onItemUpdate(update: ItemUpdate): Void;
   // NB onListenStart and onListenEnd have the hidden parameter `sub` for the sake of the legacy web widgets
   function onListenEnd(#if js sub: Subscription #end): Void;

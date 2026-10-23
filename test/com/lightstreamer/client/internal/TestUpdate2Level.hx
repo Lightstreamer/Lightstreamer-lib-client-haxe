@@ -32,7 +32,7 @@ class TestUpdate2Level extends utest.Test {
       exps.signal("onItemUpdate");
     };
     subListener._onRealMaxFrequency = freq -> exps.signal('onRealMaxFrequency $freq');
-    subListener._onItemLostUpdates = (name, pos, losts) -> exps.signal('onItemLostUpdates $name $pos $losts');
+    subListener._onItemLostUpdates = (name, pos, losts, isOverflow) -> exps.signal('onItemLostUpdates $name $pos $losts');
     subListener._onCommandSecondLevelItemLostUpdates = (losts, key) -> exps.signal('onCommandSecondLevelItemLostUpdates $losts $key');
     subListener._onEndOfSnapshot = (name, pos) -> exps.signal('onEndOfSnapshot $name $pos');
     subListener._onCommandSecondLevelSubscriptionError = (code, message, key) -> exps.signal('on2LevelError $code $message $key');

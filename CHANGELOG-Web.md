@@ -1,5 +1,14 @@
 # Lightstreamer Web Client Changelog
 
+## Unreleased
+
+**New:** Added support for `STALE` and `RESUME` item notifications through `SubscriptionListener.onItemStale` and `SubscriptionListener.onItemResume`, preserving cached values and snapshots.
+
+**Changed (breaking):** Replaced the three-argument loss callback with `onItemLostUpdates(itemName, itemPos, lostUpdates, isOverflow)`. `isOverflow` is true for Server buffer overflow (`OV`) and false for Data Adapter loss (`LOST`); `lostUpdates` is -1 when the count is unavailable.
+
+Second-level COMMAND stale, resume, and Data Adapter loss notifications are ignored. Second-level Server overflow continues through the unchanged `onCommandSecondLevelItemLostUpdates(lostUpdates, key)` callback. All new notifications participate in session-recovery counting and replay suppression.
+
+
 ## 9.2.3
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
 *Compatible with Chrome 72+*<br/>

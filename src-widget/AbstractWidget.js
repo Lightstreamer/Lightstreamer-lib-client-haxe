@@ -216,7 +216,7 @@ export default /*@__PURE__*/(function() {
       /*
       UNUSED SubscriptionListener methods
       
-      onItemLostUpdates: function(itemName, itemPos, lostUpdates) {
+      onItemLostUpdates: function(itemName, itemPos, lostUpdates, isOverflow) {
         
       },
       

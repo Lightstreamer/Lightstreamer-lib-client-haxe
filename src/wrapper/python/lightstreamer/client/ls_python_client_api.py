@@ -381,24 +381,52 @@ class SubscriptionListener:
    """
     pass
 
-  def onItemLostUpdates(self,itemName,itemPos,lostUpdates):
-    """Event handler that is called by Lightstreamer to notify that, due to internal resource limitations, 
-   Lightstreamer Server dropped one or more updates for an item in the Subscription. 
-   Such notifications are sent only if the items are delivered in an unfiltered mode; this occurs if the 
-   subscription mode is:
-   
+  def onItemLostUpdates(self,itemName,itemPos,lostUpdates,isOverflow):
+    """Event handler that is called by Lightstreamer to report lost updates for an item in the Subscription.
+   When isOverflow is True, updates were dropped by Server buffer overflow (OV).
+   Notifications can be delivered in the following modes:
+
      * RAW
      * MERGE or DISTINCT, with unfiltered dispatching specified
-     * COMMAND, with unfiltered dispatching specified
-     * COMMAND, without unfiltered dispatching specified (in this case, notifications apply to ADD and DELETE events only)
-   
-   By implementing this method it is possible to perform recovery actions.
-   
-  :param itemName: name of the involved item from the explicit "Item List".
-  :param itemPos: 1-based position of the item within the "Item List".
-   :param lostUpdates: The number of consecutive updates dropped for the item.
+     * COMMAND, for ADD and DELETE events, or for all update event types when unfiltered dispatching was requested
+
+   When isOverflow is False, the Data Adapter reported lost updates (LOST). Notifications can be
+   delivered in RAW or COMMAND mode regardless of whether unfiltered dispatching was requested,
+   and in MERGE or DISTINCT mode only when unfiltered dispatching was requested.
+
+   For two-level COMMAND Subscriptions, this callback refers only to first-level items.
+   Second-level LOST notifications are not propagated to the parent's listeners; second-level OV
+   notifications continue through :meth:`.onCommandSecondLevelItemLostUpdates`.
+
+   :param itemName: name of the involved item from the explicit "Item List".
+   :param itemPos: 1-based position of the item within the "Item List".
+   :param lostUpdates: integer number of lost updates, or -1 when the count is unavailable.
+   :param isOverflow: True for Server buffer overflow; False for Data Adapter loss notifications.
    
    .. seealso:: :meth:`.Subscription.setRequestedMaxFrequency`
+   """
+    pass
+
+  def onItemStale(self,itemName,itemPos):
+    """Event handler that is called when problems obtaining updates block an item's update event flow.
+
+   For two-level COMMAND Subscriptions, this callback refers only to first-level items.
+   Stale notifications for internal second-level items are not propagated to the parent's listeners.
+
+   :param itemName: name of the involved item from the explicit "Item List".
+   :param itemPos: 1-based position of the item within the "Item List".
+   """
+    pass
+
+  def onItemResume(self,itemName,itemPos):
+    """Event handler that is called when an item's update event flow, previously reported as blocked,
+   is no longer blocked.
+
+   For two-level COMMAND Subscriptions, this callback refers only to first-level items.
+   Resume notifications for internal second-level items are not propagated to the parent's listeners.
+
+   :param itemName: name of the involved item from the explicit "Item List".
+   :param itemPos: 1-based position of the item within the "Item List".
    """
     pass
 

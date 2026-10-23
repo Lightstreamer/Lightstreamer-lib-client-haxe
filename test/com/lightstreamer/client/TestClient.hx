@@ -401,9 +401,10 @@ class TestClient extends utest.Test {
     sub.setRequestedSnapshot("yes");
     sub.setDataAdapter("OVERFLOW");
     sub.setRequestedMaxFrequency("unfiltered");
-    subListener._onItemLostUpdates = (name, pos, lost) -> {
+    subListener._onItemLostUpdates = (name, pos, lost, isOverflow) -> {
       equals("overflow", name);
       equals(1, pos);
+      equals(true, isOverflow);
       client.unsubscribe(sub);
     };
     subListener._onUnsubscription = () -> {

@@ -503,7 +503,7 @@ class TestRecovery extends utest.Test {
       subListener._onItemUpdate = update -> exps.signal("onItemUpdate");
       subListener._onEndOfSnapshot = (itemName, itemPos) -> exps.signal("onEndOfSnapshot");
       subListener._onClearSnapshot = (itemName, itemPos) -> exps.signal("onClearSnapshot");
-      subListener._onItemLostUpdates = (itemName, itemPos, lostUpdates) -> exps.signal("onItemLostUpdates");
+      subListener._onItemLostUpdates = (itemName, itemPos, lostUpdates, isOverflow) -> exps.signal("onItemLostUpdates");
       subListener._onRealMaxFrequency = frequency -> exps.signal("onRealMaxFrequency");
       subListener._onUnsubscription = () -> exps.signal("onUnsubscription");
       sub.addListener(subListener);
@@ -555,7 +555,7 @@ class TestRecovery extends utest.Test {
       subListener._onItemUpdate = update -> exps.signal("onItemUpdate");
       subListener._onEndOfSnapshot = (itemName, itemPos) -> exps.signal("onEndOfSnapshot");
       subListener._onClearSnapshot = (itemName, itemPos) -> exps.signal("onClearSnapshot");
-      subListener._onItemLostUpdates = (itemName, itemPos, lostUpdates) -> exps.signal("onItemLostUpdates");
+      subListener._onItemLostUpdates = (itemName, itemPos, lostUpdates, isOverflow) -> exps.signal("onItemLostUpdates");
       subListener._onRealMaxFrequency = frequency -> exps.signal("onRealMaxFrequency");
       subListener._onUnsubscription = () -> exps.signal("onUnsubscription");
       sub.addListener(subListener);

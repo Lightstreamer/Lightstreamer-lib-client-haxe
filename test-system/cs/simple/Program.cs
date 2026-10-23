@@ -97,10 +97,12 @@ namespace myapp
             {
                 Log("End of Snapshot for " + itemName + ".");
             }
-            void SubscriptionListener.onItemLostUpdates(string itemName, int itemPos, int lostUpdates)
+            void SubscriptionListener.onItemLostUpdates(string itemName, int itemPos, int lostUpdates, bool isOverflow)
             {
                 Log("Lost Updates for " + itemName + " (" + lostUpdates + ").");
             }
+            void SubscriptionListener.onItemStale(string itemName, int itemPos) {}
+            void SubscriptionListener.onItemResume(string itemName, int itemPos) {}
             void SubscriptionListener.onItemUpdate(ItemUpdate itemUpdate)
             {
                 //Log("New update for " + itemUpdate.ItemName);

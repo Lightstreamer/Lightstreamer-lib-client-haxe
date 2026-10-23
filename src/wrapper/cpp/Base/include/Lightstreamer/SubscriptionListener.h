@@ -119,26 +119,49 @@ public:
    */
   virtual void onEndOfSnapshot(const std::string& itemName, int itemPos) {}
   /**
-   * Event handler that is called by Lightstreamer to notify that, due to internal resource limitations, 
-   * Lightstreamer Server dropped one or more updates for an item in the Subscription. 
-   * Such notifications are sent only if the items are delivered in an unfiltered mode; this occurs if the 
-   * subscription mode is:
+  * Event handler that is called by Lightstreamer to report lost updates for an item in the Subscription.
+  * When isOverflow is true, updates were dropped by Server buffer overflow (OV).
+  * Notifications can be delivered in the following modes:
    * <ul>
    *   <li>RAW</li>
    *   <li>MERGE or DISTINCT, with unfiltered dispatching specified</li>
-   *   <li>COMMAND, with unfiltered dispatching specified</li>
-   *   <li>COMMAND, without unfiltered dispatching specified (in this case, notifications apply to ADD 
-   *       and DELETE events only)</li>
+  *   <li>COMMAND, for ADD and DELETE events, or for all update event types when unfiltered dispatching
+  *       was requested</li>
    * </ul>
-   * By implementing this method it is possible to perform recovery actions.
-   * 
+  * When isOverflow is false, the Data Adapter reported lost updates (LOST). Notifications can be
+  * delivered in RAW or COMMAND mode regardless of whether unfiltered dispatching was requested,
+  * and in MERGE or DISTINCT mode only when unfiltered dispatching was requested. <BR>
+  * For two-level COMMAND Subscriptions, this callback refers only to first-level items.
+  * Second-level LOST notifications are not propagated to the parent's listeners; second-level OV
+  * notifications continue through {@link #onCommandSecondLevelItemLostUpdates()}.
+  *
   * @param itemName name of the involved item in the explicit item list.
   * @param itemPos 1-based position of the item within the item list.
-   * @param lostUpdates The number of consecutive updates dropped for the item.
+  * @param lostUpdates integer number of lost updates, or -1 when the count is unavailable.
+  * @param isOverflow true for Server buffer overflow; false for Data Adapter loss notifications.
    * 
    * @see Subscription#setRequestedMaxFrequency()
    */
-  virtual void onItemLostUpdates(const std::string& itemName, int itemPos, int lostUpdates) {}
+  virtual void onItemLostUpdates(const std::string& itemName, int itemPos, int lostUpdates, bool isOverflow) {}
+  /**
+  * Event handler that is called when problems obtaining updates block an item's update event flow.<BR>
+  * For two-level COMMAND Subscriptions, this callback refers only to first-level items.
+  * Stale notifications for internal second-level items are not propagated to the parent's listeners.
+  *
+  * @param itemName name of the involved item in the explicit item list.
+  * @param itemPos 1-based position of the item within the item list.
+  */
+  virtual void onItemStale(const std::string& itemName, int itemPos) {}
+  /**
+  * Event handler that is called when an item's update event flow, previously reported as blocked,
+  * is no longer blocked. <BR>
+  * For two-level COMMAND Subscriptions, this callback refers only to first-level items.
+  * Resume notifications for internal second-level items are not propagated to the parent's listeners.
+  *
+  * @param itemName name of the involved item in the explicit item list.
+  * @param itemPos 1-based position of the item within the item list.
+  */
+  virtual void onItemResume(const std::string& itemName, int itemPos) {}
   /**
    * Event handler that is called by Lightstreamer each time an update pertaining to an item in the Subscription
    * has been received from the Server.

@@ -45,9 +45,17 @@ class SubscriptionListenerAdapter implements SubscriptionListener extends cpp.Fi
     var itemName = itemName ?? "";
     _listener.ref.onEndOfSnapshot(itemName, itemPos);
   }
-  public function onItemLostUpdates(itemName: Null<String>, itemPos: Int, lostUpdates: Int): Void {
+  public function onItemLostUpdates(itemName: Null<String>, itemPos: Int, lostUpdates: Int, isOverflow: Bool): Void {
     var itemName = itemName ?? "";
-    _listener.ref.onItemLostUpdates(itemName, itemPos, lostUpdates);
+    _listener.ref.onItemLostUpdates(itemName, itemPos, lostUpdates, isOverflow);
+  }
+  public function onItemStale(itemName: Null<String>, itemPos: Int): Void {
+    var itemName = itemName ?? "";
+    _listener.ref.onItemStale(itemName, itemPos);
+  }
+  public function onItemResume(itemName: Null<String>, itemPos: Int): Void {
+    var itemName = itemName ?? "";
+    _listener.ref.onItemResume(itemName, itemPos);
   }
   public function onItemUpdate(update: ItemUpdate): Void {
     // hxObj is released by NativeItemUpdate's destructor

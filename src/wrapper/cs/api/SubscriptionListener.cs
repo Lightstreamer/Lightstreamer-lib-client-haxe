@@ -112,25 +112,47 @@ namespace com.lightstreamer.client
         void onEndOfSnapshot(string itemName, int itemPos);
 
         /// <summary>
-        /// Event handler that is called by Lightstreamer to notify that, due to internal resource limitations, 
-        /// Lightstreamer Server dropped one or more updates for an item in the Subscription. 
-        /// Such notifications are sent only if the items are delivered in an unfiltered mode; this occurs if the 
-        /// subscription mode is:
+        /// Event handler that is called by Lightstreamer to report lost updates for an item in the Subscription.
+        /// When isOverflow is true, updates were dropped by Server buffer overflow (OV).
+        /// Notifications can be delivered in the following modes:
         /// <ul>
         ///   <li>RAW</li>
         ///   <li>MERGE or DISTINCT, with unfiltered dispatching specified</li>
-        ///   <li>COMMAND, with unfiltered dispatching specified</li>
-        ///   <li>COMMAND, without unfiltered dispatching specified (in this case, notifications apply to ADD 
-        ///       and DELETE events only)</li>
+        ///   <li>COMMAND, for ADD and DELETE events, or for all update event types when unfiltered dispatching
+        ///       was requested</li>
         /// </ul>
-        /// By implementing this method it is possible to perform recovery actions.
+        /// When isOverflow is false, the Data Adapter reported lost updates (LOST). Notifications can be
+        /// delivered in RAW or COMMAND mode regardless of whether unfiltered dispatching was requested,
+        /// and in MERGE or DISTINCT mode only when unfiltered dispatching was requested.<br/>
+        /// For two-level COMMAND Subscriptions, this callback refers only to first-level items.
+        /// Second-level LOST notifications are not propagated to the parent's listeners; second-level OV
+        /// notifications continue through <c>onCommandSecondLevelItemLostUpdates</c>.
         /// </summary>
         /// <param name="itemName"> name of the involved item in the explicit item list. </param>
         /// <param name="itemPos"> 1-based position of the item within the item list. </param>
-        /// <param name="lostUpdates"> The number of consecutive updates dropped for the item.
-        /// </param>
+        /// <param name="lostUpdates"> integer number of lost updates, or -1 when the count is unavailable. </param>
+        /// <param name="isOverflow"> true for Server buffer overflow; false for Data Adapter loss notifications. </param>
         /// <c>Subscription.RequestedMaxFrequency</c>
-        void onItemLostUpdates(string itemName, int itemPos, int lostUpdates);
+        void onItemLostUpdates(string itemName, int itemPos, int lostUpdates, bool isOverflow);
+
+        /// <summary>
+        /// Event handler that is called when problems obtaining updates block an item's update event flow. <br/>
+        /// For two-level COMMAND Subscriptions, this callback refers only to first-level items.
+        /// Stale notifications for internal second-level items are not propagated to the parent's listeners.
+        /// </summary>
+        /// <param name="itemName"> name of the involved item in the explicit item list. </param>
+        /// <param name="itemPos"> 1-based position of the item within the item list. </param>
+        void onItemStale(string itemName, int itemPos);
+
+        /// <summary>
+        /// Event handler that is called when an item's update event flow, previously reported as blocked,
+        /// is no longer blocked. <br/>
+        /// For two-level COMMAND Subscriptions, this callback refers only to first-level items.
+        /// Resume notifications for internal second-level items are not propagated to the parent's listeners.
+        /// </summary>
+        /// <param name="itemName"> name of the involved item in the explicit item list. </param>
+        /// <param name="itemPos"> 1-based position of the item within the item list. </param>
+        void onItemResume(string itemName, int itemPos);
 
         /// <summary>
         /// Event handler that is called by Lightstreamer each time an update pertaining to an item in the Subscription
