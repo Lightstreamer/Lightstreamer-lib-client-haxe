@@ -406,6 +406,35 @@ class TestFreeze extends utest.Test {
     .verify();
   }
 
+  function testCreateTTL_Error12(async: utest.Async) {
+    listener._onServerError = (code, message) -> exps.signal('onServerError $code $message');
+
+    exps
+    .then(() -> client.connect())
+    .await("ws.init http://server/lightstreamer")
+    .await("CONNECTING")
+    .then(() -> ws.onOpen())
+    .await("wsok")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .then(() -> {
+      ws.onText("WSOK");
+      ws.onText("CONERR,5,server busy");
+    })
+    .await("ws.dispose")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=ws.conerr.5")
+    .await("DISCONNECTED:WILL-RETRY")
+    .await("CONNECTING")
+    .then(() -> http.onText("CONERR,12,Adapter SDK%2C incompatible"))
+    .await("http.dispose")
+    .await("DISCONNECTED")
+    .await("onServerError 12 Adapter SDK, incompatible")
+    .then(() -> {
+      equals("DISCONNECTED", client.getStatus());
+      async.completed();
+    })
+    .verify();
+  }
+
   function testWhileDisconnected(async: utest.Async) {
     exps
     .then(() -> {

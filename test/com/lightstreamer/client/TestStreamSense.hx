@@ -34,6 +34,55 @@ class TestStreamSense extends utest.Test {
     client.disconnect();
   }
 
+  function testCreateWs_Error12(async: utest.Async) {
+    var listener = new BaseListener.BaseClientListener();
+    listener._onStatusChange = status -> exps.signal(status);
+    listener._onServerError = (code, message) -> exps.signal('onServerError $code $message');
+    client.addListener(listener);
+
+    exps
+    .then(() -> client.connect())
+    .await("ws.init http://server/lightstreamer")
+    .await("CONNECTING")
+    .then(() -> ws.onOpen())
+    .await("wsok")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .then(() -> {
+      ws.onText("WSOK");
+      ws.onText("CONERR,12,Adapter SDK%2C incompatible");
+    })
+    .await("ws.dispose")
+    .await("DISCONNECTED")
+    .await("onServerError 12 Adapter SDK, incompatible")
+    .then(() -> {
+      equals("DISCONNECTED", client.getStatus());
+      async.completed();
+    })
+    .verify();
+  }
+
+  function testCreateHttp_Error12(async: utest.Async) {
+    client.connectionOptions.setForcedTransport("HTTP");
+    var listener = new BaseListener.BaseClientListener();
+    listener._onStatusChange = status -> exps.signal(status);
+    listener._onServerError = (code, message) -> exps.signal('onServerError $code $message');
+    client.addListener(listener);
+
+    exps
+    .then(() -> client.connect())
+    .await("CONNECTING",
+      "http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
+    .then(() -> http.onText("CONERR,12,Adapter SDK%2C incompatible"))
+    .await("http.dispose")
+    .await("DISCONNECTED")
+    .await("onServerError 12 Adapter SDK, incompatible")
+    .then(() -> {
+      equals("DISCONNECTED", client.getStatus());
+      async.completed();
+    })
+    .verify();
+  }
+
   #if LS_WEB
   /**
    * When the user sets some headers

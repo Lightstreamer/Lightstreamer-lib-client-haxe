@@ -117,6 +117,7 @@ class ClientListener:
      * 9 - configured maximum server load reached
      * 10 - new sessions temporarily blocked
      * 11 - streaming is not available because of Server license restrictions (this can only happen with special licenses).
+    * 12 - The Metadata Adapter mounted in the specified Adapter Set is incompatible with this protocol version because it uses the older callback-based Java In-Process Adapter SDK.
      * 21 - a request for this session has unexpectedly reached a wrong Server instance, which suggests that a routing issue may be in place.
      * 30-41 - the current connection or the whole session has been closed by external agents; the possible cause may be:
        
@@ -292,6 +293,7 @@ class SubscriptionListener:
 
    :param code: The error code sent by the Server. It can be one of the following:
           
+            * 6 - Cannot evaluate a subscription request because the Data Adapter is disabled (only raised with Data Adapter interface version 9 or later).
             * 15 - "key" field not specified in the schema for a COMMAND mode subscription
             * 16 - "command" field not specified in the schema for a COMMAND mode subscription
             * 17 - bad Data Adapter name or default Data Adapter not defined for the current Adapter Set
@@ -306,6 +308,8 @@ class SubscriptionListener:
             * 29 - RAW mode is not allowed by the current license terms (for special licenses only)
             * 30 - subscriptions are not allowed by the current license terms (for special licenses only)
             * 61 - there was an error in the parsing of the server response
+            * 63 - Subscription refused by the Data Adapter (only raised with Data Adapter interface version 9 or later).
+            * 64 - An unchecked exception was thrown in the Data Adapter while managing a subscription request (only raised with Data Adapter interface version 9 or later).
             * 66 - an unexpected exception was thrown by the Metadata Adapter while authorizing the connection
             * 68 - the Server could not fulfill the request because of an internal error.
             * <= 0 - the Metadata Adapter has refused the subscription or unsubscription request; the code value is dependent on the specific Metadata Adapter implementation

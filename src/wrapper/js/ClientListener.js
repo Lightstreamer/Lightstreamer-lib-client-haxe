@@ -93,6 +93,7 @@ ClientListener.prototype = {
      * <li>10 - new sessions temporarily blocked</li>
      * <li>11 - streaming is not available because of Server license
      * restrictions (this can only happen with special licenses)</li>
+   * <li>12 - The Metadata Adapter mounted in the specified Adapter Set is incompatible with this protocol version because it uses the older callback-based Java In-Process Adapter SDK.</li>
      * <li>21 - a bind request has unexpectedly reached a wrong Server instance, which suggests that a routing issue may be in place</li>
      * <li>30-41 - the current connection or the whole session has been closed
      * by external agents; the possible cause may be:

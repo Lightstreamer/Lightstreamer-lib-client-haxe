@@ -200,6 +200,7 @@ namespace com.lightstreamer.client
         /// </summary>
         /// <param name="code"> The error code sent by the Server. It can be one of the following:
         ///        <ul>
+        ///          <li>6 - Cannot evaluate a subscription request because the Data Adapter is disabled (only raised with Data Adapter interface version 9 or later).</li>
         ///          <li>15 - "key" field not specified in the schema for a COMMAND mode subscription</li>
         ///          <li>16 - "command" field not specified in the schema for a COMMAND mode subscription</li>
         ///          <li>17 - bad Data Adapter name or default Data Adapter not defined for the current Adapter Set</li>
@@ -216,6 +217,8 @@ namespace com.lightstreamer.client
         ///              only)</li>
         ///          <li>29 - RAW mode is not allowed by the current license terms (for special licenses only)</li>
         ///          <li>61 - there was an error in the parsing of the server response</li>
+        ///          <li>63 - Subscription refused by the Data Adapter (only raised with Data Adapter interface version 9 or later).</li>
+        ///          <li>64 - An unchecked exception was thrown in the Data Adapter while managing a subscription request (only raised with Data Adapter interface version 9 or later).</li>
         ///          <li>30 - subscriptions are not allowed by the current license terms (for special licenses only)</li>
         ///          <li>66 - an unexpected exception was thrown by the Metadata Adapter while authorizing the connection</li>
         ///          <li>68 - the Server could not fulfill the request because of an internal error.</li>
