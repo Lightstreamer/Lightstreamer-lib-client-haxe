@@ -2440,9 +2440,16 @@ class ClientMachine {
     traceEvent("METADATA_STATE");
     protocolLogger.logDebug('METADATA_STATE $adapterState');
     if (state.inPushing()) {
-      doMETADATA_STATE(adapterState);
-      if (state.inStreaming()) {
-        evtRestartKeepalive();
+      if (isFreshData()) {
+        doMETADATA_STATE(adapterState);
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      } else {
+        onStaleData();
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
       }
     }
   }
@@ -4185,6 +4192,7 @@ class ClientMachine {
   }
 
   function doMETADATA_STATE(adapterState: String) {
+    onFreshData();
     clientEventDispatcher.onMetadataAdapterStateChange(adapterState);
   }
 

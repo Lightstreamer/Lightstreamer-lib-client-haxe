@@ -268,6 +268,89 @@ class TestRecovery extends utest.Test {
     .verify();
   }
 
+  function testMetadataAdapterState(async: utest.Async) {
+    exps
+    .then(() -> {
+      listener._onMetadataAdapterStateChange = state -> exps.signal('onMetadataAdapterStateChange $state');
+      client.addListener(listener);
+      client.connect();
+    })
+    .await("ws.init http://server/lightstreamer")
+    .then(() -> ws.onOpen())
+    .await("wsok")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .then(() -> {
+      ws.onText("WSOK");
+      ws.onText("CONOK,sid,70000,5000,*");
+      ws.onText("METADATA_STATE,started");
+      ws.onText("METADATA_STATE,started");
+      ws.onText("METADATA_STATE, unknown%2C+state ");
+    })
+    .await("onMetadataAdapterStateChange started")
+    .await("onMetadataAdapterStateChange started")
+    .await("onMetadataAdapterStateChange  unknown%2C+state ")
+    .then(() -> ws.onError())
+    .await("ws.dispose")
+    .then(() -> scheduler.fireRecoveryTimeout())
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_session=sid&LS_recovery_from=3&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error")
+    .then(() -> async.completed())
+    .verify();
+  }
+
+  function testMetadataAdapterState_Skip(async: utest.Async) {
+    exps
+    .then(() -> {
+      listener._onMetadataAdapterStateChange = state -> exps.signal('onMetadataAdapterStateChange $state');
+      client.addListener(listener);
+      client.connect();
+    })
+    .await("ws.init http://server/lightstreamer")
+    .then(() -> ws.onOpen())
+    .await("wsok")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .then(() -> {
+      ws.onText("WSOK");
+      ws.onText("CONOK,sid,70000,5000,*");
+    })
+    .then(() -> {
+      ws.onText("METADATA_STATE,started");
+      ws.onText("METADATA_STATE,disabled");
+    })
+    .await("onMetadataAdapterStateChange started")
+    .await("onMetadataAdapterStateChange disabled")
+    .then(() -> ws.onError())
+    .await("ws.dispose")
+    .then(() -> scheduler.fireRecoveryTimeout())
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_session=sid&LS_recovery_from=2&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error")
+    .then(() -> {
+      http.onText("CONOK,sid,70000,5000,*");
+      http.onText("PROG,0");
+      http.onText("METADATA_STATE,started");
+      http.onText("METADATA_STATE,disabled");
+      http.onText("METADATA_STATE,resumed");
+      http.onText("METADATA_STATE,resumed");
+    })
+    .await("onMetadataAdapterStateChange resumed")
+    .await("onMetadataAdapterStateChange resumed")
+    .then(() -> http.onError())
+    .await("http.dispose")
+    .then(() -> scheduler.fireRetryTimeout())
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_session=sid&LS_recovery_from=4&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=recovery.error")
+    .then(() -> {
+      http.onText("CONOK,sid,70000,5000,*");
+      http.onText("PROG,2");
+      http.onText("METADATA_STATE,resumed");
+      http.onText("METADATA_STATE,resumed");
+      http.onText("METADATA_STATE,terminated");
+    })
+    .await("onMetadataAdapterStateChange terminated")
+    .then(() -> http.onText("LOOP,0"))
+    .await("http.dispose")
+    .await("ws.init http://server/lightstreamer")
+    .then(() -> async.completed())
+    .verify();
+  }
+
   function testMSGDONE(async: utest.Async) {
     exps
     .then(() -> {
