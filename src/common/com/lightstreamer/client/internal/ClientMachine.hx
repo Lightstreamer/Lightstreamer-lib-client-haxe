@@ -2429,9 +2429,16 @@ class ClientMachine {
     traceEvent("DATA_STATE");
     protocolLogger.logDebug('DATA_STATE $adapterState $dataAdapterName');
     if (state.inPushing()) {
-      doDATA_STATE(adapterState, dataAdapterName);
-      if (state.inStreaming()) {
-        evtRestartKeepalive();
+      if (isFreshData()) {
+        doDATA_STATE(adapterState, dataAdapterName);
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      } else {
+        onStaleData();
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
       }
     }
   }
@@ -4188,6 +4195,7 @@ class ClientMachine {
   }
 
   function doDATA_STATE(adapterState: String, dataAdapterName: String) {
+    onFreshData();
     clientEventDispatcher.onDataAdapterStateChange(adapterState, dataAdapterName);
   }
 

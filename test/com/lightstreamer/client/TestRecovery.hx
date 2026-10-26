@@ -268,6 +268,103 @@ class TestRecovery extends utest.Test {
     .verify();
   }
 
+  function testDataAdapterState(async: utest.Async) {
+    exps
+    .then(() -> {
+      listener._onDataAdapterStateChange = (state, dataAdapterName) -> exps.signal('onDataAdapterStateChange $state $dataAdapterName');
+      listener._onMetadataAdapterStateChange = state -> exps.signal('onMetadataAdapterStateChange $state');
+      client.addListener(listener);
+      client.connect();
+    })
+    .await("ws.init http://server/lightstreamer")
+    .then(() -> ws.onOpen())
+    .await("wsok")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .then(() -> {
+      ws.onText("WSOK");
+      ws.onText("CONOK,sid,70000,5000,*");
+      ws.onText("DATA_STATE,started,COUNT");
+      ws.onText("METADATA_STATE,started");
+      ws.onText("DATA_STATE,started,COUNT");
+      ws.onText("DATA_STATE, unknown%2C+state , adapter%2C+name ");
+    })
+    .await("onDataAdapterStateChange started COUNT")
+    .await("onMetadataAdapterStateChange started")
+    .await("onDataAdapterStateChange started COUNT")
+    .await("onDataAdapterStateChange  unknown%2C+state   adapter%2C+name ")
+    .then(() -> ws.onError())
+    .await("ws.dispose")
+    .then(() -> scheduler.fireRecoveryTimeout())
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_session=sid&LS_recovery_from=4&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error")
+    .then(() -> async.completed())
+    .verify();
+  }
+
+  function testDataAdapterState_Skip(async: utest.Async) {
+    exps
+    .then(() -> {
+      listener._onDataAdapterStateChange = (state, dataAdapterName) -> exps.signal('onDataAdapterStateChange $state $dataAdapterName');
+      listener._onMetadataAdapterStateChange = state -> exps.signal('onMetadataAdapterStateChange $state');
+      client.addListener(listener);
+      client.connect();
+    })
+    .await("ws.init http://server/lightstreamer")
+    .then(() -> ws.onOpen())
+    .await("wsok")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .then(() -> {
+      ws.onText("WSOK");
+      ws.onText("CONOK,sid,70000,5000,*");
+      ws.onText("DATA_STATE,started,COUNT");
+      ws.onText("METADATA_STATE,started");
+      ws.onText("DATA_STATE,disabled,OTHER");
+    })
+    .await("onDataAdapterStateChange started COUNT")
+    .await("onMetadataAdapterStateChange started")
+    .await("onDataAdapterStateChange disabled OTHER")
+    .then(() -> ws.onError())
+    .await("ws.dispose")
+    .then(() -> scheduler.fireRecoveryTimeout())
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_session=sid&LS_recovery_from=3&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=ws.error")
+    .then(() -> {
+      http.onText("CONOK,sid,70000,5000,*");
+      http.onText("PROG,0");
+      http.onText("DATA_STATE,started,COUNT");
+      http.onText("METADATA_STATE,started");
+      http.onText("DATA_STATE,disabled,OTHER");
+      http.onText("DATA_STATE, resumed%2C+state , COUNT%2C+ ");
+      http.onText("DATA_STATE, resumed%2C+state , COUNT%2C+ ");
+      http.onText("DATA_STATE,resumed,OTHER");
+      http.onText("METADATA_STATE,resumed");
+    })
+    .await("onDataAdapterStateChange  resumed%2C+state   COUNT%2C+ ")
+    .await("onDataAdapterStateChange  resumed%2C+state   COUNT%2C+ ")
+    .await("onDataAdapterStateChange resumed OTHER")
+    .await("onMetadataAdapterStateChange resumed")
+    .then(() -> http.onError())
+    .await("http.dispose")
+    .then(() -> scheduler.fireRetryTimeout())
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_session=sid&LS_recovery_from=7&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=recovery.error")
+    .then(() -> {
+      http.onText("CONOK,sid,70000,5000,*");
+      http.onText("PROG,3");
+      http.onText("DATA_STATE, resumed%2C+state , COUNT%2C+ ");
+      http.onText("DATA_STATE, resumed%2C+state , COUNT%2C+ ");
+      http.onText("DATA_STATE,resumed,OTHER");
+      http.onText("METADATA_STATE,resumed");
+      http.onText("DATA_STATE,terminated,COUNT");
+      http.onText("METADATA_STATE,terminated");
+    })
+    .await("onDataAdapterStateChange terminated COUNT")
+    .await("onMetadataAdapterStateChange terminated")
+    .then(() -> http.onError())
+    .await("http.dispose")
+    .then(() -> scheduler.fireRetryTimeout())
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_session=sid&LS_recovery_from=9&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_cause=recovery.error")
+    .then(() -> async.completed())
+    .verify();
+  }
+
   function testMetadataAdapterState(async: utest.Async) {
     exps
     .then(() -> {
