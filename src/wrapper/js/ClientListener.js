@@ -48,9 +48,9 @@ ClientListener.prototype = {
     * <BR>Adapters based on older Adapter Interface versions may send only
     * <code>started</code> and <code>terminated</code> notifications.
     *
-    * @param {String} state The state value received in the message, unchanged.
+    * @param {String} state The state value received in the message.
     * @param {String} dataAdapterName The Data Adapter name received in the
-    * message, unchanged.
+    * message.
     */
    onDataAdapterStateChange: function(state, dataAdapterName) {
 

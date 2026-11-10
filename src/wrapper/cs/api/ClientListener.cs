@@ -38,8 +38,8 @@ namespace com.lightstreamer.client
         /// <br/>Adapters based on older Adapter Interface versions may send only
         /// <c>started</c> and <c>terminated</c> notifications.
         /// </summary>
-        /// <param name="state">The state value received in the message, unchanged.</param>
-        /// <param name="dataAdapterName">The Data Adapter name received in the message, unchanged.</param>
+        /// <param name="state">The state value received in the message.</param>
+        /// <param name="dataAdapterName">The Data Adapter name received in the message.</param>
         void onDataAdapterStateChange(string state, string dataAdapterName);
 
         /// <summary>

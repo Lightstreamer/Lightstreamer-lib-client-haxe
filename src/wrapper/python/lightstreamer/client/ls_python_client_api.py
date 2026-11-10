@@ -35,8 +35,8 @@ class ClientListener:
    Adapters based on older Adapter Interface versions may send only ``started``
    and ``terminated`` notifications.
 
-   :param state: The state value received in the message, unchanged.
-   :param dataAdapterName: The Data Adapter name received in the message, unchanged.
+   :param state: The state value received in the message.
+   :param dataAdapterName: The Data Adapter name received in the message.
    """
     pass
 

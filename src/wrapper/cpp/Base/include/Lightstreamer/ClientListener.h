@@ -44,8 +44,8 @@ public:
    * <BR>Adapters based on older Adapter Interface versions may send only
    * <code>started</code> and <code>terminated</code> notifications.
    *
-   * @param state The state value received in the message, unchanged.
-   * @param dataAdapterName The Data Adapter name received in the message, unchanged.
+   * @param state The state value received in the message.
+   * @param dataAdapterName The Data Adapter name received in the message.
    */
   virtual void onDataAdapterStateChange(const std::string& state, const std::string& dataAdapterName) {}
   /**
