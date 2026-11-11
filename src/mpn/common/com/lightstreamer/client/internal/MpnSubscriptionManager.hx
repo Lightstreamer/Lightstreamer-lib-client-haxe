@@ -695,19 +695,13 @@ class MpnSubscriptionManager implements Encodable {
     req.LS_op("activate");
     req.LS_subId(m_subId.sure());
     req.LS_mode(m_subscription.fetch_mode().sure());
-    var group = m_subscription.getItemGroup();
     var items = m_subscription.getItems();
-    if (group != null) {
-      req.LS_group(group);
-    } else if (items != null) {
-      req.LS_group(items.toHaxe().join(" "));
+    if (items != null) {
+      req.LS_item(items.toHaxe());
     }
-    var schema = m_subscription.getFieldSchema();
     var fields = m_subscription.getFields();
-    if (schema != null) {
-      req.LS_schema(schema);
-    } else if (fields != null) {
-      req.LS_schema(fields.toHaxe().join(" "));
+    if (fields != null) {
+      req.LS_field(fields.toHaxe());
     }
     var adapter = m_subscription.getDataAdapter();
     if (adapter != null) {
@@ -764,19 +758,13 @@ class MpnSubscriptionManager implements Encodable {
     req.LS_reqId(m_lastConfigureReqId);
     req.LS_op("pn_reconf");
     req.LS_mode(m_subscription.fetch_mode().sure());
-    var group = m_subscription.getItemGroup();
     var items = m_subscription.getItems();
-    if (group != null) {
-      req.LS_group(group);
-    } else if (items != null) {
-      req.LS_group(items.toHaxe().join(" "));
+    if (items != null) {
+      req.LS_item(items.toHaxe());
     }
-    var schema = m_subscription.getFieldSchema();
     var fields = m_subscription.getFields();
-    if (schema != null) {
-      req.LS_schema(schema);
-    } else if (fields != null) {
-      req.LS_schema(fields.toHaxe().join(" "));
+    if (fields != null) {
+      req.LS_field(fields.toHaxe());
     }
     var adapter = m_subscription.getDataAdapter();
     if (adapter != null) {
@@ -854,8 +842,8 @@ class MpnSubscriptionManager implements Encodable {
     m_subscription.changeStatusTs(update.getValue("status_timestamp"));
     m_subscription.changeMode(update.getValue("mode"));
     m_subscription.changeAdapter(update.getValue("adapter"));
-    m_subscription.changeGroup(update.getValue("group"));
-    m_subscription.changeSchema(update.getValue("schema"));
+    m_subscription.changeItems(update.getValue("group"));
+    m_subscription.changeFields(update.getValue("schema"));
     m_subscription.changeFormat(update.getValue("notification_format"));
     m_subscription.changeTrigger(update.getValue("trigger"));
     m_subscription.changeBufferSize(update.getValue("requested_buffer_size"));

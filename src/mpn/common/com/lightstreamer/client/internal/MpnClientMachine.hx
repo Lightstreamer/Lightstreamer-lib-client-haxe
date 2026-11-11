@@ -1042,11 +1042,11 @@ class MpnClientMachine extends ClientMachine {
     if (mpnSubscription.getNotificationFormat() == null) {
       throw new IllegalArgumentException(NO_FORMAT);
     }
-    if (mpnSubscription.getItems() == null && mpnSubscription.getItemGroup() == null) {
-      throw new IllegalArgumentException("Specify property 'items' or 'itemGroup'");
+    if (mpnSubscription.getItems() == null) {
+      throw new IllegalArgumentException("Specify property 'items'");
     }
-    if (mpnSubscription.getFields() == null && mpnSubscription.getFieldSchema() == null) {
-      throw new IllegalArgumentException("Specify property 'fields' or 'fieldSchema'");
+    if (mpnSubscription.getFields() == null) {
+      throw new IllegalArgumentException("Specify property 'fields'");
     }
     var sm = new MpnSubscriptionManager(Ctor1(mpnSubscription, coalescing, this));
     actionLogger.logInfo('MPN Subscription requested: subId: ${sm.m_subId} $mpnSubscription coalescing: $coalescing');
@@ -1182,7 +1182,9 @@ private class SubscriptionDelegateBase implements SubscriptionListener {
   public function onCommandSecondLevelItemLostUpdates(lostUpdates: Int, key: String): Void {}
   public function onCommandSecondLevelSubscriptionError(code: Int, message: String, key: String): Void {}
   public function onEndOfSnapshot(itemName: String, itemPos: Int): Void {}
-  public function onItemLostUpdates(itemName: String, itemPos: Int, lostUpdates: Int): Void {}
+  public function onItemLostUpdates(itemName: String, itemPos: Int, lostUpdates: Int, isOverflow: Bool): Void {}
+  public function onItemStale(itemName: String, itemPos: Int): Void {}
+  public function onItemResume(itemName: String, itemPos: Int): Void {}
   public function onItemUpdate(update: ItemUpdate): Void {}
   public function onListenEnd(#if js sub: Subscription #end): Void {}
   public function onListenStart(#if js sub: Subscription #end): Void {}

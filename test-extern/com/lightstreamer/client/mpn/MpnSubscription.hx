@@ -32,12 +32,8 @@ extern class MpnSubscription {
   public function setDataAdapter(dataAdapter: Null<String>): Void;
   public function getFields(): Null<NativeArray<String>>;
   public function setFields(fields: Null<NativeArray<String>>): Void;
-  public function getFieldSchema(): Null<String>;
-  public function setFieldSchema(schema: Null<String>): Void;
   public function getItems(): Null<NativeArray<String>>;
   public function setItems(items: Null<NativeArray<String>>): Void;
-  public function getItemGroup(): Null<String>;
-  public function setItemGroup(group: Null<String>): Void;
   public function getRequestedBufferSize(): Null<String>;
   public function setRequestedBufferSize(size: Null<String>): Void;
   public function getRequestedMaxFrequency(): Null<String>;

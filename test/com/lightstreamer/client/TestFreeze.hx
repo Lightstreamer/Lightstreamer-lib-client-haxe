@@ -142,7 +142,7 @@ class TestFreeze extends utest.Test {
       client.connectionOptions.setForcedTransport("WS-POLLING");
       client.connect();
     })
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
     .await("CONNECTING")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
@@ -170,7 +170,7 @@ class TestFreeze extends utest.Test {
     .then(() -> {
       page.resume();
     })
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_old_session=sid&LS_cause=page.frozen")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_old_session=sid&LS_cause=page.frozen")
     .await("CONNECTING")
     .then(() -> {
       ws.onText("CONOK,sid,70000,5000,*");
@@ -186,7 +186,7 @@ class TestFreeze extends utest.Test {
       client.connectionOptions.setForcedTransport("HTTP");
       client.connect();
     })
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
     .await("CONNECTING")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
@@ -200,7 +200,7 @@ class TestFreeze extends utest.Test {
     .then(() -> {
       page.resume();
     })
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_old_session=sid&LS_cause=page.frozen")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_old_session=sid&LS_cause=page.frozen")
     .await("CONNECTING")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
@@ -216,14 +216,14 @@ class TestFreeze extends utest.Test {
       client.connectionOptions.setForcedTransport("HTTP-STREAMING");
       client.connect();
     })
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
     .await("CONNECTING")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
       http.onText("LOOP,0");
     })
     .await("http.dispose")
-    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.5.0\r\nLS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop")
     .await("CONNECTED:STREAM-SENSING")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
@@ -237,7 +237,7 @@ class TestFreeze extends utest.Test {
     .then(() -> {
       page.resume();
     })
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_old_session=sid&LS_cause=page.frozen")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_old_session=sid&LS_cause=page.frozen")
     .await("CONNECTING")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
@@ -253,14 +253,14 @@ class TestFreeze extends utest.Test {
       client.connectionOptions.setForcedTransport("HTTP-POLLING");
       client.connect();
     })
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
     .await("CONNECTING")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
       http.onText("LOOP,0");
     })
     .await("http.dispose")
-    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.5.0\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop")
     .await("CONNECTED:STREAM-SENSING")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
@@ -274,7 +274,7 @@ class TestFreeze extends utest.Test {
     .then(() -> {
       page.resume();
     })
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_old_session=sid&LS_cause=page.frozen")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_old_session=sid&LS_cause=page.frozen")
     .await("CONNECTING")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
@@ -377,7 +377,7 @@ class TestFreeze extends utest.Test {
       ws.onText("CONERR,5,server busy");
     })
     .await("ws.dispose")
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0\r\nLS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=ws.conerr.5")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=ws.conerr.5")
     .await("DISCONNECTED:WILL-RETRY")
     .await("CONNECTING")
     .then(() -> {
@@ -403,6 +403,35 @@ class TestFreeze extends utest.Test {
     })
     .await("CONNECTED:WS-STREAMING")
     .then(() -> async.completed())
+    .verify();
+  }
+
+  function testCreateTTL_Error12(async: utest.Async) {
+    listener._onServerError = (code, message) -> exps.signal('onServerError $code $message');
+
+    exps
+    .then(() -> client.connect())
+    .await("ws.init http://server/lightstreamer")
+    .await("CONNECTING")
+    .then(() -> ws.onOpen())
+    .await("wsok")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .then(() -> {
+      ws.onText("WSOK");
+      ws.onText("CONERR,5,server busy");
+    })
+    .await("ws.dispose")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_ttl_millis=unlimited&LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=ws.conerr.5")
+    .await("DISCONNECTED:WILL-RETRY")
+    .await("CONNECTING")
+    .then(() -> http.onText("CONERR,12,Adapter SDK%2C incompatible"))
+    .await("http.dispose")
+    .await("DISCONNECTED")
+    .await("onServerError 12 Adapter SDK, incompatible")
+    .then(() -> {
+      equals("DISCONNECTED", client.getStatus());
+      async.completed();
+    })
     .verify();
   }
 

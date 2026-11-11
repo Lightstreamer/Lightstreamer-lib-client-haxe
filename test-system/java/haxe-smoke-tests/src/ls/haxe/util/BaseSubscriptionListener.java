@@ -40,7 +40,15 @@ public class BaseSubscriptionListener implements SubscriptionListener {
 	}
 
 	@Override
-	public void onItemLostUpdates(String arg0, int arg1, int arg2) {
+	public void onItemLostUpdates(String arg0, int arg1, int arg2, boolean isOverflow) {
+	}
+
+	@Override
+	public void onItemStale(String itemName, int itemPos) {
+	}
+
+	@Override
+	public void onItemResume(String itemName, int itemPos) {
 	}
 
 	@Override

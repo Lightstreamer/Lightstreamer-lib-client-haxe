@@ -1,7 +1,47 @@
 # Lightstreamer Python Client Changelog
 
+## Unreleased
+
+*Compatible with Lightstreamer Server since 8.0.0.*<br/>
+*Compatible with Python 3.7+.*<br/>
+*Not compatible with code developed with the previous version.*<br/>
+*Requires a Metadata Adapter based on the v9+ Java In-Process Adapter SDK. A pre-v9 Metadata Adapter requires `support_LiteralBased_subscriptions` to be enabled for that adapter (see compatibility notes below).*
+
+**Changed (breaking):** Removed Item Group and Field Schema support, including `Subscription.setItemGroup`, `Subscription.getItemGroup`, `Subscription.setFieldSchema`, `Subscription.getFieldSchema`, `Subscription.setCommandSecondLevelFieldSchema`, and `Subscription.getCommandSecondLevelFieldSchema`. Migrate to explicit lists through the constructor or `setItems`/`getItems`, `setFields`/`getFields`, and `setCommandSecondLevelFields`/`getCommandSecondLevelFields`. Item and field lists must be configured before subscribing; constructing an initially unconfigured subscription remains supported.
+
+**New:** Item and field names may now contain any character, including spaces, numeric-only names, reserved characters, and Unicode. Individual names must still be non-empty. This also applies to COMMAND second-level field names and item names derived from COMMAND keys.
+
+**New:** Added Data Adapter and Metadata Adapter health notifications through `ClientListener.onDataAdapterStateChange(state, dataAdapterName)` and `ClientListener.onMetadataAdapterStateChange(state)`. Each received notification reports one of `started`, `disabled`, `resumed`, `restarted`, or `terminated`; pre-v9 Adapters may report only `started` and `terminated`.
+
+**New:** Added support for `STALE` and `RESUME` item notifications through `SubscriptionListener.onItemStale` and `SubscriptionListener.onItemResume`.
+
+**Changed (breaking):** Replaced the three-argument loss callback with `onItemLostUpdates(itemName, itemPos, lostUpdates, isOverflow)`. `isOverflow` is true for Server buffer overflow (`OV`) and false for Data Adapter loss (`LOST`); `lostUpdates` is -1 when the count is unavailable.
+
+Second-level COMMAND stale, resume, and Data Adapter loss notifications are ignored. Second-level Server overflow continues through the unchanged `onCommandSecondLevelItemLostUpdates(lostUpdates, key)` callback.
+
+**New:** Added support for session creation error `12`, reported through `ClientListener.onServerError` without retrying when the Metadata Adapter uses the pre-v9 Java In-Process Adapter SDK and does not support explicit-list subscriptions. The `support_LiteralBased_subscriptions` setting can restore compatibility subject to its documented conditions; this setting applies to the individual Adapter.
+
+**New:** Documented subscription errors reported through `SubscriptionListener.onSubscriptionError` with v9+ Data Adapters:
+
+- `6`: The subscription request cannot be evaluated because the Data Adapter is disabled.
+- `63`: The Data Adapter refused the subscription.
+- `64`: The Data Adapter threw an unchecked exception while managing the subscription request.
+
+
+## 2.2.3
+*Compatible with Lightstreamer Server since 7.4.0*<br/>
+*Compatible with Python 3.7+.*<br/>
+*Compatible with code developed with the previous version.*<br/>
+*Made available on 20 Aug 2026*
+
+Fixed the deprecation warning caused by passing `ssl=None` to `aiohttp` requests.
+
+Fixed the runtime warning caused by the WebSocket disposal callback being treated as an unawaited coroutine ([issue #8](https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe/issues/8)).
+
+
 ## 2.2.2
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
+*Compatible with Python 3.7+.*<br/>
 *Compatible with code developed with the previous version.*<br/>
 *Made available on 23 May 2025*
 
@@ -10,6 +50,7 @@ Fixed an uncaught exception that occurred when `LightstreamerClient` was configu
 
 ## 2.2.1
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
+*Compatible with Python 3.7+.*<br/>
 *Compatible with code developed with the previous version.*<br/>
 *Made available on 25 Feb 2025*
 
@@ -18,6 +59,7 @@ Changed HTTP `Content-Type` header to use `text/plain` instead of `application/x
 
 ## 2.2.0
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
+*Compatible with Python 3.7+.*<br/>
 *May not be compatible with code developed with the previous version.*<br/>
 *Made available on 29 Oct 2024*
 
@@ -26,6 +68,7 @@ Changed the behavior of the listener `ClientListener.onPropertyChange` to be cal
 
 ## 2.1.0
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
+*Compatible with Python 3.7+.*<br/>
 *Compatible with code developed with the previous version.*<br/>
 *Made available on 19 Dec 2023*
 
@@ -34,6 +77,7 @@ Improved the client's performance to handle more server updates per second.
 
 ## 2.0.0
 *Compatible with Lightstreamer Server since 7.4.0*<br/>
+*Compatible with Python 3.7+.*<br/>
 *Not compatible with code developed with the previous version.*<br/>
 *Made available on 10 Jul 2023* 
 
@@ -44,6 +88,7 @@ Added this check: when a `Subscription` is configured by means of an ItemList or
 
 ## 1.0.3
 *Compatible with Lightstreamer Server since 7.3.2*<br/>
+*Compatible with Python 3.7+.*<br/>
 *Compatible with code developed with the previous version.*<br/>
 *Made available on 22 Jun 2023* 
 
@@ -54,6 +99,7 @@ Updated the library haxe-concurrent to version 5.1.3.
 
 ## 1.0.2
 _Compatible with Lightstreamer Server since 7.3.2._<br>
+_Compatible with Python 3.7+._<br/>
 _Compatible with code developed for the previous versions._<br>
 _Released on 5 Apr 2023._
 
@@ -64,6 +110,7 @@ Suppressed the unsolicited console outputs produced by the library.
 
 ## 1.0.1 build 20221205
 _Compatible with Lightstreamer Server since 7.3.0._<br>
+_Compatible with Python 3.7+._<br/>
 _Compatible with code developed for the previous versions._<br>
 _Released on 5 Dec 2022._
 
@@ -73,6 +120,7 @@ Fixed a bug that could have caused a `Subscription` object not to be deleted aft
 
 ## 1.0.0 build 20221122
 _Compatible with Lightstreamer Server since 7.3.0._<br>
+_Compatible with Python 3.7+._<br/>
 _Not compatible with code developed for the previous versions._<br>
 _Released on 22 Nov 2022._
 

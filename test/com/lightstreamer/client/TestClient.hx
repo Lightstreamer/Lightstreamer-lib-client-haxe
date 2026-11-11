@@ -55,6 +55,26 @@ class TestClient extends utest.Test {
     client.connect();
   }
 
+  function _testDataAdapterState(async: utest.Async) {
+    setTransport();
+    listener._onDataAdapterStateChange = function(state, adapter) {
+      if (adapter == "COUNT") {
+        equals("onDataAdapterStateChange started COUNT", 'onDataAdapterStateChange $state $adapter');
+        async.completed();
+      }
+    };
+    client.connect();
+  }
+
+  function _testMetadataAdapterState(async: utest.Async) {
+    setTransport();
+    listener._onMetadataAdapterStateChange = function(state) {
+      equals("started", state);
+      async.completed();
+    };
+    client.connect();
+  }
+
   @:timeout(3000)
   function _testOnlineServer(async: utest.Async) {
     var transport = _param;
@@ -147,7 +167,7 @@ class TestClient extends utest.Test {
 
   function _testSubscribeCommand2Level(async: utest.Async) {
     setTransport();
-    var sub = new Subscription("COMMAND", ["two_level_command_count"], ["key", "command"]);
+    var sub = new Subscription("COMMAND", ["two_level_command_count" + _param], ["key", "command"]);
     sub.setDataAdapter("TWO_LEVEL_COMMAND");
     sub.setCommandSecondLevelDataAdapter("COUNT");
     sub.setCommandSecondLevelFields(["count"]);
@@ -381,9 +401,10 @@ class TestClient extends utest.Test {
     sub.setRequestedSnapshot("yes");
     sub.setDataAdapter("OVERFLOW");
     sub.setRequestedMaxFrequency("unfiltered");
-    subListener._onItemLostUpdates = (name, pos, lost) -> {
+    subListener._onItemLostUpdates = (name, pos, lost, isOverflow) -> {
       equals("overflow", name);
       equals(1, pos);
+      equals(true, isOverflow);
       client.unsubscribe(sub);
     };
     subListener._onUnsubscription = () -> {

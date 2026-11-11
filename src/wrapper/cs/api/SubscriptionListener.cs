@@ -37,14 +37,13 @@ namespace com.lightstreamer.client
         ///       should clear the list in order to keep a coherent view.</li>
         /// </ul>
         /// Note that, if the involved Subscription has a two-level behavior enabled
-        /// (see <c>Subscription.CommandSecondLevelFields</c> and <c>Subscription.CommandSecondLevelFieldSchema</c>)
+        /// (see <c>Subscription.CommandSecondLevelFields</c>)
         /// , the notification refers to the first-level item (which is in COMMAND mode).
         /// This kind of notification is not possible for second-level items (which are in MERGE 
         /// mode).
         /// </summary>
-        /// <param name="itemName"> name of the involved item. If the Subscription was initialized using an "Item Group" then a 
-        ///        null value is supplied. </param>
-        /// <param name="itemPos"> 1-based position of the item within the "Item List" or "Item Group". </param>
+        /// <param name="itemName"> name of the involved item in the explicit item list. </param>
+        /// <param name="itemPos"> 1-based position of the item within the item list. </param>
         void onClearSnapshot(string itemName, int itemPos);
 
         /// <summary>
@@ -59,7 +58,6 @@ namespace com.lightstreamer.client
         /// </param>
         /// <c>Subscription.RequestedMaxFrequency</c>
         /// <c>Subscription.CommandSecondLevelFields</c>
-        /// <c>Subscription.CommandSecondLevelFieldSchema</c>
         void onCommandSecondLevelItemLostUpdates(int lostUpdates, string key);
 
         /// <summary>
@@ -92,7 +90,6 @@ namespace com.lightstreamer.client
         /// </param>
         /// <c>ConnectionDetails.AdapterSet</c>
         /// <c>Subscription.CommandSecondLevelFields</c>
-        /// <c>Subscription.CommandSecondLevelFieldSchema</c>
         void onCommandSecondLevelSubscriptionError(int code, string message, string key);
 
         /// <summary>
@@ -102,40 +99,60 @@ namespace com.lightstreamer.client
         /// subscription mode and snapshot information was indeed requested for the items. By implementing this 
         /// method it is possible to perform actions which require that all the initial values have been received.<br/>
         /// Note that, if the involved Subscription has a two-level behavior enabled
-        /// (see <c>Subscription.CommandSecondLevelFields</c> and <c>Subscription.CommandSecondLevelFieldSchema</c>)
+        /// (see <c>Subscription.CommandSecondLevelFields</c>)
         /// , the notification refers to the first-level item (which is in COMMAND mode).
         /// Snapshot-related updates for the second-level items 
         /// (which are in MERGE mode) can be received both before and after this notification.
         /// </summary>
-        /// <param name="itemName"> name of the involved item. If the Subscription was initialized using an "Item Group" then a 
-        ///        null value is supplied. </param>
-        /// <param name="itemPos"> 1-based position of the item within the "Item List" or "Item Group".
+        /// <param name="itemName"> name of the involved item in the explicit item list. </param>
+        /// <param name="itemPos"> 1-based position of the item within the item list.
         /// </param>
         /// <c>Subscription.RequestedSnapshot</c>
         /// <c>ItemUpdate.isSnapshot</c>
         void onEndOfSnapshot(string itemName, int itemPos);
 
         /// <summary>
-        /// Event handler that is called by Lightstreamer to notify that, due to internal resource limitations, 
-        /// Lightstreamer Server dropped one or more updates for an item in the Subscription. 
-        /// Such notifications are sent only if the items are delivered in an unfiltered mode; this occurs if the 
-        /// subscription mode is:
+        /// Event handler that is called by Lightstreamer to report lost updates for an item in the Subscription.
+        /// When isOverflow is true, updates were dropped by Server buffer overflow (OV).
+        /// Notifications can be delivered in the following modes:
         /// <ul>
         ///   <li>RAW</li>
         ///   <li>MERGE or DISTINCT, with unfiltered dispatching specified</li>
-        ///   <li>COMMAND, with unfiltered dispatching specified</li>
-        ///   <li>COMMAND, without unfiltered dispatching specified (in this case, notifications apply to ADD 
-        ///       and DELETE events only)</li>
+        ///   <li>COMMAND, for ADD and DELETE events, or for all update event types when unfiltered dispatching
+        ///       was requested</li>
         /// </ul>
-        /// By implementing this method it is possible to perform recovery actions.
+        /// When isOverflow is false, the Data Adapter reported lost updates (LOST). Notifications can be
+        /// delivered in RAW or COMMAND mode regardless of whether unfiltered dispatching was requested,
+        /// and in MERGE or DISTINCT mode only when unfiltered dispatching was requested.<br/>
+        /// For two-level COMMAND Subscriptions, this callback refers only to first-level items.
+        /// Second-level LOST notifications are not propagated to the parent's listeners; second-level OV
+        /// notifications continue through <c>onCommandSecondLevelItemLostUpdates</c>.
         /// </summary>
-        /// <param name="itemName"> name of the involved item. If the Subscription was initialized using an "Item Group" then a 
-        ///        null value is supplied. </param>
-        /// <param name="itemPos"> 1-based position of the item within the "Item List" or "Item Group". </param>
-        /// <param name="lostUpdates"> The number of consecutive updates dropped for the item.
-        /// </param>
+        /// <param name="itemName"> name of the involved item in the explicit item list. </param>
+        /// <param name="itemPos"> 1-based position of the item within the item list. </param>
+        /// <param name="lostUpdates"> integer number of lost updates, or -1 when the count is unavailable. </param>
+        /// <param name="isOverflow"> true for Server buffer overflow; false for Data Adapter loss notifications. </param>
         /// <c>Subscription.RequestedMaxFrequency</c>
-        void onItemLostUpdates(string itemName, int itemPos, int lostUpdates);
+        void onItemLostUpdates(string itemName, int itemPos, int lostUpdates, bool isOverflow);
+
+        /// <summary>
+        /// Event handler that is called when problems obtaining updates block an item's update event flow. <br/>
+        /// For two-level COMMAND Subscriptions, this callback refers only to first-level items.
+        /// Stale notifications for internal second-level items are not propagated to the parent's listeners.
+        /// </summary>
+        /// <param name="itemName"> name of the involved item in the explicit item list. </param>
+        /// <param name="itemPos"> 1-based position of the item within the item list. </param>
+        void onItemStale(string itemName, int itemPos);
+
+        /// <summary>
+        /// Event handler that is called when an item's update event flow, previously reported as blocked,
+        /// is no longer blocked. <br/>
+        /// For two-level COMMAND Subscriptions, this callback refers only to first-level items.
+        /// Resume notifications for internal second-level items are not propagated to the parent's listeners.
+        /// </summary>
+        /// <param name="itemName"> name of the involved item in the explicit item list. </param>
+        /// <param name="itemPos"> 1-based position of the item within the item list. </param>
+        void onItemResume(string itemName, int itemPos);
 
         /// <summary>
         /// Event handler that is called by Lightstreamer each time an update pertaining to an item in the Subscription
@@ -169,7 +186,7 @@ namespace com.lightstreamer.client
         /// Note that two consecutive calls to this method are not possible, as before a second onSubscription event is 
         /// fired an <seealso cref="SubscriptionListener.onUnsubscription"/> event is eventually fired.<br/> 
         /// If the involved Subscription has a two-level behavior enabled
-        /// (see <c>Subscription.CommandSecondLevelFields</c> and <c>Subscription.CommandSecondLevelFieldSchema</c>)
+        /// (see <c>Subscription.CommandSecondLevelFields</c>)
         /// , second-level subscriptions are not notified.
         /// </summary>
         void onSubscription();
@@ -183,6 +200,7 @@ namespace com.lightstreamer.client
         /// </summary>
         /// <param name="code"> The error code sent by the Server. It can be one of the following:
         ///        <ul>
+        ///          <li>6 - Cannot evaluate a subscription request because the Data Adapter is disabled (only raised with Data Adapter interface version 9 or later).</li>
         ///          <li>15 - "key" field not specified in the schema for a COMMAND mode subscription</li>
         ///          <li>16 - "command" field not specified in the schema for a COMMAND mode subscription</li>
         ///          <li>17 - bad Data Adapter name or default Data Adapter not defined for the current Adapter Set</li>
@@ -199,6 +217,8 @@ namespace com.lightstreamer.client
         ///              only)</li>
         ///          <li>29 - RAW mode is not allowed by the current license terms (for special licenses only)</li>
         ///          <li>61 - there was an error in the parsing of the server response</li>
+        ///          <li>63 - Subscription refused by the Data Adapter (only raised with Data Adapter interface version 9 or later).</li>
+        ///          <li>64 - An unchecked exception was thrown in the Data Adapter while managing a subscription request (only raised with Data Adapter interface version 9 or later).</li>
         ///          <li>30 - subscriptions are not allowed by the current license terms (for special licenses only)</li>
         ///          <li>66 - an unexpected exception was thrown by the Metadata Adapter while authorizing the connection</li>
         ///          <li>68 - the Server could not fulfill the request because of an internal error.</li>
@@ -221,7 +241,7 @@ namespace com.lightstreamer.client
         /// Note that two consecutive calls to this method are not possible, as before a second onUnsubscription event 
         /// is fired an <seealso cref="SubscriptionListener.onSubscription"/> event is eventually fired.<br/> 
         /// If the involved Subscription has a two-level behavior enabled
-        /// (see <c>Subscription.CommandSecondLevelFields</c> and <c>Subscription.CommandSecondLevelFieldSchema</c>)
+        /// (see <c>Subscription.CommandSecondLevelFields</c>)
         /// , second-level unsubscriptions are not notified.
         /// </summary>
         void onUnsubscription();
@@ -232,7 +252,7 @@ namespace com.lightstreamer.client
         /// (see <c>Subscription.requestedMaxFrequency</c>).
         /// Since the frequency limit is applied on an item basis and a Subscription can involve multiple items,
         /// this is actually the maximum frequency among all items. For Subscriptions with two-level behavior
-        /// (see <c>Subscription.CommandSecondLevelFields</c> and <c>Subscription.CommandSecondLevelFieldSchema</c>)
+        /// (see <c>Subscription.CommandSecondLevelFields</c>)
         /// , the reported frequency limit applies to both first-level and second-level items.<br/>
         /// The value may differ from the requested one because of restrictions operated on the server side,
         /// but also because of number rounding.<br/>

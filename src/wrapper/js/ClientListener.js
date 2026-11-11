@@ -36,6 +36,43 @@ function ClientListener() {
 };
 
 ClientListener.prototype = {
+   /**
+    * Event handler called for every Data Adapter state notification for each
+    * Data Adapter included in the session's Adapter Set.
+    * <BR>The state values are <code>started</code>, <code>disabled</code>,
+    * <code>resumed</code>, <code>restarted</code>, and <code>terminated</code>.
+    * The expected sequence is <code>started</code>, followed by zero or more
+    * repetitions of <code>disabled</code> followed by either <code>resumed</code>
+    * or <code>restarted</code>. A <code>terminated</code> notification may occur
+    * at any time and may be followed by a new occurrence of that sequence.
+    * <BR>Adapters based on older Adapter Interface versions may send only
+    * <code>started</code> and <code>terminated</code> notifications.
+    *
+    * @param {String} state The state value received in the message.
+    * @param {String} dataAdapterName The Data Adapter name received in the
+    * message.
+    */
+   onDataAdapterStateChange: function(state, dataAdapterName) {
+
+   },
+
+   /**
+    * Event handler called for every Metadata Adapter state notification.
+    * <BR>The state values are <code>started</code>, <code>disabled</code>,
+    * <code>resumed</code>, <code>restarted</code>, and <code>terminated</code>.
+    * The expected sequence is <code>started</code>, followed by zero or more
+    * repetitions of <code>disabled</code> followed by either <code>resumed</code>
+    * or <code>restarted</code>. A <code>terminated</code> notification may occur
+    * at any time and may be followed by a new occurrence of that sequence.
+    * <BR>Adapters based on older Adapter Interface versions may send only
+    * <code>started</code> and <code>terminated</code> notifications.
+    *
+    * @param {String} state The state value received in the message.
+    */
+   onMetadataAdapterStateChange: function(state) {
+
+   },
+
     /**
      * Event handler that is called when the Server notifies a refusal on the
      * client attempt to open a new connection or the interruption of a
@@ -56,6 +93,7 @@ ClientListener.prototype = {
      * <li>10 - new sessions temporarily blocked</li>
      * <li>11 - streaming is not available because of Server license
      * restrictions (this can only happen with special licenses)</li>
+   * <li>12 - The Metadata Adapter mounted in the specified Adapter Set is incompatible with this protocol version because it uses the older callback-based Java In-Process Adapter SDK.</li>
      * <li>21 - a bind request has unexpectedly reached a wrong Server instance, which suggests that a routing issue may be in place</li>
      * <li>30-41 - the current connection or the whole session has been closed
      * by external agents; the possible cause may be:

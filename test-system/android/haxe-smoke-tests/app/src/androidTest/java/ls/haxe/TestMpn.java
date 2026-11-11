@@ -15,6 +15,7 @@
  */
 package ls.haxe;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -30,6 +31,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.lightstreamer.client.LSLightstreamerClient;
 import com.lightstreamer.client.LightstreamerClient;
+import com.lightstreamer.client.Subscription;
 import com.lightstreamer.client.mpn.MpnBuilder;
 import com.lightstreamer.client.mpn.MpnDevice;
 import com.lightstreamer.client.mpn.MpnSubscription;
@@ -120,9 +122,8 @@ public class TestMpn {
         /* create MPN subscription */
         sub = new MpnSubscription("MERGE");
         sub.setDataAdapter("COUNT");
-        //sub.setItems(new String[] {"count"});
-        sub.setItemGroup("count");
-        sub.setFieldSchema("count");
+        sub.setItems(new String[] {"count"});
+        sub.setFields(new String[] {"count"});
         sub.setNotificationFormat(descriptor);
     }
 
@@ -162,14 +163,14 @@ public class TestMpn {
         MpnSubscription sub1 = new MpnSubscription("MERGE");
         sub1.setDataAdapter("COUNT");
         sub1.setItems(new String[] {"count"});
-        sub1.setFieldSchema("count");
+        sub1.setFields(new String[] {"count"});
         sub1.setNotificationFormat(descriptor);
         sub1.setTriggerExpression("Integer.parseInt(${count}) < -1");
 
         MpnSubscription sub2 = new MpnSubscription("MERGE");
         sub2.setDataAdapter("COUNT");
         sub2.setItems(new String[] {"count"});
-        sub2.setFieldSchema("count");
+        sub2.setFields(new String[] {"count"});
         sub2.setNotificationFormat(descriptor);
         sub2.setTriggerExpression("Integer.parseInt(${count}) < -2");
 
@@ -320,8 +321,8 @@ public class TestMpn {
         assertNull(sub.getRequestedBufferSize());
         assertNull(sub.getRequestedMaxFrequency());
         assertEquals("MERGE", sub.getMode());
-        assertEquals("count", sub.getItemGroup());
-        assertEquals("count", sub.getFieldSchema());
+        assertArrayEquals(new String[] {"count"}, sub.getItems());
+        assertArrayEquals(new String[] {"count"}, sub.getFields());
         assertNotNull(sub.getSubscriptionId());
     }
 
@@ -512,7 +513,7 @@ public class TestMpn {
         MpnSubscription subCopy = new MpnSubscription("MERGE");
         subCopy.setDataAdapter("COUNT");
         subCopy.setItems(new String[] {"count"});
-        subCopy.setFieldSchema("count");
+        subCopy.setFields(new String[] {"count"});
         subCopy.setNotificationFormat(new MpnBuilder().title("my_title_2").build());
         subCopy.addListener(new StdoutMpnSubscriptionListener() {
             @Override
@@ -562,7 +563,7 @@ public class TestMpn {
         sub = new MpnSubscription("MERGE");
         sub.setDataAdapter("unknown.adapter"); // cause a subscription error
         sub.setItems(new String[] {"count"});
-        sub.setFieldSchema("count");
+        sub.setFields(new String[] {"count"});
         sub.setNotificationFormat("");
         sub.addListener(new StdoutMpnSubscriptionListener() {
             @Override
@@ -751,7 +752,7 @@ public class TestMpn {
         MpnSubscription sub1 = new MpnSubscription("MERGE");
         sub1.setDataAdapter("COUNT");
         sub1.setItems(new String[] {"count"});
-        sub1.setFieldSchema("count");
+        sub1.setFields(new String[] {"count"});
         sub1.setNotificationFormat(descriptor);
         sub1.addListener(new StdoutMpnSubscriptionListener() {
             @Override
@@ -769,8 +770,8 @@ public class TestMpn {
 
         MpnSubscription sub2 = new MpnSubscription("MERGE");
         sub2.setDataAdapter("COUNT");
-        sub2.setItemGroup("count");
-        sub2.setFieldSchema("count");
+        sub2.setItems(new String[] {"count"});
+        sub2.setFields(new String[] {"count"});
         sub2.setNotificationFormat(descriptor);
         // this expression is always true because the counter is >= 0
         sub2.setTriggerExpression("Integer.parseInt(${count}) > -1");
@@ -858,7 +859,7 @@ public class TestMpn {
         MpnSubscription sub1 = new MpnSubscription("MERGE");
         sub1.setDataAdapter("COUNT");
         sub1.setItems(new String[] {"count"});
-        sub1.setFieldSchema("count");
+        sub1.setFields(new String[] {"count"});
         sub1.setNotificationFormat(descriptor);
         sub1.addListener(new StdoutMpnSubscriptionListener() {
             @Override
@@ -876,8 +877,8 @@ public class TestMpn {
 
         MpnSubscription sub2 = new MpnSubscription("MERGE");
         sub2.setDataAdapter("COUNT");
-        sub2.setItemGroup("count");
-        sub2.setFieldSchema("count");
+        sub2.setItems(new String[] {"count"});
+        sub2.setFields(new String[] {"count"});
         sub2.setNotificationFormat(descriptor);
         // this expression is always true because the counter is >= 0
         sub2.setTriggerExpression("Integer.parseInt(${count}) > -1");
@@ -965,7 +966,7 @@ public class TestMpn {
         MpnSubscription sub1 = new MpnSubscription("MERGE");
         sub1.setDataAdapter("COUNT");
         sub1.setItems(new String[] {"count"});
-        sub1.setFieldSchema("count");
+        sub1.setFields(new String[] {"count"});
         sub1.setNotificationFormat(descriptor);
         sub1.addListener(new StdoutMpnSubscriptionListener() {
             @Override
@@ -983,8 +984,8 @@ public class TestMpn {
 
         MpnSubscription sub2 = new MpnSubscription("MERGE");
         sub2.setDataAdapter("COUNT");
-        sub2.setItemGroup("count");
-        sub2.setFieldSchema("count");
+        sub2.setItems(new String[] {"count"});
+        sub2.setFields(new String[] {"count"});
         sub2.setNotificationFormat(descriptor);
         // this expression is always true because the counter is >= 0
         sub2.setTriggerExpression("Integer.parseInt(${count}) > -1");
@@ -1141,13 +1142,13 @@ public class TestMpn {
         MpnSubscription sub1 = new MpnSubscription("MERGE");
         sub1.setDataAdapter("COUNT");
         sub1.setItems(new String[] {"count"});
-        sub1.setFieldSchema("count");
+        sub1.setFields(new String[] {"count"});
         sub1.setNotificationFormat(descriptor);
 
         MpnSubscription sub2 = new MpnSubscription("MERGE");
         sub2.setDataAdapter("COUNT");
         sub2.setItems(new String[] {"count"});
-        sub2.setFieldSchema("count");
+        sub2.setFields(new String[] {"count"});
         sub2.setNotificationFormat(descriptor);
 
         client.subscribe(sub1, false);
@@ -1194,14 +1195,14 @@ public class TestMpn {
         MpnSubscription sub1 = new MpnSubscription("MERGE");
         sub1.setDataAdapter("COUNT");
         sub1.setItems(new String[] {"count"});
-        sub1.setFieldSchema("count");
+        sub1.setFields(new String[] {"count"});
         sub1.setNotificationFormat(descriptor);
         sub1.setTriggerExpression("Integer.parseInt(${count}) < -1");
 
         MpnSubscription sub2 = new MpnSubscription("MERGE");
         sub2.setDataAdapter("COUNT");
         sub2.setItems(new String[] {"count"});
-        sub2.setFieldSchema("count");
+        sub2.setFields(new String[] {"count"});
         sub2.setNotificationFormat(descriptor);
         sub2.setTriggerExpression("Integer.parseInt(${count}) < -2");
 
@@ -1363,14 +1364,14 @@ public class TestMpn {
         MpnSubscription sub1 = new MpnSubscription("MERGE");
         sub1.setDataAdapter("COUNT");
         sub1.setItems(new String[] {"count"});
-        sub1.setFieldSchema("count");
+        sub1.setFields(new String[] {"count"});
         sub1.setNotificationFormat(descriptor);
         sub1.setTriggerExpression("Integer.parseInt(${count}) < -1");
 
         MpnSubscription sub2 = new MpnSubscription("MERGE");
         sub2.setDataAdapter("COUNT");
         sub2.setItems(new String[] {"count"});
-        sub2.setFieldSchema("count");
+        sub2.setFields(new String[] {"count"});
         sub2.setNotificationFormat(descriptor);
         sub2.setTriggerExpression("Integer.parseInt(${count}) < -2");
 

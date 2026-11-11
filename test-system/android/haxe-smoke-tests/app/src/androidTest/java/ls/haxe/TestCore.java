@@ -224,7 +224,7 @@ public class TestCore extends ConcurrentTestCase {
 
     @Test
     public void testSubscribeCommand2Level() throws Throwable {
-        Subscription sub = new Subscription("COMMAND", new String[]{"two_level_command_count"}, new String[]{"key", "command"});
+        Subscription sub = new Subscription("COMMAND", new String[]{"two_level_command_count" + transport}, new String[]{"key", "command"});
         sub.setDataAdapter("TWO_LEVEL_COMMAND");
         sub.setCommandSecondLevelDataAdapter("COUNT");
         sub.setCommandSecondLevelFields(new String[]{"count"});
@@ -555,7 +555,7 @@ public class TestCore extends ConcurrentTestCase {
         sub.setRequestedMaxFrequency("unfiltered");
         sub.addListener(new BaseSubscriptionListener() {
             @Override
-            public void onItemLostUpdates(String name, int pos, int lost) {
+            public void onItemLostUpdates(String name, int pos, int lost, boolean isOverflow) {
                 threadAssertEquals("overflow", name);
                 threadAssertEquals(1, pos);
                 client.unsubscribe(sub);

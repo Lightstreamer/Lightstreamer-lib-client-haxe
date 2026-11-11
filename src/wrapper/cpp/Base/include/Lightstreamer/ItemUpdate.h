@@ -39,9 +39,7 @@ namespace Lightstreamer {
  *  <li>The field name can always be used, both for the first-level and the second-level fields. 
  *  In case of name conflict, the first-level field is meant.</li>
  *  <li>The field position can always be used; however, the field positions for the second-level 
- *  fields start at the highest position of the first-level field list + 1. If a field schema had 
- *  been specified for either first-level or second-level Subscriptions, then client-side knowledge 
- *  of the first-level schema length would be required.</li>
+ *  fields start at the highest position of the first-level field list + 1.</li>
  *</ul>
  */
 class ItemUpdate {
@@ -59,19 +57,16 @@ public:
   }
   /**
    * Inquiry method that retrieves the name of the item to which this update pertains. <BR> 
-   * The name will be empty if the related Subscription was initialized using an "Item Group".
    * @return The name of the item to which this update pertains.
-   * @see Subscription#setItemGroup()
    * @see Subscription#setItems()
    */
   std::string getItemName() {
     return ItemUpdate_getItemName(_delegate);
   }
   /**
-   * Inquiry method that retrieves the position in the "Item List" or "Item Group" of the item to 
+  * Inquiry method that retrieves the position in the item list of the item to
    * which this update pertains.
    * @return The 1-based position of the item to which this update pertains.
-   * @see Subscription#setItemGroup()
    * @see Subscription#setItems()
    */
   int getItemPos() {
@@ -98,7 +93,7 @@ public:
   }
   /**
    * Returns the current value for the specified field.
-   * @param fieldPos The 1-based position of the field within the "Field List" or "Field Schema".
+  * @param fieldPos The 1-based position of the field within the field list.
    * @throws LightstreamerError if the specified field is not part of the Subscription.
    * @return The value of the specified field; it can be the empty string in the following cases:<BR>
    * <ul>
@@ -110,7 +105,6 @@ public:
    *      <br>**To differentiate between a truly empty string and a null or absent value, refer to ItemUpdate#isNull(int).**</li>
    * </ul>
    * @see ItemUpdate#isNull(int)
-   * @see Subscription#setFieldSchema()
    * @see Subscription#setFields()
    */
   std::string getValue(int fieldPos) {
@@ -134,7 +128,7 @@ public:
   }
   /**
    * Returns whether the current value received from the Server for the specified field is null.
-   * @param fieldPos The 1-based position of the field within the "Field List" or "Field Schema".
+  * @param fieldPos The 1-based position of the field within the field list.
    * @throws LightstreamerError if the specified field is not part of the Subscription.
    * @return true in the following cases:<BR>
    * <ul>
@@ -203,7 +197,7 @@ public:
    * Inquiry method that asks whether the value for a field has changed after the reception of the last 
    * update from the Server for an item. If the Subscription mode is COMMAND then the change is meant as 
    * relative to the same key.
-   * @param fieldPos The 1-based position of the field within the "Field List" or "Field Schema".
+  * @param fieldPos The 1-based position of the field within the field list.
    * @throws LightstreamerError if the specified field is not part of the Subscription.
    * @return Unless the Subscription mode is COMMAND, the return value is true in the following cases:
    * <ul>
@@ -220,7 +214,6 @@ public:
    *  used to carry key information).</li>
    * </ul>
    * In all other cases, the return value is false.
-   * @see Subscription#setFieldSchema()
    * @see Subscription#setFields()
    */
   bool isValueChanged(int fieldPos) {
@@ -235,11 +228,8 @@ public:
    * All of this is also true on tables that have the two-level behavior enabled, but in case of 
    * DELETE commands second-level fields will not be iterated.
    * 
-   * @throws LightstreamerError if the Subscription was initialized using a field schema.
-   * 
    * @return A map containing the values for each field changed with the last server update.
    * 
-   * @see Subscription#setFieldSchema()
    * @see Subscription#setFields()
    */
   std::map<std::string, std::string> getChangedFields() {
@@ -247,7 +237,7 @@ public:
   }
   /**
    * Returns a map containing the values for each field changed with the last server update. 
-   * The 1-based field position within the field schema or field list is used as key for the values in the map. 
+  * The 1-based field position within the field list is used as key for the values in the map.
    * Note that if the Subscription mode of the involved Subscription is COMMAND, then changed fields 
    * are meant as relative to the previous update for the same key. On such tables if a DELETE command 
    * is received, all the fields, excluding the key field, will be present as changed, with the empty string as value. 
@@ -256,7 +246,6 @@ public:
    * 
    * @return A map containing the values for each field changed with the last server update.
    * 
-   * @see Subscription#setFieldSchema()
    * @see Subscription#setFields()
    */
   std::map<int, std::string> getChangedFieldsByPosition() {
@@ -266,11 +255,8 @@ public:
    * Returns a map containing the values for each field in the Subscription.
    * The related field name is used as key for the values in the map. 
    * 
-   * @throws LightstreamerError if the Subscription was initialized using a field schema.
-   * 
    * @return A map containing the values for each field in the Subscription.
    * 
-   * @see Subscription#setFieldSchema()
    * @see Subscription#setFields()
    */
   std::map<std::string, std::string> getFields() {
@@ -278,11 +264,10 @@ public:
   }
   /**
    * Returns a map containing the values for each field in the Subscription.
-   * The 1-based field position within the field schema or field list is used as key for the values in the map. 
+  * The 1-based field position within the field list is used as key for the values in the map.
    * 
    * @return A map containing the values for each field in the Subscription.
    * 
-   * @see Subscription#setFieldSchema()
    * @see Subscription#setFields()
    */
   std::map<int, std::string> getFieldsByPosition() {

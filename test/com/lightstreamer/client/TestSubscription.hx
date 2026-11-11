@@ -42,6 +42,27 @@ class TestSubscription extends utest.Test {
     raisesEx(() -> new Subscription("COMMAND", ["i1"], ["key"]), IllegalArgumentException, "Field 'command' is missing");
   }
 
+  function testConfigureBeforeSubmission() {
+    #if (java || cs)
+    var subscription = new Subscription("MERGE");
+    #else
+    var subscription = new Subscription("MERGE", null, null);
+    #end
+    var client = new LightstreamerClient(null, null);
+    equals(null, subscription.getItems());
+    equals(null, subscription.getFields());
+
+    raisesEx(() -> client.subscribe(subscription), IllegalArgumentException, "Specify property 'items'");
+    subscription.setItems(["i1"]);
+    raisesEx(() -> client.subscribe(subscription), IllegalArgumentException, "Specify property 'fields'");
+    subscription.setFields(["f1"]);
+    client.subscribe(subscription);
+    equals(true, subscription.isActive());
+    strictSame(["i1"], subscription.getItems());
+    strictSame(["f1"], subscription.getFields());
+    client.unsubscribe(subscription);
+  }
+
   function testIsActive() {
     equals(false, sub.isActive());
   }
@@ -80,14 +101,24 @@ class TestSubscription extends utest.Test {
     sub.setItems(["123_456"]);
     strictSame(["123_456"], sub.getItems());
 
-    raisesEx(() -> sub.setItems(["123"]), IllegalArgumentException, "Item List is invalid");
+    sub.setItems(["123"]);
+    strictSame(["123"], sub.getItems());
   }
 
-  function testItemGroup() {
-    equals(null, sub.getItemGroup());
+  function testArbitraryNames() {
+    var unicode = haxe.io.Bytes.ofHex("c3a9e4b8adf09f9880").toString();
+    var names = ["123", " ", " a b ", "&=%+?#/", "\u0000\t\r\n", unicode, "123"];
+    var subscription = new Subscription("MERGE", names, names);
+    strictSame(names, subscription.getItems());
+    strictSame(names, subscription.getFields());
+    sub.setItems(names);
+    sub.setFields(names);
+    strictSame(names, sub.getItems());
+    strictSame(names, sub.getFields());
 
-    sub.setItemGroup("grp");
-    equals("grp", sub.getItemGroup());
+    var command = new Subscription("COMMAND", ["123"], ["key", "command", "a b"]);
+    command.setCommandSecondLevelFields(names);
+    strictSame(names, command.getCommandSecondLevelFields());
   }
 
   function testFields() {
@@ -98,13 +129,6 @@ class TestSubscription extends utest.Test {
 
     raisesEx(() -> sub.setFields([]), IllegalArgumentException, "Field List is empty");
     raisesEx(() -> sub.setFields([""]), IllegalArgumentException, "Field List is invalid");
-  }
-
-  function testFieldSchema() {
-    equals(null, sub.getFieldSchema());
-
-    sub.setFieldSchema("scm");
-    equals("scm", sub.getFieldSchema());
   }
 
   function testRequestedBufferSize() {
@@ -185,11 +209,15 @@ class TestSubscription extends utest.Test {
     raisesEx(() -> sub.setCommandSecondLevelFields([""]), IllegalArgumentException, "Field List is invalid");
   }
 
-  function testCommandSecondLevelFieldSchema() {
-    equals(null, sub.getCommandSecondLevelFieldSchema());
-
+  function testCommandSecondLevelIsOptional() {
     var sub = new Subscription("COMMAND", ["i1"], ["key", "command"]);
-    sub.setCommandSecondLevelFieldSchema("scm2");
-    equals("scm2", sub.getCommandSecondLevelFieldSchema());
+    equals(null, sub.getCommandSecondLevelFields());
+    sub.setCommandSecondLevelFields(["f1"]);
+    sub.setCommandSecondLevelFields(null);
+    var client = new LightstreamerClient(null, null);
+    client.subscribe(sub);
+    equals(true, sub.isActive());
+    equals(null, sub.getCommandSecondLevelFields());
+    client.unsubscribe(sub);
   }
 }

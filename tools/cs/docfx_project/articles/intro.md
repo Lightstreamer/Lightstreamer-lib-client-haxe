@@ -80,7 +80,9 @@ namespace myapp
             void SubscriptionListener.onCommandSecondLevelItemLostUpdates(int lostUpdates, string key) {}
             void SubscriptionListener.onCommandSecondLevelSubscriptionError(int code, string message, string key) {}
             void SubscriptionListener.onEndOfSnapshot(string itemName, int itemPos) {}
-            void SubscriptionListener.onItemLostUpdates(string itemName, int itemPos, int lostUpdates) {}
+            void SubscriptionListener.onItemLostUpdates(string itemName, int itemPos, int lostUpdates, bool isOverflow) {}
+            void SubscriptionListener.onItemStale(string itemName, int itemPos) {}
+            void SubscriptionListener.onItemResume(string itemName, int itemPos) {}
             void SubscriptionListener.onListenEnd() {}
             void SubscriptionListener.onListenStart() {}
             void SubscriptionListener.onRealMaxFrequency(string frequency) {}

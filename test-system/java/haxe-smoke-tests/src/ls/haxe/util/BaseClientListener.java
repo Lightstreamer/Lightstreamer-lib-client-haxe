@@ -23,6 +23,14 @@ public class BaseClientListener implements ClientListener {
 	}
 
 	@Override
+	public void onDataAdapterStateChange(String state, String dataAdapterName) {
+	}
+
+	@Override
+	public void onMetadataAdapterStateChange(String state) {
+	}
+
+	@Override
 	public void onListenEnd() {
 	}
 

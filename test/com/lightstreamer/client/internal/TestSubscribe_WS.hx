@@ -60,7 +60,7 @@ class TestSubscribe_WS extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false&LS_ack=false")
     .then(() -> async.completed())
     .verify();
   }
@@ -80,7 +80,28 @@ class TestSubscribe_WS extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%2Bf2&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1%2Bf2&LS_snapshot=false&LS_ack=false")
+    .then(() -> async.completed())
+    .verify();
+  }
+
+  function testSubscribeSpecialNames(async: utest.Async) {
+    exps
+    .then(() -> {
+      sub.setItems(["a b", "x&y", "%20"]);
+      sub.setFields(["f=1", "+"]);
+      client.subscribe(sub);
+      client.connect();
+    })
+    .await("ws.init http://server/lightstreamer")
+    .then(() -> ws.onOpen())
+    .await("wsok")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .then(() -> {
+      ws.onText("WSOK");
+      ws.onText("CONOK,sid,70000,5000,*");
+    })
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=a%20b&x%26y&%2520&LS_field=f%3D1&%2B&LS_snapshot=false&LS_ack=false")
     .then(() -> async.completed())
     .verify();
   }
@@ -101,7 +122,7 @@ class TestSubscribe_WS extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false&LS_ack=false")
     .then(() -> ws.onText("REQERR,1,-5,error"))
     .await("onError -5 error")
     .then(() -> isFalse(sub.isActive()))
@@ -124,7 +145,7 @@ class TestSubscribe_WS extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false&LS_ack=false")
     .then(() -> ws.onText("SUBOK,1,1,2"))
     .await("onSubscription")
     .then(() -> isTrue(sub.isSubscribed()))
@@ -147,7 +168,7 @@ class TestSubscribe_WS extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false&LS_ack=false")
     .then(() -> ws.onText("SUBOK,1,10,2"))
     .await(
       "onError 61 Expected 1 items but got 10", 
@@ -157,7 +178,7 @@ class TestSubscribe_WS extends utest.Test {
       equals([], client.getSubscriptions().toHaxe());
       client.subscribe(sub);
     })
-    .await("control\r\nLS_reqId=3&LS_op=add&LS_subId=2&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=3&LS_op=add&LS_subId=2&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false&LS_ack=false")
     .then(() -> ws.onText("SUBOK,2,1,20"))
     .await(
       "onError 61 Expected 2 fields but got 20", 
@@ -167,7 +188,7 @@ class TestSubscribe_WS extends utest.Test {
       equals([], client.getSubscriptions().toHaxe());
       client.subscribe(sub);
     })
-    .await("control\r\nLS_reqId=5&LS_op=add&LS_subId=3&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=5&LS_op=add&LS_subId=3&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false&LS_ack=false")
     .then(() -> ws.onText("REQOK,5"))
     .then(() -> ws.onText("SUBOK,3,10,2"))
     .await(
@@ -178,7 +199,7 @@ class TestSubscribe_WS extends utest.Test {
       equals([], client.getSubscriptions().toHaxe());
       client.subscribe(sub);
     })
-    .await("control\r\nLS_reqId=7&LS_op=add&LS_subId=4&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=7&LS_op=add&LS_subId=4&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false&LS_ack=false")
     .then(() -> ws.onText("REQOK,7"))
     .then(() -> ws.onText("SUBOK,4,1,20"))
     .await(
@@ -192,12 +213,12 @@ class TestSubscribe_WS extends utest.Test {
     .verify();
   }
 
-  function testSUBOK_ItemGroupAndFieldSchema(async: utest.Async) {
+  function testSUBOK_SingleItemAndField(async: utest.Async) {
     exps
     .then(() -> {
       subListener._onSubscription = () -> exps.signal("onSubscription");
-      sub.setItemGroup("ig");
-      sub.setFieldSchema("fs");
+      sub.setItems(["ig"]);
+      sub.setFields(["fs"]);
       client.subscribe(sub);
       client.connect();
     })
@@ -209,8 +230,8 @@ class TestSubscribe_WS extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=ig&LS_schema=fs&LS_snapshot=false&LS_ack=false")
-    .then(() -> ws.onText("SUBOK,1,10,20"))
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=ig&LS_field=fs&LS_snapshot=false&LS_ack=false")
+    .then(() -> ws.onText("SUBOK,1,1,1"))
     .await("onSubscription")
     .then(() -> isTrue(sub.isSubscribed()))
     .then(() -> async.completed())
@@ -234,7 +255,7 @@ class TestSubscribe_WS extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=item&LS_schema=key%20command&LS_snapshot=true&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=item&LS_field=key&command&LS_snapshot=true&LS_ack=false")
     .then(() -> ws.onText("SUBCMD,1,1,2,1,2"))
     .await("onSubscription")
     .then(() -> {
@@ -263,7 +284,7 @@ class TestSubscribe_WS extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_group=item&LS_schema=key%20command&LS_snapshot=true&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=COMMAND&LS_item=item&LS_field=key&command&LS_snapshot=true&LS_ack=false")
     .then(() -> ws.onText("SUBCMD,1,10,2,1,2"))
     .await(
       "onError 61 Expected 1 items but got 10", 
@@ -273,7 +294,7 @@ class TestSubscribe_WS extends utest.Test {
       equals([], client.getSubscriptions().toHaxe());
       client.subscribe(sub);
     })
-    .await("control\r\nLS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_group=item&LS_schema=key%20command&LS_snapshot=true&LS_ack=false")
+    .await("control\r\nLS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=item&LS_field=key&command&LS_snapshot=true&LS_ack=false")
     .then(() -> ws.onText("SUBCMD,2,1,20,1,2"))
     .await(
       "onError 61 Expected 2 fields but got 20", 
@@ -283,7 +304,7 @@ class TestSubscribe_WS extends utest.Test {
       equals([], client.getSubscriptions().toHaxe());
       client.subscribe(sub);
     })
-    .await("control\r\nLS_reqId=5&LS_op=add&LS_subId=3&LS_mode=COMMAND&LS_group=item&LS_schema=key%20command&LS_snapshot=true&LS_ack=false")
+    .await("control\r\nLS_reqId=5&LS_op=add&LS_subId=3&LS_mode=COMMAND&LS_item=item&LS_field=key&command&LS_snapshot=true&LS_ack=false")
     .then(() -> ws.onText("REQOK,5"))
     .then(() -> ws.onText("SUBCMD,3,10,2,1,2"))
     .await(
@@ -294,7 +315,7 @@ class TestSubscribe_WS extends utest.Test {
       equals([], client.getSubscriptions().toHaxe());
       client.subscribe(sub);
     })
-    .await("control\r\nLS_reqId=7&LS_op=add&LS_subId=4&LS_mode=COMMAND&LS_group=item&LS_schema=key%20command&LS_snapshot=true&LS_ack=false")
+    .await("control\r\nLS_reqId=7&LS_op=add&LS_subId=4&LS_mode=COMMAND&LS_item=item&LS_field=key&command&LS_snapshot=true&LS_ack=false")
     .then(() -> ws.onText("REQOK,7"))
     .then(() -> ws.onText("SUBCMD,4,1,20,1,2"))
     .await(
@@ -323,7 +344,7 @@ class TestSubscribe_WS extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,1,1,2");
       ws.onText("CONF,1,unlimited,filtered");
@@ -352,7 +373,7 @@ class TestSubscribe_WS extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,1,1,2");
       ws.onText("U,1,1,a|b");
@@ -391,7 +412,7 @@ class TestSubscribe_WS extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=true&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=true&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,1,1,2");
       ws.onText("U,1,1,a|b");
@@ -422,7 +443,7 @@ class TestSubscribe_WS extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,1,1,2");
       ws.onText("CS,1,1");
@@ -435,7 +456,7 @@ class TestSubscribe_WS extends utest.Test {
   function testOV(async: utest.Async) {
     exps
     .then(() -> {
-      subListener._onItemLostUpdates = (name, pos, losts) -> exps.signal('onItemLostUpdates $name $pos $losts');
+      subListener._onItemLostUpdates = (name, pos, losts, isOverflow) -> exps.signal('onItemLostUpdates $name $pos $losts $isOverflow');
       client.subscribe(sub);
       client.connect();
     })
@@ -447,12 +468,90 @@ class TestSubscribe_WS extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,1,1,2");
       ws.onText("OV,1,1,33");
     })
-    .await("onItemLostUpdates item 1 33")
+    .await("onItemLostUpdates item 1 33 true")
+    .then(() -> async.completed())
+    .verify();
+  }
+
+  function testSTALE(async: utest.Async) {
+    exps
+    .then(() -> {
+      subListener._onItemStale = (name, pos) -> exps.signal('onItemStale $name $pos');
+      client.subscribe(sub);
+      client.connect();
+    })
+    .await("ws.init http://server/lightstreamer")
+    .then(() -> ws.onOpen())
+    .await("wsok")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .then(() -> {
+      ws.onText("WSOK");
+      ws.onText("CONOK,sid,70000,5000,*");
+    })
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false&LS_ack=false")
+    .then(() -> {
+      ws.onText("SUBOK,1,1,2");
+      ws.onText("STALE,1,1");
+    })
+    .await("onItemStale item 1")
+    .then(() -> async.completed())
+    .verify();
+  }
+
+  function testRESUME(async: utest.Async) {
+    exps
+    .then(() -> {
+      subListener._onItemResume = (name, pos) -> exps.signal('onItemResume $name $pos');
+      client.subscribe(sub);
+      client.connect();
+    })
+    .await("ws.init http://server/lightstreamer")
+    .then(() -> ws.onOpen())
+    .await("wsok")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .then(() -> {
+      ws.onText("WSOK");
+      ws.onText("CONOK,sid,70000,5000,*");
+    })
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false&LS_ack=false")
+    .then(() -> {
+      ws.onText("SUBOK,1,1,2");
+      ws.onText("STALE,1,1");
+      ws.onText("RESUME,1,1");
+    })
+    .await("onItemResume item 1")
+    .then(() -> async.completed())
+    .verify();
+  }
+
+  function testLOST(async: utest.Async) {
+    exps
+    .then(() -> {
+      subListener._onItemLostUpdates = (name, pos, losts, isOverflow) -> exps.signal('onItemLostUpdates $name $pos $losts $isOverflow');
+      client.subscribe(sub);
+      client.connect();
+    })
+    .await("ws.init http://server/lightstreamer")
+    .then(() -> ws.onOpen())
+    .await("wsok")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .then(() -> {
+      ws.onText("WSOK");
+      ws.onText("CONOK,sid,70000,5000,*");
+    })
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false&LS_ack=false")
+    .then(() -> {
+      ws.onText("SUBOK,1,1,2");
+      ws.onText("LOST,1,1,33");
+    })
+    .await("onItemLostUpdates item 1 33 false")
+    .then(() -> ws.onText("LOST,1,1,?"))
+    .await("onItemLostUpdates item 1 -1 false")
     .then(() -> async.completed())
     .verify();
   }
@@ -473,7 +572,7 @@ class TestSubscribe_WS extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false&LS_ack=false")
     .then(() -> ws.onText("SUBOK,1,1,2"))
     .await("onSubscription")
     .then(() -> isTrue(sub.isSubscribed()))
@@ -502,7 +601,7 @@ class TestSubscribe_WS extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false&LS_ack=false")
     .then(() -> ws.onText("SUBOK,1,1,2"))
     .await("onSubscription")
     .then(() -> isTrue(sub.isSubscribed()))
@@ -529,7 +628,7 @@ class TestSubscribe_WS extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false&LS_ack=false")
     .then(() -> ws.onText("SUBOK,1,1,2"))
     .await("onSubscription")
     .then(() -> isTrue(sub.isSubscribed()))
@@ -556,7 +655,7 @@ class TestSubscribe_WS extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false&LS_ack=false")
     .then(() -> ws.onText("SUBOK,1,1,2"))
     .await("onSubscription")
     .then(() -> sub.setRequestedMaxFrequency("12.3"))
@@ -581,7 +680,7 @@ class TestSubscribe_WS extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false&LS_ack=false")
     .then(() -> ws.onText("SUBOK,1,1,2"))
     .await("onSubscription")
     .then(() -> sub.setRequestedMaxFrequency("12.3"))
@@ -625,7 +724,7 @@ class TestSubscribe_WS extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onError();
       scheduler.fireRetryTimeout();
@@ -639,7 +738,7 @@ class TestSubscribe_WS extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=2&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=2&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false&LS_ack=false")
     .then(() -> async.completed())
     .verify();
   }
@@ -665,7 +764,7 @@ class TestSubscribe_WS extends utest.Test {
       ws.onText("WSOK");
       ws.onText("CONOK,sid,70000,5000,*");
     })
-    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=DISTINCT&LS_group=item&LS_schema=f1%20f2&LS_snapshot=false&LS_ack=false")
+    .await("control\r\nLS_reqId=1&LS_op=add&LS_subId=1&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false&LS_ack=false\r\nLS_reqId=2&LS_op=add&LS_subId=2&LS_mode=DISTINCT&LS_item=item&LS_field=f1&f2&LS_snapshot=false&LS_ack=false")
     .then(() -> {
       ws.onText("SUBOK,2,1,2");
       ws.onText("SUBOK,1,1,2");

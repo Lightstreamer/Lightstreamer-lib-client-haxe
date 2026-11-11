@@ -35,7 +35,7 @@ class TestHttpClientPython extends utest.Test {
 
   function testPolling(async: utest.Async) {
     new HttpClient(
-      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
+      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0",
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null,
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
@@ -51,7 +51,7 @@ class TestHttpClientPython extends utest.Test {
 
   function testStreaming(async: utest.Async) {
     new HttpClient(
-      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
+      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0",
       "LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null,
       function onText(c, line) {
         if (c.isDisposed()) return;
@@ -70,7 +70,7 @@ class TestHttpClientPython extends utest.Test {
   @:timeout(3000)
   function testHttps(async: utest.Async) {
     new HttpClient(
-      "https://push.lightstreamer.com/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
+      "https://push.lightstreamer.com/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0",
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null,
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
@@ -86,7 +86,7 @@ class TestHttpClientPython extends utest.Test {
 
   function testConnectionError(async: utest.Async) {
     new HttpClient(
-      secHost + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
+      secHost + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0",
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null,
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
@@ -110,7 +110,7 @@ class TestHttpClientPython extends utest.Test {
     LightstreamerClient.addCookies(uri, cookies);
 
     new HttpClient(
-      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
+      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0",
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null,
       function onText(c, line) null, 
       function onError(c, error) { 
@@ -129,7 +129,7 @@ class TestHttpClientPython extends utest.Test {
 
   function testHeaders(async: utest.Async) {
     new HttpClient(
-      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
+      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0",
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg",
       ["X-Header" => "header"],  null, null,
       function onText(c, line) output.push(line), 
@@ -146,7 +146,7 @@ class TestHttpClientPython extends utest.Test {
 
   function testProxy(async: utest.Async) {
     new HttpClient(
-      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
+      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0",
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", 
       null,
       new Proxy("HTTP", "localtest.me", 8079, "myuser", "mypassword"), null,
@@ -167,7 +167,7 @@ class TestHttpClientPython extends utest.Test {
     // see https://docs.aiohttp.org/en/stable/client_advanced.html#ssl-control-for-tcp-sockets
     var sslcontext = SSLContext.SSL.create_default_context({cafile: "test/mitmproxy-ca-cert.pem"});
     new HttpClient(
-      "https://push.lightstreamer.com/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
+      "https://push.lightstreamer.com/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0",
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", 
       null,
       new Proxy("HTTP", "localtest.me", 8079, "myuser", "mypassword"), sslcontext,
@@ -190,7 +190,7 @@ class TestHttpClientPython extends utest.Test {
 
     LightstreamerClient.setTrustManagerFactory(sslcontext);
     new HttpClient(
-      secHost + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
+      secHost + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0",
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, 
       Globals.instance.getTrustManagerFactory(),
       function onText(c, line) output.push(line), 

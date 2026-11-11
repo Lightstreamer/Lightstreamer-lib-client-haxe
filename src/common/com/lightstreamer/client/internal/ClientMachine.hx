@@ -619,6 +619,15 @@ class ClientMachine {
       var args = line.split(",");
       var ip = args[1];
       evtCLIENTIP(ip);
+    } else if (line.startsWith("DATA_STATE,")) {
+      var args = line.split(",");
+      var adapterState = args[1];
+      var dataAdapterName = args[2];
+      evtDATA_STATE(adapterState, dataAdapterName);
+    } else if (line.startsWith("METADATA_STATE,")) {
+      var args = line.split(",");
+      var adapterState = args[1];
+      evtMETADATA_STATE(adapterState);
     } else if (line.startsWith("CONS")) {
       // CONS,(unmanaged|unlimited|<bandwidth>)
       var args = line.split(",");
@@ -709,6 +718,22 @@ class ClientMachine {
       var subId = parseInt(args[1]);
       var itemIdx = parseInt(args[2]);
       evtCS(subId, itemIdx);
+    } else if (line.startsWith("STALE")) {
+      var args = line.split(",");
+      var subId = parseInt(args[1]);
+      var itemIdx = parseInt(args[2]);
+      evtSTALE(subId, itemIdx);
+    } else if (line.startsWith("RESUME")) {
+      var args = line.split(",");
+      var subId = parseInt(args[1]);
+      var itemIdx = parseInt(args[2]);
+      evtRESUME(subId, itemIdx);
+    } else if (line.startsWith("LOST")) {
+      var args = line.split(",");
+      var subId = parseInt(args[1]);
+      var itemIdx = parseInt(args[2]);
+      var lostUpdates = args[3] == "?" ? -1 : parseInt(args[3]);
+      evtLOST(subId, itemIdx, lostUpdates);
     } else if (line.startsWith("OV")) {
       // OV,<subscription id>,<item index>,<lost updates>
       var args = line.split(",");
@@ -2400,6 +2425,42 @@ class ClientMachine {
     }
   }
 
+  function evtDATA_STATE(adapterState: String, dataAdapterName: String) {
+    traceEvent("DATA_STATE");
+    protocolLogger.logDebug('DATA_STATE $adapterState $dataAdapterName');
+    if (state.inPushing()) {
+      if (isFreshData()) {
+        doDATA_STATE(adapterState, dataAdapterName);
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      } else {
+        onStaleData();
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      }
+    }
+  }
+
+  function evtMETADATA_STATE(adapterState: String) {
+    traceEvent("METADATA_STATE");
+    protocolLogger.logDebug('METADATA_STATE $adapterState');
+    if (state.inPushing()) {
+      if (isFreshData()) {
+        doMETADATA_STATE(adapterState);
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      } else {
+        onStaleData();
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      }
+    }
+  }
+
   function evtCONS(bandwidth: RealMaxBandwidth) {
     traceEvent("CONS");
     protocolLogger.logDebug('CONS $bandwidth');
@@ -2602,6 +2663,60 @@ class ClientMachine {
     if (state.inPushing()) {
       if (isFreshData()) {
         doCS(subId, itemIdx);
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      } else {
+        onStaleData();
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      }
+    }
+  }
+
+  function evtSTALE(subId: Int, itemIdx: Pos) {
+    traceEvent("STALE");
+    protocolLogger.logDebug('STALE $subId $itemIdx');
+    if (state.inPushing()) {
+      if (isFreshData()) {
+        doSTALE(subId, itemIdx);
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      } else {
+        onStaleData();
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      }
+    }
+  }
+
+  function evtRESUME(subId: Int, itemIdx: Pos) {
+    traceEvent("RESUME");
+    protocolLogger.logDebug('RESUME $subId $itemIdx');
+    if (state.inPushing()) {
+      if (isFreshData()) {
+        doRESUME(subId, itemIdx);
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      } else {
+        onStaleData();
+        if (state.inStreaming()) {
+          evtRestartKeepalive();
+        }
+      }
+    }
+  }
+
+  function evtLOST(subId: Int, itemIdx: Pos, lostUpdates: Int) {
+    traceEvent("LOST");
+    protocolLogger.logDebug('LOST $subId $itemIdx $lostUpdates');
+    if (state.inPushing()) {
+      if (isFreshData()) {
+        doLOST(subId, itemIdx, lostUpdates);
         if (state.inStreaming()) {
           evtRestartKeepalive();
         }
@@ -4079,6 +4194,16 @@ class ClientMachine {
     lastKnownClientIp = clientIp;
   }
 
+  function doDATA_STATE(adapterState: String, dataAdapterName: String) {
+    onFreshData();
+    clientEventDispatcher.onDataAdapterStateChange(adapterState, dataAdapterName);
+  }
+
+  function doMETADATA_STATE(adapterState: String) {
+    onFreshData();
+    clientEventDispatcher.onMetadataAdapterStateChange(adapterState);
+  }
+
   function doCONS(bandwidth: RealMaxBandwidth) {
     options.setRealMaxBandwidth(bandwidth);
   }
@@ -4183,6 +4308,39 @@ class ClientMachine {
     } else {
       var sub = new SubscriptionManagerZombie(subId, this);
       sub.evtCS(itemIdx);
+    }
+  }
+
+  function doSTALE(subId: Int, itemIdx: Pos) {
+    onFreshData();
+    var sub = subscriptionManagers[subId];
+    if (sub != null) {
+      sub.evtSTALE(itemIdx);
+    } else {
+      var sub = new SubscriptionManagerZombie(subId, this);
+      sub.evtSTALE(itemIdx);
+    }
+  }
+
+  function doRESUME(subId: Int, itemIdx: Pos) {
+    onFreshData();
+    var sub = subscriptionManagers[subId];
+    if (sub != null) {
+      sub.evtRESUME(itemIdx);
+    } else {
+      var sub = new SubscriptionManagerZombie(subId, this);
+      sub.evtRESUME(itemIdx);
+    }
+  }
+
+  function doLOST(subId: Int, itemIdx: Pos, lostUpdates: Int) {
+    onFreshData();
+    var sub = subscriptionManagers[subId];
+    if (sub != null) {
+      sub.evtLOST(itemIdx, lostUpdates);
+    } else {
+      var sub = new SubscriptionManagerZombie(subId, this);
+      sub.evtLOST(itemIdx, lostUpdates);
     }
   }
 
@@ -4899,11 +5057,11 @@ class ClientMachine {
     if (subscription.isActive()) {
       throw new IllegalStateException("Cannot subscribe to an active Subscription");
     }
-    if (subscription.fetchItems() == null && subscription.getItemGroup() == null) {
-      throw new IllegalArgumentException("Specify property 'items' or 'itemGroup'");
+    if (subscription.fetchItems() == null) {
+      throw new IllegalArgumentException("Specify property 'items'");
     }
-    if (subscription.fetchFields() == null && subscription.getFieldSchema() == null) {
-      throw new IllegalArgumentException("Specify property 'fields' or 'fieldSchema'");
+    if (subscription.fetchFields() == null) {
+      throw new IllegalArgumentException("Specify property 'fields'");
     }
     var sm = new SubscriptionManagerLiving(subscription, this);
     actionLogger.logInfo('${isInternal ? "Internal subscription" : "Subscription"} requested: subId: ${sm.subId} $subscription');
