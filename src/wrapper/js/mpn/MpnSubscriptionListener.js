@@ -169,5 +169,10 @@
            * <li><code>trigger</code></li>
            * </ul>
            */
-          onModificationError: function(code, message, propertyName) {}
+          onModificationError: function(code, message, propertyName) {},
+
+          /**
+           * Event handler called when the server confirms the modification of the trigger expression or notification format of an {@link MpnSubscription}.
+           */
+          onModification: function() {}
   };

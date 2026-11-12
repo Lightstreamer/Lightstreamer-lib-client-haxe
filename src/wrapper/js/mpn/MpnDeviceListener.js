@@ -100,5 +100,18 @@
           * 
           * @see LightstreamerClient#getMpnSubscriptions
           */
-         onSubscriptionsUpdated: function() {}
+         onSubscriptionsUpdated: function() {},
+
+         /**
+          * Event handler called when multiple MPN subscriptions have been successfully unsubscribed.
+          */
+         onMultipleUnsubscriptions: function() {},
+
+         /**
+          * Event handler called when the server notifies an error while unsubscribing multiple MPN subscriptions.
+          *
+          * @param {Number} errorCode The error code sent by the Server.
+          * @param {String} errorMessage The description of the error sent by the Server; it can be null.
+          */
+         onMultipleUnsubscriptionsError: function(errorCode, errorMessage) {}
  };

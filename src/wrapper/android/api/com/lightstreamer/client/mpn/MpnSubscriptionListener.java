@@ -178,7 +178,7 @@ public interface MpnSubscriptionListener {
     public void onModificationError(int code, String message, String propertyName);
 
     /**
-     * TODO
+     * Event handler called when the server confirms the modification of the trigger expression or notification format of an {@link MpnSubscription}.
      */
     public void onModification();
 }
