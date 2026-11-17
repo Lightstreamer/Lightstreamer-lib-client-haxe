@@ -46,8 +46,8 @@ class TestMpnClient extends utest.Test {
     /* create MPN subscription */
     sub = new MpnSubscription("MERGE");
     sub.setDataAdapter("COUNT");
-    sub.setItemGroup("count");
-    sub.setFieldSchema("count");
+    sub.setItems(["count"]);
+    sub.setFields(["count"]);
     sub.setNotificationFormat(descriptor);
     subListener = new BaseMpnSubscriptionListener();
     sub.addListener(subListener);
@@ -199,8 +199,8 @@ class TestMpnClient extends utest.Test {
       isNull(sub.getRequestedBufferSize());
       isNull(sub.getRequestedMaxFrequency());
       equals("MERGE", sub.getMode());
-      equals("count", sub.getItemGroup());
-      equals("count", sub.getFieldSchema());
+      strictSame(["count"], sub.getItems());
+      strictSame(["count"], sub.getFields());
       notNull(sub.getSubscriptionId());
     })
     .cleanup(this)
@@ -299,8 +299,8 @@ class TestMpnClient extends utest.Test {
     };
     var subCopy = new MpnSubscription("MERGE");
     subCopy.setDataAdapter("COUNT");
-    subCopy.setItemGroup("count");
-    subCopy.setFieldSchema("count");
+    subCopy.setItems(["count"]);
+    subCopy.setFields(["count"]);
     subCopy.setNotificationFormat(new FirebaseMpnBuilder().setTitle("my_title_2").build());
     var subCopyListener = new BaseMpnSubscriptionListener();
     subCopy.addListener(subCopyListener);
@@ -473,8 +473,8 @@ class TestMpnClient extends utest.Test {
 
     var sub1 = new MpnSubscription("MERGE");
     sub1.setDataAdapter("COUNT");
-    sub1.setItemGroup("count");
-    sub1.setFieldSchema("count");
+    sub1.setItems(["count"]);
+    sub1.setFields(["count"]);
     sub1.setNotificationFormat(descriptor);
     var sub1Listener = new BaseMpnSubscriptionListener();
     sub1.addListener(sub1Listener);
@@ -483,8 +483,8 @@ class TestMpnClient extends utest.Test {
 
     var sub2 = new MpnSubscription("MERGE");
     sub2.setDataAdapter("COUNT");
-    sub2.setItemGroup("count");
-    sub2.setFieldSchema("count");
+    sub2.setItems(["count"]);
+    sub2.setFields(["count"]);
     sub2.setNotificationFormat(descriptor);
     // this expression is always true because the counter is >= 0
     sub2.setTriggerExpression("Integer.parseInt(${count}) > -1");
@@ -549,8 +549,8 @@ class TestMpnClient extends utest.Test {
 
     var sub1 = new MpnSubscription("MERGE");
     sub1.setDataAdapter("COUNT");
-    sub1.setItemGroup("count");
-    sub1.setFieldSchema("count");
+    sub1.setItems(["count"]);
+    sub1.setFields(["count"]);
     sub1.setNotificationFormat(descriptor);
     var sub1Listener = new BaseMpnSubscriptionListener();
     sub1.addListener(sub1Listener);
@@ -559,8 +559,8 @@ class TestMpnClient extends utest.Test {
 
     var sub2 = new MpnSubscription("MERGE");
     sub2.setDataAdapter("COUNT");
-    sub2.setItemGroup("count");
-    sub2.setFieldSchema("count");
+    sub2.setItems(["count"]);
+    sub2.setFields(["count"]);
     sub2.setNotificationFormat(descriptor);
     // this expression is always true because the counter is >= 0
     sub2.setTriggerExpression("Integer.parseInt(${count}) > -1");
@@ -625,8 +625,8 @@ class TestMpnClient extends utest.Test {
 
     var sub1 = new MpnSubscription("MERGE");
     sub1.setDataAdapter("COUNT");
-    sub1.setItemGroup("count");
-    sub1.setFieldSchema("count");
+    sub1.setItems(["count"]);
+    sub1.setFields(["count"]);
     sub1.setNotificationFormat(descriptor);
     var sub1Listener = new BaseMpnSubscriptionListener();
     sub1.addListener(sub1Listener);
@@ -635,8 +635,8 @@ class TestMpnClient extends utest.Test {
 
     var sub2 = new MpnSubscription("MERGE");
     sub2.setDataAdapter("COUNT");
-    sub2.setItemGroup("count");
-    sub2.setFieldSchema("count");
+    sub2.setItems(["count"]);
+    sub2.setFields(["count"]);
     sub2.setNotificationFormat(descriptor);
     // this expression is always true because the counter is >= 0
     sub2.setTriggerExpression("Integer.parseInt(${count}) > -1");
@@ -765,8 +765,8 @@ class TestMpnClient extends utest.Test {
 
     var sub1 = new MpnSubscription("MERGE");
     sub1.setDataAdapter("COUNT");
-    sub1.setItemGroup("count");
-    sub1.setFieldSchema("count");
+    sub1.setItems(["count"]);
+    sub1.setFields(["count"]);
     sub1.setNotificationFormat(descriptor);
     var sub1Listener = new BaseMpnSubscriptionListener();
     sub1.addListener(sub1Listener);
@@ -774,8 +774,8 @@ class TestMpnClient extends utest.Test {
 
     var sub2 = new MpnSubscription("MERGE");
     sub2.setDataAdapter("COUNT");
-    sub2.setItemGroup("count");
-    sub2.setFieldSchema("count");
+    sub2.setItems(["count"]);
+    sub2.setFields(["count"]);
     sub2.setNotificationFormat(descriptor);
     var sub2Listener = new BaseMpnSubscriptionListener();
     sub2.addListener(sub2Listener);
@@ -823,15 +823,15 @@ class TestMpnClient extends utest.Test {
      */
     var sub1 = new MpnSubscription("MERGE");
     sub1.setDataAdapter("COUNT");
-    sub1.setItemGroup("count");
-    sub1.setFieldSchema("count");
+    sub1.setItems(["count"]);
+    sub1.setFields(["count"]);
     sub1.setNotificationFormat(descriptor);
     sub1.setTriggerExpression("Integer.parseInt(${count}) < -1");
 
     var sub2 = new MpnSubscription("MERGE");
     sub2.setDataAdapter("COUNT");
-    sub2.setItemGroup("count");
-    sub2.setFieldSchema("count");
+    sub2.setItems(["count"]);
+    sub2.setFields(["count"]);
     sub2.setNotificationFormat(descriptor);
     sub2.setTriggerExpression("Integer.parseInt(${count}) < -2");
     exps
@@ -944,15 +944,15 @@ class TestMpnClient extends utest.Test {
      */
     var sub1 = new MpnSubscription("MERGE");
     sub1.setDataAdapter("COUNT");
-    sub1.setItemGroup("count");
-    sub1.setFieldSchema("count");
+    sub1.setItems(["count"]);
+    sub1.setFields(["count"]);
     sub1.setNotificationFormat(descriptor);
     sub1.setTriggerExpression("Integer.parseInt(${count}) < -1");
 
     var sub2 = new MpnSubscription("MERGE");
     sub2.setDataAdapter("COUNT");
-    sub2.setItemGroup("count");
-    sub2.setFieldSchema("count");
+    sub2.setItems(["count"]);
+    sub2.setFields(["count"]);
     sub2.setNotificationFormat(descriptor);
     sub2.setTriggerExpression("Integer.parseInt(${count}) < -2");
     exps

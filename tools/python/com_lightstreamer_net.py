@@ -94,7 +94,7 @@ class HttpClientPy:
     proxy_url, proxy_auth = build_proxy(proxy)
     try:
       session = SessionPy.getInstance()
-      async with session.request("POST", url, data=body, headers=headers, proxy=proxy_url, proxy_auth=proxy_auth, ssl=sslContext) as resp:
+      async with session.request("POST", url, data=body, headers=headers, proxy=proxy_url, proxy_auth=proxy_auth, ssl=(True if sslContext is None else sslContext)) as resp:
         self.cancellationToken.set_result(resp)
         if not resp.ok:
           raise Exception("Unexpected HTTP code: " + str(resp.status))
@@ -141,7 +141,7 @@ class WsClientPy:
     proxy_url, proxy_auth = build_proxy(proxy)
     try:
       session = SessionPy.getInstance()
-      async with session.ws_connect(url, protocols=(protocol,), headers=headers, proxy=proxy_url, proxy_auth=proxy_auth, ssl=sslContext) as ws:
+      async with session.ws_connect(url, protocols=(protocol,), headers=headers, proxy=proxy_url, proxy_auth=proxy_auth, ssl=(True if sslContext is None else sslContext)) as ws:
         self.cancellationToken.set_result(ws)
         self.ws = ws
         self.on_open(self)
@@ -166,7 +166,7 @@ class WsClientPy:
         resp = self.cancellationToken.result()
         ls_io_thread.submit_coro(resp.close())
       else:
-        async def on_done_callback(future):
+        def on_done_callback(future):
           resp = future.result()
           ls_io_thread.submit_coro(resp.close())
         self.cancellationToken.add_done_callback(on_done_callback)

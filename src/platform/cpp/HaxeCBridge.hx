@@ -255,7 +255,10 @@ class HaxeCBridge {
 							t: TInst(clsRef, []), // return a instance of this class
 						}
 						case Member:
-							var instanceTArg: TVar = {id: -1, name: 'instance', t: TInst(clsRef, []), meta: null, capture: false, extra: null};
+							/* $Lightstreamer$
+							`instanceTArg` represents a local variable, so `isStatic` is set to `false`.
+							*/
+							var instanceTArg: TVar = {id: -1, name: 'instance', t: TInst(clsRef, []), meta: null, capture: false, extra: null, isStatic: false};
 							{
 								args: [{v: instanceTArg, value: null}].concat(tfunc.args),
 								expr: tfunc.expr,

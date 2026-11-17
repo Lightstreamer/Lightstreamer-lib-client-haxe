@@ -18,9 +18,13 @@ package com.lightstreamer.internal;
 import com.lightstreamer.internal.NativeTypes.Long;
 using StringTools;
 
-private class KeyVal {
-  public var key: String;
-  public var val: String;
+private interface IKeyVal {
+  function toEncodedPair(): String;
+}
+
+private class KeyVal implements IKeyVal {
+  final key: String;
+  final val: String;
 
   public function new(key: String, val: String) {
     this.key = key;
@@ -36,8 +40,26 @@ private class KeyVal {
   }
 }
 
+private class ListKeyVal implements IKeyVal {
+  final key: String;
+  final names: Array<String>;
+
+  public function new(key: String, names: Array<String>) {
+    this.key = key;
+    this.names = names.copy();
+  }
+
+  public function toEncodedPair() {
+    return key.urlEncode() + "=" + names.map(name -> name.urlEncode()).join("&");
+  }
+
+  public function toString() {
+    return key + "=" + names;
+  }
+}
+
 class RequestBuilder {
-  final params: Array<KeyVal> = [];
+  final params: Array<IKeyVal> = [];
 
   public inline function new() {}
 
@@ -81,12 +103,12 @@ class RequestBuilder {
     addParam("LS_mode", val);
   }
 
-  public function LS_group(val: String) {
-    addParam("LS_group", val);
+  public function LS_item(names: Array<String>) {
+    params.push(new ListKeyVal("LS_item", names));
   }
 
-  public function LS_schema(val: String) {
-    addParam("LS_schema", val);
+  public function LS_field(names: Array<String>) {
+    params.push(new ListKeyVal("LS_field", names));
   }
 
   public function LS_data_adapter(val: String) {

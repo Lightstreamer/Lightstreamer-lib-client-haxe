@@ -44,14 +44,13 @@ public:
    *       should clear the list in order to keep a coherent view.</li>
    * </ul>
    * Note that, if the involved Subscription has a two-level behavior enabled
-   * (see {@link Subscription#setCommandSecondLevelFields()} and {@link Subscription#setCommandSecondLevelFieldSchema()})
+  * (see {@link Subscription#setCommandSecondLevelFields()})
    * , the notification refers to the first-level item (which is in COMMAND mode).
    * This kind of notification is not possible for second-level items (which are in MERGE 
    * mode).
    * 
-   * @param itemName name of the involved item. If the Subscription was initialized using an "Item Group" then an 
-   *        empty string is supplied.
-   * @param itemPos 1-based position of the item within the "Item List" or "Item Group".
+  * @param itemName name of the involved item in the explicit item list.
+  * @param itemPos 1-based position of the item within the item list.
    */
   virtual void onClearSnapshot(const std::string& itemName, int itemPos) {}
   /**
@@ -66,7 +65,6 @@ public:
    * 
    * @see Subscription#setRequestedMaxFrequency()
    * @see Subscription#setCommandSecondLevelFields()
-   * @see Subscription#setCommandSecondLevelFieldSchema()
    */
   virtual void onCommandSecondLevelItemLostUpdates(int lostUpdates, const std::string& key) {}
   /**
@@ -99,7 +97,6 @@ public:
    * 
    * @see ConnectionDetails#setAdapterSet()
    * @see Subscription#setCommandSecondLevelFields()
-   * @see Subscription#setCommandSecondLevelFieldSchema()
    */
   virtual void onCommandSecondLevelSubscriptionError(int code, const std::string& message, const std::string& key) {}
   /**
@@ -109,41 +106,62 @@ public:
    * subscription mode and snapshot information was indeed requested for the items. By implementing this 
    * method it is possible to perform actions which require that all the initial values have been received. <BR>
    * Note that, if the involved Subscription has a two-level behavior enabled
-   * (see {@link Subscription#setCommandSecondLevelFields()} and {@link Subscription#setCommandSecondLevelFieldSchema()})
+  * (see {@link Subscription#setCommandSecondLevelFields()})
    * , the notification refers to the first-level item (which is in COMMAND mode).
    * Snapshot-related updates for the second-level items 
    * (which are in MERGE mode) can be received both before and after this notification.
    * 
-   * @param itemName name of the involved item. If the Subscription was initialized using an "Item Group" then an 
-   *        empty string is supplied.
-   * @param itemPos 1-based position of the item within the "Item List" or "Item Group".
+  * @param itemName name of the involved item in the explicit item list.
+  * @param itemPos 1-based position of the item within the item list.
    * 
    * @see Subscription#setRequestedSnapshot()
    * @see ItemUpdate#isSnapshot()
    */
   virtual void onEndOfSnapshot(const std::string& itemName, int itemPos) {}
   /**
-   * Event handler that is called by Lightstreamer to notify that, due to internal resource limitations, 
-   * Lightstreamer Server dropped one or more updates for an item in the Subscription. 
-   * Such notifications are sent only if the items are delivered in an unfiltered mode; this occurs if the 
-   * subscription mode is:
+  * Event handler that is called by Lightstreamer to report lost updates for an item in the Subscription.
+  * When isOverflow is true, updates were dropped by Server buffer overflow (OV).
+  * Notifications can be delivered in the following modes:
    * <ul>
    *   <li>RAW</li>
    *   <li>MERGE or DISTINCT, with unfiltered dispatching specified</li>
-   *   <li>COMMAND, with unfiltered dispatching specified</li>
-   *   <li>COMMAND, without unfiltered dispatching specified (in this case, notifications apply to ADD 
-   *       and DELETE events only)</li>
+  *   <li>COMMAND, for ADD and DELETE events, or for all update event types when unfiltered dispatching
+  *       was requested</li>
    * </ul>
-   * By implementing this method it is possible to perform recovery actions.
-   * 
-   * @param itemName name of the involved item. If the Subscription was initialized using an "Item Group" then an 
-   *        empty string is supplied.
-   * @param itemPos 1-based position of the item within the "Item List" or "Item Group".
-   * @param lostUpdates The number of consecutive updates dropped for the item.
+  * When isOverflow is false, the Data Adapter reported lost updates (LOST). Notifications can be
+  * delivered in RAW or COMMAND mode regardless of whether unfiltered dispatching was requested,
+  * and in MERGE or DISTINCT mode only when unfiltered dispatching was requested. <BR>
+  * For two-level COMMAND Subscriptions, this callback refers only to first-level items.
+  * Second-level LOST notifications are not propagated to the parent's listeners; second-level OV
+  * notifications continue through {@link #onCommandSecondLevelItemLostUpdates()}.
+  *
+  * @param itemName name of the involved item in the explicit item list.
+  * @param itemPos 1-based position of the item within the item list.
+  * @param lostUpdates integer number of lost updates, or -1 when the count is unavailable.
+  * @param isOverflow true for Server buffer overflow; false for Data Adapter loss notifications.
    * 
    * @see Subscription#setRequestedMaxFrequency()
    */
-  virtual void onItemLostUpdates(const std::string& itemName, int itemPos, int lostUpdates) {}
+  virtual void onItemLostUpdates(const std::string& itemName, int itemPos, int lostUpdates, bool isOverflow) {}
+  /**
+  * Event handler that is called when problems obtaining updates block an item's update event flow.<BR>
+  * For two-level COMMAND Subscriptions, this callback refers only to first-level items.
+  * Stale notifications for internal second-level items are not propagated to the parent's listeners.
+  *
+  * @param itemName name of the involved item in the explicit item list.
+  * @param itemPos 1-based position of the item within the item list.
+  */
+  virtual void onItemStale(const std::string& itemName, int itemPos) {}
+  /**
+  * Event handler that is called when an item's update event flow, previously reported as blocked,
+  * is no longer blocked. <BR>
+  * For two-level COMMAND Subscriptions, this callback refers only to first-level items.
+  * Resume notifications for internal second-level items are not propagated to the parent's listeners.
+  *
+  * @param itemName name of the involved item in the explicit item list.
+  * @param itemPos 1-based position of the item within the item list.
+  */
+  virtual void onItemResume(const std::string& itemName, int itemPos) {}
   /**
    * Event handler that is called by Lightstreamer each time an update pertaining to an item in the Subscription
    * has been received from the Server.
@@ -173,7 +191,7 @@ public:
    * Note that two consecutive calls to this method are not possible, as before a second onSubscription event is 
    * fired an {@link #onUnsubscription} event is eventually fired. <BR> 
    * If the involved Subscription has a two-level behavior enabled
-   * (see {@link Subscription#setCommandSecondLevelFields()} and {@link Subscription#setCommandSecondLevelFieldSchema()})
+  * (see {@link Subscription#setCommandSecondLevelFields()})
    * , second-level subscriptions are not notified.
    */
   virtual void onSubscription() {}
@@ -186,7 +204,8 @@ public:
    *
    * @param code The error code sent by the Server. It can be one of the following:
    *        <ul>
-   *          <li>15 - "key" field not specified in the schema for a COMMAND mode subscription</li>
+  *          <li>6 - Cannot evaluate a subscription request because the Data Adapter is disabled (only raised with Data Adapter interface version 9 or later).</li>
+  *          <li>15 - "key" field not specified in the schema for a COMMAND mode subscription</li>
    *          <li>16 - "command" field not specified in the schema for a COMMAND mode subscription</li>
    *          <li>17 - bad Data Adapter name or default Data Adapter not defined for the current Adapter Set</li>
    *          <li>21 - bad Group name</li>
@@ -203,6 +222,8 @@ public:
    *          <li>29 - RAW mode is not allowed by the current license terms (for special licenses only)</li>
    *          <li>30 - subscriptions are not allowed by the current license terms (for special licenses only)</li>
    *          <li>61 - there was an error in the parsing of the server response</li>
+  *          <li>63 - Subscription refused by the Data Adapter (only raised with Data Adapter interface version 9 or later).</li>
+  *          <li>64 - An unchecked exception was thrown in the Data Adapter while managing a subscription request (only raised with Data Adapter interface version 9 or later).</li>
    *          <li>66 - an unexpected exception was thrown by the Metadata Adapter while authorizing the connection</li>
    *          <li>68 - the Server could not fulfill the request because of an internal error.</li>
    *          <li>&lt;= 0 - the Metadata Adapter has refused the subscription or unsubscription request; the 
@@ -224,7 +245,7 @@ public:
    * Note that two consecutive calls to this method are not possible, as before a second onUnsubscription event 
    * is fired an {@link #onSubscription} event is eventually fired. <BR> 
    * If the involved Subscription has a two-level behavior enabled
-   * (see {@link Subscription#setCommandSecondLevelFields()} and {@link Subscription#setCommandSecondLevelFieldSchema()})
+  * (see {@link Subscription#setCommandSecondLevelFields()})
    * , second-level unsubscriptions are not notified.
    */
   virtual void onUnsubscription() {}
@@ -234,7 +255,7 @@ public:
    * (see {@link Subscription#setRequestedMaxFrequency()}).
    * Since the frequency limit is applied on an item basis and a Subscription can involve multiple items,
    * this is actually the maximum frequency among all items. For Subscriptions with two-level behavior
-   * (see {@link Subscription#setCommandSecondLevelFields()} and {@link Subscription#setCommandSecondLevelFieldSchema()})
+  * (see {@link Subscription#setCommandSecondLevelFields()})
    * , the reported frequency limit applies to both first-level and second-level items. <BR>
    * The value may differ from the requested one because of restrictions operated on the server side,
    * but also because of number rounding. <BR>

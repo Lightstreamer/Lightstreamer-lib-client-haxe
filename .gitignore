@@ -13,3 +13,4 @@ pages/
 .haxelib/
 
 scratch.md
+.spec/

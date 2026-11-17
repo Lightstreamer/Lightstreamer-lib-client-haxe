@@ -6,6 +6,7 @@
 
 -D NO_PRECOMPILED_HEADERS
 -D windows
+-D HXCPP_M64
 
 -D ABI=/MTd
 

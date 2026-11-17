@@ -441,11 +441,7 @@ class Key2Level implements ItemKey {
     }
     sub2.setItems(items);
     var fields2 = sub.getCommandSecondLevelFields();
-    if (fields2 != null) {
-      sub2.setFields(fields2);
-    } else {
-      sub2.setFieldSchema(sub.getCommandSecondLevelFieldSchema());
-    }
+    sub2.setFields(fields2.sure());
     sub2.setDataAdapter(sub.getCommandSecondLevelDataAdapter());
     sub2.setRequestedSnapshot(SnpYes.toString());
     sub2.setRequestedMaxFrequency(item.strategy.requestedMaxFrequency.toString());
@@ -506,10 +502,12 @@ private class Sub2LevelDelegate implements SubscriptionListener {
     });
   }
 
-  public function onItemLostUpdates(itemName: Null<String>, itemPos: Pos, lostUpdates: Int) {
-    synchronized(() -> {
-      key.evtOnItemLostUpdates2Level(lostUpdates);
-    });
+  public function onItemLostUpdates(itemName: Null<String>, itemPos: Pos, lostUpdates: Int, isOverflow: Bool) {
+    if (isOverflow) {
+      synchronized(() -> {
+        key.evtOnItemLostUpdates2Level(lostUpdates);
+      });
+    }
   }
 
   public function onRealMaxFrequency(frequency: Null<String>) {
@@ -532,6 +530,8 @@ private class Sub2LevelDelegate implements SubscriptionListener {
   public function onCommandSecondLevelItemLostUpdates(lostUpdates:Int, key:String) {}
   public function onCommandSecondLevelSubscriptionError(code:Int, message:String, key:String) {}
   public function onEndOfSnapshot(itemName:Null<String>, itemPos:Int) {}
+  public function onItemStale(itemName:Null<String>, itemPos:Int) {}
+  public function onItemResume(itemName:Null<String>, itemPos:Int) {}
   public function onListenEnd(#if js sub: Subscription #end) {}
   public function onListenStart(#if js sub: Subscription #end) {}
   public function onSubscription() {}

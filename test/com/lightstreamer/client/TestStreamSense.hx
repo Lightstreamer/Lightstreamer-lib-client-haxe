@@ -34,6 +34,55 @@ class TestStreamSense extends utest.Test {
     client.disconnect();
   }
 
+  function testCreateWs_Error12(async: utest.Async) {
+    var listener = new BaseListener.BaseClientListener();
+    listener._onStatusChange = status -> exps.signal(status);
+    listener._onServerError = (code, message) -> exps.signal('onServerError $code $message');
+    client.addListener(listener);
+
+    exps
+    .then(() -> client.connect())
+    .await("ws.init http://server/lightstreamer")
+    .await("CONNECTING")
+    .then(() -> ws.onOpen())
+    .await("wsok")
+    .await("create_session\r\nLS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_send_sync=false&LS_cause=api")
+    .then(() -> {
+      ws.onText("WSOK");
+      ws.onText("CONERR,12,Adapter SDK%2C incompatible");
+    })
+    .await("ws.dispose")
+    .await("DISCONNECTED")
+    .await("onServerError 12 Adapter SDK, incompatible")
+    .then(() -> {
+      equals("DISCONNECTED", client.getStatus());
+      async.completed();
+    })
+    .verify();
+  }
+
+  function testCreateHttp_Error12(async: utest.Async) {
+    client.connectionOptions.setForcedTransport("HTTP");
+    var listener = new BaseListener.BaseClientListener();
+    listener._onStatusChange = status -> exps.signal(status);
+    listener._onServerError = (code, message) -> exps.signal('onServerError $code $message');
+    client.addListener(listener);
+
+    exps
+    .then(() -> client.connect())
+    .await("CONNECTING",
+      "http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
+    .then(() -> http.onText("CONERR,12,Adapter SDK%2C incompatible"))
+    .await("http.dispose")
+    .await("DISCONNECTED")
+    .await("onServerError 12 Adapter SDK, incompatible")
+    .then(() -> {
+      equals("DISCONNECTED", client.getStatus());
+      async.completed();
+    })
+    .verify();
+  }
+
   #if LS_WEB
   /**
    * When the user sets some headers
@@ -49,14 +98,14 @@ class TestStreamSense extends utest.Test {
 
     exps
     .then(() -> client.connect())
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
       http.onText("LOOP,0");
     })
     .await("CONNECTING")
     .await("http.dispose")
-    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.5.0\r\nLS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=http.loop")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
     })
@@ -81,7 +130,7 @@ class TestStreamSense extends utest.Test {
 
     exps
     .then(() -> client.connect())
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
       http.onText("LOOP,0");
@@ -134,7 +183,7 @@ class TestStreamSense extends utest.Test {
     
     exps
     .then(() -> client.connect())
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=api")
     .then(() -> {
       client.connectionOptions.setHttpExtraHeadersOnSessionCreationOnly(false);
       http.onError();
@@ -157,7 +206,7 @@ class TestStreamSense extends utest.Test {
       ws.onError();
     })
     .await("ws.dispose")
-    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=ws.unavailable")
+    .await("http.send http://server/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg&LS_cause=ws.unavailable")
     .then(() -> {
       http.onText("CONOK,sid,70000,5000,*");
       http.onText("LOOP,0");
@@ -166,9 +215,9 @@ class TestStreamSense extends utest.Test {
     .await("ws.init http://server/lightstreamer")
     .then(() -> scheduler.fireTransportTimeout())
     .await("ws.dispose")
-    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.5.0\r\nLS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=ws.unavailable")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_session=sid&LS_content_length=50000000&LS_send_sync=false&LS_cause=ws.unavailable")
     .then(() -> scheduler.fireTransportTimeout())
-    .await("ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.5.0&LS_session=sid\r\nLS_reqId=1&LS_op=force_rebind&LS_cause=http.streaming.unavailable")
+    .await("ctrl.send http://server/lightstreamer/control.txt?LS_protocol=TLCP-2.6.0&LS_session=sid\r\nLS_reqId=1&LS_op=force_rebind&LS_cause=http.streaming.unavailable")
     .then(() -> {
       ctrl.onText("REQOK,1");
       ctrl.onDone();
@@ -179,7 +228,7 @@ class TestStreamSense extends utest.Test {
       http.onText("LOOP,0");
     })
     .await("http.dispose")
-    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.5.0\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop")
+    .await("http.send http://server/lightstreamer/bind_session.txt?LS_protocol=TLCP-2.6.0\r\nLS_session=sid&LS_polling=true&LS_polling_millis=0&LS_idle_millis=19000&LS_cause=http.loop")
     .then(() -> http.onText("CONOK,sid,70000,5000,*"))
     .then(() -> async.completed())
     .verify();

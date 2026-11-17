@@ -341,6 +341,8 @@ public:
   /**
    * Operation method that adds a Subscription to the list of "active" Subscriptions. The Subscription cannot already 
    * be in the "active" state. <BR>
+  * Explicit item and field lists must be configured through the constructor or
+  * {@link Subscription#setItems()} and {@link Subscription#setFields()} before this call.
    * Active subscriptions are subscribed to through the server as soon as possible (i.e. as soon as there is a 
    * session available). Active Subscription are automatically persisted across different sessions as long as a 
    * related unsubscribe call is not issued.
@@ -354,6 +356,7 @@ public:
    * event.
    * 
    * @param subscription A Subscription object, carrying all the information needed to process real-time values.
+  * @throws LightstreamerError if the subscription has no explicit item list or field list.
    * 
    * @see #unsubscribe()
    */

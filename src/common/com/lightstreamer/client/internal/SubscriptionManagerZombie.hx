@@ -117,6 +117,30 @@ class SubscriptionManagerZombie implements SubscriptionManager {
     }
   }
   
+  public function evtSTALE(itemIdx: Pos) {
+    traceEvent("STALE");
+    if (s_m == s1) {
+      goto(s2);
+      genSendControl();
+    }
+  }
+
+  public function evtRESUME(itemIdx: Pos) {
+    traceEvent("RESUME");
+    if (s_m == s1) {
+      goto(s2);
+      genSendControl();
+    }
+  }
+
+  public function evtLOST(itemIdx: Pos, lostUpdates: Int) {
+    traceEvent("LOST");
+    if (s_m == s1) {
+      goto(s2);
+      genSendControl();
+    }
+  }
+
   public  function evtOV(itemIdx: Pos, lostUpdates: Int) {
     traceEvent("OV");
     if (s_m == s1) {

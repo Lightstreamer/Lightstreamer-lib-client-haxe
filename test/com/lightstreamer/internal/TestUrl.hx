@@ -16,6 +16,11 @@
 package com.lightstreamer.internal;
 
 class TestUrl extends utest.Test {
+
+  function testProtocolVersion() {
+    equals("TLCP-2.6.0", Constants.TLCP_VERSION);
+    equals("TLCP-2.6.0.lightstreamer.com", Constants.FULL_TLCP_VERSION);
+  }
   
   function testAddPathToBase() {
     var url = new Url("http://example.com");

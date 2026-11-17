@@ -46,7 +46,7 @@ class TestHttpClientCpp extends utest.Test {
 
   function testPolling(async: utest.Async) {
     client = new _HttpClient(
-      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
+      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0",
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", 
       function onText(c, line) {
         output.push(line);
@@ -64,7 +64,7 @@ class TestHttpClientCpp extends utest.Test {
 
   function testStreaming(async: utest.Async) {
     client = new _HttpClient(
-      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
+      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0",
       "LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", 
       function onText(c, line) {
         if (c.isDisposed()) return;
@@ -83,7 +83,7 @@ class TestHttpClientCpp extends utest.Test {
   @:timeout(3000)
   function testHttps(async: utest.Async) {
     client = new _HttpClient(
-      "https://push.lightstreamer.com/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
+      "https://push.lightstreamer.com/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0",
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", 
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
@@ -99,7 +99,7 @@ class TestHttpClientCpp extends utest.Test {
 
   function testConnectionError(async: utest.Async) {
     client = new _HttpClient(
-      secHost + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
+      secHost + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0",
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", 
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
@@ -121,7 +121,7 @@ class TestHttpClientCpp extends utest.Test {
     LightstreamerClient.addCookies(uri, cookies);
 
     client = new _HttpClient(
-      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
+      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0",
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", 
       function onText(c, line) null, 
       function onError(c, error) { 
@@ -142,7 +142,7 @@ class TestHttpClientCpp extends utest.Test {
 
   function testHeaders(async: utest.Async) {
     client = new _HttpClient(
-      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
+      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0",
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", 
       ["X-Header" => "header"], 
       function onText(c, line) output.push(line), 
@@ -160,7 +160,7 @@ class TestHttpClientCpp extends utest.Test {
   #if LS_HAS_PROXY
   function testProxy(async: utest.Async) {
     client = new _HttpClient(
-      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
+      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0",
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", 
       new Proxy("HTTP", "localtest.me", 8079, "myuser", "mypassword"),
       function onText(c, line) output.push(line), 
@@ -178,7 +178,7 @@ class TestHttpClientCpp extends utest.Test {
   @:timeout(3000)
   function testProxyHttps(async: utest.Async) {
     client = new _HttpClient(
-      "https://push.lightstreamer.com/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
+      "https://push.lightstreamer.com/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0",
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", 
       new Proxy("HTTP", "localtest.me", 8079, "myuser", "mypassword"),
       function onText(c, line) output.push(line), 
@@ -202,7 +202,7 @@ class TestHttpClientCpp extends utest.Test {
 
     LightstreamerClient.setTrustManagerFactory(caLocation, certificateFile, privateKeyFile, "", true);
     client = new _HttpClient(
-      secHost + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
+      secHost + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0",
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", 
       function onText(c, line) output.push(line), 
       function onError(c, error) { 

@@ -152,8 +152,8 @@ public interface MpnSubscriptionListener {
      * 
      * @param propertyName The name of the changed property. It can be one of the following:<ul>
      * <li><code>mode</code></li>
-     * <li><code>group</code></li>
-     * <li><code>schema</code></li>
+    * <li><code>group</code> - the legacy event name for the explicit item list; see {@link MpnSubscription#getItems()}.</li>
+    * <li><code>schema</code> - the legacy event name for the explicit field list; see {@link MpnSubscription#getFields()}.</li>
      * <li><code>adapter</code></li>
      * <li><code>notification_format</code></li>
      * <li><code>trigger</code></li>

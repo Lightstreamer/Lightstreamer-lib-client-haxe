@@ -39,7 +39,7 @@ class TestHttpClientJava extends utest.Test {
 
   function testPolling(async: utest.Async) {
     new HttpClient(
-      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
+      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0",
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null, [],
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
@@ -56,7 +56,7 @@ class TestHttpClientJava extends utest.Test {
 
   function testStreaming(async: utest.Async) {
     new HttpClient(
-      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
+      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0",
       "LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null, [],
       function onText(c, line) {
         if (c.isDisposed()) return;
@@ -76,7 +76,7 @@ class TestHttpClientJava extends utest.Test {
   @:timeout(3000)
   function testHttps(async: utest.Async) {
     new HttpClient(
-      "https://push.lightstreamer.com/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
+      "https://push.lightstreamer.com/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0",
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null, [],
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
@@ -93,7 +93,7 @@ class TestHttpClientJava extends utest.Test {
 
   function testConnectionError(async: utest.Async) {
     new HttpClient(
-      secHost + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
+      secHost + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0",
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null, [],
       function onText(c, line) output.push(line), 
       function onError(c, error) { 
@@ -120,7 +120,7 @@ class TestHttpClientJava extends utest.Test {
     LightstreamerClient.addCookies(uri, new NativeList([cookie]));
 
     new HttpClient(
-      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
+      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0",
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, null, [],
       function onText(c, line) null, 
       function onError(c, error) { 
@@ -139,7 +139,7 @@ class TestHttpClientJava extends utest.Test {
 
   function testHeaders(async: utest.Async) {
     new HttpClient(
-      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
+      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0",
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", 
       ["X-Header" => "header"], null, null, [],
       function onText(c, line) output.push(line), 
@@ -157,7 +157,7 @@ class TestHttpClientJava extends utest.Test {
 
   function testProxy(async: utest.Async) {
     new HttpClient(
-      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
+      host + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0",
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", 
       null,
       #if android
@@ -182,7 +182,7 @@ class TestHttpClientJava extends utest.Test {
   @:timeout(3000)
   function testProxyHttps(async: utest.Async) {
     new HttpClient(
-      "https://push.lightstreamer.com/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
+      "https://push.lightstreamer.com/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0",
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=DEMO&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", 
       null,
       #if android
@@ -213,7 +213,7 @@ class TestHttpClientJava extends utest.Test {
 
     LightstreamerClient.setTrustManagerFactory(tmf);
     new HttpClient(
-      secHost + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.5.0", 
+      secHost + "/lightstreamer/create_session.txt?LS_protocol=TLCP-2.6.0",
       "LS_polling=true&LS_polling_millis=0&LS_idle_millis=0&LS_adapter_set=TEST&LS_cid=mgQkwtwdysogQz2BJ4Ji%20kOj2Bg", null, null, 
       Globals.instance.getTrustManagerFactory(), [],
       function onText(c, line) output.push(line), 

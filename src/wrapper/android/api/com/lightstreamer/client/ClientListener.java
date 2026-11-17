@@ -27,6 +27,38 @@ import javax.annotation.Nonnull;
  * same thread.
  */
 public interface ClientListener {
+
+  /**
+   * Event handler called for every Data Adapter state notification for each
+   * Data Adapter included in the session's Adapter Set.
+   * <BR>The state values are {@code started}, {@code disabled}, {@code resumed},
+   * {@code restarted}, and {@code terminated}. The expected sequence is
+   * {@code started}, followed by zero or more repetitions of {@code disabled}
+   * followed by either {@code resumed} or {@code restarted}. A {@code terminated}
+   * notification may occur at any time and may be followed by a new occurrence
+   * of that sequence.
+   * <BR>Adapters based on older Adapter Interface versions may send only
+   * {@code started} and {@code terminated} notifications.
+   *
+   * @param state The state value received in the message.
+   * @param dataAdapterName The Data Adapter name received in the message.
+   */
+  void onDataAdapterStateChange(@Nonnull String state, @Nonnull String dataAdapterName);
+
+  /**
+   * Event handler called for every Metadata Adapter state notification.
+   * <BR>The state values are {@code started}, {@code disabled}, {@code resumed},
+   * {@code restarted}, and {@code terminated}. The expected sequence is
+   * {@code started}, followed by zero or more repetitions of {@code disabled}
+   * followed by either {@code resumed} or {@code restarted}. A {@code terminated}
+   * notification may occur at any time and may be followed by a new occurrence
+   * of that sequence.
+   * <BR>Adapters based on older Adapter Interface versions may send only
+   * {@code started} and {@code terminated} notifications.
+   *
+   * @param state The state value received in the message.
+   */
+  void onMetadataAdapterStateChange(@Nonnull String state);
   
   /**
    * Event handler that receives a notification when the ClientListener instance is removed from a LightstreamerClient 
@@ -56,6 +88,7 @@ public interface ClientListener {
    *   <li>9 - configured maximum server load reached</li>
    *   <li>10 - new sessions temporarily blocked</li>
    *   <li>11 - streaming is not available because of Server license restrictions (this can only happen with special licenses).</li>
+  *   <li>12 - The Metadata Adapter mounted in the specified Adapter Set is incompatible with this protocol version because it uses the older callback-based Java In-Process Adapter SDK.</li>
    *   <li>21 - a request for this session has unexpectedly reached a wrong Server instance, which suggests that a routing issue may be in place.</li>
    *   <li>30-41 - the current connection or the whole session has been closed by external agents; the possible cause may be:
    *     <ul>

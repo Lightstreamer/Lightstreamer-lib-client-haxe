@@ -27,6 +27,36 @@ namespace com.lightstreamer.client
     public interface ClientListener
     {
         /// <summary>
+        /// Event handler called for every Data Adapter state notification for each
+        /// Data Adapter included in the session's Adapter Set.
+        /// <br/>The state values are <c>started</c>, <c>disabled</c>, <c>resumed</c>,
+        /// <c>restarted</c>, and <c>terminated</c>. The expected sequence is
+        /// <c>started</c>, followed by zero or more repetitions of <c>disabled</c>
+        /// followed by either <c>resumed</c> or <c>restarted</c>. A <c>terminated</c>
+        /// notification may occur at any time and may be followed by a new occurrence
+        /// of that sequence.
+        /// <br/>Adapters based on older Adapter Interface versions may send only
+        /// <c>started</c> and <c>terminated</c> notifications.
+        /// </summary>
+        /// <param name="state">The state value received in the message.</param>
+        /// <param name="dataAdapterName">The Data Adapter name received in the message.</param>
+        void onDataAdapterStateChange(string state, string dataAdapterName);
+
+        /// <summary>
+        /// Event handler called for every Metadata Adapter state notification.
+        /// <br/>The state values are <c>started</c>, <c>disabled</c>, <c>resumed</c>,
+        /// <c>restarted</c>, and <c>terminated</c>. The expected sequence is
+        /// <c>started</c>, followed by zero or more repetitions of <c>disabled</c>
+        /// followed by either <c>resumed</c> or <c>restarted</c>. A <c>terminated</c>
+        /// notification may occur at any time and may be followed by a new occurrence
+        /// of that sequence.
+        /// <br/>Adapters based on older Adapter Interface versions may send only
+        /// <c>started</c> and <c>terminated</c> notifications.
+        /// </summary>
+        /// <param name="state">The state value received in the message.</param>
+        void onMetadataAdapterStateChange(string state);
+
+        /// <summary>
         /// Event handler that receives a notification when the ClientListener instance is removed from a LightstreamerClient 
         /// through <c>LightstreamerClient.removeListener(ClientListener)</c>. This is the last event to be fired on the listener. </summary>
         void onListenEnd();
@@ -52,6 +82,7 @@ namespace com.lightstreamer.client
         ///   <li>9 - configured maximum server load reached</li>
         ///   <li>10 - new sessions temporarily blocked</li>
         ///   <li>11 - streaming is not available because of Server license restrictions (this can only happen with special licenses).</li>
+        ///   <li>12 - The Metadata Adapter mounted in the specified Adapter Set is incompatible with this protocol version because it uses the older callback-based Java In-Process Adapter SDK.</li>
         ///   <li>21 - a request for this session has unexpectedly reached a wrong Server instance, which suggests that a routing issue may be in place.</li>
         ///   <li>30-41 - the current connection or the whole session has been closed by external agents; the possible cause may be:
         ///     <ul>
