@@ -28,9 +28,9 @@ class TestCertificatePinning extends utest.Test {
   https://www.ssllabs.com/ssltest/analyze.html?d=push.lightstreamer.com
   */
   // Leaf certificate pin of push.lightstreamer.com
-  var leafCertificate = "sha256/Y2YtFSlQyVrcCp1Rtrwi/nPciqO832oNxJAZnQF1D6o=";
+  var leafCertificate = "sha256/WGWZidbcZEXJLXrI80GPHf3NpSNQZodJhihfI+C47VA=";
   // Intermediate certificate pin of push.lightstreamer.com
-  var intermediateCertificate = "sha256/s/tdAOmUzd8syaTuqfgGvFcn6DzA5Cmb+Vby1ST+U3Y=";
+  var intermediateCertificate = "sha256/brzvtCELCIZUo4sD/qPX0ccRtPsd3DY6RfmxpOU9oB4=";
   // Other pins
   var bogusCertificate = "sha256/mExQV1m8P3X5mz2EsY3ascQlMz1NAdjrKvfvR6FUMI0=";
   var bogusCertificate2 = "sha256/vh78KSg1Ry4NaqGDV10w/cTb9VH3BQUZoCWNa93W/EY=";

@@ -25,9 +25,9 @@ public class TestCertificatePinning extends ConcurrentTestCase {
      * https://www.ssllabs.com/ssltest/analyze.html?d=push.lightstreamer.com
      */
     // Leaf certificate pin of push.lightstreamer.com
-    final String leafCertificate = "sha256/Y2YtFSlQyVrcCp1Rtrwi/nPciqO832oNxJAZnQF1D6o=";
+    final String leafCertificate = "sha256/WGWZidbcZEXJLXrI80GPHf3NpSNQZodJhihfI+C47VA=";
     // Intermediate certificate pin of push.lightstreamer.com
-    final String intermediateCertificate = "sha256/s/tdAOmUzd8syaTuqfgGvFcn6DzA5Cmb+Vby1ST+U3Y=";
+    final String intermediateCertificate = "sha256/brzvtCELCIZUo4sD/qPX0ccRtPsd3DY6RfmxpOU9oB4=";
     // Other pins
     final String bogusCertificate = "sha256/mExQV1m8P3X5mz2EsY3ascQlMz1NAdjrKvfvR6FUMI0=";
     final String bogusCertificate2 = "sha256/vh78KSg1Ry4NaqGDV10w/cTb9VH3BQUZoCWNa93W/EY=";
