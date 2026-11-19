@@ -1,5 +1,14 @@
 # Lightstreamer Android Client Changelog
 
+## 5.3.4
+*Compatible with Lightstreamer Server since 7.4.0.*<br/>
+*Compatible with Android 8 (API level 26) or greater.*<br/>
+*Compatible with code developed with the previous version.*<br/>
+*Made available on 19 Nov 2026.*
+
+Bumped the version of `com.fasterxml.jackson.core:jackson-databind` to 2.22.4, in order to fix security vulnerabilities affecting the previous versions of the library.
+
+
 ## 5.3.3
 *Compatible with Lightstreamer Server since 7.4.0.*<br/>
 *Compatible with Android 8 (API level 26) or greater.*<br/>
