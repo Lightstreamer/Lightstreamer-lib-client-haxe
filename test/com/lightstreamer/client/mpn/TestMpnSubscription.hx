@@ -34,9 +34,11 @@ class TestMpnSubscription extends utest.Test {
 
     raisesEx(() -> new MpnSubscription("MERGE", [], ["f1"]), IllegalArgumentException, "Item List is empty");
     raisesEx(() -> new MpnSubscription("MERGE", [""], ["f1"]), IllegalArgumentException, "Item List is invalid");
+    raisesEx(() -> new MpnSubscription("MERGE", ["i 1"], ["f1"]), IllegalArgumentException, "Item List is invalid");
 
     raisesEx(() -> new MpnSubscription("MERGE", ["i1"], []), IllegalArgumentException, "Field List is empty");
     raisesEx(() -> new MpnSubscription("MERGE", ["i1"], [""]), IllegalArgumentException, "Field List is invalid");
+    raisesEx(() -> new MpnSubscription("MERGE", ["i1"], ["f 1"]), IllegalArgumentException, "Field List is invalid");
   }
 
   function testTrigger() {
@@ -50,7 +52,7 @@ class TestMpnSubscription extends utest.Test {
 
   function testArbitraryNamesAndCopying() {
     var unicode = haxe.io.Bytes.ofHex("c3a9e4b8adf09f9880").toString();
-    var names = ["123", " ", " a b ", "&=%+?#/", "\u0000\t\r\n", unicode, "123"];
+    var names = ["123", "\t", "\r\n", "&=%+?#/", "\u0000\t\r\n", unicode, "123"];
     var subscription = new MpnSubscription("MERGE", names, names);
     strictSame(names, subscription.getItems());
     strictSame(names, subscription.getFields());
@@ -71,6 +73,20 @@ class TestMpnSubscription extends utest.Test {
     strictSame(names, converted.getFields());
     strictSame(names, copied.getItems());
     strictSame(names, copied.getFields());
+
+    var spacedNames = ["a b"];
+    raisesEx(() -> sub.setItems(spacedNames), IllegalArgumentException, "Item List is invalid");
+    raisesEx(() -> sub.setFields(spacedNames), IllegalArgumentException, "Field List is invalid");
+
+    var sourceWithSpaces = new Subscription("MERGE", spacedNames, spacedNames);
+    var sourceWithSpacedFields = new Subscription("MERGE", ["item"], spacedNames);
+    #if js
+    raisesEx(() -> new MpnSubscription(sourceWithSpaces, null, null), IllegalArgumentException, "Item List is invalid");
+    raisesEx(() -> new MpnSubscription(sourceWithSpacedFields, null, null), IllegalArgumentException, "Field List is invalid");
+    #else
+    raisesEx(() -> new MpnSubscription(sourceWithSpaces), IllegalArgumentException, "Item List is invalid");
+    raisesEx(() -> new MpnSubscription(sourceWithSpacedFields), IllegalArgumentException, "Field List is invalid");
+    #end
   }
 
   function testNotificationFormat() {
@@ -121,6 +137,7 @@ class TestMpnSubscription extends utest.Test {
 
     raisesEx(() -> sub.setItems([]), IllegalArgumentException, "Item List is empty");
     raisesEx(() -> sub.setItems([""]), IllegalArgumentException, "Item List is invalid");
+    raisesEx(() -> sub.setItems(["i 1"]), IllegalArgumentException, "Item List is invalid");
   }
 
   function testFields() {
@@ -131,6 +148,7 @@ class TestMpnSubscription extends utest.Test {
 
     raisesEx(() -> sub.setFields([]), IllegalArgumentException, "Field List is empty");
     raisesEx(() -> sub.setFields([""]), IllegalArgumentException, "Field List is invalid");
+    raisesEx(() -> sub.setFields(["f 1"]), IllegalArgumentException, "Field List is invalid");
   }
 
   function testRequestedBufferSize() {

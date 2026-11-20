@@ -124,8 +124,8 @@ class LSMpnSubscription {
   function initFromSubscription(subscription: Subscription) {
     var _items = subscription.getItems();
     var _fields = subscription.getFields();
-    this.items = _items != null ? Items.fromArray(_items) : null;
-    this.fields = _fields != null ? Fields.fromArray(_fields) : null;
+    this.items = itemsFromArray(_items == null ? null : _items.toHaxe());
+    this.fields = fieldsFromArray(_fields == null ? null : _fields.toHaxe());
     this.dataAdapter = Name.fromString(subscription.getDataAdapter());
     this.bufferSize = RequestedBufferSizeTools.fromString(subscription.getRequestedBufferSize());
     this.requestedMaxFrequency = MpnRequestedMaxFrequencyTools.fromString(subscription.getRequestedMaxFrequency());
@@ -146,11 +146,27 @@ class LSMpnSubscription {
       if (fields == null) {
         throw new IllegalArgumentException("Please specify a valid field list");
       }
-      this.items = Items.fromArray(items.toHaxe());
-      this.fields = Fields.fromArray(fields.toHaxe());
+      this.items = itemsFromArray(items.toHaxe());
+      this.fields = fieldsFromArray(fields.toHaxe());
     } else if (fields != null) {
       throw new IllegalArgumentException("Please specify a valid item or item list");
     }
+  }
+
+  static function itemsFromArray(array: Null<Array<String>>): Null<Items> {
+    var result = Items.fromArray(array);
+    if (result != null && Lambda.exists((result : Array<String>), item -> item.indexOf(" ") != -1)) {
+      throw new IllegalArgumentException("Item List is invalid");
+    }
+    return result;
+  }
+
+  static function fieldsFromArray(array: Null<Array<String>>): Null<Fields> {
+    var result = Fields.fromArray(array);
+    if (result != null && Lambda.exists((result : Array<String>), field -> field.indexOf(" ") != -1)) {
+      throw new IllegalArgumentException("Field List is invalid");
+    }
+    return result;
   }
 
   public function addListener(listener: MpnSubscriptionListener): Void {
@@ -216,7 +232,7 @@ class LSMpnSubscription {
   }
   public function setFields(fields: Null<NativeArray<String>>): Void {
     checkActive();
-    this.fields = Fields.fromArray(fields == null ? null : fields.toHaxe());
+    this.fields = fieldsFromArray(fields == null ? null : fields.toHaxe());
   }
 
   public function getItems(): Null<NativeArray<String>> {
@@ -224,7 +240,7 @@ class LSMpnSubscription {
   }
   public function setItems(items: Null<NativeArray<String>>): Void {
     checkActive();
-    this.items = Items.fromArray(items == null ? null : items.toHaxe());
+    this.items = itemsFromArray(items == null ? null : items.toHaxe());
   }
 
   public function getRequestedBufferSize(): Null<String> {
