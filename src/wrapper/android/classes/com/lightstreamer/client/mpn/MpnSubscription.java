@@ -37,8 +37,8 @@ import com.lightstreamer.client.mpn.LSMpnSubscription;
  * the MPN subscription switches to "triggered" state and a single push notification is sent. Once triggered, no other push notifications are sent.<BR>
  * When an MpnSubscription is subscribed on the server, it acquires a permanent subscription ID that the server later uses to identify the same
  * MPN subscription on subsequent sessions.<BR>
- * An MpnSubscription uses explicit item and field lists. The same name validation rules that apply to
- * {@link Subscription} apply to MpnSubscription.<BR>
+ * An MpnSubscription uses explicit item and field lists. Each item and field name must be non-empty
+ * and cannot contain a space character; all other characters are allowed.<BR>
  * An MpnSubscription object can also be provided by the client to represent a pre-existing MPN subscription on the server. In fact, differently than real-time
  * subscriptions, MPN subscriptions are persisted on the server's MPN Module database and survive the session they were created on.<BR>
  * MPN subscriptions are associated with the MPN device, and after the device has been registered the client retrieves pre-existing MPN subscriptions from the
@@ -113,6 +113,7 @@ public class MpnSubscription {
      * Note that all of the methods used to describe the subscription to the server, except {@link #setTriggerExpression(String)} and {@link #setNotificationFormat(String)}, can only be called while the instance is in the "inactive" state.
      * 
      * @param copyFrom The Subscription object to copy properties from.
+     * @throws IllegalArgumentException If an item or field name is empty or contains a space character.
      */
     public MpnSubscription(@Nonnull Subscription copyFrom) {
         this.delegate = new LSMpnSubscription(copyFrom.delegate, this);
@@ -398,9 +399,9 @@ public class MpnSubscription {
     * with the legacy argument <code>group</code> on any {@link MpnSubscriptionListener} listening to the related MpnSubscription.
     * Read the explicit item list through {@link #getItems()}.
      * 
-     * @param items an array of items to be subscribed to through the server. 
+     * @param items an array of non-empty items to be subscribed to through the server. No item name can contain a space character.
      * @throws IllegalArgumentException if any of the item names in the "Item List"
-     * is empty/null.
+     * is empty/null or contains a space character.
      * @throws IllegalStateException if the MpnSubscription is currently 
      * "active".
      */
@@ -435,9 +436,9 @@ public class MpnSubscription {
     * with the legacy argument <code>schema</code> on any {@link MpnSubscriptionListener} listening to the related MpnSubscription.
     * Read the explicit field list through {@link #getFields()}.
      * 
-     * @param fields an array of fields to be subscribed to through the server. 
+     * @param fields an array of non-empty fields to be subscribed to through the server. No field name can contain a space character.
      * @throws IllegalArgumentException if any of the field names in the list
-     * is empty/null.
+     * is empty/null or contains a space character.
      * @throws IllegalStateException if the MpnSubscription is currently 
      * "active".
      */

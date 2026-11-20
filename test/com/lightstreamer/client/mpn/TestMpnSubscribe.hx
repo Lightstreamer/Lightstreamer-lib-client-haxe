@@ -103,11 +103,11 @@ class TestMpnSubscribe extends utest.Test {
     .await("control\r\nLS_reqId=2&LS_op=add&LS_subId=1&LS_mode=MERGE&LS_item=DEV-devid&LS_field=status&status_timestamp&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false")
     .await("control\r\nLS_reqId=3&LS_op=add&LS_subId=2&LS_mode=COMMAND&LS_item=SUBS-devid&LS_field=key&command&LS_data_adapter=adapter&LS_snapshot=true&LS_requested_max_frequency=unfiltered&LS_ack=false")
     .then(() -> {
-      var subscription = new MpnSubscription("MERGE", ["a b", "x&y", "%20"], ["f=1", "+"]);
+      var subscription = new MpnSubscription("MERGE", ["a\tb", "x&y", "%20"], ["f=1", "+"]);
       subscription.setNotificationFormat("fmt");
       client.subscribeMpn(subscription, false);
     })
-    .await("control\r\nLS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=a%20b&x%26y&%2520&LS_field=f%3D1&%2B&PN_deviceId=devid&PN_notificationFormat=fmt")
+    .await("control\r\nLS_reqId=4&LS_op=activate&LS_subId=3&LS_mode=MERGE&LS_item=a%09b&x%26y&%2520&LS_field=f%3D1&%2B&PN_deviceId=devid&PN_notificationFormat=fmt")
     .then(() -> async.completed())
     .verify();
   }

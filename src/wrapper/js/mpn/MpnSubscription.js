@@ -55,8 +55,8 @@
      * When an MpnSubscription is subscribed on the server, it acquires a permanent subscription ID that the server later uses to identify the same
      * MPN subscription on subsequent sessions.<BR>
     * An MpnSubscription uses explicit item and field lists. Both lists must be configured before
-    * calling {@link LightstreamerClient#subscribeMpn}. The same list and name rules that apply to
-    * {@link Subscription} apply to MpnSubscription.<BR>
+    * calling {@link LightstreamerClient#subscribeMpn}. Each item and field name must be non-empty
+    * and cannot contain a space character; all other characters are allowed.<BR>
      * An MpnSubscription object can also be provided by the client to represent a pre-existing MPN subscription on the server. In fact, differently than real-time
      * subscriptions, MPN subscriptions are persisted on the server's MPN Module database and survive the session they were created on.<BR>
      * MPN subscriptions are associated with the MPN device, and after the device has been registered the client retrieves pre-existing MPN subscriptions from the
@@ -343,9 +343,9 @@ MpnSubscription.prototype = {
        * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a call to {@link MpnSubscriptionListener#onPropertyChanged}
        * with argument <code>group</code> on any {@link MpnSubscriptionListener} listening to the related MpnSubscription.</p>
        *
-       * @param {String[]} items an array of items to be subscribed to through the server.
+       * @param {String[]} items an array of non-empty items to be subscribed to through the server. No item name can contain a space character.
        * @throws IllegalArgumentException if any of the item names in the "Item List"
-       * is empty/null.
+       * is empty/null or contains a space character.
        * @throws IllegalStateException if the MpnSubscription is currently
        * "active".
        */
@@ -379,9 +379,9 @@ MpnSubscription.prototype = {
        * <p class="notification"><b>Notification:</b> A change to this setting will be notified through a call to {@link MpnSubscriptionListener#onPropertyChanged}
       * with argument <code>schema</code> on any {@link MpnSubscriptionListener} listening to the related MpnSubscription.</p>
        *
-       * @param {String[]} fields an array of fields to be subscribed to through the server.
+       * @param {String[]} fields an array of non-empty fields to be subscribed to through the server. No field name can contain a space character.
        * @throws IllegalArgumentException if any of the field names in the list
-       * is empty/null.
+       * is empty/null or contains a space character.
        * @throws IllegalStateException if the MpnSubscription is currently
        * "active".
        */
